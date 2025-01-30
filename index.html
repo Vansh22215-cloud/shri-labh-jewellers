@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="gu-IN" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shri Labh Jewellers - Ahmedabad's Premier Heritage Jewellery Store Since 1990">
+    <meta name="keywords" content="Gujarati Jewellery, Ahmedabad Gold Shop, Traditional Jewellery, Diwali Collection">
+    
+    <!-- Open Graph Tags for Social Sharing -->
+    <meta property="og:title" content="Shri Labh Jewellers | Luxury Heritage Jewellers">
+    <meta property="og:image" content="https://yoursite.com/og-image.jpg">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Hind+Vadodara:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Animate on Scroll & Splide Slider -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <style>
+        :root {
+            --gold: linear-gradient(45deg, #D4AF37, #B8860B);
+            --navy: #0A1A2F;
+            --emerald: #005F5A;
+        }
+
+        body {
+            font-family: 'Hind Vadodara', sans-serif;
+            background: var(--navy);
+            color: #fff;
+            line-height: 1.8;
+        }
+
+        /* Gujarati-Inspired Header */
+        .hero {
+            background: linear-gradient(rgba(10,26,47,0.9), rgba(10,26,47,0.9)), 
+                        url('https://i.ibb.co/7Yh0q0L/peacock-pattern.png');
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 4.5rem;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            letter-spacing: 4px;
+        }
+
+        /* Cultural Motif Divider */
+        .divider {
+            background: url('https://i.ibb.co/3zq0Z7T/gujarati-border.png') repeat-x;
+            height: 20px;
+            margin: 40px 0;
+        }
+
+        /* Luxury Card Sections */
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 50px auto;
+            max-width: 1200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Interactive Image Gallery */
+        .splide__slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .splide__slide:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Gujarati Font Section */
+        .gujarati-text {
+            font-family: 'Shree Gujarati', sans-serif;
+            font-size: 1.5rem;
+            color: var(--emerald);
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero" data-aos="zoom-in">
+        <h1>શ્રી લાભ જ્યુવેલર્સ</h1>
+        <p class="gujarati-text">અમદાવાદની ગૌરવશાળી પરંપરા</p>
+        <div class="divider"></div>
+        <p style="font-size: 1.2rem;">Crafting Heritage Since 1990</p>
+    </section>
+
+    <!-- Image Gallery -->
+    <section class="section" data-aos="fade-up">
+        <div class="splide" aria-label="Store Gallery">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    <li class="splide__slide"><img src="store-front.jpg" alt="Store Front"></li>
+                    <li class="splide__slide"><img src="craftsmanship.jpg" alt="Craftsmanship"></li>
+                    <li class="splide__slide"><img src="heritage-display.jpg" alt="Heritage Display"></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" data-aos="fade-up">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+            <div>
+                <h2 style="font-family: 'Cinzel Decorative'; color: #D4AF37;">Find Us</h2>
+                <p><i class="fas fa-map-marker-alt"></i> CG Road, Ahmedabad, Gujarat 380009</p>
+                <p><i class="fas fa-phone"></i> +91 79 1234 5678</p>
+                <p><i class="fas fa-envelope"></i> contact@shrilabhjewellers.com</p>
+            </div>
+            <div style="border: 2px solid; border-image: var(--gold); border-image-slice: 1; border-radius: 12px;">
+                <iframe src="YOUR_GOOGLE_MAP_EMBED" 
+                        width="100%" 
+                        height="300" 
+                        style="border:0; border-radius: 8px;" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script>
+        // Initialize Animations
+        AOS.init({ duration: 1000, once: true });
+
+        // Initialize Image Slider
+        new Splide('.splide', {
+            type: 'loop',
+            perPage: 1,
+            autoplay: true,
+            interval: 3000,
+            pauseOnHover: true
+        }).mount();
+    </script>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp" style="color: white; font-size: 32px;"></i>
+    </a>
+</body>
+</html>
