@@ -1,0 +1,27 @@
+# ============================================================
+#  YOUR SETTINGS  (safe to edit in Notepad; keep the spacing)
+# ============================================================
+
+# Your trading capital in rupees.
+capital: 45000
+
+# KILL SWITCH: change "false" to "true" to stop ALL tips immediately.
+kill_switch: false
+
+# "paper" = tips are recorded and tracked but you should NOT trade real money yet.
+# The system stays in paper mode for at least paper_weeks after paper_start_date.
+mode: paper
+paper_start_date: 2026-11-02
+paper_weeks: 8
+
+# Optional: let Claude (headless "claude -p") write a risk review of the shortlist.
+# Needs Claude Code installed and signed in on this PC. true / false
+claude_review: false
+claude_review_max_stocks: 6
+
+# Optional: Telegram alerts. Paste your bot token and chat id between the quotes.
+telegram_bot_token: ""
+telegram_chat_id: ""
+
+# Which strategy version is live (managed by the weekly improvement job).
+live_strategy: v1
