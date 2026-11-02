@@ -57,6 +57,14 @@ _G = {}
 
 
 def _run_one(v):
+    try:
+        return _run_one_inner(v)
+    except Exception as e:   # one broken variant must not kill the whole search
+        log.error("Variant %s (%s) failed: %s", v["name"], v.get("family"), e)
+        return None
+
+
+def _run_one_inner(v):
     P, B, lf, end = _G["P"], _G["B"], _G["lf"], _G["end"]
     sig = family_signals(B, v)
     eq, tr, ex = backtest.run(P, sig, v, validate.WF_START, end, 45000.0, lf)
@@ -95,6 +103,7 @@ def run_search(processes=None):
             res = pool.map(_run_one, variants, chunksize=4)
     else:
         res = [_run_one(v) for v in variants]
+    res = [r for r in res if r is not None]
     R = pd.DataFrame({r[0]: r[1] for r in res})
     T = pd.DataFrame({r[0]: r[2] for r in res})
     S = pd.DataFrame({r[0]: r[3] for r in res}).T

@@ -114,7 +114,7 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     B["ret1"] = c / c.shift(1) - 1
     B["ema20_prev_below"] = (B["ema20"].shift(1) <= B["sma50"].shift(1))
     idx = c.index
-    B["week_start"] = pd.Series(idx.to_series().dt.isocalendar().week.values, index=idx).diff().fillna(1).ne(0)
+    B["week_start"] = pd.Series(np.asarray(idx.isocalendar().week, dtype=float), index=idx).diff().fillna(1).ne(0)
 
     breadth = ((c > B["sma50"]) & member).sum(axis=1) / member.sum(axis=1).replace(0, np.nan) * 100
     B["breadth"] = breadth
@@ -147,8 +147,9 @@ def family_signals(B, p):
         entry = B["above200"] & (B["rsi2"] < 10) & (c > B["sma50"] * 0.95)
         setup = "oversold dip in uptrend"
     elif fam == "momentum_leaders":
-        entry = B["week_start"].values[:, None] & (B["rs_rank"] >= 0.9) & B["up_trend"] & B["not_extended"]
-        entry = pd.DataFrame(entry, index=c.index, columns=c.columns)
+        ws = pd.DataFrame(np.repeat(B["week_start"].to_numpy(dtype=bool)[:, None], c.shape[1], axis=1),
+                          index=c.index, columns=c.columns)
+        entry = ws & (B["rs_rank"] >= 0.9) & B["up_trend"] & B["not_extended"]
         setup = "momentum leader"
     elif fam == "squeeze":
         entry = (B["bw_pct"] <= 0.2) & (c > B["bb_upper"]) & B["above200"]
