@@ -49,60 +49,43 @@ def add_tips(day, plans, kind, strategy):
 
 
 def simulate_trade(o, h, l, c, signal_date, tip, p):
-    """Follow one tip through the daily bars using the SAME rules as the backtest.
-    o/h/l/c: Series for the stock (real, unadjusted-for-the-future prices). Returns dict."""
-    after = c.index[c.index > pd.Timestamp(signal_date)]
-    if len(after) == 0:
+    """Follow one tip through the daily bars by running the BACKTEST ENGINE ITSELF on a
+    one-stock panel, so paper results use exactly the tested rules (entry zone, stop,
+    targets / trailing stop / exit signal, time exit, costs, slippage)."""
+    from . import backtest
+    sd = pd.Timestamp(signal_date)
+    idx = c.index[c.index >= sd]
+    if len(idx) <= 1:
         return {"status": "pending"}
-    d0 = after[0]
-    op = o[d0]
-    if not np.isfinite(op) or op > tip["entry_high"] or op <= tip["stop"]:
-        return {"status": "skipped (opened outside entry zone)", "entry_date": str(d0.date())}
-    entry = costs.fill_price(op, "buy")
-    qty = int(tip["qty"])
-    r = entry - tip["stop"]
-    t1, t2, stop = entry + p["target1_r"] * r, entry + p["target2_r"] * r, tip["stop"]
-    fee_in = costs.buy_cost(qty * entry)
-    left, cash_in, t1_done, days = qty, 0.0, False, 0
-    last_reason = None
-    for d in after:
-        new = d == d0
-        if not new:
-            days += 1
-        od, hd, ld = o[d], h[d], l[d]
-        if not np.isfinite(od):
-            continue
-
-        def sell(q, px):
-            f = costs.fill_price(px, "sell")
-            return q * f - costs.sell_cost(q * f)
-        if not new and days > p["max_hold_days"]:
-            cash_in += sell(left, od); left = 0; last_reason = "time"
-        elif not new and od <= stop:
-            cash_in += sell(left, od); left = 0; last_reason = "stop_gap"
-        elif ld <= stop:
-            cash_in += sell(left, stop); left = 0; last_reason = "stop" if not t1_done else "breakeven"
-        else:
-            if not t1_done and hd >= t1:
-                px = od if (not new and od >= t1) else t1
-                half = left // 2
-                if half >= 1:
-                    cash_in += sell(half, px); left -= half
-                t1_done, stop = True, max(stop, entry)
-            if left > 0 and hd >= t2:
-                px = od if (not new and od >= t2) else t2
-                cash_in += sell(left, px); left = 0; last_reason = "target2"
-        if left == 0:
-            pnl = cash_in - qty * entry - fee_in
-            return {"status": "closed", "entry_date": str(d0.date()), "entry_price": round(entry, 2),
-                    "exit_date": str(d.date()), "exit_reason": last_reason, "pnl": round(pnl, 2),
-                    "r_multiple": round(pnl / (r * qty), 3) if r > 0 and qty else 0, "days": days,
-                    "exit_price": round(cash_in / qty, 2)}
-    last = c.dropna().iloc[-1]
-    open_pnl = cash_in + left * last - qty * entry - fee_in
-    return {"status": "open", "entry_date": str(d0.date()), "entry_price": round(entry, 2),
-            "pnl": round(open_pnl, 2), "r_multiple": round(open_pnl / (r * qty), 3) if r > 0 and qty else 0,
-            "days": days, "t1_done": t1_done, "current_stop": round(stop, 2)}
+    sym = "X"
+    f = lambda s: pd.DataFrame({sym: s.reindex(idx).astype(float)})
+    P = {"open": f(o), "high": f(h), "low": f(l), "close": f(c)}
+    close0 = float(tip.get("signal_close", np.nan)) if hasattr(tip, "get") else float(tip["signal_close"])
+    if not np.isfinite(close0):
+        close0 = float(c.loc[:sd].iloc[-1])
+    atr_val = (close0 - float(tip["stop"])) / p["stop_atr_mult"]
+    elig = pd.DataFrame(False, index=idx, columns=[sym])
+    elig.iloc[0] = True
+    sig = {"score": pd.DataFrame(1.0, index=idx, columns=[sym]), "eligible": elig,
+           "setup": pd.DataFrame("tip", index=idx, columns=[sym]),
+           "atr": pd.DataFrame(atr_val, index=idx, columns=[sym]), "regime_ok": pd.Series(True, index=idx)}
+    pp = dict(p, max_open_positions=1)
+    big = 1e9
+    import swing.backtest as bt
+    eq, tr, ex = bt.run(P, sig, pp, idx[0], idx[-1], big, None, max_candidates=1,
+                        qty_override=int(tip["qty"]))
+    if len(tr):
+        t = tr.iloc[0]
+        return {"status": "closed", "entry_date": str(t["entry_date"].date()), "entry_price": t["entry"],
+                "exit_date": str(t["exit_date"].date()), "exit_reason": t["exit_reason"], "pnl": t["pnl"],
+                "r_multiple": t["r_multiple"], "days": int(t["days"])}
+    held = ex[ex > 0]
+    if len(held):
+        pnl = round(float(eq.iloc[-1] - big), 2)
+        r = (close0 - float(tip["stop"])) * int(tip["qty"])
+        return {"status": "open", "entry_date": str(held.index[0].date()), "pnl": pnl,
+                "r_multiple": round(pnl / r, 3) if r > 0 else 0, "days": int(len(held))}
+    return {"status": "skipped (opened outside entry zone)", "entry_date": str(idx[1].date())}
 
 
 def update_outcomes(load_prices, p_by_strategy):
@@ -166,7 +149,26 @@ def monitor_my_trades(my, load_prices, p, next_results):
         held = int((c.index > bd).sum())
         since = h[h.index >= bd]
         actions = []
-        if last <= stop:
+        style = p.get("exit_style", "targets")
+        if style == "trail":
+            hc = float(c[c.index >= bd].max()) if (c.index >= bd).any() else last
+            new_stop = max(stop, hc - p.get("trail_atr_mult", 3.0) * a)
+            if last <= new_stop:
+                actions.append(f"EXIT: closed at {last:.2f}, at/below trailing stop {new_stop:.2f}. Sell at tomorrow's open.")
+            else:
+                actions.append(f"Hold. Set/raise your stop to {new_stop:.2f} (trailing; never lower it).")
+            t1 = t2 = float("inf")
+        elif style == "signal":
+            if last > float(c.tail(5).mean()):
+                actions.append("EXIT: bounced above its 5-day average - sell at tomorrow's open.")
+            elif last <= stop:
+                actions.append(f"EXIT: at/below your stop {stop:.2f}. Sell at tomorrow's open.")
+            else:
+                actions.append(f"Hold. Stop {stop:.2f}.")
+            t1 = t2 = float("inf")
+        if style != "targets":
+            pass
+        elif last <= stop:
             actions.append(f"EXIT: closed at {last:.2f}, at/below your stop {stop:.2f}. Sell at tomorrow's open.")
         elif since.max() >= t2:
             actions.append(f"Target 2 ({t2:.2f}) reached: sell the remaining shares.")

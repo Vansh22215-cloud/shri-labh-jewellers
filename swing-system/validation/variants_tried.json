@@ -8,5 +8,2785 @@
   "name": "candidate-P1",
   "first_tested": "2026-11-02",
   "note": "proposal P1"
+ },
+ "744b2ed313": {
+  "name": "S000",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "478d860a68": {
+  "name": "S001",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "6e65450691": {
+  "name": "S002",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "9e0656f568": {
+  "name": "S003",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "e13cfe882d": {
+  "name": "S004",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "1913388859": {
+  "name": "S005",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "0896f43802": {
+  "name": "S006",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "af1a9d1e4b": {
+  "name": "S007",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "b608543f28": {
+  "name": "S008",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "74374eaef3": {
+  "name": "S009",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "ed338f6b69": {
+  "name": "S010",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "8975ba3907": {
+  "name": "S011",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "6b7a7e5611": {
+  "name": "S012",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "8ce2b06e59": {
+  "name": "S013",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "ee83f715da": {
+  "name": "S014",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "87d9506c79": {
+  "name": "S015",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "35ef26a7a0": {
+  "name": "S016",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "5e07a12d9f": {
+  "name": "S017",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "6b6532a61a": {
+  "name": "S018",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "b02de76611": {
+  "name": "S019",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "4ea4c214d6": {
+  "name": "S020",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "b567b1e727": {
+  "name": "S021",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "f8dc30a6f5": {
+  "name": "S022",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "b8809b0359": {
+  "name": "S023",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "e5de659d3b": {
+  "name": "S024",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "fc47943ab5": {
+  "name": "S025",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "77437a066a": {
+  "name": "S026",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "4eac685a79": {
+  "name": "S027",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "223c233b65": {
+  "name": "S028",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "925520044b": {
+  "name": "S029",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "9d790be025": {
+  "name": "S030",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "6b3d970d22": {
+  "name": "S031",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "2d790d72b1": {
+  "name": "S032",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "4bfcef180a": {
+  "name": "S033",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "e346a68494": {
+  "name": "S034",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "2c0ebb1592": {
+  "name": "S035",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "6a60e055b3": {
+  "name": "S036",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "2ffb79bcc4": {
+  "name": "S037",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "20726a1911": {
+  "name": "S038",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "522a4e7c08": {
+  "name": "S039",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "b76babee6b": {
+  "name": "S040",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "11ae66f130": {
+  "name": "S041",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "a5b4601a2c": {
+  "name": "S042",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "12e645786e": {
+  "name": "S043",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "20a8a44b10": {
+  "name": "S044",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "5a1f1b669d": {
+  "name": "S045",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "b4d2e44e62": {
+  "name": "S046",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "b61cfa53f4": {
+  "name": "S047",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "f9c2d8b98f": {
+  "name": "S048",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "ef7bf9ec8f": {
+  "name": "S049",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "b27036707f": {
+  "name": "S050",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "f0bc765ace": {
+  "name": "S051",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "3ac3f90bdc": {
+  "name": "S052",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "6590cc505c": {
+  "name": "S053",
+  "first_tested": "2026-11-02",
+  "note": "search: trend_pb_bo, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "b7feb0ee85": {
+  "name": "S054",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "a4b9ef88f4": {
+  "name": "S055",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "609a0b1038": {
+  "name": "S056",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "d3cd67406f": {
+  "name": "S057",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "014c809773": {
+  "name": "S058",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "3d7dfab8fd": {
+  "name": "S059",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "5e16a6944f": {
+  "name": "S060",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "a1ae16b5b3": {
+  "name": "S061",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "3c1b351dbb": {
+  "name": "S062",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "1fc05cfbdd": {
+  "name": "S063",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "af2b45b7ff": {
+  "name": "S064",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "fcdd328a67": {
+  "name": "S065",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "507dd9546e": {
+  "name": "S066",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "775397689c": {
+  "name": "S067",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "ef2d361b47": {
+  "name": "S068",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "c1af506984": {
+  "name": "S069",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "762ddde501": {
+  "name": "S070",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "28407c6e53": {
+  "name": "S071",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "32b1dae924": {
+  "name": "S072",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "d5f9c577f0": {
+  "name": "S073",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "c53eae9e0d": {
+  "name": "S074",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "bc8b467abb": {
+  "name": "S075",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "a23bf9d39c": {
+  "name": "S076",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "ba22fbc7ff": {
+  "name": "S077",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "a789c20bb0": {
+  "name": "S078",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "8faf3965df": {
+  "name": "S079",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "d4d5d0175f": {
+  "name": "S080",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "d015152634": {
+  "name": "S081",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "7861d35465": {
+  "name": "S082",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "cb63cd8ef1": {
+  "name": "S083",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "15178bdb63": {
+  "name": "S084",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "d044f7e3fb": {
+  "name": "S085",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "60235b8601": {
+  "name": "S086",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "d7fe03d657": {
+  "name": "S087",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "8660dbc762": {
+  "name": "S088",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "da41258cfd": {
+  "name": "S089",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "25f2f73b0a": {
+  "name": "S090",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "2dec29def5": {
+  "name": "S091",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "40f616c23e": {
+  "name": "S092",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "87ebd9edff": {
+  "name": "S093",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "80bddaa46a": {
+  "name": "S094",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "10da05dc80": {
+  "name": "S095",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "5d07bdc467": {
+  "name": "S096",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "7226e8971e": {
+  "name": "S097",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "28b75a1233": {
+  "name": "S098",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "80d900446e": {
+  "name": "S099",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "fc06961e32": {
+  "name": "S100",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "88a2f979cd": {
+  "name": "S101",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "0b629f1d82": {
+  "name": "S102",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "b73ca08771": {
+  "name": "S103",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "c2f5b26bf7": {
+  "name": "S104",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "f5a5b2d878": {
+  "name": "S105",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "0a75b3baa3": {
+  "name": "S106",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "e0faf8664c": {
+  "name": "S107",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(20), stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "425810fab7": {
+  "name": "S108",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "9138731fab": {
+  "name": "S109",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "4511b5c356": {
+  "name": "S110",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "5c405703f9": {
+  "name": "S111",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "47e074d421": {
+  "name": "S112",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "505c58231d": {
+  "name": "S113",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "12c29296bc": {
+  "name": "S114",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "2ed48667a5": {
+  "name": "S115",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "027f5fdb7d": {
+  "name": "S116",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "43940218e4": {
+  "name": "S117",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "206af8c552": {
+  "name": "S118",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "4bfe9ab837": {
+  "name": "S119",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "e2d4428d1f": {
+  "name": "S120",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "497613b1d7": {
+  "name": "S121",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "8171ffbbcf": {
+  "name": "S122",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "b2fcceba33": {
+  "name": "S123",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "dea7f5f6b6": {
+  "name": "S124",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "0e20f07d42": {
+  "name": "S125",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "c3aade7ae6": {
+  "name": "S126",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "2b1545a0bf": {
+  "name": "S127",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "c7636dce02": {
+  "name": "S128",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "e48f40c39d": {
+  "name": "S129",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "b096d3b1ec": {
+  "name": "S130",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "04aa004eb4": {
+  "name": "S131",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "9afc905090": {
+  "name": "S132",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "f5308e81e2": {
+  "name": "S133",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "29dd81e946": {
+  "name": "S134",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "a1ff195baf": {
+  "name": "S135",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "fc74ef8ff4": {
+  "name": "S136",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "ba6c4c0f31": {
+  "name": "S137",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "5ebd744ae6": {
+  "name": "S138",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "b23372d82b": {
+  "name": "S139",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "38c21d5abf": {
+  "name": "S140",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "ab3380c3e5": {
+  "name": "S141",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "be15cf6253": {
+  "name": "S142",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "4113d28031": {
+  "name": "S143",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "30aadeadb5": {
+  "name": "S144",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "e82029aef5": {
+  "name": "S145",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "3d50ed1016": {
+  "name": "S146",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "54d9e6322a": {
+  "name": "S147",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "13b82b89a7": {
+  "name": "S148",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "61cc12adad": {
+  "name": "S149",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "fd1fcc7e43": {
+  "name": "S150",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "0925646a29": {
+  "name": "S151",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "50ce72f84a": {
+  "name": "S152",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "376234a56d": {
+  "name": "S153",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "5e472bde22": {
+  "name": "S154",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "899cdf85a6": {
+  "name": "S155",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "9dc8fd8e12": {
+  "name": "S156",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "195666258d": {
+  "name": "S157",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "44921f2e3b": {
+  "name": "S158",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "a2e5915150": {
+  "name": "S159",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "f9809334c1": {
+  "name": "S160",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "cb1f3517f4": {
+  "name": "S161",
+  "first_tested": "2026-11-02",
+  "note": "search: donchian(55), stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "4245d628e1": {
+  "name": "S162",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "680ed0e398": {
+  "name": "S163",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "bf80afc8f4": {
+  "name": "S164",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "4a45ba51c1": {
+  "name": "S165",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "c3ebd16be0": {
+  "name": "S166",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "5767e34ffd": {
+  "name": "S167",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "a564f21dcc": {
+  "name": "S168",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "e2e0ecf8a9": {
+  "name": "S169",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "44dd0ba386": {
+  "name": "S170",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "3f88abcebb": {
+  "name": "S171",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "31790bc1e2": {
+  "name": "S172",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "5495d8537a": {
+  "name": "S173",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "8f1a84975d": {
+  "name": "S174",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "012a56a6b5": {
+  "name": "S175",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "6ee44dab81": {
+  "name": "S176",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "68da3697d5": {
+  "name": "S177",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "43897cd194": {
+  "name": "S178",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "f4f5d785ee": {
+  "name": "S179",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "2489bd2599": {
+  "name": "S180",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "d80b0d1ca5": {
+  "name": "S181",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "e379c54ec2": {
+  "name": "S182",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "7e87720d5b": {
+  "name": "S183",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "fefff9661f": {
+  "name": "S184",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "12217bd0d6": {
+  "name": "S185",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "b76c07a051": {
+  "name": "S186",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "d5ae130009": {
+  "name": "S187",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "4411ebeda0": {
+  "name": "S188",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "128b18f0c2": {
+  "name": "S189",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "f4740f9cfd": {
+  "name": "S190",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "57c5fec686": {
+  "name": "S191",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "63f5957252": {
+  "name": "S192",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "15846670de": {
+  "name": "S193",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "e4fab8f3d9": {
+  "name": "S194",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "39b09a156e": {
+  "name": "S195",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "443569b077": {
+  "name": "S196",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "74160520b3": {
+  "name": "S197",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "da5c5dc0b8": {
+  "name": "S198",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "44b912da49": {
+  "name": "S199",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "7c603f5942": {
+  "name": "S200",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "a99d3d657b": {
+  "name": "S201",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "9504ad549d": {
+  "name": "S202",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "e9d5224081": {
+  "name": "S203",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "c719f88ad1": {
+  "name": "S204",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "27d0242985": {
+  "name": "S205",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "59e894fa55": {
+  "name": "S206",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "c8bcc94792": {
+  "name": "S207",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "0b659ee7b0": {
+  "name": "S208",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "27f488115b": {
+  "name": "S209",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "c4637f0bed": {
+  "name": "S210",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "96a82060ec": {
+  "name": "S211",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "ce5885c6ac": {
+  "name": "S212",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "94e6c2dd74": {
+  "name": "S213",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "efb0b65efd": {
+  "name": "S214",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "6b39f6f2a9": {
+  "name": "S215",
+  "first_tested": "2026-11-02",
+  "note": "search: high52, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "a3112e4463": {
+  "name": "S216",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, exit on bounce, max 5 days, market filter on"
+ },
+ "d8fd9ae8f0": {
+  "name": "S217",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, exit on bounce, max 5 days, market filter off"
+ },
+ "9aa52351a3": {
+  "name": "S218",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, exit on bounce, max 10 days, market filter on"
+ },
+ "e7d317c12c": {
+  "name": "S219",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, exit on bounce, max 10 days, market filter off"
+ },
+ "7d6fc2ce67": {
+  "name": "S220",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, targets 1.5R/3.0R, max 5 days, market filter on"
+ },
+ "97eda25d29": {
+  "name": "S221",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, targets 1.5R/3.0R, max 5 days, market filter off"
+ },
+ "13634d6a16": {
+  "name": "S222",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "73bdfbf129": {
+  "name": "S223",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "1ca713dfdf": {
+  "name": "S224",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, exit on bounce, max 5 days, market filter on"
+ },
+ "461f1ed299": {
+  "name": "S225",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, exit on bounce, max 5 days, market filter off"
+ },
+ "109b10231d": {
+  "name": "S226",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, exit on bounce, max 10 days, market filter on"
+ },
+ "6efb0a209a": {
+  "name": "S227",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, exit on bounce, max 10 days, market filter off"
+ },
+ "a52d6c3d53": {
+  "name": "S228",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, targets 1.5R/3.0R, max 5 days, market filter on"
+ },
+ "425e88edc0": {
+  "name": "S229",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, targets 1.5R/3.0R, max 5 days, market filter off"
+ },
+ "df378e7c78": {
+  "name": "S230",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "aa2e129a10": {
+  "name": "S231",
+  "first_tested": "2026-11-02",
+  "note": "search: mean_reversion, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "90ed0bd573": {
+  "name": "S232",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "420e1072ac": {
+  "name": "S233",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "59e8c09171": {
+  "name": "S234",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "f0fb9321c4": {
+  "name": "S235",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "e33729a21a": {
+  "name": "S236",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "0c92be04e3": {
+  "name": "S237",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "deeb580372": {
+  "name": "S238",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "3a6a3b72d3": {
+  "name": "S239",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "39c8b18875": {
+  "name": "S240",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "acb4d9cea8": {
+  "name": "S241",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "e2609bdeb3": {
+  "name": "S242",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "07b754719a": {
+  "name": "S243",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "b91d519718": {
+  "name": "S244",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "95c07ea132": {
+  "name": "S245",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "d2dac464d2": {
+  "name": "S246",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "56bbeb14c6": {
+  "name": "S247",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "19594c39b6": {
+  "name": "S248",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "990a628b04": {
+  "name": "S249",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "14811b9095": {
+  "name": "S250",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "9c4c819cc8": {
+  "name": "S251",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "1f1968d076": {
+  "name": "S252",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "9466215ae5": {
+  "name": "S253",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "3898549eb0": {
+  "name": "S254",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "aa04e2f99b": {
+  "name": "S255",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "526a17dbb1": {
+  "name": "S256",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "265a49a5e2": {
+  "name": "S257",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "1fe07f2a4d": {
+  "name": "S258",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "1e6e17997a": {
+  "name": "S259",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "0d5fb8d3c8": {
+  "name": "S260",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "31c8375adb": {
+  "name": "S261",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "ea32cdb469": {
+  "name": "S262",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "2691a6b842": {
+  "name": "S263",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "332b04581d": {
+  "name": "S264",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "1b45b899b4": {
+  "name": "S265",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "b38e654feb": {
+  "name": "S266",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "a7346c7bc3": {
+  "name": "S267",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "065af34b62": {
+  "name": "S268",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "be9c6974ff": {
+  "name": "S269",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "63a0cbff08": {
+  "name": "S270",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "79dbf289ee": {
+  "name": "S271",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "d9e25b2b91": {
+  "name": "S272",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "68e6e1c375": {
+  "name": "S273",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "435d3519ec": {
+  "name": "S274",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "d6a00e4f5b": {
+  "name": "S275",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "52e4af55da": {
+  "name": "S276",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "0f9196201d": {
+  "name": "S277",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "304fc5763e": {
+  "name": "S278",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "dcf033c292": {
+  "name": "S279",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "d09c81723a": {
+  "name": "S280",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "8ae68ba233": {
+  "name": "S281",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "ca46b0f4af": {
+  "name": "S282",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "8f8cc322c4": {
+  "name": "S283",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "5c69bcba13": {
+  "name": "S284",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "3ea6f0d6fc": {
+  "name": "S285",
+  "first_tested": "2026-11-02",
+  "note": "search: momentum_leaders, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "ad61d7b8e4": {
+  "name": "S286",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "5f85cb98d8": {
+  "name": "S287",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "8e4fef0ac9": {
+  "name": "S288",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "d0fad9601a": {
+  "name": "S289",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "4067a95889": {
+  "name": "S290",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "a99f283cf9": {
+  "name": "S291",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "91f2ca7c99": {
+  "name": "S292",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "cf8273c029": {
+  "name": "S293",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "860b2efee3": {
+  "name": "S294",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "9c5dd14513": {
+  "name": "S295",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "9b35cc8cef": {
+  "name": "S296",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "b95b43f00c": {
+  "name": "S297",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "4f01a04db3": {
+  "name": "S298",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "e418594f5d": {
+  "name": "S299",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "6b20f18216": {
+  "name": "S300",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "8c7d2fb893": {
+  "name": "S301",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "61037c3998": {
+  "name": "S302",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "18e5f7712b": {
+  "name": "S303",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "b591643ba4": {
+  "name": "S304",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "2f73216f85": {
+  "name": "S305",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "890507dbf5": {
+  "name": "S306",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "19e500f0b2": {
+  "name": "S307",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "61a58fb31d": {
+  "name": "S308",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "94639ed159": {
+  "name": "S309",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "2fd3559d7d": {
+  "name": "S310",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "8c7badcbbd": {
+  "name": "S311",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "807f549dfb": {
+  "name": "S312",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "67e4a0341c": {
+  "name": "S313",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "9c8462f71f": {
+  "name": "S314",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "b158d94a76": {
+  "name": "S315",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "ef25b40988": {
+  "name": "S316",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "65e8913120": {
+  "name": "S317",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "809b1a1428": {
+  "name": "S318",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "79a221a40c": {
+  "name": "S319",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "ace2a2575c": {
+  "name": "S320",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "97e2a360ef": {
+  "name": "S321",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "2b15d87ac4": {
+  "name": "S322",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "551eefb839": {
+  "name": "S323",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "4e606e2409": {
+  "name": "S324",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "073bfb93b2": {
+  "name": "S325",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "35891f782e": {
+  "name": "S326",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "5a643f3d83": {
+  "name": "S327",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "b04e7a395c": {
+  "name": "S328",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "c6a78fce30": {
+  "name": "S329",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "0081ce3f22": {
+  "name": "S330",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "6e6ae26184": {
+  "name": "S331",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "0e8423ff28": {
+  "name": "S332",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "65364deb8f": {
+  "name": "S333",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "8783d45e47": {
+  "name": "S334",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "4c9e265ebb": {
+  "name": "S335",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "ab6886b0c9": {
+  "name": "S336",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "cb837aff9b": {
+  "name": "S337",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "6bb5ead258": {
+  "name": "S338",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "154f445cdb": {
+  "name": "S339",
+  "first_tested": "2026-11-02",
+  "note": "search: squeeze, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "6ead51b98e": {
+  "name": "S340",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "cb5d9677a0": {
+  "name": "S341",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "b56d072e58": {
+  "name": "S342",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "685787e929": {
+  "name": "S343",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "1ddb66cd09": {
+  "name": "S344",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "b64bbb2490": {
+  "name": "S345",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "7ab95cfe13": {
+  "name": "S346",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "9b16d33f53": {
+  "name": "S347",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "6417134c86": {
+  "name": "S348",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "309261b8fc": {
+  "name": "S349",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "d3f9ddcf05": {
+  "name": "S350",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "6f94ed2ff8": {
+  "name": "S351",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "b1c75bb877": {
+  "name": "S352",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "eb2000dbad": {
+  "name": "S353",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "9284c4b22d": {
+  "name": "S354",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "6c12804570": {
+  "name": "S355",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "fa5e5c0cf7": {
+  "name": "S356",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "c4bbe57cb5": {
+  "name": "S357",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "ac0239f301": {
+  "name": "S358",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "ab691dc4b8": {
+  "name": "S359",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "602a0aa821": {
+  "name": "S360",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "bf2699cd9b": {
+  "name": "S361",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "339972d32d": {
+  "name": "S362",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "016993136d": {
+  "name": "S363",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "fb54e25a92": {
+  "name": "S364",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "df84056aad": {
+  "name": "S365",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "a42df5178f": {
+  "name": "S366",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "95c39feefa": {
+  "name": "S367",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "95535d1cc9": {
+  "name": "S368",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "a5082286eb": {
+  "name": "S369",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "81140cda60": {
+  "name": "S370",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "699ba3abe3": {
+  "name": "S371",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "fdc4be08cd": {
+  "name": "S372",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "304682a998": {
+  "name": "S373",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "c6ee54866c": {
+  "name": "S374",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "ba10609825": {
+  "name": "S375",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "661ba551eb": {
+  "name": "S376",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "de44cce27a": {
+  "name": "S377",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "b55579e835": {
+  "name": "S378",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "9d23a18b52": {
+  "name": "S379",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "1f5b4b1e13": {
+  "name": "S380",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "ffb5f4167f": {
+  "name": "S381",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "82ef7c6115": {
+  "name": "S382",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "fd8402a214": {
+  "name": "S383",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "dd05946aa8": {
+  "name": "S384",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "67a539a345": {
+  "name": "S385",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "f591bae8cc": {
+  "name": "S386",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "f3554cc246": {
+  "name": "S387",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "65b2ef436a": {
+  "name": "S388",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "8f685eeb2f": {
+  "name": "S389",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "7495d68a31": {
+  "name": "S390",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "b47ce97710": {
+  "name": "S391",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "7557bef077": {
+  "name": "S392",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "1aeb428529": {
+  "name": "S393",
+  "first_tested": "2026-11-02",
+  "note": "search: ma_cross, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "006d9a8edb": {
+  "name": "S394",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "9e76e690e8": {
+  "name": "S395",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "03bd4c618b": {
+  "name": "S396",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "24da076635": {
+  "name": "S397",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "fd7fe9f4d0": {
+  "name": "S398",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "0f3e54b6e5": {
+  "name": "S399",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "84e31f7577": {
+  "name": "S400",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "b5e9f32130": {
+  "name": "S401",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "4cb6b40e47": {
+  "name": "S402",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "f1987bc174": {
+  "name": "S403",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "70ff7cbb90": {
+  "name": "S404",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "5233673be1": {
+  "name": "S405",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "56caa12e8c": {
+  "name": "S406",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "e1716d7167": {
+  "name": "S407",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "0578033496": {
+  "name": "S408",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "114d8e1985": {
+  "name": "S409",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "1e74502576": {
+  "name": "S410",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "91686f3e6f": {
+  "name": "S411",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "fffaaece5b": {
+  "name": "S412",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "149fd5f6a9": {
+  "name": "S413",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "7a461230ad": {
+  "name": "S414",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "168954c5e9": {
+  "name": "S415",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "8ccfd31a3b": {
+  "name": "S416",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "2124f24e94": {
+  "name": "S417",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "35562e32c5": {
+  "name": "S418",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "bbfebf7e6a": {
+  "name": "S419",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "abd86a8cbc": {
+  "name": "S420",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "d86347a145": {
+  "name": "S421",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "9124efdae0": {
+  "name": "S422",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "36b1a3b0f8": {
+  "name": "S423",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "06021f7d35": {
+  "name": "S424",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "64386d8b4b": {
+  "name": "S425",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "700e3d50c9": {
+  "name": "S426",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "bea72957ab": {
+  "name": "S427",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "82fa98fedc": {
+  "name": "S428",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "285918a650": {
+  "name": "S429",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "d221c9269c": {
+  "name": "S430",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "9c8a94f187": {
+  "name": "S431",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "fe9cba7f8e": {
+  "name": "S432",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "32a615bd5b": {
+  "name": "S433",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "32faedaf79": {
+  "name": "S434",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "e56f3e2662": {
+  "name": "S435",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "ac81ae1f08": {
+  "name": "S436",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "3a72b1ea4c": {
+  "name": "S437",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "7dcd1ef0fd": {
+  "name": "S438",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "0db1a9a85d": {
+  "name": "S439",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "0018b59b7f": {
+  "name": "S440",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "2429d8c6a4": {
+  "name": "S441",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "a316e7fae4": {
+  "name": "S442",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "a967f3f4e0": {
+  "name": "S443",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "90a06b9848": {
+  "name": "S444",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "40195f2673": {
+  "name": "S445",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "0196461366": {
+  "name": "S446",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "da81552ff2": {
+  "name": "S447",
+  "first_tested": "2026-11-02",
+  "note": "search: volume_surge, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "d737d1bd18": {
+  "name": "S448",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "b821ed4617": {
+  "name": "S449",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "7bc98796c8": {
+  "name": "S450",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "dabf90c8cb": {
+  "name": "S451",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "b9b0b92b9d": {
+  "name": "S452",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "b584445369": {
+  "name": "S453",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "ec26a2b4f4": {
+  "name": "S454",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "ba1ff78c04": {
+  "name": "S455",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "0f1ea346f1": {
+  "name": "S456",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "c54455c69a": {
+  "name": "S457",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "313b1a8241": {
+  "name": "S458",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "b6aaf5d387": {
+  "name": "S459",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "c811fdb663": {
+  "name": "S460",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "48b56e86fd": {
+  "name": "S461",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "b3df670fb6": {
+  "name": "S462",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "56bb9f2e39": {
+  "name": "S463",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "974b1d8e1c": {
+  "name": "S464",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "def0a5654f": {
+  "name": "S465",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "17b5ce518d": {
+  "name": "S466",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "ff8b874c4e": {
+  "name": "S467",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "e241cb1ea5": {
+  "name": "S468",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "d58d868b7a": {
+  "name": "S469",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "01f3e11c37": {
+  "name": "S470",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "130c397296": {
+  "name": "S471",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "e47ed2d498": {
+  "name": "S472",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "9079af7187": {
+  "name": "S473",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "e21e46b537": {
+  "name": "S474",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "818ad4cd94": {
+  "name": "S475",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "bc330a2706": {
+  "name": "S476",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "2e725d05ea": {
+  "name": "S477",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "1731dc707a": {
+  "name": "S478",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "a26655b82e": {
+  "name": "S479",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "7c8d2368ef": {
+  "name": "S480",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "a7819ac41a": {
+  "name": "S481",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "581909b86f": {
+  "name": "S482",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "8d95de9c58": {
+  "name": "S483",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "1b902fb5c0": {
+  "name": "S484",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "2c9bffcfdf": {
+  "name": "S485",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "0da66a1c92": {
+  "name": "S486",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "432f139922": {
+  "name": "S487",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "e5c1778580": {
+  "name": "S488",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "cdd19d810c": {
+  "name": "S489",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "ecd27033f9": {
+  "name": "S490",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "4c55da52c0": {
+  "name": "S491",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "b2a007ff9b": {
+  "name": "S492",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "0ed41c4002": {
+  "name": "S493",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "84ed958125": {
+  "name": "S494",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "ad5fb661e7": {
+  "name": "S495",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "4176866a95": {
+  "name": "S496",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "53d9d9db56": {
+  "name": "S497",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "b8eab81d08": {
+  "name": "S498",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "363919df8c": {
+  "name": "S499",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "55e2b2d8f4": {
+  "name": "S500",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "a71a0effb8": {
+  "name": "S501",
+  "first_tested": "2026-11-02",
+  "note": "search: nr7, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "6927070917": {
+  "name": "S502",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "2caf43c704": {
+  "name": "S503",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "e33f697606": {
+  "name": "S504",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "0cfd90c404": {
+  "name": "S505",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "4c46c447b2": {
+  "name": "S506",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "530f7c715b": {
+  "name": "S507",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "df4ec4df9d": {
+  "name": "S508",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "8c787ceac5": {
+  "name": "S509",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "4f06e3ea23": {
+  "name": "S510",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "8aa01dfc96": {
+  "name": "S511",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "c8a99fb9ea": {
+  "name": "S512",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "eab0405659": {
+  "name": "S513",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "8cf448678c": {
+  "name": "S514",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "0260262ab8": {
+  "name": "S515",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "b402518340": {
+  "name": "S516",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "c72e8bf417": {
+  "name": "S517",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "fca2dfc6f9": {
+  "name": "S518",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "e1eb1651e9": {
+  "name": "S519",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 1.5 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "2877c75d36": {
+  "name": "S520",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "7d75c5e3ef": {
+  "name": "S521",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "1b450e4d5f": {
+  "name": "S522",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "34dc8d2dba": {
+  "name": "S523",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "6d02077b1c": {
+  "name": "S524",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "a15f5259a2": {
+  "name": "S525",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "a7c8397b3f": {
+  "name": "S526",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "a0f96c4d9c": {
+  "name": "S527",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "fb0c1c3515": {
+  "name": "S528",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "f1a9d342ef": {
+  "name": "S529",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "6fe295808a": {
+  "name": "S530",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "39e8fc589a": {
+  "name": "S531",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "1034455489": {
+  "name": "S532",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "98aefab40d": {
+  "name": "S533",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "44390cb208": {
+  "name": "S534",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "ee90b7bb2a": {
+  "name": "S535",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "b1783bad1e": {
+  "name": "S536",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "ef9f71d5c5": {
+  "name": "S537",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 2.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
+ },
+ "723f8867f2": {
+  "name": "S538",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter on"
+ },
+ "c74565db7e": {
+  "name": "S539",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 1.5R/3.0R, max 10 days, market filter off"
+ },
+ "ddc83939e1": {
+  "name": "S540",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter on"
+ },
+ "ada92b1a2c": {
+  "name": "S541",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 1.5R/3.0R, max 25 days, market filter off"
+ },
+ "ef6ac857c2": {
+  "name": "S542",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter on"
+ },
+ "b7797ae0e0": {
+  "name": "S543",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off"
+ },
+ "0883141d1e": {
+  "name": "S544",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter on"
+ },
+ "f191894ece": {
+  "name": "S545",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 2.0R/4.0R, max 10 days, market filter off"
+ },
+ "39005c8cd1": {
+  "name": "S546",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on"
+ },
+ "585ef44b5c": {
+  "name": "S547",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off"
+ },
+ "35fae70fdc": {
+  "name": "S548",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on"
+ },
+ "2540dffd97": {
+  "name": "S549",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off"
+ },
+ "41b5af8663": {
+  "name": "S550",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter on"
+ },
+ "142c3ba774": {
+  "name": "S551",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, trailing stop 3 ATR, max 10 days, market filter off"
+ },
+ "5e4270721e": {
+  "name": "S552",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter on"
+ },
+ "77c0467992": {
+  "name": "S553",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, trailing stop 3 ATR, max 25 days, market filter off"
+ },
+ "627e3fc0b0": {
+  "name": "S554",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter on"
+ },
+ "1243412316": {
+  "name": "S555",
+  "first_tested": "2026-11-02",
+  "note": "search: lowvol_momentum, stop 3.0 ATR, trailing stop 3 ATR, max 50 days, market filter off"
  }
 }

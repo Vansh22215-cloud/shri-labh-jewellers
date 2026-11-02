@@ -39,14 +39,18 @@ class Position:
     r: float              # initial risk per share
     cost_paid: float
     days: int = 0
+    atr_e: float = 0.0
+    hc: float = 0.0
+    exit_next: bool = False
     t1_done: bool = False
     realised: float = 0.0  # net rupees from partial exits
     exits: list = field(default_factory=list)
 
 
-def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candidates=8):
+def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candidates=8, qty_override=None):
     """Simulate the strategy between start and end. Returns (equity Series, trades DataFrame, daily exposure)."""
     p = params
+    style = p.get("exit_style", "targets")   # targets | trail | signal
     dates = P["close"].loc[start:end].index
     o, h, l, c = (P[k] for k in ("open", "high", "low", "close"))
     score, elig, setup, atrv, regime = sig["score"], sig["eligible"], sig["setup"], sig["atr"], sig["regime_ok"]
@@ -56,6 +60,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
         lf_ret = lf.pct_change().fillna(0).clip(-0.01, 0.01)
     else:
         lf_ret = pd.Series(0.0, index=dates)
+    sma5 = c.rolling(5, min_periods=5).mean() if style == "signal" else None
 
     cash, peak = capital, capital
     pause_until = -1
@@ -82,7 +87,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                 if op > cand["close"] + p["do_not_buy_gap_atr"] * cand["atr"] or op <= cand["stop"]:
                     continue  # do-not-buy rule
                 fill = costs.fill_price(op, "buy")
-                qty = position_size(equity_prev, cash, fill, cand["stop"], p)
+                qty = cand.get("qty") or position_size(equity_prev, cash, fill, cand["stop"], p)
                 if qty < 1:
                     continue
                 value = qty * fill
@@ -92,7 +97,8 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                 cash -= value + fee
                 r = fill - cand["stop"]
                 positions.append(Position(s, cand["setup"], cand["date"], d, fill, qty, cand["stop"],
-                                          fill + p["target1_r"] * r, fill + p["target2_r"] * r, r, fee))
+                                          fill + p["target1_r"] * r, fill + p["target2_r"] * r, r, fee,
+                                          atr_e=cand["atr"], hc=fill))
                 held.add(s)
 
         # 3) manage open positions with today's bar
@@ -117,9 +123,12 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                 ps.exits.append((d, q, fill, why))
                 ps.qty -= q
 
-            # time stop: sell at the open after max_hold_days
+            # time stop: sell at the open after max_hold_days; exit signal from last close
             if not new_today and ps.days > p["max_hold_days"]:
                 sell(ps.qty, od, "time")
+                closed = True
+            elif not new_today and ps.exit_next:
+                sell(ps.qty, od, "signal")
                 closed = True
             # gap through stop
             elif not new_today and od <= ps.stop:
@@ -128,7 +137,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
             elif ld <= ps.stop:
                 sell(ps.qty, ps.stop, "stop")
                 closed = True
-            else:
+            elif style == "targets":
                 if not ps.t1_done and hd >= ps.t1:
                     px = od if (not new_today and od >= ps.t1) else ps.t1
                     half = ps.qty // 2
@@ -152,6 +161,11 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                     "init_r": round(ps.r, 2),
                 })
             else:
+                if style == "trail":       # chandelier stop: highest close minus k x ATR (only moves up)
+                    ps.hc = max(ps.hc, cd)
+                    ps.stop = max(ps.stop, ps.hc - p.get("trail_atr_mult", 3.0) * ps.atr_e)
+                elif style == "signal" and sma5 is not None and cd > sma5.at[d, ps.symbol]:
+                    ps.exit_next = True    # bounced above 5-day average: sell at next open
                 still.append(ps)
         positions = still
 
@@ -181,7 +195,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                 for s in sc.index:
                     cl, av = c.at[d, s], atrv.at[d, s]
                     pending.append({"symbol": s, "date": d, "close": cl, "atr": av, "setup": setup.at[d, s],
-                                    "stop": cl - p["stop_atr_mult"] * av})
+                                    "stop": cl - p["stop_atr_mult"] * av, "qty": qty_override})
 
     equity = pd.Series(eq, index=dates, name="equity")
     return equity, pd.DataFrame(trades), pd.Series(expo, index=dates, name="exposure")

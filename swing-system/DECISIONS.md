@@ -103,3 +103,29 @@ unless an entry says so explicitly (with date and reason).
 - **D35.** Kill switch and all user settings live in `settings.yaml` (editable in Notepad). An unreadable
   settings file forces the kill switch ON.
 - **D36. Paid services:** none used. None proposed at this stage.
+
+## Strategy SEARCH (added 2026-11-02, written BEFORE the search was run)
+You asked the system not to be limited to one strategy. So it now searches a large space instead of
+testing a single idea.
+- **D37. Search space:** 10 strategy families (see `swing/families.py`: trend pullback/breakout, Donchian
+  breakout 20/55, 52-week high, mean reversion RSI(2), momentum leaders, volatility squeeze, moving-average
+  cross, volume surge, NR7, low-volatility momentum) x stop-loss (1.5/2/3 ATR) x exit style (targets 1.5R/3R,
+  wide targets 2R/4R, chandelier trailing stop 3 ATR; mean reversion: exit on bounce above 5-day average) x
+  maximum hold (10/25/50 days; mean reversion 5/10) x market filter on/off. ~550 variants. Every variant is
+  recorded in `validation/variants_tried.json`.
+- **D38. The danger:** among hundreds of variants some will look excellent by pure luck. Picking the best
+  backtest and calling it "validated" would be self-deception. So the raw best variant is reported only as
+  "cherry-picked, not evidence".
+- **D39. Honest selection (walk-forward search):** at the start of each year from 2016, the system picks the
+  variant with the highest Sharpe ratio (monthly returns) over the PREVIOUS 36 months, among variants with
+  >= 30 trades in that window. That pick is then traded for the year. Only these out-of-sample years count.
+  The gate (D27) is applied to this chain; "variants tried" for the haircut = number of *search procedures*
+  tried (`validation/search_procedures.json`), because selection happens inside the walk-forward. The raw
+  variant count is still reported, and a second, informational check asks whether the cherry-picked best
+  variant survives a haircut for ALL raw variants (t >= sqrt(2 ln N_raw)).
+- **D40. Holdout:** the variant chosen with the 36 months before the holdout start is run once, fresh, on the
+  holdout. Must beat NIFTYBEES and the liquid fund, with drawdown <= 15%.
+- **D41. Simplification (stated):** in the chain, each year's return comes from that variant's continuous
+  backtest (positions carried in from the previous year), not a fresh restart.
+- **D42. If the search ever passes:** the variant selected on the latest 36 months becomes the next live
+  version (vN). The weekly job re-runs the search when the last one is > 30 days old.

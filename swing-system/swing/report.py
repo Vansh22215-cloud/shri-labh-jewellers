@@ -111,8 +111,13 @@ def daily_html(ctx):
             ("Buy zone (next morning)", f"Rs {pl['entry_low']} - Rs {pl['entry_high']}"),
             ("DO NOT BUY if", f"price is above Rs {pl['entry_high']} or below Rs {pl['stop']} at the open"),
             ("Stop-loss", f"Rs {pl['stop']} (sell everything if price closes/trades below)"),
-            ("Target 1", f"Rs {pl['target1']} - sell half, then move stop to your buy price"),
-            ("Target 2", f"Rs {pl['target2']} - sell the rest"),
+            *((("Target 1", f"Rs {pl['target1']} - sell half, then move stop to your buy price"),
+               ("Target 2", f"Rs {pl['target2']} - sell the rest"))
+              if pl.get("exit_style", "targets") == "targets" else
+              ((("Exit", f"No fixed target. Trailing stop: each evening raise your stop to (highest close since "
+                         f"you bought - Rs {pl.get('trail_atr')}); never lower it. The report shows the level."),)
+               if pl.get("exit_style") == "trail" else
+               (("Exit", "Sell at the next open after the stock closes above its 5-day average (the report tells you)"),))),
             ("Quantity", f"{pl['qty']} shares (~Rs {pl['qty'] * pl['last_close']:,.0f}); "
                          f"loss if stopped ~Rs {pl['risk_rupees']:,.0f} + charges (limit: 1% of capital)"),
             ("Expected holding", f"up to {pl['max_hold']} trading days (sell at the open after that)"),

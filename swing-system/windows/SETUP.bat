@@ -6,7 +6,7 @@ REM  backtest, schedules the nightly + weekly jobs, opens the report.
 REM ============================================================
 cd /d "%~dp0\.."
 echo.
-echo  Swing system setup - this can take 30-90 minutes the first time.
+echo  Swing system setup - this can take 1-3 hours the first time (it tests ~550 strategies).
 echo  Keep this window open. You can use your PC normally meanwhile.
 echo.
 set "PY="

@@ -1,0 +1,182 @@
+"""Library of strategy FAMILIES (different ways to pick stocks and time entries).
+
+Every family uses only data up to the close of day t (no look-ahead); trades are
+entered at the next open by the backtest. Shared indicators are computed once
+(`base_indicators`) and each family is a cheap combination of them
+(`family_signals`), so hundreds of variants can be searched quickly.
+
+Families:
+  trend_pb_bo      v1: uptrend + strong RS, breakout to 50-day high OR pullback-reversal to 20 EMA
+  donchian         close above the highest close of the last N days (20 or 55), volume confirmation
+  high52           within 2% of the 52-week high and a new 20-day high, strong RS
+  mean_reversion   long-term uptrend but 2-day RSI < 10 (short-term oversold); exit on bounce
+  momentum_leaders top 10% relative strength in a clean uptrend, entries on the first day of each week
+  squeeze          Bollinger band width in the lowest 20% of 6 months, then a close above the upper band
+  ma_cross         20-day EMA crosses above 50-day average while above the 200-day
+  volume_surge     volume > 3x average with a strong up-close (institutional buying footprint)
+  nr7              narrowest range of 7 days followed by a close above that day's high, in an uptrend
+  lowvol_momentum  strong RS AND low volatility, bought near the 20-day EMA
+"""
+import numpy as np
+import pandas as pd
+
+FAMILIES = ["trend_pb_bo", "donchian", "high52", "mean_reversion", "momentum_leaders",
+            "squeeze", "ma_cross", "volume_surge", "nr7", "lowvol_momentum"]
+
+
+def sma(df, n):
+    return df.rolling(n, min_periods=n).mean()
+
+
+def ema(df, n):
+    return df.ewm(span=n, adjust=False, min_periods=n).mean()
+
+
+def atr(high, low, close, n):
+    prev = close.shift(1)
+    tr = np.maximum(high - low, np.maximum((high - prev).abs(), (low - prev).abs()))
+    tr = tr.where(~(high.isna() | low.isna()))
+    return tr.rolling(n, min_periods=n).mean()
+
+
+def rsi(close, n):
+    d = close.diff()
+    up = d.clip(lower=0).ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
+    dn = (-d.clip(upper=0)).ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
+    return 100 - 100 / (1 + up / dn.replace(0, np.nan))
+
+
+def xs_rank(df, mask):
+    return df.where(mask).rank(axis=1, pct=True)
+
+
+def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None):
+    """All shared indicators (expensive part, computed once)."""
+    o, h, l, c, v, raw = P["open"], P["high"], P["low"], P["close"], P["volume"], P["raw_close"]
+    nifty = nifty_close.reindex(c.index).ffill()
+    B = {"c": c, "h": h, "l": l, "v": v}
+    B["sma50"], B["sma200"] = sma(c, p["trend_fast_sma"]), sma(c, p["trend_slow_sma"])
+    B["ema20"] = ema(c, p["pullback_ema"])
+    B["atr"] = a = atr(h, l, c, p["atr_period"])
+    bars = c.notna().cumsum()
+    traded_value = (raw * v).rolling(p["liquidity_lookback"], min_periods=20).median()
+    member = member_mask.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool)
+    member &= (bars >= p["min_history_days"]) & (raw >= p["min_price"]) & c.notna()
+    B["member"] = member
+
+    sk = p["mom_skip"]
+    rs_l = (c.shift(sk) / c.shift(p["mom_long"]) - 1).sub(nifty.shift(sk) / nifty.shift(p["mom_long"]) - 1, axis=0)
+    rs_s = (c.shift(sk) / c.shift(p["mom_short"]) - 1).sub(nifty.shift(sk) / nifty.shift(p["mom_short"]) - 1, axis=0)
+    B["rs_rank"] = rank_rs_l = xs_rank(rs_l, member)
+    rank_rs_s = xs_rank(rs_s, member)
+
+    sector_rank = pd.DataFrame(0.5, index=c.index, columns=c.columns)
+    ind = pd.Series({s: industry.get(s) for s in c.columns}).dropna()
+    if len(ind):
+        groups = {g: list(cols) for g, cols in ind.groupby(ind).groups.items()}
+        rs_m = rs_l.where(member)
+        ind_mean = pd.DataFrame({g: rs_m[cols].mean(axis=1) for g, cols in groups.items()})
+        ind_rank = ind_mean.rank(axis=1, pct=True)
+        for g, cols in groups.items():
+            sector_rank[cols] = np.repeat(ind_rank[[g]].values, len(cols), axis=1)
+        sector_rank = sector_rank.fillna(0.5)
+    B["sector_rank"] = sector_rank
+
+    B["up_trend"] = (c > B["sma50"]) & (B["sma50"] > B["sma200"]) & (B["sma200"] > B["sma200"].shift(p["slope_lookback"]))
+    B["above200"] = c > B["sma200"]
+    B["not_extended"] = (c / B["sma50"] - 1) * 100 <= p["max_extension_above_50dma_pct"]
+    pct_above = (c > B["sma50"]).astype(float).where(B["sma50"].notna()).rolling(63, min_periods=40).mean()
+    atr_pct = a / c
+    B["lowvol_rank"] = xs_rank(-atr_pct, member)
+    trend_q = 0.5 * xs_rank(pct_above, member) + 0.5 * B["lowvol_rank"]
+    liq = xs_rank(traded_value, member)
+    w = p["score_weights"]
+    B["score"] = (w["rs_long"] * rank_rs_l + w["rs_short"] * rank_rs_s + w["sector_rs"] * sector_rank
+                  + w["trend_quality"] * trend_q + w["liquidity"] * liq) * 100
+
+    B["avg_vol"] = v.shift(1).rolling(50, min_periods=30).mean()
+    rng = (h - l)
+    B["close_pos"] = (c - l) / rng.replace(0, np.nan)
+    B["hi50"] = c.shift(1).rolling(50, min_periods=50).max()
+    B["hi20"] = c.shift(1).rolling(20, min_periods=20).max()
+    B["hi55"] = c.shift(1).rolling(55, min_periods=55).max()
+    B["hi252"] = h.rolling(252, min_periods=200).max()
+    B["low5_min"] = l.rolling(5, min_periods=5).min()
+    B["prev_high"] = h.shift(1)
+    B["rsi2"] = rsi(c, 2)
+    mid, sd = sma(c, 20), c.rolling(20, min_periods=20).std()
+    B["bb_upper"] = mid + 2 * sd
+    bw = (4 * sd / mid)
+    bw_lo, bw_hi = bw.rolling(126, min_periods=100).min(), bw.rolling(126, min_periods=100).max()
+    B["bw_pct"] = ((bw - bw_lo) / (bw_hi - bw_lo).replace(0, np.nan)).shift(1)
+    nr = rng.rolling(7, min_periods=7).min()
+    B["nr7_prev"] = (rng == nr).shift(1).fillna(False).astype(bool)
+    B["ret1"] = c / c.shift(1) - 1
+    B["ema20_prev_below"] = (B["ema20"].shift(1) <= B["sma50"].shift(1))
+    idx = c.index
+    B["week_start"] = pd.Series(idx.to_series().dt.isocalendar().week.values, index=idx).diff().fillna(1).ne(0)
+
+    breadth = ((c > B["sma50"]) & member).sum(axis=1) / member.sum(axis=1).replace(0, np.nan) * 100
+    B["breadth"] = breadth
+    B["regime_ok"] = (nifty > nifty.rolling(p["regime_sma"], min_periods=p["regime_sma"]).mean()) & \
+                     (breadth >= p["breadth_min_pct_above_50dma"])
+    B["results_soon"] = None if results_soon is None else \
+        results_soon.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool)
+    return B
+
+
+def family_signals(B, p):
+    """Entry mask, setup label and ranking score for the family named in p['family']."""
+    fam = p.get("family", "trend_pb_bo")
+    c, v = B["c"], B["v"]
+    rs_ok = B["rs_rank"] * 100 >= p["min_rs_percentile"]
+    if fam == "trend_pb_bo":
+        breakout = (c > B["hi50"]) & (v > p["breakout_volume_mult"] * B["avg_vol"]) & (B["close_pos"] >= 0.5)
+        touched = B["low5_min"] <= B["ema20"] * (1 + p["pullback_band_pct"] / 100)
+        pullback = touched & (c > B["ema20"]) & (c > B["prev_high"]) & ~breakout
+        entry = B["up_trend"] & B["not_extended"] & rs_ok & (breakout | pullback)
+        setup = np.where(breakout, "breakout", np.where(pullback, "pullback", ""))
+    elif fam == "donchian":
+        hi = B["hi20"] if p.get("donchian_n", 55) == 20 else B["hi55"]
+        entry = B["above200"] & (c > hi) & (v > 1.2 * B["avg_vol"])
+        setup = "donchian breakout"
+    elif fam == "high52":
+        entry = (c >= 0.98 * B["hi252"]) & (c > B["hi20"]) & rs_ok & B["above200"]
+        setup = "near 52-week high"
+    elif fam == "mean_reversion":
+        entry = B["above200"] & (B["rsi2"] < 10) & (c > B["sma50"] * 0.95)
+        setup = "oversold dip in uptrend"
+    elif fam == "momentum_leaders":
+        entry = B["week_start"].values[:, None] & (B["rs_rank"] >= 0.9) & B["up_trend"] & B["not_extended"]
+        entry = pd.DataFrame(entry, index=c.index, columns=c.columns)
+        setup = "momentum leader"
+    elif fam == "squeeze":
+        entry = (B["bw_pct"] <= 0.2) & (c > B["bb_upper"]) & B["above200"]
+        setup = "volatility squeeze breakout"
+    elif fam == "ma_cross":
+        entry = B["ema20_prev_below"] & (B["ema20"] > B["sma50"]) & B["above200"]
+        setup = "20/50 average crossover"
+    elif fam == "volume_surge":
+        entry = (v > 3 * B["avg_vol"]) & (B["ret1"] > 0.04) & (B["close_pos"] >= 0.75) & (c > B["sma50"])
+        setup = "volume surge"
+    elif fam == "nr7":
+        entry = B["nr7_prev"] & (c > B["prev_high"]) & B["up_trend"]
+        setup = "NR7 breakout"
+    elif fam == "lowvol_momentum":
+        entry = rs_ok & (B["lowvol_rank"] >= 0.7) & (c > B["sma50"]) & (c <= B["ema20"] * 1.02) & (c > B["prev_high"])
+        setup = "low-volatility leader on pullback"
+    else:
+        raise ValueError(f"unknown family {fam}")
+    eligible = B["member"] & entry & B["atr"].notna()
+    if B.get("results_soon") is not None and p.get("results_rule") == "exclude":
+        eligible &= ~B["results_soon"]
+    setup = pd.DataFrame(setup if isinstance(setup, np.ndarray) else np.full(c.shape, setup),
+                         index=c.index, columns=c.columns)
+    score = B["score"]
+    if fam == "mean_reversion":
+        score = 100 - B["rsi2"]      # most oversold first
+    regime = B["regime_ok"] if p.get("use_regime_filter", True) else pd.Series(True, index=c.index)
+    return {"score": score, "eligible": eligible, "setup": setup, "atr": B["atr"], "regime_ok": regime,
+            "market_regime_ok": B["regime_ok"], "breadth": B["breadth"], "rs_rank": B["rs_rank"],
+            "sector_rank": B["sector_rank"], "sma50": B["sma50"], "sma200": B["sma200"], "ema20": B["ema20"],
+            "member": B["member"]}

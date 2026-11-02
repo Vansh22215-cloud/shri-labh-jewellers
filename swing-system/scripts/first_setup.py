@@ -1,5 +1,5 @@
 """ONE-TIME SETUP: download all data, check it, run the full backtest/validation,
-test pending proposals, and produce the first daily report. Takes 30-90 minutes.
+test pending proposals, and produce the first daily report. Takes 1-3 hours (includes the ~550-strategy search).
 Safe to re-run (everything is cached)."""
 import sys
 from pathlib import Path

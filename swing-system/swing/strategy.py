@@ -30,85 +30,11 @@ def xs_rank(df, mask):
 
 
 def compute_signals(P, nifty_close, member_mask, industry, params, results_soon=None):
-    """Return a dict of wide DataFrames: score, eligible, setup, atr, plus regime Series.
-
-    P            : dict of wide frames open/high/low/close/volume/raw_close (adjusted)
-    nifty_close  : Series of Nifty 50 closes
-    member_mask  : bool DataFrame - stock in point-in-time universe that day
-    industry     : dict symbol -> industry name (unknown -> neutral sector score)
-    results_soon : optional bool DataFrame - company results due within N days
-    """
-    p = params
-    o, h, l, c, v, raw = P["open"], P["high"], P["low"], P["close"], P["volume"], P["raw_close"]
-    nifty = nifty_close.reindex(c.index).ffill()
-
-    sma_f, sma_s = sma(c, p["trend_fast_sma"]), sma(c, p["trend_slow_sma"])
-    ema_p = ema(c, p["pullback_ema"])
-    a = atr(h, l, c, p["atr_period"])
-    bars = c.notna().cumsum()
-    traded_value = (raw * v).rolling(p["liquidity_lookback"], min_periods=20).median()
-
-    member = member_mask.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool)
-    member &= (bars >= p["min_history_days"]) & (raw >= p["min_price"]) & c.notna()
-
-    # --- momentum and relative strength vs Nifty (skip the most recent few days) ---
-    sk = p["mom_skip"]
-    mom_l = c.shift(sk) / c.shift(p["mom_long"]) - 1
-    mom_s = c.shift(sk) / c.shift(p["mom_short"]) - 1
-    n_l = (nifty.shift(sk) / nifty.shift(p["mom_long"]) - 1)
-    n_s = (nifty.shift(sk) / nifty.shift(p["mom_short"]) - 1)
-    rs_l = mom_l.sub(n_l, axis=0)
-    rs_s = mom_s.sub(n_s, axis=0)
-    rank_rs_l = xs_rank(rs_l, member)
-    rank_rs_s = xs_rank(rs_s, member)
-
-    # --- sector relative strength: average RS of the stock's industry, ranked across industries ---
-    sector_rank = pd.DataFrame(0.5, index=c.index, columns=c.columns)
-    ind = pd.Series({s: industry.get(s) for s in c.columns}).dropna()
-    if len(ind):
-        groups = {g: list(cols) for g, cols in ind.groupby(ind).groups.items()}
-        rs_m = rs_l.where(member)
-        ind_mean = pd.DataFrame({g: rs_m[cols].mean(axis=1) for g, cols in groups.items()})
-        ind_rank = ind_mean.rank(axis=1, pct=True)
-        for g, cols in groups.items():
-            sector_rank[cols] = np.repeat(ind_rank[[g]].values, len(cols), axis=1)
-        sector_rank = sector_rank.fillna(0.5)
-
-    # --- trend health ---
-    up_trend = (c > sma_f) & (sma_f > sma_s) & (sma_s > sma_s.shift(p["slope_lookback"]))
-    not_extended = (c / sma_f - 1) * 100 <= p["max_extension_above_50dma_pct"]
-    pct_above = (c > sma_f).astype(float).where(sma_f.notna()).rolling(63, min_periods=40).mean()
-    atr_pct = a / c
-    trend_q = 0.5 * xs_rank(pct_above, member) + 0.5 * xs_rank(-atr_pct, member)
-    liq = xs_rank(traded_value, member)
-
-    # --- entry timing ---
-    prior_high = c.shift(1).rolling(p["breakout_lookback"], min_periods=p["breakout_lookback"]).max()
-    avg_vol = v.shift(1).rolling(50, min_periods=30).mean()
-    rng = (h - l).replace(0, np.nan)
-    breakout = (c > prior_high) & (v > p["breakout_volume_mult"] * avg_vol) & ((c - l) / rng >= 0.5)
-    touched = l.rolling(5, min_periods=5).min() <= ema_p * (1 + p["pullback_band_pct"] / 100)
-    pullback = touched & (c > ema_p) & (c > h.shift(1)) & ~breakout
-
-    # --- market regime (weak-market filter): Nifty above its 200-day average AND breadth ok ---
-    breadth = ((c > sma_f) & member).sum(axis=1) / member.sum(axis=1).replace(0, np.nan) * 100
-    regime_ok = (nifty > nifty.rolling(p["regime_sma"], min_periods=p["regime_sma"]).mean()) & \
-                (breadth >= p["breadth_min_pct_above_50dma"])
-
-    w = p["score_weights"]
-    score = (w["rs_long"] * rank_rs_l + w["rs_short"] * rank_rs_s + w["sector_rs"] * sector_rank
-             + w["trend_quality"] * trend_q + w["liquidity"] * liq) * 100
-
-    eligible = member & up_trend & not_extended & (rank_rs_l * 100 >= p["min_rs_percentile"]) \
-        & (breakout | pullback) & a.notna()
-    if results_soon is not None:
-        rs_mask = results_soon.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool)
-        eligible &= ~rs_mask
-    setup = pd.DataFrame(np.where(breakout, "breakout", np.where(pullback, "pullback", "")),
-                         index=c.index, columns=c.columns)
-    return {"score": score, "eligible": eligible, "setup": setup, "atr": a, "regime_ok": regime_ok,
-            "breadth": breadth, "rs_rank": rank_rs_l, "sector_rank": sector_rank,
-            "sma50": sma_f, "sma200": sma_s, "ema20": ema_p, "member": member}
+    """Signals for one strategy config (family + parameters). See swing/families.py.
+    If results_soon is given, it is applied only when params['results_rule'] == 'exclude'."""
+    from .families import base_indicators, family_signals
+    B = base_indicators(P, nifty_close, member_mask, industry, params, results_soon)
+    return family_signals(B, params)
 
 
 def trade_plan(close, atr_val, p):

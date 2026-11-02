@@ -70,7 +70,7 @@ def test_time_stop(params):
 def test_paper_simulator_matches_backtest(params):
     P, sig, idx = make([100, 100.5, 105, 104], [101, 101, 110, 104.5], [99, 99.5, 104, 100], [100, 100.6, 108, 101])
     _, tr, _ = backtest.run(P, sig, params, idx[0], idx[-1], 45000)
-    tip = {"entry_high": 101.25, "stop": 95.0, "qty": tr.iloc[0]["qty"]}
+    tip = {"signal_close": 100.0, "entry_high": 101.25, "stop": 95.0, "qty": tr.iloc[0]["qty"]}
     res = journal.simulate_trade(P["open"]["A"], P["high"]["A"], P["low"]["A"], P["close"]["A"], idx[0], tip, params)
     assert res["status"] == "closed"
     assert abs(res["pnl"] - tr.iloc[0]["pnl"]) < 0.05
@@ -81,3 +81,32 @@ def test_equity_never_negative_and_costs_charged(params):
     eq, tr, _ = backtest.run(P, sig, params, idx[0], idx[-1], 45000)
     assert (eq > 0).all()
     assert eq.iloc[-1] < 45000   # flat prices -> we lose the charges + slippage
+
+
+def test_trailing_stop_exit(params):
+    p = dict(params, exit_style="trail", trail_atr_mult=3.0)
+    # rises to 120 then falls: trail stop = 120 - 7.5 = 112.5 -> exit near there, in profit
+    c = [100, 100.5, 105, 110, 115, 120, 118, 114, 110, 108]
+    P, sig, idx = make([100, 100.5, 104, 109, 114, 119, 119, 116, 113, 109], [x + 1 for x in c], [x - 1 for x in c], c)
+    _, tr, _ = backtest.run(P, sig, p, idx[0], idx[-1], 45000)
+    t = tr.iloc[0]
+    assert t["exit_reason"] in ("stop", "stop_gap") and t["pnl"] > 0
+
+
+def test_signal_exit_sells_next_open(params):
+    p = dict(params, exit_style="signal")
+    c = [100, 99, 98, 97, 96, 99.5, 101, 102]
+    P, sig, idx = make([100, 99.2, 98, 97, 96, 97, 101.5, 102], [x + 0.5 for x in c], [x - 0.5 for x in c], c,
+                       signal_day=0, atr=5.0)
+    _, tr, _ = backtest.run(P, sig, p, idx[0], idx[-1], 45000)
+    assert tr.iloc[0]["exit_reason"] == "signal"
+
+
+def test_paper_tracker_open_and_skipped(params):
+    P, sig, idx = make([100, 100.5, 101, 102], [101, 101, 102, 103], [99, 99.5, 100, 101], [100, 100.6, 101.5, 102.5])
+    tip = {"signal_close": 100.0, "entry_high": 101.25, "stop": 95.0, "qty": 10}
+    res = journal.simulate_trade(P["open"]["A"], P["high"]["A"], P["low"]["A"], P["close"]["A"], idx[0], tip, params)
+    assert res["status"] == "open" and res["pnl"] > -50
+    P2, _, idx2 = make([100, 103, 104, 105], [101, 104, 105, 106], [99, 102, 103, 104], [100, 103, 104, 105])
+    res2 = journal.simulate_trade(P2["open"]["A"], P2["high"]["A"], P2["low"]["A"], P2["close"]["A"], idx2[0], tip, params)
+    assert res2["status"].startswith("skipped")

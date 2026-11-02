@@ -53,6 +53,18 @@ def gate_status(strategy):
         return {"passed": False, "checks": [], "note": "validation has not been run yet"}
 
 
+def search_html():
+    try:
+        o = json.loads((ROOT / "validation" / "search_latest.json").read_text())
+    except Exception:
+        return ""
+    won = sum(p["beat_niftybees"] for p in o["picks"])
+    return (f"<p><b>Strategy search</b> ({o['date']}): {o['variants_searched']} strategy variants across 10 families "
+            f"were searched honestly (each year's pick chosen only from earlier years). Picks beat NIFTYBEES in "
+            f"{won} of {len(o['picks'])} years; search gate <b class='{'good' if o['passed'] else 'bad'}'>"
+            f"{'PASSED' if o['passed'] else 'FAILED'}</b>. Details: validation/search.html</p>")
+
+
 def gate_html(g):
     if not g.get("checks"):
         return f"<p class='bad'>Not validated: {g.get('note', '')}</p>"
@@ -71,8 +83,9 @@ def build_reasons_risks(sym, sig, d, plan, q, results_date, p, deals):
     reasons.append(f"Its industry ranks in the top {100 - sr:.0f}% by strength" if sr >= 50
                    else f"Industry strength is below average (rank {sr:.0f}/100)")
     reasons.append("Healthy uptrend: price above rising 50- and 200-day averages")
-    reasons.append("Breakout to a 50-day closing high on above-average volume" if plan["setup"] == "breakout"
-                   else "Pullback to the 20-day average followed by a reversal day (closed above yesterday's high)")
+    setup_text = {"breakout": "Breakout to a 50-day closing high on above-average volume",
+                  "pullback": "Pullback to the 20-day average followed by a reversal day (closed above yesterday's high)"}
+    reasons.append(setup_text.get(plan["setup"], f"Entry signal: {plan['setup']}"))
     reasons += [f"Fundamentals: {x}" for x in q.get("positives", [])]
     stop_pct = (plan["last_close"] - plan["stop"]) / plan["last_close"] * 100
     risks.append(f"Stop is {stop_pct:.1f}% below the last close; a gap down can cause a bigger loss")
@@ -170,7 +183,8 @@ def run():
         bad("duplicate dates in price panel")
         blockers.append("Duplicate rows in price data")
 
-    regime = bool(sig["regime_ok"].loc[d])
+    regime = bool(sig["regime_ok"].loc[d])                       # used by this strategy version
+    market_ok = bool(sig.get("market_regime_ok", sig["regime_ok"]).loc[d])  # shown to you
     nlast = float(nifty.loc[:d].iloc[-1])
     n200 = float(nifty.loc[:d].tail(200).mean())
     vix = data_prices.load("INDIAVIX")
@@ -178,7 +192,8 @@ def run():
         "Nifty 50 close": f"{nlast:,.0f} ({(nlast / n200 - 1) * 100:+.1f}% vs 200-day average)",
         "Breadth (% of top-500 above 50-day avg)": f"{sig['breadth'].loc[d]:.0f}%",
         "India VIX (fear gauge)": f"{vix['close'].iloc[-1]:.1f}" if vix is not None else "n/a",
-        "Market filter": "HEALTHY - new trades allowed" if regime else "WEAK - no new trades (capital protection)",
+        "Market filter": ("HEALTHY" if market_ok else "WEAK") + (
+            "" if p.get("use_regime_filter", True) else " (this strategy version does not use the market filter)"),
     }
     secs = []
     for k in data_prices.INDEX_TICKERS:
@@ -229,7 +244,8 @@ def run():
                 "score": float(sig["score"].at[d, sym]), "last_close": round(close, 2), **lv, "qty": qty,
                 "risk_rupees": round(qty * (close - lv["stop"]), 0), "max_hold": p["max_hold_days"],
                 "results": str(rd.date()) if rd is not None else None,
-                "hit_rate": setup_hits.get(sig["setup"].at[d, sym], {})}
+                "hit_rate": setup_hits.get(sig["setup"].at[d, sym], {}),
+                "exit_style": p.get("exit_style", "targets"), "trail_atr": round(p.get("trail_atr_mult", 3.0) * a, 2)}
         plan["reasons"], plan["risks"] = build_reasons_risks(sym, sig, d, plan, qsum, rd, p, deals)
         plans.append(plan)
 
@@ -315,7 +331,7 @@ def run():
     ctx = {"day": day, "strategy": sname, "mode_text": mode_text, "headline": headline, "why": why,
            "money_advice": money, "market": market, "tips": tips, "removed": removed, "my_trades": my_status,
            "paper": paper, "shadow": shadow, "backtest_ref": bt_ref, "health": health_items,
-           "gate_html": gate_html(g),
+           "gate_html": search_html() + gate_html(g),
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
     f = report.daily_html(ctx)
 

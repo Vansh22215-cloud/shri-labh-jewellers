@@ -158,6 +158,35 @@ def ask_claude_for_proposals(summary):
         return f"Claude proposal step failed: {e}"
 
 
+def strategy_search(live, live_table, max_age_days=30):
+    """Re-run the walk-forward strategy search monthly; promote its pick only if the search passes the gate."""
+    from . import search
+    f = ROOT / "validation" / "search_latest.json"
+    out = json.loads(f.read_text()) if f.exists() else None
+    if out is None or (pd.Timestamp.today() - pd.Timestamp(out["date"])).days > max_age_days:
+        out = search.run_search()
+    msg = (f"Strategy search ({out['variants_searched']} variants, {out['date']}): walk-forward picks beat "
+           f"NIFTYBEES in {sum(p['beat_niftybees'] for p in out['picks'])} of {len(out['picks'])} years; "
+           f"gate {'PASSED' if out['passed'] else 'FAILED'}")
+    if not out["passed"]:
+        return msg + " - nothing promoted."
+    pick = out["latest_pick"]
+    for v in versions():
+        if load_strategy(v).get("search_variant") == pick["variant"] and load_strategy(v).get("search_date") == out["date"]:
+            return msg + f" - already live as {v}."
+    n = int(versions()[-1][1:]) + 1
+    params = dict(pick["params"], name=f"v{n}", created=str(date.today()), search_variant=pick["variant"],
+                  search_date=out["date"], description=f"Chosen by walk-forward search: {pick['how']}")
+    (STRATEGIES / f"v{n}.json").write_text(json.dumps(params, indent=2))
+    gs = json.loads(validate.GATE.read_text()) if validate.GATE.exists() else {}
+    gs[f"v{n}"] = {"passed": True, "checks": out["checks"], "date": out["date"],
+                   "variants_tried": out["search_procedures_tried"], "note": "validated by walk-forward search"}
+    validate.GATE.write_text(json.dumps(gs, indent=1))
+    set_live(f"v{n}")
+    changelog(f"- PROMOTED search pick {pick['variant']} as v{n} ({pick['how']}); previous {live} kept. {msg}")
+    return msg + f" - PROMOTED as v{n}."
+
+
 def run():
     settings = load_settings()
     live = settings["live_strategy"]
@@ -212,6 +241,7 @@ def run():
         changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
         notes.append("Rejected " + summary)
 
+    notes.append(strategy_search(live, live_table))
     notes.append(claude_effect())
     notes.append(rotate_holdout(live_res["data_end"]))
     if settings.get("claude_review"):

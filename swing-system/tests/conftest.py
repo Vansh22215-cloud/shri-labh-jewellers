@@ -7,6 +7,10 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import logging  # noqa: E402
+# Tests must never write into the real logs/system.log (the daily report summarises that file).
+logging.getLogger("swing").addHandler(logging.NullHandler())
+
 from swing.config import load_strategy  # noqa: E402
 
 
