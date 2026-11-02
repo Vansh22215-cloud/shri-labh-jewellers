@@ -41,9 +41,13 @@ Already done for you: your bot token is saved in `my_secrets.yaml` (private, nev
 `DECISIONS.md` why every default was chosen | `IMPROVEMENTS.md` tested ideas | `CHANGELOG.md` history |
 `logs/system.log` errors.
 
-## Status at first build (2026-11-02)
-The first full backtest (2013 - Nov 2026, Zerodha costs and slippage included) **FAILED** the validation gate:
-strategy v1 beat simply holding NIFTYBEES in only 3 of 13 yearly periods, lost to it in the untouched holdout
-(-4.1% vs -3.2%; liquid fund +9.8%), and had a 21.7% worst drawdown. So the daily report says
-**"No tips: strategy not validated. Use the index fund."** The system keeps re-testing itself every week and
-will only start giving tips if a version honestly passes. Details: `validation/latest.html`.
+## Status (2026-11-02)
+The system tested **556 different strategies** (10 families: breakouts, pullbacks, dip-buying, 52-week highs,
+momentum leaders, squeezes, crossovers, volume surges, NR7, low-volatility momentum - each with different
+stop-losses, exits and holding periods), with Zerodha costs, from 2013 to today.
+- Picking each year's strategy from the previous 3 years (the fair test) beat simply holding NIFTYBEES in only
+  **2 of 10 years** (about 4.9% a year vs about 13% for NIFTYBEES).
+- Even with hindsight, only 2 of 556 strategies grew faster than NIFTYBEES, and not convincingly.
+- So the validation gate **FAILED** and the daily report says **"No tips: strategy not validated. Use the index fund."**
+  The system re-runs this search every month and will only give tips if something honestly passes.
+Details: `validation/search.html` and `validation/latest.html`.

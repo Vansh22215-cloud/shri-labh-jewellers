@@ -16,3 +16,10 @@
   - Claude review: 0 reviewed trades closed - too few to judge; it remains an explainer only.
   - Holdout unchanged (starts 2025-05-01)
   - Variants tried so far: 2
+
+## 2026-11-02 - Strategy search (556 variants, 10 families)
+- Walk-forward search (D37-D42): picks beat NIFTYBEES in 2 of 10 years; holdout pick +5.4% vs NIFTYBEES -2.4%
+  but below the liquid fund +9.8%; worst fall 20.2%; t-stat -1.95. **Search gate FAILED. Nothing promoted.**
+- Even with hindsight, only 2 of 556 variants (0.4%) grew faster than NIFTYBEES over 2013-Apr 2025, and none
+  beat it convincingly (best t-stat about 0). Best families on average: low-volatility momentum, momentum leaders.
+- Live version stays v1 (not validated) -> reports say "No tips: strategy not validated. Use the index fund."
