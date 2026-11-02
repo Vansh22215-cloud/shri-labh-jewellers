@@ -1,0 +1,12 @@
+{
+ "4b2984719a": {
+  "name": "v1",
+  "first_tested": "2026-11-02",
+  "note": "live version re-validation"
+ },
+ "e01f2bfe75": {
+  "name": "candidate-P1",
+  "first_tested": "2026-11-02",
+  "note": "proposal P1"
+ }
+}
