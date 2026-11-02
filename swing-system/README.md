@@ -15,8 +15,8 @@ Every weekday evening this system downloads free market data, checks it, and wri
 3. Click **Install Now**, wait, then click **Close**.
 
 **Step 2 - Get this folder and run setup (once, 30-90 minutes, mostly waiting)**
-1. Download this project as a ZIP (on GitHub: green **Code** button -> **Download ZIP**) and unzip it, e.g. to
-   `C:\swing`. Open the `swing-system` folder inside it.
+1. Download the file **swing-system.zip** that Claude sent you in the chat. Right-click it -> **Extract All...**
+   -> choose e.g. `C:\swing` -> **Extract**. Open the `swing-system` folder inside it.
 2. Open the `windows` folder and **double-click `SETUP.bat`**. If Windows says "Windows protected your PC",
    click **More info -> Run anyway**.
 3. Leave the black window open until it says **DONE**. Your first report opens in your browser. From now on
