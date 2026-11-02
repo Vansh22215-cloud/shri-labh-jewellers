@@ -21,7 +21,7 @@ CAVEATS = [
     "the losers, so results are probably flattered. Coverage is reported above.",
     "DATA QUALITY: prices come from Yahoo Finance and are cross-checked against NSE official closing prices; "
     "stocks that disagree or have unexplained jumps are quarantined (excluded). Yahoo data still contains "
-    "undetected errors, and demergers are not adjusted.",
+    "undetected errors, and demergers are not always adjusted.",
     "FUNDAMENTALS are NOT part of this backtest (free point-in-time history does not exist for 10+ years). "
     "The live quality screen can only remove tips; its effect is untested.",
     "RESULTS DATES used in tests are actual historical dates; in reality a date is known only a few days "
@@ -88,7 +88,8 @@ def run(strategy_name, params=None, note="live version re-validation", write=Tru
     cov = coverage
     cov_txt = (f"{cov['with_price_data']} of {cov['universe_symbols_ever']} stocks that were ever in the monthly "
                f"top-500 have usable price data ({cov['with_price_data'] / max(1, cov['universe_symbols_ever']):.0%}). "
-               f"{cov['quarantined']} were quarantined for bad data.")
+               f"Excluded: {cov['quarantined']} symbols in total - mostly delisted/renamed stocks with no free price "
+               f"history, plus a few dozen with suspicious data (see data/quarantine.json).")
     page = f"""<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
 <title>Validation {strategy_name}</title><style>body{{font-family:system-ui,Segoe UI,Arial;max-width:1000px;margin:auto;padding:16px;background:#fff;color:#0f172a}}
 table{{border-collapse:collapse;font-size:12px;display:block;overflow-x:auto}}td,th{{border-bottom:1px solid #e2e8f0;padding:4px 6px;white-space:nowrap}}img{{max-width:100%}}</style></head><body>
