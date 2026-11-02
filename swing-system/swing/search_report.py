@@ -41,7 +41,7 @@ Result {h.get('total_return_pct')}% (worst fall {h.get('max_drawdown_pct')}%, {h
 {h['niftybees_return_pct']}% vs liquid fund {h['liquid_fund_return_pct']}%.</p>
 <h2>Which families work best on average (median of all their variants, 2013-Apr 2025)</h2>
 {_tbl(o['family_medians'], ['family', 'cagr_pct', 'max_drawdown_pct', 'sharpe'], ['Family', 'CAGR %', 'Max drawdown %', 'Sharpe'])}
-<p>Share of all variants whose growth beat NIFTYBEES over the whole period: {o['share_variants_beating_niftybees_cagr']:.0%}.</p>
+<p>Share of all variants whose growth beat NIFTYBEES over the whole period: {o['share_variants_beating_niftybees_cagr']:.1%} (about {round(o['share_variants_beating_niftybees_cagr'] * o['variants_searched'])} of {o['variants_searched']}).</p>
 <h2>Cherry-picked top 10 (NOT evidence)</h2>
 <p>These are the best of {o['variants_searched']} backtests chosen with hindsight. To count as real after this many tries,
 a t-stat of at least {o['cherry_haircut_t_needed']} would be needed. Shown for transparency only.</p>
