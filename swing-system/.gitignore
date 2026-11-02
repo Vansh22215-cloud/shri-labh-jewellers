@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .pytest_cache/
 logs/*.out
+my_secrets.yaml

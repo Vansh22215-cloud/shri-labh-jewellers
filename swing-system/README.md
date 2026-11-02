@@ -24,10 +24,8 @@ Every weekday evening this system downloads free market data, checks it, and wri
    Saturdays.
 
 **Step 3 (optional) - Get the report on your phone via Telegram**
-1. In Telegram, search **@BotFather**, tap **Start**, send `/newbot`, choose any name and a username ending in `bot`.
-2. BotFather replies with a **token** (looks like `123456:ABC-...`). Copy it.
-3. Open `settings.yaml` in Notepad, paste the token between the quotes of `telegram_bot_token: ""`, save.
-4. Open your new bot in Telegram and send it any message (e.g. "hi"). Done - the next report also comes by Telegram.
+Already done for you: your bot token is saved in `my_secrets.yaml` (private, never uploaded). Just open your bot
+**@Vsjshsjsbaksnsjsh_bot** in Telegram and send it any message (e.g. "hi"). Reports then also arrive in Telegram.
 
 ## Everyday use
 - Read `reports/latest.html` each evening. In **paper mode** (first 8 weeks) do not use real money - watch how

@@ -45,6 +45,13 @@ def load_settings(path=None):
         logging.getLogger("swing").error("settings.yaml unreadable (%s); kill switch forced ON", e)
         user = {"kill_switch": True}
     defaults.update(user)
+    # Private values (e.g. Telegram token) live in my_secrets.yaml, which is never uploaded to GitHub.
+    sec = ROOT / "my_secrets.yaml"
+    if path is None and sec.exists():
+        try:
+            defaults.update({k: v for k, v in (yaml.safe_load(sec.read_text(encoding="utf-8")) or {}).items() if v})
+        except Exception as e:
+            logging.getLogger("swing").error("my_secrets.yaml unreadable: %s", e)
     return defaults
 
 
