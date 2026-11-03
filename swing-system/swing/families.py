@@ -16,12 +16,18 @@ Families:
   volume_surge     volume > 3x average with a strong up-close (institutional buying footprint)
   nr7              narrowest range of 7 days followed by a close above that day's high, in an uptrend
   lowvol_momentum  strong RS AND low volatility, bought near the 20-day EMA
+  inside_day       yesterday's range inside the day before's; today closes above yesterday's high (uptrend)
+  gap_go           opens >= 1% above yesterday's high and closes strong on 1.5x volume (gap-and-go)
+  strong_close     up > 2% closing in the top 10% of the day's range, strong RS, above 50-day average
+  pullback_3d      three lower closes in a row inside an uptrend (short dip), above the 50-day average
 """
 import numpy as np
 import pandas as pd
 
 FAMILIES = ["trend_pb_bo", "donchian", "high52", "mean_reversion", "momentum_leaders",
             "squeeze", "ma_cross", "volume_surge", "nr7", "lowvol_momentum"]
+# Short-term (1-5 day) chart patterns, added 2026-11-03
+SHORT_FAMILIES = ["inside_day", "gap_go", "strong_close", "pullback_3d"]
 
 
 def sma(df, n):
@@ -54,7 +60,7 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     """All shared indicators (expensive part, computed once)."""
     o, h, l, c, v, raw = P["open"], P["high"], P["low"], P["close"], P["volume"], P["raw_close"]
     nifty = nifty_close.reindex(c.index).ffill()
-    B = {"c": c, "h": h, "l": l, "v": v}
+    B = {"c": c, "h": h, "l": l, "v": v, "o": o}
     B["sma50"], B["sma200"] = sma(c, p["trend_fast_sma"]), sma(c, p["trend_slow_sma"])
     B["ema20"] = ema(c, p["pullback_ema"])
     B["atr"] = a = atr(h, l, c, p["atr_period"])
@@ -103,6 +109,8 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     B["hi252"] = h.rolling(252, min_periods=200).max()
     B["low5_min"] = l.rolling(5, min_periods=5).min()
     B["prev_high"] = h.shift(1)
+    B["inside_prev"] = ((h.shift(1) < h.shift(2)) & (l.shift(1) > l.shift(2)))
+    B["down3"] = (c < c.shift(1)) & (c.shift(1) < c.shift(2)) & (c.shift(2) < c.shift(3))
     B["rsi2"] = rsi(c, 2)
     mid, sd = sma(c, 20), c.rolling(20, min_periods=20).std()
     B["bb_upper"] = mid + 2 * sd
@@ -166,6 +174,19 @@ def family_signals(B, p):
     elif fam == "lowvol_momentum":
         entry = rs_ok & (B["lowvol_rank"] >= 0.7) & (c > B["sma50"]) & (c <= B["ema20"] * 1.02) & (c > B["prev_high"])
         setup = "low-volatility leader on pullback"
+    elif fam == "inside_day":
+        entry = B["inside_prev"] & (c > B["prev_high"]) & B["up_trend"]
+        setup = "inside-day breakout"
+    elif fam == "gap_go":
+        entry = (B["o"] >= B["prev_high"] * 1.01) & (c > B["o"]) & (B["close_pos"] >= 0.7) & \
+                (v > 1.5 * B["avg_vol"]) & (c > B["sma50"])
+        setup = "gap-and-go"
+    elif fam == "strong_close":
+        entry = (B["ret1"] > 0.02) & (B["close_pos"] >= 0.9) & rs_ok & (c > B["sma50"])
+        setup = "strong close"
+    elif fam == "pullback_3d":
+        entry = B["down3"] & B["up_trend"] & (c > B["sma50"])
+        setup = "3-day pullback in uptrend"
     else:
         raise ValueError(f"unknown family {fam}")
     eligible = B["member"] & entry & B["atr"].notna()

@@ -15,7 +15,7 @@ import pandas as pd
 
 from . import backtest, data_prices, engine, validate
 from .config import ROOT, get_logger, load_strategy
-from .families import FAMILIES, base_indicators, family_signals
+from .families import FAMILIES, SHORT_FAMILIES, base_indicators, family_signals
 
 log = get_logger()
 VAL = ROOT / "validation"
@@ -44,13 +44,44 @@ def variant_space(base):
     return out
 
 
+def short_space(base):
+    """Short-term space (added 2026-11-03 at the user's request: hold 1-5 days, exit at target).
+    Rule changes vs v1: holds of 2/3/5 days, tighter stops and targets, and a second sizing
+    option of 2% risk per trade with up to 6 open trades."""
+    out = []
+    exits = {"quick": {"exit_style": "targets", "target1_r": 1.0, "target2_r": 2.0},
+             "targets": {"exit_style": "targets", "target1_r": 1.5, "target2_r": 3.0},
+             "trail": {"exit_style": "trail", "trail_atr_mult": 2.0}}
+    sizing = {"1pct": {"risk_per_trade_pct": 1.0, "max_open_positions": 4},
+              "2pct": {"risk_per_trade_pct": 2.0, "max_open_positions": 6}}
+    fams = ["trend_pb_bo", "mean_reversion", "high52", "volume_surge", "nr7", "squeeze"] + SHORT_FAMILIES
+    for fam, stop, ex, hold, sz, reg in product(fams, [1.0, 1.5, 2.0], list(exits), [2, 3, 5], list(sizing),
+                                                [True, False]):
+        e = dict(exits[ex])
+        if fam == "mean_reversion" and ex == "trail":
+            e = {"exit_style": "signal"}
+        out.append(dict(base, family=fam, stop_atr_mult=stop, max_hold_days=hold, use_regime_filter=reg,
+                        **e, **sizing[sz]))
+    for i, v in enumerate(out):
+        v["name"] = f"T{i:04d}"
+    return out
+
+
+SPACES = {
+    "swing": (variant_space, SEARCH_NAME, "search_latest.json"),
+    "short": (short_space, "wf-search-short-v1: 1-5 day holds, 36m Sharpe pick, yearly, min 30 trades",
+              "search_short.json"),
+}
+
+
 def describe(v):
     ex = v.get("exit_style")
     exs = (f"targets {v['target1_r']}R/{v['target2_r']}R" if ex == "targets" else
            "trailing stop 3 ATR" if ex == "trail" else "exit on bounce")
     fam = v["family"] + (f"({v['donchian_n']})" if v["family"] == "donchian" else "")
     return (f"{fam}, stop {v['stop_atr_mult']} ATR, {exs}, max {v['max_hold_days']} days, "
-            f"market filter {'on' if v.get('use_regime_filter', True) else 'off'}")
+            f"market filter {'on' if v.get('use_regime_filter', True) else 'off'}, "
+            f"risk {v.get('risk_per_trade_pct', 1.0)}% x {v.get('max_open_positions', 4)} trades")
 
 
 _G = {}
@@ -79,13 +110,14 @@ def _run_one_inner(v):
     return v["name"], mret, tm.reindex(mret.index).fillna(0), backtest.stats(eq, tr)
 
 
-def run_search(processes=None):
+def run_search(processes=None, space="swing"):
+    space_fn, proc_name, out_file = SPACES[space]
     base = load_strategy("v1")
-    variants = variant_space({k: v for k, v in base.items() if k not in ("name", "created", "description")})
+    variants = space_fn({k: v for k, v in base.items() if k not in ("name", "created", "description")})
     for v in variants:
         validate.register_variant(v, f"search: {describe(v)}")
     procs = json.loads(PROCS.read_text()) if PROCS.exists() else {}
-    procs.setdefault(SEARCH_NAME, str(date.today()))
+    procs.setdefault(proc_name, str(date.today()))
     PROCS.write_text(json.dumps(procs, indent=1))
 
     P, sig0, nifty, industry, coverage, hist = engine.build(base)
@@ -198,7 +230,7 @@ def run_search(processes=None):
     sh = win[ok].mean() / win[ok].std().replace(0, np.nan) * math.sqrt(12)
     latest = sh.idxmax()
 
-    out = {"date": str(date.today()), "procedure": SEARCH_NAME, "variants_searched": len(variants),
+    out = {"date": str(date.today()), "procedure": proc_name, "space": space, "variants_searched": len(variants),
            "raw_variants_ever": raw_n, "search_procedures_tried": n_proc, "passed": passed, "checks": checks,
            "picks": picks, "holdout": hold, "chain_t": round(t_chain, 2), "chain_max_dd": round(chain_dd, 2),
            "chain_cagr_pct": round(((1 + chain).prod() ** (12 / len(chain)) - 1) * 100, 2),
@@ -208,9 +240,9 @@ def run_search(processes=None):
            "family_medians": fam_summary.reset_index().to_dict("records"),
            "share_variants_beating_niftybees_cagr": round(float((S["cagr_pct"] > bees_cagr).mean()), 3),
            "latest_pick": {"variant": latest, "how": describe(byname[latest]), "params": byname[latest]}}
-    (VAL / "search_latest.json").write_text(json.dumps(out, indent=1, default=str))
-    S.assign(how=[describe(byname[i]) for i in S.index]).to_csv(VAL / "search_all_variants.csv")
+    (VAL / out_file).write_text(json.dumps(out, indent=1, default=str))
+    S.assign(how=[describe(byname[i]) for i in S.index]).to_csv(VAL / f"search_all_variants_{space}.csv")
     from . import search_report
-    search_report.write()
+    search_report.write(out_file)
     log.info("Search done: gate %s", "PASSED" if passed else "FAILED")
     return out

@@ -129,3 +129,24 @@ testing a single idea.
   backtest (positions carried in from the previous year), not a fresh restart.
 - **D42. If the search ever passes:** the variant selected on the latest 36 months becomes the next live
   version (vN). The weekly job re-runs the search when the last one is > 30 days old.
+
+## Short-term and intraday trading (added 2026-11-03 at your request, written BEFORE these searches)
+You asked for short trades (hours to 2-3 days, exit at target) and allowed the rules to change.
+- **D43. Short-term daily search** (`search.short_space`): holds of 2/3/5 days, stops 1/1.5/2 ATR, quick
+  targets 1R/2R, 1.5R/3R or a 2-ATR trailing stop, and a second sizing option of **2% risk per trade with up
+  to 6 open trades** (rule change from D19). 10 patterns incl. 4 new short-term ones (inside-day breakout,
+  gap-and-go, strong close, 3-day pullback). 1,080 variants. Same walk-forward selection and gate as D39-D40.
+- **D44. Intraday data:** Yahoo hourly bars (free, ~730 days; we keep older bars cached so history grows).
+  Top 150 liquid stocks of the current universe (small survivorship bias over 3 years).
+- **D45. Intraday rules:** see `swing/intraday.py` docstring - entry at the next bar open after a closed
+  signal bar, stop-first when ambiguous, square-off at the 15:15 bar open, 1% risk, max 50% of capital per
+  trade, NO leverage (MIS leverage magnifies losses; capital protection first), max 1-2 trades/day.
+- **D46. Intraday costs:** Zerodha MIS charges (zerodha.com/charges) + slippage **0.05% per side** (typical
+  bid-ask spread of top-150 NSE stocks is 0.02-0.05%). Because this is an estimate, a strategy must ALSO stay
+  above the liquid fund with **double slippage (0.10%)** to pass.
+- **D47. Intraday walk-forward:** calendar quarters; each quarter's strategy is picked by best Sharpe over the
+  previous 6 months (>= 30 trades). Holdout: 2026-07-01 onward, never used for choices. Benchmarks: NIFTYBEES
+  and the liquid fund (idle intraday capital earns nothing in the backtest).
+- **D48. Kite Connect:** not used. It is paid (about Rs 500/month) and the free data is enough for this
+  research; orders are placed by you. Revisit only if a strategy passes and needs minute-level data to confirm.
+  Never share API keys in chat.

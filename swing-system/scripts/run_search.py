@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from swing.search import run_search
 
 if __name__ == "__main__":
-    out = run_search()
+    out = run_search(space=sys.argv[1] if len(sys.argv) > 1 else "swing")
     print(json.dumps({k: out[k] for k in ("passed", "checks", "picks", "holdout", "chain_cagr_pct",
                                           "niftybees_cagr_pct_wf", "cherry_picked_top10",
                                           "share_variants_beating_niftybees_cagr")}, indent=1, default=str))

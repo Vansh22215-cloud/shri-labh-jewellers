@@ -54,15 +54,23 @@ def gate_status(strategy):
 
 
 def search_html():
-    try:
-        o = json.loads((ROOT / "validation" / "search_latest.json").read_text())
-    except Exception:
+    """One line per strategy search (swing, short-term, intraday)."""
+    parts = []
+    for fname, label, unit in (("search_latest.json", "Swing (days-weeks)", "years"),
+                               ("search_short.json", "Short-term (1-5 days)", "years"),
+                               ("search_intraday.json", "Intraday (same day)", "quarters")):
+        try:
+            o = json.loads((ROOT / "validation" / fname).read_text())
+        except Exception:
+            continue
+        won = sum(p["beat_niftybees"] for p in o["picks"])
+        parts.append(f"<li><b>{label}</b> ({o['date']}): {o['variants_searched']} strategies searched; honest "
+                     f"walk-forward picks beat NIFTYBEES in {won} of {len(o['picks'])} {unit} - "
+                     f"<b class='{'good' if o['passed'] else 'bad'}'>{'PASSED' if o['passed'] else 'FAILED'}</b></li>")
+    if not parts:
         return ""
-    won = sum(p["beat_niftybees"] for p in o["picks"])
-    return (f"<p><b>Strategy search</b> ({o['date']}): {o['variants_searched']} strategy variants across 10 families "
-            f"were searched honestly (each year's pick chosen only from earlier years). Picks beat NIFTYBEES in "
-            f"{won} of {len(o['picks'])} years; search gate <b class='{'good' if o['passed'] else 'bad'}'>"
-            f"{'PASSED' if o['passed'] else 'FAILED'}</b>. Details: validation/search.html</p>")
+    return ("<p><b>Strategy searches</b> (each period's strategy chosen only from earlier data). Details in the "
+            "validation folder (search*.html).</p><ul>" + "".join(parts) + "</ul>")
 
 
 def gate_html(g):

@@ -24,7 +24,7 @@ from datetime import date
 import pandas as pd
 
 from . import journal, validate, validation_report
-from .config import ROOT, STRATEGIES, get_logger, load_settings, load_state, load_strategy, save_state
+from .config import DATA as DATA_DIR, ROOT, STRATEGIES, get_logger, load_settings, load_state, load_strategy, save_state
 
 log = get_logger()
 IMPROVEMENTS = ROOT / "IMPROVEMENTS.md"
@@ -165,9 +165,27 @@ def strategy_search(live, live_table, max_age_days=30):
     out = json.loads(f.read_text()) if f.exists() else None
     if out is None or (pd.Timestamp.today() - pd.Timestamp(out["date"])).days > max_age_days:
         out = search.run_search()
+    # Monthly re-run of the short-term and intraday searches too (results shown in the daily report).
+    extra = []
+    fs = ROOT / "validation" / "search_short.json"
+    o2 = json.loads(fs.read_text()) if fs.exists() else None
+    if o2 is None or (pd.Timestamp.today() - pd.Timestamp(o2["date"])).days > max_age_days:
+        o2 = search.run_search(space="short")
+    extra.append(f"short-term search gate {'PASSED' if o2['passed'] else 'FAILED'}")
+    fi = ROOT / "validation" / "search_intraday.json"
+    o3 = json.loads(fi.read_text()) if fi.exists() else None
+    if o3 is None or (pd.Timestamp.today() - pd.Timestamp(o3["date"])).days > max_age_days:
+        from . import intraday, intraday_data, search_report
+        intraday_data.download((DATA_DIR / "intraday_universe.txt").read_text().split())
+        o3 = intraday.run_search()
+        search_report.write_intraday()
+    extra.append(f"intraday search gate {'PASSED' if o3['passed'] else 'FAILED'}"
+                 + (" - live intraday plans are not built yet; tell Claude to build them" if o3["passed"] else ""))
+    if o2["passed"] and not out["passed"]:
+        out = o2   # promote the short-term pick through the same path below
     msg = (f"Strategy search ({out['variants_searched']} variants, {out['date']}): walk-forward picks beat "
            f"NIFTYBEES in {sum(p['beat_niftybees'] for p in out['picks'])} of {len(out['picks'])} years; "
-           f"gate {'PASSED' if out['passed'] else 'FAILED'}")
+           f"gate {'PASSED' if out['passed'] else 'FAILED'}; " + "; ".join(extra))
     if not out["passed"]:
         return msg + " - nothing promoted."
     pick = out["latest_pick"]
