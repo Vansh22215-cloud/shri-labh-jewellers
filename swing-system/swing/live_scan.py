@@ -179,6 +179,11 @@ def run(send=True):
     st = load_state()
     sent = set(st.get("scan_sent", {}).get(str(d.date()), []))
     forming = []
+    from .abnormal import check as abnormal_check
+    abn = abnormal_check(capital, tips)
+    if abn:
+        regime = False
+        hdr += "\n🛑 <b>" + E("; ".join(abn)) + "</b> - no new trades."
     if regime:
         el = sig["eligible"].loc[d]
         cands = [x for x in sig["score"].loc[d, el[el].index].sort_values(ascending=False).index if x in names]

@@ -238,3 +238,6 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   EXCESS OF THE LIQUID FUND over the previous 36 months (>= 30 trades). Everything else as D39-D40. This counts
   as one more search procedure (stricter gate). If its gate fails, aggressive mode follows this procedure's
   current pick anyway (owner's choice, D52), because it measures what the TRADES add over parking cash.
+- **D67. Abnormal-market detector & daily loss limit (2026-11-03):** no new trades after a day when India VIX jumps
+  > 20% or is above 28, when Nifty moves more than 2.5%, or when realised losses on tracked tips reach 2% of
+  capital that day. Thresholds are standard risk-desk defaults, not tuned.

@@ -320,6 +320,11 @@ def run():
 
     if settings.get("kill_switch"):
         blockers.insert(0, "Kill switch is ON in settings.yaml")
+    try:
+        from .abnormal import check as abnormal_check
+        blockers += abnormal_check(capital, tips_df, d)
+    except Exception as e:
+        log.warning("abnormal-market check failed: %s", e)
     if not g.get("passed") and not aggressive:
         blockers.append("Strategy not validated: it did not pass the validation gate (see the table below)")
     if aggressive:
