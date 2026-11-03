@@ -200,3 +200,51 @@ def results_day_mask(symbols, dates):
                 if pos + 1 < len(idx):
                     m.iat[pos + 1, m.columns.get_loc(s)] = True
     return m
+
+
+EPS = EVENTS / "eps"
+EPS.mkdir(parents=True, exist_ok=True)
+
+
+def eps_history(symbol, max_age_days=30):
+    """Quarterly REPORTED EPS with the date it was announced (point-in-time; Yahoo earnings calendar). For CANSLIM."""
+    f = EPS / f"{symbol}.csv"
+    if f.exists() and (time.time() - f.stat().st_mtime) < max_age_days * 86400:
+        return pd.read_csv(f, parse_dates=["date"])
+    try:
+        ed = yf.Ticker(yahoo_ticker(symbol)).get_earnings_dates(limit=60)
+        df = pd.DataFrame({"date": [pd.Timestamp(x).tz_localize(None).normalize() if pd.Timestamp(x).tzinfo
+                                    else pd.Timestamp(x).normalize() for x in ed.index],
+                           "eps": pd.to_numeric(ed["Reported EPS"], errors="coerce").values}).dropna()
+        df = df.sort_values("date")
+        df.to_csv(f, index=False)
+        time.sleep(0.7)
+        return df
+    except Exception as e:
+        log.debug("eps history failed %s: %s", symbol, e)
+        return pd.read_csv(f, parse_dates=["date"]) if f.exists() else pd.DataFrame(columns=["date", "eps"])
+
+
+def eps_growth_panel(symbols, dates):
+    """Point-in-time quarterly EPS growth vs the same quarter a year earlier (latest report known on each date)."""
+    idx = pd.DatetimeIndex(dates)
+    out = pd.DataFrame(index=idx, columns=symbols, dtype=float)
+    for s in symbols:
+        f = EPS / f"{s}.csv"
+        if not f.exists():
+            continue
+        e = pd.read_csv(f, parse_dates=["date"]).sort_values("date")
+        if len(e) < 5:
+            continue
+        # same quarter a year earlier = the report 320-410 days before (Yahoo history has gaps, so no shift(4))
+        prev = []
+        for d0 in e["date"]:
+            m = e[(e["date"] <= d0 - pd.Timedelta(days=320)) & (e["date"] >= d0 - pd.Timedelta(days=410))]
+            prev.append(m["eps"].iloc[-1] if len(m) else float("nan"))
+        e["prev_year"] = prev
+        e["growth"] = (e["eps"] - e["prev_year"]) / e["prev_year"].abs()
+        e.loc[e["prev_year"] <= 0, "growth"] = float("nan")
+        g = e.set_index(e["date"] + pd.Timedelta(days=1))["growth"]      # known from the day after the report
+        g = g[~g.index.duplicated(keep="last")]
+        out[s] = g.reindex(g.index.union(idx)).ffill().reindex(idx).values
+    return out
