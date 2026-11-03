@@ -1,10 +1,24 @@
-<!doctype html><meta charset='utf-8'><title>Swing report error</title><body style='font-family:sans-serif'><h1>No tips today: the system hit an error</h1><p>Research, not advice. No system can guarantee profit; you can lose money. You decide and place every order yourself.</p><p>The nightly run crashed, so no tips are given. It will retry tomorrow. Technical details (for Claude to fix) are in logs/system.log.</p><pre>Traceback (most recent call last):
-  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 364, in main
-    return run()
-  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 342, in run
-    "gate_html": search_html() + gate_html(g),
-                 ~~~~~~~~~~~^^
-  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 66, in search_html
-    won = sum(p["beat_niftybees"] for p in o["picks"])
-TypeError: unsupported operand type(s) for +: 'int' and 'str'
-</pre></body>
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Swing Report 2026-11-03</title><style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--good:#15803d;--bad:#b91c1c;--warn:#b45309}
+@media (prefers-color-scheme: dark){:root{--bg:#0b1220;--card:#111a2e;--ink:#e2e8f0;--muted:#94a3b8;--line:#1e293b;--good:#4ade80;--bad:#f87171;--warn:#fbbf24}}
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0;padding:16px;max-width:980px;margin:auto;line-height:1.45}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+h1{font-size:22px;margin:4px 0} h2{font-size:17px;margin:4px 0 8px} h3{font-size:15px;margin:6px 0}
+.muted{color:var(--muted)} .good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+.banner{font-size:18px;font-weight:700;padding:14px;border-radius:10px;border:2px solid currentColor}
+table{border-collapse:collapse;width:100%;font-size:13px;overflow-x:auto;display:block}
+th,td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;white-space:nowrap}
+img{max-width:100%;border-radius:6px;background:#fff}
+.kv td:first-child{color:var(--muted)}
+</style></head><body>
+<h1>Swing report for 2026-11-03</h1><p class='muted'>Generated 2026-11-03 06:21. Strategy v1 | mode: PAPER (week 1 of 8)</p>
+<div class='card'><b>Research, not advice. No system can guarantee profit; you can lose money. You decide and place every order yourself.</b></div>
+<div class='card banner bad'>No tips: strategy not validated. Use the index fund.</div>
+<div class='card'><h2>Why</h2><ul><li>Strategy not validated: it did not pass the validation gate (see the table below)</li><li>Weak market: Nifty below its 200-day average or too few stocks in uptrends</li></ul></div>
+<div class='card'><h2>What to do with your money</h2><p>Put long-term money in a low-cost Nifty 50 index fund or NIFTYBEES via SIP, and keep short-term money in a liquid fund. The system will keep testing itself and will tell you if a version ever passes the gate.</p></div>
+<div class='card'><h2>Market today</h2><table class='kv'><tr><td>Nifty 50 close</td><td>23,684 (-1.4% vs 200-day average)</td></tr><tr><td>Breadth (% of top-500 above 50-day avg)</td><td>35%</td></tr><tr><td>India VIX (fear gauge)</td><td>15.8</td></tr><tr><td>Market filter</td><td>WEAK</td></tr><tr><td>Strongest sectors (1 month)</td><td>NIFTYIT +14.7%, NIFTYINFRA +6.5%, NIFTYPSUBANK +5.4%</td></tr><tr><td>Weakest sectors (1 month)</td><td>NIFTYREALTY +0.5%, NIFTYENERGY -0.4%, NIFTYMETAL -2.6%</td></tr></table></div>
+<div class='card'><h2>Your open trades (from my_trades.csv)</h2><p class='muted'>None.</p><p class='muted'>To add a trade you placed: open <b>my_trades.csv</b> in Excel/Notepad and add a line like <code>INFY,2026-11-03,1500,7,1430</code> (symbol, buy date, buy price, quantity, stop).</p></div>
+<div class='card'><h2>Paper trading vs backtest</h2><p>Paper period: started 2026-11-02, 0.1 weeks so far; paper drawdown 0.0%</p><table><tr><th></th><th>closed</th><th>win_rate_pct</th><th>avg_r</th><th>total_pnl</th></tr><tr><td>Paper tips (live, since start)</td><td>0</td><td></td><td></td><td></td></tr><tr><td>Shadow picks (recorded while tips blocked)</td><td>0</td><td></td><td></td><td></td></tr><tr><td>Backtest expectation</td><td>518</td><td>45.6</td><td>0.04</td><td>-</td></tr></table><p class='muted'>Few closed trades = results are mostly luck. Wait for 30+ before judging.</p></div>
+<div class='card'><h2>System health</h2><ul><li class='good'>OK - latest prices dated 2026-11-03 (NSE latest trading day 2026-11-02)</li><li class='good'>OK - 431 stocks quarantined for suspicious data (excluded)</li><li class='good'>OK - self-tests: 62 passed in 8.04s</li><li class='good'>OK - 100% of universe stocks have a price for 2026-11-03 (472 stocks in universe)</li><li class='good'>0 universe stocks moved more than 20% today</li><li class='good'>OK - all trade plans passed sanity checks (levels in order, quantity, risk, position cap)</li><li class='warn'>log: Benchmark data repaired on 2019-12-19, 2019-12-20 (isolated bad quotes)</li><li class='warn'>log: NIGHTLY RUN CRASHED:</li></ul></div>
+<div class='card'><h2>Validation gate</h2><p><b>Strategy searches</b> (each period's strategy chosen only from earlier data). Details in the validation folder (search*.html).</p><ul><li><b>Swing (days-weeks)</b> (2026-11-02): 556 strategies searched; honest walk-forward picks beat NIFTYBEES in 2 of 10 years - <b class='bad'>FAILED</b></li><li><b>Short-term (1-5 days)</b> (2026-11-03): 1080 strategies searched; honest walk-forward picks beat NIFTYBEES in 1 of 10 years - <b class='bad'>FAILED</b></li><li><b>Intraday (same day)</b> (2026-11-03): 120 strategies searched; honest walk-forward picks beat NIFTYBEES in 4 of 9 quarters - <b class='bad'>FAILED</b></li></ul><p>Last validated 2026-11-02 - overall: <b class='bad'>FAILED</b>. Variants tried so far: 2. Full report: validation/latest.html</p><table><tr><td class='bad'>FAIL</td><td>Walk-forward: beats NIFTYBEES in most periods</td><td>won 3 of 13 periods (23%); needed 62%</td></tr><tr><td class='bad'>FAIL</td><td>Holdout: beats NIFTYBEES and liquid fund</td><td>strategy -4.1% vs NIFTYBEES -3.2% vs liquid fund 9.8%</td></tr><tr><td class='good'>PASS</td><td>Holdout drawdown <= 15%</td><td>-13.2%</td></tr><tr><td class='bad'>FAIL</td><td>Walk-forward drawdown <= 20%</td><td>-21.7% (continuous run)</td></tr><tr><td class='good'>PASS</td><td>Enough trades (>= 100)</td><td>521 trades</td></tr><tr><td class='bad'>FAIL</td><td>Excess return statistically convincing</td><td>t-stat -1.55; needed 1.18 (because 2 variant(s) tried)</td></tr></table></div>
+<p class='muted'>Research, not advice. No system can guarantee profit; you can lose money. You decide and place every order yourself.</p></body></html>

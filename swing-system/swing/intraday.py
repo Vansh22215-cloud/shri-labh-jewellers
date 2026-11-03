@@ -219,12 +219,12 @@ def run_search():
         b = bees.loc[qs:qe]
         lq = lf.reindex(lf.index.union(r.index)).ffill().reindex(r.index)
         picks.append({"quarter": str(q), "picked": best, "how": describe(byname[best]),
-                      "return_pct": round(r.sum() * 100, 2), "trades": int(NT.loc[r.index, best].sum()),
-                      "niftybees_pct": round((b.iloc[-1] / b.iloc[0] - 1) * 100, 2) if len(b) > 1 else 0.0,
+                      "return_pct": float(round(r.sum() * 100, 2)), "trades": int(NT.loc[r.index, best].sum()),
+                      "niftybees_pct": float(round((b.iloc[-1] / b.iloc[0] - 1) * 100, 2)) if len(b) > 1 else 0.0,
                       "liquid_fund_pct": round((lq.iloc[-1] / lq.iloc[0] - 1) * 100, 2) if len(lq) > 1 else 0.0})
         chain.append(r)
     for p in picks:
-        p["beat_niftybees"] = p["return_pct"] > p["niftybees_pct"]
+        p["beat_niftybees"] = bool(p["return_pct"] > p["niftybees_pct"])
     chain = pd.concat(chain) if chain else pd.Series(dtype=float)
     ceq = cap * (1 + chain.cumsum())
     chain_dd = float((ceq / ceq.cummax() - 1).min() * 100) if len(ceq) else 0.0
@@ -238,11 +238,11 @@ def run_search():
     heq2, _ = run(days, syms, cube, ctx, hv, start=HOLDOUT_START, slip=2 * SLIP)
     hb = bees.loc[HOLDOUT_START:]
     hl = lf.reindex(lf.index.union(heq.index)).ffill().reindex(heq.index)
-    hold = {"picked": hp, "how": describe(hv), "return_pct": round((heq.iloc[-1] / cap - 1) * 100, 2),
-            "return_pct_double_slippage": round((heq2.iloc[-1] / cap - 1) * 100, 2),
+    hold = {"picked": hp, "how": describe(hv), "return_pct": float(round((heq.iloc[-1] / cap - 1) * 100, 2)),
+            "return_pct_double_slippage": float(round((heq2.iloc[-1] / cap - 1) * 100, 2)),
             "max_drawdown_pct": round(float((heq / heq.cummax() - 1).min() * 100), 2), "trades": len(htr),
-            "niftybees_return_pct": round((hb.iloc[-1] / hb.iloc[0] - 1) * 100, 2),
-            "liquid_fund_return_pct": round((hl.iloc[-1] / hl.iloc[0] - 1) * 100, 2)}
+            "niftybees_return_pct": float(round((hb.iloc[-1] / hb.iloc[0] - 1) * 100, 2)),
+            "liquid_fund_return_pct": float(round((hl.iloc[-1] / hl.iloc[0] - 1) * 100, 2))}
 
     n_proc = len(procs)
     req_share = min(0.80, 0.60 + 0.02 * max(0, n_proc - 1))

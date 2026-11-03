@@ -32,3 +32,13 @@
 - Intraday (hourly bars, Nov 2023-Nov 2026, 150 stocks, Zerodha MIS charges, no leverage): 120 variants; only
   5.8% made money; walk-forward picks lost Rs 985 on Rs 45,000; holdout -2.6%. **Gate FAILED.**
 - Nothing promoted. Reports still say "No tips: strategy not validated."
+
+## 2026-11-03 (automatic)
+- Weekly session summary:
+  - Sandbox tests: 62 passed in 8.27s
+  - Live v1 re-validated: gate FAILED
+  - Paper check for v1: {'closed': 0} - fewer than 20 closed trades, too early to judge (no action).
+  - Strategy search (556 variants, 2026-11-02): walk-forward picks beat NIFTYBEES in 2 of 10 years; gate FAILED; short-term search gate FAILED; intraday search gate FAILED - nothing promoted.
+  - Claude review: 0 reviewed trades closed - too few to judge; it remains an explainer only.
+  - Holdout unchanged (starts 2025-05-01)
+  - Variants tried so far: 1754

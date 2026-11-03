@@ -7,12 +7,12 @@
    {
     "check": "Walk-forward: beats NIFTYBEES in most periods",
     "passed": false,
-    "detail": "won 3 of 13 periods (23%); needed 62%"
+    "detail": "won 3 of 13 periods (23%); needed 80%"
    },
    {
     "check": "Holdout: beats NIFTYBEES and liquid fund",
     "passed": false,
-    "detail": "strategy -4.1% vs NIFTYBEES -3.2% vs liquid fund 9.8%"
+    "detail": "strategy -4.1% vs NIFTYBEES -1.8% vs liquid fund 9.8%"
    },
    {
     "check": "Holdout drawdown <= 15%",
@@ -32,22 +32,22 @@
    {
     "check": "Excess return statistically convincing",
     "passed": false,
-    "detail": "t-stat -1.55; needed 1.18 (because 2 variant(s) tried)"
+    "detail": "t-stat -1.55; needed 3.87 (because 1754 variant(s) tried)"
    }
   ],
-  "variants_tried": 2,
-  "required_wf_share": 0.62,
-  "required_t": 1.18,
-  "date": "2026-11-02"
+  "variants_tried": 1754,
+  "required_wf_share": 0.8,
+  "required_t": 3.87,
+  "date": "2026-11-03"
  },
  "periods": [
   {
    "period": "WF 2013",
    "start": "2013-01-01",
    "end": "2013-12-31",
-   "total_return_pct": 3.55,
+   "total_return_pct": 3.54,
    "cagr_pct": 3.57,
-   "max_drawdown_pct": -10.83,
+   "max_drawdown_pct": -10.84,
    "sharpe": 0.5,
    "trades": 30,
    "win_rate_pct": 36.7,
@@ -125,8 +125,8 @@
    "period": "WF 2017",
    "start": "2017-01-01",
    "end": "2017-12-29",
-   "total_return_pct": 24.83,
-   "cagr_pct": 25.16,
+   "total_return_pct": 24.8,
+   "cagr_pct": 25.13,
    "max_drawdown_pct": -3.7,
    "sharpe": 2.19,
    "trades": 51,
@@ -145,9 +145,9 @@
    "period": "WF 2018",
    "start": "2018-01-01",
    "end": "2018-12-31",
-   "total_return_pct": -9.35,
-   "cagr_pct": -9.41,
-   "max_drawdown_pct": -15.32,
+   "total_return_pct": -9.3,
+   "cagr_pct": -9.35,
+   "max_drawdown_pct": -15.29,
    "sharpe": -1.09,
    "trades": 36,
    "win_rate_pct": 27.8,
@@ -157,7 +157,7 @@
    "niftybees_return_pct": 4.95,
    "niftybees_max_dd_pct": -14.01,
    "liquid_fund_return_pct": 7.49,
-   "exposure_matched_return_pct": 7.86,
+   "exposure_matched_return_pct": 7.87,
    "avg_exposure_pct": 31.5,
    "beat_niftybees": false
   },
@@ -185,8 +185,8 @@
    "period": "WF 2020",
    "start": "2020-01-01",
    "end": "2020-12-31",
-   "total_return_pct": 19.16,
-   "cagr_pct": 19.18,
+   "total_return_pct": 19.3,
+   "cagr_pct": 19.32,
    "max_drawdown_pct": -7.0,
    "sharpe": 2.13,
    "trades": 37,
@@ -197,16 +197,16 @@
    "niftybees_return_pct": 15.25,
    "niftybees_max_dd_pct": -36.24,
    "liquid_fund_return_pct": 4.35,
-   "exposure_matched_return_pct": 8.19,
-   "avg_exposure_pct": 28.6,
+   "exposure_matched_return_pct": 8.25,
+   "avg_exposure_pct": 28.7,
    "beat_niftybees": true
   },
   {
    "period": "WF 2021",
    "start": "2021-01-01",
    "end": "2021-12-31",
-   "total_return_pct": 6.07,
-   "cagr_pct": 6.09,
+   "total_return_pct": 6.06,
+   "cagr_pct": 6.08,
    "max_drawdown_pct": -8.87,
    "sharpe": 0.61,
    "trades": 58,
@@ -265,8 +265,8 @@
    "period": "WF 2024",
    "start": "2024-01-01",
    "end": "2024-12-31",
-   "total_return_pct": 9.68,
-   "cagr_pct": 9.69,
+   "total_return_pct": 9.67,
+   "cagr_pct": 9.68,
    "max_drawdown_pct": -7.06,
    "sharpe": 0.92,
    "trades": 52,
@@ -304,7 +304,7 @@
   {
    "period": "HOLDOUT",
    "start": "2025-05-01",
-   "end": "2026-11-02",
+   "end": "2026-11-03",
    "total_return_pct": -4.09,
    "cagr_pct": -2.74,
    "max_drawdown_pct": -13.23,
@@ -314,7 +314,7 @@
    "avg_r": -0.246,
    "avg_days": 12.2,
    "profit_factor": 0.66,
-   "niftybees_return_pct": -3.2,
+   "niftybees_return_pct": -1.79,
    "niftybees_max_dd_pct": -14.77,
    "liquid_fund_return_pct": 9.75,
    "exposure_matched_return_pct": 4.8,
@@ -324,12 +324,12 @@
  ],
  "coverage": {
   "universe_symbols_ever": 1610,
-  "with_price_data": 1181,
-  "quarantined": 429
+  "with_price_data": 1179,
+  "quarantined": 431
  },
  "tstat": -1.55,
  "continuous": {
-  "total_return_pct": 124.62,
+  "total_return_pct": 124.59,
   "cagr_pct": 6.79,
   "max_drawdown_pct": -21.74,
   "sharpe": 0.77,
@@ -360,5 +360,5 @@
   "total_pnl": "-"
  },
  "holdout_start": "2025-05-01",
- "data_end": "2026-11-02"
+ "data_end": "2026-11-03"
 }

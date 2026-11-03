@@ -50,7 +50,7 @@
    "trades": 50,
    "niftybees_pct": 7.77,
    "liquid_fund_pct": 1.76,
-   "beat_niftybees": "True"
+   "beat_niftybees": true
   },
   {
    "quarter": "2024Q3",
@@ -60,7 +60,7 @@
    "trades": 50,
    "niftybees_pct": 7.48,
    "liquid_fund_pct": 1.76,
-   "beat_niftybees": "False"
+   "beat_niftybees": false
   },
   {
    "quarter": "2024Q4",
@@ -70,7 +70,7 @@
    "trades": 40,
    "niftybees_pct": -8.26,
    "liquid_fund_pct": 1.74,
-   "beat_niftybees": "True"
+   "beat_niftybees": true
   },
   {
    "quarter": "2025Q1",
@@ -80,7 +80,7 @@
    "trades": 56,
    "niftybees_pct": -0.9,
    "liquid_fund_pct": 1.75,
-   "beat_niftybees": "False"
+   "beat_niftybees": false
   },
   {
    "quarter": "2025Q2",
@@ -90,7 +90,7 @@
    "trades": 31,
    "niftybees_pct": 10.37,
    "liquid_fund_pct": 1.68,
-   "beat_niftybees": "False"
+   "beat_niftybees": false
   },
   {
    "quarter": "2025Q3",
@@ -100,7 +100,7 @@
    "trades": 64,
    "niftybees_pct": -3.25,
    "liquid_fund_pct": 1.43,
-   "beat_niftybees": "True"
+   "beat_niftybees": true
   },
   {
    "quarter": "2025Q4",
@@ -110,7 +110,7 @@
    "trades": 45,
    "niftybees_pct": 5.28,
    "liquid_fund_pct": 1.46,
-   "beat_niftybees": "False"
+   "beat_niftybees": false
   },
   {
    "quarter": "2026Q1",
@@ -120,7 +120,7 @@
    "trades": 29,
    "niftybees_pct": -14.18,
    "liquid_fund_pct": 1.44,
-   "beat_niftybees": "True"
+   "beat_niftybees": true
   },
   {
    "quarter": "2026Q2",
@@ -130,7 +130,7 @@
    "trades": 31,
    "niftybees_pct": 5.58,
    "liquid_fund_pct": 1.82,
-   "beat_niftybees": "False"
+   "beat_niftybees": false
   }
  ],
  "holdout": {

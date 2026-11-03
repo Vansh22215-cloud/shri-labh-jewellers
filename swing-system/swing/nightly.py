@@ -63,7 +63,7 @@ def search_html():
             o = json.loads((ROOT / "validation" / fname).read_text())
         except Exception:
             continue
-        won = sum(p["beat_niftybees"] for p in o["picks"])
+        won = sum(p["beat_niftybees"] in (True, "True") for p in o["picks"])
         parts.append(f"<li><b>{label}</b> ({o['date']}): {o['variants_searched']} strategies searched; honest "
                      f"walk-forward picks beat NIFTYBEES in {won} of {len(o['picks'])} {unit} - "
                      f"<b class='{'good' if o['passed'] else 'bad'}'>{'PASSED' if o['passed'] else 'FAILED'}</b></li>")
