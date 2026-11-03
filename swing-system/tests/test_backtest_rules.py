@@ -110,3 +110,12 @@ def test_paper_tracker_open_and_skipped(params):
     P2, _, idx2 = make([100, 103, 104, 105], [101, 104, 105, 106], [99, 102, 103, 104], [100, 103, 104, 105])
     res2 = journal.simulate_trade(P2["open"]["A"], P2["high"]["A"], P2["low"]["A"], P2["close"]["A"], idx2[0], tip, params)
     assert res2["status"].startswith("skipped")
+
+
+def test_targets_then_trail(params):
+    p = dict(params, exit_style="targets_trail", target1_r=1.5, trail_atr_mult=3.0)
+    c = [100, 100.5, 110, 120, 130, 140, 135, 128, 122, 118]
+    P, sig, idx = make([100, 100.5, 108, 119, 129, 139, 136, 129, 123, 119], [x + 1 for x in c], [x - 1 for x in c], c)
+    _, tr, _ = backtest.run(P, sig, p, idx[0], idx[-1], 45000)
+    t = tr.iloc[0]
+    assert t["exit_reason"] in ("stop", "stop_gap") and t["r_multiple"] > 2   # rode the trend past 3R

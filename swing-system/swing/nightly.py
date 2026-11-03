@@ -205,6 +205,7 @@ def run():
         "Nifty 50 close": f"{nlast:,.0f} ({(nlast / n200 - 1) * 100:+.1f}% vs 200-day average)",
         "Breadth (% of top-500 above 50-day avg)": f"{sig['breadth'].loc[d]:.0f}%",
         "India VIX (fear gauge)": f"{vix['close'].iloc[-1]:.1f}" if vix is not None else "n/a",
+        "Market type (history of this strategy in such markets)": __import__("swing.research", fromlist=["x"]).today_line() or "n/a",
         "Market filter": ("HEALTHY" if market_ok else "WEAK") + (
             "" if p.get("use_regime_filter", True) else " (this strategy version does not use the market filter)"),
     }
@@ -380,7 +381,10 @@ def run():
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
     f = report.daily_html(ctx)
 
+    from .research import today_line
     lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
+    if today_line():
+        lines.append("🧭 " + today_line())
     for i, pl in enumerate(tips, 1):
         lines.append(f"{i}. {pl['symbol']} ({pl['setup']}) buy {pl['entry_low']}-{pl['entry_high']}, "
                      f"stop {pl['stop']}, T1 {pl['target1']}, T2 {pl['target2']}, qty {pl['qty']}")

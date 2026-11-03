@@ -14,3 +14,55 @@ written: 2026-11-02
 reason: Quarterly results cause large overnight gaps that jump past stop-losses; skipping entries within 5 trading days before results should cut gap losses more than it costs in missed winners.
 overrides: {"results_rule": "exclude"}
 ```
+
+## Research backlog (written 2026-11-03, BEFORE any of these were tested)
+Each is tested against the strategy that currently gives tips (aggressive line aN while nothing is validated),
+one per weekday evening by the daily research session, with the rules in weekly.test_proposal (D60).
+
+```proposal
+id: R1
+status: proposed
+written: 2026-11-03
+reason: Industry momentum persists (Moskowitz & Grinblatt 1999); only buying stocks whose industry is in the stronger half should avoid fighting sector headwinds.
+overrides: {"min_sector_rank": 0.5}
+```
+
+```proposal
+id: R2
+status: proposed
+written: 2026-11-03
+reason: A trend change backed by above-average volume signals real institutional buying; requiring 1.2x average volume on the signal day should filter weak, noisy crossovers.
+overrides: {"min_volume_mult": 1.2}
+```
+
+```proposal
+id: R3
+status: proposed
+written: 2026-11-03
+reason: Trend trades have a few very large winners; after selling half at target 1, trailing the rest with a 3-ATR stop instead of a fixed target 2 should let the big winners run.
+overrides: {"exit_style": "targets_trail", "trail_atr_mult": 3.0}
+```
+
+```proposal
+id: R4
+status: proposed
+written: 2026-11-03
+reason: Cross-sectional momentum is one of the most robust effects in equities; requiring the stock to be stronger than 60% of the market should improve the quality of trend signals.
+overrides: {"min_rs_filter": 60}
+```
+
+```proposal
+id: R5
+status: proposed
+written: 2026-11-03
+reason: Very volatile stocks gap through stops more often and suffer the low-volatility anomaly; skipping stocks that move more than 4% a day should cut the worst losses.
+overrides: {"max_atr_pct": 4.0}
+```
+
+```proposal
+id: R6
+status: proposed
+written: 2026-11-03
+reason: Results cause gaps that jump stops; for the tips strategy, skipping entries within 5 trading days of results should cut gap losses (P1 reduced drawdown for v1).
+overrides: {"results_rule": "exclude"}
+```

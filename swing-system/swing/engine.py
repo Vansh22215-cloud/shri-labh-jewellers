@@ -16,6 +16,25 @@ def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
     syms = sorted(set(hist["symbol"]) | set(n500["Symbol"].dropna()))
     q = health.load_quarantine()
     clean = [s for s in syms if s not in q]
+    # Company shares only: a symbol that still trades today but is NOT in NSE's equity list is an ETF/fund
+    # (e.g. LIQUIDBEES, GOLDBEES) and is excluded. Delisted stocks are kept (survivorship).
+    try:
+        from .tipcheck import equity_list
+        eq = set(equity_list()["SYMBOL"])
+        recent = pd.Timestamp.today() - pd.Timedelta(days=15)
+        def _is_fund(sym):
+            if sym in eq:
+                return False
+            f = data_prices.PRICES / f"{sym}.csv"
+            if not f.exists():
+                return False
+            last = f.read_text().rstrip().rsplit("\n", 1)[-1].split(",", 1)[0]
+            return pd.Timestamp(last) >= recent
+        funds = [s for s in clean if _is_fund(s)]
+        clean = [s for s in clean if s not in set(funds)]
+        log.info("Excluded %d ETFs/funds from the stock universe", len(funds))
+    except Exception as e:
+        log.warning("ETF filter unavailable: %s", e)
     P = data_prices.panel(clean, start=start)
     if not P:
         raise RuntimeError("No price data available")

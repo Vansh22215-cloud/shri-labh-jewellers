@@ -190,6 +190,15 @@ def family_signals(B, p):
     else:
         raise ValueError(f"unknown family {fam}")
     eligible = B["member"] & entry & B["atr"].notna()
+    # optional filters used by research proposals (IMPROVEMENTS.md)
+    if p.get("min_sector_rank"):
+        eligible &= B["sector_rank"] >= p["min_sector_rank"]
+    if p.get("min_volume_mult"):
+        eligible &= v >= p["min_volume_mult"] * B["avg_vol"]
+    if p.get("min_rs_filter"):
+        eligible &= B["rs_rank"] * 100 >= p["min_rs_filter"]
+    if p.get("max_atr_pct"):
+        eligible &= (B["atr"] / c * 100) <= p["max_atr_pct"]
     if B.get("results_soon") is not None and p.get("results_rule") == "exclude":
         eligible &= ~B["results_soon"]
     setup = pd.DataFrame(setup if isinstance(setup, np.ndarray) else np.full(c.shape, setup),

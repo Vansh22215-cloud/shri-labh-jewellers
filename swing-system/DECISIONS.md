@@ -196,3 +196,17 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   Your trades are checked live for stop/target hits.
 - **D59. Kite Connect: declined.** Paid, needs a daily login with your Zerodha password (which this system must
   never hold), and free 5-minute data is enough for hourly scans.
+
+## Continuous research (added 2026-11-03 at your request)
+- **D60. Daily research session** (weekdays 20:17 IST): tests ONE pre-registered idea from IMPROVEMENTS.md
+  against the strategy currently giving tips. Aggressive line (aN): promote only if it beats the base in most
+  walk-forward years, has a higher walk-forward CAGR, and its worst fall is not more than 2 points worse.
+  Validated line (vN): must also pass the full gate. The holdout is never used to decide. Every idea counts as a
+  tried variant. New ideas must be written into IMPROVEMENTS.md (with reason and date) BEFORE they are tested.
+- **D61. Market dynamics:** each backtest trade is tagged with the market regime on its signal day (Nifty trend,
+  VIX mood, breadth). Reports show today's regime and how the strategy did historically in similar markets.
+  Samples per regime are small (30-300 trades), so this is context, not a trading rule; any rule derived from
+  these tables would be "data already seen" and must be pre-registered and tested like any other idea.
+- **D62. Bug fixed 2026-11-03:** ETFs/funds (e.g. LIQUIDBEES) were inside the backtest stock universe; one Yahoo
+  glitch in a liquid ETF produced an -84R trade. 35 ETFs/funds are now excluded; all validations and searches
+  were re-run.

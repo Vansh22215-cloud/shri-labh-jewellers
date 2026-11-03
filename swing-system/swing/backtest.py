@@ -137,7 +137,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
             elif ld <= ps.stop:
                 sell(ps.qty, ps.stop, "stop")
                 closed = True
-            elif style == "targets":
+            elif style in ("targets", "targets_trail"):
                 if not ps.t1_done and hd >= ps.t1:
                     px = od if (not new_today and od >= ps.t1) else ps.t1
                     half = ps.qty // 2
@@ -145,7 +145,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                         sell(half, px, "target1")
                     ps.t1_done = True
                     ps.stop = max(ps.stop, ps.entry)  # breakeven from now on
-                if ps.qty > 0 and hd >= ps.t2:
+                if ps.qty > 0 and style == "targets" and hd >= ps.t2:
                     px = od if (not new_today and od >= ps.t2) else ps.t2
                     sell(ps.qty, px, "target2")
                     closed = True
@@ -161,7 +161,7 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                     "init_r": round(ps.r, 2),
                 })
             else:
-                if style == "trail":       # chandelier stop: highest close minus k x ATR (only moves up)
+                if style == "trail" or (style == "targets_trail" and ps.t1_done):   # chandelier stop: highest close minus k x ATR (only moves up)
                     ps.hc = max(ps.hc, cd)
                     ps.stop = max(ps.stop, ps.hc - p.get("trail_atr_mult", 3.0) * ps.atr_e)
                 elif style == "signal" and sma5 is not None and cd > sma5.at[d, ps.symbol]:

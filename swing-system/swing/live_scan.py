@@ -186,6 +186,10 @@ def run(send=True):
            f"Breadth    {adv} up / {dec} down (top 500)\n"
            f"Market     {'HEALTHY' if market_ok else 'WEAK (below 200-day avg)'}\n"
            f"Strategy   {E(sname)} {'(validated)' if validated else '(NOT validated - aggressive mode)'}</pre>")
+    from .research import today_line
+    rl = today_line()
+    if rl:
+        hdr += "\n🧭 <b>Market dynamics:</b> " + E(rl)
     blocks = [hdr]
     blocks.append("💼 <b>YOUR TRADES</b>\n" + ("\n".join(my_lines) if my_lines else "No open trades recorded."))
     if tip_lines:

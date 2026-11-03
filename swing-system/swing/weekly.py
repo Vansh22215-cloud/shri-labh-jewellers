@@ -199,6 +199,71 @@ def refresh_aggressive(out, settings):
     return f"Aggressive mode switched to a{n}: {pick['how']}."
 
 
+def tips_strategy(settings):
+    """The strategy that currently produces tips: the validated live version, or the aggressive one."""
+    from .nightly import gate_status
+    live = settings["live_strategy"]
+    if settings.get("tips_mode") == "aggressive" and not gate_status(live).get("passed"):
+        return settings.get("aggressive_strategy", "a1"), True
+    return live, False
+
+
+def test_proposal(prop, settings, live, live_res=None, live_table=None):
+    """Test ONE pre-registered proposal against the strategy that currently gives tips.
+    Validated line (vN): promote only if it passes the full gate AND beats the base in most walk-forward
+    periods AND has higher walk-forward CAGR.
+    Aggressive line (aN, already unvalidated): promote if it beats the base in most walk-forward periods,
+    has higher walk-forward CAGR AND its walk-forward drawdown is not worse by more than 2 points.
+    The holdout is never used to decide (D60)."""
+    if not prop.get("reason") or not prop.get("written") or prop["written"] > str(date.today()):
+        set_proposal_status(prop["_raw"], "rejected (no reason/date written before testing)")
+        return "Rejected proposal without a pre-written reason"
+    try:
+        overrides = json.loads(prop.get("overrides", "{}"))
+    except Exception:
+        set_proposal_status(prop["_raw"], "rejected (overrides not valid JSON)")
+        return "Rejected proposal with invalid overrides"
+    base, aggressive = tips_strategy(settings)
+    base_p = load_strategy(base)
+    if base != live or live_res is None:
+        live_res, _, live_table = validation_report.run(base, params=base_p, note="base for proposal", write=False)
+    base_wf = live_table[live_table["period"].str.startswith("WF")].set_index("period")
+    cand = dict(base_p, **overrides)
+    cand["name"] = f"candidate-{prop.get('id')}"
+    res, _, table = validation_report.run(cand["name"], params=cand, note=f"proposal {prop.get('id')}", write=False)
+    wf = table[table["period"].str.startswith("WF")].set_index("period")
+    common = wf.index.intersection(base_wf.index)
+    wins = int((wf.loc[common, "total_return_pct"] > base_wf.loc[common, "total_return_pct"]).sum())
+    c_new, c_old = res["continuous"].get("cagr_pct", -99), live_res["continuous"].get("cagr_pct", -99)
+    dd_new, dd_old = res["continuous"].get("max_drawdown_pct", -99), live_res["continuous"].get("max_drawdown_pct", -99)
+    if aggressive:
+        promote = wins > len(common) / 2 and c_new > c_old and dd_new >= dd_old - 2
+    else:
+        promote = res["gate"]["passed"] and wins > len(common) / 2 and c_new > c_old
+    summary = (f"{prop.get('id')} vs {base}: beat it in {wins}/{len(common)} walk-forward years, CAGR {c_new}% vs "
+               f"{c_old}%, worst fall {dd_new}% vs {dd_old}%, gate {'PASS' if res['gate']['passed'] else 'FAIL'}")
+    if not promote:
+        set_proposal_status(prop["_raw"], f"rejected {date.today()} - {summary}")
+        changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
+        return "Rejected " + summary
+    prefix = "a" if aggressive else "v"
+    fam = sorted((x.stem for x in STRATEGIES.glob(f"{prefix}*.json")), key=lambda x: int(x[1:]))
+    n = int(fam[-1][1:]) + 1
+    newp = dict(cand, name=f"{prefix}{n}", created=str(date.today()),
+                description=base_p.get("description", "") + f" | {prefix}{n}: {prop.get('reason')}")
+    (STRATEGIES / f"{prefix}{n}.json").write_text(json.dumps(newp, indent=2))
+    if aggressive:
+        f = ROOT / "settings.yaml"
+        f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: {prefix}{n}",
+                            f.read_text(encoding="utf-8")), encoding="utf-8")
+    else:
+        set_live(f"{prefix}{n}")
+        validation_report.run(f"{prefix}{n}", note=f"promoted from {prop.get('id')}")
+    set_proposal_status(prop["_raw"], f"PROMOTED to {prefix}{n} on {date.today()} - {summary}")
+    changelog(f"- PROMOTED proposal {prop.get('id')} as {prefix}{n} (previous {base} kept). {summary}")
+    return "PROMOTED " + summary
+
+
 def strategy_search(live, live_table, max_age_days=30):
     """Re-run the walk-forward strategy search monthly; promote its pick only if the search passes the gate."""
     from . import search
@@ -263,45 +328,11 @@ def run():
     notes.append(f"Live {live} re-validated: gate {'PASSED' if live_res['gate']['passed'] else 'FAILED'}")
     notes.append(rollback_check(settings, live_res.get("wf_summary", {})))
 
-    live_p = load_strategy(live)
-    live_wf = live_table[live_table["period"].str.startswith("WF")].set_index("period")
     for prop in parse_proposals():
-        if prop.get("status") != "proposed":
-            continue
-        if not prop.get("reason") or not prop.get("written") or prop["written"] > str(date.today()):
-            set_proposal_status(prop["_raw"], "rejected (no reason/date written before testing)")
-            continue
-        try:
-            overrides = json.loads(prop.get("overrides", "{}"))
-        except Exception:
-            set_proposal_status(prop["_raw"], "rejected (overrides not valid JSON)")
-            continue
-        cand = dict(live_p, **overrides)
-        cand["name"] = f"candidate-{prop.get('id')}"
-        res, _, table = validation_report.run(cand["name"], params=cand, note=f"proposal {prop.get('id')}", write=False)
-        wf = table[table["period"].str.startswith("WF")].set_index("period")
-        common = wf.index.intersection(live_wf.index)
-        wins = int((wf.loc[common, "total_return_pct"] > live_wf.loc[common, "total_return_pct"]).sum())
-        better_cagr = res["continuous"].get("cagr_pct", -99) > live_res["continuous"].get("cagr_pct", -99)
-        promote = res["gate"]["passed"] and wins > len(common) / 2 and better_cagr
-        summary = (f"{prop.get('id')}: gate {'PASS' if res['gate']['passed'] else 'FAIL'}, beat live in {wins}/{len(common)} "
-                   f"walk-forward periods, WF CAGR {res['continuous'].get('cagr_pct')}% vs live "
-                   f"{live_res['continuous'].get('cagr_pct')}%, WF maxDD {res['continuous'].get('max_drawdown_pct')}% vs "
-                   f"{live_res['continuous'].get('max_drawdown_pct')}%")
-        if promote:
-            n = int(versions()[-1][1:]) + 1
-            newp = dict(cand, name=f"v{n}", created=str(date.today()),
-                        description=live_p["description"] + f" | v{n}: {prop.get('reason')}")
-            (STRATEGIES / f"v{n}.json").write_text(json.dumps(newp, indent=2))
-            set_live(f"v{n}")
-            validation_report.run(f"v{n}", note=f"promoted from {prop.get('id')}")
-            set_proposal_status(prop["_raw"], f"PROMOTED to v{n} on {date.today()} - {summary}")
-            changelog(f"- PROMOTED proposal {prop.get('id')} as v{n} (previous {live} kept). {summary}")
-            notes.append("PROMOTED " + summary)
-            break   # one change per week
-        set_proposal_status(prop["_raw"], f"rejected {date.today()} - {summary}")
-        changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
-        notes.append("Rejected " + summary)
+        if prop.get("status") == "proposed":
+            notes.append(test_proposal(prop, settings, live, live_res, live_table))
+            if notes[-1].startswith("PROMOTED"):
+                break   # one change per week
 
     notes.append(strategy_search(live, live_table))
     notes.append(tip_checker_review())
