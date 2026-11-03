@@ -42,3 +42,9 @@
   - Claude review: 0 reviewed trades closed - too few to judge; it remains an explainer only.
   - Holdout unchanged (starts 2025-05-01)
   - Variants tried so far: 1754
+
+## 2026-11-03 - Re-run on clean data (ETFs/funds removed, D62)
+- Swing search: still FAILED (2 of 10 years); same pick S385/a1; holdout +7.6% (was +5.4%).
+- Short-term search: still FAILED (0 of 10 years); holdout -3.2%.
+- Regime study refreshed: a1 trades average +0.07R; in today's market type (downtrend, calm, weak breadth) past
+  trades won 43%.
