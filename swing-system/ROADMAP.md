@@ -27,7 +27,7 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 - [x] T2. (2026-11-03: built - VIX spike/level, Nifty shock day, 2% daily loss limit; blocks new trades in nightly and hourly scans) Daily loss limit + abnormal-market detector (VIX spike, big gap, data outage) -> no new trades.
 - [x] UI1. (2026-11-03: built - https://claude.ai/artifact/LKLWX4WHnvo6bvDoa6botT; market tiles, ranked ideas with odds, your trades, per-trade stats, strategy vs NIFTYBEES chart, FII chart, leaderboard, market types, research log, journal; refreshed by the hourly scan and evening run) DASHBOARD: phone-friendly web dashboard (published Artifact) refreshed after every scan: market
       overview, ranked opportunities, interactive charts, open trades & risk, performance analytics, research log.
-- [ ] A1. Performance analytics: per strategy / per regime / per month: win rate, avg R, P&L, drawdown, Sharpe,
+- [x] A1. (2026-11-03: built - yearly P&L before/after 20% STCG tax, worst fall, monthly pattern, loss review. a1 trades alone 2013-2026: +Rs 16.8k before tax, +Rs 11.1k after tax on Rs 45k, 7 losing years of 14; most of the backtest's yearly % came from idle cash in a liquid fund) Performance analytics: per strategy / per regime / per month: win rate, avg R, P&L, drawdown, Sharpe,
       after tax; mistakes review ("why did losers lose").
 
 ## Week 1 PRIORITY - Strategy library: the best-known methods, each built and tested on NSE data

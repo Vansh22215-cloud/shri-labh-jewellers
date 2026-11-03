@@ -119,3 +119,6 @@
 
 ## 2026-11-03 - UI1 dashboard
 - Phone-friendly dashboard published (private): https://claude.ai/artifact/LKLWX4WHnvo6bvDoa6botT, fed by data/dashboard/desk.json from swing/dashboard_export.py; refreshed by scheduled runs.
+
+## 2026-11-03 - A1 performance analytics
+- a1 trades only (no liquid-fund interest), 576 trades 2013-Nov 2026: +Rs 16,780 before tax, Rs 5,647 tax, +Rs 11,132 after tax on Rs 45,000 (~Rs 800/yr); 7 losing years out of 14. Losers: 59% at the stop (avg -Rs 521), 37% at the time limit (avg -Rs 154), 4% gap-through-stop (avg -Rs 585).

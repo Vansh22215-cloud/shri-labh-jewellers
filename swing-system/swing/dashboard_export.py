@@ -175,6 +175,14 @@ def build():
         w = w[w.index >= w.index[-1] - pd.DateOffset(years=3)].resample("W-FRI").last().dropna()
         rows += [{"table": "fii", "week": str(d.date()), "fii_long_pct": round(float(v), 1)} for d, v in w.items()]
 
+    # yearly results after tax (ROADMAP A1)
+    try:
+        an = json.loads((VAL / "analytics.json").read_text())
+        for y in an.get("years", []):
+            rows.append({"table": "year", **y})
+    except Exception:
+        pass
+
     # headline
     n_ideas = len(li.get("ideas", []))
     mood = f"{reg.get('trend', '?')}, {reg.get('fear', '?')} market" if reg else "market"
