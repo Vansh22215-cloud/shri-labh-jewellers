@@ -51,3 +51,27 @@
 
 ## 2026-11-03 (automatic)
 - Tested proposal R1: rejected. R1 vs a1: beat it in 4/13 walk-forward years, CAGR 8.43% vs 9.15%, worst fall -12.66% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R2: rejected. R2 vs a1: beat it in 8/13 walk-forward years, CAGR 4.41% vs 9.15%, worst fall -18.36% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R3: rejected. R3 vs a1: beat it in 5/13 walk-forward years, CAGR 7.65% vs 9.15%, worst fall -13.22% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R4: rejected. R4 vs a1: beat it in 6/13 walk-forward years, CAGR 5.56% vs 9.15%, worst fall -11.31% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R5: rejected. R5 vs a1: beat it in 7/13 walk-forward years, CAGR 7.1% vs 9.15%, worst fall -16.83% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R6: rejected. R6 vs a1: beat it in 2/13 walk-forward years, CAGR 7.87% vs 9.15%, worst fall -15.71% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R9: rejected. R9 vs a1: beat it in 6/13 walk-forward years, CAGR 6.97% vs 9.15%, worst fall -13.32% vs -9.92%, gate FAIL
+
+## 2026-11-03 - Research round 1 (R1-R6, R9 vs a1): all rejected
+- R1 sector filter 8.4%/yr, R2 volume 4.4%, R3 trail after T1 7.7%, R4 RS>60 5.6%, R5 ATR<4% 7.1%,
+  R6 results exclusion 7.9%, R9 max 1 per industry 7.0% - vs a1 9.15%/yr (2013-Apr 2025), a1 worst fall -9.9%.
+- Checked for bugs: none. Lesson: a1's result is sensitive to small rule changes (4-9%/yr range), so part of its
+  backtest is likely luck; expect live results below the backtest. Keep risk per trade at 1%.

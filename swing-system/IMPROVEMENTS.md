@@ -29,7 +29,7 @@ overrides: {"min_sector_rank": 0.5}
 
 ```proposal
 id: R2
-status: proposed
+status: rejected 2026-11-03 - R2 vs a1: beat it in 8/13 walk-forward years, CAGR 4.41% vs 9.15%, worst fall -18.36% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: A trend change backed by above-average volume signals real institutional buying; requiring 1.2x average volume on the signal day should filter weak, noisy crossovers.
 overrides: {"min_volume_mult": 1.2}
@@ -37,7 +37,7 @@ overrides: {"min_volume_mult": 1.2}
 
 ```proposal
 id: R3
-status: proposed
+status: rejected 2026-11-03 - R3 vs a1: beat it in 5/13 walk-forward years, CAGR 7.65% vs 9.15%, worst fall -13.22% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Trend trades have a few very large winners; after selling half at target 1, trailing the rest with a 3-ATR stop instead of a fixed target 2 should let the big winners run.
 overrides: {"exit_style": "targets_trail", "trail_atr_mult": 3.0}
@@ -45,7 +45,7 @@ overrides: {"exit_style": "targets_trail", "trail_atr_mult": 3.0}
 
 ```proposal
 id: R4
-status: proposed
+status: rejected 2026-11-03 - R4 vs a1: beat it in 6/13 walk-forward years, CAGR 5.56% vs 9.15%, worst fall -11.31% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Cross-sectional momentum is one of the most robust effects in equities; requiring the stock to be stronger than 60% of the market should improve the quality of trend signals.
 overrides: {"min_rs_filter": 60}
@@ -53,7 +53,7 @@ overrides: {"min_rs_filter": 60}
 
 ```proposal
 id: R5
-status: proposed
+status: rejected 2026-11-03 - R5 vs a1: beat it in 7/13 walk-forward years, CAGR 7.1% vs 9.15%, worst fall -16.83% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Very volatile stocks gap through stops more often and suffer the low-volatility anomaly; skipping stocks that move more than 4% a day should cut the worst losses.
 overrides: {"max_atr_pct": 4.0}
@@ -61,7 +61,7 @@ overrides: {"max_atr_pct": 4.0}
 
 ```proposal
 id: R6
-status: proposed
+status: rejected 2026-11-03 - R6 vs a1: beat it in 2/13 walk-forward years, CAGR 7.87% vs 9.15%, worst fall -15.71% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Results cause gaps that jump stops; for the tips strategy, skipping entries within 5 trading days of results should cut gap losses (P1 reduced drawdown for v1).
 overrides: {"results_rule": "exclude"}
@@ -85,7 +85,7 @@ overrides: {"family": "delivery_breakout"}
 
 ```proposal
 id: R9
-status: proposed
+status: rejected 2026-11-03 - R9 vs a1: beat it in 6/13 walk-forward years, CAGR 6.97% vs 9.15%, worst fall -13.32% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Stocks in one industry fall together on sector news; allowing at most 1 open trade per industry should spread risk and reduce drawdowns without hurting average returns (ROADMAP P2).
 overrides: {"max_per_industry": 1}
