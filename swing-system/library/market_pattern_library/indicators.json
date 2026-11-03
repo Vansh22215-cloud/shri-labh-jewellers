@@ -1,0 +1,4238 @@
+{
+  "schema_version": "1.0.0",
+  "items": [
+    {
+      "id": "accbands",
+      "name": "Acceleration Bands",
+      "canonical_code": "ACCBANDS",
+      "category": "volatility_envelope",
+      "description": "Volatility-adjusted upper/lower bands around price.",
+      "calculation_basis": "Use high/low-derived acceleration factor to construct upper/lower bands, then smooth each band.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "alma",
+      "name": "Arnaud Legoux Moving Average",
+      "canonical_code": "ALMA",
+      "category": "moving_average",
+      "description": "Weighted moving average using a Gaussian distribution with offset and sigma.",
+      "calculation_basis": "Gaussian-weighted average over a rolling window.",
+      "common_parameters": {
+        "period": 9,
+        "offset": 0.85,
+        "sigma": 6
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "bbands",
+      "name": "Bollinger Bands",
+      "canonical_code": "BBANDS",
+      "category": "volatility_envelope",
+      "description": "Moving-average envelope offset by standard deviations.",
+      "calculation_basis": "Middle=SMA(price,n); upper/lower=middle ± k*rolling_std(price,n).",
+      "common_parameters": {
+        "period": 20,
+        "stddev": 2,
+        "ma_type": "SMA"
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ce",
+      "name": "Chandelier Exit",
+      "canonical_code": "CE",
+      "category": "trend_stop",
+      "description": "ATR-based trailing stop above/below recent extremes.",
+      "calculation_basis": "Long stop=highest(high,n)-ATR(m)*k; short stop=lowest(low,n)+ATR(m)*k.",
+      "common_parameters": {
+        "period": 22,
+        "atr_period": 22,
+        "multiplier": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cksp",
+      "name": "Chande Kroll Stop",
+      "canonical_code": "CKSP",
+      "category": "trend_stop",
+      "description": "ATR-based two-line stop system.",
+      "calculation_basis": "Combine rolling highs/lows and ATR offsets using the selected periods/multipliers.",
+      "common_parameters": {
+        "p": 10,
+        "x": 1,
+        "q": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "dema",
+      "name": "Double Exponential Moving Average",
+      "canonical_code": "DEMA",
+      "category": "moving_average",
+      "description": "EMA with lag reduction.",
+      "calculation_basis": "DEMA=2*EMA(price,n)-EMA(EMA(price,n),n).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "donchian",
+      "name": "Donchian Channels",
+      "canonical_code": "DONCHIAN",
+      "category": "price_channel",
+      "description": "Highest high and lowest low over a lookback.",
+      "calculation_basis": "Upper=max(high,n); lower=min(low,n); midpoint=(upper+lower)/2.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ema",
+      "name": "Exponential Moving Average",
+      "canonical_code": "EMA",
+      "category": "moving_average",
+      "description": "Moving average assigning exponentially greater weight to recent prices.",
+      "calculation_basis": "EMA_t=alpha*price_t+(1-alpha)*EMA_(t-1), alpha=2/(n+1).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "frama",
+      "name": "Fractal Adaptive Moving Average",
+      "canonical_code": "FRAMA",
+      "category": "adaptive_average",
+      "description": "Moving average whose smoothing adapts to estimated fractal dimension.",
+      "calculation_basis": "Compute fractal dimension from subranges, derive adaptive alpha, recursively smooth.",
+      "common_parameters": {
+        "period": 16
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "hma",
+      "name": "Hull Moving Average",
+      "canonical_code": "HMA",
+      "category": "moving_average",
+      "description": "Low-lag weighted moving average.",
+      "calculation_basis": "HMA(n)=WMA(2*WMA(price,n/2)-WMA(price,n),sqrt(n)).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ht_trendline",
+      "name": "Hilbert Transform Instantaneous Trendline",
+      "canonical_code": "HT_TRENDLINE",
+      "category": "cycle_trend",
+      "description": "Adaptive trendline derived from Hilbert transform components.",
+      "calculation_basis": "Ehlers Hilbert-transform analytic signal / instantaneous period logic; use library reference implementation.",
+      "common_parameters": {
+        "unstable_period": "library-defined"
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ichimoku",
+      "name": "Ichimoku Kinko Hyo",
+      "canonical_code": "ICHIMOKU",
+      "category": "trend_system",
+      "description": "Multi-line trend, momentum and support/resistance system.",
+      "calculation_basis": "Tenkan=(9-high+9-low)/2; Kijun=(26-high+26-low)/2; Senkou A=(Tenkan+Kijun)/2 shifted +26; Senkou B=(52-high+52-low)/2 shifted +26; Chikou close shifted -26.",
+      "common_parameters": {
+        "tenkan": 9,
+        "kijun": 26,
+        "senkou_b": 52,
+        "displacement": 26
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kama",
+      "name": "Kaufman Adaptive Moving Average",
+      "canonical_code": "KAMA",
+      "category": "adaptive_average",
+      "description": "Adaptive moving average using efficiency ratio.",
+      "calculation_basis": "ER=abs(price-price[n])/sum(abs(delta),n); smoothing constant interpolates fast/slow EMA constants and is squared.",
+      "common_parameters": {
+        "period": 10,
+        "fast": 2,
+        "slow": 30
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kc",
+      "name": "Keltner Channels",
+      "canonical_code": "KC",
+      "category": "volatility_envelope",
+      "description": "EMA channel offset by ATR.",
+      "calculation_basis": "Middle=EMA(close,n); upper/lower=middle ± multiplier*ATR(m).",
+      "common_parameters": {
+        "ema_period": 20,
+        "atr_period": 10,
+        "multiplier": 2
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ma",
+      "name": "Moving Average",
+      "canonical_code": "MA",
+      "category": "moving_average",
+      "description": "Generic moving average with selectable method.",
+      "calculation_basis": "Apply selected moving-average algorithm to price series.",
+      "common_parameters": {
+        "period": 20,
+        "type": "SMA"
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "mama",
+      "name": "MESA Adaptive Moving Average",
+      "canonical_code": "MAMA",
+      "category": "adaptive_average",
+      "description": "Adaptive moving average pair based on Hilbert-transform phase.",
+      "calculation_basis": "Ehlers MESA adaptive algorithm; use canonical library implementation.",
+      "common_parameters": {
+        "fast_limit": 0.5,
+        "slow_limit": 0.05
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "mavp",
+      "name": "Moving Average Variable Period",
+      "canonical_code": "MAVP",
+      "category": "moving_average",
+      "description": "Moving average whose period varies per bar.",
+      "calculation_basis": "Apply chosen MA to price using a per-row period series.",
+      "common_parameters": {
+        "min_period": 2,
+        "max_period": 30,
+        "type": "SMA"
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "mcgd",
+      "name": "McGinley Dynamic",
+      "canonical_code": "MCGD",
+      "category": "adaptive_average",
+      "description": "Adaptive trend line designed to reduce lag in changing speeds.",
+      "calculation_basis": "MD_t=MD_(t-1)+(price-MD_(t-1))/(k*n*(price/MD_(t-1))^4).",
+      "common_parameters": {
+        "period": 14,
+        "k": 0.6
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "midpoint",
+      "name": "Rolling Midpoint",
+      "canonical_code": "MIDPOINT",
+      "category": "price_channel",
+      "description": "Midpoint of rolling highest and lowest close.",
+      "calculation_basis": "(highest(close,n)+lowest(close,n))/2.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "midprice",
+      "name": "Rolling Midprice",
+      "canonical_code": "MIDPRICE",
+      "category": "price_channel",
+      "description": "Midpoint of rolling high and low.",
+      "calculation_basis": "(highest(high,n)+lowest(low,n))/2.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rma",
+      "name": "Wilder Moving Average / RMA",
+      "canonical_code": "RMA",
+      "category": "moving_average",
+      "description": "Wilder-smoothed moving average used by RSI and ATR.",
+      "calculation_basis": "RMA_t=(RMA_(t-1)*(n-1)+x_t)/n.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "sar",
+      "name": "Parabolic SAR",
+      "canonical_code": "SAR",
+      "category": "trend_stop",
+      "description": "Parabolic trailing stop and trend-reversal system.",
+      "calculation_basis": "Recursive SAR updated by extreme point and acceleration factor, constrained by prior highs/lows.",
+      "common_parameters": {
+        "acceleration": 0.02,
+        "maximum": 0.2
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "sarext",
+      "name": "Parabolic SAR Extended",
+      "canonical_code": "SAREXT",
+      "category": "trend_stop",
+      "description": "Extended long/short Parabolic SAR with separate acceleration controls.",
+      "calculation_basis": "Parabolic SAR with independently configurable long and short parameters.",
+      "common_parameters": {
+        "long_acceleration": 0.02,
+        "long_maximum": 0.2,
+        "short_acceleration": 0.02,
+        "short_maximum": 0.2
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "sma",
+      "name": "Simple Moving Average",
+      "canonical_code": "SMA",
+      "category": "moving_average",
+      "description": "Arithmetic mean of the last n observations.",
+      "calculation_basis": "SMA=sum(price,n)/n.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "supertrend",
+      "name": "SuperTrend",
+      "canonical_code": "SUPERTREND",
+      "category": "trend_stop",
+      "description": "ATR-based trailing trend line that flips direction when price crosses it.",
+      "calculation_basis": "Basic bands=HL2 ± multiplier*ATR; final bands are recursively constrained; trend flips on close crossing band.",
+      "common_parameters": {
+        "atr_period": 10,
+        "multiplier": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "swak_butter",
+      "name": "Butterworth Filter",
+      "canonical_code": "SWAK_BUTTER",
+      "category": "smoothing_filter",
+      "description": "Two-pole Butterworth low-pass smoother.",
+      "calculation_basis": "Recursive digital low-pass filter; coefficients depend on selected cutoff.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "swak_gauss",
+      "name": "Gaussian Filter",
+      "canonical_code": "SWAK_GAUSS",
+      "category": "smoothing_filter",
+      "description": "Gaussian-weighted low-pass filter.",
+      "calculation_basis": "Convolution/recursive Gaussian smoothing with configurable cutoff.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "t3",
+      "name": "Tillson T3",
+      "canonical_code": "T3",
+      "category": "moving_average",
+      "description": "Six-stage EMA composite with volume factor.",
+      "calculation_basis": "T3 is a weighted combination of EMA1..EMA6, with coefficients set by volume factor.",
+      "common_parameters": {
+        "period": 5,
+        "vfactor": 0.7
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "tema",
+      "name": "Triple Exponential Moving Average",
+      "canonical_code": "TEMA",
+      "category": "moving_average",
+      "description": "EMA composite designed to reduce lag.",
+      "calculation_basis": "TEMA=3*EMA1-3*EMA2+EMA3.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "trima",
+      "name": "Triangular Moving Average",
+      "canonical_code": "TRIMA",
+      "category": "moving_average",
+      "description": "Double-smoothed/simple triangular weighting average.",
+      "calculation_basis": "SMA of SMA with triangular weighting (period convention depends on library).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "vidya",
+      "name": "Variable Index Dynamic Average",
+      "canonical_code": "VIDYA",
+      "category": "adaptive_average",
+      "description": "Adaptive EMA whose smoothing responds to volatility/momentum index.",
+      "calculation_basis": "EMA recursion with alpha scaled by absolute CMO or volatility ratio, per variant.",
+      "common_parameters": {
+        "period": 14,
+        "cmo_period": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "vwma",
+      "name": "Volume Weighted Moving Average",
+      "canonical_code": "VWMA",
+      "category": "moving_average",
+      "description": "Moving average weighted by traded volume.",
+      "calculation_basis": "sum(close*volume,n)/sum(volume,n).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "wma",
+      "name": "Weighted Moving Average",
+      "canonical_code": "WMA",
+      "category": "moving_average",
+      "description": "Linearly weighted moving average.",
+      "calculation_basis": "sum(weight_i*price_i)/sum(weights), recent observations get higher weights.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "zigzag",
+      "name": "Zig Zag",
+      "canonical_code": "ZIGZAG",
+      "category": "swing_analysis",
+      "description": "Filters moves below a threshold and connects significant swing extremes.",
+      "calculation_basis": "Retain pivots only after reversal exceeds percent/point/ATR threshold; future-confirmed pivots must not be used prematurely.",
+      "common_parameters": {
+        "change_threshold_pct": 5
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "zlema",
+      "name": "Zero-Lag Exponential Moving Average",
+      "canonical_code": "ZLEMA",
+      "category": "moving_average",
+      "description": "EMA with lag compensation.",
+      "calculation_basis": "EMA(price + (price-price[lag]),n), lag≈(n-1)/2.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ac",
+      "name": "Accelerator/Decelerator Oscillator",
+      "canonical_code": "AC",
+      "category": "momentum",
+      "description": "Measures acceleration/deceleration of momentum.",
+      "calculation_basis": "Awesome Oscillator minus its 5-period SMA.",
+      "common_parameters": {
+        "fast_slow": "AO 5/34",
+        "signal": 5
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "adx",
+      "name": "Average Directional Index",
+      "canonical_code": "ADX",
+      "category": "trend_strength",
+      "description": "Measures trend strength irrespective of direction.",
+      "calculation_basis": "Wilder-smoothed DX from +DI and -DI.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "adxr",
+      "name": "Average Directional Movement Index Rating",
+      "canonical_code": "ADXR",
+      "category": "trend_strength",
+      "description": "Smoothed/lagged ADX measure.",
+      "calculation_basis": "Average of current ADX and ADX n periods earlier.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ao",
+      "name": "Awesome Oscillator",
+      "canonical_code": "AO",
+      "category": "momentum",
+      "description": "Difference between short and long median-price averages.",
+      "calculation_basis": "SMA( HL2,5 ) - SMA( HL2,34 ).",
+      "common_parameters": {
+        "fast": 5,
+        "slow": 34
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "apo",
+      "name": "Absolute Price Oscillator",
+      "canonical_code": "APO",
+      "category": "momentum",
+      "description": "Difference between fast and slow moving averages in price units.",
+      "calculation_basis": "MA(price,fast)-MA(price,slow).",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "ma_type": "EMA"
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "aroon",
+      "name": "Aroon",
+      "canonical_code": "AROON",
+      "category": "trend_strength",
+      "description": "Measures time since recent high and low.",
+      "calculation_basis": "AroonUp=100*(n-bars_since_high)/n; AroonDown analogous for low.",
+      "common_parameters": {
+        "period": 25
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "aroonosc",
+      "name": "Aroon Oscillator",
+      "canonical_code": "AROONOSC",
+      "category": "trend_strength",
+      "description": "Difference between Aroon Up and Aroon Down.",
+      "calculation_basis": "AroonUp-AroonDown.",
+      "common_parameters": {
+        "period": 25
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "asi",
+      "name": "Wilder Accumulative Swing Index",
+      "canonical_code": "ASI",
+      "category": "momentum",
+      "description": "Cumulative swing index that uses OHLC relationships and limit move.",
+      "calculation_basis": "Accumulate Wilder Swing Index values; implementation requires exact formula parameters.",
+      "common_parameters": {
+        "limit_move": 0
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "bop",
+      "name": "Balance of Power",
+      "canonical_code": "BOP",
+      "category": "momentum",
+      "description": "Measures ability of buyers/sellers to move price.",
+      "calculation_basis": "(close-open)/(high-low), with zero-range handling.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cci",
+      "name": "Commodity Channel Index",
+      "canonical_code": "CCI",
+      "category": "momentum",
+      "description": "Measures deviation of typical price from its mean in mean deviations.",
+      "calculation_basis": "(TP-SMA(TP,n))/(0.015*mean_deviation(TP,n)).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cg",
+      "name": "Center of Gravity Oscillator",
+      "canonical_code": "CG",
+      "category": "momentum",
+      "description": "Ehlers zero-lag oscillator based on weighted price positions.",
+      "calculation_basis": "Weighted rolling price sum ratio; use canonical formula implementation.",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "chop",
+      "name": "Choppiness Index",
+      "canonical_code": "CHOP",
+      "category": "trend_regime",
+      "description": "Estimates trendiness vs choppiness.",
+      "calculation_basis": "100*log10(sum(TR,n)/(highest(high,n)-lowest(low,n)))/log10(n).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "choptr",
+      "name": "Choppiness Index True Range Box",
+      "canonical_code": "CHOPTR",
+      "category": "trend_regime",
+      "description": "Choppiness index variant using true-range-defined box.",
+      "calculation_basis": "TA-Lib variant of CHOP with true-range box construction.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cmo",
+      "name": "Chande Momentum Oscillator",
+      "canonical_code": "CMO",
+      "category": "momentum",
+      "description": "Bounded momentum oscillator based on up/down changes.",
+      "calculation_basis": "100*(sum_up-sum_down)/(sum_up+sum_down).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cmou",
+      "name": "Chande Momentum Oscillator Unsmoothed",
+      "canonical_code": "CMOU",
+      "category": "momentum",
+      "description": "Unsmoothed CMO variant.",
+      "calculation_basis": "Raw rolling up/down change balance without conventional smoothing.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "coppock",
+      "name": "Coppock Curve",
+      "canonical_code": "COPPOCK",
+      "category": "momentum",
+      "description": "Long-term momentum oscillator using weighted smoothing of ROC.",
+      "calculation_basis": "WMA(ROC(long1)+ROC(long2), smoothing).",
+      "common_parameters": {
+        "roc1": 14,
+        "roc2": 11,
+        "wma": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "crsi",
+      "name": "Connors RSI",
+      "canonical_code": "CRSI",
+      "category": "momentum",
+      "description": "Composite of short RSI, streak RSI and percentile rank of ROC.",
+      "calculation_basis": "Average RSI(close,3), RSI(streak,2), PercentRank(ROC(1),100).",
+      "common_parameters": {
+        "rsi_period": 3,
+        "streak_rsi": 2,
+        "rank_period": 100
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cti",
+      "name": "Correlation Trend Indicator",
+      "canonical_code": "CTI",
+      "category": "trend_strength",
+      "description": "Correlation of price with time over a rolling window.",
+      "calculation_basis": "Rolling Pearson correlation between price and linear time index.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "dosc",
+      "name": "Derivative Oscillator",
+      "canonical_code": "DOSC",
+      "category": "momentum",
+      "description": "RSI-derived oscillator with smoothing and signal line.",
+      "calculation_basis": "EMA(RSI) minus EMA(EMA(RSI)) or library-specific derivative-oscillator construction.",
+      "common_parameters": {
+        "rsi": 14,
+        "ema1": 5,
+        "ema2": 3,
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "dpo",
+      "name": "Detrended Price Oscillator",
+      "canonical_code": "DPO",
+      "category": "cycle",
+      "description": "Removes longer-term trend to expose cycles.",
+      "calculation_basis": "Close shifted back by n/2+1 minus SMA(close,n), per convention.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "dx",
+      "name": "Directional Movement Index",
+      "canonical_code": "DX",
+      "category": "trend_strength",
+      "description": "Raw directional strength measure before ADX smoothing.",
+      "calculation_basis": "100*abs(+DI--DI)/(+DI+-DI).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "er",
+      "name": "Kaufman Efficiency Ratio",
+      "canonical_code": "ER",
+      "category": "trend_regime",
+      "description": "Ratio of net price movement to total path movement.",
+      "calculation_basis": "abs(close-close[n])/sum(abs(close-close[1]),n).",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "eri",
+      "name": "Elder Ray Index",
+      "canonical_code": "ERI",
+      "category": "momentum",
+      "description": "Bull Power and Bear Power relative to EMA.",
+      "calculation_basis": "BullPower=high-EMA(close,n); BearPower=low-EMA(close,n).",
+      "common_parameters": {
+        "period": 13
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "fisher",
+      "name": "Fisher Transform",
+      "canonical_code": "FISHER",
+      "category": "cycle_momentum",
+      "description": "Transforms normalized prices into a near-Gaussian oscillator.",
+      "calculation_basis": "Normalize mid-price in rolling range to [-1,1], recursively smooth, apply 0.5*ln((1+x)/(1-x)).",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "fosc",
+      "name": "Forecast Oscillator",
+      "canonical_code": "FOSC",
+      "category": "momentum",
+      "description": "Difference between linear-regression forecast and actual price, normalized.",
+      "calculation_basis": "100*(price-forecast)/price or library-sign convention; verify sign in implementation.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "fractal",
+      "name": "Williams Fractal",
+      "canonical_code": "FRACTAL",
+      "category": "swing_analysis",
+      "description": "Identifies local pivot highs/lows using neighboring bars.",
+      "calculation_basis": "Pivot high/low greater/less than configured surrounding bars; confirmed only after right bars close.",
+      "common_parameters": {
+        "left": 2,
+        "right": 2
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ibs",
+      "name": "Internal Bar Strength",
+      "canonical_code": "IBS",
+      "category": "momentum",
+      "description": "Close location within current high-low range.",
+      "calculation_basis": "(close-low)/(high-low).",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "imi",
+      "name": "Intraday Momentum Index",
+      "canonical_code": "IMI",
+      "category": "momentum",
+      "description": "RSI-like measure using candle body changes.",
+      "calculation_basis": "100*sum(up body,n)/(sum(up body,n)+sum(down body,n)).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kdj",
+      "name": "KDJ Stochastic",
+      "canonical_code": "KDJ",
+      "category": "momentum",
+      "description": "Stochastic oscillator with J line derived from K and D.",
+      "calculation_basis": "K/D smooth stochastic %K; J=3K-2D.",
+      "common_parameters": {
+        "period": 9,
+        "smooth_k": 3,
+        "smooth_d": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kst",
+      "name": "Know Sure Thing",
+      "canonical_code": "KST",
+      "category": "momentum",
+      "description": "Long-term smoothed rate-of-change composite.",
+      "calculation_basis": "Weighted sum of smoothed ROCs across four lookbacks.",
+      "common_parameters": {
+        "roc_periods": [
+          10,
+          15,
+          20,
+          30
+        ],
+        "sma_periods": [
+          10,
+          10,
+          10,
+          15
+        ],
+        "weights": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kstext",
+      "name": "Know Sure Thing Extended",
+      "canonical_code": "KSTEXT",
+      "category": "momentum",
+      "description": "KST with configurable moving-average type.",
+      "calculation_basis": "KST components are smoothed ROC series with selectable MA type.",
+      "common_parameters": {
+        "roc_periods": [
+          10,
+          15,
+          20,
+          30
+        ],
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "macd",
+      "name": "Moving Average Convergence Divergence",
+      "canonical_code": "MACD",
+      "category": "momentum",
+      "description": "Difference between fast and slow EMAs plus signal and histogram.",
+      "calculation_basis": "MACD=EMA_fast-EMA_slow; signal=EMA(MACD,signal_n); hist=MACD-signal.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "macdext",
+      "name": "MACD Extended",
+      "canonical_code": "MACDEXT",
+      "category": "momentum",
+      "description": "MACD with independently selectable moving average types.",
+      "calculation_basis": "Difference of selected fast/slow MAs, then selected signal MA.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "macdfix",
+      "name": "MACD Fixed",
+      "canonical_code": "MACDFIX",
+      "category": "momentum",
+      "description": "Standard MACD using fixed 12/26 periods.",
+      "calculation_basis": "EMA(12)-EMA(26), with 9-period signal.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "macdv",
+      "name": "MACD-V",
+      "canonical_code": "MACDV",
+      "category": "momentum",
+      "description": "Volatility-normalized MACD variant.",
+      "calculation_basis": "Normalize MACD spread by ATR or volatility measure; exact scaling must match selected reference.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9,
+        "atr": 26
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "mfi",
+      "name": "Money Flow Index",
+      "canonical_code": "MFI",
+      "category": "volume_momentum",
+      "description": "Volume-weighted RSI-style money flow oscillator.",
+      "calculation_basis": "Typical price*volume; compare positive and negative money flows over n; MFI=100-100/(1+money_ratio).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "minus_di",
+      "name": "Minus Directional Indicator",
+      "canonical_code": "MINUS_DI",
+      "category": "trend_strength",
+      "description": "Negative directional movement divided by smoothed true range.",
+      "calculation_basis": "100*WilderSmooth(-DM,n)/WilderSmooth(TR,n).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "minus_dm",
+      "name": "Minus Directional Movement",
+      "canonical_code": "MINUS_DM",
+      "category": "trend_strength",
+      "description": "Downward directional movement component.",
+      "calculation_basis": "DownMove=priorLow-currentLow; retain if greater than up move and positive.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "mom",
+      "name": "Momentum",
+      "canonical_code": "MOM",
+      "category": "momentum",
+      "description": "Difference between current price and price n periods ago.",
+      "calculation_basis": "close-close[n].",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "plus_di",
+      "name": "Plus Directional Indicator",
+      "canonical_code": "PLUS_DI",
+      "category": "trend_strength",
+      "description": "Positive directional movement divided by smoothed true range.",
+      "calculation_basis": "100*WilderSmooth(+DM,n)/WilderSmooth(TR,n).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "plus_dm",
+      "name": "Plus Directional Movement",
+      "canonical_code": "PLUS_DM",
+      "category": "trend_strength",
+      "description": "Upward directional movement component.",
+      "calculation_basis": "UpMove=currentHigh-priorHigh; retain if greater than down move and positive.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ppo",
+      "name": "Percentage Price Oscillator",
+      "canonical_code": "PPO",
+      "category": "momentum",
+      "description": "MACD expressed as a percentage of slow MA.",
+      "calculation_basis": "100*(fastMA-slowMA)/slowMA.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pso",
+      "name": "Premier Stochastic Oscillator",
+      "canonical_code": "PSO",
+      "category": "momentum",
+      "description": "Smoothed bounded stochastic momentum oscillator.",
+      "calculation_basis": "Stochastic range normalization followed by smoothing/transform; use reference implementation.",
+      "common_parameters": {
+        "period": 8
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "qstick",
+      "name": "Qstick",
+      "canonical_code": "QSTICK",
+      "category": "momentum",
+      "description": "Moving average of candle real-body changes.",
+      "calculation_basis": "MA(close-open,n).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "roc",
+      "name": "Rate of Change",
+      "canonical_code": "ROC",
+      "category": "momentum",
+      "description": "Percentage change versus n periods ago.",
+      "calculation_basis": "100*(close/close[n]-1).",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rocp",
+      "name": "Rate of Change Percentage",
+      "canonical_code": "ROCP",
+      "category": "momentum",
+      "description": "Fractional change versus n periods ago.",
+      "calculation_basis": "(close-close[n])/close[n].",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rocr",
+      "name": "Rate of Change Ratio",
+      "canonical_code": "ROCR",
+      "category": "momentum",
+      "description": "Ratio of current to n-period-old price.",
+      "calculation_basis": "close/close[n].",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rocr100",
+      "name": "Rate of Change Ratio 100",
+      "canonical_code": "ROCR100",
+      "category": "momentum",
+      "description": "Price ratio expressed on a 100 base.",
+      "calculation_basis": "100*close/close[n].",
+      "common_parameters": {
+        "period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rsi",
+      "name": "Relative Strength Index",
+      "canonical_code": "RSI",
+      "category": "momentum",
+      "description": "Wilder-smoothed ratio of average gains to average losses.",
+      "calculation_basis": "RS=RMA(gains,n)/RMA(losses,n); RSI=100-100/(1+RS).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "si",
+      "name": "Wilder Swing Index",
+      "canonical_code": "SI",
+      "category": "momentum",
+      "description": "Single-period swing index based on OHLC changes and limit move.",
+      "calculation_basis": "Wilder Swing Index formula; use canonical implementation.",
+      "common_parameters": {
+        "limit_move": 0
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "smi",
+      "name": "Stochastic Momentum Index",
+      "canonical_code": "SMI",
+      "category": "momentum",
+      "description": "Stochastic measuring close relative to midpoint of recent high-low range, double-smoothed.",
+      "calculation_basis": "100*EMA(EMA(close-range_mid,n),m)/[0.5*EMA(EMA(range,n),m)].",
+      "common_parameters": {
+        "period": 14,
+        "smooth_k": 3,
+        "smooth_d": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "sqzmom",
+      "name": "Squeeze Momentum",
+      "canonical_code": "SQZMOM",
+      "category": "volatility_momentum",
+      "description": "Identifies Bollinger Bands inside Keltner Channels and momentum direction.",
+      "calculation_basis": "Squeeze when BB inside KC; momentum from regression/detrended price series.",
+      "common_parameters": {
+        "bb_period": 20,
+        "bb_mult": 2,
+        "kc_period": 20,
+        "kc_mult": 1.5
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "stc",
+      "name": "Schaff Trend Cycle",
+      "canonical_code": "STC",
+      "category": "cycle_momentum",
+      "description": "MACD-derived cycle oscillator using stochastic smoothing.",
+      "calculation_basis": "Stochastic transform of MACD, applied twice with smoothing.",
+      "common_parameters": {
+        "fast": 23,
+        "slow": 50,
+        "cycle": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "stoch",
+      "name": "Stochastic Oscillator",
+      "canonical_code": "STOCH",
+      "category": "momentum",
+      "description": "Close position within rolling high-low range with smoothing.",
+      "calculation_basis": "%K=100*(close-lowestLow)/(highestHigh-lowestLow); %D=MA(%K).",
+      "common_parameters": {
+        "k_period": 14,
+        "k_smooth": 3,
+        "d_period": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "stochf",
+      "name": "Stochastic Fast",
+      "canonical_code": "STOCHF",
+      "category": "momentum",
+      "description": "Fast stochastic %K and its smoothing.",
+      "calculation_basis": "%K=100*(close-lowestLow)/(highestHigh-lowestLow); FastD=MA(%K).",
+      "common_parameters": {
+        "k_period": 14,
+        "d_period": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "stochrsi",
+      "name": "Stochastic RSI",
+      "canonical_code": "STOCHRSI",
+      "category": "momentum",
+      "description": "Stochastic normalization of RSI values.",
+      "calculation_basis": "100*(RSI-lowestRSI)/(highestRSI-lowestRSI), then optional smoothing.",
+      "common_parameters": {
+        "rsi_period": 14,
+        "stoch_period": 14,
+        "k": 3,
+        "d": 3
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "trix",
+      "name": "TRIX",
+      "canonical_code": "TRIX",
+      "category": "momentum",
+      "description": "One-period percentage rate of change of triple-smoothed EMA.",
+      "calculation_basis": "100*(TEMA(close,n)/TEMA(close,n)[1]-1).",
+      "common_parameters": {
+        "period": 15
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "tsi",
+      "name": "True Strength Index",
+      "canonical_code": "TSI",
+      "category": "momentum",
+      "description": "Double-smoothed momentum relative to double-smoothed absolute momentum.",
+      "calculation_basis": "100*EMA(EMA(momentum,r),s)/EMA(EMA(abs(momentum),r),s).",
+      "common_parameters": {
+        "long": 25,
+        "short": 13,
+        "signal": 7
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ultosc",
+      "name": "Ultimate Oscillator",
+      "canonical_code": "ULTOSC",
+      "category": "momentum",
+      "description": "Weighted oscillator combining buying pressure over three horizons.",
+      "calculation_basis": "Weighted average of BP/TR ratios over 7,14,28 periods, scaled 0–100.",
+      "common_parameters": {
+        "periods": [
+          7,
+          14,
+          28
+        ],
+        "weights": [
+          4,
+          2,
+          1
+        ]
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "vhf",
+      "name": "Vertical Horizontal Filter",
+      "canonical_code": "VHF",
+      "category": "trend_regime",
+      "description": "Distinguishes trending from ranging conditions.",
+      "calculation_basis": "(highest(close,n)-lowest(close,n))/sum(abs(close-close[1]),n).",
+      "common_parameters": {
+        "period": 28
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "vortex",
+      "name": "Vortex Indicator",
+      "canonical_code": "VORTEX",
+      "category": "trend_strength",
+      "description": "Positive and negative trend movement lines.",
+      "calculation_basis": "VI+=sum(abs(high-low[1]),n)/sum(TR,n); VI-=sum(abs(low-high[1]),n)/sum(TR,n).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "wad",
+      "name": "Williams Accumulation/Distribution",
+      "canonical_code": "WAD",
+      "category": "volume_momentum",
+      "description": "Cumulative accumulation/distribution based on close location versus prior close.",
+      "calculation_basis": "Accumulate TrueHigh/TrueLow-derived close location change.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "wavetrend",
+      "name": "WaveTrend Oscillator",
+      "canonical_code": "WAVETREND",
+      "category": "momentum",
+      "description": "Smoothed channel-index oscillator popular in discretionary charting.",
+      "calculation_basis": "ESA=EMA(typical,n1); CI=(TP-ESA)/(0.015*EMA(abs(TP-ESA),n1)); WT1=EMA(CI,n2); WT2=SMA(WT1,signal).",
+      "common_parameters": {
+        "channel_length": 10,
+        "average_length": 21,
+        "signal": 4
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "willr",
+      "name": "Williams %R",
+      "canonical_code": "WILLR",
+      "category": "momentum",
+      "description": "Close location relative to highest high/lowest low, scaled -100 to 0.",
+      "calculation_basis": "-100*(highestHigh-close)/(highestHigh-lowestLow).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "adr",
+      "name": "Average Day Range",
+      "canonical_code": "ADR",
+      "category": "volatility",
+      "description": "Average high-low daily range.",
+      "calculation_basis": "SMA(high-low,n), optionally normalized by close.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "atr",
+      "name": "Average True Range",
+      "canonical_code": "ATR",
+      "category": "volatility",
+      "description": "Wilder average of true range, capturing gaps and intrabar range.",
+      "calculation_basis": "TR=max(high-low,abs(high-prevClose),abs(low-prevClose)); ATR=RMA(TR,n).",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "bbw",
+      "name": "Bollinger BandWidth",
+      "canonical_code": "BBW",
+      "category": "volatility",
+      "description": "Width of Bollinger Bands relative to middle band.",
+      "calculation_basis": "(Upper-Lower)/Middle.",
+      "common_parameters": {
+        "period": 20,
+        "stddev": 2
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cvi",
+      "name": "Chaikin Volatility",
+      "canonical_code": "CVI",
+      "category": "volatility",
+      "description": "Percentage change in EMA of high-low range.",
+      "calculation_basis": "100*(EMA(range,n)-EMA(range,n)[m])/EMA(range,n)[m].",
+      "common_parameters": {
+        "ema_period": 10,
+        "roc_period": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "massi",
+      "name": "Mass Index",
+      "canonical_code": "MASSI",
+      "category": "volatility_reversal",
+      "description": "Range-expansion indicator used to identify potential reversals.",
+      "calculation_basis": "Sum of ratio of EMA(high-low) to EMA of that EMA over lookback.",
+      "common_parameters": {
+        "ema_period": 9,
+        "sum_period": 25
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "natr",
+      "name": "Normalized ATR",
+      "canonical_code": "NATR",
+      "category": "volatility",
+      "description": "ATR scaled by closing price.",
+      "calculation_basis": "100*ATR(n)/close.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "percentb",
+      "name": "Bollinger %B",
+      "canonical_code": "PERCENTB",
+      "category": "volatility",
+      "description": "Close position relative to Bollinger Bands.",
+      "calculation_basis": "(close-lowerBand)/(upperBand-lowerBand).",
+      "common_parameters": {
+        "period": 20,
+        "stddev": 2
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rogerssatchell",
+      "name": "Rogers-Satchell Volatility",
+      "canonical_code": "ROGERSSATCHELL",
+      "category": "volatility",
+      "description": "OHLC-based volatility estimator that can accommodate drift.",
+      "calculation_basis": "Rolling mean of ln(H/C)*ln(H/O)+ln(L/C)*ln(L/O), then annualize as configured.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rvi",
+      "name": "Relative Volatility Index",
+      "canonical_code": "RVI",
+      "category": "volatility_momentum",
+      "description": "RSI-style oscillator applied to standard deviation changes.",
+      "calculation_basis": "Separate volatility up/down measures and RSI-style normalization.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rvir",
+      "name": "Relative Volatility Index Refined",
+      "canonical_code": "RVIR",
+      "category": "volatility_momentum",
+      "description": "Refined RVI using high/low volatility data.",
+      "calculation_basis": "RVI variant based on high/low-derived volatility inputs.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "trange",
+      "name": "True Range",
+      "canonical_code": "TRANGE",
+      "category": "volatility",
+      "description": "Single-period range including prior-close gaps.",
+      "calculation_basis": "max(high-low,abs(high-prev_close),abs(low-prev_close)).",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ad",
+      "name": "Chaikin Accumulation/Distribution Line",
+      "canonical_code": "AD",
+      "category": "volume",
+      "description": "Cumulative money-flow volume.",
+      "calculation_basis": "CLV=((close-low)-(high-close))/(high-low); AD_t=AD_(t-1)+CLV*volume.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "adosc",
+      "name": "Chaikin A/D Oscillator",
+      "canonical_code": "ADOSC",
+      "category": "volume",
+      "description": "Difference between fast and slow EMAs of A/D line.",
+      "calculation_basis": "EMA(AD,fast)-EMA(AD,slow).",
+      "common_parameters": {
+        "fast": 3,
+        "slow": 10
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cmf",
+      "name": "Chaikin Money Flow",
+      "canonical_code": "CMF",
+      "category": "volume",
+      "description": "Volume-weighted accumulation/distribution over a rolling window.",
+      "calculation_basis": "sum(CLV*volume,n)/sum(volume,n).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "efi",
+      "name": "Elder Force Index",
+      "canonical_code": "EFI",
+      "category": "volume_momentum",
+      "description": "Price change multiplied by volume, commonly smoothed.",
+      "calculation_basis": "EMA((close-close[1])*volume,n).",
+      "common_parameters": {
+        "period": 13
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "emv",
+      "name": "Ease of Movement",
+      "canonical_code": "EMV",
+      "category": "volume",
+      "description": "Relates price movement to volume and range.",
+      "calculation_basis": "Distance moved divided by box ratio derived from volume/high-low.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kvo",
+      "name": "Klinger Volume Oscillator",
+      "canonical_code": "KVO",
+      "category": "volume_momentum",
+      "description": "Volume force oscillator using trend direction and range.",
+      "calculation_basis": "Difference between fast/slow EMAs of volume force.",
+      "common_parameters": {
+        "fast": 34,
+        "slow": 55,
+        "signal": 13
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "marketfi",
+      "name": "Market Facilitation Index",
+      "canonical_code": "MARKETFI",
+      "category": "volume",
+      "description": "Price range per unit volume.",
+      "calculation_basis": "(high-low)/volume; combine with volume change for interpretation.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "nvi",
+      "name": "Negative Volume Index",
+      "canonical_code": "NVI",
+      "category": "volume",
+      "description": "Cumulative price return updated on lower-volume sessions.",
+      "calculation_basis": "When volume falls, NVI*=1+price_return; otherwise unchanged.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "obv",
+      "name": "On-Balance Volume",
+      "canonical_code": "OBV",
+      "category": "volume",
+      "description": "Cumulative volume signed by close-to-close direction.",
+      "calculation_basis": "OBV_t=OBV_(t-1)+volume if close up; minus volume if down.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pvi",
+      "name": "Positive Volume Index",
+      "canonical_code": "PVI",
+      "category": "volume",
+      "description": "Cumulative price return updated on higher-volume sessions.",
+      "calculation_basis": "When volume rises, PVI*=1+price_return; otherwise unchanged.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pvo",
+      "name": "Percentage Volume Oscillator",
+      "canonical_code": "PVO",
+      "category": "volume_momentum",
+      "description": "MACD-style oscillator applied to volume.",
+      "calculation_basis": "100*(EMA(volume,fast)-EMA(volume,slow))/EMA(volume,slow).",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pvt",
+      "name": "Price Volume Trend",
+      "canonical_code": "PVT",
+      "category": "volume",
+      "description": "Cumulative volume weighted by percentage price change.",
+      "calculation_basis": "PVT_t=PVT_(t-1)+volume*(close-close[1])/close[1].",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rvol",
+      "name": "Relative Volume",
+      "canonical_code": "RVOL",
+      "category": "volume",
+      "description": "Current volume relative to typical volume for comparable bars.",
+      "calculation_basis": "volume / rolling_mean(volume,n); intraday version must compare same time-of-day bucket.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "vwap",
+      "name": "Volume Weighted Average Price",
+      "canonical_code": "VWAP",
+      "category": "volume_price",
+      "description": "Intraday cumulative volume-weighted typical price.",
+      "calculation_basis": "Cumulative sum(typical_price*volume)/cumulative sum(volume), reset each session.",
+      "common_parameters": {
+        "price": "HLC3",
+        "reset": "session"
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "beta",
+      "name": "Rolling Beta",
+      "canonical_code": "BETA",
+      "category": "statistics",
+      "description": "Sensitivity of asset returns to benchmark returns.",
+      "calculation_basis": "Cov(asset_returns,benchmark_returns)/Var(benchmark_returns).",
+      "common_parameters": {
+        "period": 60
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "correl",
+      "name": "Rolling Correlation",
+      "canonical_code": "CORREL",
+      "category": "statistics",
+      "description": "Pearson correlation between two series.",
+      "calculation_basis": "Cov(x,y)/(std(x)*std(y)).",
+      "common_parameters": {
+        "period": 30
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "kurtosis",
+      "name": "Rolling Excess Kurtosis",
+      "canonical_code": "KURTOSIS",
+      "category": "statistics",
+      "description": "Measures tail heaviness relative to normal distribution.",
+      "calculation_basis": "Fourth standardized central moment minus 3, with sample convention specified.",
+      "common_parameters": {
+        "period": 60
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "linearreg",
+      "name": "Linear Regression Value",
+      "canonical_code": "LINEARREG",
+      "category": "statistics",
+      "description": "Endpoint value of rolling least-squares regression.",
+      "calculation_basis": "Fit y=a+b*x over n points; return fitted value at endpoint.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "linearreg_angle",
+      "name": "Linear Regression Angle",
+      "canonical_code": "LINEARREG_ANGLE",
+      "category": "statistics",
+      "description": "Angle of rolling regression slope.",
+      "calculation_basis": "arctan(slope) converted to degrees; scale-sensitive unless normalized.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "linearreg_intercept",
+      "name": "Linear Regression Intercept",
+      "canonical_code": "LINEARREG_INTERCEPT",
+      "category": "statistics",
+      "description": "Intercept of rolling least-squares regression.",
+      "calculation_basis": "Return fitted intercept a from y=a+b*x.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "linearreg_slope",
+      "name": "Linear Regression Slope",
+      "canonical_code": "LINEARREG_SLOPE",
+      "category": "statistics",
+      "description": "Slope of rolling least-squares regression.",
+      "calculation_basis": "b=cov(x,y)/var(x) over n points.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "median",
+      "name": "Rolling Median",
+      "canonical_code": "MEDIAN",
+      "category": "statistics",
+      "description": "Median of observations over a rolling window.",
+      "calculation_basis": "Median(x,n).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "percentile",
+      "name": "Rolling Percentile",
+      "canonical_code": "PERCENTILE",
+      "category": "statistics",
+      "description": "Selected rolling percentile of observations.",
+      "calculation_basis": "Quantile(x,n,q), define interpolation method.",
+      "common_parameters": {
+        "period": 100,
+        "percentile": 0.9
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "percentrank",
+      "name": "Rolling Percent Rank",
+      "canonical_code": "PERCENTRANK",
+      "category": "statistics",
+      "description": "Percentile rank of latest observation in rolling history.",
+      "calculation_basis": "Fraction of window values <= current value, with tie policy defined.",
+      "common_parameters": {
+        "period": 100
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "skew",
+      "name": "Rolling Skewness",
+      "canonical_code": "SKEW",
+      "category": "statistics",
+      "description": "Measures asymmetry of rolling return distribution.",
+      "calculation_basis": "Third standardized central moment; sample correction documented.",
+      "common_parameters": {
+        "period": 60
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "stddev",
+      "name": "Rolling Standard Deviation",
+      "canonical_code": "STDDEV",
+      "category": "statistics",
+      "description": "Dispersion of values around rolling mean.",
+      "calculation_basis": "sqrt(rolling variance); specify ddof convention.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "tsf",
+      "name": "Time Series Forecast",
+      "canonical_code": "TSF",
+      "category": "statistics",
+      "description": "One-step-ahead forecast from rolling linear regression.",
+      "calculation_basis": "For rolling regression y=a+b*x, forecast next x position.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "var",
+      "name": "Rolling Variance",
+      "canonical_code": "VAR",
+      "category": "statistics",
+      "description": "Rolling variance of observations.",
+      "calculation_basis": "Mean squared deviation from rolling mean; specify ddof.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ht_dcperiod",
+      "name": "Hilbert Dominant Cycle Period",
+      "canonical_code": "HT_DCPERIOD",
+      "category": "cycle",
+      "description": "Estimate of dominant market cycle length.",
+      "calculation_basis": "Hilbert-transform in-phase/quadrature components and phase-difference period estimation.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ht_dcphase",
+      "name": "Hilbert Dominant Cycle Phase",
+      "canonical_code": "HT_DCPHASE",
+      "category": "cycle",
+      "description": "Phase angle of dominant cycle.",
+      "calculation_basis": "Hilbert analytic signal phase from in-phase and quadrature components.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ht_phasor",
+      "name": "Hilbert Phasor Components",
+      "canonical_code": "HT_PHASOR",
+      "category": "cycle",
+      "description": "In-phase and quadrature components of analytic signal.",
+      "calculation_basis": "Hilbert transform of detrended price; outputs I and Q.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ht_sine",
+      "name": "Hilbert SineWave",
+      "canonical_code": "HT_SINE",
+      "category": "cycle",
+      "description": "Sine and lead-sine oscillator from cycle phase.",
+      "calculation_basis": "Sine(phase) and Sine(phase+45 degrees).",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ht_trendmode",
+      "name": "Hilbert Trend vs Cycle Mode",
+      "canonical_code": "HT_TRENDMODE",
+      "category": "cycle_regime",
+      "description": "Classifies trend mode vs cycle mode.",
+      "calculation_basis": "Hilbert-transform phase/dominant-cycle logic; output regime flag.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "swak_2php",
+      "name": "Two-Pole High-Pass Filter",
+      "canonical_code": "SWAK_2PHP",
+      "category": "cycle_filter",
+      "description": "Removes low-frequency components using a two-pole high-pass filter.",
+      "calculation_basis": "Recursive two-pole high-pass digital filter; coefficients depend on cutoff.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "swak_bp",
+      "name": "Band-Pass Filter",
+      "canonical_code": "SWAK_BP",
+      "category": "cycle_filter",
+      "description": "Extracts a selected frequency band.",
+      "calculation_basis": "Recursive digital band-pass filter with center period/bandwidth parameters.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "swak_hp",
+      "name": "High-Pass Filter",
+      "canonical_code": "SWAK_HP",
+      "category": "cycle_filter",
+      "description": "High-pass filter for removing slow trend components.",
+      "calculation_basis": "Recursive digital high-pass filter.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "avgprice",
+      "name": "Average Price",
+      "canonical_code": "AVGPRICE",
+      "category": "price_transform",
+      "description": "Average of OHLC values.",
+      "calculation_basis": "(open+high+low+close)/4.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "ha",
+      "name": "Heikin-Ashi",
+      "canonical_code": "HA",
+      "category": "price_transform",
+      "description": "Synthetic candles that smooth price action.",
+      "calculation_basis": "HA_close=(O+H+L+C)/4; HA_open=(prior HA_open+prior HA_close)/2; HA_high=max(H,HA_open,HA_close); HA_low=min(L,HA_open,HA_close).",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "medprice",
+      "name": "Median Price",
+      "canonical_code": "MEDPRICE",
+      "category": "price_transform",
+      "description": "Midpoint of high and low.",
+      "calculation_basis": "(high+low)/2.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "typprice",
+      "name": "Typical Price",
+      "canonical_code": "TYPPRICE",
+      "category": "price_transform",
+      "description": "Average of high, low and close.",
+      "calculation_basis": "(high+low+close)/3.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "wclprice",
+      "name": "Weighted Close Price",
+      "canonical_code": "WCLPRICE",
+      "category": "price_transform",
+      "description": "Close-weighted average of high, low and close.",
+      "calculation_basis": "(high+low+2*close)/4.",
+      "common_parameters": {},
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "avgdev",
+      "name": "Average Deviation",
+      "canonical_code": "AVGDEV",
+      "category": "statistics",
+      "description": "Mean absolute deviation around rolling mean.",
+      "calculation_basis": "Mean(abs(x-SMA(x,n))) over n.",
+      "common_parameters": {
+        "period": 14
+      },
+      "implementation_source": "TA-Lib",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "anchored_vwap",
+      "name": "Anchored VWAP",
+      "canonical_code": null,
+      "category": "volume_price",
+      "description": "VWAP calculated from a user/event-defined anchor rather than session open.",
+      "calculation_basis": "Cumulative sum(typical_price*volume) / cumulative sum(volume) from anchor bar.",
+      "common_parameters": {
+        "anchor": "explicit_event_or_pivot"
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "volume_profile",
+      "name": "Volume Profile (POC, VAH, VAL)",
+      "canonical_code": null,
+      "category": "volume_price",
+      "description": "Volume-at-price histogram identifying point of control and value area.",
+      "calculation_basis": "Bin traded volume by price; POC=max-volume bin; value area expands from POC to target share (often 70%).",
+      "common_parameters": {
+        "value_area_pct": 0.7,
+        "bin_size": "tick_or_ATR"
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "cumulative_volume_delta",
+      "name": "Cumulative Volume Delta (CVD)",
+      "canonical_code": null,
+      "category": "volume_orderflow",
+      "description": "Cumulative signed volume based on aggressor buy/sell classification.",
+      "calculation_basis": "CVD += buyer_initiated_volume - seller_initiated_volume; OHLCV-only proxy is not equivalent to true order-flow delta.",
+      "common_parameters": {
+        "source": "trade_or_quote_classified"
+      },
+      "implementation_source": "Order-flow analytics",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "volume_delta",
+      "name": "Volume Delta",
+      "canonical_code": null,
+      "category": "volume_orderflow",
+      "description": "Difference between buyer-initiated and seller-initiated volume in a bar.",
+      "calculation_basis": "Buy volume minus sell volume based on trade classification; not reliably inferable from daily OHLCV.",
+      "common_parameters": {},
+      "implementation_source": "Order-flow analytics",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "parkinson_volatility",
+      "name": "Parkinson Volatility",
+      "canonical_code": null,
+      "category": "volatility",
+      "description": "High-low range volatility estimator.",
+      "calculation_basis": "sqrt(mean(ln(H/L)^2)/(4*ln(2))).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "Volatility estimator",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "garman_klass_volatility",
+      "name": "Garman-Klass Volatility",
+      "canonical_code": null,
+      "category": "volatility",
+      "description": "OHLC volatility estimator using open/high/low/close.",
+      "calculation_basis": "sqrt(mean(0.5*ln(H/L)^2-(2ln2-1)*ln(C/O)^2)).",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "Volatility estimator",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "yang_zhang_volatility",
+      "name": "Yang-Zhang Volatility",
+      "canonical_code": null,
+      "category": "volatility",
+      "description": "OHLC volatility estimator designed to handle opening jumps and drift.",
+      "calculation_basis": "Combine overnight, open-to-close and Rogers-Satchell components with weighting.",
+      "common_parameters": {
+        "period": 20
+      },
+      "implementation_source": "Volatility estimator",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "historical_volatility",
+      "name": "Historical Volatility",
+      "canonical_code": null,
+      "category": "volatility",
+      "description": "Annualized standard deviation of log returns.",
+      "calculation_basis": "std(log(close/close[1]),n)*sqrt(bars_per_year).",
+      "common_parameters": {
+        "period": 20,
+        "annualization": "market_calendar"
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "relative_strength_line",
+      "name": "Relative Strength vs Benchmark",
+      "canonical_code": null,
+      "category": "relative_strength",
+      "description": "Price ratio of asset to benchmark, optionally normalized.",
+      "calculation_basis": "asset_close / benchmark_close; assess trend and momentum of ratio.",
+      "common_parameters": {
+        "benchmark": "explicit_symbol"
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "elder_impulse_system",
+      "name": "Elder Impulse System",
+      "canonical_code": null,
+      "category": "trend_momentum",
+      "description": "Combines EMA slope and MACD histogram slope to colour trend/momentum state.",
+      "calculation_basis": "Bullish if EMA rising and MACD histogram rising; bearish if both falling; otherwise neutral.",
+      "common_parameters": {
+        "ema_period": 13,
+        "macd": [
+          12,
+          26,
+          9
+        ]
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "heikin_ashi_trend",
+      "name": "Heikin-Ashi Trend State",
+      "canonical_code": null,
+      "category": "price_transform",
+      "description": "Trend-state features from consecutive synthetic Heikin-Ashi candles.",
+      "calculation_basis": "Compute HA candles; classify runs, body size and shadow presence.",
+      "common_parameters": {},
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "supertrend_multi",
+      "name": "Multi-timeframe SuperTrend",
+      "canonical_code": null,
+      "category": "trend_stop",
+      "description": "SuperTrend calculated on multiple timeframes for confluence.",
+      "calculation_basis": "Calculate SuperTrend independently per timeframe; align only completed higher-timeframe bars.",
+      "common_parameters": {
+        "timeframes": [
+          "15m",
+          "1h",
+          "1d"
+        ],
+        "atr_period": 10,
+        "multiplier": 3
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pivot_points_classic",
+      "name": "Classic Pivot Points",
+      "canonical_code": null,
+      "category": "support_resistance",
+      "description": "Daily/weekly/monthly support and resistance derived from prior session OHLC.",
+      "calculation_basis": "P=(H+L+C)/3; R1=2P-L; S1=2P-H; R2=P+(H-L); S2=P-(H-L), with variants.",
+      "common_parameters": {
+        "anchor": "prior_session"
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pivot_points_fibonacci",
+      "name": "Fibonacci Pivot Points",
+      "canonical_code": null,
+      "category": "support_resistance",
+      "description": "Pivot levels using Fibonacci fractions of prior range.",
+      "calculation_basis": "P=(H+L+C)/3; supports/resistances=P ± fib_fraction*(H-L).",
+      "common_parameters": {
+        "fractions": [
+          0.382,
+          0.618,
+          1.0
+        ]
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "pivot_points_camarilla",
+      "name": "Camarilla Pivots",
+      "canonical_code": null,
+      "category": "support_resistance",
+      "description": "Intraday levels derived from prior session range and close.",
+      "calculation_basis": "Prior close plus/minus fixed range fractions; common constants differ by platform.",
+      "common_parameters": {},
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "zigzag_atr",
+      "name": "ATR ZigZag",
+      "canonical_code": null,
+      "category": "swing_analysis",
+      "description": "ZigZag swing filter using ATR multiple rather than percent.",
+      "calculation_basis": "Confirm new swing only after reversal >= k*ATR from extreme.",
+      "common_parameters": {
+        "atr_period": 14,
+        "reversal_atr": 2.0
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "market_structure_hh_hl",
+      "name": "Market Structure HH/HL/LH/LL",
+      "canonical_code": null,
+      "category": "price_action",
+      "description": "Classifies confirmed swing sequence into higher highs/lows and lower highs/lows.",
+      "calculation_basis": "Use confirmed pivots; HH if pivot high exceeds prior confirmed high; HL if pivot low exceeds prior low; mirror for bearish.",
+      "common_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3
+      },
+      "implementation_source": "Price action framework",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "bos_choch",
+      "name": "Break of Structure / Change of Character",
+      "canonical_code": null,
+      "category": "price_action",
+      "description": "Break of a previously confirmed swing level; terminology varies across frameworks.",
+      "calculation_basis": "BOS: close through trend-aligned swing; CHoCH: close through opposing swing against prior structure.",
+      "common_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "break_buffer_atr": 0.1
+      },
+      "implementation_source": "Price action framework",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "vwap_deviation_bands",
+      "name": "VWAP Deviation Bands",
+      "canonical_code": null,
+      "category": "volume_price",
+      "description": "VWAP with standard-deviation bands.",
+      "calculation_basis": "VWAP ± k*weighted_standard_deviation(price around VWAP).",
+      "common_parameters": {
+        "bands": [
+          1,
+          2,
+          3
+        ]
+      },
+      "implementation_source": "Common technical analysis",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume",
+        "high_optional",
+        "low_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "rsi_divergence",
+      "name": "RSI Divergence",
+      "canonical_code": null,
+      "category": "momentum_pattern",
+      "description": "Price swing and RSI swing move in opposite directions.",
+      "calculation_basis": "Compare confirmed price and RSI pivots within synchronization tolerance; regular and hidden variants separated.",
+      "common_parameters": {
+        "rsi_period": 14,
+        "pivot_left": 3,
+        "pivot_right": 3
+      },
+      "implementation_source": "Derived signal",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "macd_divergence",
+      "name": "MACD Divergence",
+      "canonical_code": null,
+      "category": "momentum_pattern",
+      "description": "Price swing and MACD histogram/line swing move in opposite directions.",
+      "calculation_basis": "Compare confirmed synchronized price and oscillator pivots.",
+      "common_parameters": {
+        "macd": [
+          12,
+          26,
+          9
+        ],
+        "pivot_left": 3,
+        "pivot_right": 3
+      },
+      "implementation_source": "Derived signal",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "stoch_divergence",
+      "name": "Stochastic Divergence",
+      "canonical_code": null,
+      "category": "momentum_pattern",
+      "description": "Price swing and stochastic oscillator swing diverge.",
+      "calculation_basis": "Compare confirmed synchronized pivots in price and %K/%D.",
+      "common_parameters": {
+        "stochastic": [
+          14,
+          3,
+          3
+        ],
+        "pivot_left": 3,
+        "pivot_right": 3
+      },
+      "implementation_source": "Derived signal",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "atr_percentile",
+      "name": "ATR Percentile",
+      "canonical_code": null,
+      "category": "volatility_regime",
+      "description": "Current ATR rank versus its own rolling historical distribution.",
+      "calculation_basis": "PercentRank(ATR(n), lookback).",
+      "common_parameters": {
+        "atr_period": 14,
+        "rank_lookback": 252
+      },
+      "implementation_source": "Derived indicator",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "volatility_squeeze",
+      "name": "Volatility Squeeze State",
+      "canonical_code": null,
+      "category": "volatility_regime",
+      "description": "Compression state from Bollinger Bands inside Keltner Channels or low range percentile.",
+      "calculation_basis": "Boolean: BB upper < KC upper and BB lower > KC lower; release when containment ends.",
+      "common_parameters": {
+        "bb": [
+          20,
+          2
+        ],
+        "kc": [
+          20,
+          1.5
+        ]
+      },
+      "implementation_source": "Derived indicator",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "high_optional",
+        "low_optional",
+        "volume_optional"
+      ],
+      "known_caveats": [],
+      "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
+      "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    }
+  ]
+}

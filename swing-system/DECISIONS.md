@@ -295,3 +295,12 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   figures and re-fetched within days when its profile service failed. Bloomberg/Refinitiv/Capitaline are paid
   (thousands of dollars a year); Screener, Moneycontrol, Tickertape and NSE/BSE websites forbid automated copying in
   their terms, so they are not scraped. A licensed source can be added later if the owner decides to pay for one.
+
+## Owner's pattern library (2026-11-04)
+- **D78.** library/market_pattern_library (52 chart, 69 candlestick, 176 indicators) is the source of truth, loaded by
+  swing/catalog.py. TA-Lib (installed) provides the canonical candle and indicator functions; chart patterns use a
+  swing-pivot engine with right-side confirmation (no back-dating). library/IMPLEMENTATION_AUDIT.md lists every item's
+  status: candles 44 implemented as entries + 19 bearish detector-only; chart 22 implemented, 15 bearish
+  (not applicable to a long-only system), 15 planned (harmonic/Elliott/Wyckoff phases need more pivot geometry);
+  indicators 164 implemented, 4 blocked by data (tick/intraday), 8 planned. All new entry rules joined the idea
+  factory queue (~108 entry ideas + ~1,800 combinations); nothing is used for tips unless it passes the tests.

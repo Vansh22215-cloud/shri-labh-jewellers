@@ -1,0 +1,1247 @@
+{
+  "schema_version": "1.0.0",
+  "items": [
+    {
+      "id": "cdl2crows",
+      "name": "Two Crows",
+      "canonical_code": "CDL2CROWS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Three-candle bearish reversal after an advance; a long bullish candle is followed by two gapping/overlapping bearish candles that show distribution.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdl3blackcrows",
+      "name": "Three Black Crows",
+      "canonical_code": "CDL3BLACKCROWS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Three consecutive long bearish candles with progressively lower closes; each opens within the prior body in the classic form.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdl3inside",
+      "name": "Three Inside Up/Down",
+      "canonical_code": "CDL3INSIDE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Harami-style first two candles followed by a third candle closing beyond the first candle range/body to confirm reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdl3linestrike",
+      "name": "Three-Line Strike",
+      "canonical_code": "CDL3LINESTRIKE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 4,
+      "typical_direction": "both",
+      "definition": "Three candles trend in one direction, followed by a large opposite candle that engulfs the prior three-candle sequence; interpretation varies by convention.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdl3outside",
+      "name": "Three Outside Up/Down",
+      "canonical_code": "CDL3OUTSIDE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Engulfing pattern followed by a third candle confirming the reversal direction.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdl3starsinsouth",
+      "name": "Three Stars in the South",
+      "canonical_code": "CDL3STARSINSOUTH",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bullish",
+      "definition": "Three progressively smaller bearish candles with shrinking ranges near a low; rare bullish reversal formation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdl3whitesoldiers",
+      "name": "Three Advancing White Soldiers",
+      "canonical_code": "CDL3WHITESOLDIERS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bullish",
+      "definition": "Three consecutive strong bullish candles with higher closes and relatively small upper shadows after a decline/base.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlabandonedbaby",
+      "name": "Abandoned Baby",
+      "canonical_code": "CDLABANDONEDBABY",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Doji is isolated by gaps from candles on both sides; bullish version at a low, bearish version at a high.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdladvanceblock",
+      "name": "Advance Block",
+      "canonical_code": "CDLADVANCEBLOCK",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Three advancing bullish candles whose real bodies tend to shorten and/or upper shadows grow, warning of weakening advance.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlbelthold",
+      "name": "Belt-hold",
+      "canonical_code": "CDLBELTHOLD",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "both",
+      "definition": "Long one-sided candle opening at or near one extreme with little shadow at the open; direction follows candle colour.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlbreakaway",
+      "name": "Breakaway",
+      "canonical_code": "CDLBREAKAWAY",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 5,
+      "typical_direction": "both",
+      "definition": "Five-candle reversal sequence after a gap/extended move; final candle closes back into the prior price area.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlclosingmarubozu",
+      "name": "Closing Marubozu",
+      "canonical_code": "CDLCLOSINGMARUBOZU",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "both",
+      "definition": "Candle has little or no shadow at the close; bullish closes near high, bearish closes near low.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlconcealbabyswall",
+      "name": "Concealing Baby Swallow",
+      "canonical_code": "CDLCONCEALBABYSWALL",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 4,
+      "typical_direction": "bullish",
+      "definition": "Four-candle bullish reversal sequence, generally formed by successive bearish candles with a final candle engulfing the prior action.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlcounterattack",
+      "name": "Counterattack",
+      "canonical_code": "CDLCOUNTERATTACK",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Opposite-colour long candles with similar closing prices after a trend, indicating a possible stalemate/reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdldarkcloudcover",
+      "name": "Dark Cloud Cover",
+      "canonical_code": "CDLDARKCLOUDCOVER",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bearish",
+      "definition": "After an advance, bearish candle opens above prior high/close and closes well into the prior bullish real body, commonly beyond its midpoint.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdldoji",
+      "name": "Doji",
+      "canonical_code": "CDLDOJI",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "neutral",
+      "definition": "Open and close are nearly equal relative to candle range/body baseline; signals indecision, not direction by itself.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdldojistar",
+      "name": "Doji Star",
+      "canonical_code": "CDLDOJISTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "A doji gaps away from a long real body after a trend; potential reversal requiring context/confirmation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdldragonflydoji",
+      "name": "Dragonfly Doji",
+      "canonical_code": "CDLDRAGONFLYDOJI",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bullish",
+      "definition": "Open and close near high with a long lower shadow and little upper shadow; bullish when formed after decline/support.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlengulfing",
+      "name": "Engulfing Pattern",
+      "canonical_code": "CDLENGULFING",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Second real body fully engulfs the prior real body and has opposite colour; trend/location determines reversal interpretation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdleveningdojistar",
+      "name": "Evening Doji Star",
+      "canonical_code": "CDLEVENINGDOJISTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Long bullish candle, gapping doji, then bearish candle closing substantially into first body; bearish reversal candidate.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdleveningstar",
+      "name": "Evening Star",
+      "canonical_code": "CDLEVENINGSTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Long bullish candle, small-bodied star, then strong bearish candle closing into first body; bearish reversal candidate.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlgapsidesidewhite",
+      "name": "Up/Down-Gap Side-by-Side White Lines",
+      "canonical_code": "CDLGAPSIDESIDEWHITE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Two similar bullish candles appear side by side after a gap; gap direction and preceding trend determine interpretation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlgravestonedoji",
+      "name": "Gravestone Doji",
+      "canonical_code": "CDLGRAVESTONEDOJI",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bearish",
+      "definition": "Open and close near low with a long upper shadow; bearish when formed after an advance/resistance.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlhammer",
+      "name": "Hammer",
+      "canonical_code": "CDLHAMMER",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bullish",
+      "definition": "Small real body near top of range with long lower shadow and little upper shadow; bullish reversal candidate after decline.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlhangingman",
+      "name": "Hanging Man",
+      "canonical_code": "CDLHANGINGMAN",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bearish",
+      "definition": "Hammer-shaped candle after an advance; long lower shadow warns of selling pressure, confirmation needed.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlharami",
+      "name": "Harami Pattern",
+      "canonical_code": "CDLHARAMI",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Small second real body lies within the prior long real body; indicates contraction/indecision and possible reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlharamicross",
+      "name": "Harami Cross Pattern",
+      "canonical_code": "CDLHARAMICROSS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Doji second candle lies within prior long real body; potential reversal/indecision.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlhighwave",
+      "name": "High-Wave Candle",
+      "canonical_code": "CDLHIGHWAVE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "neutral",
+      "definition": "Very long upper and lower shadows with a small body; high volatility and indecision.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlhikkake",
+      "name": "Hikkake Pattern",
+      "canonical_code": "CDLHIKKAKE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Inside-bar setup followed by a failed break and subsequent move in the opposite direction; confirmation occurs after the setup.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlhikkakemod",
+      "name": "Modified Hikkake Pattern",
+      "canonical_code": "CDLHIKKAKEMOD",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Modified inside-bar failure pattern with stricter context/confirmation conditions than basic Hikkake.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlhomingpigeon",
+      "name": "Homing Pigeon",
+      "canonical_code": "CDLHOMINGPIGEON",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bullish",
+      "definition": "Two bearish candles; second smaller real body is contained within the first, often interpreted as bullish reversal at a low.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlidentical3crows",
+      "name": "Identical Three Crows",
+      "canonical_code": "CDLIDENTICAL3CROWS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Three similar long bearish candles with nearly identical closes; strong bearish reversal pattern.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlinneck",
+      "name": "In-Neck Pattern",
+      "canonical_code": "CDLINNECK",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bearish",
+      "definition": "Long bearish candle followed by a small bullish candle closing near the prior low; bearish continuation in classic interpretation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlinvertedhammer",
+      "name": "Inverted Hammer",
+      "canonical_code": "CDLINVERTEDHAMMER",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bullish",
+      "definition": "Small body near low with long upper shadow after decline; potential bullish reversal after confirmation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlkicking",
+      "name": "Kicking",
+      "canonical_code": "CDLKICKING",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Opposite-colour marubozu-like candles separated by a gap, indicating abrupt reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlkickingbylength",
+      "name": "Kicking by Length",
+      "canonical_code": "CDLKICKINGBYLENGTH",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Kicking pattern variant where the longer marubozu determines bullish/bearish direction.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlladderbottom",
+      "name": "Ladder Bottom",
+      "canonical_code": "CDLLADDERBOTTOM",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 5,
+      "typical_direction": "bullish",
+      "definition": "Downtrend sequence of bearish candles followed by a bullish reversal candle; exact variant rules are library-specific.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdllongleggeddoji",
+      "name": "Long-Legged Doji",
+      "canonical_code": "CDLLONGLEGGEDDOJI",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "neutral",
+      "definition": "Open and close near one another with unusually long upper/lower shadows; high indecision.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdllongline",
+      "name": "Long Line Candle",
+      "canonical_code": "CDLLONGLINE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "both",
+      "definition": "Real body materially longer than recent typical real bodies; direction follows candle colour.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlmarubozu",
+      "name": "Marubozu",
+      "canonical_code": "CDLMARUBOZU",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "both",
+      "definition": "Long real body with very small or absent shadows; direction follows candle colour.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlmatchinglow",
+      "name": "Matching Low",
+      "canonical_code": "CDLMATCHINGLOW",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bullish",
+      "definition": "Two consecutive bearish candles close at approximately the same low, suggesting support/possible bullish reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlmathold",
+      "name": "Mat Hold",
+      "canonical_code": "CDLMATHOLD",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 5,
+      "typical_direction": "bullish",
+      "definition": "Strong bullish candle, small countertrend consolidation candles, then bullish continuation; rare continuation pattern.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlmorningdojistar",
+      "name": "Morning Doji Star",
+      "canonical_code": "CDLMORNINGDOJISTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bullish",
+      "definition": "Long bearish candle, gapping doji, then strong bullish candle closing well into first body.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlmorningstar",
+      "name": "Morning Star",
+      "canonical_code": "CDLMORNINGSTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bullish",
+      "definition": "Long bearish candle, small-bodied star, then strong bullish candle closing into first body.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlonneck",
+      "name": "On-Neck Pattern",
+      "canonical_code": "CDLONNECK",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bearish",
+      "definition": "Long bearish candle followed by small bullish candle closing near the prior low; bearish continuation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlpiercing",
+      "name": "Piercing Pattern",
+      "canonical_code": "CDLPIERCING",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bullish",
+      "definition": "After decline, bullish candle opens below prior low/close and closes above midpoint of prior bearish real body.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlrickshawman",
+      "name": "Rickshaw Man",
+      "canonical_code": "CDLRICKSHAWMAN",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "neutral",
+      "definition": "Long-legged doji with open/close near the midpoint of the range; indecision.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlrisefall3methods",
+      "name": "Rising/Falling Three Methods",
+      "canonical_code": "CDLRISEFALL3METHODS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 5,
+      "typical_direction": "both",
+      "definition": "Long trend candle, several small countertrend candles contained within its range, then trend-resuming candle.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlseparatinglines",
+      "name": "Separating Lines",
+      "canonical_code": "CDLSEPARATINGLINES",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Opposite-colour candles with similar opening prices; second candle resumes the prior trend, suggesting continuation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlshootingstar",
+      "name": "Shooting Star",
+      "canonical_code": "CDLSHOOTINGSTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bearish",
+      "definition": "Small real body near low with long upper shadow and little lower shadow after advance.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlshortline",
+      "name": "Short Line Candle",
+      "canonical_code": "CDLSHORTLINE",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "both",
+      "definition": "Real body materially shorter than recent typical bodies; weak directional information without context.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlspinningtop",
+      "name": "Spinning Top",
+      "canonical_code": "CDLSPINNINGTOP",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "neutral",
+      "definition": "Small real body with upper and lower shadows; indecision.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlstalledpattern",
+      "name": "Stalled Pattern / Deliberation",
+      "canonical_code": "CDLSTALLEDPATTERN",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "Three-candle advance where later candle bodies shrink or lose momentum; possible bearish reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlsticksandwich",
+      "name": "Stick Sandwich",
+      "canonical_code": "CDLSTICKSANDWICH",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bullish",
+      "definition": "Bearish candle, bullish candle, then bearish candle closing near the first candle close; matching support.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdltakuri",
+      "name": "Takuri",
+      "canonical_code": "CDLTAKURI",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 1,
+      "typical_direction": "contextual_bullish",
+      "definition": "Dragonfly-like candle with exceptionally long lower shadow; potential bullish rejection at a low.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdltasukigap",
+      "name": "Tasuki Gap",
+      "canonical_code": "CDLTASUKIGAP",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Two candles create a gap in trend direction; third opposite-colour candle partially fills but does not close the gap.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlthrusting",
+      "name": "Thrusting Pattern",
+      "canonical_code": "CDLTHRUSTING",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 2,
+      "typical_direction": "bearish",
+      "definition": "Small bullish candle penetrates but fails to reach midpoint of prior long bearish candle; bearish continuation bias.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdltristar",
+      "name": "Tristar",
+      "canonical_code": "CDLTRISTAR",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Three consecutive doji-like candles with a middle doji displaced from adjacent candles; potential reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlunique3river",
+      "name": "Unique Three River",
+      "canonical_code": "CDLUNIQUE3RIVER",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bullish",
+      "definition": "Three-candle bearish sequence with a distinctive small third candle; rare bullish reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlupsidegap2crows",
+      "name": "Upside Gap Two Crows",
+      "canonical_code": "CDLUPSIDEGAP2CROWS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "bearish",
+      "definition": "After an advance, two bearish candles form above a gap; possible bearish reversal.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "cdlxsidegap3methods",
+      "name": "Upside/Downside Gap Three Methods",
+      "canonical_code": "CDLXSIDEGAP3METHODS",
+      "source_standard": "TA-Lib CDL pattern recognition",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Two same-direction candles create a gap; third opposite candle enters gap without fully closing it, suggesting continuation.",
+      "context_required": true,
+      "detector_implementation": "Use the exact TA-Lib CDL function for parity. If implementing from scratch, document every body/shadow threshold and use adaptive lookback averages; do not hard-code universal absolute candle sizes.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Pattern detection is descriptive. Apply prior-trend/location filters and a separately tested next-bar or structure-break confirmation."
+    },
+    {
+      "id": "tweezer_top",
+      "name": "Tweezer Top",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 2,
+      "typical_direction": "bearish",
+      "definition": "Two or more candles test nearly the same high after an advance; tolerance and candle-colour rules vary.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "tweezer_bottom",
+      "name": "Tweezer Bottom",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 2,
+      "typical_direction": "bullish",
+      "definition": "Two or more candles test nearly the same low after a decline; tolerance and candle-colour rules vary.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "inside_bar",
+      "name": "Inside Bar",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 2,
+      "typical_direction": "neutral",
+      "definition": "Current candle high/low is inside previous candle high/low; compression setup, direction only on breakout.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "outside_bar",
+      "name": "Outside Bar",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 2,
+      "typical_direction": "contextual",
+      "definition": "Current candle makes both a higher high and a lower low than previous candle; direction depends on close location/context.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "railroad_tracks",
+      "name": "Railroad Tracks",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 2,
+      "typical_direction": "both",
+      "definition": "Two consecutive large opposite-colour real bodies of similar size; possible reversal at a meaningful level.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "belt_hold",
+      "name": "Belt Hold (generic variant)",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 1,
+      "typical_direction": "both",
+      "definition": "Long candle opens at or near one extreme with little opening-side shadow; definitions differ among sources.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "three_bar_reversal",
+      "name": "Three-Bar Reversal",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Trend-extreme candle followed by rejection and a third candle that breaks the prior bar/sequence; rule variants abound.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    },
+    {
+      "id": "fakey_inside_bar",
+      "name": "Fakey / Failed Inside-Bar Breakout",
+      "canonical_code": null,
+      "source_standard": "Common discretionary / community convention; no single universal standard",
+      "candles_required": 3,
+      "typical_direction": "both",
+      "definition": "Inside bar breaks one side, then closes back inside mother bar and later breaks the opposite side.",
+      "context_required": true,
+      "detector_implementation": "Implement only as a configurable heuristic with explicit ATR/body/wick/level tolerances. Record the chosen rule version.",
+      "signal_output_schema": {
+        "no_pattern": 0,
+        "bullish": 1,
+        "bearish": -1,
+        "neutral": 0
+      },
+      "confirmation_policy": "Require trend context, nearby support/resistance and explicit close/break confirmation; test each variant separately."
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "library_name": "Market Pattern & Technical Indicator Reference Library",
+  "version": "1.0.0",
+  "generated_date": "2026-11-04",
+  "purpose": "Machine-readable research catalogue for systematic detection and backtesting of widely used chart patterns, candlestick patterns and technical indicators.",
+  "scope_note": "No finite catalogue can contain every proprietary, regional, discretionary or renamed variant. This release covers a broad, widely recognised baseline plus explicitly labelled community/derived additions. Treat additions as separate versioned definitions, not interchangeable names.",
+  "counts": {
+    "chart_patterns": 52,
+    "candlestick_patterns": 69,
+    "indicators_and_features": 176
+  },
+  "datasets": {
+    "chart_patterns": "chart_patterns.json",
+    "candlestick_patterns": "candlestick_patterns.json",
+    "indicators_and_features": "indicators.json"
+  },
+  "source_baseline": [
+    {
+      "name": "TA-Lib Functions Catalogue",
+      "url": "https://ta-lib.org/functions/",
+      "use": "Canonical list and reference implementations for indicators, volatility, volume, statistics, price transforms and CDL candlestick recognizers."
+    },
+    {
+      "name": "TA-Lib Candlestick Outputs",
+      "url": "https://ta-lib.org/api/candlestick-outputs/",
+      "use": "Candlestick output encoding and reminder that pattern detections do not themselves confirm a trade."
+    },
+    {
+      "name": "StockCharts ChartSchool – Chart Patterns",
+      "url": "https://chartschool.stockcharts.com/table-of-contents/chart-analysis/chart-patterns",
+      "use": "Classic chart pattern taxonomy, reversal/continuation groupings and limitations."
+    },
+    {
+      "name": "TradingView – All Chart Patterns",
+      "url": "https://www.tradingview.com/support/solutions/43000706927-all-chart-patterns/",
+      "use": "Cross-check of commonly automated classic chart formations."
+    },
+    {
+      "name": "TradingView – Automatic Candlestick Pattern Detection",
+      "url": "https://www.tradingview.com/support/solutions/43000584462-candlestick-patterns/",
+      "use": "Candlestick-pattern automation context and categorisation."
+    },
+    {
+      "name": "CRAN talib vignette – Candlestick Pattern Recognition",
+      "url": "https://www.stat.ethz.ch/CRAN/web/packages/talib/vignettes/candlestick.html",
+      "use": "61 TA-Lib candle functions, adaptive body/shadow thresholds and lookback considerations."
+    }
+  ],
+  "global_rules": [
+    "Pattern recognition output is not a trade recommendation or proof of predictive power.",
+    "Keep detection, confirmation, entry, exit and position sizing as separate layers.",
+    "Do not use unconfirmed pivots, future bars, or revised higher-timeframe candles (look-ahead bias).",
+    "Store exact rule version, parameters, data vendor, timeframe and instrument with each experiment.",
+    "Use corporate-action-adjusted prices for equities and preserve raw prices for execution simulation.",
+    "Never assume volume exists or is comparable across all assets/venues.",
+    "For harmonic, Elliott and Wyckoff methods, preserve alternative counts/events and confidence; do not force a single answer.",
+    "Benchmark every detected pattern against a simple baseline and random/time-shuffled controls."
+  ],
+  "standard_signal_contract": {
+    "fields": [
+      "timestamp",
+      "instrument",
+      "timeframe",
+      "feature_id",
+      "rule_version",
+      "direction",
+      "status",
+      "confidence_optional",
+      "anchor_start",
+      "anchor_end",
+      "trigger_price_optional",
+      "invalidation_price_optional",
+      "target_price_optional",
+      "parameters_hash"
+    ],
+    "direction_values": [
+      "bullish",
+      "bearish",
+      "neutral"
+    ],
+    "status_values": [
+      "forming",
+      "detected_unconfirmed",
+      "confirmed",
+      "invalidated",
+      "expired"
+    ],
+    "timestamp_rule": "Timestamp must be the first time the signal was actually knowable, not the first pivot bar if later bars were required for confirmation."
+  }
+}

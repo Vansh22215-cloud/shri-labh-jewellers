@@ -1,0 +1,298 @@
+type,id,name,category,direction_or_output,canonical_code
+chart_pattern,head_and_shoulders_top,Head and Shoulders Top,classic_reversal,bearish,
+chart_pattern,inverse_head_and_shoulders,Inverse Head and Shoulders,classic_reversal,bullish,
+chart_pattern,double_top,Double Top,classic_reversal,bearish,
+chart_pattern,double_bottom,Double Bottom,classic_reversal,bullish,
+chart_pattern,triple_top,Triple Top,classic_reversal,bearish,
+chart_pattern,triple_bottom,Triple Bottom,classic_reversal,bullish,
+chart_pattern,ascending_triangle,Ascending Triangle,classic_continuation_or_reversal,usually_bullish,
+chart_pattern,descending_triangle,Descending Triangle,classic_continuation_or_reversal,usually_bearish,
+chart_pattern,symmetrical_triangle,Symmetrical Triangle,classic_continuation,neutral_until_breakout,
+chart_pattern,bull_flag,Bull Flag,classic_continuation,bullish,
+chart_pattern,bear_flag,Bear Flag,classic_continuation,bearish,
+chart_pattern,bull_pennant,Bull Pennant,classic_continuation,bullish,
+chart_pattern,bear_pennant,Bear Pennant,classic_continuation,bearish,
+chart_pattern,rectangle_range,Rectangle / Trading Range,classic_continuation_or_reversal,neutral_until_breakout,
+chart_pattern,rising_wedge,Rising Wedge,classic_reversal_or_continuation,often_bearish,
+chart_pattern,falling_wedge,Falling Wedge,classic_reversal_or_continuation,often_bullish,
+chart_pattern,broadening_top,Broadening Top / Megaphone,classic_reversal,often_bearish,
+chart_pattern,broadening_bottom,Broadening Bottom,classic_reversal,often_bullish,
+chart_pattern,cup_and_handle,Cup and Handle,classic_continuation,bullish,
+chart_pattern,inverted_cup_and_handle,Inverted Cup and Handle,classic_continuation,bearish,
+chart_pattern,rounding_bottom,Rounding Bottom / Saucer,classic_reversal,bullish,
+chart_pattern,rounding_top,Rounding Top,classic_reversal,bearish,
+chart_pattern,diamond_top,Diamond Top,classic_reversal,bearish,
+chart_pattern,diamond_bottom,Diamond Bottom,classic_reversal,bullish,
+chart_pattern,bump_and_run_reversal,Bump-and-Run Reversal,classic_reversal,bearish_or_bullish_mirror,
+chart_pattern,measured_move_up,Measured Move Up / AB=CD Projection,measured_move,bullish,
+chart_pattern,measured_move_down,Measured Move Down,measured_move,bearish,
+chart_pattern,price_channel,Ascending / Descending / Horizontal Channel,trend_structure,directional_with_channel,
+chart_pattern,island_reversal,Island Reversal,gap_reversal,bullish_or_bearish,
+chart_pattern,gap_breakaway,Breakaway Gap,gap_pattern,trend_continuation_or_reversal,
+chart_pattern,gap_runaway,Runaway / Measuring Gap,gap_pattern,trend_continuation,
+chart_pattern,gap_exhaustion,Exhaustion Gap,gap_pattern,possible_reversal,
+chart_pattern,harmonic_ab_cd,AB=CD Harmonic Pattern,harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_gartley,Gartley (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_bat,Bat (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_butterfly,Butterfly (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_crab,Crab (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_deep_crab,Deep Crab (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_cypher,Cypher (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_shark,Shark (0XABC),harmonic,bullish_or_bearish_at_C,
+chart_pattern,elliott_impulse,Elliott Impulse Wave (1–5),wave_theory,trend_direction,
+chart_pattern,elliott_abc_correction,Elliott ABC Correction,wave_theory,countertrend,
+chart_pattern,wyckoff_accumulation,Wyckoff Accumulation Schematic,wyckoff,bullish_after_confirmation,
+chart_pattern,wyckoff_distribution,Wyckoff Distribution Schematic,wyckoff,bearish_after_confirmation,
+chart_pattern,wyckoff_spring,Wyckoff Spring,wyckoff_event,bullish,
+chart_pattern,wyckoff_upthrust_utad,Wyckoff Upthrust / UTAD,wyckoff_event,bearish,
+chart_pattern,breakout_retest,Breakout and Retest,price_action_setup,directional,
+chart_pattern,false_breakout,False Breakout / Failed Auction,price_action_setup,contrarian,
+chart_pattern,inside_bar,Inside Bar / Mother-Bar Compression,price_action_setup,neutral_until_breakout,
+chart_pattern,outside_bar,Outside Bar / Engulfing Range Bar,price_action_setup,directional_by_close,
+chart_pattern,pin_bar_rejection,Pin Bar / Rejection Bar,price_action_setup,contextual,
+chart_pattern,engulfing_price_action,Bullish / Bearish Engulfing (price-action setup),price_action_setup,bullish_or_bearish,
+candlestick_pattern,cdl2crows,Two Crows,candlestick,bearish,CDL2CROWS
+candlestick_pattern,cdl3blackcrows,Three Black Crows,candlestick,bearish,CDL3BLACKCROWS
+candlestick_pattern,cdl3inside,Three Inside Up/Down,candlestick,both,CDL3INSIDE
+candlestick_pattern,cdl3linestrike,Three-Line Strike,candlestick,both,CDL3LINESTRIKE
+candlestick_pattern,cdl3outside,Three Outside Up/Down,candlestick,both,CDL3OUTSIDE
+candlestick_pattern,cdl3starsinsouth,Three Stars in the South,candlestick,bullish,CDL3STARSINSOUTH
+candlestick_pattern,cdl3whitesoldiers,Three Advancing White Soldiers,candlestick,bullish,CDL3WHITESOLDIERS
+candlestick_pattern,cdlabandonedbaby,Abandoned Baby,candlestick,both,CDLABANDONEDBABY
+candlestick_pattern,cdladvanceblock,Advance Block,candlestick,bearish,CDLADVANCEBLOCK
+candlestick_pattern,cdlbelthold,Belt-hold,candlestick,both,CDLBELTHOLD
+candlestick_pattern,cdlbreakaway,Breakaway,candlestick,both,CDLBREAKAWAY
+candlestick_pattern,cdlclosingmarubozu,Closing Marubozu,candlestick,both,CDLCLOSINGMARUBOZU
+candlestick_pattern,cdlconcealbabyswall,Concealing Baby Swallow,candlestick,bullish,CDLCONCEALBABYSWALL
+candlestick_pattern,cdlcounterattack,Counterattack,candlestick,both,CDLCOUNTERATTACK
+candlestick_pattern,cdldarkcloudcover,Dark Cloud Cover,candlestick,bearish,CDLDARKCLOUDCOVER
+candlestick_pattern,cdldoji,Doji,candlestick,neutral,CDLDOJI
+candlestick_pattern,cdldojistar,Doji Star,candlestick,both,CDLDOJISTAR
+candlestick_pattern,cdldragonflydoji,Dragonfly Doji,candlestick,contextual_bullish,CDLDRAGONFLYDOJI
+candlestick_pattern,cdlengulfing,Engulfing Pattern,candlestick,both,CDLENGULFING
+candlestick_pattern,cdleveningdojistar,Evening Doji Star,candlestick,bearish,CDLEVENINGDOJISTAR
+candlestick_pattern,cdleveningstar,Evening Star,candlestick,bearish,CDLEVENINGSTAR
+candlestick_pattern,cdlgapsidesidewhite,Up/Down-Gap Side-by-Side White Lines,candlestick,both,CDLGAPSIDESIDEWHITE
+candlestick_pattern,cdlgravestonedoji,Gravestone Doji,candlestick,contextual_bearish,CDLGRAVESTONEDOJI
+candlestick_pattern,cdlhammer,Hammer,candlestick,contextual_bullish,CDLHAMMER
+candlestick_pattern,cdlhangingman,Hanging Man,candlestick,contextual_bearish,CDLHANGINGMAN
+candlestick_pattern,cdlharami,Harami Pattern,candlestick,both,CDLHARAMI
+candlestick_pattern,cdlharamicross,Harami Cross Pattern,candlestick,both,CDLHARAMICROSS
+candlestick_pattern,cdlhighwave,High-Wave Candle,candlestick,neutral,CDLHIGHWAVE
+candlestick_pattern,cdlhikkake,Hikkake Pattern,candlestick,both,CDLHIKKAKE
+candlestick_pattern,cdlhikkakemod,Modified Hikkake Pattern,candlestick,both,CDLHIKKAKEMOD
+candlestick_pattern,cdlhomingpigeon,Homing Pigeon,candlestick,bullish,CDLHOMINGPIGEON
+candlestick_pattern,cdlidentical3crows,Identical Three Crows,candlestick,bearish,CDLIDENTICAL3CROWS
+candlestick_pattern,cdlinneck,In-Neck Pattern,candlestick,bearish,CDLINNECK
+candlestick_pattern,cdlinvertedhammer,Inverted Hammer,candlestick,contextual_bullish,CDLINVERTEDHAMMER
+candlestick_pattern,cdlkicking,Kicking,candlestick,both,CDLKICKING
+candlestick_pattern,cdlkickingbylength,Kicking by Length,candlestick,both,CDLKICKINGBYLENGTH
+candlestick_pattern,cdlladderbottom,Ladder Bottom,candlestick,bullish,CDLLADDERBOTTOM
+candlestick_pattern,cdllongleggeddoji,Long-Legged Doji,candlestick,neutral,CDLLONGLEGGEDDOJI
+candlestick_pattern,cdllongline,Long Line Candle,candlestick,both,CDLLONGLINE
+candlestick_pattern,cdlmarubozu,Marubozu,candlestick,both,CDLMARUBOZU
+candlestick_pattern,cdlmatchinglow,Matching Low,candlestick,bullish,CDLMATCHINGLOW
+candlestick_pattern,cdlmathold,Mat Hold,candlestick,bullish,CDLMATHOLD
+candlestick_pattern,cdlmorningdojistar,Morning Doji Star,candlestick,bullish,CDLMORNINGDOJISTAR
+candlestick_pattern,cdlmorningstar,Morning Star,candlestick,bullish,CDLMORNINGSTAR
+candlestick_pattern,cdlonneck,On-Neck Pattern,candlestick,bearish,CDLONNECK
+candlestick_pattern,cdlpiercing,Piercing Pattern,candlestick,bullish,CDLPIERCING
+candlestick_pattern,cdlrickshawman,Rickshaw Man,candlestick,neutral,CDLRICKSHAWMAN
+candlestick_pattern,cdlrisefall3methods,Rising/Falling Three Methods,candlestick,both,CDLRISEFALL3METHODS
+candlestick_pattern,cdlseparatinglines,Separating Lines,candlestick,both,CDLSEPARATINGLINES
+candlestick_pattern,cdlshootingstar,Shooting Star,candlestick,contextual_bearish,CDLSHOOTINGSTAR
+candlestick_pattern,cdlshortline,Short Line Candle,candlestick,both,CDLSHORTLINE
+candlestick_pattern,cdlspinningtop,Spinning Top,candlestick,neutral,CDLSPINNINGTOP
+candlestick_pattern,cdlstalledpattern,Stalled Pattern / Deliberation,candlestick,bearish,CDLSTALLEDPATTERN
+candlestick_pattern,cdlsticksandwich,Stick Sandwich,candlestick,bullish,CDLSTICKSANDWICH
+candlestick_pattern,cdltakuri,Takuri,candlestick,contextual_bullish,CDLTAKURI
+candlestick_pattern,cdltasukigap,Tasuki Gap,candlestick,both,CDLTASUKIGAP
+candlestick_pattern,cdlthrusting,Thrusting Pattern,candlestick,bearish,CDLTHRUSTING
+candlestick_pattern,cdltristar,Tristar,candlestick,both,CDLTRISTAR
+candlestick_pattern,cdlunique3river,Unique Three River,candlestick,bullish,CDLUNIQUE3RIVER
+candlestick_pattern,cdlupsidegap2crows,Upside Gap Two Crows,candlestick,bearish,CDLUPSIDEGAP2CROWS
+candlestick_pattern,cdlxsidegap3methods,Upside/Downside Gap Three Methods,candlestick,both,CDLXSIDEGAP3METHODS
+candlestick_pattern,tweezer_top,Tweezer Top,candlestick,bearish,
+candlestick_pattern,tweezer_bottom,Tweezer Bottom,candlestick,bullish,
+candlestick_pattern,inside_bar,Inside Bar,candlestick,neutral,
+candlestick_pattern,outside_bar,Outside Bar,candlestick,contextual,
+candlestick_pattern,railroad_tracks,Railroad Tracks,candlestick,both,
+candlestick_pattern,belt_hold,Belt Hold (generic variant),candlestick,both,
+candlestick_pattern,three_bar_reversal,Three-Bar Reversal,candlestick,both,
+candlestick_pattern,fakey_inside_bar,Fakey / Failed Inside-Bar Breakout,candlestick,both,
+indicator,accbands,Acceleration Bands,volatility_envelope,numeric_or_feature,ACCBANDS
+indicator,alma,Arnaud Legoux Moving Average,moving_average,numeric_or_feature,ALMA
+indicator,bbands,Bollinger Bands,volatility_envelope,numeric_or_feature,BBANDS
+indicator,ce,Chandelier Exit,trend_stop,numeric_or_feature,CE
+indicator,cksp,Chande Kroll Stop,trend_stop,numeric_or_feature,CKSP
+indicator,dema,Double Exponential Moving Average,moving_average,numeric_or_feature,DEMA
+indicator,donchian,Donchian Channels,price_channel,numeric_or_feature,DONCHIAN
+indicator,ema,Exponential Moving Average,moving_average,numeric_or_feature,EMA
+indicator,frama,Fractal Adaptive Moving Average,adaptive_average,numeric_or_feature,FRAMA
+indicator,hma,Hull Moving Average,moving_average,numeric_or_feature,HMA
+indicator,ht_trendline,Hilbert Transform Instantaneous Trendline,cycle_trend,numeric_or_feature,HT_TRENDLINE
+indicator,ichimoku,Ichimoku Kinko Hyo,trend_system,numeric_or_feature,ICHIMOKU
+indicator,kama,Kaufman Adaptive Moving Average,adaptive_average,numeric_or_feature,KAMA
+indicator,kc,Keltner Channels,volatility_envelope,numeric_or_feature,KC
+indicator,ma,Moving Average,moving_average,numeric_or_feature,MA
+indicator,mama,MESA Adaptive Moving Average,adaptive_average,numeric_or_feature,MAMA
+indicator,mavp,Moving Average Variable Period,moving_average,numeric_or_feature,MAVP
+indicator,mcgd,McGinley Dynamic,adaptive_average,numeric_or_feature,MCGD
+indicator,midpoint,Rolling Midpoint,price_channel,numeric_or_feature,MIDPOINT
+indicator,midprice,Rolling Midprice,price_channel,numeric_or_feature,MIDPRICE
+indicator,rma,Wilder Moving Average / RMA,moving_average,numeric_or_feature,RMA
+indicator,sar,Parabolic SAR,trend_stop,numeric_or_feature,SAR
+indicator,sarext,Parabolic SAR Extended,trend_stop,numeric_or_feature,SAREXT
+indicator,sma,Simple Moving Average,moving_average,numeric_or_feature,SMA
+indicator,supertrend,SuperTrend,trend_stop,numeric_or_feature,SUPERTREND
+indicator,swak_butter,Butterworth Filter,smoothing_filter,numeric_or_feature,SWAK_BUTTER
+indicator,swak_gauss,Gaussian Filter,smoothing_filter,numeric_or_feature,SWAK_GAUSS
+indicator,t3,Tillson T3,moving_average,numeric_or_feature,T3
+indicator,tema,Triple Exponential Moving Average,moving_average,numeric_or_feature,TEMA
+indicator,trima,Triangular Moving Average,moving_average,numeric_or_feature,TRIMA
+indicator,vidya,Variable Index Dynamic Average,adaptive_average,numeric_or_feature,VIDYA
+indicator,vwma,Volume Weighted Moving Average,moving_average,numeric_or_feature,VWMA
+indicator,wma,Weighted Moving Average,moving_average,numeric_or_feature,WMA
+indicator,zigzag,Zig Zag,swing_analysis,numeric_or_feature,ZIGZAG
+indicator,zlema,Zero-Lag Exponential Moving Average,moving_average,numeric_or_feature,ZLEMA
+indicator,ac,Accelerator/Decelerator Oscillator,momentum,numeric_or_feature,AC
+indicator,adx,Average Directional Index,trend_strength,numeric_or_feature,ADX
+indicator,adxr,Average Directional Movement Index Rating,trend_strength,numeric_or_feature,ADXR
+indicator,ao,Awesome Oscillator,momentum,numeric_or_feature,AO
+indicator,apo,Absolute Price Oscillator,momentum,numeric_or_feature,APO
+indicator,aroon,Aroon,trend_strength,numeric_or_feature,AROON
+indicator,aroonosc,Aroon Oscillator,trend_strength,numeric_or_feature,AROONOSC
+indicator,asi,Wilder Accumulative Swing Index,momentum,numeric_or_feature,ASI
+indicator,bop,Balance of Power,momentum,numeric_or_feature,BOP
+indicator,cci,Commodity Channel Index,momentum,numeric_or_feature,CCI
+indicator,cg,Center of Gravity Oscillator,momentum,numeric_or_feature,CG
+indicator,chop,Choppiness Index,trend_regime,numeric_or_feature,CHOP
+indicator,choptr,Choppiness Index True Range Box,trend_regime,numeric_or_feature,CHOPTR
+indicator,cmo,Chande Momentum Oscillator,momentum,numeric_or_feature,CMO
+indicator,cmou,Chande Momentum Oscillator Unsmoothed,momentum,numeric_or_feature,CMOU
+indicator,coppock,Coppock Curve,momentum,numeric_or_feature,COPPOCK
+indicator,crsi,Connors RSI,momentum,numeric_or_feature,CRSI
+indicator,cti,Correlation Trend Indicator,trend_strength,numeric_or_feature,CTI
+indicator,dosc,Derivative Oscillator,momentum,numeric_or_feature,DOSC
+indicator,dpo,Detrended Price Oscillator,cycle,numeric_or_feature,DPO
+indicator,dx,Directional Movement Index,trend_strength,numeric_or_feature,DX
+indicator,er,Kaufman Efficiency Ratio,trend_regime,numeric_or_feature,ER
+indicator,eri,Elder Ray Index,momentum,numeric_or_feature,ERI
+indicator,fisher,Fisher Transform,cycle_momentum,numeric_or_feature,FISHER
+indicator,fosc,Forecast Oscillator,momentum,numeric_or_feature,FOSC
+indicator,fractal,Williams Fractal,swing_analysis,numeric_or_feature,FRACTAL
+indicator,ibs,Internal Bar Strength,momentum,numeric_or_feature,IBS
+indicator,imi,Intraday Momentum Index,momentum,numeric_or_feature,IMI
+indicator,kdj,KDJ Stochastic,momentum,numeric_or_feature,KDJ
+indicator,kst,Know Sure Thing,momentum,numeric_or_feature,KST
+indicator,kstext,Know Sure Thing Extended,momentum,numeric_or_feature,KSTEXT
+indicator,macd,Moving Average Convergence Divergence,momentum,numeric_or_feature,MACD
+indicator,macdext,MACD Extended,momentum,numeric_or_feature,MACDEXT
+indicator,macdfix,MACD Fixed,momentum,numeric_or_feature,MACDFIX
+indicator,macdv,MACD-V,momentum,numeric_or_feature,MACDV
+indicator,mfi,Money Flow Index,volume_momentum,numeric_or_feature,MFI
+indicator,minus_di,Minus Directional Indicator,trend_strength,numeric_or_feature,MINUS_DI
+indicator,minus_dm,Minus Directional Movement,trend_strength,numeric_or_feature,MINUS_DM
+indicator,mom,Momentum,momentum,numeric_or_feature,MOM
+indicator,plus_di,Plus Directional Indicator,trend_strength,numeric_or_feature,PLUS_DI
+indicator,plus_dm,Plus Directional Movement,trend_strength,numeric_or_feature,PLUS_DM
+indicator,ppo,Percentage Price Oscillator,momentum,numeric_or_feature,PPO
+indicator,pso,Premier Stochastic Oscillator,momentum,numeric_or_feature,PSO
+indicator,qstick,Qstick,momentum,numeric_or_feature,QSTICK
+indicator,roc,Rate of Change,momentum,numeric_or_feature,ROC
+indicator,rocp,Rate of Change Percentage,momentum,numeric_or_feature,ROCP
+indicator,rocr,Rate of Change Ratio,momentum,numeric_or_feature,ROCR
+indicator,rocr100,Rate of Change Ratio 100,momentum,numeric_or_feature,ROCR100
+indicator,rsi,Relative Strength Index,momentum,numeric_or_feature,RSI
+indicator,si,Wilder Swing Index,momentum,numeric_or_feature,SI
+indicator,smi,Stochastic Momentum Index,momentum,numeric_or_feature,SMI
+indicator,sqzmom,Squeeze Momentum,volatility_momentum,numeric_or_feature,SQZMOM
+indicator,stc,Schaff Trend Cycle,cycle_momentum,numeric_or_feature,STC
+indicator,stoch,Stochastic Oscillator,momentum,numeric_or_feature,STOCH
+indicator,stochf,Stochastic Fast,momentum,numeric_or_feature,STOCHF
+indicator,stochrsi,Stochastic RSI,momentum,numeric_or_feature,STOCHRSI
+indicator,trix,TRIX,momentum,numeric_or_feature,TRIX
+indicator,tsi,True Strength Index,momentum,numeric_or_feature,TSI
+indicator,ultosc,Ultimate Oscillator,momentum,numeric_or_feature,ULTOSC
+indicator,vhf,Vertical Horizontal Filter,trend_regime,numeric_or_feature,VHF
+indicator,vortex,Vortex Indicator,trend_strength,numeric_or_feature,VORTEX
+indicator,wad,Williams Accumulation/Distribution,volume_momentum,numeric_or_feature,WAD
+indicator,wavetrend,WaveTrend Oscillator,momentum,numeric_or_feature,WAVETREND
+indicator,willr,Williams %R,momentum,numeric_or_feature,WILLR
+indicator,adr,Average Day Range,volatility,numeric_or_feature,ADR
+indicator,atr,Average True Range,volatility,numeric_or_feature,ATR
+indicator,bbw,Bollinger BandWidth,volatility,numeric_or_feature,BBW
+indicator,cvi,Chaikin Volatility,volatility,numeric_or_feature,CVI
+indicator,massi,Mass Index,volatility_reversal,numeric_or_feature,MASSI
+indicator,natr,Normalized ATR,volatility,numeric_or_feature,NATR
+indicator,percentb,Bollinger %B,volatility,numeric_or_feature,PERCENTB
+indicator,rogerssatchell,Rogers-Satchell Volatility,volatility,numeric_or_feature,ROGERSSATCHELL
+indicator,rvi,Relative Volatility Index,volatility_momentum,numeric_or_feature,RVI
+indicator,rvir,Relative Volatility Index Refined,volatility_momentum,numeric_or_feature,RVIR
+indicator,trange,True Range,volatility,numeric_or_feature,TRANGE
+indicator,ad,Chaikin Accumulation/Distribution Line,volume,numeric_or_feature,AD
+indicator,adosc,Chaikin A/D Oscillator,volume,numeric_or_feature,ADOSC
+indicator,cmf,Chaikin Money Flow,volume,numeric_or_feature,CMF
+indicator,efi,Elder Force Index,volume_momentum,numeric_or_feature,EFI
+indicator,emv,Ease of Movement,volume,numeric_or_feature,EMV
+indicator,kvo,Klinger Volume Oscillator,volume_momentum,numeric_or_feature,KVO
+indicator,marketfi,Market Facilitation Index,volume,numeric_or_feature,MARKETFI
+indicator,nvi,Negative Volume Index,volume,numeric_or_feature,NVI
+indicator,obv,On-Balance Volume,volume,numeric_or_feature,OBV
+indicator,pvi,Positive Volume Index,volume,numeric_or_feature,PVI
+indicator,pvo,Percentage Volume Oscillator,volume_momentum,numeric_or_feature,PVO
+indicator,pvt,Price Volume Trend,volume,numeric_or_feature,PVT
+indicator,rvol,Relative Volume,volume,numeric_or_feature,RVOL
+indicator,vwap,Volume Weighted Average Price,volume_price,numeric_or_feature,VWAP
+indicator,beta,Rolling Beta,statistics,numeric_or_feature,BETA
+indicator,correl,Rolling Correlation,statistics,numeric_or_feature,CORREL
+indicator,kurtosis,Rolling Excess Kurtosis,statistics,numeric_or_feature,KURTOSIS
+indicator,linearreg,Linear Regression Value,statistics,numeric_or_feature,LINEARREG
+indicator,linearreg_angle,Linear Regression Angle,statistics,numeric_or_feature,LINEARREG_ANGLE
+indicator,linearreg_intercept,Linear Regression Intercept,statistics,numeric_or_feature,LINEARREG_INTERCEPT
+indicator,linearreg_slope,Linear Regression Slope,statistics,numeric_or_feature,LINEARREG_SLOPE
+indicator,median,Rolling Median,statistics,numeric_or_feature,MEDIAN
+indicator,percentile,Rolling Percentile,statistics,numeric_or_feature,PERCENTILE
+indicator,percentrank,Rolling Percent Rank,statistics,numeric_or_feature,PERCENTRANK
+indicator,skew,Rolling Skewness,statistics,numeric_or_feature,SKEW
+indicator,stddev,Rolling Standard Deviation,statistics,numeric_or_feature,STDDEV
+indicator,tsf,Time Series Forecast,statistics,numeric_or_feature,TSF
+indicator,var,Rolling Variance,statistics,numeric_or_feature,VAR
+indicator,ht_dcperiod,Hilbert Dominant Cycle Period,cycle,numeric_or_feature,HT_DCPERIOD
+indicator,ht_dcphase,Hilbert Dominant Cycle Phase,cycle,numeric_or_feature,HT_DCPHASE
+indicator,ht_phasor,Hilbert Phasor Components,cycle,numeric_or_feature,HT_PHASOR
+indicator,ht_sine,Hilbert SineWave,cycle,numeric_or_feature,HT_SINE
+indicator,ht_trendmode,Hilbert Trend vs Cycle Mode,cycle_regime,numeric_or_feature,HT_TRENDMODE
+indicator,swak_2php,Two-Pole High-Pass Filter,cycle_filter,numeric_or_feature,SWAK_2PHP
+indicator,swak_bp,Band-Pass Filter,cycle_filter,numeric_or_feature,SWAK_BP
+indicator,swak_hp,High-Pass Filter,cycle_filter,numeric_or_feature,SWAK_HP
+indicator,avgprice,Average Price,price_transform,numeric_or_feature,AVGPRICE
+indicator,ha,Heikin-Ashi,price_transform,numeric_or_feature,HA
+indicator,medprice,Median Price,price_transform,numeric_or_feature,MEDPRICE
+indicator,typprice,Typical Price,price_transform,numeric_or_feature,TYPPRICE
+indicator,wclprice,Weighted Close Price,price_transform,numeric_or_feature,WCLPRICE
+indicator,avgdev,Average Deviation,statistics,numeric_or_feature,AVGDEV
+indicator,anchored_vwap,Anchored VWAP,volume_price,numeric_or_feature,
+indicator,volume_profile,"Volume Profile (POC, VAH, VAL)",volume_price,numeric_or_feature,
+indicator,cumulative_volume_delta,Cumulative Volume Delta (CVD),volume_orderflow,numeric_or_feature,
+indicator,volume_delta,Volume Delta,volume_orderflow,numeric_or_feature,
+indicator,parkinson_volatility,Parkinson Volatility,volatility,numeric_or_feature,
+indicator,garman_klass_volatility,Garman-Klass Volatility,volatility,numeric_or_feature,
+indicator,yang_zhang_volatility,Yang-Zhang Volatility,volatility,numeric_or_feature,
+indicator,historical_volatility,Historical Volatility,volatility,numeric_or_feature,
+indicator,relative_strength_line,Relative Strength vs Benchmark,relative_strength,numeric_or_feature,
+indicator,elder_impulse_system,Elder Impulse System,trend_momentum,numeric_or_feature,
+indicator,heikin_ashi_trend,Heikin-Ashi Trend State,price_transform,numeric_or_feature,
+indicator,supertrend_multi,Multi-timeframe SuperTrend,trend_stop,numeric_or_feature,
+indicator,pivot_points_classic,Classic Pivot Points,support_resistance,numeric_or_feature,
+indicator,pivot_points_fibonacci,Fibonacci Pivot Points,support_resistance,numeric_or_feature,
+indicator,pivot_points_camarilla,Camarilla Pivots,support_resistance,numeric_or_feature,
+indicator,zigzag_atr,ATR ZigZag,swing_analysis,numeric_or_feature,
+indicator,market_structure_hh_hl,Market Structure HH/HL/LH/LL,price_action,numeric_or_feature,
+indicator,bos_choch,Break of Structure / Change of Character,price_action,numeric_or_feature,
+indicator,vwap_deviation_bands,VWAP Deviation Bands,volume_price,numeric_or_feature,
+indicator,rsi_divergence,RSI Divergence,momentum_pattern,numeric_or_feature,
+indicator,macd_divergence,MACD Divergence,momentum_pattern,numeric_or_feature,
+indicator,stoch_divergence,Stochastic Divergence,momentum_pattern,numeric_or_feature,
+indicator,atr_percentile,ATR Percentile,volatility_regime,numeric_or_feature,
+indicator,volatility_squeeze,Volatility Squeeze State,volatility_regime,numeric_or_feature,

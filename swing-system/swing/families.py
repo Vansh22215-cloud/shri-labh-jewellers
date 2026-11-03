@@ -292,9 +292,13 @@ def family_signals(B, p):
         setup = "3-day pullback in uptrend"
     else:
         from .patterns import PATTERN_FAMILIES, signals as pattern_signals
-        if fam not in PATTERN_FAMILIES:
+        if fam.startswith(("cdl_", "cp_")):
+            from .catalog import signals as catalog_signals     # owner's pattern library (TA-Lib + pivot engine)
+            entry, setup = catalog_signals(fam, B, p)
+        elif fam not in PATTERN_FAMILIES:
             raise ValueError(f"unknown family {fam}")
-        entry, setup = pattern_signals(fam, B, p)
+        else:
+            entry, setup = pattern_signals(fam, B, p)
     eligible = B["member"] & entry & B["atr"].notna()
     # optional filters used by research proposals (IMPROVEMENTS.md)
     if p.get("min_sector_rank"):

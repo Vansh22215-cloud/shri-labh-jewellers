@@ -49,6 +49,15 @@ def family_ideas():
             for f in LIBRARY_FAMILIES]
     out += [({"family": f}, "an alternative core entry rule may beat the current one with the same exits")
             for f in FAMILIES + SHORT_FAMILIES]
+    try:   # the owner's pattern library: TA-Lib candles and pivot-confirmed chart patterns
+        from .catalog import families as cat_families, get
+        for f in cat_families():
+            kind = "candlestick" if f.startswith("cdl_") else "chart_pattern"
+            it = get(kind, f.split("_", 1)[1])
+            out.append(({"family": f}, f"the {it['name']} pattern from the owner's pattern library may time entries "
+                                       f"better than the current rule"))
+    except Exception:
+        pass
     return out
 
 
