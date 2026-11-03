@@ -210,3 +210,11 @@ You said you want daily tips even if somewhat risky, and do not want the index f
 - **D62. Bug fixed 2026-11-03:** ETFs/funds (e.g. LIQUIDBEES) were inside the backtest stock universe; one Yahoo
   glitch in a liquid ETF produced an -84R trade. 35 ETFs/funds are now excluded; all validations and searches
   were re-run.
+
+## Deep upgrade session (added 2026-11-03 at your request)
+- **D63.** Every 2 days (21:47 IST) a deep session works through ROADMAP.md: builds one new capability (data,
+  strategy family, risk, ensemble, honest walk-forward machine learning, live-learning), with unit tests, then
+  validates it with the same rules (pre-registered proposal or search space, walk-forward, untouched holdout,
+  costs, variant count). Anything that does not help is kept as code but not used. Results go to CHANGELOG.md,
+  ROADMAP.md and Telegram. Scheduled sessions use the owner's Claude plan; when its limit is reached a session
+  may be skipped until the limit resets.
