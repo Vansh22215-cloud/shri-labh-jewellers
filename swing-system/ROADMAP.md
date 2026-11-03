@@ -21,7 +21,7 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 - [x] I3. (2026-11-03: built - 11 global series; S&P overnight move vs Nifty open gap: corr 0.47, -0.68% after S&P < -1.5%; 'Global' line in messages; idea R13 queued) Global markets overnight (US, Asia, crude, USD/INR, US yields, gold) -> pre-market risk line + feature.
 - [x] I4. (2026-11-03: built - 7 RSS feeds (ET, Moneycontrol, Business Standard, Mint), stock matching, red-flag/positive tone, on trade cards, tip checker and hourly scans; NSE/BSE announcements blocked from cloud) News & announcements: headlines (RSS) and NSE/BSE corporate announcements, matched to stocks;
       Claude summarises/flags them in sessions; shown as "news check" on trade cards.
-- [ ] I5. Economic/event calendar (RBI, Budget, CPI, Fed, results season) -> abnormal-day flags.
+- [x] I5. (2026-11-03: built - Budget, election results, monthly expiry (+ manual events file); study: only 13 a1 trades near Budget/election, 69% wins vs 47% - too few, no skip rule) Economic/event calendar (RBI, Budget, CPI, Fed, results season) -> abnormal-day flags.
 - [ ] T1. Trade card upgrade: T1/T2/T3, calibrated probability of T1-before-stop with sample size, confidence
       score, invalidation conditions, expected holding period from history.
 - [ ] T2. Daily loss limit + abnormal-market detector (VIX spike, big gap, data outage) -> no new trades.
@@ -59,7 +59,7 @@ Each becomes a family in swing/families.py (with tests), joins the walk-forward 
 - [ ] D4. Bulk/block deal history as a signal (large investor buying) - collect daily, test after 3 months.
 - [ ] D5. Data-quality dashboard in the report (coverage, quarantine, staleness per source).
 
-- [ ] D6. Market-event calendar (Union Budget, RBI policy, election results, index rebalancing, F&O expiry):
+- [x] D6. (done as I5) Market-event calendar (Union Budget, RBI policy, election results, index rebalancing, F&O expiry):
       study how our trades behave around these days; pre-register a "skip entries before big events" test.
 - [ ] D7. Execution tracker: compare the price you actually bought/sold at with the planned price, to measure
       real slippage and recalibrate the backtest's cost assumptions.

@@ -107,3 +107,6 @@
 
 ## 2026-11-03 - I4 news built
 - Headlines from ET, Moneycontrol, Business Standard, Mint matched to stocks; red-flag words (fraud, raid, SEBI order, downgrade, default...) raise caution on trade cards and tip checks.
+
+## 2026-11-03 - I5 event calendar built
+- Union Budget, election results, monthly F&O expiry; 'Upcoming events' line in messages. a1 trades entered within 2 days of Budget/election: 13 trades, 69% winners (vs 47%), +Rs 171 avg - sample too small, no rule adopted.

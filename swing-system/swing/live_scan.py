@@ -216,6 +216,9 @@ def run(send=True):
                 f"~{bs['trades_per_month']} trades/month. Losing streaks of up to {bs['max_losing_streak']} happen.")
     from .research import today_line
     rl = today_line()
+    from .intel_events import line as ev_line
+    if ev_line():
+        hdr += "\n📅 " + E(ev_line())
     from .intel_global import overnight_line
     if overnight_line():
         hdr += "\n🌍 " + E(overnight_line())

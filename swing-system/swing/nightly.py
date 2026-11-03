@@ -400,6 +400,9 @@ def run():
     lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
     if today_line():
         lines.append("🧭 " + today_line())
+    from .intel_events import line as _ev
+    if _ev():
+        lines.append("📅 " + _ev())
     from .intel_global import overnight_line as _gl
     if _gl():
         lines.append("🌍 " + _gl())
