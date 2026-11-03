@@ -101,3 +101,6 @@
 - I1 FII/DII/Pro/Client positioning (NSE participant OI since 2013): "Big money" line in messages; idea R12 queued.
 - I2 F&O end-of-day intelligence (from Jul 2024): long/short build-up, PCR, max pain, OI support/resistance shown
   on trade cards; options checker now uses NSE's real expiry dates (Nov 2026 expiry is 23 Nov, not 24).
+
+## 2026-11-03 - I3 global markets built
+- S&P 500, Nasdaq, Dow, US VIX, Nikkei, Hang Seng, FTSE, Brent, gold, USD/INR, US 10y. Nifty open gap after S&P moves (2015-2026): S&P < -1.5% -> -0.68% avg gap (180 days), > +1.5% -> +0.68% (151 days). Idea R13 pre-registered.

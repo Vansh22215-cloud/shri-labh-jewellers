@@ -73,6 +73,9 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
         equity_prev = eq[-1] if eq else capital
 
         # 2) entries at today's open from yesterday's ranked candidates
+        eb = sig.get("entry_block")
+        if eb is not None and bool(eb.get(d, False)):
+            pending = []          # e.g. big overnight fall in the US: no new entries today
         if pending and i > pause_until:
             held = {ps.symbol for ps in positions}
             for cand in pending:

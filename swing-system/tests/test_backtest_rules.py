@@ -146,3 +146,11 @@ def test_update_outcomes_handles_new_text_fields(params, tmp_path, monkeypatch):
                         "close": [100, 100.6, 101.5, 102.5]}, index=idx, dtype=float)
     df = journal.update_outcomes(lambda s: raw, lambda n: params)
     assert df.iloc[0]["status"] == "open" and str(df.iloc[0]["entry_date"]) == "2024-01-02"
+
+
+def test_entry_block_skips_entries(params):
+    import pandas as pd
+    P, sig, idx = make([100, 100.5, 101, 102], [101, 101, 102, 103], [99, 99.5, 100, 101], [100, 100.6, 101.5, 102.5])
+    sig["entry_block"] = pd.Series([False, True, False, False], index=idx)   # block the entry day
+    _, tr, ex = backtest.run(P, sig, params, idx[0], idx[-1], 45000)
+    assert len(tr) == 0 and ex.max() == 0

@@ -393,6 +393,9 @@ def run():
     lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
     if today_line():
         lines.append("🧭 " + today_line())
+    from .intel_global import overnight_line as _gl
+    if _gl():
+        lines.append("🌍 " + _gl())
     from .intel_positioning import today_line as _fii
     if _fii():
         lines.append("🏦 " + _fii())

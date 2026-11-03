@@ -18,7 +18,7 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 - [x] I1. (2026-11-03: built - daily NSE participant OI since 2013, 'Big money' line in every message, nightly update; idea R12 queued) FII/DII/Pro/Client positioning from NSE participant-wise OI (daily history) -> regime feature + report.
 - [x] I2. (2026-11-03: built - daily NSE F&O bhavcopy summary from Jul 2024: build-up type, PCR, max pain, call/put OI walls, real expiry dates; shown on trade cards; options checker uses real expiries) F&O end-of-day data (futures + options bhavcopy): OI build-up (long/short build-up, unwinding), PCR,
       max pain, implied volatility per stock -> features + "options view" in each trade card.
-- [ ] I3. Global markets overnight (US, Asia, crude, USD/INR, US yields, gold) -> pre-market risk line + feature.
+- [x] I3. (2026-11-03: built - 11 global series; S&P overnight move vs Nifty open gap: corr 0.47, -0.68% after S&P < -1.5%; 'Global' line in messages; idea R13 queued) Global markets overnight (US, Asia, crude, USD/INR, US yields, gold) -> pre-market risk line + feature.
 - [ ] I4. News & announcements: headlines (RSS) and NSE/BSE corporate announcements, matched to stocks;
       Claude summarises/flags them in sessions; shown as "news check" on trade cards.
 - [ ] I5. Economic/event calendar (RBI, Budget, CPI, Fed, results season) -> abnormal-day flags.

@@ -114,3 +114,11 @@ written: 2026-11-03
 reason: FIIs are the largest informed participants in Nifty futures; when their index-futures positions are less than 30% long they are heavily hedged/bearish, and new long swing trades should face a hostile market - skipping new entries then should cut losses (ROADMAP I1).
 overrides: {"min_fii_long_pct": 30}
 ```
+
+```proposal
+id: R13
+status: proposed
+written: 2026-11-03
+reason: History shows Nifty opens ~0.7% lower after an S&P 500 fall of more than 1.5% (correlation 0.47); such risk-off nights often start weak days, so skipping new entries at that open should avoid buying into global selling (ROADMAP I3).
+overrides: {"skip_if_us_drop_pct": 1.5}
+```

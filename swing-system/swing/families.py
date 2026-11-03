@@ -305,7 +305,12 @@ def family_signals(B, p):
     if p.get("min_fii_long_pct") and P_FII.get("series") is not None:   # FII positioning filter (ROADMAP I1)
         fl = P_FII["series"].reindex(c.index).ffill()
         regime = regime & (fl >= p["min_fii_long_pct"]).fillna(True)
-    return {"score": score, "eligible": eligible, "setup": setup, "atr": B["atr"], "regime_ok": regime,
+    entry_block = None
+    if p.get("skip_if_us_drop_pct"):   # skip next-open entries after a big overnight US fall (ROADMAP I3)
+        from .intel_global import us_return_before
+        entry_block = (us_return_before(c.index) * 100 < -p["skip_if_us_drop_pct"]).fillna(False)
+    return {"entry_block": entry_block,
+            "score": score, "eligible": eligible, "setup": setup, "atr": B["atr"], "regime_ok": regime,
             "market_regime_ok": B["regime_ok"], "breadth": B["breadth"], "rs_rank": B["rs_rank"],
             "sector_rank": B["sector_rank"], "sma50": B["sma50"], "sma200": B["sma200"], "ema20": B["ema20"],
             "member": B["member"], "industry": B.get("industry", {})}
