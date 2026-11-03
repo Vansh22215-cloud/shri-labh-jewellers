@@ -1,0 +1,232 @@
+{
+ "strategy": "a1",
+ "years": [
+  {
+   "year": 2013,
+   "trades": 44,
+   "win_pct": 31.8,
+   "pnl_before_tax": -3590,
+   "tax": 0,
+   "pnl_after_tax": -3590,
+   "worst_fall_pct": -8.3
+  },
+  {
+   "year": 2014,
+   "trades": 39,
+   "win_pct": 61.5,
+   "pnl_before_tax": 6373,
+   "tax": 1275,
+   "pnl_after_tax": 5099,
+   "worst_fall_pct": -3.6
+  },
+  {
+   "year": 2015,
+   "trades": 41,
+   "win_pct": 51.2,
+   "pnl_before_tax": -254,
+   "tax": 0,
+   "pnl_after_tax": -254,
+   "worst_fall_pct": -5.4
+  },
+  {
+   "year": 2016,
+   "trades": 43,
+   "win_pct": 39.5,
+   "pnl_before_tax": -651,
+   "tax": 0,
+   "pnl_after_tax": -651,
+   "worst_fall_pct": -9.2
+  },
+  {
+   "year": 2017,
+   "trades": 40,
+   "win_pct": 50.0,
+   "pnl_before_tax": 4445,
+   "tax": 889,
+   "pnl_after_tax": 3556,
+   "worst_fall_pct": -5.8
+  },
+  {
+   "year": 2018,
+   "trades": 37,
+   "win_pct": 45.9,
+   "pnl_before_tax": 1182,
+   "tax": 236,
+   "pnl_after_tax": 946,
+   "worst_fall_pct": -5.3
+  },
+  {
+   "year": 2019,
+   "trades": 42,
+   "win_pct": 47.6,
+   "pnl_before_tax": 762,
+   "tax": 152,
+   "pnl_after_tax": 609,
+   "worst_fall_pct": -6.7
+  },
+  {
+   "year": 2020,
+   "trades": 39,
+   "win_pct": 35.9,
+   "pnl_before_tax": -3664,
+   "tax": 0,
+   "pnl_after_tax": -3664,
+   "worst_fall_pct": -10.2
+  },
+  {
+   "year": 2021,
+   "trades": 43,
+   "win_pct": 48.8,
+   "pnl_before_tax": -67,
+   "tax": 0,
+   "pnl_after_tax": -67,
+   "worst_fall_pct": -9.3
+  },
+  {
+   "year": 2022,
+   "trades": 44,
+   "win_pct": 45.5,
+   "pnl_before_tax": -1989,
+   "tax": 0,
+   "pnl_after_tax": -1989,
+   "worst_fall_pct": -8.1
+  },
+  {
+   "year": 2023,
+   "trades": 41,
+   "win_pct": 68.3,
+   "pnl_before_tax": 9760,
+   "tax": 1952,
+   "pnl_after_tax": 7808,
+   "worst_fall_pct": -5.1
+  },
+  {
+   "year": 2024,
+   "trades": 41,
+   "win_pct": 53.7,
+   "pnl_before_tax": 3557,
+   "tax": 711,
+   "pnl_after_tax": 2846,
+   "worst_fall_pct": -5.6
+  },
+  {
+   "year": 2025,
+   "trades": 43,
+   "win_pct": 46.5,
+   "pnl_before_tax": 2162,
+   "tax": 432,
+   "pnl_after_tax": 1729,
+   "worst_fall_pct": -3.8
+  },
+  {
+   "year": 2026,
+   "trades": 39,
+   "win_pct": 35.9,
+   "pnl_before_tax": -1246,
+   "tax": 0,
+   "pnl_after_tax": -1246,
+   "worst_fall_pct": -7.0
+  }
+ ],
+ "months": [
+  {
+   "month": 1,
+   "trades": 54,
+   "win_pct": 38.9,
+   "avg_pnl": -30.4
+  },
+  {
+   "month": 2,
+   "trades": 49,
+   "win_pct": 44.9,
+   "avg_pnl": -18.4
+  },
+  {
+   "month": 3,
+   "trades": 55,
+   "win_pct": 47.3,
+   "avg_pnl": 30.1
+  },
+  {
+   "month": 4,
+   "trades": 38,
+   "win_pct": 44.7,
+   "avg_pnl": 28.9
+  },
+  {
+   "month": 5,
+   "trades": 42,
+   "win_pct": 52.4,
+   "avg_pnl": 28.9
+  },
+  {
+   "month": 6,
+   "trades": 49,
+   "win_pct": 61.2,
+   "avg_pnl": 188.1
+  },
+  {
+   "month": 7,
+   "trades": 54,
+   "win_pct": 53.7,
+   "avg_pnl": 114.7
+  },
+  {
+   "month": 8,
+   "trades": 47,
+   "win_pct": 51.1,
+   "avg_pnl": 65.5
+  },
+  {
+   "month": 9,
+   "trades": 48,
+   "win_pct": 43.8,
+   "avg_pnl": 26.7
+  },
+  {
+   "month": 10,
+   "trades": 43,
+   "win_pct": 41.9,
+   "avg_pnl": -48.4
+  },
+  {
+   "month": 11,
+   "trades": 52,
+   "win_pct": 44.2,
+   "avg_pnl": -48.5
+  },
+  {
+   "month": 12,
+   "trades": 45,
+   "win_pct": 42.2,
+   "avg_pnl": 4.1
+  }
+ ],
+ "loss_review": [
+  {
+   "exit_reason": "stop",
+   "count": 180,
+   "avg_loss": -521.0,
+   "share_pct": 59.2
+  },
+  {
+   "exit_reason": "stop_gap",
+   "count": 12,
+   "avg_loss": -585.0,
+   "share_pct": 3.9
+  },
+  {
+   "exit_reason": "time",
+   "count": 112,
+   "avg_loss": -154.0,
+   "share_pct": 36.8
+  }
+ ],
+ "summary": {
+  "trades": 576,
+  "pnl_before_tax": 16780,
+  "tax_paid": 5647,
+  "pnl_after_tax": 11132,
+  "losing_years": 7
+ }
+}

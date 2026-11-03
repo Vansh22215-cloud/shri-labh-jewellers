@@ -10,7 +10,10 @@ echo  Swing system setup - this can take 1-3 hours the first time (it tests ~550
 echo  Keep this window open. You can use your PC normally meanwhile.
 echo.
 set "PY="
-where py >nul 2>nul && set "PY=py -3"
+REM Prefer Python 3.13 (all packages available). The new Python install manager can fetch it itself.
+where py >nul 2>nul && (py -3.13 --version >nul 2>nul || py install 3.13)
+where py >nul 2>nul && py -3.13 --version >nul 2>nul && set "PY=py -3.13"
+if not defined PY where py >nul 2>nul && set "PY=py -3"
 if not defined PY where python >nul 2>nul && set "PY=python"
 if not defined PY (
   echo  Python is not installed. Please follow Step 1 in README.md, then double-click SETUP.bat again.

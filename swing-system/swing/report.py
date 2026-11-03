@@ -34,10 +34,12 @@ def stock_chart(sym, raw, plan, day):
     axv.set_ylabel("Volume", fontsize=7)
     fig.autofmt_xdate()
     fig.tight_layout()
-    f = CHARTS / f"{day}_{sym}.png"
-    fig.savefig(f, dpi=90)
+    import base64
+    import io
+    buf = io.BytesIO()
+    fig.savefig(buf, dpi=80, format="png")
     plt.close(fig)
-    return f"charts/{f.name}"
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()   # self-contained report file
 
 
 def append_stock_note(sym, day, plan, extra):
@@ -112,7 +114,8 @@ def daily_html(ctx):
             ("DO NOT BUY if", f"price is above Rs {pl['entry_high']} or below Rs {pl['stop']} at the open"),
             ("Stop-loss", f"Rs {pl['stop']} (sell everything if price closes/trades below)"),
             *((("Target 1", f"Rs {pl['target1']} - sell half, then move stop to your buy price"),
-               ("Target 2", f"Rs {pl['target2']} - sell the rest"))
+               ("Target 2", f"Rs {pl['target2']} - sell the rest"),
+               ("Target 3 (stretch)", f"Rs {pl.get('target3', '-')}"))
               if pl.get("exit_style", "targets") == "targets" else
               ((("Exit", f"No fixed target. Trailing stop: each evening raise your stop to (highest close since "
                          f"you bought - Rs {pl.get('trail_atr')}); never lower it. The report shows the level."),)
@@ -122,7 +125,8 @@ def daily_html(ctx):
                          f"loss if stopped ~Rs {pl['risk_rupees']:,.0f} + charges (limit: 1% of capital)"),
             ("Expected holding", f"up to {pl['max_hold']} trading days (sell at the open after that)"),
             ("Next results date", pl.get("results") or "unknown - check before buying"),
-            ("Historical hit-rate of this setup", f"{hr.get('win_rate_pct','?')}% winners, avg {hr.get('avg_r','?')}R "
+            ("Cancel the idea if", f"it opens above Rs {pl['entry_high']} or at/below Rs {pl['stop']}; big negative news; Nifty gaps down more than 1.5% (caution, being tested)"),
+            ("Historical odds of this setup", f"{hr.get('win_rate_pct','?')}% winners, avg {hr.get('avg_r','?')}R "
                                                   f"over {hr.get('trades','?')} backtest trades" if hr else "n/a"),
         ]
         parts.append("<table class='kv'>" + "".join(f"<tr><td>{a}</td><td>{html.escape(str(b))}</td></tr>" for a, b in rows) + "</table>")
@@ -141,6 +145,14 @@ def daily_html(ctx):
                  _table(ctx["my_trades"], ["symbol", "buy", "last", "pnl_pct", "days_held", "status"]) +
                  "<p class='muted'>To add a trade you placed: open <b>my_trades.csv</b> in Excel/Notepad and add a line "
                  "like <code>INFY,2026-11-03,1500,7,1430</code> (symbol, buy date, buy price, quantity, stop).</p></div>")
+
+    fw = ctx.get("forwarded") or {}
+    rows = [{"group": f"source: {k}", **v} for k, v in fw.get("by_source", {}).items()] + \
+           [{"group": f"bot verdict: {k}", **v} for k, v in fw.get("by_verdict", {}).items()]
+    parts.append("<div class='card'><h2>Tips you forwarded to the bot - what really happened</h2>" +
+                 _table(rows, ["group", "tips", "target_hit_pct", "stop_hit_pct"]) +
+                 "<p class='muted'>Forward any tip to your Telegram bot; it answers GOOD / RISKY / AVOID and tracks the "
+                 "real outcome here. Full list: journal/forwarded_tips.csv</p></div>")
 
     ps, bt = ctx["paper"], ctx["backtest_ref"]
     parts.append("<div class='card'><h2>Paper trading vs backtest</h2>"

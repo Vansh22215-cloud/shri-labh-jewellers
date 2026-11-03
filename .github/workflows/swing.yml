@@ -1,0 +1,114 @@
+# NSE swing system - runs every job on GitHub's free computers (no laptop, no Claude needed).
+# Times are UTC (IST = UTC + 5:30). GitHub may start scheduled jobs a few minutes late.
+name: swing-system
+
+on:
+  schedule:
+    - cron: "50 4-9 * * 1-5"    # hourly market scan 10:20-15:20 IST, weekdays
+    - cron: "10 13 * * 1-5"     # evening trades 18:40 IST, weekdays
+    - cron: "47 14 * * 1-5"     # research: test one pre-registered idea, 20:17 IST
+    - cron: "47 4 * * 6"        # weekly self-check (+ monthly strategy searches), Saturday 10:17 IST
+    - cron: "25 * * * *"        # Telegram bot: answer forwarded tips and /bought /sold commands, hourly
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "scan | nightly | research | weekly | bot"
+        required: true
+        default: nightly
+
+permissions:
+  contents: write
+
+concurrency:
+  group: swing-system
+  cancel-in-progress: false
+
+env:
+  SWING_BRANCH: claude/nse-swing-trading-system-sqncpt
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    defaults:
+      run:
+        working-directory: swing-system
+    steps:
+      - name: Pick the task
+        id: task
+        working-directory: .
+        run: |
+          S="${{ github.event.schedule }}"
+          T="${{ github.event.inputs.task }}"
+          case "$S" in
+            "50 4-9 * * 1-5") T=scan ;;
+            "10 13 * * 1-5") T=nightly ;;
+            "47 14 * * 1-5") T=research ;;
+            "47 4 * * 6") T=weekly ;;
+            "25 * * * *") T=bot ;;
+          esac
+          echo "task=${T:-nightly}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SWING_BRANCH }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: swing-system/requirements.txt
+
+      - name: Install packages
+        run: pip install -r requirements.txt
+
+      - name: Restore saved data
+        uses: actions/cache/restore@v4
+        with:
+          path: swing-system/data
+          key: swing-data-${{ github.run_id }}
+          restore-keys: swing-data-
+
+      - name: Run ${{ steps.task.outputs.task }}
+        env:   # private values are passed in memory only, never written to a file
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          case "${{ steps.task.outputs.task }}" in
+            scan)     python scripts/bot_poll.py || true; python scripts/run_scan.py ;;
+            nightly)  python scripts/run_nightly.py ;;
+            research) python scripts/run_research.py ;;
+            weekly)   python scripts/run_weekly.py ;;
+            bot)      python scripts/bot_poll.py ;;
+          esac
+
+      - name: Save data for the next run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: swing-system/data
+          key: swing-data-${{ github.run_id }}
+
+      - name: Back up your private files (trades, forwarded tips)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: private-backup-${{ github.run_id }}
+          path: |
+            swing-system/data/my_trades.csv
+            swing-system/data/closed_trades.csv
+            swing-system/data/forwarded_tips.csv
+          if-no-files-found: ignore
+          retention-days: 90
+
+      - name: Save results to GitHub
+        if: always()
+        run: |
+          git config user.name "swing-system-bot"
+          git config user.email "swing-system-bot@users.noreply.github.com"
+          # only non-personal results are saved; trades, forwarded tips, reports and data stay private
+          git add journal/tips.csv validation strategies stocks IMPROVEMENTS.md CHANGELOG.md settings.yaml ROADMAP.md \
+                  data/universe_history.csv data/quarantine.json data/no_yahoo_data.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "swing-system: ${{ steps.task.outputs.task }} run ${{ github.run_id }}"
+          git pull --rebase origin "$SWING_BRANCH" || true
+          git push origin "HEAD:$SWING_BRANCH" || true

@@ -24,7 +24,7 @@ from datetime import date
 import pandas as pd
 
 from . import journal, validate, validation_report
-from .config import ROOT, STRATEGIES, get_logger, load_settings, load_state, load_strategy, save_state
+from .config import DATA as DATA_DIR, ROOT, STRATEGIES, get_logger, load_settings, load_state, load_strategy, save_state
 
 log = get_logger()
 IMPROVEMENTS = ROOT / "IMPROVEMENTS.md"
@@ -123,6 +123,24 @@ def claude_effect():
                if helped else "No evidence the review improves results - kept as an explainer only."))
 
 
+def tip_checker_review(min_tips=30):
+    """Is the Telegram tip-checker's verdict actually useful? (GOOD tips should beat AVOID tips.)"""
+    from . import tipcheck
+    sc = tipcheck.source_scorecard()
+    bv = sc.get("by_verdict", {}) if sc else {}
+    n = sum(v["tips"] for v in bv.values())
+    if n < min_tips:
+        return f"Tip checker: {n} forwarded tips resolved so far - need {min_tips} before judging its verdicts."
+    good, avoid = bv.get("GOOD"), bv.get("AVOID")
+    if good and avoid and good["target_hit_pct"] <= avoid["target_hit_pct"]:
+        msg = (f"Tip checker WARNING: GOOD tips hit target {good['target_hit_pct']}% vs AVOID {avoid['target_hit_pct']}% "
+               f"- its verdicts are not helping; flagged in IMPROVEMENTS.md for review.")
+        with open(IMPROVEMENTS, "a", encoding="utf-8") as f:
+            f.write(f"\n- {date.today()}: {msg} (needs a human/Claude review of tipcheck.py rules)\n")
+        return msg
+    return f"Tip checker verdicts by outcome: {bv}"
+
+
 def rotate_holdout(data_end):
     hs = pd.Timestamp(validate.holdout_start())
     if (pd.Timestamp(data_end) - hs).days > 30 * 30.4:
@@ -158,6 +176,94 @@ def ask_claude_for_proposals(summary):
         return f"Claude proposal step failed: {e}"
 
 
+def refresh_aggressive(out, settings):
+    """Aggressive mode follows the walk-forward search's CURRENT pick (re-chosen monthly from the last 36 months)."""
+    cur = settings.get("aggressive_strategy", "a1")
+    try:
+        cur_p = load_strategy(cur)
+    except Exception:
+        cur_p = {}
+    pick = out["latest_pick"]
+    if cur_p.get("search_variant") == pick["variant"]:
+        return f"Aggressive mode keeps {cur} ({pick['how']})."
+    aggs = sorted((p.stem for p in STRATEGIES.glob("a*.json")), key=lambda x: int(x[1:]))
+    n = int(aggs[-1][1:]) + 1 if aggs else 1
+    newp = dict(pick["params"], name=f"a{n}", created=str(date.today()), search_variant=pick["variant"],
+                risk_per_trade_pct=1.0, drawdown_pause_pct=10,
+                description="AGGRESSIVE MODE (NOT validated): walk-forward search pick - " + pick["how"])
+    (STRATEGIES / f"a{n}.json").write_text(json.dumps(newp, indent=2))
+    f = ROOT / "settings.yaml"
+    f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: a{n}", f.read_text(encoding="utf-8")),
+                 encoding="utf-8")
+    changelog(f"- Aggressive mode switched {cur} -> a{n}: {pick['how']} (monthly re-pick from the last 36 months).")
+    return f"Aggressive mode switched to a{n}: {pick['how']}."
+
+
+def tips_strategy(settings):
+    """The strategy that currently produces tips: the validated live version, or the aggressive one."""
+    from .nightly import gate_status
+    live = settings["live_strategy"]
+    if settings.get("tips_mode") == "aggressive" and not gate_status(live).get("passed"):
+        return settings.get("aggressive_strategy", "a1"), True
+    return live, False
+
+
+def test_proposal(prop, settings, live, live_res=None, live_table=None):
+    """Test ONE pre-registered proposal against the strategy that currently gives tips.
+    Validated line (vN): promote only if it passes the full gate AND beats the base in most walk-forward
+    periods AND has higher walk-forward CAGR.
+    Aggressive line (aN, already unvalidated): promote if it beats the base in most walk-forward periods,
+    has higher walk-forward CAGR AND its walk-forward drawdown is not worse by more than 2 points.
+    The holdout is never used to decide (D60)."""
+    if not prop.get("reason") or not prop.get("written") or prop["written"] > str(date.today()):
+        set_proposal_status(prop["_raw"], "rejected (no reason/date written before testing)")
+        return "Rejected proposal without a pre-written reason"
+    try:
+        overrides = json.loads(prop.get("overrides", "{}"))
+    except Exception:
+        set_proposal_status(prop["_raw"], "rejected (overrides not valid JSON)")
+        return "Rejected proposal with invalid overrides"
+    base, aggressive = tips_strategy(settings)
+    base_p = load_strategy(base)
+    if base != live or live_res is None:
+        live_res, _, live_table = validation_report.run(base, params=base_p, note="base for proposal", write=False)
+    base_wf = live_table[live_table["period"].str.startswith("WF")].set_index("period")
+    cand = dict(base_p, **overrides)
+    cand["name"] = f"candidate-{prop.get('id')}"
+    res, _, table = validation_report.run(cand["name"], params=cand, note=f"proposal {prop.get('id')}", write=False)
+    wf = table[table["period"].str.startswith("WF")].set_index("period")
+    common = wf.index.intersection(base_wf.index)
+    wins = int((wf.loc[common, "total_return_pct"] > base_wf.loc[common, "total_return_pct"]).sum())
+    c_new, c_old = res["continuous"].get("cagr_pct", -99), live_res["continuous"].get("cagr_pct", -99)
+    dd_new, dd_old = res["continuous"].get("max_drawdown_pct", -99), live_res["continuous"].get("max_drawdown_pct", -99)
+    if aggressive:
+        promote = wins > len(common) / 2 and c_new > c_old and dd_new >= dd_old - 2
+    else:
+        promote = res["gate"]["passed"] and wins > len(common) / 2 and c_new > c_old
+    summary = (f"{prop.get('id')} vs {base}: beat it in {wins}/{len(common)} walk-forward years, CAGR {c_new}% vs "
+               f"{c_old}%, worst fall {dd_new}% vs {dd_old}%, gate {'PASS' if res['gate']['passed'] else 'FAIL'}")
+    if not promote:
+        set_proposal_status(prop["_raw"], f"rejected {date.today()} - {summary}")
+        changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
+        return "Rejected " + summary
+    prefix = "a" if aggressive else "v"
+    fam = sorted((x.stem for x in STRATEGIES.glob(f"{prefix}*.json")), key=lambda x: int(x[1:]))
+    n = int(fam[-1][1:]) + 1
+    newp = dict(cand, name=f"{prefix}{n}", created=str(date.today()),
+                description=base_p.get("description", "") + f" | {prefix}{n}: {prop.get('reason')}")
+    (STRATEGIES / f"{prefix}{n}.json").write_text(json.dumps(newp, indent=2))
+    if aggressive:
+        f = ROOT / "settings.yaml"
+        f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: {prefix}{n}",
+                            f.read_text(encoding="utf-8")), encoding="utf-8")
+    else:
+        set_live(f"{prefix}{n}")
+        validation_report.run(f"{prefix}{n}", note=f"promoted from {prop.get('id')}")
+    set_proposal_status(prop["_raw"], f"PROMOTED to {prefix}{n} on {date.today()} - {summary}")
+    changelog(f"- PROMOTED proposal {prop.get('id')} as {prefix}{n} (previous {base} kept). {summary}")
+    return "PROMOTED " + summary
+
+
 def strategy_search(live, live_table, max_age_days=30):
     """Re-run the walk-forward strategy search monthly; promote its pick only if the search passes the gate."""
     from . import search
@@ -165,11 +271,39 @@ def strategy_search(live, live_table, max_age_days=30):
     out = json.loads(f.read_text()) if f.exists() else None
     if out is None or (pd.Timestamp.today() - pd.Timestamp(out["date"])).days > max_age_days:
         out = search.run_search()
+    # Monthly re-run of the short-term and intraday searches too (results shown in the daily report).
+    extra = []
+    fs = ROOT / "validation" / "search_short.json"
+    o2 = json.loads(fs.read_text()) if fs.exists() else None
+    if o2 is None or (pd.Timestamp.today() - pd.Timestamp(o2["date"])).days > max_age_days:
+        o2 = search.run_search(space="short")
+    extra.append(f"short-term search gate {'PASSED' if o2['passed'] else 'FAILED'}")
+    fi = ROOT / "validation" / "search_intraday.json"
+    o3 = json.loads(fi.read_text()) if fi.exists() else None
+    if o3 is None or (pd.Timestamp.today() - pd.Timestamp(o3["date"])).days > max_age_days:
+        from . import intraday, intraday_data, search_report
+        intraday_data.download((DATA_DIR / "intraday_universe.txt").read_text().split())
+        o3 = intraday.run_search()
+        search_report.write_intraday()
+    extra.append(f"intraday search gate {'PASSED' if o3['passed'] else 'FAILED'}"
+                 + (" - live intraday plans are not built yet; tell Claude to build them" if o3["passed"] else ""))
+    if o2["passed"] and not out["passed"]:
+        out = o2   # promote the short-term pick through the same path below
     msg = (f"Strategy search ({out['variants_searched']} variants, {out['date']}): walk-forward picks beat "
            f"NIFTYBEES in {sum(p['beat_niftybees'] for p in out['picks'])} of {len(out['picks'])} years; "
-           f"gate {'PASSED' if out['passed'] else 'FAILED'}")
+           f"gate {'PASSED' if out['passed'] else 'FAILED'}; " + "; ".join(extra))
     if not out["passed"]:
-        return msg + " - nothing promoted."
+        settings = load_settings()
+        if settings.get("tips_mode") != "aggressive":
+            return msg + " - nothing promoted."
+        # D66: aggressive mode follows the COMBINED search (excess-over-liquid-fund selection), re-run monthly
+        fc = ROOT / "validation" / "search_combined.json"
+        oc = json.loads(fc.read_text()) if fc.exists() else None
+        if oc is None or (pd.Timestamp.today() - pd.Timestamp(oc["date"])).days > max_age_days:
+            oc = search.run_search(space="combined")
+        if not oc["passed"]:
+            return msg + " - nothing validated. " + refresh_aggressive(oc, settings)
+        out = oc   # the combined search passed the gate -> promote it through the normal path below
     pick = out["latest_pick"]
     for v in versions():
         if load_strategy(v).get("search_variant") == pick["variant"] and load_strategy(v).get("search_date") == out["date"]:
@@ -201,47 +335,14 @@ def run():
     notes.append(f"Live {live} re-validated: gate {'PASSED' if live_res['gate']['passed'] else 'FAILED'}")
     notes.append(rollback_check(settings, live_res.get("wf_summary", {})))
 
-    live_p = load_strategy(live)
-    live_wf = live_table[live_table["period"].str.startswith("WF")].set_index("period")
     for prop in parse_proposals():
-        if prop.get("status") != "proposed":
-            continue
-        if not prop.get("reason") or not prop.get("written") or prop["written"] > str(date.today()):
-            set_proposal_status(prop["_raw"], "rejected (no reason/date written before testing)")
-            continue
-        try:
-            overrides = json.loads(prop.get("overrides", "{}"))
-        except Exception:
-            set_proposal_status(prop["_raw"], "rejected (overrides not valid JSON)")
-            continue
-        cand = dict(live_p, **overrides)
-        cand["name"] = f"candidate-{prop.get('id')}"
-        res, _, table = validation_report.run(cand["name"], params=cand, note=f"proposal {prop.get('id')}", write=False)
-        wf = table[table["period"].str.startswith("WF")].set_index("period")
-        common = wf.index.intersection(live_wf.index)
-        wins = int((wf.loc[common, "total_return_pct"] > live_wf.loc[common, "total_return_pct"]).sum())
-        better_cagr = res["continuous"].get("cagr_pct", -99) > live_res["continuous"].get("cagr_pct", -99)
-        promote = res["gate"]["passed"] and wins > len(common) / 2 and better_cagr
-        summary = (f"{prop.get('id')}: gate {'PASS' if res['gate']['passed'] else 'FAIL'}, beat live in {wins}/{len(common)} "
-                   f"walk-forward periods, WF CAGR {res['continuous'].get('cagr_pct')}% vs live "
-                   f"{live_res['continuous'].get('cagr_pct')}%, WF maxDD {res['continuous'].get('max_drawdown_pct')}% vs "
-                   f"{live_res['continuous'].get('max_drawdown_pct')}%")
-        if promote:
-            n = int(versions()[-1][1:]) + 1
-            newp = dict(cand, name=f"v{n}", created=str(date.today()),
-                        description=live_p["description"] + f" | v{n}: {prop.get('reason')}")
-            (STRATEGIES / f"v{n}.json").write_text(json.dumps(newp, indent=2))
-            set_live(f"v{n}")
-            validation_report.run(f"v{n}", note=f"promoted from {prop.get('id')}")
-            set_proposal_status(prop["_raw"], f"PROMOTED to v{n} on {date.today()} - {summary}")
-            changelog(f"- PROMOTED proposal {prop.get('id')} as v{n} (previous {live} kept). {summary}")
-            notes.append("PROMOTED " + summary)
-            break   # one change per week
-        set_proposal_status(prop["_raw"], f"rejected {date.today()} - {summary}")
-        changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
-        notes.append("Rejected " + summary)
+        if prop.get("status") == "proposed":
+            notes.append(test_proposal(prop, settings, live, live_res, live_table))
+            if notes[-1].startswith("PROMOTED"):
+                break   # one change per week
 
     notes.append(strategy_search(live, live_table))
+    notes.append(tip_checker_review())
     notes.append(claude_effect())
     notes.append(rotate_holdout(live_res["data_end"]))
     if settings.get("claude_review"):

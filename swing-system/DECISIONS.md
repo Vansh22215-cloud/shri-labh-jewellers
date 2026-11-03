@@ -129,3 +129,152 @@ testing a single idea.
   backtest (positions carried in from the previous year), not a fresh restart.
 - **D42. If the search ever passes:** the variant selected on the latest 36 months becomes the next live
   version (vN). The weekly job re-runs the search when the last one is > 30 days old.
+
+## Short-term and intraday trading (added 2026-11-03 at your request, written BEFORE these searches)
+You asked for short trades (hours to 2-3 days, exit at target) and allowed the rules to change.
+- **D43. Short-term daily search** (`search.short_space`): holds of 2/3/5 days, stops 1/1.5/2 ATR, quick
+  targets 1R/2R, 1.5R/3R or a 2-ATR trailing stop, and a second sizing option of **2% risk per trade with up
+  to 6 open trades** (rule change from D19). 10 patterns incl. 4 new short-term ones (inside-day breakout,
+  gap-and-go, strong close, 3-day pullback). 1,080 variants. Same walk-forward selection and gate as D39-D40.
+- **D44. Intraday data:** Yahoo hourly bars (free, ~730 days; we keep older bars cached so history grows).
+  Top 150 liquid stocks of the current universe (small survivorship bias over 3 years).
+- **D45. Intraday rules:** see `swing/intraday.py` docstring - entry at the next bar open after a closed
+  signal bar, stop-first when ambiguous, square-off at the 15:15 bar open, 1% risk, max 50% of capital per
+  trade, NO leverage (MIS leverage magnifies losses; capital protection first), max 1-2 trades/day.
+- **D46. Intraday costs:** Zerodha MIS charges (zerodha.com/charges) + slippage **0.05% per side** (typical
+  bid-ask spread of top-150 NSE stocks is 0.02-0.05%). Because this is an estimate, a strategy must ALSO stay
+  above the liquid fund with **double slippage (0.10%)** to pass.
+- **D47. Intraday walk-forward:** calendar quarters; each quarter's strategy is picked by best Sharpe over the
+  previous 6 months (>= 30 trades). Holdout: 2026-07-01 onward, never used for choices. Benchmarks: NIFTYBEES
+  and the liquid fund (idle intraday capital earns nothing in the backtest).
+- **D48. Kite Connect:** not used. It is paid (about Rs 500/month) and the free data is enough for this
+  research; orders are placed by you. Revisit only if a strategy passes and needs minute-level data to confirm.
+  Never share API keys in chat.
+
+## Telegram tip checker (added 2026-11-03 at your request)
+- **D49.** Forward any tip to your bot; it parses stock / entry / stop / targets / intraday-or-swing, checks the
+  live price, and judges the tip by the stock's OWN last 5 years: how often the target distance was reached
+  before the stop distance within the holding window (1 day intraday, 2 BTST, 10 swing, 40 positional;
+  stop-first if both on one day), versus the win rate needed to break even after Zerodha charges + slippage.
+- **D50. Verdicts:** AVOID if the odds are > 5 points below break-even, the stock is illiquid (< Rs 5 crore a
+  day - classic pump-and-dump), in a surveillance series, the entry is > 10% from today's price, or the tip has
+  already failed. RISKY if any caution flag (no stop-loss, odds within 5 points of break-even, tight/wide stop,
+  below 200-day average, weak market, results within 7 days, price already ran > 1.5%). Otherwise GOOD.
+  These base rates are unconditional (they ignore the tip-giver's chart reasoning), so they are a reality check,
+  not a prediction.
+- **D51. Learning:** every checked tip is stored with its source (channel/person) and its real outcome is
+  tracked; the report shows hit rates per source and per verdict. After 30 resolved tips the weekly job checks
+  that GOOD tips beat AVOID tips and flags the checker for review if not. Only the owner's chat is answered.
+
+## Aggressive mode (added 2026-11-03 - the owner's explicit choice)
+You said you want daily tips even if somewhat risky, and do not want the index fund. It is your money, so:
+- **D52.** `tips_mode: aggressive` in settings.yaml. When no strategy passes the gate, the system still gives
+  tips from the walk-forward search's CURRENT pick (chosen by the fixed rule: best Sharpe over the last 36
+  months), clearly labelled **NOT validated**. Today that is a1 = 20/50-day moving-average crossover above the
+  200-day average, stop 3 ATR, targets 2R/4R, max 25 days, no market filter.
+- **D53. Expectations (backtest, after costs, idle cash in a liquid fund):** 2013-Apr 2025 about 9% a year,
+  worst fall about 10%, ~516 trades, ~50% winners; untouched holdout May 2025-Nov 2026 +5.5% (NIFTYBEES -1%).
+  It earned LESS than NIFTYBEES over the full period. These are estimates, not promises.
+- **D54. Risk 1% per trade, not 2%.** Tested both (2 more variants counted): 2% risk earned LESS (8.4% vs
+  9.0% a year, 2013-Apr 2025) with a much worse fall (-26% vs -10%). More risk did not mean more money.
+- **D55. Brakes:** max 4 positions, max 25% of capital each, a 4-week pause after a 10% fall, and a HARD STOP
+  when aggressive tips have lost 20% of capital in total (only you can restart it). Kill switch still works.
+  Mode set to live (paper_weeks 0) at your request; every tip and its outcome is still journaled. The weekly
+  job moves aggressive mode to the new search pick each month (a2, a3, ...), logged in CHANGELOG.md.
+- **D56.** Idle cash: the backtest assumes money not in a trade sits in a liquid fund (LIQUIDBEES or a liquid
+  mutual fund - this is cash parking, not index investing). If it sits idle in the trading account instead,
+  expect about 4-5% a year less.
+
+## Hourly scan and risk score (added 2026-11-03 at your request)
+- **D57. Risk score 1-10** (`swing/risk_score.py`): +3 if the strategy is not validated (+1 if it is),
+  +0-3 volatility (daily range), +0-2 liquidity, +1 not in a long-term uptrend, +1 weak market, +2 results within
+  7 days, +1 stretched > 15% above the 50-day average. A checklist, not a probability.
+- **D58. Hourly scan** 10:20-15:20 IST on weekdays (the scheduler's minimum is hourly; every 10 minutes is not
+  possible and would use up the Claude plan). Live 5-minute data for the top ~500 company shares (ETFs/funds
+  excluded) feeds the SAME strategy code on a provisional "today so far" bar. Signals are provisional until the
+  close; the 6:40 pm run confirms them and the plan is to buy at the next open inside the buy zone (as tested).
+  Your trades are checked live for stop/target hits.
+- **D59. Kite Connect: declined.** Paid, needs a daily login with your Zerodha password (which this system must
+  never hold), and free 5-minute data is enough for hourly scans.
+
+## Continuous research (added 2026-11-03 at your request)
+- **D60. Daily research session** (weekdays 20:17 IST): tests ONE pre-registered idea from IMPROVEMENTS.md
+  against the strategy currently giving tips. Aggressive line (aN): promote only if it beats the base in most
+  walk-forward years, has a higher walk-forward CAGR, and its worst fall is not more than 2 points worse.
+  Validated line (vN): must also pass the full gate. The holdout is never used to decide. Every idea counts as a
+  tried variant. New ideas must be written into IMPROVEMENTS.md (with reason and date) BEFORE they are tested.
+- **D61. Market dynamics:** each backtest trade is tagged with the market regime on its signal day (Nifty trend,
+  VIX mood, breadth). Reports show today's regime and how the strategy did historically in similar markets.
+  Samples per regime are small (30-300 trades), so this is context, not a trading rule; any rule derived from
+  these tables would be "data already seen" and must be pre-registered and tested like any other idea.
+- **D62. Bug fixed 2026-11-03:** ETFs/funds (e.g. LIQUIDBEES) were inside the backtest stock universe; one Yahoo
+  glitch in a liquid ETF produced an -84R trade. 35 ETFs/funds are now excluded; all validations and searches
+  were re-run.
+
+## Deep upgrade session (added 2026-11-03 at your request)
+- **D63.** Every 2 days (21:47 IST) a deep session works through ROADMAP.md: builds one new capability (data,
+  strategy family, risk, ensemble, honest walk-forward machine learning, live-learning), with unit tests, then
+  validates it with the same rules (pre-registered proposal or search space, walk-forward, untouched holdout,
+  costs, variant count). Anything that does not help is kept as code but not used. Results go to CHANGELOG.md,
+  ROADMAP.md and Telegram. Scheduled sessions use the owner's Claude plan; when its limit is reached a session
+  may be skipped until the limit resets.
+
+## Mission and Kite Connect (2026-11-03)
+- **D64. Mission (owner):** give the best trades one can find every day, combining the best-known methods
+  (Minervini, O'Neil, Weinstein, Darvas, academic momentum, earnings drift, Connors, sector rotation, quality),
+  each tested on NSE data, and a meta-system that picks the currently strongest ones using only past data.
+  "Best" always means "best by honest out-of-sample evidence", never "guaranteed".
+- **D65. Kite Connect (Rs 500/month, owner's decision to buy):** useful for minute-level history and reliable live
+  quotes. Cost note: Rs 6,000/year is ~13% of the Rs 45,000 capital and more than the strategy's expected yearly
+  profit, so it must earn its cost through better research. Security: API key/secret stored only in
+  my_secrets.yaml (never on GitHub); the daily access token is obtained by the owner logging in on Kite's own page;
+  the system never asks for the Zerodha password/TOTP and NEVER calls any order API. Access tokens expire daily.
+
+## Selection-rule fix (written 2026-11-03 BEFORE running the combined search)
+- **D66. Flaw found:** walk-forward selection used the Sharpe ratio of equity that INCLUDES liquid-fund interest on
+  idle cash, which rewards strategies that barely trade (smooth cash-like curves; e.g. the library pick PEAD made
+  < 1 trade a month and its trades lost slightly in the holdout). New procedure "wf-search-combined-v1": pool ALL
+  swing + library variants (684) and pick each year the variant with the highest Sharpe of monthly returns IN
+  EXCESS OF THE LIQUID FUND over the previous 36 months (>= 30 trades). Everything else as D39-D40. This counts
+  as one more search procedure (stricter gate). If its gate fails, aggressive mode follows this procedure's
+  current pick anyway (owner's choice, D52), because it measures what the TRADES add over parking cash.
+- **D67. Abnormal-market detector & daily loss limit (2026-11-03):** no new trades after a day when India VIX jumps
+  > 20% or is above 28, when Nifty moves more than 2.5%, or when realised losses on tracked tips reach 2% of
+  capital that day. Thresholds are standard risk-desk defaults, not tuned.
+- **D68. Smart money (2026-11-03, owner's request):** evening message lists bulk/block deals where a fund or well-known
+  investor was a NET buyer of >= Rs 5 crore in a liquid top-500 stock that is in an uptrend (HFT/prop/broker names
+  excluded). Free deal history starts now, so it is labelled an untested idea; every flagged deal is logged in
+  journal/smart_money.csv and will be tested as a strategy once ~6 months of deals exist.
+- **D69. Learning from the owner's tip channels:** the forwarded-tip journal scores every channel; once a channel
+  has >= 30 resolved calls with a target-hit rate clearly above what its stops imply (break-even after costs) its
+  checked calls can be added to the daily list (to be built when the data exists).
+
+## NSE terms of use (found 2026-11-03 - correcting D4/D10)
+- **D70.** NSE's website Terms of Use prohibit "systematic or automated data collection ... including scraping, data
+  mining, data extraction and data harvesting" on the website (nseindia.com terms of use). D4 wrongly treated the
+  archive files as freely automatable; that was not checked properly at the start. Actions taken: large
+  historical back-fills from NSE (participant OI, F&O) stopped; NO new NSE website/API collectors are built (FII/DII
+  cash API, shareholding, announcements, insider trades were found reachable but are not used). The owner decides
+  how to continue (see the conversation of 2026-11-03): licensed data via a broker API (Kite Connect, Rs 500/month),
+  NSE's paid data products, or accept the terms risk for low-volume personal downloads.
+
+## S12 meta-system (written 2026-11-03 BEFORE computing it)
+- **D71.** "Best of all" = an ENSEMBLE, not a single pick: each January choose the 3 variants with the highest
+  Sharpe of excess-over-liquid-fund monthly returns over the previous 36 months (>= 30 trades), each from a
+  DIFFERENT family, and give each one third of the capital for that year. Evaluated from the saved monthly-return
+  matrix of the combined search (validation/search_R_combined.csv.gz) against NIFTYBEES per year, with the same gate
+  (counts as one more search procedure). Simplification: per-strategy returns are taken as if run on full capital
+  (fixed DP charges on smaller positions are under-counted, which flatters the ensemble slightly).
+- **D72. S12 result (2026-11-03):** the 3-family ensemble, honest walk-forward 2016-2025: 7.75%/yr, worst fall -8.4%,
+  beat NIFTYBEES in 1/10 years, t -1.47 -> gate FAILED. But compared procedure-to-procedure on the same walk-forward
+  years it beats the single-pick procedure that currently feeds aggressive mode (6.49%/yr, worst fall -22.1%).
+  Decision: aggressive mode will move to the ensemble (today: ma_cross S385 + volume_surge S444 + nr7 S489, one third
+  of the risk budget each) once the live multi-strategy plumbing is built and tested (next ROADMAP step).
+
+## Running without Claude (2026-11-03, the owner's Claude plan ends)
+- **D73.** All daily jobs run on GitHub Actions (free for public repositories): hourly scan, evening trades,
+  research (pre-registered ideas only; no NEW ideas without Claude), weekly self-check with monthly searches, and an
+  hourly Telegram bot poll. Data is kept between runs in the Actions cache; the committed universe list lets a fresh
+  runner start with recent data only. The repository is PUBLIC, so personal files (your trades, forwarded tips,
+  daily reports) are kept out of git: they live in the cache and are backed up as 90-day private run artifacts.
+  NSE data use stays at option B (small daily downloads) until the owner decides otherwise (D70).

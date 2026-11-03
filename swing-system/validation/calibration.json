@@ -1,0 +1,68 @@
+{
+ "a1": {
+  "strategy": "a1",
+  "targets_r": [
+   2.0,
+   4.0,
+   6.0
+  ],
+  "all": {
+   "signals": 8694,
+   "p_t1": 16.0,
+   "p_t2": 2.5,
+   "p_t3": 0.6,
+   "p_stop": 33.9,
+   "median_days_t1": 15.0
+  },
+  "by_regime": {
+   "downtrend/calm": {
+    "signals": 546,
+    "p_t1": 11.4,
+    "p_t2": 1.6,
+    "p_t3": 0.4,
+    "p_stop": 40.3,
+    "median_days_t1": 16.0
+   },
+   "downtrend/nervous": {
+    "signals": 149,
+    "p_t1": 16.8,
+    "p_t2": 2.0,
+    "p_t3": 1.3,
+    "p_stop": 8.1,
+    "median_days_t1": 16.0
+   },
+   "downtrend/normal": {
+    "signals": 864,
+    "p_t1": 15.5,
+    "p_t2": 2.2,
+    "p_t3": 0.8,
+    "p_stop": 24.1,
+    "median_days_t1": 17.0
+   },
+   "uptrend/calm": {
+    "signals": 4748,
+    "p_t1": 16.3,
+    "p_t2": 2.4,
+    "p_t3": 0.5,
+    "p_stop": 36.5,
+    "median_days_t1": 15.0
+   },
+   "uptrend/nervous": {
+    "signals": 376,
+    "p_t1": 24.5,
+    "p_t2": 4.3,
+    "p_t3": 1.3,
+    "p_stop": 20.7,
+    "median_days_t1": 14.0
+   },
+   "uptrend/normal": {
+    "signals": 2011,
+    "p_t1": 15.3,
+    "p_t2": 2.6,
+    "p_t3": 0.7,
+    "p_stop": 34.9,
+    "median_days_t1": 13.0
+   }
+  }
+ }
+}

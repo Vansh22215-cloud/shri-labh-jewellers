@@ -54,15 +54,23 @@ def gate_status(strategy):
 
 
 def search_html():
-    try:
-        o = json.loads((ROOT / "validation" / "search_latest.json").read_text())
-    except Exception:
+    """One line per strategy search (swing, short-term, intraday)."""
+    parts = []
+    for fname, label, unit in (("search_latest.json", "Swing (days-weeks)", "years"),
+                               ("search_short.json", "Short-term (1-5 days)", "years"),
+                               ("search_intraday.json", "Intraday (same day)", "quarters")):
+        try:
+            o = json.loads((ROOT / "validation" / fname).read_text())
+        except Exception:
+            continue
+        won = sum(p["beat_niftybees"] in (True, "True") for p in o["picks"])
+        parts.append(f"<li><b>{label}</b> ({o['date']}): {o['variants_searched']} strategies searched; honest "
+                     f"walk-forward picks beat NIFTYBEES in {won} of {len(o['picks'])} {unit} - "
+                     f"<b class='{'good' if o['passed'] else 'bad'}'>{'PASSED' if o['passed'] else 'FAILED'}</b></li>")
+    if not parts:
         return ""
-    won = sum(p["beat_niftybees"] for p in o["picks"])
-    return (f"<p><b>Strategy search</b> ({o['date']}): {o['variants_searched']} strategy variants across 10 families "
-            f"were searched honestly (each year's pick chosen only from earlier years). Picks beat NIFTYBEES in "
-            f"{won} of {len(o['picks'])} years; search gate <b class='{'good' if o['passed'] else 'bad'}'>"
-            f"{'PASSED' if o['passed'] else 'FAILED'}</b>. Details: validation/search.html</p>")
+    return ("<p><b>Strategy searches</b> (each period's strategy chosen only from earlier data). Details in the "
+            "validation folder (search*.html).</p><ul>" + "".join(parts) + "</ul>")
 
 
 def gate_html(g):
@@ -105,6 +113,20 @@ def build_reasons_risks(sym, sig, d, plan, q, results_date, p, deals):
     if q.get("insider_pct") is not None and q["insider_pct"] < 0.30:
         risks.append(f"Promoter/insider holding only {q['insider_pct']*100:.0f}% (approx.)")
     risks.append("Promoter pledge data not available from a free automatable source - check on Zerodha/Tijori")
+    try:
+        from .intel_news import line as news_line
+        nl = news_line(sym, plan.get("name") or "")
+        if nl:
+            (risks if "RED FLAG" in nl else reasons).append(nl)
+    except Exception:
+        pass
+    try:
+        from .intel_fno import line as fno_line
+        fl = fno_line(sym)
+        if fl:
+            (risks if ("SHORT BUILD-UP" in fl or "LONG UNWINDING" in fl) else reasons).append(fl)
+    except Exception:
+        pass
     if deals is not None and len(deals) and "Symbol" in deals.columns:
         dd = deals[deals["Symbol"] == sym]
         if len(dd):
@@ -118,6 +140,11 @@ def run():
     settings = load_settings()
     state = load_state()
     sname = settings.get("live_strategy", "v1")
+    g = gate_status(sname)
+    # AGGRESSIVE MODE (owner's explicit choice): if nothing is validated, use the best available strategy
+    aggressive = settings.get("tips_mode") == "aggressive" and not g.get("passed")
+    if aggressive:
+        sname = settings.get("aggressive_strategy", "a1")
     p = load_strategy(sname)
     capital = float(settings["capital"])
     blockers, health_items = [], []
@@ -147,9 +174,18 @@ def run():
         # attempt a fix: force a full re-download of the index data, then re-check
         log.warning("Stale index data (%s vs %s); retrying full download", last_bar.date(), expected.date())
         data_prices.download_full(list(data_prices.INDEX_TICKERS))
+        for k in ("NIFTY50", "NIFTYBEES", "INDIAVIX"):
+            data_prices.patch_today_from_intraday(k, expected)
         nifty_raw = data_prices.load("NIFTY50")
         last_bar = nifty_raw.index[-1]
         fresh = health.freshness(last_bar, expected)
+    if fresh:   # stocks too: Yahoo sometimes publishes empty daily bars in the evening -> rebuild from 5-minute data
+        try:
+            u = pd.read_csv(update.universe.UNIVERSE_FILE, parse_dates=["asof"])
+            cur = list(u[u["asof"] == u["asof"].max()]["symbol"])
+            data_prices.patch_missing_day_batch(cur, expected)
+        except Exception as e:
+            log.warning("stock bar patch failed: %s", e)
     (ok if fresh else bad)(f"latest prices dated {last_bar.date()} (NSE latest trading day {expected.date()})")
     if not fresh:
         blockers.append("Price data is not up to date - the free data source may be late. Will retry tomorrow.")
@@ -192,6 +228,7 @@ def run():
         "Nifty 50 close": f"{nlast:,.0f} ({(nlast / n200 - 1) * 100:+.1f}% vs 200-day average)",
         "Breadth (% of top-500 above 50-day avg)": f"{sig['breadth'].loc[d]:.0f}%",
         "India VIX (fear gauge)": f"{vix['close'].iloc[-1]:.1f}" if vix is not None else "n/a",
+        "Market type (history of this strategy in such markets)": __import__("swing.research", fromlist=["x"]).today_line() or "n/a",
         "Market filter": ("HEALTHY" if market_ok else "WEAK") + (
             "" if p.get("use_regime_filter", True) else " (this strategy version does not use the market filter)"),
     }
@@ -211,6 +248,12 @@ def run():
         stats_file = json.loads((ROOT / "validation" / "latest.json").read_text())
         setup_hits = stats_file.get("setup_stats", {})
         bt_ref = stats_file.get("wf_summary", {})
+        if aggressive and p.get("backtest_stats"):
+            bs_ = p["backtest_stats"]
+            setup_hits = {s_: {"win_rate_pct": bs_["win_rate_pct"], "avg_r": "n/a", "trades": bs_["trades"]}
+                          for s_ in ("20/50 average crossover", p.get("family", ""))}
+            bt_ref = {"closed": bs_["trades"], "win_rate_pct": bs_["win_rate_pct"],
+                      "avg_r": f"avg Rs {bs_.get('avg_per_trade_rs', '?')}/trade", "total_pnl": "-"}
     except Exception:
         setup_hits, bt_ref = {}, {}
     try:
@@ -219,7 +262,9 @@ def run():
         deals = None
     plans, removed = [], []
     elig = sig["eligible"].loc[d]
-    names = list(sig["score"].loc[d, elig[elig].index].sort_values(ascending=False).index[:15])
+    from .tipcheck import equity_list
+    _eq = set(equity_list()["SYMBOL"])          # company shares only (excludes ETFs / funds)
+    names = [x for x in sig["score"].loc[d, elig[elig].index].sort_values(ascending=False).index if x in _eq][:15]
     if not regime:
         names = []   # same as the backtest: no candidates at all in a weak market
     for sym in names:
@@ -247,6 +292,18 @@ def run():
                 "hit_rate": setup_hits.get(sig["setup"].at[d, sym], {}),
                 "exit_style": p.get("exit_style", "targets"), "trail_atr": round(p.get("trail_atr_mult", 3.0) * a, 2)}
         plan["reasons"], plan["risks"] = build_reasons_risks(sym, sig, d, plan, qsum, rd, p, deals)
+        plan["target3"] = round(close + p["target2_r"] * 1.5 * (close - lv["stop"]), 2)
+        try:
+            from .calibration import for_regime
+            from .research import regime_frame
+            rg = regime_frame(nifty.reindex(P["close"].index), sig["breadth"]).loc[d]
+            cal = for_regime(sname, f"{rg['trend']}/{rg['fear']}")
+            if cal:
+                plan["hit_rate"] = {"win_rate_pct": f"T1 {cal['p_t1']:.0f}% / T2 {cal['p_t2']:.0f}% / stop {cal['p_stop']:.0f}% "
+                                                    f"(rest: time exit)", "avg_r": f"median {cal['median_days_t1']:.0f} days to T1",
+                                    "trades": f"{cal['signals']} past signals, {cal['regime']}, reliability {cal['confidence']}"}
+        except Exception as e:
+            log.warning("calibration unavailable: %s", e)
         plans.append(plan)
 
     probs = health.sanity_check_plans(plans, capital)
@@ -270,17 +327,35 @@ def run():
         paper_dd = float((eq / np.maximum.accumulate(np.r_[capital, eq.values])[1:] - 1).min() * 100)
     open_paper = int(tips_df[(tips_df["kind"] == "tip") & tips_df["status"].isin(["open", "pending"])].shape[0])
 
-    g = gate_status(sname)
     if settings.get("kill_switch"):
         blockers.insert(0, "Kill switch is ON in settings.yaml")
-    if not g.get("passed"):
+    try:
+        from .abnormal import check as abnormal_check
+        blockers += abnormal_check(capital, tips_df, d)
+    except Exception as e:
+        log.warning("abnormal-market check failed: %s", e)
+    if not g.get("passed") and not aggressive:
         blockers.append("Strategy not validated: it did not pass the validation gate (see the table below)")
+    if aggressive:
+        agg = tips_df[(tips_df["kind"] == "tip") & (tips_df["strategy"].astype(str).str.startswith("a"))]
+        agg_pnl = float(agg["pnl"].astype(float).fillna(0).sum()) if len(agg) else 0.0
+        if agg_pnl <= -capital * settings.get("aggressive_hard_stop_pct", 20) / 100:
+            blockers.append(f"HARD STOP: aggressive tips have lost Rs {-agg_pnl:,.0f} "
+                            f"(limit {settings.get('aggressive_hard_stop_pct', 20)}% of capital). Change the setting "
+                            "only after reviewing what went wrong.")
     if state.get("auto_paused"):
         blockers.append(f"Automatic pause: {state['auto_paused']}")
     if not regime:
         blockers.append("Weak market: Nifty below its 200-day average or too few stocks in uptrends")
-    if paper_dd <= -p["drawdown_pause_pct"]:
-        blockers.append(f"Paper drawdown {paper_dd:.1f}% exceeds the {p['drawdown_pause_pct']}% pause limit")
+    if len(closed):
+        eqc = capital + closed["pnl"].astype(float).cumsum()
+        cur_dd = float(eqc.iloc[-1] / max(capital, eqc.max()) - 1) * 100
+        breach = closed.loc[(eqc / np.maximum.accumulate(np.r_[capital, eqc.values])[1:] - 1) * 100
+                            <= -p["drawdown_pause_pct"], "exit_date"]
+        if cur_dd <= -p["drawdown_pause_pct"] and len(breach) and \
+                (pd.Timestamp(d) - pd.Timestamp(breach.iloc[0])).days < 28:
+            blockers.append(f"Drawdown {cur_dd:.1f}% exceeds the {p['drawdown_pause_pct']}% limit: "
+                            f"4-week pause (capital protection)")
     slots = max(0, p["max_open_positions"] - open_paper)
 
     # Claude review (optional explainer)
@@ -299,12 +374,17 @@ def run():
     weeks = (pd.Timestamp(day) - paper_start).days / 7
     in_paper = settings.get("mode", "paper") == "paper" or weeks < settings.get("paper_weeks", 8)
     mode_text = f"PAPER (week {int(weeks) + 1} of {settings.get('paper_weeks', 8)})" if in_paper else "LIVE"
+    if aggressive:
+        mode_text += " | AGGRESSIVE MODE - strategy NOT validated (your choice)"
 
     if tips:
         headline = (f"{len(tips)} trade idea(s) for tomorrow, best first. You can hold {slots} more position(s) "
                     f"- take them in order and skip any that open outside the buy zone.")
         if in_paper:
             headline = "PAPER MODE - do not use real money yet. " + headline
+        if aggressive:
+            headline = ("AGGRESSIVE MODE (not validated - higher risk, your choice): " + headline +
+                        " Never risk more than the quantity shown.")
         why, money = [], None
     else:
         if not g.get("passed"):
@@ -320,6 +400,13 @@ def run():
     my = journal.load_my_trades()
     my_status = journal.monitor_my_trades(my, data_prices.load, p,
                                           lambda s: fundamentals.next_results_date(s, d)) if len(my) else []
+    # forwarded tips (Telegram bot): update outcomes and show the scorecard
+    try:
+        from . import tipcheck
+        fwd = tipcheck.source_scorecard()
+    except Exception as e:
+        log.warning("forwarded-tip scorecard failed: %s", e)
+        fwd = {}
     for e in error_summary(since):
         health_items.append(("warn", "log: " + e))
 
@@ -329,20 +416,44 @@ def run():
         report.append_stock_note(pl["symbol"], day, pl, {"Shown as": "TIP" if tips else "shadow (not shown, tips blocked)"})
 
     ctx = {"day": day, "strategy": sname, "mode_text": mode_text, "headline": headline, "why": why,
-           "money_advice": money, "market": market, "tips": tips, "removed": removed, "my_trades": my_status,
+           "money_advice": money, "market": market, "forwarded": fwd, "tips": tips, "removed": removed, "my_trades": my_status,
            "paper": paper, "shadow": shadow, "backtest_ref": bt_ref, "health": health_items,
            "gate_html": search_html() + gate_html(g),
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
     f = report.daily_html(ctx)
+    try:
+        from .dashboard_export import save_ideas
+        save_ideas([{k: v for k, v in pl.items() if k not in ("chart",)} for pl in (tips or [])],
+                   my_status, "evening run")
+    except Exception as e:
+        log.warning("dashboard ideas save failed: %s", e)
 
-    lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
-    for i, pl in enumerate(tips, 1):
-        lines.append(f"{i}. {pl['symbol']} ({pl['setup']}) buy {pl['entry_low']}-{pl['entry_high']}, "
-                     f"stop {pl['stop']}, T1 {pl['target1']}, T2 {pl['target2']}, qty {pl['qty']}")
-    for s in my_status:
-        lines.append(f"[Your trade] {s['symbol']}: {s['status']}")
+    if tips:
+        lines = [f"📋 Trades for tomorrow ({day}) - buy only inside the price range, set the stop-loss straight away:"]
+        for i, pl in enumerate(tips[:3], 1):
+            lines.append(f"{i}. BUY {pl['symbol']} {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
+                         f"target {pl['target1']:,.0f} | qty {pl['qty']} (max loss ~Rs {pl['risk_rupees']:,.0f})")
+    else:
+        lines = [f"📋 No trade for tomorrow ({day}). Reason: {why[0] if why else 'nothing met the rules'}"]
+    try:   # follow the smart money (bulk/block deals by funds / well-known investors in liquid, uptrending stocks)
+        from .smart_money import todays_buys
+        sm = todays_buys(deals, set(sig["member"].loc[d][sig["member"].loc[d]].index))
+        sm = sm[sm["trend_ok"]] if len(sm) else sm
+        for _, r in sm.head(3).iterrows():
+            a_ = float(sig["atr"].at[d, r["symbol"]]) if r["symbol"] in sig["atr"].columns else None
+            stop_ = round(r["close"] - p["stop_atr_mult"] * a_, 0) if a_ else None
+            lines.append(f"💼 Smart money: {r['buyer'][:40]} bought Rs {r['net_buy_cr']:.0f} cr of {r['symbol']} at "
+                         f"{r['deal_price']:,.0f} (now {r['close']:,.0f}, uptrend)" + (f" | idea stop {stop_:,.0f}" if stop_ else "")
+                         + " - untested idea, small size only")
+    except Exception as e:
+        log.warning("smart-money check failed: %s", e)
+    for s_ in my_status:
+        if "Hold." not in s_["status"]:
+            lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines))
+    if settings.get("send_report_file", True):
+        telegram.send_document(settings, f, "Full report (open in your browser)")
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,
                   "telegram": tg})

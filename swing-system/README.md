@@ -7,25 +7,31 @@ Every weekday evening this system downloads free market data, checks it, and wri
 **"No tips today"** and the reason. It only gives tips if its strategy has passed a strict honesty test
 (the "validation gate"). It never connects to your broker.
 
-## Your 3 steps
+## How it runs (no Claude, no laptop needed)
+Everything runs **automatically on GitHub's free computers** (GitHub Actions, file `.github/workflows/swing.yml`):
+| When (IST, weekdays) | What you get on Telegram |
+|---|---|
+| 10:20 - 15:20, hourly | only if something needs action: a new buy signal, or your stop/target was hit |
+| 18:40 | tomorrow's trades (stock, buy range, stop, target, quantity) + the full report as a file |
+| every hour | answers to tips you forward, and to /bought /sold /trades |
+| 20:17 | (silent) tests one pre-registered improvement idea |
+| Saturday 10:17 | (silent) weekly self-check; once a month it re-runs all strategy searches |
 
-**Step 1 - Install Python (once, 5 minutes)**
-1. Open https://www.python.org/downloads/ and click the yellow **Download Python 3.12** (or newer) button.
-2. Open the downloaded file. **Tick the box "Add python.exe to PATH"** at the bottom of the first screen.
-3. Click **Install Now**, wait, then click **Close**.
+**One-time setup (2 minutes, on your phone):** GitHub repo -> Settings -> Secrets and variables -> Actions ->
+New repository secret: `TELEGRAM_BOT_TOKEN` = your bot token, and `TELEGRAM_CHAT_ID` = your chat id.
 
-**Step 2 - Get this folder and run setup (once, 1-3 hours, mostly waiting)**
-1. Download the file **swing-system.zip** that Claude sent you in the chat. Right-click it -> **Extract All...**
-   -> choose e.g. `C:\swing` -> **Extract**. Open the `swing-system` folder inside it.
-2. Open the `windows` folder and **double-click `SETUP.bat`**. If Windows says "Windows protected your PC",
-   click **More info -> Run anyway**.
-3. Leave the black window open until it says **DONE**. Your first report opens in your browser. From now on
-   it runs by itself every weekday at 6:30 pm (and catches up if your PC was off), and a self-check runs on
-   Saturdays.
+**Record your trades** by messaging the bot: `/bought ICICIBANK 5 1425 1340` (symbol, qty, price, stop) and
+`/sold ICICIBANK 1500`. These stay private (not in the public repository).
 
-**Step 3 (optional) - Get the report on your phone via Telegram**
-Already done for you: your bot token is saved in `my_secrets.yaml` (private, never uploaded). Just open your bot
-**@Vsjshsjsbaksnsjsh_bot** in Telegram and send it any message (e.g. "hi"). Reports then also arrive in Telegram.
+**Optional - run it on a laptop any time:** install Python, download this folder from GitHub (Code -> Download
+ZIP), double-click `windows/SETUP.bat` once, then `windows/run_nightly.bat` whenever you want a fresh report.
+The laptop never sends Telegram messages (only GitHub does), so nothing is sent twice.
+
+## Check any tip on Telegram
+Forward any stock tip (from a channel, group or friend) to your bot **@Vsjshsjsbaksnsjsh_bot**. Within seconds it
+answers 🟢 GOOD / 🟡 RISKY / 🔴 AVOID with reasons, using real prices and Zerodha charges. Send /score to see
+how forwarded tips actually turned out, and /report for tonight's summary. (The bot runs on your PC, so it answers
+while the PC is on; tips sent while it was off are answered when it starts.)
 
 ## Everyday use
 - Read `reports/latest.html` each evening. In **paper mode** (first 8 weeks) do not use real money - watch how
@@ -41,9 +47,14 @@ Already done for you: your bot token is saved in `my_secrets.yaml` (private, nev
 `DECISIONS.md` why every default was chosen | `IMPROVEMENTS.md` tested ideas | `CHANGELOG.md` history |
 `logs/system.log` errors.
 
-## Status at first build (2026-11-02)
-The first full backtest (2013 - Nov 2026, Zerodha costs and slippage included) **FAILED** the validation gate:
-strategy v1 beat simply holding NIFTYBEES in only 3 of 13 yearly periods, lost to it in the untouched holdout
-(-4.1% vs -3.2%; liquid fund +9.8%), and had a 21.7% worst drawdown. So the daily report says
-**"No tips: strategy not validated. Use the index fund."** The system keeps re-testing itself every week and
-will only start giving tips if a version honestly passes. Details: `validation/latest.html`.
+## Status (2026-11-03)
+Three honest searches, all with Zerodha charges, all **FAILED** the validation gate:
+| Search | Strategies tested | Fair walk-forward result | Newest untouched period |
+|---|---|---|---|
+| Swing (days-weeks) | 556 | beat NIFTYBEES in 2 of 10 years | +5.4% vs liquid fund +9.8% |
+| Short-term (1-5 days) | 1,080 | beat NIFTYBEES in 1 of 10 years | -13.2% |
+| Intraday (same day) | 120 | lost Rs 985 on Rs 45,000 | -2.6% |
+
+Short trades fail mainly because of **charges and slippage on every trade**. So the daily report says
+**"No tips: strategy not validated. Use the index fund."** All searches re-run monthly by themselves.
+Details: `validation/search.html`, `validation/search_short.html`, `validation/search_intraday.html`.

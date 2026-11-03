@@ -5,37 +5,37 @@
    {
     "check": "Walk-forward: beats NIFTYBEES in most periods",
     "passed": false,
-    "detail": "won 3 of 13 periods (23%); needed 62%"
+    "detail": "won 3 of 13 periods (23%); needed 80%"
    },
    {
     "check": "Holdout: beats NIFTYBEES and liquid fund",
     "passed": false,
-    "detail": "strategy -4.1% vs NIFTYBEES -3.2% vs liquid fund 9.8%"
+    "detail": "strategy -8.3% vs NIFTYBEES -3.2% vs liquid fund 9.8%"
    },
    {
     "check": "Holdout drawdown <= 15%",
-    "passed": true,
-    "detail": "-13.2%"
+    "passed": false,
+    "detail": "-17.0%"
    },
    {
     "check": "Walk-forward drawdown <= 20%",
     "passed": false,
-    "detail": "-21.7% (continuous run)"
+    "detail": "-20.3% (continuous run)"
    },
    {
     "check": "Enough trades (>= 100)",
     "passed": true,
-    "detail": "521 trades"
+    "detail": "519 trades"
    },
    {
     "check": "Excess return statistically convincing",
     "passed": false,
-    "detail": "t-stat -1.55; needed 1.18 (because 2 variant(s) tried)"
+    "detail": "t-stat -1.43; needed 3.87 (because 1755 variant(s) tried)"
    }
   ],
-  "variants_tried": 2,
-  "required_wf_share": 0.62,
-  "required_t": 1.18,
-  "date": "2026-11-02"
+  "variants_tried": 1755,
+  "required_wf_share": 0.8,
+  "required_t": 3.87,
+  "date": "2026-11-03"
  }
 }

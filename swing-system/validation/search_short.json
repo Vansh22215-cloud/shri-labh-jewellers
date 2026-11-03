@@ -1,0 +1,356 @@
+{
+ "date": "2026-11-03",
+ "procedure": "wf-search-short-v1: 1-5 day holds, 36m Sharpe pick, yearly, min 30 trades",
+ "space": "short",
+ "variants_searched": 1080,
+ "raw_variants_ever": 1755,
+ "search_procedures_tried": 3,
+ "passed": false,
+ "checks": [
+  {
+   "check": "Walk-forward search: picks beat NIFTYBEES in most years",
+   "passed": false,
+   "detail": "won 0 of 10 years (0%); needed 64%"
+  },
+  {
+   "check": "Holdout: beats NIFTYBEES and liquid fund",
+   "passed": false,
+   "detail": "T1012 -3.2% vs NIFTYBEES -2.41% vs liquid fund 9.75%"
+  },
+  {
+   "check": "Holdout drawdown <= 15%",
+   "passed": true,
+   "detail": "-9.52%"
+  },
+  {
+   "check": "Walk-forward drawdown <= 20%",
+   "passed": false,
+   "detail": "-37.8%"
+  },
+  {
+   "check": "Enough trades (>= 100)",
+   "passed": true,
+   "detail": "944 trades"
+  },
+  {
+   "check": "Excess return statistically convincing",
+   "passed": false,
+   "detail": "t-stat -2.81; needed 1.48 (3 search procedure(s) tried)"
+  }
+ ],
+ "picks": [
+  {
+   "year": 2016,
+   "picked": "T1072",
+   "how": "pullback_3d, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.07,
+   "return_pct": 0.07,
+   "niftybees_pct": 3.97,
+   "trades": 116,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2017,
+   "picked": "T0424",
+   "how": "volume_surge, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.95,
+   "return_pct": -6.43,
+   "niftybees_pct": 29.89,
+   "trades": 159,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2018,
+   "picked": "T0424",
+   "how": "volume_surge, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.33,
+   "return_pct": -11.29,
+   "niftybees_pct": 4.82,
+   "trades": 80,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2019,
+   "picked": "T0428",
+   "how": "volume_surge, stop 2.0 ATR, trailing stop 2.0 ATR, max 5 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.31,
+   "return_pct": -1.56,
+   "niftybees_pct": 13.61,
+   "trades": 85,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2020,
+   "picked": "T0856",
+   "how": "gap_go, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.3,
+   "return_pct": 2.91,
+   "niftybees_pct": 15.42,
+   "trades": 79,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2021,
+   "picked": "T0856",
+   "how": "gap_go, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.65,
+   "return_pct": -6.46,
+   "niftybees_pct": 25.97,
+   "trades": 79,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2022,
+   "picked": "T1052",
+   "how": "pullback_3d, stop 2.0 ATR, targets 1.0R/2.0R, max 5 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.53,
+   "return_pct": -8.04,
+   "niftybees_pct": 5.46,
+   "trades": 96,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2023,
+   "picked": "T1064",
+   "how": "pullback_3d, stop 2.0 ATR, targets 1.5R/3.0R, max 5 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.02,
+   "return_pct": 13.29,
+   "niftybees_pct": 21.01,
+   "trades": 111,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2024,
+   "picked": "T1064",
+   "how": "pullback_3d, stop 2.0 ATR, targets 1.5R/3.0R, max 5 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.08,
+   "return_pct": -0.26,
+   "niftybees_pct": 10.36,
+   "trades": 131,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2025,
+   "picked": "T0104",
+   "how": "trend_pb_bo, stop 2.0 ATR, trailing stop 2.0 ATR, max 5 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.76,
+   "return_pct": -2.53,
+   "niftybees_pct": 2.84,
+   "trades": 8,
+   "beat_niftybees": false
+  }
+ ],
+ "holdout": {
+  "picked": "T1012",
+  "how": "pullback_3d, stop 1.5 ATR, targets 1.0R/2.0R, max 3 days, market filter on, risk 1.0% x 4 trades",
+  "total_return_pct": -3.2,
+  "cagr_pct": -2.14,
+  "max_drawdown_pct": -9.52,
+  "sharpe": -0.24,
+  "trades": 136,
+  "win_rate_pct": 46.3,
+  "avg_r": -0.104,
+  "avg_days": 3.5,
+  "profit_factor": 0.72,
+  "niftybees_return_pct": -2.41,
+  "liquid_fund_return_pct": 9.75
+ },
+ "chain_t": -2.81,
+ "chain_max_dd": -37.75,
+ "chain_cagr_pct": -2.4,
+ "niftybees_cagr_pct_wf": 12.99,
+ "cherry_picked_top10": [
+  {
+   "variant": "T1031",
+   "how": "pullback_3d, stop 1.5 ATR, targets 1.5R/3.0R, max 5 days, market filter off, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -1.22,
+   "cagr_pct": 5.21,
+   "max_dd_pct": -41.44,
+   "trades": 2495
+  },
+  {
+   "variant": "T1042",
+   "how": "pullback_3d, stop 1.5 ATR, trailing stop 2.0 ATR, max 5 days, market filter on, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -1.65,
+   "cagr_pct": 3.26,
+   "max_dd_pct": -39.11,
+   "trades": 1873
+  },
+  {
+   "variant": "T1030",
+   "how": "pullback_3d, stop 1.5 ATR, targets 1.5R/3.0R, max 5 days, market filter on, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -1.68,
+   "cagr_pct": 2.76,
+   "max_dd_pct": -31.89,
+   "trades": 1815
+  },
+  {
+   "variant": "T1026",
+   "how": "pullback_3d, stop 1.5 ATR, targets 1.5R/3.0R, max 3 days, market filter on, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -1.78,
+   "cagr_pct": 1.95,
+   "max_dd_pct": -48.78,
+   "trades": 2300
+  },
+  {
+   "variant": "T1072",
+   "how": "pullback_3d, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -1.81,
+   "cagr_pct": 4.86,
+   "max_dd_pct": -18.59,
+   "trades": 1674
+  },
+  {
+   "variant": "T1006",
+   "how": "pullback_3d, stop 1.0 ATR, trailing stop 2.0 ATR, max 5 days, market filter on, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -1.82,
+   "cagr_pct": 1.96,
+   "max_dd_pct": -36.71,
+   "trades": 1935
+  },
+  {
+   "variant": "T0634",
+   "how": "squeeze, stop 2.0 ATR, targets 1.5R/3.0R, max 5 days, market filter on, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -1.89,
+   "cagr_pct": 1.03,
+   "max_dd_pct": -55.22,
+   "trades": 1618
+  },
+  {
+   "variant": "T0740",
+   "how": "inside_day, stop 2.0 ATR, targets 1.5R/3.0R, max 5 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -1.9,
+   "cagr_pct": 4.6,
+   "max_dd_pct": -23.08,
+   "trades": 1253
+  },
+  {
+   "variant": "T1074",
+   "how": "pullback_3d, stop 2.0 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 2.0% x 6 trades",
+   "t_vs_niftybees": -2.01,
+   "cagr_pct": 0.32,
+   "max_dd_pct": -48.4,
+   "trades": 2230
+  },
+  {
+   "variant": "T1036",
+   "how": "pullback_3d, stop 1.5 ATR, trailing stop 2.0 ATR, max 3 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -2.05,
+   "cagr_pct": 2.93,
+   "max_dd_pct": -34.7,
+   "trades": 1687
+  }
+ ],
+ "cherry_haircut_t_needed": 3.87,
+ "family_medians": [
+  {
+   "family": "pullback_3d",
+   "cagr_pct": -5.94,
+   "max_drawdown_pct": -62.34,
+   "sharpe": -0.35
+  },
+  {
+   "family": "gap_go",
+   "cagr_pct": -8.49,
+   "max_drawdown_pct": -69.69,
+   "sharpe": -0.76
+  },
+  {
+   "family": "strong_close",
+   "cagr_pct": -17.37,
+   "max_drawdown_pct": -92.55,
+   "sharpe": -1.49
+  },
+  {
+   "family": "mean_reversion",
+   "cagr_pct": -19.74,
+   "max_drawdown_pct": -93.5,
+   "sharpe": -1.88
+  },
+  {
+   "family": "squeeze",
+   "cagr_pct": -20.76,
+   "max_drawdown_pct": -95.22,
+   "sharpe": -1.84
+  },
+  {
+   "family": "nr7",
+   "cagr_pct": -23.86,
+   "max_drawdown_pct": -96.93,
+   "sharpe": -2.02
+  },
+  {
+   "family": "high52",
+   "cagr_pct": -24.42,
+   "max_drawdown_pct": -97.2,
+   "sharpe": -2.12
+  },
+  {
+   "family": "trend_pb_bo",
+   "cagr_pct": -27.04,
+   "max_drawdown_pct": -98.1,
+   "sharpe": -2.34
+  },
+  {
+   "family": "inside_day",
+   "cagr_pct": -29.32,
+   "max_drawdown_pct": -98.66,
+   "sharpe": -2.28
+  },
+  {
+   "family": "volume_surge",
+   "cagr_pct": -30.8,
+   "max_drawdown_pct": -98.99,
+   "sharpe": -2.32
+  }
+ ],
+ "share_variants_beating_niftybees_cagr": 0.0,
+ "latest_pick": {
+  "variant": "T1012",
+  "how": "pullback_3d, stop 1.5 ATR, targets 1.0R/2.0R, max 3 days, market filter on, risk 1.0% x 4 trades",
+  "params": {
+   "universe_size": 500,
+   "min_price": 50,
+   "min_history_days": 250,
+   "liquidity_lookback": 60,
+   "regime_sma": 200,
+   "breadth_min_pct_above_50dma": 40,
+   "trend_fast_sma": 50,
+   "trend_slow_sma": 200,
+   "slope_lookback": 20,
+   "max_extension_above_50dma_pct": 25,
+   "mom_long": 126,
+   "mom_short": 63,
+   "mom_skip": 5,
+   "min_rs_percentile": 70,
+   "breakout_lookback": 50,
+   "breakout_volume_mult": 1.5,
+   "pullback_ema": 20,
+   "pullback_band_pct": 3,
+   "atr_period": 14,
+   "stop_atr_mult": 1.5,
+   "do_not_buy_gap_atr": 0.5,
+   "target1_r": 1.0,
+   "target2_r": 2.0,
+   "max_hold_days": 3,
+   "risk_per_trade_pct": 1.0,
+   "max_position_pct": 25,
+   "max_open_positions": 4,
+   "drawdown_pause_pct": 10,
+   "drawdown_pause_days": 20,
+   "exclude_results_within_days": 5,
+   "score_weights": {
+    "rs_long": 0.35,
+    "rs_short": 0.2,
+    "sector_rs": 0.15,
+    "trend_quality": 0.2,
+    "liquidity": 0.1
+   },
+   "results_rule": "flag",
+   "family": "pullback_3d",
+   "use_regime_filter": true,
+   "exit_style": "targets",
+   "name": "T1012"
+  }
+ }
+}

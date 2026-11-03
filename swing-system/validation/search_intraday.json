@@ -1,0 +1,225 @@
+{
+ "date": "2026-11-03",
+ "space": "intraday",
+ "procedure": "wf-search-intraday-v1: hourly bars, quarterly pick by 6m Sharpe, min 30 trades",
+ "variants_searched": 120,
+ "passed": false,
+ "checks": [
+  {
+   "check": "Walk-forward: quarterly picks beat NIFTYBEES in most quarters",
+   "passed": false,
+   "detail": "won 4 of 9 quarters (44%); needed 64%"
+  },
+  {
+   "check": "Holdout: beats NIFTYBEES and liquid fund",
+   "passed": false,
+   "detail": "I078 -2.58% vs NIFTYBEES -2.55% vs liquid fund 2.02%"
+  },
+  {
+   "check": "Holdout still beats liquid fund with double slippage",
+   "passed": false,
+   "detail": "-4.43%"
+  },
+  {
+   "check": "Holdout drawdown <= 15%",
+   "passed": true,
+   "detail": "-3.8%"
+  },
+  {
+   "check": "Walk-forward drawdown <= 20%",
+   "passed": true,
+   "detail": "-17.7%"
+  },
+  {
+   "check": "Enough trades (>= 100)",
+   "passed": true,
+   "detail": "396 trades"
+  },
+  {
+   "check": "Excess return statistically convincing",
+   "passed": false,
+   "detail": "t-stat -0.52; needed 1.48 (3 search procedures tried)"
+  }
+ ],
+ "picks": [
+  {
+   "quarter": "2024Q2",
+   "picked": "I094",
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day",
+   "return_pct": 13.24,
+   "trades": 50,
+   "niftybees_pct": 7.77,
+   "liquid_fund_pct": 1.76,
+   "beat_niftybees": true
+  },
+  {
+   "quarter": "2024Q3",
+   "picked": "I094",
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day",
+   "return_pct": -1.78,
+   "trades": 50,
+   "niftybees_pct": 7.48,
+   "liquid_fund_pct": 1.76,
+   "beat_niftybees": false
+  },
+  {
+   "quarter": "2024Q4",
+   "picked": "I094",
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day",
+   "return_pct": 3.38,
+   "trades": 40,
+   "niftybees_pct": -8.26,
+   "liquid_fund_pct": 1.74,
+   "beat_niftybees": true
+  },
+  {
+   "quarter": "2025Q1",
+   "picked": "I081",
+   "how": "gap_fade, target 2.0R, stop at first-hour low/high, trend filter on, max 2 trade(s)/day",
+   "return_pct": -2.21,
+   "trades": 56,
+   "niftybees_pct": -0.9,
+   "liquid_fund_pct": 1.75,
+   "beat_niftybees": false
+  },
+  {
+   "quarter": "2025Q2",
+   "picked": "I068",
+   "how": "gap_go, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter on, max 1 trade(s)/day",
+   "return_pct": -3.06,
+   "trades": 31,
+   "niftybees_pct": 10.37,
+   "liquid_fund_pct": 1.68,
+   "beat_niftybees": false
+  },
+  {
+   "quarter": "2025Q3",
+   "picked": "I026",
+   "how": "orb_both, target 1.0R, stop at first-hour low/high, trend filter off, max 1 trade(s)/day",
+   "return_pct": -0.74,
+   "trades": 64,
+   "niftybees_pct": -3.25,
+   "liquid_fund_pct": 1.43,
+   "beat_niftybees": true
+  },
+  {
+   "quarter": "2025Q4",
+   "picked": "I118",
+   "how": "first_hour_momo, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day",
+   "return_pct": -3.18,
+   "trades": 45,
+   "niftybees_pct": 5.28,
+   "liquid_fund_pct": 1.46,
+   "beat_niftybees": false
+  },
+  {
+   "quarter": "2026Q1",
+   "picked": "I068",
+   "how": "gap_go, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter on, max 1 trade(s)/day",
+   "return_pct": -5.84,
+   "trades": 29,
+   "niftybees_pct": -14.18,
+   "liquid_fund_pct": 1.44,
+   "beat_niftybees": true
+  },
+  {
+   "quarter": "2026Q2",
+   "picked": "I086",
+   "how": "gap_fade, target 2.0R, stop at first-hour midpoint, trend filter off, max 1 trade(s)/day",
+   "return_pct": -1.99,
+   "trades": 31,
+   "niftybees_pct": 5.58,
+   "liquid_fund_pct": 1.82,
+   "beat_niftybees": false
+  }
+ ],
+ "holdout": {
+  "picked": "I078",
+  "how": "gap_fade, target 1.0R, stop at first-hour midpoint, trend filter off, max 1 trade(s)/day",
+  "return_pct": -2.58,
+  "return_pct_double_slippage": -4.43,
+  "max_drawdown_pct": -3.8,
+  "trades": 42,
+  "niftybees_return_pct": -2.55,
+  "liquid_fund_return_pct": 2.02
+ },
+ "chain_pnl_rs": -985.0,
+ "chain_max_dd": -17.7,
+ "chain_t": -0.52,
+ "share_variants_profitable": 0.058,
+ "cherry_picked_top10": [
+  {
+   "variant": "I094",
+   "total_pnl": 11196.0,
+   "trades": 421.0,
+   "win_rate_pct": 40.6,
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I086",
+   "total_pnl": 6623.0,
+   "trades": 421.0,
+   "win_rate_pct": 43.7,
+   "how": "gap_fade, target 2.0R, stop at first-hour midpoint, trend filter off, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I095",
+   "total_pnl": 5209.0,
+   "trades": 707.0,
+   "win_rate_pct": 37.3,
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 2 trade(s)/day"
+  },
+  {
+   "variant": "I070",
+   "total_pnl": 1797.0,
+   "trades": 439.0,
+   "win_rate_pct": 31.9,
+   "how": "gap_go, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I046",
+   "total_pnl": 1305.0,
+   "trades": 624.0,
+   "win_rate_pct": 47.6,
+   "how": "orb_both, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I087",
+   "total_pnl": 1289.0,
+   "trades": 707.0,
+   "win_rate_pct": 41.2,
+   "how": "gap_fade, target 2.0R, stop at first-hour midpoint, trend filter off, max 2 trade(s)/day"
+  },
+  {
+   "variant": "I038",
+   "total_pnl": 547.0,
+   "trades": 624.0,
+   "win_rate_pct": 47.6,
+   "how": "orb_both, target 2.0R, stop at first-hour midpoint, trend filter off, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I076",
+   "total_pnl": -194.0,
+   "trades": 115.0,
+   "win_rate_pct": 55.7,
+   "how": "gap_fade, target 1.0R, stop at first-hour midpoint, trend filter on, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I090",
+   "total_pnl": -772.0,
+   "trades": 470.0,
+   "win_rate_pct": 47.9,
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour low/high, trend filter off, max 1 trade(s)/day"
+  },
+  {
+   "variant": "I092",
+   "total_pnl": -1064.0,
+   "trades": 115.0,
+   "win_rate_pct": 44.3,
+   "how": "gap_fade, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter on, max 1 trade(s)/day"
+  }
+ ],
+ "data_from": "2023-11-20",
+ "data_to": "2026-11-02",
+ "stocks": 147
+}

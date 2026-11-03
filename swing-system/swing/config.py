@@ -37,6 +37,7 @@ def load_settings(path=None):
         "paper_start_date": "2026-11-02", "paper_weeks": 8,
         "claude_review": False, "claude_review_max_stocks": 6,
         "telegram_bot_token": "", "telegram_chat_id": "", "live_strategy": "v1",
+        "tips_mode": "validated", "aggressive_strategy": "a1", "aggressive_hard_stop_pct": 20,
     }
     p = Path(path) if path else ROOT / "settings.yaml"
     try:
@@ -45,6 +46,11 @@ def load_settings(path=None):
         logging.getLogger("swing").error("settings.yaml unreadable (%s); kill switch forced ON", e)
         user = {"kill_switch": True}
     defaults.update(user)
+    # On GitHub Actions the private values come from environment variables (repository secrets), never a file.
+    import os
+    for env_key, key in (("TELEGRAM_BOT_TOKEN", "telegram_bot_token"), ("TELEGRAM_CHAT_ID", "telegram_chat_id")):
+        if os.environ.get(env_key):
+            defaults[key] = os.environ[env_key]
     # Private values (e.g. Telegram token) live in my_secrets.yaml, which is never uploaded to GitHub.
     sec = ROOT / "my_secrets.yaml"
     if path is None and sec.exists():

@@ -27,7 +27,9 @@ def refresh(first_time=False, hist_start="2012-09-01"):
 
     # Official NSE bhavcopies: every 5th trading day since hist_start + every one of the last 15 days.
     hist_days = cal[cal >= pd.Timestamp(hist_start)]
-    sample = set(hist_days[::5]) | set(cal[-15:])
+    # A fresh machine (e.g. GitHub Actions) with the committed universe list only fetches recent days.
+    have_hist = len(list(universe.BHAV.glob("*.csv"))) >= 300 or not universe.UNIVERSE_FILE.exists()
+    sample = (set(hist_days[::5]) if have_hist else set()) | set(cal[-15:])
     # Today's file too (Yahoo's calendar may not include today yet).
     today = pd.Timestamp.today().normalize()
     if today.weekday() < 5:
@@ -50,6 +52,20 @@ def refresh(first_time=False, hist_start="2012-09-01"):
     except Exception as e:
         info["errors"].append(f"Bulk/block deals unavailable: {e}")
     data_prices.liquid_fund_nav()
+    try:   # daily FII/DII positioning + delivery data (ROADMAP I1, D1)
+        from . import data_delivery, intel_positioning
+        recent = [d for d in cal[-10:]]
+        intel_positioning.download(recent)
+        intel_positioning.build_panel()
+        data_delivery.download(recent)
+        from . import intel_fno, intel_global
+        intel_fno.download(recent)
+        intel_global.refresh()
+        from . import intel_news
+        intel_news.fetch()
+        data_delivery.build_panel()
+    except Exception as e:
+        info["errors"].append(f"positioning/delivery update failed: {e}")
     st = load_state()
     st["last_data_update"] = str(pd.Timestamp.now())
     save_state(st)

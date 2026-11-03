@@ -2,8 +2,8 @@
 
 journal/tips.csv      - every tip ever shown (and 'shadow' picks when tips are blocked),
                         tracked automatically with the exact backtest exit rules.
-my_trades.csv         - (in the main folder) trades you actually placed. Add one line per
-                        trade in Excel/Notepad: symbol,buy_date,buy_price,qty,stop
+data/my_trades.csv    - trades you actually placed (private, not in the public repo). Easiest: tell the Telegram
+                        bot "/bought TCS 3 3500" (symbol qty price [stop]) and "/sold TCS".
 """
 import math
 
@@ -11,10 +11,10 @@ import numpy as np
 import pandas as pd
 
 from . import costs
-from .config import JOURNAL, ROOT
+from .config import DATA, JOURNAL, ROOT
 
 TIPS = JOURNAL / "tips.csv"
-MY_TRADES = ROOT / "my_trades.csv"
+MY_TRADES = DATA / "my_trades.csv"   # personal: never committed to the (public) repository
 COLUMNS = ["date", "symbol", "kind", "strategy", "setup", "score", "signal_close", "entry_low", "entry_high",
            "stop", "target1", "target2", "qty", "claude_verdict", "status", "entry_date", "entry_price",
            "exit_date", "exit_price", "exit_reason", "pnl", "r_multiple", "days"]
@@ -90,7 +90,7 @@ def simulate_trade(o, h, l, c, signal_date, tip, p):
 
 def update_outcomes(load_prices, p_by_strategy):
     """Re-simulate every not-yet-closed tip with the latest data."""
-    df = load_tips()
+    df = load_tips().astype(object)   # mixed text/number fields (dates, prices) must not fight column types
     for i, t in df.iterrows():
         if str(t["status"]).startswith(("closed", "skipped")):
             continue

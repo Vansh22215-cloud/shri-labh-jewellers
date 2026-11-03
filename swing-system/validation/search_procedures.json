@@ -1,3 +1,8 @@
 {
- "wf-search-v1: 36m Sharpe pick, yearly, min 30 trades": "2026-11-02"
+ "wf-search-v1: 36m Sharpe pick, yearly, min 30 trades": "2026-11-02",
+ "wf-search-short-v1: 1-5 day holds, 36m Sharpe pick, yearly, min 30 trades": "2026-11-03",
+ "wf-search-intraday-v1: hourly bars, quarterly pick by 6m Sharpe, min 30 trades": "2026-11-03",
+ "wf-search-library-v1: famous methods, 36m Sharpe pick, yearly, min 30 trades": "2026-11-03",
+ "wf-search-combined-v1: swing+library, 36m Sharpe of excess over liquid fund": "2026-11-03",
+ "wf-meta-ensemble-v1: top-3 families by 36m excess Sharpe, equal weight": "2026-11-03"
 }
