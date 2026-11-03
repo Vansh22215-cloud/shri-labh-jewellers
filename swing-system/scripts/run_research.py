@@ -15,8 +15,12 @@ if __name__ == "__main__":
         notes.append(weekly.test_proposal(todo[0], s, s["live_strategy"]))
     else:
         notes.append("No untested ideas left in IMPROVEMENTS.md - Claude should add new, pre-registered ones.")
+    from swing.idea_factory import top_up
+    new = top_up()
+    if new:
+        notes.append("New ideas written for the next runs: " + "; ".join(new))
     research.run()
     notes.append(research.today_line())
     msg = "🔬 Daily research\n" + "\n".join(f"• {n}" for n in notes) + f"\n{len(todo) - 1 if todo else 0} ideas left to test."
     print(msg)
-    # research results stay in the reports/dashboard; no Telegram (owner wants only actionable messages)
+    print(telegram.send(load_settings(), msg))   # owner wants every result on Telegram

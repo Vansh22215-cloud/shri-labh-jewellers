@@ -450,6 +450,9 @@ def run():
     for s_ in my_status:
         if "Hold." not in s_["status"]:
             lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
+    probs = [t for c_, t in health_items if c_ == "bad"]
+    if probs:
+        lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines))
     if settings.get("send_report_file", True):

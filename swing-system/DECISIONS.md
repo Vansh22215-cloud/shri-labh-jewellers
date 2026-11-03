@@ -278,3 +278,7 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   runner start with recent data only. The repository is PUBLIC, so personal files (your trades, forwarded tips,
   daily reports) are kept out of git: they live in the cache and are backed up as 90-day private run artifacts.
   NSE data use stays at option B (small daily downloads) until the owner decides otherwise (D70).
+- **D74. Self-improvement without Claude (2026-11-03):** an idea factory (swing/idea_factory.py) writes 2 new dated
+  ideas from a fixed menu of sensible single changes whenever fewer than 3 are queued; the evening research run tests
+  one per weekday with the normal promotion rules. Telegram now reports every job (hourly pulse or actions, evening
+  trades + report file + any system problems, research result, weekly self-check), at the owner's request.
