@@ -64,7 +64,7 @@ def _card(i, pl):
              f"Stop-loss   ₹{pl['stop']:,.2f}  ({pl['stop_pct']:.1f}%)\nTarget 1    ₹{pl['target1']:,.2f}  (sell half)\n"
              f"Target 2    ₹{pl['target2']:,.2f}\nQuantity    {pl['qty']} sh  (≈₹{pl['qty'] * pl['ltp']:,.0f})\n"
              f"Max loss    ≈₹{pl['risk_rupees']:,.0f}\nHold        up to {pl['max_hold']} trading days</pre>",
-             "<b>Why:</b> " + E("; ".join(pl["reasons"][:3])),
+             "<b>Why:</b> " + E("; ".join(pl["reasons"][:4])),
              "<b>Risk factors:</b> " + E("; ".join(pl["risk_reasons"]) or "none flagged")]
     return "\n".join(lines)
 
@@ -126,6 +126,15 @@ def run(send=True):
                    f"next results {rd.date()}" if rd is not None else "results date unknown"]
         if (close - lv["stop"]) / close < 0.01:
             return None   # no real price movement (fund/ETF-like) - not a trade
+        try:
+            from .intel_fno import line as fno_line
+            fl = fno_line(s)
+            if fl:
+                reasons.append(fl)
+                if "SHORT BUILD-UP" in fl or "LONG UNWINDING" in fl:
+                    rs_why.append("F&O shows selling (short build-up/long unwinding)")
+        except Exception:
+            pass
         return {"symbol": s, "name": names.get(s, ""), "setup": setup, "score": float(sig["score"].at[d, s]), "ltp": close, **lv, "qty": qty,
                 "risk_rupees": qty * (close - lv["stop"]), "stop_pct": (close - lv["stop"]) / close * 100,
                 "max_hold": p["max_hold_days"], "risk": rs_val, "risk_reasons": rs_why, "reasons": reasons}

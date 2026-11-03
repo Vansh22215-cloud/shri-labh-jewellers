@@ -126,6 +126,13 @@ def evaluate_option(o, capital=45000.0, today=None):
     exp = monthly_expiry(year, month)
     if exp < today:
         exp = monthly_expiry(year + (month == 12), month % 12 + 1)
+    try:   # use the ACTUAL expiry from the latest NSE F&O bhavcopy when it is the same month (holidays etc.)
+        from .intel_fno import expiry_for
+        real = expiry_for(sym)
+        if real is not None and real.month == exp.month and real >= today:
+            exp = real
+    except Exception:
+        pass
     days_left = max(1, (exp - today).days)
     t = days_left / 365
     k, kind = o["strike"], o["kind"]

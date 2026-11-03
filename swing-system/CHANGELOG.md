@@ -96,3 +96,8 @@
   3/10 years, 6.5%/yr, worst fall -22%. Today's fair pick is S385 = a1 itself, so tips stay on a1.
 - Lesson: methods that look best in hindsight do not stay best year to year (the yearly re-pick chases last
   period's winner). Next: the meta-system S12 (combine signals of several families instead of picking one).
+
+## 2026-11-03 - Intelligence desk: I1 + I2 built
+- I1 FII/DII/Pro/Client positioning (NSE participant OI since 2013): "Big money" line in messages; idea R12 queued.
+- I2 F&O end-of-day intelligence (from Jul 2024): long/short build-up, PCR, max pain, OI support/resistance shown
+  on trade cards; options checker now uses NSE's real expiry dates (Nov 2026 expiry is 23 Nov, not 24).

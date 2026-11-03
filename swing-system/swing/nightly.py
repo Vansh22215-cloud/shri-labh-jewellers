@@ -113,6 +113,13 @@ def build_reasons_risks(sym, sig, d, plan, q, results_date, p, deals):
     if q.get("insider_pct") is not None and q["insider_pct"] < 0.30:
         risks.append(f"Promoter/insider holding only {q['insider_pct']*100:.0f}% (approx.)")
     risks.append("Promoter pledge data not available from a free automatable source - check on Zerodha/Tijori")
+    try:
+        from .intel_fno import line as fno_line
+        fl = fno_line(sym)
+        if fl:
+            (risks if ("SHORT BUILD-UP" in fl or "LONG UNWINDING" in fl) else reasons).append(fl)
+    except Exception:
+        pass
     if deals is not None and len(deals) and "Symbol" in deals.columns:
         dd = deals[deals["Symbol"] == sym]
         if len(dd):

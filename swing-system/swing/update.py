@@ -56,6 +56,8 @@ def refresh(first_time=False, hist_start="2012-09-01"):
         intel_positioning.download(recent)
         intel_positioning.build_panel()
         data_delivery.download(recent)
+        from . import intel_fno
+        intel_fno.download(recent)
         data_delivery.build_panel()
     except Exception as e:
         info["errors"].append(f"positioning/delivery update failed: {e}")
