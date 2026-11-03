@@ -75,3 +75,16 @@
   R6 results exclusion 7.9%, R9 max 1 per industry 7.0% - vs a1 9.15%/yr (2013-Apr 2025), a1 worst fall -9.9%.
 - Checked for bugs: none. Lesson: a1's result is sensitive to small rule changes (4-9%/yr range), so part of its
   backtest is likely luck; expect live results below the backtest. Keep risk per trade at 1%.
+
+## 2026-11-03 (automatic)
+- Tested proposal R7: rejected. R7 vs a1: beat it in 7/13 walk-forward years, CAGR 4.28% vs 9.15%, worst fall -11.89% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R8: rejected. R8 vs a1: beat it in 6/13 walk-forward years, CAGR 4.64% vs 9.15%, worst fall -10.85% vs -9.92%, gate FAIL
+
+## 2026-11-03 (automatic)
+- Tested proposal R10: rejected. R10 vs a1: beat it in 4/13 walk-forward years, CAGR 3.6% vs 9.15%, worst fall -13.21% vs -9.92%, gate FAIL
+
+## 2026-11-03 - Research round 2 (vs a1): all rejected
+- R7 delivery filter 4.3%/yr, R8 high-delivery breakout family 4.6%, R10 nearer targets (1R/2R) 3.6% - vs a1 9.15%.
+- ROADMAP D1 (delivery data) and P2 (industry limit) built and tested: did not help a1 -> marked [~].

@@ -69,7 +69,7 @@ overrides: {"results_rule": "exclude"}
 
 ```proposal
 id: R7
-status: proposed
+status: rejected 2026-11-03 - R7 vs a1: beat it in 7/13 walk-forward years, CAGR 4.28% vs 9.15%, worst fall -11.89% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Delivery % shows whether buyers took shares home; requiring signal-day delivery to be at least 1.2x the stock's own 20-day average should keep trend changes backed by real investors and drop speculative ones.
 overrides: {"min_delivery_ratio": 1.2}
@@ -77,7 +77,7 @@ overrides: {"min_delivery_ratio": 1.2}
 
 ```proposal
 id: R8
-status: proposed
+status: rejected 2026-11-03 - R8 vs a1: beat it in 6/13 walk-forward years, CAGR 4.64% vs 9.15%, worst fall -10.85% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Breakouts to a new 20-day high with high volume AND unusually high delivery reflect accumulation by investors; this setup (ROADMAP D1) may beat the moving-average-cross entry with the same exits.
 overrides: {"family": "delivery_breakout"}
@@ -93,7 +93,7 @@ overrides: {"max_per_industry": 1}
 
 ```proposal
 id: R10
-status: proposed
+status: rejected 2026-11-03 - R10 vs a1: beat it in 4/13 walk-forward years, CAGR 3.6% vs 9.15%, worst fall -13.21% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: 65% of a1 trades end on the 25-day time limit because targets of 2R/4R (with a wide 3-ATR stop) are rarely reached; nearer targets (1R sell half, 2R rest) should convert more of the move into realised profit within the holding window.
 overrides: {"target1_r": 1.0, "target2_r": 2.0}

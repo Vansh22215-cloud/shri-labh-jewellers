@@ -6,7 +6,7 @@ Each session: pick the FIRST unchecked item, build it, test it, record the resul
 send a Telegram summary. Mark items [x] done or [~] built-but-did-not-help (keep the code, note why).
 
 ## Month 1 - Better data = better decisions
-- [ ] D1. Delivery % from NSE full bhavcopy (DELIV_PER): store history; new factor "high delivery breakout"
+- [~] D1. (2026-11-03: built - 13 yrs of delivery data, delivery_breakout family, delivery filter; neither beat a1: 4.3-4.6%/yr vs 9.2%) Delivery % from NSE full bhavcopy (DELIV_PER): store history; new factor "high delivery breakout"
       (genuine buying vs speculative intraday volume). Add family + proposal.
 - [ ] D2. Sector indices strength (NIFTY IT/BANK/AUTO/...): sector-rotation family (buy leaders of the
       strongest 2-3 sectors).
@@ -17,7 +17,7 @@ send a Telegram summary. Mark items [x] done or [~] built-but-did-not-help (keep
 
 ## Month 2 - Smarter portfolio and risk
 - [ ] P1. Volatility-scaled sizing (equal risk per trade already; add portfolio "heat" limit: total open risk <= 4%).
-- [ ] P2. Correlation / sector limit: max 2 open trades in the same industry.
+- [~] P2. (2026-11-03: built as max_per_industry; 7.0%/yr vs 9.2% - not adopted) Correlation / sector limit: max 2 open trades in the same industry.
 - [ ] P3. Monte-Carlo of trade sequences: probability of a 10%/20% drawdown -> shown in reports.
 - [ ] P4. Parameter-stability maps: show the strategy still works when each setting is nudged (robustness, not tuning).
 - [ ] P5. Liquidity-based slippage model (smaller stocks = more slippage) in the backtest.
