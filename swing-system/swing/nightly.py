@@ -386,6 +386,9 @@ def run():
     lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
     if today_line():
         lines.append("🧭 " + today_line())
+    from .intel_positioning import today_line as _fii
+    if _fii():
+        lines.append("🏦 " + _fii())
     _bs = p.get("backtest_stats") or {}
     if _bs.get("avg_win_rs"):
         lines.append(f"📐 Per trade (13-yr test): {_bs['win_rate_pct']:.0f}% winners, avg win Rs {_bs['avg_win_rs']}, "

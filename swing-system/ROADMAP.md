@@ -15,7 +15,7 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 
 
 ## INTELLIGENCE DESK (owner's institutional brief, 2026-11-03) - see ARCHITECTURE.md
-- [ ] I1. FII/DII/Pro/Client positioning from NSE participant-wise OI (daily history) -> regime feature + report.
+- [x] I1. (2026-11-03: built - daily NSE participant OI since 2013, 'Big money' line in every message, nightly update; idea R12 queued) FII/DII/Pro/Client positioning from NSE participant-wise OI (daily history) -> regime feature + report.
 - [ ] I2. F&O end-of-day data (futures + options bhavcopy): OI build-up (long/short build-up, unwinding), PCR,
       max pain, implied volatility per stock -> features + "options view" in each trade card.
 - [ ] I3. Global markets overnight (US, Asia, crude, USD/INR, US yields, gold) -> pre-market risk line + feature.

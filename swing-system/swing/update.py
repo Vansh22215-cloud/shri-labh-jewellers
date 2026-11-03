@@ -50,6 +50,15 @@ def refresh(first_time=False, hist_start="2012-09-01"):
     except Exception as e:
         info["errors"].append(f"Bulk/block deals unavailable: {e}")
     data_prices.liquid_fund_nav()
+    try:   # daily FII/DII positioning + delivery data (ROADMAP I1, D1)
+        from . import data_delivery, intel_positioning
+        recent = [d for d in cal[-10:]]
+        intel_positioning.download(recent)
+        intel_positioning.build_panel()
+        data_delivery.download(recent)
+        data_delivery.build_panel()
+    except Exception as e:
+        info["errors"].append(f"positioning/delivery update failed: {e}")
     st = load_state()
     st["last_data_update"] = str(pd.Timestamp.now())
     save_state(st)

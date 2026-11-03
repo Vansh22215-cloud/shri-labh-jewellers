@@ -180,6 +180,9 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     return B
 
 
+P_FII = {"series": None}   # set by engine.build from the participant-OI panel (FII index-futures long %)
+
+
 def family_signals(B, p):
     """Entry mask, setup label and ranking score for the family named in p['family']."""
     fam = p.get("family", "trend_pb_bo")
@@ -299,6 +302,9 @@ def family_signals(B, p):
     if fam == "mean_reversion":
         score = 100 - B["rsi2"]      # most oversold first
     regime = B["regime_ok"] if p.get("use_regime_filter", True) else pd.Series(True, index=c.index)
+    if p.get("min_fii_long_pct") and P_FII.get("series") is not None:   # FII positioning filter (ROADMAP I1)
+        fl = P_FII["series"].reindex(c.index).ffill()
+        regime = regime & (fl >= p["min_fii_long_pct"]).fillna(True)
     return {"score": score, "eligible": eligible, "setup": setup, "atr": B["atr"], "regime_ok": regime,
             "market_regime_ok": B["regime_ok"], "breadth": B["breadth"], "rs_rank": B["rs_rank"],
             "sector_rank": B["sector_rank"], "sma50": B["sma50"], "sma200": B["sma200"], "ema20": B["ema20"],

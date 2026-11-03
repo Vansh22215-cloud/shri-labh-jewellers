@@ -106,3 +106,11 @@ written: 2026-11-03
 reason: With small positions (~Rs 5,300) Zerodha's Rs 15.34 DP charge per sell is ~0.3% of the trade, and selling half at target 1 pays it twice; a single full exit at one target (2R) halves DP costs and should lift the thin per-trade edge.
 overrides: {"target1_r": 2.0, "target2_r": 2.0}
 ```
+
+```proposal
+id: R12
+status: proposed
+written: 2026-11-03
+reason: FIIs are the largest informed participants in Nifty futures; when their index-futures positions are less than 30% long they are heavily hedged/bearish, and new long swing trades should face a hostile market - skipping new entries then should cut losses (ROADMAP I1).
+overrides: {"min_fii_long_pct": 30}
+```

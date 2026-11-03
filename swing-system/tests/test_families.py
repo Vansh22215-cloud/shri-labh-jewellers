@@ -37,3 +37,16 @@ def test_delivery_filter_uses_only_past_average(params):
     d = P["close"].index[300]
     expected = P["deliv"].iloc[280:300].mean()       # the 20 days BEFORE d
     assert np.allclose(B["deliv_avg"].loc[d].values, expected.values)
+
+
+def test_fii_filter_blocks_regime(params):
+    import pandas as pd
+    from swing import families
+    P, nifty, mask = synthetic_panel(n_sym=30, n_days=420, seed=4)
+    B = base_indicators(P, nifty, mask, {}, params)
+    families.P_FII["series"] = pd.Series(10.0, index=P["close"].index)   # FIIs only 10% long
+    try:
+        sig = family_signals(B, dict(params, use_regime_filter=False, min_fii_long_pct=30))
+        assert not sig["regime_ok"].any()
+    finally:
+        families.P_FII["series"] = None

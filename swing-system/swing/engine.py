@@ -67,6 +67,13 @@ def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
         P["results_day"] = results_day_mask(list(P["close"].columns), idx)
     except Exception as e:
         log.warning("results-day mask unavailable: %s", e)
+    try:   # FII positioning (ROADMAP I1)
+        from .intel_positioning import load_panel as _lp
+        from .families import P_FII
+        _pp = _lp()
+        P_FII["series"] = _pp["fii_idx_fut_long_pct"] if _pp is not None else None
+    except Exception as e:
+        log.warning("positioning panel unavailable: %s", e)
     mask = universe.membership_mask(hist, idx, list(P["close"].columns))
     # Live: today's universe = most recent month's list (same rule, latest data).
     industry = dict(zip(n500["Symbol"], n500["Industry"]))

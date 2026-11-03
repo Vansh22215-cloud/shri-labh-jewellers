@@ -193,6 +193,9 @@ def run(send=True):
                 f"~{bs['trades_per_month']} trades/month. Losing streaks of up to {bs['max_losing_streak']} happen.")
     from .research import today_line
     rl = today_line()
+    from .intel_positioning import today_line as fii_line
+    if fii_line():
+        hdr += "\n🏦 <b>Big money:</b> " + E(fii_line())
     if rl:
         hdr += "\n🧭 <b>Market dynamics:</b> " + E(rl)
     blocks = [hdr]
