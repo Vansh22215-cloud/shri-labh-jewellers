@@ -248,3 +248,12 @@ You said you want daily tips even if somewhat risky, and do not want the index f
 - **D69. Learning from the owner's tip channels:** the forwarded-tip journal scores every channel; once a channel
   has >= 30 resolved calls with a target-hit rate clearly above what its stops imply (break-even after costs) its
   checked calls can be added to the daily list (to be built when the data exists).
+
+## NSE terms of use (found 2026-11-03 - correcting D4/D10)
+- **D70.** NSE's website Terms of Use prohibit "systematic or automated data collection ... including scraping, data
+  mining, data extraction and data harvesting" on the website (nseindia.com terms of use). D4 wrongly treated the
+  archive files as freely automatable; that was not checked properly at the start. Actions taken: large
+  historical back-fills from NSE (participant OI, F&O) stopped; NO new NSE website/API collectors are built (FII/DII
+  cash API, shareholding, announcements, insider trades were found reachable but are not used). The owner decides
+  how to continue (see the conversation of 2026-11-03): licensed data via a broker API (Kite Connect, Rs 500/month),
+  NSE's paid data products, or accept the terms risk for low-volume personal downloads.
