@@ -1,8 +1,1 @@
 checked,source,symbol,side,horizon,verdict,entry,stop,target,ltp,hist_pct,need_pct,expected_r,outcome,raw
-2026-11-03 06:42:14,test,RELIANCE,buy,swing,AVOID,1297.5,1270.0,1340.0,1291.0,38.9,49.2,-0.26,open,🔥 BUY RELIANCE @ 1295-1300 SL 1270 TGT 1340/1380 🎯 swing
-2026-11-03 06:42:14,test,TATASTEEL,buy,intraday,AVOID,150.0,149.5,152.0,176.14,25.2,32.4,-0.36,open,Intraday: buy TATASTEEL above 150 sl 149.5 target 152
-2026-11-03 06:42:14,test,SBIN,buy,swing,AVOID,1100.0,1064.03,1153.96,995.45,39.6,46.6,-0.18,open,Jackpot call! Buy SBIN cmp for target 1100 multibagger
-2026-11-03 06:42:14,test,,buy,swing,UNKNOWN,,,,,,,,,BUY 21STCENMGM 55 sl 50 tgt 70
-2026-11-03 06:42:33,test,SBIN,buy,swing,AVOID,996.0,960.03,1100.0,996.0,9.4,29.5,-0.78,open,Jackpot call! Buy SBIN cmp for target 1100 multibagger
-2026-11-03 06:42:36,test,21STCENMGM,buy,swing,AVOID,55.0,50.0,70.0,63.73,2.3,27.2,-1.0,open,BUY 21STCENMGM 55 sl 50 tgt 70
-2026-11-03 06:43:12,typed by you,,buy,swing,UNKNOWN,,,,,,,,n/a,Hi
