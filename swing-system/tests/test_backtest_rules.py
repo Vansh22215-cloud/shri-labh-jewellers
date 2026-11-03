@@ -132,3 +132,17 @@ def test_max_per_industry_limits_entries(params):
     _, _, ex1 = backtest.run(P, sig, dict(params, max_per_industry=1), idx[0], idx[-1], 45000)
     _, _, ex2 = backtest.run(P, sig, params, idx[0], idx[-1], 45000)
     assert ex1.iloc[-1] < ex2.iloc[-1]      # only one bank bought when capped
+
+
+def test_update_outcomes_handles_new_text_fields(params, tmp_path, monkeypatch):
+    import pandas as pd
+    from swing import journal
+    monkeypatch.setattr(journal, "TIPS", tmp_path / "tips.csv")
+    pd.DataFrame([{c: None for c in journal.COLUMNS} | {"date": "2024-01-01", "symbol": "A", "kind": "tip",
+                   "strategy": "v1", "signal_close": 100.0, "entry_low": 99.0, "entry_high": 101.25, "stop": 95.0,
+                   "target1": 108.0, "target2": 115.0, "qty": 10, "status": "pending"}]).to_csv(journal.TIPS, index=False)
+    idx = pd.bdate_range("2024-01-01", periods=4)
+    raw = pd.DataFrame({"open": [100, 100.5, 101, 102], "high": [101, 101, 102, 103], "low": [99, 99.5, 100, 101],
+                        "close": [100, 100.6, 101.5, 102.5]}, index=idx, dtype=float)
+    df = journal.update_outcomes(lambda s: raw, lambda n: params)
+    assert df.iloc[0]["status"] == "open" and str(df.iloc[0]["entry_date"]) == "2024-01-02"

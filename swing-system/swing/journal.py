@@ -90,7 +90,7 @@ def simulate_trade(o, h, l, c, signal_date, tip, p):
 
 def update_outcomes(load_prices, p_by_strategy):
     """Re-simulate every not-yet-closed tip with the latest data."""
-    df = load_tips()
+    df = load_tips().astype(object)   # mixed text/number fields (dates, prices) must not fight column types
     for i, t in df.iterrows():
         if str(t["status"]).startswith(("closed", "skipped")):
             continue

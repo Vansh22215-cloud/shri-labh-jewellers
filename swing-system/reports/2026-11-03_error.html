@@ -1,10 +1,46 @@
-<!doctype html><meta charset='utf-8'><title>Swing report error</title><body style='font-family:sans-serif'><h1>No tips today: the system hit an error</h1><p>Research, not advice. No system can guarantee profit; you can lose money. You decide and place every order yourself.</p><p>The nightly run crashed, so no tips are given. It will retry tomorrow. Technical details (for Claude to fix) are in logs/system.log.</p><pre>Traceback (most recent call last):
-  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 364, in main
+<!doctype html><meta charset='utf-8'><title>Swing report error</title><body style='font-family:sans-serif'><h1>No tips today: the system hit an error</h1><p>Research, not advice. No system can guarantee profit; you can lose money. You decide and place every order yourself.</p><p>The nightly run crashed, so no tips are given. It will retry tomorrow. Technical details (for Claude to fix) are in logs/system.log.</p><pre>Error
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 420, in main
     return run()
-  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 342, in run
-    "gate_html": search_html() + gate_html(g),
-                 ~~~~~~~~~~~^^
-  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 66, in search_html
-    won = sum(p["beat_niftybees"] for p in o["picks"])
-TypeError: unsupported operand type(s) for +: 'int' and 'str'
+  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 292, in run
+    tips_df = journal.update_outcomes(data_prices.load, lambda name: load_strategy(name if isinstance(name, str) else sname))
+  File "/home/user/shri-labh-jewellers/swing-system/swing/journal.py", line 104, in update_outcomes
+    df.at[i, k] = v
+    ~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/indexing.py", line 2592, in __setitem__
+    return super().__setitem__(key, value)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/indexing.py", line 2542, in __setitem__
+    self.obj._set_value(*key, value=value, takeable=self._takeable)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/frame.py", line 4924, in _set_value
+    self.loc[index, col] = value
+    ~~~~~~~~^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/internals/managers.py", line 1541, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/internals/managers.py", line 620, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/internals/managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/internals/blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "/usr/local/lib/python3.13/site-packages/pandas/core/internals/blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value '2026-11-03' for dtype 'float64'
 </pre></body>
