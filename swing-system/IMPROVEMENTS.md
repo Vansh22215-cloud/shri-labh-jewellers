@@ -98,3 +98,11 @@ written: 2026-11-03
 reason: 65% of a1 trades end on the 25-day time limit because targets of 2R/4R (with a wide 3-ATR stop) are rarely reached; nearer targets (1R sell half, 2R rest) should convert more of the move into realised profit within the holding window.
 overrides: {"target1_r": 1.0, "target2_r": 2.0}
 ```
+
+```proposal
+id: R11
+status: proposed
+written: 2026-11-03
+reason: With small positions (~Rs 5,300) Zerodha's Rs 15.34 DP charge per sell is ~0.3% of the trade, and selling half at target 1 pays it twice; a single full exit at one target (2R) halves DP costs and should lift the thin per-trade edge.
+overrides: {"target1_r": 2.0, "target2_r": 2.0}
+```

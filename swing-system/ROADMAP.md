@@ -15,11 +15,21 @@ send a Telegram summary. Mark items [x] done or [~] built-but-did-not-help (keep
 - [ ] D4. Bulk/block deal history as a signal (large investor buying) - collect daily, test after 3 months.
 - [ ] D5. Data-quality dashboard in the report (coverage, quarantine, staleness per source).
 
+- [ ] D6. Market-event calendar (Union Budget, RBI policy, election results, index rebalancing, F&O expiry):
+      study how our trades behave around these days; pre-register a "skip entries before big events" test.
+- [ ] D7. Execution tracker: compare the price you actually bought/sold at with the planned price, to measure
+      real slippage and recalibrate the backtest's cost assumptions.
+- [ ] D8. Tax & net-profit tracker: short-term capital gains tax (20%) and all charges per closed trade, so the
+      report shows what you really keep.
+
 ## Month 2 - Smarter portfolio and risk
 - [ ] P1. Volatility-scaled sizing (equal risk per trade already; add portfolio "heat" limit: total open risk <= 4%).
 - [~] P2. (2026-11-03: built as max_per_industry; 7.0%/yr vs 9.2% - not adopted) Correlation / sector limit: max 2 open trades in the same industry.
 - [ ] P3. Monte-Carlo of trade sequences: probability of a 10%/20% drawdown -> shown in reports.
 - [ ] P4. Parameter-stability maps: show the strategy still works when each setting is nudged (robustness, not tuning).
+- [ ] P6. Edge-decay alarm: rolling 30-trade live result vs backtest; automatic warning/pause when the live edge
+      is statistically worse than expected.
+- [ ] P7. Idle-cash tracker: remind to park unused cash in a liquid fund/LIQUIDBEES (the backtest assumes it).
 - [ ] P5. Liquidity-based slippage model (smaller stocks = more slippage) in the backtest.
 
 ## Month 3 - Combine strategies (ensemble)
