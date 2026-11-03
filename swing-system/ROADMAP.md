@@ -8,6 +8,30 @@ validated honestly (walk-forward, untouched holdout, costs, variant counting) an
 Each session: pick the FIRST unchecked item, build it, test it, record the result here and in CHANGELOG.md,
 send a Telegram summary. Mark items [x] done or [~] built-but-did-not-help (keep the code, note why).
 
+
+## MISSION (set by the owner 2026-11-03)
+Give the best trades one can find, every day: learn from the best-known traders, funds and research, combine the
+best of all of them into OUR own system, keep only what proves itself on data, and run on its own.
+
+## Week 1 PRIORITY - Strategy library: the best-known methods, each built and tested on NSE data
+Each becomes a family in swing/families.py (with tests), joins the walk-forward search, and is pre-registered.
+- [ ] S1. Mark Minervini "Trend Template" + VCP (volatility contraction pattern) breakouts.
+- [ ] S2. William O'Neil CANSLIM-style: new highs + earnings growth + relative strength (uses fundamentals).
+- [ ] S3. Stan Weinstein Stage Analysis: buy only stage-2 breakouts above the 30-week average.
+- [ ] S4. Nicolas Darvas boxes: breakouts from tight boxes near highs with volume.
+- [ ] S5. Jegadeesh-Titman / AQR cross-sectional momentum (12-1 month), monthly top-decile rotation.
+- [ ] S6. George & Hwang 52-week-high momentum (stocks closest to their 52-week high).
+- [ ] S7. Post-Earnings-Announcement Drift (Ball & Brown; widely used by quant funds): buy strong results gaps.
+- [ ] S8. Larry Connors short-term mean reversion (RSI(2), %b) in uptrends - already partly done, extend.
+- [ ] S9. Antonacci dual momentum / Faber sector rotation using NSE sector indices.
+- [ ] S10. Quality + momentum (AQR "quality minus junk" idea) using fundamentals as a filter.
+- [ ] S11. Turtle/Donchian trend following with volatility sizing (Richard Dennis) - extend existing.
+- [ ] S12. "Best of all" META-SYSTEM: every evening rank each family by its recent walk-forward performance
+      (only past data), and give the top trades from the top families, with risk score 1-10. This becomes the
+      daily "best trades" list once it beats the single-strategy a1 in walk-forward testing.
+- [ ] K1. (If the owner buys Kite Connect) Kite integration: daily login via Telegram, live quotes and minute
+      history for intraday research; the code NEVER calls order APIs.
+
 ## Month 1 - Better data = better decisions
 - [~] D1. (2026-11-03: built - 13 yrs of delivery data, delivery_breakout family, delivery filter; neither beat a1: 4.3-4.6%/yr vs 9.2%) Delivery % from NSE full bhavcopy (DELIV_PER): store history; new factor "high delivery breakout"
       (genuine buying vs speculative intraday volume). Add family + proposal.

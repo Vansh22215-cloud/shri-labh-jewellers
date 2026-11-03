@@ -218,3 +218,14 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   costs, variant count). Anything that does not help is kept as code but not used. Results go to CHANGELOG.md,
   ROADMAP.md and Telegram. Scheduled sessions use the owner's Claude plan; when its limit is reached a session
   may be skipped until the limit resets.
+
+## Mission and Kite Connect (2026-11-03)
+- **D64. Mission (owner):** give the best trades one can find every day, combining the best-known methods
+  (Minervini, O'Neil, Weinstein, Darvas, academic momentum, earnings drift, Connors, sector rotation, quality),
+  each tested on NSE data, and a meta-system that picks the currently strongest ones using only past data.
+  "Best" always means "best by honest out-of-sample evidence", never "guaranteed".
+- **D65. Kite Connect (Rs 500/month, owner's decision to buy):** useful for minute-level history and reliable live
+  quotes. Cost note: Rs 6,000/year is ~13% of the Rs 45,000 capital and more than the strategy's expected yearly
+  profit, so it must earn its cost through better research. Security: API key/secret stored only in
+  my_secrets.yaml (never on GitHub); the daily access token is obtained by the owner logging in on Kite's own page;
+  the system never asks for the Zerodha password/TOTP and NEVER calls any order API. Access tokens expire daily.
