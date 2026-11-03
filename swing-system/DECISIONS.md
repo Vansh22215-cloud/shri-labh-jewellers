@@ -287,3 +287,7 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   and family x rule combinations), tested 2 per weekday evening and up to 8 on Saturdays. Anti-fluke rule: an idea
   must beat the current strategy by at least 0.25 x sqrt(ln N) CAGR points (N = ideas tested so far) and, after 50
   ideas, in at least 60% of walk-forward years, with a worst fall no more than 2 points deeper.
+- **D76. Company of the day (2026-11-03):** all ~2,391 NSE EQ companies; ~120 statements refreshed per night
+  (Yahoo, free), scored 0-100 (quality 25, growth 20, financial health 20, cash flow 15, valuation 10, Piotroski 10;
+  -8 per red flag). Pick: best score without red flags, tradeable (>= Rs 1 cr/day, price >= Rs 20, P/E <= 100), not
+  shown in the last 60 days. Research pick, not a tip; every pick is logged (journal/company_picks.csv) to measure it.

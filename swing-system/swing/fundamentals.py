@@ -49,7 +49,9 @@ def fetch_fundamentals(symbol, max_age_days=30):
     """Download (or read cached) fundamentals snapshot for one stock."""
     f = FUND / f"{symbol}.json"
     if f.exists() and (time.time() - f.stat().st_mtime) < max_age_days * 86400:
-        return json.loads(f.read_text())
+        old = json.loads(f.read_text())
+        if old.get("v") == 2 or not old.get("ok"):
+            return old
     snap = {"symbol": symbol, "downloaded": str(date.today()), "ok": False}
     try:
         t = yf.Ticker(yahoo_ticker(symbol))
@@ -65,6 +67,11 @@ def fetch_fundamentals(symbol, max_age_days=30):
         equity = _row(bs, "Stockholders Equity", "Common Stock Equity")
         debt = _row(bs, "Total Debt")
         ocf = _row(cf, "Operating Cash Flow")
+        capex = _row(cf, "Capital Expenditure")
+        intexp = _row(inc, "Interest Expense", "Interest Expense Non Operating")
+        gp = _row(inc, "Gross Profit")
+        ca = _row(bs, "Current Assets")
+        shares = _row(bs, "Ordinary Shares Number", "Share Issued")
         years = {}
         if rev is not None:
             for per in rev.index:
@@ -73,12 +80,16 @@ def fetch_fundamentals(symbol, max_age_days=30):
                 years[str(pe.date())] = {
                     "published_assumed": str((pe + pd.Timedelta(days=60)).date()),
                     "revenue": g(rev), "net_income": g(ni), "ebit": g(ebit), "total_assets": g(assets),
-                    "current_liabilities": g(cl), "equity": g(equity), "debt": g(debt), "ocf": g(ocf)}
+                    "current_liabilities": g(cl), "equity": g(equity), "debt": g(debt), "ocf": g(ocf),
+                    "capex": g(capex), "interest": g(intexp), "gross_profit": g(gp), "current_assets": g(ca),
+                    "shares": g(shares)}
         snap.update({"ok": bool(years), "annual": years,
                      "pe": _safe(info.get("trailingPE")), "pb": _safe(info.get("priceToBook")),
                      "insider_pct": _safe(info.get("heldPercentInsiders")),
                      "sector": info.get("sector"), "industry": info.get("industry"),
-                     "name": info.get("longName") or info.get("shortName")})
+                     "name": info.get("longName") or info.get("shortName"),
+                     "market_cap": _safe(info.get("marketCap")), "dividend_yield": _safe(info.get("dividendYield")),
+                     "summary": (info.get("longBusinessSummary") or "")[:600], "v": 2})
     except Exception as e:
         snap["error"] = str(e)
         log.warning("Fundamentals failed for %s: %s", symbol, e)
