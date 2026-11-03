@@ -50,3 +50,11 @@ def test_fii_filter_blocks_regime(params):
         assert not sig["regime_ok"].any()
     finally:
         families.P_FII["series"] = None
+
+
+def test_mom12_filter_reduces_signals(params):
+    P, nifty, mask = synthetic_panel(n_sym=60, n_days=520, seed=5)
+    B = base_indicators(P, nifty, mask, {}, params)
+    a = family_signals(B, dict(params, family="ma_cross"))["eligible"].values.sum()
+    b = family_signals(B, dict(params, family="ma_cross", min_mom12_rank=0.7))["eligible"].values.sum()
+    assert b <= a

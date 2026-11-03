@@ -292,6 +292,8 @@ def family_signals(B, p):
         eligible &= B["rs_rank"] * 100 >= p["min_rs_filter"]
     if p.get("min_delivery_ratio") and B.get("deliv") is not None:
         eligible &= B["deliv"] >= p["min_delivery_ratio"] * B["deliv_avg"]
+    if p.get("min_mom12_rank"):   # 12-1 month momentum rank filter (cross-sectional, 0..1)
+        eligible &= B["mom_12_1_rank"] >= p["min_mom12_rank"]
     if p.get("max_atr_pct"):
         eligible &= (B["atr"] / c * 100) <= p["max_atr_pct"]
     if B.get("results_soon") is not None and p.get("results_rule") == "exclude":

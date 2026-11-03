@@ -101,7 +101,7 @@ overrides: {"target1_r": 1.0, "target2_r": 2.0}
 
 ```proposal
 id: R11
-status: proposed
+status: rejected 2026-11-03 - R11 vs a1: beat it in 6/13 walk-forward years, CAGR 7.42% vs 9.15%, worst fall -10.31% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: With small positions (~Rs 5,300) Zerodha's Rs 15.34 DP charge per sell is ~0.3% of the trade, and selling half at target 1 pays it twice; a single full exit at one target (2R) halves DP costs and should lift the thin per-trade edge.
 overrides: {"target1_r": 2.0, "target2_r": 2.0}
@@ -121,4 +121,20 @@ status: proposed
 written: 2026-11-03
 reason: History shows Nifty opens ~0.7% lower after an S&P 500 fall of more than 1.5% (correlation 0.47); such risk-off nights often start weak days, so skipping new entries at that open should avoid buying into global selling (ROADMAP I3).
 overrides: {"skip_if_us_drop_pct": 1.5}
+```
+
+```proposal
+id: R14
+status: proposed
+written: 2026-11-03
+reason: Calibration shows ~50% of a1 trades end at the 25-day limit while still drifting and only 16% reach T1; price momentum persists for 1-3 months in the literature, so allowing 40 trading days should let more of that drift be captured.
+overrides: {"max_hold_days": 40}
+```
+
+```proposal
+id: R15
+status: proposed
+written: 2026-11-03
+reason: 12-1 month momentum is the most documented equity anomaly; a moving-average cross in a stock that is ALSO in the top 30% by 12-month momentum is trend continuation rather than a bounce in a long-term loser, so its trades should be better.
+overrides: {"min_mom12_rank": 0.7}
 ```

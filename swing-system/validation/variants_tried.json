@@ -9473,5 +9473,10 @@
   "name": "L127",
   "first_tested": "2026-11-03",
   "note": "search: connors_pctb, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "04cb9d568d": {
+  "name": "candidate-R11",
+  "first_tested": "2026-11-03",
+  "note": "proposal R11"
  }
 }

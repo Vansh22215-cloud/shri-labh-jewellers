@@ -113,3 +113,6 @@
 
 ## 2026-11-03 - T1 trade card upgrade
 - Calibrated odds from all 8,694 historical a1 signals: T1 (2R) before stop 16%, T2 2.5%, T3 0.6%, stop 34%, ~50% end at the 25-day limit; by regime T1 ranges 11-25%. Cards now show these honestly with sample size, plus T3, risk:reward and cancel-if conditions.
+
+## 2026-11-03 (automatic)
+- Tested proposal R11: rejected. R11 vs a1: beat it in 6/13 walk-forward years, CAGR 7.42% vs 9.15%, worst fall -10.31% vs -9.92%, gate FAIL
