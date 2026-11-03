@@ -426,6 +426,18 @@ def run():
                          f"target {pl['target1']:,.0f} | qty {pl['qty']} (max loss ~Rs {pl['risk_rupees']:,.0f})")
     else:
         lines = [f"📋 No trade for tomorrow ({day}). Reason: {why[0] if why else 'nothing met the rules'}"]
+    try:   # follow the smart money (bulk/block deals by funds / well-known investors in liquid, uptrending stocks)
+        from .smart_money import todays_buys
+        sm = todays_buys(deals, set(sig["member"].loc[d][sig["member"].loc[d]].index))
+        sm = sm[sm["trend_ok"]] if len(sm) else sm
+        for _, r in sm.head(3).iterrows():
+            a_ = float(sig["atr"].at[d, r["symbol"]]) if r["symbol"] in sig["atr"].columns else None
+            stop_ = round(r["close"] - p["stop_atr_mult"] * a_, 0) if a_ else None
+            lines.append(f"💼 Smart money: {r['buyer'][:40]} bought Rs {r['net_buy_cr']:.0f} cr of {r['symbol']} at "
+                         f"{r['deal_price']:,.0f} (now {r['close']:,.0f}, uptrend)" + (f" | idea stop {stop_:,.0f}" if stop_ else "")
+                         + " - untested idea, small size only")
+    except Exception as e:
+        log.warning("smart-money check failed: %s", e)
     for s_ in my_status:
         if "Hold." not in s_["status"]:
             lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")

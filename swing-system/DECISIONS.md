@@ -241,3 +241,10 @@ You said you want daily tips even if somewhat risky, and do not want the index f
 - **D67. Abnormal-market detector & daily loss limit (2026-11-03):** no new trades after a day when India VIX jumps
   > 20% or is above 28, when Nifty moves more than 2.5%, or when realised losses on tracked tips reach 2% of
   capital that day. Thresholds are standard risk-desk defaults, not tuned.
+- **D68. Smart money (2026-11-03, owner's request):** evening message lists bulk/block deals where a fund or well-known
+  investor was a NET buyer of >= Rs 5 crore in a liquid top-500 stock that is in an uptrend (HFT/prop/broker names
+  excluded). Free deal history starts now, so it is labelled an untested idea; every flagged deal is logged in
+  journal/smart_money.csv and will be tested as a strategy once ~6 months of deals exist.
+- **D69. Learning from the owner's tip channels:** the forwarded-tip journal scores every channel; once a channel
+  has >= 30 resolved calls with a target-hit rate clearly above what its stops imply (break-even after costs) its
+  checked calls can be added to the daily list (to be built when the data exists).
