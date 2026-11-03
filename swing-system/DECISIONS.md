@@ -304,3 +304,28 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   (not applicable to a long-only system), 15 planned (harmonic/Elliott/Wyckoff phases need more pivot geometry);
   indicators 164 implemented, 4 blocked by data (tick/intraday), 8 planned. All new entry rules joined the idea
   factory queue (~108 entry ideas + ~1,800 combinations); nothing is used for tips unless it passes the tests.
+
+## D79 (2026-11-03) Pattern library v2 (791 records) replaces v1
+- The owner's v2 library is a superset of v1 (every v1 id kept), adding market-structure/liquidity events (85) and
+  quant research features (104). Loaded as five catalogues keyed by type; 1,212 aliases resolved; 0 validation problems.
+- Built now (rule version cat-v2): 30 non-TA-Lib bullish candle rules (adaptive body/ATR thresholds), 24 more chart
+  detectors (Darvas, VCP, flat base, NR4/NR7, turtle soup, 3-bar play, gap-and-go, symmetrical triangle, ...),
+  21 market-structure events (BOS, CHoCH, MSS, liquidity sweeps, FVG, order block, displacement, weekly/monthly
+  open reclaim, SAR/chandelier flips, ...), 110 more indicators and 53 quant features. Every new family/indicator has
+  a test that its value on a past day does not change when later data is added (no look-ahead).
+- Four v2 names that are the same rule as another detector are merged (not counted as separate tests).
+- Audit: 492 built (incl. 20 detector-only), 97 bearish/not applicable (long-only), 62 need data we do not have
+  (options IV history, order book, tick, volume profile, futures basis), 120 still to build (mostly harmonic/Elliott/
+  Wyckoff phases and intraday-session events). Idea queue grows to 182 entry ideas + 3,094 combinations.
+- A detector is not an edge: nothing reaches the tips unless it beats the live rule in the walk-forward test.
+
+## D80 (2026-11-03) GitHub runs everything; Claude's scheduled sessions switched off
+- The first GitHub nightly ran and sent Telegram, but its save step was rejected (pull --rebase with unstaged files),
+  so results were not kept. Fix in branch code (no change to main needed): swing/ci_save.py commits the fixed
+  non-personal list, rebases with --autostash (this run's results win conflicts), pushes with 5 retries; every
+  scheduled script calls it at the end. Tested against a throwaway remote with a concurrent commit.
+- Research on GitHub now tests as many queued ideas as fit in 120 minutes (was 2 per day) and keeps 80 ideas
+  pre-written for the next run, so self-improvement no longer depends on Claude.
+- Claude's hourly/daily improvement sessions are disabled (owner: "no need of Claude"). Code changes to the system
+  itself (new detectors) now only happen if the owner opens a new Claude session; idea testing, strategy searches,
+  rollback, company of the day and all Telegram messages continue on GitHub for free.

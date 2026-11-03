@@ -1,0 +1,1552 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Point-in-time feature definitions for research, filters, risk controls and execution modelling. These are not all standalone indicators or trade signals.",
+  "items": [
+    {
+      "id": "log_return",
+      "name": "Log Return",
+      "category": "returns",
+      "definition": "One-period continuously compounded return.",
+      "calculation": "ln(close_t/close_t-1).",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "simple_return",
+      "name": "Simple Return",
+      "category": "returns",
+      "definition": "One-period percentage return.",
+      "calculation": "close_t/close_t-1 - 1.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "overnight_return",
+      "name": "Overnight Return",
+      "category": "returns",
+      "definition": "Prior close to current session open return.",
+      "calculation": "open_t/prior_session_close - 1.",
+      "inputs": [
+        "timestamp",
+        "open",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "intraday_return",
+      "name": "Intraday Return",
+      "category": "returns",
+      "definition": "Session open to current/close return.",
+      "calculation": "close_t/session_open_t - 1.",
+      "inputs": [
+        "timestamp",
+        "open",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "close_to_close_return_5",
+      "name": "Five-Bar Return",
+      "category": "returns",
+      "definition": "Cumulative return over five completed bars.",
+      "calculation": "close_t/close_t-5 - 1.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "bars": 5
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "close_to_close_return_20",
+      "name": "Twenty-Bar Return",
+      "category": "returns",
+      "definition": "Cumulative return over twenty completed bars.",
+      "calculation": "close_t/close_t-20 - 1.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "bars": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "close_to_close_return_60",
+      "name": "Sixty-Bar Return",
+      "category": "returns",
+      "definition": "Cumulative return over sixty completed bars.",
+      "calculation": "close_t/close_t-60 - 1.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "bars": 60
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "rolling_return_volatility",
+      "name": "Rolling Return Volatility",
+      "category": "returns",
+      "definition": "Standard deviation of returns over trailing window.",
+      "calculation": "std(returns,n)*sqrt(periods_per_year) when annualised.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "length": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "downside_return_volatility",
+      "name": "Downside Return Volatility",
+      "category": "returns",
+      "definition": "Volatility of negative returns below specified threshold.",
+      "calculation": "sqrt(mean(min(return-target,0)^2)).",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "length": 20,
+        "target": 0
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "upside_return_volatility",
+      "name": "Upside Return Volatility",
+      "category": "returns",
+      "definition": "Volatility of positive returns above threshold.",
+      "calculation": "sqrt(mean(max(return-target,0)^2)).",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "length": 20,
+        "target": 0
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "return_skewness",
+      "name": "Return Skewness",
+      "category": "returns_distribution",
+      "definition": "Asymmetry of trailing returns.",
+      "calculation": "Rolling third central moment / std^3.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "length": 60
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "return_excess_kurtosis",
+      "name": "Return Excess Kurtosis",
+      "category": "returns_distribution",
+      "definition": "Tail-heaviness relative to normal distribution.",
+      "calculation": "Rolling kurtosis minus 3 (if raw kurtosis convention).",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "length": 60
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "gap_size_atr",
+      "name": "Gap Size in ATR",
+      "category": "gap",
+      "definition": "Overnight gap size normalised by ATR.",
+      "calculation": "(open_t-prior_close)/ATR_prev.",
+      "inputs": [
+        "open",
+        "close",
+        "high",
+        "low"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "true_range_atr",
+      "name": "True Range / ATR",
+      "category": "range",
+      "definition": "Current true range normalised by prior ATR.",
+      "calculation": "TR_t/ATR_(t-1).",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "bar_range_percent",
+      "name": "Bar Range Percent",
+      "category": "range",
+      "definition": "High-low range as percentage of close.",
+      "calculation": "(high-low)/close.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "body_atr",
+      "name": "Body Size in ATR",
+      "category": "candle_anatomy",
+      "definition": "Absolute candle body normalised by ATR.",
+      "calculation": "abs(close-open)/ATR_prev.",
+      "inputs": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "upper_wick_atr",
+      "name": "Upper Wick in ATR",
+      "category": "candle_anatomy",
+      "definition": "Upper wick length normalised by ATR.",
+      "calculation": "(high-max(open,close))/ATR_prev.",
+      "inputs": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "lower_wick_atr",
+      "name": "Lower Wick in ATR",
+      "category": "candle_anatomy",
+      "definition": "Lower wick length normalised by ATR.",
+      "calculation": "(min(open,close)-low)/ATR_prev.",
+      "inputs": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "close_location_value",
+      "name": "Close Location Value",
+      "category": "candle_anatomy",
+      "definition": "Close position within current bar range.",
+      "calculation": "(close-low)/(high-low).",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "bar_overlap_ratio",
+      "name": "Bar Overlap Ratio",
+      "category": "bar_structure",
+      "definition": "Overlap of current and previous bar ranges.",
+      "calculation": "Overlap length / min(current range, prior range) with zero-range handling.",
+      "inputs": [
+        "high",
+        "low"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "inside_bar_flag",
+      "name": "Inside Bar Flag",
+      "category": "bar_structure",
+      "definition": "Current bar lies inside prior bar high-low range.",
+      "calculation": "high_t<=high_t-1 and low_t>=low_t-1.",
+      "inputs": [
+        "high",
+        "low"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "outside_bar_flag",
+      "name": "Outside Bar Flag",
+      "category": "bar_structure",
+      "definition": "Current bar exceeds both prior high and prior low.",
+      "calculation": "high_t>high_t-1 and low_t<low_t-1.",
+      "inputs": [
+        "high",
+        "low"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "consecutive_up_bars",
+      "name": "Consecutive Up Bars",
+      "category": "bar_structure",
+      "definition": "Length of current consecutive higher-close sequence.",
+      "calculation": "Recursive count(close_t>close_t-1).",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "consecutive_down_bars",
+      "name": "Consecutive Down Bars",
+      "category": "bar_structure",
+      "definition": "Length of consecutive lower-close sequence.",
+      "calculation": "Recursive count(close_t<close_t-1).",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "close_above_prior_high",
+      "name": "Close Above Prior High",
+      "category": "bar_structure",
+      "definition": "Binary flag for close above prior bar high.",
+      "calculation": "close_t>high_t-1.",
+      "inputs": [
+        "high",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "close_below_prior_low",
+      "name": "Close Below Prior Low",
+      "category": "bar_structure",
+      "definition": "Binary flag for close below prior bar low.",
+      "calculation": "close_t<low_t-1.",
+      "inputs": [
+        "low",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_rolling_high",
+      "name": "Distance from Rolling High",
+      "category": "price_location",
+      "definition": "Price drawdown from trailing high.",
+      "calculation": "close/rolling_max(high,n)-1.",
+      "inputs": [
+        "high",
+        "close"
+      ],
+      "parameters": {
+        "length": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_rolling_low",
+      "name": "Distance from Rolling Low",
+      "category": "price_location",
+      "definition": "Price distance above trailing low.",
+      "calculation": "close/rolling_min(low,n)-1.",
+      "inputs": [
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "length": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_prior_day_high",
+      "name": "Distance from Prior Day High",
+      "category": "price_location",
+      "definition": "Distance from prior completed session high.",
+      "calculation": "(close-prior_day_high)/ATR.",
+      "inputs": [
+        "timestamp",
+        "high",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_prior_day_low",
+      "name": "Distance from Prior Day Low",
+      "category": "price_location",
+      "definition": "Distance from prior completed session low.",
+      "calculation": "(close-prior_day_low)/ATR.",
+      "inputs": [
+        "timestamp",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_prior_week_high",
+      "name": "Distance from Prior Week High",
+      "category": "price_location",
+      "definition": "Distance from prior completed week high.",
+      "calculation": "(close-prior_week_high)/ATR.",
+      "inputs": [
+        "timestamp",
+        "high",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_prior_week_low",
+      "name": "Distance from Prior Week Low",
+      "category": "price_location",
+      "definition": "Distance from prior completed week low.",
+      "calculation": "(close-prior_week_low)/ATR.",
+      "inputs": [
+        "timestamp",
+        "low",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_poc",
+      "name": "Distance from Point of Control",
+      "category": "profile_location",
+      "definition": "Price distance from selected session/composite POC.",
+      "calculation": "(close-POC)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "parameters": {
+        "profile": "session"
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_vah",
+      "name": "Distance from Value Area High",
+      "category": "profile_location",
+      "definition": "Price distance from selected profile VAH.",
+      "calculation": "(close-VAH)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_val",
+      "name": "Distance from Value Area Low",
+      "category": "profile_location",
+      "definition": "Price distance from selected profile VAL.",
+      "calculation": "(close-VAL)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "profile_value_overlap",
+      "name": "Profile Value Area Overlap",
+      "category": "profile_location",
+      "definition": "Overlap of current and prior value areas.",
+      "calculation": "Intersection length / union or prior VA width.",
+      "inputs": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "relative_volume_20",
+      "name": "Relative Volume 20",
+      "category": "volume",
+      "definition": "Current volume relative to trailing mean volume.",
+      "calculation": "volume_t/mean(volume,n).",
+      "inputs": [
+        "volume"
+      ],
+      "parameters": {
+        "length": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "relative_volume_median_20",
+      "name": "Relative Volume Median 20",
+      "category": "volume",
+      "definition": "Current volume relative to trailing median.",
+      "calculation": "volume_t/median(volume,n).",
+      "inputs": [
+        "volume"
+      ],
+      "parameters": {
+        "length": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "volume_zscore_60",
+      "name": "Volume Z-Score 60",
+      "category": "volume",
+      "definition": "Standardised volume surprise.",
+      "calculation": "(volume-mean(volume,60))/std(volume,60).",
+      "inputs": [
+        "volume"
+      ],
+      "parameters": {
+        "length": 60
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "dollar_volume",
+      "name": "Dollar Volume",
+      "category": "liquidity",
+      "definition": "Traded notional proxy.",
+      "calculation": "close*volume; use actual traded value when available.",
+      "inputs": [
+        "close",
+        "volume"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "turnover_ratio",
+      "name": "Turnover Ratio",
+      "category": "liquidity",
+      "definition": "Traded volume relative to shares/units outstanding or free float.",
+      "calculation": "volume/free_float_shares or market-specific turnover.",
+      "inputs": [
+        "volume",
+        "free_float_shares"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "amihud_20",
+      "name": "Amihud 20",
+      "category": "liquidity",
+      "definition": "Price impact proxy over 20 periods.",
+      "calculation": "mean(abs(return)/dollar_volume,20).",
+      "inputs": [
+        "close",
+        "volume"
+      ],
+      "parameters": {
+        "length": 20
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "quoted_spread_bps",
+      "name": "Quoted Spread BPS",
+      "category": "execution",
+      "definition": "Quoted spread in basis points.",
+      "calculation": "10000*(ask-bid)/mid.",
+      "inputs": [
+        "best_bid",
+        "best_ask"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "spread_to_atr",
+      "name": "Quoted Spread to ATR",
+      "category": "execution",
+      "definition": "Spread cost relative to expected bar range.",
+      "calculation": "(ask-bid)/ATR.",
+      "inputs": [
+        "best_bid",
+        "best_ask",
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "estimated_slippage_bps",
+      "name": "Estimated Slippage BPS",
+      "category": "execution",
+      "definition": "Modelled execution shortfall in basis points.",
+      "calculation": "Fit or lookup slippage by size, volatility, ADV and time-of-day using training data.",
+      "inputs": [
+        "order_size",
+        "adv",
+        "volatility",
+        "spread",
+        "timestamp"
+      ],
+      "parameters": {
+        "model": "calibrated_fill_shortfall_model"
+      },
+      "implementation_notes": "Fit or lookup slippage by size, volatility, ADV and time-of-day using training data. Model fit must be trained without future fills; store calibration date/version.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "participation_rate",
+      "name": "Participation Rate",
+      "category": "execution",
+      "definition": "Order quantity as share of market volume.",
+      "calculation": "order_quantity/expected_or_realised_market_volume.",
+      "inputs": [
+        "order_quantity",
+        "volume"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "market_impact_estimate",
+      "name": "Market Impact Estimate",
+      "category": "execution",
+      "definition": "Estimated nonlinear impact of order size.",
+      "calculation": "Calibrated impact model using volatility, spread, ADV and participation.",
+      "inputs": [
+        "order_size",
+        "adv",
+        "volatility",
+        "spread"
+      ],
+      "parameters": {
+        "model": "calibrated_nonlinear_impact_model"
+      },
+      "implementation_notes": "Estimate impact from volatility, spread, ADV and participation. Calibrate on historical fills with out-of-sample validation; do not assume a universal coefficient.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "time_of_day_bucket",
+      "name": "Time of Day Bucket",
+      "category": "calendar",
+      "definition": "Categorical intraday session segment.",
+      "calculation": "Exchange-local session minute mapped to predeclared buckets.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "minutes_since_open",
+      "name": "Minutes Since Open",
+      "category": "calendar",
+      "definition": "Elapsed minutes since official session open.",
+      "calculation": "Exchange calendar timestamp minus session open.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "minutes_to_close",
+      "name": "Minutes to Close",
+      "category": "calendar",
+      "definition": "Minutes remaining before official session close.",
+      "calculation": "Official session close minus timestamp.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "is_first_15_minutes",
+      "name": "First 15 Minutes Flag",
+      "category": "calendar",
+      "definition": "Flag for initial 15 session minutes.",
+      "calculation": "minutes_since_open < 15.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "is_last_30_minutes",
+      "name": "Last 30 Minutes Flag",
+      "category": "calendar",
+      "definition": "Flag for final 30 session minutes.",
+      "calculation": "minutes_to_close <= 30.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "weekday",
+      "name": "Weekday",
+      "category": "calendar",
+      "definition": "Exchange-local weekday categorical.",
+      "calculation": "Calendar weekday integer/categorical.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "month",
+      "name": "Month",
+      "category": "calendar",
+      "definition": "Calendar month categorical.",
+      "calculation": "Exchange-local month.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "quarter_end_flag",
+      "name": "Quarter-End Flag",
+      "category": "calendar",
+      "definition": "Flag for final configured sessions of fiscal/calendar quarter.",
+      "calculation": "Use versioned exchange/fiscal calendar.",
+      "inputs": [
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "expiry_week_flag",
+      "name": "Expiry Week Flag",
+      "category": "calendar",
+      "definition": "Flag for derivative expiry week/session.",
+      "calculation": "Join point-in-time exchange expiry calendar.",
+      "inputs": [
+        "timestamp",
+        "expiry_calendar"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "corporate_action_flag",
+      "name": "Corporate Action Flag",
+      "category": "events",
+      "definition": "Flag around splits, dividends, bonus or other corporate actions.",
+      "calculation": "Point-in-time corporate action calendar join.",
+      "inputs": [
+        "timestamp",
+        "corporate_actions"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "earnings_event_flag",
+      "name": "Earnings Event Flag",
+      "category": "events",
+      "definition": "Flag for known earnings event window.",
+      "calculation": "Join point-in-time earnings calendar.",
+      "inputs": [
+        "timestamp",
+        "earnings_calendar"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "macro_event_flag",
+      "name": "Macro Event Flag",
+      "category": "events",
+      "definition": "Flag for scheduled macro releases in selected currency/market.",
+      "calculation": "Join timestamped known event calendar.",
+      "inputs": [
+        "timestamp",
+        "macro_calendar"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "benchmark_return",
+      "name": "Benchmark Return",
+      "category": "cross_asset",
+      "definition": "Return of selected benchmark over same interval.",
+      "calculation": "benchmark_close_t/benchmark_close_t-1-1.",
+      "inputs": [
+        "benchmark_close"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "sector_return",
+      "name": "Sector Return",
+      "category": "cross_asset",
+      "definition": "Sector index return over same interval.",
+      "calculation": "sector_index_t/sector_index_t-1-1.",
+      "inputs": [
+        "sector_index"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "market_return_dispersion",
+      "name": "Market Return Dispersion",
+      "category": "cross_asset",
+      "definition": "Cross-sectional dispersion of constituent returns.",
+      "calculation": "Std or IQR of point-in-time constituent returns.",
+      "inputs": [
+        "universe_returns"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "market_correlation",
+      "name": "Market Correlation",
+      "category": "cross_asset",
+      "definition": "Average pairwise or benchmark correlation in universe.",
+      "calculation": "Rolling mean correlation across selected constituents.",
+      "inputs": [
+        "universe_returns"
+      ],
+      "parameters": {
+        "length": 60
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "breadth_above_20dma",
+      "name": "Breadth Above 20DMA",
+      "category": "breadth",
+      "definition": "Share of constituents above 20-day average.",
+      "calculation": "Count(close>MA20)/eligible constituent count.",
+      "inputs": [
+        "point_in_time_universe_ohlcv"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "breadth_above_50dma",
+      "name": "Breadth Above 50DMA",
+      "category": "breadth",
+      "definition": "Share of constituents above 50-day average.",
+      "calculation": "Count(close>MA50)/eligible count.",
+      "inputs": [
+        "point_in_time_universe_ohlcv"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "breadth_above_200dma",
+      "name": "Breadth Above 200DMA",
+      "category": "breadth",
+      "definition": "Share of constituents above 200-day average.",
+      "calculation": "Count(close>MA200)/eligible count.",
+      "inputs": [
+        "point_in_time_universe_ohlcv"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "new_52w_high_count",
+      "name": "New 52-Week High Count",
+      "category": "breadth",
+      "definition": "Count of constituents at trailing 52-week highs.",
+      "calculation": "Point-in-time count using split-adjusted lookback.",
+      "inputs": [
+        "point_in_time_universe_ohlcv"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "new_52w_low_count",
+      "name": "New 52-Week Low Count",
+      "category": "breadth",
+      "definition": "Count of constituents at trailing 52-week lows.",
+      "calculation": "Point-in-time count using split-adjusted lookback.",
+      "inputs": [
+        "point_in_time_universe_ohlcv"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "sector_strength_rank",
+      "name": "Sector Strength Rank",
+      "category": "cross_sectional",
+      "definition": "Cross-sectional rank of sectors by trailing performance.",
+      "calculation": "Rank sector total returns within point-in-time sector universe.",
+      "inputs": [
+        "sector_returns"
+      ],
+      "parameters": {
+        "lookback": 63
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "stock_strength_rank",
+      "name": "Stock Strength Rank",
+      "category": "cross_sectional",
+      "definition": "Cross-sectional rank of stocks by trailing performance.",
+      "calculation": "Rank adjusted returns within point-in-time eligible stock universe.",
+      "inputs": [
+        "stock_returns"
+      ],
+      "parameters": {
+        "lookback": 126
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "market_cap_bucket",
+      "name": "Market Capitalisation Bucket",
+      "category": "cross_sectional",
+      "definition": "Categorical market-cap bucket.",
+      "calculation": "Point-in-time market cap ranked into defined buckets.",
+      "inputs": [
+        "price",
+        "shares_outstanding"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "free_float_market_cap",
+      "name": "Free Float Market Capitalisation",
+      "category": "cross_sectional",
+      "definition": "Equity market cap adjusted for free float.",
+      "calculation": "Price*free-float shares.",
+      "inputs": [
+        "price",
+        "free_float_shares"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_to_earnings",
+      "name": "Sessions to Earnings",
+      "category": "events",
+      "definition": "Sessions until next known earnings announcement.",
+      "calculation": "Point-in-time calendar session distance.",
+      "inputs": [
+        "timestamp",
+        "earnings_calendar"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_to_expiry",
+      "name": "Sessions to Expiry",
+      "category": "derivatives",
+      "definition": "Sessions remaining to contract expiry.",
+      "calculation": "Expiry session index minus current session index.",
+      "inputs": [
+        "timestamp",
+        "expiry_calendar"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "days_to_dividend",
+      "name": "Days to Ex-Dividend",
+      "category": "events",
+      "definition": "Calendar days until ex-dividend date.",
+      "calculation": "Point-in-time corporate action date difference.",
+      "inputs": [
+        "timestamp",
+        "corporate_actions"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "futures_roll_days",
+      "name": "Days to Futures Roll",
+      "category": "derivatives",
+      "definition": "Sessions until selected futures roll date.",
+      "calculation": "Roll calendar date minus current session.",
+      "inputs": [
+        "timestamp",
+        "contract_calendar"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "basis_percent",
+      "name": "Futures Basis Percent",
+      "category": "derivatives",
+      "definition": "Futures premium/discount relative to spot.",
+      "calculation": "(future-spot)/spot.",
+      "inputs": [
+        "futures_price",
+        "spot_price"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "basis_annualised",
+      "name": "Annualised Futures Basis",
+      "category": "derivatives",
+      "definition": "Futures basis normalised by days to expiry.",
+      "calculation": "basis_pct*365/days_to_expiry or exchange calendar annualisation.",
+      "inputs": [
+        "futures_price",
+        "spot_price",
+        "expiry"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "funding_rate",
+      "name": "Perpetual Funding Rate",
+      "category": "derivatives",
+      "definition": "Current periodic perpetual futures funding.",
+      "calculation": "Use exchange-published funding rate and timestamp.",
+      "inputs": [
+        "funding_rate",
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "open_interest_delta",
+      "name": "Open Interest Delta",
+      "category": "derivatives",
+      "definition": "Change in open contracts.",
+      "calculation": "OI_t-OI_t-1 and percentage change.",
+      "inputs": [
+        "open_interest"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "put_call_oi_ratio",
+      "name": "Put Call OI Ratio",
+      "category": "options",
+      "definition": "Put open interest divided by call open interest.",
+      "calculation": "Aggregate OI across defined expiry/delta universe.",
+      "inputs": [
+        "options_chain"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "iv_skew",
+      "name": "Implied Volatility Skew",
+      "category": "options",
+      "definition": "Difference between put/call IV at matched delta and expiry.",
+      "calculation": "IV_put(delta)-IV_call(delta).",
+      "inputs": [
+        "options_chain"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "iv_term_slope",
+      "name": "IV Term Structure Slope",
+      "category": "options",
+      "definition": "Slope of implied volatility across tenors.",
+      "calculation": "IV_long-tenor-IV_short-tenor.",
+      "inputs": [
+        "options_chain"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "order_book_depth_imbalance",
+      "name": "Order Book Depth Imbalance",
+      "category": "microstructure",
+      "definition": "Relative bid/ask depth imbalance.",
+      "calculation": "(bid_depth-ask_depth)/(bid_depth+ask_depth).",
+      "inputs": [
+        "order_book_snapshots"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "trade_sign_imbalance",
+      "name": "Trade Sign Imbalance",
+      "category": "microstructure",
+      "definition": "Net buyer-initiated versus seller-initiated volume.",
+      "calculation": "(buy_volume-sell_volume)/(buy_volume+sell_volume).",
+      "inputs": [
+        "trades",
+        "quotes"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "cumulative_delta_change",
+      "name": "Cumulative Delta Change",
+      "category": "microstructure",
+      "definition": "Change in cumulative volume delta over window.",
+      "calculation": "Sum buyer-initiated minus seller-initiated volume.",
+      "inputs": [
+        "trades",
+        "quotes"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "queue_imbalance",
+      "name": "Best Quote Queue Imbalance",
+      "category": "microstructure",
+      "definition": "Bid-size versus ask-size imbalance at best quotes.",
+      "calculation": "(bid_size-ask_size)/(bid_size+ask_size).",
+      "inputs": [
+        "best_bid",
+        "best_ask",
+        "bid_size",
+        "ask_size"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "trade_intensity",
+      "name": "Trade Intensity",
+      "category": "microstructure",
+      "definition": "Number of trades per unit time.",
+      "calculation": "Count trades in trailing time bucket / seconds.",
+      "inputs": [
+        "trades",
+        "timestamp"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "order_cancel_rate",
+      "name": "Order Cancellation Rate",
+      "category": "microstructure",
+      "definition": "Cancelled order quantity relative to submitted order quantity.",
+      "calculation": "Cancelled quantity / submitted quantity from order events.",
+      "inputs": [
+        "order_book_events"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "realised_spread",
+      "name": "Realised Spread",
+      "category": "microstructure",
+      "definition": "Execution spread measured against future midpoint.",
+      "calculation": "2*side*(execution price-midpoint after horizon).",
+      "inputs": [
+        "trades",
+        "quotes"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "price_impact_5m",
+      "name": "Five-Minute Price Impact",
+      "category": "microstructure",
+      "definition": "Midpoint movement after signed trade/order event.",
+      "calculation": "side*(mid_t+5m-mid_t) or aggregated event study.",
+      "inputs": [
+        "trades",
+        "quotes"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "fvg_size_atr",
+      "name": "Fair Value Gap Size ATR",
+      "category": "imbalance",
+      "definition": "Gap size normalised by ATR.",
+      "calculation": "(third low-first high)/ATR for bullish FVG or mirrored bearish.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "order_block_size_atr",
+      "name": "Order Block Size ATR",
+      "category": "structure",
+      "definition": "Order block range normalised by ATR.",
+      "calculation": "(zone_high-zone_low)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "swing_prominence_atr",
+      "name": "Swing Prominence ATR",
+      "category": "structure",
+      "definition": "Peak/trough prominence normalised by ATR.",
+      "calculation": "Difference from neighbouring swing level divided by ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "trend_slope_atr",
+      "name": "Trend Slope ATR",
+      "category": "trend",
+      "definition": "Regression slope normalised by ATR.",
+      "calculation": "Rolling linear regression slope / ATR.",
+      "inputs": [
+        "close"
+      ],
+      "parameters": {
+        "length": 30,
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_ema20_atr",
+      "name": "Distance from EMA20 in ATR",
+      "category": "trend",
+      "definition": "Price distance from 20 EMA scaled by ATR.",
+      "calculation": "(close-EMA20)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "ema_length": 20,
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_ema50_atr",
+      "name": "Distance from EMA50 in ATR",
+      "category": "trend",
+      "definition": "Price distance from 50 EMA scaled by ATR.",
+      "calculation": "(close-EMA50)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "ema_length": 50,
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "distance_from_ema200_atr",
+      "name": "Distance from EMA200 in ATR",
+      "category": "trend",
+      "definition": "Price distance from 200 EMA scaled by ATR.",
+      "calculation": "(close-EMA200)/ATR.",
+      "inputs": [
+        "high",
+        "low",
+        "close"
+      ],
+      "parameters": {
+        "ema_length": 200,
+        "atr_length": 14
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "multi_timeframe_trend_score",
+      "name": "Multi-Timeframe Trend Score",
+      "category": "multi_timeframe",
+      "definition": "Aggregate trend direction across multiple completed timeframes.",
+      "calculation": "Encode each timeframe trend state and aggregate with fixed weights.",
+      "inputs": [
+        "ohlcv_multiple_timeframes"
+      ],
+      "parameters": {
+        "timeframes": [
+          "5m",
+          "15m",
+          "1h",
+          "1d"
+        ]
+      },
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "multi_timeframe_momentum_score",
+      "name": "Multi-Timeframe Momentum Score",
+      "category": "multi_timeframe",
+      "definition": "Aggregate normalised momentum across completed timeframes.",
+      "calculation": "Weighted sum of percentile-normalised momentum measures.",
+      "inputs": [
+        "ohlcv_multiple_timeframes"
+      ],
+      "parameters": {},
+      "implementation_notes": "Use point-in-time inputs, document null handling, and normalise carefully across instruments.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "regime_trend_probability",
+      "name": "Trend Regime Probability",
+      "category": "regime",
+      "definition": "Model-derived probability of trend regime.",
+      "calculation": "Fit regime classifier on training-only volatility, slope and efficiency features.",
+      "inputs": [
+        "ohlcv",
+        "training_model_outputs"
+      ],
+      "parameters": {
+        "model": "training_only_regime_classifier"
+      },
+      "implementation_notes": "Model outputs must be fitted and calibrated only on past/training data.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "regime_mean_reversion_probability",
+      "name": "Mean Reversion Regime Probability",
+      "category": "regime",
+      "definition": "Model-derived probability of mean-reverting regime.",
+      "calculation": "Fit regime classifier on training-only range, autocorrelation and volatility features.",
+      "inputs": [
+        "ohlcv",
+        "training_model_outputs"
+      ],
+      "parameters": {
+        "model": "training_only_regime_classifier"
+      },
+      "implementation_notes": "Do not infer probabilities from future labels; use nested temporal validation.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "regime_high_vol_probability",
+      "name": "High Volatility Regime Probability",
+      "category": "regime",
+      "definition": "Model-derived probability of high-volatility state.",
+      "calculation": "Classify based on trailing volatility and point-in-time model.",
+      "inputs": [
+        "ohlcv",
+        "training_model_outputs"
+      ],
+      "parameters": {
+        "model": "training_only_regime_classifier"
+      },
+      "implementation_notes": "Avoid regime-label leakage and use calibrated temporal splits.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    },
+    {
+      "id": "regime_liquidity_stress",
+      "name": "Liquidity Stress Score",
+      "category": "regime",
+      "definition": "Composite score from spread, depth, turnover and volatility.",
+      "calculation": "Weighted/learned combination with versioned scaling and missing-data policy.",
+      "inputs": [
+        "spread",
+        "depth",
+        "volume",
+        "volatility"
+      ],
+      "parameters": {
+        "model": "training_only_composite_or_classifier"
+      },
+      "implementation_notes": "Weights fitted on training data only; monitor market/venue shifts.",
+      "no_lookahead_requirement": "All transformations must use current and past observations only; fitted transforms and universe membership must be point-in-time."
+    }
+  ]
+}

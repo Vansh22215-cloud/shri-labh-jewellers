@@ -342,6 +342,13 @@ def run():
 
     from .idea_factory import top_up
     top_up(min_open=8, n_new=8)            # weekend batch: test up to 8 ideas
+    try:   # refresh the owner's pattern-library implementation audit (library/IMPLEMENTATION_AUDIT.md)
+        from .audit import build as build_audit
+        cnt = build_audit().sum()
+        notes.append(f"Pattern library: {int(cnt.get('implemented', 0))} items built, "
+                     f"{int(cnt.get('not_yet_implemented', 0))} still to build, {int(cnt.get('blocked_by_data', 0))} need paid data")
+    except Exception as e:
+        notes.append(f"pattern-library audit failed: {e}")
     for prop in parse_proposals():
         if prop.get("status") == "proposed":
             notes.append(test_proposal(prop, settings, live, live_res, live_table))

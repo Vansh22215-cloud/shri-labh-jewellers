@@ -6,3 +6,9 @@ from swing.live_scan import run
 
 if __name__ == "__main__":
     print(run(send="--dry" not in sys.argv))
+    try:   # on GitHub: keep the results for the next run (no Claude needed)
+        from swing.ci_save import save
+        print("save:", save("scan"))
+    except Exception as e:
+        print("saving results failed:", e)
+

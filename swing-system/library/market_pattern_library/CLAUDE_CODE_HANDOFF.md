@@ -1,28 +1,52 @@
-# Claude Code handoff: ingest this reference library
+# Claude Code Handoff — Market Research Library v2.0.0
 
-Use this folder as the initial source-of-truth catalogue for the trading research project.
+You are building an autonomous **research and backtesting system**, not an automatic live-trading bot. Start by treating this folder as a catalogue of candidate hypotheses.
 
-## Required behaviour
+## First action
 
-1. Load `manifest.json`, `chart_patterns.json`, `candlestick_patterns.json`, and `indicators.json` without dropping fields.
-2. Preserve each stable `id`, `canonical_code`, category, formula description, detection outline, confirmation rule, invalidation rule and caveat.
-3. Build an internal registry from the JSON records. Do not hard-code a second, divergent catalogue in source files.
-4. For any TA-Lib `canonical_code`, prefer the canonical TA-Lib implementation and verify numerical parity. Do not pretend that a prose description is an exact formula where it says to use a canonical implementation.
-5. For non-standard patterns, turn each heuristic into a deterministic, configurable rule and stamp the exact rule version. Keep variants separate.
-6. Implement detectors as event-time systems: signals are emitted only when all required bars are closed and all pivots are confirmed. Never backdate an event to a pivot that was only knowable later.
-7. Add tests for boundary conditions, missing data, zero-range candles, corporate actions, session gaps, timezone/session resets and warm-up periods.
-8. Before any strategy testing, create a rule audit report showing: catalogue item, implemented/not implemented, code reference, parameters, tests, known limitations and exact formula/variant.
-9. Do not silently skip catalogue entries. Mark each as `implemented`, `not_applicable_to_dataset`, `blocked_by_data`, or `not_yet_implemented` with a reason.
-10. Do not make profitability claims from detector unit tests. Predictive testing belongs to a later, separate backtesting stage with realistic costs and out-of-sample validation.
+Read `README.md`, `manifest.json`, `signal_schema.json` and `research_engine_contract.json`. Load all five item catalogues and `aliases.json`. Validate JSON schemas, duplicate IDs, unresolved aliases, missing required fields and references. Create a machine-readable validation report.
 
-## Important distinctions
+## Catalogue counts
 
-- A pattern detector describes price structure; it is not automatically an entry signal.
-- A confirmation rule is not the same as an entry execution rule.
-- A price target derived from a pattern is a conventional projection, not an expected return guarantee.
-- Higher-timeframe data must be aligned from the last fully closed higher-timeframe candle only.
-- If data is OHLCV-only, do not claim true bid/ask aggressor volume, order-flow delta or footprint accuracy.
+- Chart patterns: 148
+- Candlestick patterns: 130
+- Technical indicators: 324
+- Market structure/liquidity events: 85
+- Quant research features: 104
 
-## First implementation milestone
+## Required architecture
 
-Build a catalogue browser/API and detector registry first. The first milestone is complete only when every record can be loaded, validated, queried by category/id, and reported in the implementation audit. Do not start brute-force strategy combinations until this audit is complete.
+1. `data/`: vendor adapters, point-in-time symbols/universes, OHLCV, corporate actions, derivatives and optional specialist feeds.
+2. `catalogue/`: load JSON records, canonical IDs, aliases, versioning and capability flags (`ohlcv`, `intraday`, `options`, `order_book`, `breadth`).
+3. `indicators/`: deterministic feature implementations with unit tests and reference parity where available.
+4. `detectors/`: event/pattern recognition with `first_knowable_at`; no future pivots or unfinished higher-timeframe candles.
+5. `strategies/`: combinable rules but avoid brute-force unrestricted Cartesian products. Use a predeclared hypothesis search space.
+6. `backtest/`: event-driven execution, realistic fill rules, fees/taxes, spread, slippage, market impact, lot/tick size and exchange sessions.
+7. `validation/`: chronological train/validation/test, nested walk-forward, robustness, multiple-testing accounting and untouched holdout.
+8. `experiments/`: immutable run metadata, code commit, parameters, data versions, all outcomes including failures.
+9. `scheduler/`: daily ingestion, quality checks, feature refresh, evaluation, reports and alerts.
+10. `dashboard/`: net-of-cost leaderboard with trade count, confidence intervals, drawdown, stability and regime breakdowns.
+
+## Prioritise implementation
+
+**Phase A — OHLCV core:** classic chart formations, TA-Lib candlestick recognisers, common moving averages, RSI/MACD/ADX/ATR/Bollinger/Donchian, volume and basic volatility.
+
+**Phase B — structure:** confirmed pivots, HH/HL/LH/LL, BOS/CHoCH, range breaks, gap/FVG, liquidity sweeps and session references. All need point-in-time confirmation.
+
+**Phase C — quantitative context:** returns, normalisation, volatility regimes, relative strength, breadth and cross-asset features.
+
+**Phase D — specialist feeds:** options IV/Greeks/skew, volume profile/TPO, order book, signed trades, futures basis/open interest and auction imbalances. Do not fake these from OHLCV.
+
+## Acceptance tests
+
+- Every detector output has canonical ID, rule version, parameters, instrument, timeframe, event timestamp, first-knowable timestamp and data version.
+- No signals use unfinished bars, future data, survivorship-biased universes or retrospective anchors.
+- Indicator output matches a documented implementation on test vectors; warm-up and missing-value rules are tested.
+- Backtest fills occur after the signal could be known and respect trading hours, liquidity and execution costs.
+- Final holdout is untouched by model/parameter selection.
+- Every experiment is saved; failed experiments are not deleted.
+- Leaderboard ranks net-of-cost out-of-sample robustness, not in-sample win rate alone.
+
+## Important
+
+Do not claim this is literally every pattern ever published. Names and definitions differ by school/platform. Ask the owner before introducing a new definition that conflicts with an existing ID. Keep variants separately versioned. Never recommend live trades or enable brokerage execution until paper-trading, operational risk and explicit approval requirements are met.

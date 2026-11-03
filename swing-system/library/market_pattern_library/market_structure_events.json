@@ -1,0 +1,2203 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Market structure, liquidity, auction and execution-context event catalogue. Most concepts require configurable pivot, range and volume definitions.",
+  "items": [
+    {
+      "id": "higher_high",
+      "name": "Higher High (HH)",
+      "category": "swing_structure",
+      "typical_bias": "bullish",
+      "definition": "Confirmed swing high exceeds prior confirmed swing high.",
+      "detection_outline": "Compare chronologically confirmed pivot highs.",
+      "confirmation_rule": "Close/acceptance above prior swing high.",
+      "invalidation_rule": "Invalidated by later structure reclassification only under explicit rule.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "higher_low",
+      "name": "Higher Low (HL)",
+      "category": "swing_structure",
+      "typical_bias": "bullish",
+      "definition": "Confirmed swing low exceeds prior confirmed swing low.",
+      "detection_outline": "Compare confirmed pivot lows.",
+      "confirmation_rule": "Subsequent bullish continuation or hold above prior low.",
+      "invalidation_rule": "Break below the defining higher low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "lower_high",
+      "name": "Lower High (LH)",
+      "category": "swing_structure",
+      "typical_bias": "bearish",
+      "definition": "Confirmed swing high is below prior confirmed swing high.",
+      "detection_outline": "Compare confirmed pivot highs.",
+      "confirmation_rule": "Subsequent bearish continuation.",
+      "invalidation_rule": "Break above defining lower high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "lower_low",
+      "name": "Lower Low (LL)",
+      "category": "swing_structure",
+      "typical_bias": "bearish",
+      "definition": "Confirmed swing low is below prior confirmed swing low.",
+      "detection_outline": "Compare confirmed pivot lows.",
+      "confirmation_rule": "Close/acceptance below prior swing low.",
+      "invalidation_rule": "Break above defining lower high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "break_of_structure_bullish",
+      "name": "Bullish Break of Structure (BOS)",
+      "category": "structure_break",
+      "typical_bias": "bullish",
+      "definition": "Price breaks a prior meaningful swing high in an established bullish structure.",
+      "detection_outline": "Choose major/minor swing algorithm; detect close above level plus buffer.",
+      "confirmation_rule": "Hold/retest or follow-through.",
+      "invalidation_rule": "Close back below broken level / swing structure failure.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "break_of_structure_bearish",
+      "name": "Bearish Break of Structure (BOS)",
+      "category": "structure_break",
+      "typical_bias": "bearish",
+      "definition": "Price breaks a prior meaningful swing low in bearish structure.",
+      "detection_outline": "Detect close below confirmed swing low plus buffer.",
+      "confirmation_rule": "Hold below / failed retest.",
+      "invalidation_rule": "Close back above broken level.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "change_of_character_bullish",
+      "name": "Bullish Change of Character (CHoCH)",
+      "category": "structure_shift",
+      "typical_bias": "bullish",
+      "definition": "First meaningful break against preceding bearish swing sequence.",
+      "detection_outline": "Track LL/LH sequence; break above last lower high.",
+      "confirmation_rule": "New higher low and higher high.",
+      "invalidation_rule": "New lower low before bullish sequence established.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "change_of_character_bearish",
+      "name": "Bearish Change of Character (CHoCH)",
+      "category": "structure_shift",
+      "typical_bias": "bearish",
+      "definition": "First meaningful break against preceding bullish swing sequence.",
+      "detection_outline": "Track HH/HL sequence; break below last higher low.",
+      "confirmation_rule": "New lower high and lower low.",
+      "invalidation_rule": "New higher high before bearish sequence established.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "market_structure_shift_bullish",
+      "name": "Bullish Market Structure Shift (MSS)",
+      "category": "structure_shift",
+      "typical_bias": "bullish",
+      "definition": "Displacement breaks a key internal/external high after sell-side liquidity event.",
+      "detection_outline": "Require sweep/event plus displacement close through confirmed structure level.",
+      "confirmation_rule": "Retest/continuation above broken level.",
+      "invalidation_rule": "Return below displacement origin or swept low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "market_structure_shift_bearish",
+      "name": "Bearish Market Structure Shift (MSS)",
+      "category": "structure_shift",
+      "typical_bias": "bearish",
+      "definition": "Displacement breaks a key low after buy-side liquidity event.",
+      "detection_outline": "Require buy-side sweep plus displacement close through structure low.",
+      "confirmation_rule": "Retest/continuation lower.",
+      "invalidation_rule": "Return above displacement origin or swept high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "internal_structure_break",
+      "name": "Internal Structure Break",
+      "category": "structure_break",
+      "typical_bias": "neutral",
+      "definition": "Break of a minor swing within larger external range.",
+      "detection_outline": "Maintain separate internal swing hierarchy and detect level break.",
+      "confirmation_rule": "Contextual only; combine with external trend.",
+      "invalidation_rule": "Reversal through break origin.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "external_structure_break",
+      "name": "External Structure Break",
+      "category": "structure_break",
+      "typical_bias": "neutral",
+      "definition": "Break of a major swing that defines higher-level market structure.",
+      "detection_outline": "Use higher prominence/scale pivots and close beyond boundary.",
+      "confirmation_rule": "Retest and acceptance.",
+      "invalidation_rule": "Return into prior external range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "equal_highs_liquidity_pool",
+      "name": "Equal Highs Liquidity Pool",
+      "category": "liquidity_pool",
+      "typical_bias": "neutral",
+      "definition": "Cluster of highs within configurable price tolerance.",
+      "detection_outline": "Cluster confirmed swing highs by ATR/percent tolerance and spacing.",
+      "confirmation_rule": "Sweep/reclaim or acceptance above pool.",
+      "invalidation_rule": "Pool dissipates after accepted breakout.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "equal_lows_liquidity_pool",
+      "name": "Equal Lows Liquidity Pool",
+      "category": "liquidity_pool",
+      "typical_bias": "neutral",
+      "definition": "Cluster of lows within configurable price tolerance.",
+      "detection_outline": "Cluster confirmed swing lows.",
+      "confirmation_rule": "Sweep/reclaim or acceptance below pool.",
+      "invalidation_rule": "Pool dissipates after accepted breakdown.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "buy_side_liquidity_sweep",
+      "name": "Buy-Side Liquidity Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "bearish",
+      "definition": "Price trades above highs/liquidity pool then rejects back below.",
+      "detection_outline": "Detect high above confirmed liquidity pool, close back below within N bars.",
+      "confirmation_rule": "Bearish internal structure shift/displacement.",
+      "invalidation_rule": "Acceptance above swept pool.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "sell_side_liquidity_sweep",
+      "name": "Sell-Side Liquidity Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "bullish",
+      "definition": "Price trades below lows/liquidity pool then reclaims above.",
+      "detection_outline": "Detect low below confirmed pool and close back above.",
+      "confirmation_rule": "Bullish internal structure shift.",
+      "invalidation_rule": "Acceptance below swept pool.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "internal_liquidity_sweep",
+      "name": "Internal Liquidity Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "neutral",
+      "definition": "Sweep of a minor swing within the external dealing range.",
+      "detection_outline": "Apply sweep test to internal pivots only.",
+      "confirmation_rule": "Use as context for entry timing.",
+      "invalidation_rule": "Acceptance beyond swept point.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "external_liquidity_sweep",
+      "name": "External Liquidity Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "neutral",
+      "definition": "Sweep of major external high/low or prior day/week extreme.",
+      "detection_outline": "Detect trade beyond confirmed HTF level then rejection.",
+      "confirmation_rule": "Structure shift away from swept liquidity.",
+      "invalidation_rule": "Acceptance beyond external extreme.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "fair_value_gap_bullish",
+      "name": "Bullish Fair Value Gap (FVG)",
+      "category": "imbalance",
+      "typical_bias": "bullish",
+      "definition": "Three-candle gap between first candle high and third candle low.",
+      "detection_outline": "For bars t-2,t: low[t] > high[t-2], optionally require displacement body.",
+      "confirmation_rule": "Price retraces into gap and rejects or continues above.",
+      "invalidation_rule": "Full mitigation/close below gap lower bound per chosen rule.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "fair_value_gap_bearish",
+      "name": "Bearish Fair Value Gap (FVG)",
+      "category": "imbalance",
+      "typical_bias": "bearish",
+      "definition": "Three-candle gap between first candle low and third candle high.",
+      "detection_outline": "high[t] < low[t-2], optionally displacement body.",
+      "confirmation_rule": "Retrace into gap and reject lower.",
+      "invalidation_rule": "Full mitigation/close above gap upper bound.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "inverse_fair_value_gap_bullish",
+      "name": "Bullish Inverse FVG (IFVG)",
+      "category": "imbalance",
+      "typical_bias": "bullish",
+      "definition": "Prior bearish gap is traded through and later acts as support.",
+      "detection_outline": "Track bearish FVG; require close through upper edge then retest from above.",
+      "confirmation_rule": "Hold and bullish structure confirmation.",
+      "invalidation_rule": "Acceptance back below zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "inverse_fair_value_gap_bearish",
+      "name": "Bearish Inverse FVG (IFVG)",
+      "category": "imbalance",
+      "typical_bias": "bearish",
+      "definition": "Prior bullish gap is traded through and later acts as resistance.",
+      "detection_outline": "Track bullish FVG; require close through lower edge then retest from below.",
+      "confirmation_rule": "Reject and bearish structure confirmation.",
+      "invalidation_rule": "Acceptance above zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "volume_imbalance_bullish",
+      "name": "Bullish Volume Imbalance",
+      "category": "imbalance",
+      "typical_bias": "bullish",
+      "definition": "Adjacent candles show a gap between body edges under selected body-only convention.",
+      "detection_outline": "Compare prior close/open body edge to next open/close using explicit definition.",
+      "confirmation_rule": "Revisit/reaction only; not a universal gap.",
+      "invalidation_rule": "Full trade-through / acceptance.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "volume_imbalance_bearish",
+      "name": "Bearish Volume Imbalance",
+      "category": "imbalance",
+      "typical_bias": "bearish",
+      "definition": "Adjacent candles show bearish body-edge imbalance.",
+      "detection_outline": "Use explicit body-only gap definition.",
+      "confirmation_rule": "Revisit/rejection.",
+      "invalidation_rule": "Full trade-through.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "order_block_bullish",
+      "name": "Bullish Order Block (heuristic)",
+      "category": "order_block",
+      "typical_bias": "bullish",
+      "definition": "Last bearish candle or down-close cluster before bullish displacement and structure break.",
+      "detection_outline": "Find bearish candle before displacement; define zone by full range or body; require BOS.",
+      "confirmation_rule": "Retest zone with reaction and structure confirmation.",
+      "invalidation_rule": "Close below zone low or origin swing.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "order_block_bearish",
+      "name": "Bearish Order Block (heuristic)",
+      "category": "order_block",
+      "typical_bias": "bearish",
+      "definition": "Last bullish candle or up-close cluster before bearish displacement and structure break.",
+      "detection_outline": "Find bullish candle before bearish displacement; require BOS.",
+      "confirmation_rule": "Retest and rejection.",
+      "invalidation_rule": "Close above zone high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "breaker_block_bullish",
+      "name": "Bullish Breaker Block",
+      "category": "order_block",
+      "typical_bias": "bullish",
+      "definition": "Failed bearish order block flips to support after upside break.",
+      "detection_outline": "Track bearish OB invalidation by bullish displacement; retain zone.",
+      "confirmation_rule": "Retest from above.",
+      "invalidation_rule": "Acceptance below breaker zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "breaker_block_bearish",
+      "name": "Bearish Breaker Block",
+      "category": "order_block",
+      "typical_bias": "bearish",
+      "definition": "Failed bullish order block flips to resistance after downside break.",
+      "detection_outline": "Track bullish OB invalidation by bearish displacement.",
+      "confirmation_rule": "Retest from below.",
+      "invalidation_rule": "Acceptance above breaker zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "mitigation_block_bullish",
+      "name": "Bullish Mitigation Block",
+      "category": "order_block",
+      "typical_bias": "bullish",
+      "definition": "Zone revisited after an opposing position is unwound under chosen methodology.",
+      "detection_outline": "Use explicit swing/OB sequence definition; do not infer participant intent.",
+      "confirmation_rule": "Reaction and subsequent structure confirmation.",
+      "invalidation_rule": "Zone break.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "mitigation_block_bearish",
+      "name": "Bearish Mitigation Block",
+      "category": "order_block",
+      "typical_bias": "bearish",
+      "definition": "Bearish counterpart of mitigation block.",
+      "detection_outline": "Use explicit sequence and zone rules.",
+      "confirmation_rule": "Rejection and bearish structure confirmation.",
+      "invalidation_rule": "Zone break.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "rejection_block_bullish",
+      "name": "Bullish Rejection Block",
+      "category": "order_block",
+      "typical_bias": "bullish",
+      "definition": "Swing-low wick rejection zone followed by meaningful bullish displacement.",
+      "detection_outline": "Define wick/body zone and require later structure break.",
+      "confirmation_rule": "Retest holds zone.",
+      "invalidation_rule": "Close below rejection low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "rejection_block_bearish",
+      "name": "Bearish Rejection Block",
+      "category": "order_block",
+      "typical_bias": "bearish",
+      "definition": "Swing-high wick rejection zone followed by meaningful bearish displacement.",
+      "detection_outline": "Define wick/body zone and require structure break.",
+      "confirmation_rule": "Retest rejects zone.",
+      "invalidation_rule": "Close above rejection high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "premium_zone",
+      "name": "Premium Zone",
+      "category": "dealing_range",
+      "typical_bias": "bearish",
+      "definition": "Price above midpoint of selected dealing range.",
+      "detection_outline": "Select confirmed dealing-range high/low; premium if price > 50% equilibrium.",
+      "confirmation_rule": "Context only; require bearish trigger.",
+      "invalidation_rule": "Range redefinition or price below midpoint.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "discount_zone",
+      "name": "Discount Zone",
+      "category": "dealing_range",
+      "typical_bias": "bullish",
+      "definition": "Price below midpoint of selected dealing range.",
+      "detection_outline": "Use confirmed dealing range; discount if price < 50% equilibrium.",
+      "confirmation_rule": "Context only; require bullish trigger.",
+      "invalidation_rule": "Range redefinition or price above midpoint.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "equilibrium_level",
+      "name": "Equilibrium (50%)",
+      "category": "dealing_range",
+      "typical_bias": "neutral",
+      "definition": "Midpoint of selected dealing range.",
+      "detection_outline": "(range_high+range_low)/2 from point-in-time anchors.",
+      "confirmation_rule": "Contextual balance reference.",
+      "invalidation_rule": "Anchors change only when rule permits.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "optimal_trade_entry_zone",
+      "name": "Optimal Trade Entry (OTE) Zone",
+      "category": "fibonacci_zone",
+      "typical_bias": "neutral",
+      "definition": "Retracement region commonly defined around 62%-79% of a selected impulse leg.",
+      "detection_outline": "Use confirmed impulse endpoints and exact ratio convention.",
+      "confirmation_rule": "Need structure shift / candle confirmation within zone.",
+      "invalidation_rule": "Impulse origin breach.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "consequent_encroachment",
+      "name": "Consequent Encroachment (CE)",
+      "category": "imbalance",
+      "typical_bias": "neutral",
+      "definition": "Midpoint of a gap/imbalance zone.",
+      "detection_outline": "Calculate midpoint of defined FVG/imbalance.",
+      "confirmation_rule": "Observe midpoint reaction during mitigation.",
+      "invalidation_rule": "Zone full mitigation or invalidation.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "breaker_retest",
+      "name": "Breaker Retest",
+      "category": "order_block",
+      "typical_bias": "neutral",
+      "definition": "Price retests a flipped failed block from the other side.",
+      "detection_outline": "Track block break then touch within tolerance.",
+      "confirmation_rule": "Rejection/hold and structure confirmation.",
+      "invalidation_rule": "Close through zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "liquidity_void",
+      "name": "Liquidity Void",
+      "category": "imbalance",
+      "typical_bias": "neutral",
+      "definition": "Fast one-directional move with little two-sided trading/overlap.",
+      "detection_outline": "Measure consecutive displacement bars, low overlap and volume/profile sparsity.",
+      "confirmation_rule": "Watch partial retrace or continuation.",
+      "invalidation_rule": "Trade through void / opposing acceptance.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "displacement_bullish",
+      "name": "Bullish Displacement",
+      "category": "displacement",
+      "typical_bias": "bullish",
+      "definition": "Unusually large bullish body/range relative to recent volatility.",
+      "detection_outline": "Body and true range exceed rolling percentile/ATR threshold; close near high.",
+      "confirmation_rule": "Break of structure or continuation.",
+      "invalidation_rule": "Retrace through displacement origin.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "displacement_bearish",
+      "name": "Bearish Displacement",
+      "category": "displacement",
+      "typical_bias": "bearish",
+      "definition": "Unusually large bearish body/range relative to recent volatility.",
+      "detection_outline": "Body/range above threshold and close near low.",
+      "confirmation_rule": "Break of structure or continuation.",
+      "invalidation_rule": "Retrace through origin.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "consolidation_range",
+      "name": "Consolidation / Dealing Range",
+      "category": "range_structure",
+      "typical_bias": "neutral",
+      "definition": "Price rotates between measurable support and resistance zones.",
+      "detection_outline": "Cluster confirmed pivots and bound range duration/depth.",
+      "confirmation_rule": "Wait for acceptance outside or fade edges after rejection.",
+      "invalidation_rule": "Accepted breakout/structural shift.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "range_acceptance_above",
+      "name": "Acceptance Above Range",
+      "category": "auction_event",
+      "typical_bias": "bullish",
+      "definition": "Price spends defined time/volume above former range resistance.",
+      "detection_outline": "Require N closes or fraction of volume above upper bound.",
+      "confirmation_rule": "Retest holds or value migrates upward.",
+      "invalidation_rule": "Return and acceptance inside range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "range_acceptance_below",
+      "name": "Acceptance Below Range",
+      "category": "auction_event",
+      "typical_bias": "bearish",
+      "definition": "Price spends defined time/volume below former range support.",
+      "detection_outline": "Require N closes or volume below lower bound.",
+      "confirmation_rule": "Retest fails from below.",
+      "invalidation_rule": "Return and acceptance inside range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "range_rejection_above",
+      "name": "Rejection Above Range",
+      "category": "auction_event",
+      "typical_bias": "bearish",
+      "definition": "Probe above range fails and price closes/accepts back inside.",
+      "detection_outline": "Detect excursion above range then return and failed retest.",
+      "confirmation_rule": "Bearish follow-through toward range interior.",
+      "invalidation_rule": "Accepted trade above range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "range_rejection_below",
+      "name": "Rejection Below Range",
+      "category": "auction_event",
+      "typical_bias": "bullish",
+      "definition": "Probe below range fails and price reclaims range.",
+      "detection_outline": "Detect excursion below lower bound and close back inside.",
+      "confirmation_rule": "Bullish follow-through toward range interior.",
+      "invalidation_rule": "Accepted trade below range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "vwap_reclaim",
+      "name": "VWAP Reclaim",
+      "category": "intraday_reference",
+      "typical_bias": "bullish",
+      "definition": "Price recovers session VWAP after trading below it.",
+      "detection_outline": "Compute session VWAP and detect close/cross above from below.",
+      "confirmation_rule": "Hold/retest VWAP with positive structure.",
+      "invalidation_rule": "Lose VWAP and accept below.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "vwap_rejection",
+      "name": "VWAP Rejection",
+      "category": "intraday_reference",
+      "typical_bias": "bearish",
+      "definition": "Price tests session VWAP from below and fails.",
+      "detection_outline": "Detect approach/touch and bearish close back below.",
+      "confirmation_rule": "Lower low / continued rejection.",
+      "invalidation_rule": "Acceptance above VWAP.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "prior_day_high_sweep",
+      "name": "Prior Day High Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "bearish",
+      "definition": "Current session trades above prior day high then rejects.",
+      "detection_outline": "Use correct exchange session and adjusted data; detect high beyond PDH then close below.",
+      "confirmation_rule": "Bearish internal structure break.",
+      "invalidation_rule": "Acceptance above PDH.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "prior_day_low_sweep",
+      "name": "Prior Day Low Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "bullish",
+      "definition": "Current session trades below prior day low then reclaims.",
+      "detection_outline": "Detect low below PDL and close above.",
+      "confirmation_rule": "Bullish structure break.",
+      "invalidation_rule": "Acceptance below PDL.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "prior_week_high_sweep",
+      "name": "Prior Week High Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "bearish",
+      "definition": "Price sweeps prior completed week high.",
+      "detection_outline": "Use completed weekly bar only; detect excursion/reclaim.",
+      "confirmation_rule": "Bearish shift.",
+      "invalidation_rule": "Acceptance above PWH.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "prior_week_low_sweep",
+      "name": "Prior Week Low Sweep",
+      "category": "liquidity_sweep",
+      "typical_bias": "bullish",
+      "definition": "Price sweeps prior completed week low.",
+      "detection_outline": "Use completed weekly bar only.",
+      "confirmation_rule": "Bullish shift.",
+      "invalidation_rule": "Acceptance below PWL.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "opening_range_high_sweep",
+      "name": "Opening Range High Sweep",
+      "category": "intraday_liquidity",
+      "typical_bias": "bearish",
+      "definition": "Opening range high is exceeded then reclaimed lower.",
+      "detection_outline": "Build completed opening range; detect false breakout.",
+      "confirmation_rule": "Move below opening range midpoint/low.",
+      "invalidation_rule": "Acceptance above OR high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "opening_range_low_sweep",
+      "name": "Opening Range Low Sweep",
+      "category": "intraday_liquidity",
+      "typical_bias": "bullish",
+      "definition": "Opening range low is breached then reclaimed.",
+      "detection_outline": "Build completed opening range; detect false breakdown.",
+      "confirmation_rule": "Move above midpoint/high.",
+      "invalidation_rule": "Acceptance below OR low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "trend_day_up",
+      "name": "Up Trend Day",
+      "category": "session_regime",
+      "typical_bias": "bullish",
+      "definition": "Session develops directional upward auction with shallow pullbacks and higher value.",
+      "detection_outline": "Session range progression, VWAP position, close location and profile migration.",
+      "confirmation_rule": "Use intraday pullback continuation; not known at open.",
+      "invalidation_rule": "VWAP loss / structure breakdown.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "trend_day_down",
+      "name": "Down Trend Day",
+      "category": "session_regime",
+      "typical_bias": "bearish",
+      "definition": "Session develops directional downward auction with shallow rallies.",
+      "detection_outline": "Mirror up trend day measurements.",
+      "confirmation_rule": "Pullback continuation.",
+      "invalidation_rule": "VWAP reclaim / structure break.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "neutral_day",
+      "name": "Neutral Day",
+      "category": "session_regime",
+      "typical_bias": "neutral",
+      "definition": "Session rotates around value with two-sided trade and limited directional extension.",
+      "detection_outline": "Measure range, VWAP crossings, value-area overlap and close location.",
+      "confirmation_rule": "Range-edge fades only after rejection.",
+      "invalidation_rule": "Acceptance outside session range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "double_distribution_day",
+      "name": "Double Distribution Day",
+      "category": "session_regime",
+      "typical_bias": "neutral",
+      "definition": "Two volume/TPO distributions separated by low-volume region.",
+      "detection_outline": "Build profile and detect two peaks with valley threshold.",
+      "confirmation_rule": "Breakout/acceptance from one distribution to the other.",
+      "invalidation_rule": "Return through separating LVN.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "poor_high",
+      "name": "Poor High",
+      "category": "auction_reference",
+      "typical_bias": "bearish",
+      "definition": "Profile high has multiple TPOs/trades at extreme rather than a single excess tail.",
+      "detection_outline": "Detect terminal price level with excess criterion not satisfied.",
+      "confirmation_rule": "Potential revisit; not standalone short.",
+      "invalidation_rule": "Clean excess develops / acceptance higher.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "poor_low",
+      "name": "Poor Low",
+      "category": "auction_reference",
+      "typical_bias": "bullish",
+      "definition": "Profile low lacks single-print/excess tail under selected TPO rules.",
+      "detection_outline": "Detect terminal price level with inadequate excess.",
+      "confirmation_rule": "Potential revisit; not standalone long.",
+      "invalidation_rule": "Clean excess develops / acceptance lower.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "single_print_zone",
+      "name": "Single Prints",
+      "category": "auction_reference",
+      "typical_bias": "neutral",
+      "definition": "One TPO print at price levels during directional auction.",
+      "detection_outline": "Build TPO profile; detect contiguous single-print price bins.",
+      "confirmation_rule": "Potential support/resistance on revisit.",
+      "invalidation_rule": "Acceptance fully through zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "excess_high",
+      "name": "Excess High",
+      "category": "auction_reference",
+      "typical_bias": "bearish",
+      "definition": "Clear rejection tail at profile high.",
+      "detection_outline": "Use TPO/volume profile tail length and terminal print count.",
+      "confirmation_rule": "Rejection from high / mean reversion.",
+      "invalidation_rule": "Acceptance above excess high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "excess_low",
+      "name": "Excess Low",
+      "category": "auction_reference",
+      "typical_bias": "bullish",
+      "definition": "Clear rejection tail at profile low.",
+      "detection_outline": "Use terminal tail/excess criteria.",
+      "confirmation_rule": "Rejection from low.",
+      "invalidation_rule": "Acceptance below excess low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "value_area_migration_up",
+      "name": "Value Area Migration Up",
+      "category": "auction_event",
+      "typical_bias": "bullish",
+      "definition": "Value area and POC shift higher across sessions.",
+      "detection_outline": "Compare session VAH/VAL/POC using consistent profiles.",
+      "confirmation_rule": "Continuation context when price holds migrated value.",
+      "invalidation_rule": "Value migrates back down.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "value_area_migration_down",
+      "name": "Value Area Migration Down",
+      "category": "auction_event",
+      "typical_bias": "bearish",
+      "definition": "Value area and POC shift lower across sessions.",
+      "detection_outline": "Compare profiles across completed sessions.",
+      "confirmation_rule": "Continuation context lower.",
+      "invalidation_rule": "Value migrates back up.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "anchored_vwap_reclaim",
+      "name": "Anchored VWAP Reclaim",
+      "category": "intraday_reference",
+      "typical_bias": "bullish",
+      "definition": "Price recovers an anchored VWAP from an event/swing.",
+      "detection_outline": "Use anchor known at time, compute VWAP then detect cross/reclaim.",
+      "confirmation_rule": "Hold/retest plus structure.",
+      "invalidation_rule": "Acceptance below AVWAP.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "anchored_vwap_rejection",
+      "name": "Anchored VWAP Rejection",
+      "category": "intraday_reference",
+      "typical_bias": "bearish",
+      "definition": "Price rejects anchored VWAP from below.",
+      "detection_outline": "Detect approach and close back below anchored VWAP.",
+      "confirmation_rule": "Bearish follow-through.",
+      "invalidation_rule": "Acceptance above AVWAP.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "parabolic_run",
+      "name": "Parabolic Run",
+      "category": "trend_exhaustion",
+      "typical_bias": "neutral",
+      "definition": "Price acceleration becomes convex with increasing rate of change.",
+      "detection_outline": "Fit log-price slope/curvature and compare to historical thresholds.",
+      "confirmation_rule": "Only after exhaustion/reversal trigger.",
+      "invalidation_rule": "Continuation with no curvature break.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "climax_volume_spike",
+      "name": "Climax Volume Spike",
+      "category": "volume_event",
+      "typical_bias": "neutral",
+      "definition": "Volume is an extreme outlier relative to recent distribution.",
+      "detection_outline": "Rolling robust z-score/percentile of volume, session-time adjusted.",
+      "confirmation_rule": "Interpret with price spread and close location.",
+      "invalidation_rule": "No standalone direction.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "absorption_bid",
+      "name": "Bid-Side Absorption (trade-level)",
+      "category": "order_flow_event",
+      "typical_bias": "bullish",
+      "definition": "Large aggressive selling is met by replenishing bids with limited downward progress.",
+      "detection_outline": "Use signed trade flow and order-book replenishment at bid; OHLCV cannot verify.",
+      "confirmation_rule": "Subsequent upward displacement/structure break.",
+      "invalidation_rule": "Bid support depleted and price accepts lower.",
+      "required_inputs": [
+        "timestamp",
+        "trades",
+        "order_book_events"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "absorption_ask",
+      "name": "Ask-Side Absorption (trade-level)",
+      "category": "order_flow_event",
+      "typical_bias": "bearish",
+      "definition": "Large aggressive buying is met by replenishing offers with limited upward progress.",
+      "detection_outline": "Use signed trade flow and ask replenishment; require event data.",
+      "confirmation_rule": "Subsequent downward displacement.",
+      "invalidation_rule": "Ask liquidity consumed and price accepts higher.",
+      "required_inputs": [
+        "timestamp",
+        "trades",
+        "order_book_events"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "iceberg_order_inference",
+      "name": "Iceberg Order Inference",
+      "category": "order_flow_event",
+      "typical_bias": "neutral",
+      "definition": "Repeated executions at a price with displayed depth replenishment.",
+      "detection_outline": "Detect replenishment patterns from order-level data; label as inference only.",
+      "confirmation_rule": "Use only as contextual feature.",
+      "invalidation_rule": "Pattern ceases or price trades through level.",
+      "required_inputs": [
+        "timestamp",
+        "order_book_events",
+        "trades"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "stop_run_inference",
+      "name": "Stop Run Inference",
+      "category": "liquidity_sweep",
+      "typical_bias": "neutral",
+      "definition": "Rapid move through clustered stops/liquidity followed by continuation or reversal.",
+      "detection_outline": "Proxy via level sweep, range expansion and order-flow spike; true stop orders are not visible.",
+      "confirmation_rule": "Classify only after post-sweep acceptance/rejection.",
+      "invalidation_rule": "Depends on selected continuation/reversal thesis.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "squeeze_release",
+      "name": "Volatility Squeeze Release",
+      "category": "volatility_regime",
+      "typical_bias": "neutral",
+      "definition": "Low volatility compression transitions into rapid expansion.",
+      "detection_outline": "Band/ATR percentile low then range/volume expansion above threshold.",
+      "confirmation_rule": "Break direction confirmed by close and follow-through.",
+      "invalidation_rule": "Return to compression range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "atr_trailing_stop_flip",
+      "name": "ATR Trailing Stop Flip",
+      "category": "trend_state",
+      "typical_bias": "neutral",
+      "definition": "Price crosses a volatility-adjusted trailing stop state.",
+      "detection_outline": "Use explicit ATR multiplier and direction update algorithm.",
+      "confirmation_rule": "Confirm on completed bar.",
+      "invalidation_rule": "Flip back across trailing stop.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "parabolic_sar_flip",
+      "name": "Parabolic SAR State Flip",
+      "category": "trend_state",
+      "typical_bias": "neutral",
+      "definition": "Price crosses Parabolic SAR, changing its trend state.",
+      "detection_outline": "Compute SAR using specified acceleration parameters.",
+      "confirmation_rule": "Close beyond SAR and context.",
+      "invalidation_rule": "Subsequent reverse flip.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "weekly_open_reclaim",
+      "name": "Weekly Open Reclaim",
+      "category": "higher_timeframe_reference",
+      "typical_bias": "bullish",
+      "definition": "Price reclaims current week open after trading below.",
+      "detection_outline": "Use week boundary per exchange calendar; compare close to weekly open.",
+      "confirmation_rule": "Hold above weekly open.",
+      "invalidation_rule": "Acceptance back below.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "weekly_open_rejection",
+      "name": "Weekly Open Rejection",
+      "category": "higher_timeframe_reference",
+      "typical_bias": "bearish",
+      "definition": "Price tests current week open from below and rejects.",
+      "detection_outline": "Use active week open and detect failed reclaim.",
+      "confirmation_rule": "Move away lower.",
+      "invalidation_rule": "Acceptance above weekly open.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "monthly_open_reclaim",
+      "name": "Monthly Open Reclaim",
+      "category": "higher_timeframe_reference",
+      "typical_bias": "bullish",
+      "definition": "Price recovers month open after trading below.",
+      "detection_outline": "Use calendar/exchange monthly session and active month open.",
+      "confirmation_rule": "Hold above monthly open.",
+      "invalidation_rule": "Acceptance below.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "monthly_open_rejection",
+      "name": "Monthly Open Rejection",
+      "category": "higher_timeframe_reference",
+      "typical_bias": "bearish",
+      "definition": "Price rejects month open from below.",
+      "detection_outline": "Detect failed reclaim at active month open.",
+      "confirmation_rule": "Move away lower.",
+      "invalidation_rule": "Acceptance above.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "multi_timeframe_alignment",
+      "name": "Multi-Timeframe Alignment",
+      "category": "multi_timeframe_context",
+      "typical_bias": "neutral",
+      "definition": "Trend/structure features agree across selected timeframes.",
+      "detection_outline": "Compute same feature family on fully closed bars for each timeframe; aggregate agreement score.",
+      "confirmation_rule": "Use lower timeframe trigger only when higher bars are closed.",
+      "invalidation_rule": "Higher timeframe regime flips.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "multi_timeframe_conflict",
+      "name": "Multi-Timeframe Conflict",
+      "category": "multi_timeframe_context",
+      "typical_bias": "neutral",
+      "definition": "Higher and lower timeframe structure/indicators disagree.",
+      "detection_outline": "Compare defined regime states across timeframes.",
+      "confirmation_rule": "Treat as filter/position-size context, not directional signal.",
+      "invalidation_rule": "Timeframe states align again.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "session_open_drive",
+      "name": "Session Open Drive",
+      "category": "intraday_auction",
+      "typical_bias": "neutral",
+      "definition": "Strong initial directional auction from session open.",
+      "detection_outline": "Measure initial 5-30 minute return, volume, range and VWAP relation.",
+      "confirmation_rule": "Continuation if opening extreme holds.",
+      "invalidation_rule": "Return through open/initial range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "lunch_session_compression",
+      "name": "Midday Session Compression",
+      "category": "intraday_regime",
+      "typical_bias": "neutral",
+      "definition": "Intraday range and volume contract during defined midday period.",
+      "detection_outline": "Exchange-local time bucket with historical seasonality adjustment.",
+      "confirmation_rule": "Breakout only after liquidity/volume returns.",
+      "invalidation_rule": "Compression ends without directional expansion.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    },
+    {
+      "id": "closing_auction_imbalance",
+      "name": "Closing Auction Imbalance",
+      "category": "auction_event",
+      "typical_bias": "neutral",
+      "definition": "Published closing auction buy/sell imbalance.",
+      "detection_outline": "Use timestamped official auction imbalance feed and venue-specific fields.",
+      "confirmation_rule": "Observe price response/auction clearing.",
+      "invalidation_rule": "Imbalance changes before auction close.",
+      "required_inputs": [
+        "timestamp",
+        "auction_imbalance_feed"
+      ],
+      "default_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "tolerance_atr": 0.25,
+        "lookback": 100
+      },
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Pivots, swing levels, zones and higher-timeframe references must be available in real time and never backdated. Track first_knowable_at."
+    }
+  ]
+}

@@ -6,3 +6,9 @@ from swing.bot import poll_once
 
 if __name__ == "__main__":
     print("answered", poll_once())
+    try:   # on GitHub: keep the results for the next run (no Claude needed)
+        from swing.ci_save import save
+        print("save:", save("bot"))
+    except Exception as e:
+        print("saving results failed:", e)
+

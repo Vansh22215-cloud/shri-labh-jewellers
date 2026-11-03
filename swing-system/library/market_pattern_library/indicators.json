@@ -4233,6 +4233,3693 @@
       "known_caveats": [],
       "warmup_policy": "Do not emit a valid signal until all lookbacks and recursive initialisation requirements are satisfied.",
       "no_lookahead_policy": "Use only values available at the signal timestamp. For higher-timeframe inputs, use the last fully closed higher-timeframe bar."
+    },
+    {
+      "id": "mcginley_dynamic",
+      "name": "McGinley Dynamic",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Adaptive average designed to track price changes.",
+      "calculation_basis": "Recursive update using prior average and price ratio raised to fourth power.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "jma",
+      "name": "Jurik Moving Average (JMA-style)",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Proprietary-style low-lag adaptive smoothing approximation.",
+      "calculation_basis": "Do not claim exact JMA parity without a licensed/reference algorithm; define chosen approximation.",
+      "common_parameters": {
+        "length": 20,
+        "phase": 0,
+        "power": 2
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "JMA implementations are often proprietary or reverse engineered; treat each implementation as a distinct variant."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "swma",
+      "name": "Symmetric Weighted Moving Average",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Symmetric triangular or custom weighted smoothing.",
+      "calculation_basis": "Normalised symmetric weights applied to recent observations.",
+      "common_parameters": {
+        "length": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "smma",
+      "name": "Smoothed Moving Average (SMMA/RMA)",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Wilder-style recursive smoothed average.",
+      "calculation_basis": "Seed with initial simple average, then (prior*(n-1)+price)/n.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "lsma",
+      "name": "Least Squares Moving Average",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Linear regression endpoint used as a smoothed trend estimate.",
+      "calculation_basis": "Fit least-squares line over lookback and evaluate at final in-window x.",
+      "common_parameters": {
+        "length": 25
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "epma",
+      "name": "Endpoint Moving Average",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Regression endpoint average.",
+      "calculation_basis": "Use linear regression endpoint over rolling window.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "kama_efficiency_ratio",
+      "name": "Kaufman Efficiency Ratio",
+      "canonical_code": null,
+      "category": "adaptive_trend",
+      "description": "Ratio of net displacement to sum of absolute movements.",
+      "calculation_basis": "abs(close-close[n])/sum(abs(diff(close)),n); used in adaptive smoothing.",
+      "common_parameters": {
+        "length": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "t3_average",
+      "name": "Tillson T3 Moving Average",
+      "canonical_code": null,
+      "category": "moving_average",
+      "description": "Six-stage EMA cascade with volume factor.",
+      "calculation_basis": "Combine six EMA stages using T3 coefficients from volume factor.",
+      "common_parameters": {
+        "length": 5,
+        "volume_factor": 0.7
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "tema_slope",
+      "name": "Triple EMA Slope",
+      "canonical_code": null,
+      "category": "trend_strength",
+      "description": "Slope of TEMA over selected horizon.",
+      "calculation_basis": "Difference or regression slope of TEMA divided by ATR/price.",
+      "common_parameters": {
+        "length": 20,
+        "slope_period": 5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "normalised_slope"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ma_spread",
+      "name": "Moving Average Spread",
+      "canonical_code": null,
+      "category": "trend",
+      "description": "Distance between fast and slow averages.",
+      "calculation_basis": "(fast_MA-slow_MA)/close or ATR; preserve raw and normalised forms.",
+      "common_parameters": {
+        "fast": 10,
+        "slow": 50
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "spread",
+        "normalised_spread"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ma_ribbon_width",
+      "name": "Moving Average Ribbon Width",
+      "canonical_code": null,
+      "category": "trend_regime",
+      "description": "Dispersion among a family of moving averages.",
+      "calculation_basis": "Standard deviation or max-min of normalized multiple MAs.",
+      "common_parameters": {
+        "lengths": [
+          5,
+          10,
+          20,
+          30,
+          50,
+          100
+        ]
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "width",
+        "ordering_score"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "price_ma_distance",
+      "name": "Price-to-Moving-Average Distance",
+      "canonical_code": null,
+      "category": "trend",
+      "description": "Normalised price distance from a reference moving average.",
+      "calculation_basis": "(close-MA)/ATR and percentage distance; compute for multiple lengths.",
+      "common_parameters": {
+        "ma_length": 20,
+        "atr_length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "atr_distance",
+        "pct_distance"
+      ],
+      "data_requirements": [
+        "close",
+        "high",
+        "low"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "connors_rsi",
+      "name": "Connors RSI",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Composite short-term oscillator.",
+      "calculation_basis": "Combine short RSI, RSI of streak length and percentile rank of one-period returns.",
+      "common_parameters": {
+        "rsi_length": 3,
+        "streak_rsi_length": 2,
+        "rank_length": 100
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "rsi_price",
+        "rsi_streak",
+        "percent_rank"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ultimate_oscillator",
+      "name": "Ultimate Oscillator",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Multi-timeframe buying-pressure oscillator.",
+      "calculation_basis": "Weighted ratio of buying pressure to true range over three lookbacks.",
+      "common_parameters": {
+        "short": 7,
+        "medium": 14,
+        "long": 28
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "schaff_trend_cycle",
+      "name": "Schaff Trend Cycle",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "MACD-derived stochastic cycle oscillator.",
+      "calculation_basis": "Apply stochastic transforms to MACD line with smoothing.",
+      "common_parameters": {
+        "fast": 23,
+        "slow": 50,
+        "cycle": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "coppock_curve",
+      "name": "Coppock Curve",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Long-horizon momentum oscillator.",
+      "calculation_basis": "WMA of sum of two ROC horizons.",
+      "common_parameters": {
+        "roc1": 14,
+        "roc2": 11,
+        "wma": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "vortex_indicator",
+      "name": "Vortex Indicator",
+      "canonical_code": null,
+      "category": "trend",
+      "description": "Directional movement oscillator based on vortex movements.",
+      "calculation_basis": "Sum |high-low_prev| and |low-high_prev| divided by rolling true range sum.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "vi_plus",
+        "vi_minus"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "chande_momentum_oscillator",
+      "name": "Chande Momentum Oscillator",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Momentum oscillator using sums of gains and losses.",
+      "calculation_basis": "100*(sum_up-sum_down)/(sum_up+sum_down).",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "relative_vigor_index",
+      "name": "Relative Vigor Index",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Compares close-open movement with high-low range.",
+      "calculation_basis": "Smoothed ratio of close-open to high-low, often signal line.",
+      "common_parameters": {
+        "length": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "signal"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "smoothed_rvi",
+      "name": "Smoothed Relative Vigor Index",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Smoothed RVI for reduced noise.",
+      "calculation_basis": "Apply selected smoother to RVI and signal series.",
+      "common_parameters": {
+        "length": 10,
+        "smooth": 4
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "signal"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "fisher_transform",
+      "name": "Fisher Transform",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Transforms bounded price position to an approximately Gaussian oscillator.",
+      "calculation_basis": "Normalise midpoint to rolling high-low range, clamp then apply Fisher transform recursively.",
+      "common_parameters": {
+        "length": 9
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "signal"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "inverse_fisher_rsi",
+      "name": "Inverse Fisher RSI",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Maps RSI-derived signal into bounded range.",
+      "calculation_basis": "Apply scaled RSI through hyperbolic tangent/inverse Fisher mapping.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rsi_of_ema",
+      "name": "RSI of EMA",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "RSI computed on an EMA series rather than raw close.",
+      "calculation_basis": "Calculate EMA then apply Wilder RSI to EMA changes.",
+      "common_parameters": {
+        "ema_length": 20,
+        "rsi_length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rsi_divergence_score",
+      "name": "RSI Divergence Score",
+      "canonical_code": null,
+      "category": "momentum_divergence",
+      "description": "Quantifies price/RSI swing disagreement.",
+      "calculation_basis": "Compare confirmed price pivots with RSI values at same knowable times.",
+      "common_parameters": {
+        "pivot_left": 3,
+        "pivot_right": 3,
+        "max_gap": 60
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "bullish_score",
+        "bearish_score"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Pivot divergence is only knowable after right-side pivot confirmation; never backdate the signal."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "macd_histogram_slope",
+      "name": "MACD Histogram Slope",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "Rate of change of MACD histogram.",
+      "calculation_basis": "Difference or regression slope of MACD minus signal.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "histogram",
+        "slope"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "macd_normalised",
+      "name": "Normalised MACD",
+      "canonical_code": null,
+      "category": "momentum",
+      "description": "MACD scaled by price or ATR for cross-asset comparability.",
+      "calculation_basis": "MACD line / close or ATR; record scaling method.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9,
+        "normalise_by": "atr"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "signal",
+        "histogram"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "elder_force_index",
+      "name": "Elder Force Index",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "Price change multiplied by volume, then smoothed.",
+      "calculation_basis": "EMA((close-close_prev)*volume).",
+      "common_parameters": {
+        "length": 13
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ease_of_movement",
+      "name": "Ease of Movement",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "Relates midpoint movement to volume and range.",
+      "calculation_basis": "Midpoint change times range divided by volume/box ratio.",
+      "common_parameters": {
+        "length": 14,
+        "divisor": 100000000
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "smoothed"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_zone_oscillator",
+      "name": "Volume Zone Oscillator",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "Signed volume pressure as a percentage of smoothed volume.",
+      "calculation_basis": "EMA(sign(close-close_prev)*volume)/EMA(volume)*100.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "negative_volume_index",
+      "name": "Negative Volume Index",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "Cumulative price index updated on lower-volume bars.",
+      "calculation_basis": "Update index return only when current volume < prior volume.",
+      "common_parameters": {
+        "initial_value": 1000
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "positive_volume_index",
+      "name": "Positive Volume Index",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "Cumulative price index updated on higher-volume bars.",
+      "calculation_basis": "Update index return only when current volume > prior volume.",
+      "common_parameters": {
+        "initial_value": 1000
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "chaikin_oscillator",
+      "name": "Chaikin Oscillator",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "Difference between fast and slow EMA of accumulation/distribution line.",
+      "calculation_basis": "EMA(fast,ADL)-EMA(slow,ADL).",
+      "common_parameters": {
+        "fast": 3,
+        "slow": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "chaikin_money_flow",
+      "name": "Chaikin Money Flow",
+      "canonical_code": null,
+      "category": "volume_flow",
+      "description": "Volume-weighted close-location flow over rolling period.",
+      "calculation_basis": "Sum money-flow volume / sum volume.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_price_trend",
+      "name": "Volume Price Trend",
+      "canonical_code": null,
+      "category": "volume_flow",
+      "description": "Cumulative volume adjusted by percentage price change.",
+      "calculation_basis": "Prior VPT + volume*(close-close_prev)/close_prev.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_weighted_macd",
+      "name": "Volume Weighted MACD",
+      "canonical_code": null,
+      "category": "volume_momentum",
+      "description": "MACD variant using a volume-weighted price input/average.",
+      "calculation_basis": "Apply EMA differences to selected VW price series; document weighting convention.",
+      "common_parameters": {
+        "fast": 12,
+        "slow": 26,
+        "signal": 9
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "signal",
+        "histogram"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "There are multiple non-equivalent VW-MACD formulas; implementation must be explicitly versioned."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "relative_volume_time_of_day",
+      "name": "Relative Volume Time of Day",
+      "canonical_code": null,
+      "category": "volume",
+      "description": "Current intraday volume versus historical volume at same session time.",
+      "calculation_basis": "Cumulative or bar volume divided by median/mean volume for same time bucket across prior sessions.",
+      "common_parameters": {
+        "lookback_sessions": 20,
+        "bucket_minutes": 5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "relative_volume",
+        "z_score"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "volume"
+      ],
+      "known_caveats": [
+        "Requires exchange calendar, session alignment and point-in-time historical baselines."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_weighted_average_price_bands",
+      "name": "VWAP Standard Deviation Bands",
+      "canonical_code": null,
+      "category": "volume_weighted_price",
+      "description": "VWAP with dispersion bands.",
+      "calculation_basis": "Session VWAP plus/minus selected multiples of weighted standard deviation.",
+      "common_parameters": {
+        "multipliers": [
+          1,
+          2,
+          3
+        ]
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "vwap",
+        "upper_1",
+        "lower_1",
+        "upper_2",
+        "lower_2"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume",
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Session reset and price source must be explicit; partial session values are time-dependent."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_vwap",
+      "name": "Rolling VWAP",
+      "canonical_code": null,
+      "category": "volume_weighted_price",
+      "description": "VWAP over a rolling bar window.",
+      "calculation_basis": "Sum(price*volume,n)/sum(volume,n).",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_profile_poc",
+      "name": "Volume Profile Point of Control",
+      "canonical_code": null,
+      "category": "volume_profile",
+      "description": "Price bin with highest traded volume in a defined profile.",
+      "calculation_basis": "Aggregate volume by price bins over session or anchored window; select max-volume bin.",
+      "common_parameters": {
+        "bins": 100,
+        "profile": "session"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "poc"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "OHLCV-derived volume allocation is an approximation unless trade-level data is available."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_profile_value_area",
+      "name": "Volume Profile Value Area",
+      "canonical_code": null,
+      "category": "volume_profile",
+      "description": "Price interval containing configured share of profile volume.",
+      "calculation_basis": "Expand outward from POC by adjacent-bin volume until value-area fraction reached.",
+      "common_parameters": {
+        "value_area_pct": 0.7,
+        "bins": 100
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "vah",
+        "val",
+        "poc"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Bin allocation and tie-break rules materially affect VAH/VAL."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_profile_high_volume_nodes",
+      "name": "High Volume Nodes",
+      "canonical_code": null,
+      "category": "volume_profile",
+      "description": "Price bins with locally high volume concentration.",
+      "calculation_basis": "Detect local maxima in price-volume histogram using prominence and width thresholds.",
+      "common_parameters": {
+        "bins": 100,
+        "prominence": 1.5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "hvn_prices",
+        "hvn_strength"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volume_profile_low_volume_nodes",
+      "name": "Low Volume Nodes",
+      "canonical_code": null,
+      "category": "volume_profile",
+      "description": "Price bins with locally low volume concentration.",
+      "calculation_basis": "Detect local minima in profile histogram with smoothing and prominence thresholds.",
+      "common_parameters": {
+        "bins": 100,
+        "prominence": 1.5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "lvn_prices",
+        "lvn_strength"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ulcer_index",
+      "name": "Ulcer Index",
+      "canonical_code": null,
+      "category": "risk_volatility",
+      "description": "Measures depth and persistence of drawdowns from rolling highs.",
+      "calculation_basis": "Square root of mean squared percentage drawdown from rolling peak.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ulcer_performance_index",
+      "name": "Ulcer Performance Index",
+      "canonical_code": null,
+      "category": "risk_adjusted_performance",
+      "description": "Return divided by Ulcer Index risk.",
+      "calculation_basis": "Excess return over period divided by Ulcer Index; define annualisation.",
+      "common_parameters": {
+        "length": 14,
+        "risk_free_rate": 0
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rogers_satchell_volatility",
+      "name": "Rogers-Satchell Volatility",
+      "canonical_code": null,
+      "category": "volatility_estimator",
+      "description": "OHLC volatility estimator that accommodates non-zero drift.",
+      "calculation_basis": "Rolling mean of log(H/C)log(H/O)+log(L/C)log(L/O), annualised.",
+      "common_parameters": {
+        "length": 20,
+        "annualisation": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "volatility"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "realised_volatility",
+      "name": "Realised Volatility",
+      "canonical_code": null,
+      "category": "volatility_estimator",
+      "description": "Volatility estimated from intraday returns.",
+      "calculation_basis": "Square root of sum of squared intraday returns over session/window.",
+      "common_parameters": {
+        "sampling_minutes": 5,
+        "annualisation": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "volatility"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "close"
+      ],
+      "known_caveats": [
+        "Sampling frequency and microstructure noise create material estimation differences."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "realised_bipower_variation",
+      "name": "Realised Bipower Variation",
+      "canonical_code": null,
+      "category": "volatility_estimator",
+      "description": "Robust variation estimate used to separate continuous variation from jumps.",
+      "calculation_basis": "Scaled sum of absolute adjacent intraday return products.",
+      "common_parameters": {
+        "sampling_minutes": 5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "realised_kernel_volatility",
+      "name": "Realised Kernel Volatility",
+      "canonical_code": null,
+      "category": "volatility_estimator",
+      "description": "Noise-robust realised variance estimator.",
+      "calculation_basis": "Use autocovariance-weighted realised kernel with selected kernel and bandwidth.",
+      "common_parameters": {
+        "kernel": "Parzen",
+        "bandwidth": "data_driven"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "volatility"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "close"
+      ],
+      "known_caveats": [
+        "Needs clean intraday data and careful sampling/noise treatment."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ewma_volatility",
+      "name": "EWMA Volatility",
+      "canonical_code": null,
+      "category": "volatility_estimator",
+      "description": "Exponentially weighted volatility estimate.",
+      "calculation_basis": "Recursive variance with decay lambda applied to squared returns.",
+      "common_parameters": {
+        "lambda": 0.94
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "volatility",
+        "variance"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "garch_11_volatility",
+      "name": "GARCH(1,1) Volatility",
+      "canonical_code": null,
+      "category": "volatility_model",
+      "description": "Conditional volatility forecast using lagged variance and return shock.",
+      "calculation_basis": "Variance_t=omega+alpha*shock_(t-1)^2+beta*variance_(t-1).",
+      "common_parameters": {
+        "fit_window": 500,
+        "refit_frequency": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "conditional_volatility",
+        "variance"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Fit only on data available at the time; track convergence and parameter instability."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "egarch_volatility",
+      "name": "EGARCH Volatility",
+      "canonical_code": null,
+      "category": "volatility_model",
+      "description": "Log-variance model allowing asymmetric shock effects.",
+      "calculation_basis": "Fit EGARCH recursion on past returns.",
+      "common_parameters": {
+        "fit_window": 500
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "conditional_volatility"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Model specification and fitted parameters must be point-in-time; guard failed fits."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "volatility_of_volatility",
+      "name": "Volatility of Volatility",
+      "canonical_code": null,
+      "category": "volatility_regime",
+      "description": "Variation in rolling volatility estimate.",
+      "calculation_basis": "Rolling standard deviation or coefficient of variation of ATR/realised volatility.",
+      "common_parameters": {
+        "vol_length": 20,
+        "lookback": 60
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "choppiness_index",
+      "name": "Choppiness Index",
+      "canonical_code": null,
+      "category": "trend_regime",
+      "description": "Measures range-bound versus directional conditions.",
+      "calculation_basis": "100*log10(sum ATR(n)/(highest high-lowest low))/log10(n).",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "vertical_horizontal_filter",
+      "name": "Vertical Horizontal Filter",
+      "canonical_code": null,
+      "category": "trend_regime",
+      "description": "Compares net price displacement to total movement.",
+      "calculation_basis": "(highest(close,n)-lowest(close,n))/sum(abs(diff(close)),n).",
+      "common_parameters": {
+        "length": 28
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "efficiency_ratio",
+      "name": "Price Efficiency Ratio",
+      "canonical_code": null,
+      "category": "trend_regime",
+      "description": "Net displacement divided by path length.",
+      "calculation_basis": "abs(close-close[n])/sum(abs(diff(close)),n).",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "hurst_exponent",
+      "name": "Hurst Exponent",
+      "canonical_code": null,
+      "category": "statistical_regime",
+      "description": "Estimates long-memory/persistence versus mean-reversion.",
+      "calculation_basis": "Estimate scaling of rescaled range or variance across lags.",
+      "common_parameters": {
+        "length": 256,
+        "method": "variance_scaling"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "hurst"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Estimator is unstable on short samples and nonstationary series; avoid simplistic >0.5 buy rules."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "permutation_entropy",
+      "name": "Permutation Entropy",
+      "canonical_code": null,
+      "category": "statistical_regime",
+      "description": "Measures ordinal-pattern complexity of a time series.",
+      "calculation_basis": "Compute distribution of ordinal permutations over embedding dimension/delay and Shannon entropy.",
+      "common_parameters": {
+        "length": 100,
+        "dimension": 3,
+        "delay": 1
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "entropy"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "sample_entropy",
+      "name": "Sample Entropy",
+      "canonical_code": null,
+      "category": "statistical_regime",
+      "description": "Measures regularity of a time series.",
+      "calculation_basis": "Negative log conditional probability of matching patterns of length m and m+1.",
+      "common_parameters": {
+        "length": 100,
+        "embedding": 2,
+        "tolerance_sd": 0.2
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "entropy"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Sensitive to window length, scaling and missing values."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_skewness",
+      "name": "Rolling Skewness",
+      "canonical_code": null,
+      "category": "statistical_moments",
+      "description": "Third standardised central moment of returns.",
+      "calculation_basis": "Rolling third central moment divided by standard deviation cubed.",
+      "common_parameters": {
+        "length": 60
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "skewness"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_kurtosis",
+      "name": "Rolling Kurtosis",
+      "canonical_code": null,
+      "category": "statistical_moments",
+      "description": "Fourth standardised central moment of returns.",
+      "calculation_basis": "Rolling fourth central moment divided by variance squared; specify excess versus raw.",
+      "common_parameters": {
+        "length": 60,
+        "excess": true
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "kurtosis"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_autocorrelation",
+      "name": "Rolling Autocorrelation",
+      "canonical_code": null,
+      "category": "statistical_dependence",
+      "description": "Serial correlation of returns or price changes.",
+      "calculation_basis": "Rolling lag-k Pearson autocorrelation.",
+      "common_parameters": {
+        "length": 60,
+        "lag": 1
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "autocorrelation"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_beta",
+      "name": "Rolling Beta",
+      "canonical_code": null,
+      "category": "cross_asset_statistics",
+      "description": "Sensitivity of asset returns to benchmark returns.",
+      "calculation_basis": "Rolling covariance(asset,benchmark)/variance(benchmark).",
+      "common_parameters": {
+        "length": 60
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "beta"
+      ],
+      "data_requirements": [
+        "close",
+        "benchmark_close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_correlation",
+      "name": "Rolling Correlation",
+      "canonical_code": null,
+      "category": "cross_asset_statistics",
+      "description": "Rolling correlation between two return series.",
+      "calculation_basis": "Rolling Pearson/Spearman correlation of aligned returns.",
+      "common_parameters": {
+        "length": 60,
+        "method": "pearson"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "correlation"
+      ],
+      "data_requirements": [
+        "close",
+        "other_close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_cointegration_residual",
+      "name": "Cointegration Residual",
+      "canonical_code": null,
+      "category": "cross_asset_statistics",
+      "description": "Residual from rolling hedge regression for a candidate pair.",
+      "calculation_basis": "Estimate hedge ratio on training window; compute residual using point-in-time coefficients.",
+      "common_parameters": {
+        "fit_window": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "residual",
+        "hedge_ratio"
+      ],
+      "data_requirements": [
+        "close",
+        "other_close"
+      ],
+      "known_caveats": [
+        "Pair selection and hedge ratio fitting must be nested in training data; watch nonstationarity."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "spread_zscore",
+      "name": "Spread Z-Score",
+      "canonical_code": null,
+      "category": "statistical_spread",
+      "description": "Standardised deviation of a pair/spread from rolling mean.",
+      "calculation_basis": "(spread-rolling_mean)/rolling_std.",
+      "common_parameters": {
+        "length": 60
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "zscore"
+      ],
+      "data_requirements": [
+        "spread"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_linear_regression_slope",
+      "name": "Rolling Linear Regression Slope",
+      "canonical_code": null,
+      "category": "statistical_trend",
+      "description": "Slope of least-squares line over rolling window.",
+      "calculation_basis": "Fit y=a+bx on trailing observations; output slope and optional t-stat.",
+      "common_parameters": {
+        "length": 30
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "slope",
+        "intercept",
+        "r_squared"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_linear_regression_r2",
+      "name": "Rolling Regression R-Squared",
+      "canonical_code": null,
+      "category": "statistical_trend",
+      "description": "Explained variance of rolling linear regression.",
+      "calculation_basis": "R-squared of price or returns regressed on time.",
+      "common_parameters": {
+        "length": 30
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "r_squared"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_zscore",
+      "name": "Rolling Z-Score",
+      "canonical_code": null,
+      "category": "statistical_normalisation",
+      "description": "Standardises feature relative to trailing distribution.",
+      "calculation_basis": "(x-rolling_mean)/rolling_std with chosen ddof and robust variant.",
+      "common_parameters": {
+        "length": 50,
+        "ddof": 0
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "zscore"
+      ],
+      "data_requirements": [
+        "any_numeric_series"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "robust_mad_zscore",
+      "name": "Robust MAD Z-Score",
+      "canonical_code": null,
+      "category": "statistical_normalisation",
+      "description": "Robust standard score based on median absolute deviation.",
+      "calculation_basis": "(x-median)/(1.4826*MAD) over rolling window.",
+      "common_parameters": {
+        "length": 50
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "robust_zscore"
+      ],
+      "data_requirements": [
+        "any_numeric_series"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_percentile_rank",
+      "name": "Rolling Percentile Rank",
+      "canonical_code": null,
+      "category": "statistical_normalisation",
+      "description": "Ranks current value against trailing observations.",
+      "calculation_basis": "Empirical percentile of current value among prior N values.",
+      "common_parameters": {
+        "length": 100
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "percentile"
+      ],
+      "data_requirements": [
+        "any_numeric_series"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "cusum_change_detector",
+      "name": "CUSUM Change Detector",
+      "canonical_code": null,
+      "category": "statistical_change_point",
+      "description": "Detects persistent shifts in mean or level.",
+      "calculation_basis": "One-sided/two-sided cumulative sum of deviations against reference mean.",
+      "common_parameters": {
+        "threshold": 5,
+        "drift": 0.5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "positive_cusum",
+        "negative_cusum",
+        "change_flag"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Reference mean and threshold must be calibrated on past data only."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "bollinger_bandwidth_percentile",
+      "name": "Bollinger Bandwidth Percentile",
+      "canonical_code": null,
+      "category": "volatility_regime",
+      "description": "Percentile rank of Bollinger bandwidth.",
+      "calculation_basis": "(upper-lower)/middle, then rolling percentile rank.",
+      "common_parameters": {
+        "length": 20,
+        "std": 2,
+        "rank_length": 120
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "bandwidth",
+        "percentile"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "keltner_channel_width",
+      "name": "Keltner Channel Width",
+      "canonical_code": null,
+      "category": "volatility_envelope",
+      "description": "Normalised distance between ATR-based channel bands.",
+      "calculation_basis": "2*multiplier*ATR/EMA basis.",
+      "common_parameters": {
+        "length": 20,
+        "atr_length": 10,
+        "multiplier": 2
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "width"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "donchian_width",
+      "name": "Donchian Channel Width",
+      "canonical_code": null,
+      "category": "volatility_envelope",
+      "description": "Range width of rolling high/low channel.",
+      "calculation_basis": "Highest high minus lowest low over lookback, optionally divide by close/ATR.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "width",
+        "normalised_width"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "mass_index",
+      "name": "Mass Index",
+      "canonical_code": null,
+      "category": "volatility_reversal",
+      "description": "Range expansion/contraction reversal indicator.",
+      "calculation_basis": "Sum ratio of single to double EMA of high-low over period.",
+      "common_parameters": {
+        "ema_length": 9,
+        "sum_length": 25
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "relative_volatility_index",
+      "name": "Relative Volatility Index",
+      "canonical_code": null,
+      "category": "volatility_momentum",
+      "description": "RSI-like oscillator applied to volatility changes.",
+      "calculation_basis": "Separate standard-deviation of up/down moves and compute bounded ratio.",
+      "common_parameters": {
+        "length": 14,
+        "stdev_length": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "detrended_price_oscillator",
+      "name": "Detrended Price Oscillator",
+      "canonical_code": null,
+      "category": "cycle",
+      "description": "Removes trend component to highlight price cycles.",
+      "calculation_basis": "Subtract displaced moving average from price; displacement must be handled without future values.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Some textbook DPO plots shift values into the past; that shifted display must never be used as a tradable feature."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "ehlers_mama",
+      "name": "MESA Adaptive Moving Average",
+      "canonical_code": null,
+      "category": "cycle_adaptive_average",
+      "description": "Adaptive average using Hilbert-transform phase estimates.",
+      "calculation_basis": "Use a specified Ehlers MESA/Hilbert implementation to estimate phase and adaptive alpha.",
+      "common_parameters": {
+        "fast_limit": 0.5,
+        "slow_limit": 0.05
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "mama",
+        "fama"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Hilbert initialisation and phase conventions differ by platform; validate reference outputs."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "hilbert_dominant_cycle",
+      "name": "Hilbert Transform Dominant Cycle",
+      "canonical_code": null,
+      "category": "cycle",
+      "description": "Estimates dominant cycle period from price series.",
+      "calculation_basis": "Apply Hilbert transform components and phase-difference cycle estimate.",
+      "common_parameters": {
+        "max_period": 50
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "dominant_cycle"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "autocorrelation_periodogram",
+      "name": "Autocorrelation Periodogram",
+      "canonical_code": null,
+      "category": "cycle",
+      "description": "Estimates cycle period from autocorrelation spectrum.",
+      "calculation_basis": "Compute lag autocorrelations and periodogram aggregation.",
+      "common_parameters": {
+        "length": 100,
+        "max_lag": 50
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "dominant_period",
+        "spectrum"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "fisher_cycle_indicator",
+      "name": "Fisher Cycle Indicator",
+      "canonical_code": null,
+      "category": "cycle",
+      "description": "Cycle oscillator using Fisher transformation of normalised price.",
+      "calculation_basis": "Normalize price over cycle window, smooth, Fisher transform and signal.",
+      "common_parameters": {
+        "length": 10
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "signal"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "aroon_oscillator",
+      "name": "Aroon Oscillator",
+      "canonical_code": null,
+      "category": "trend",
+      "description": "Difference between Aroon Up and Aroon Down.",
+      "calculation_basis": "100*(bars_since_high/bars? convention) using documented Aroon convention.",
+      "common_parameters": {
+        "length": 25
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value",
+        "aroon_up",
+        "aroon_down"
+      ],
+      "data_requirements": [
+        "high",
+        "low"
+      ],
+      "known_caveats": [
+        "Different libraries invert bars-since-extreme formula; preserve exact convention."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "demand_index",
+      "name": "Demand Index",
+      "canonical_code": null,
+      "category": "volume_flow",
+      "description": "Price/volume pressure oscillator.",
+      "calculation_basis": "Calculate buying/selling pressure using price changes and volume; implement chosen published formula.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Published formulas vary; treat as a versioned research feature, not a canonical standard."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "intraday_intensity_index",
+      "name": "Intraday Intensity Index",
+      "canonical_code": null,
+      "category": "volume_flow",
+      "description": "Volume-weighted close location within bar range.",
+      "calculation_basis": "((2*close-high-low)/(high-low))*volume; smooth or cumulate.",
+      "common_parameters": {
+        "length": 21
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "close_location_value",
+      "name": "Close Location Value",
+      "canonical_code": null,
+      "category": "price_location",
+      "description": "Measures close location within candle range.",
+      "calculation_basis": "(2*close-high-low)/(high-low), with zero-range handling.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "buying_pressure",
+      "name": "Buying Pressure",
+      "canonical_code": null,
+      "category": "price_location",
+      "description": "Close position and directional demand proxy.",
+      "calculation_basis": "Selected close-location or true-range adjusted buying-pressure formula.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "This label has multiple meanings across trading systems; document exact formula."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "selling_pressure",
+      "name": "Selling Pressure",
+      "canonical_code": null,
+      "category": "price_location",
+      "description": "Close position and directional supply proxy.",
+      "calculation_basis": "Selected close-location or true-range adjusted selling-pressure formula.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "This label has multiple meanings across trading systems; document exact formula."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "trend_intensity_index",
+      "name": "Trend Intensity Index",
+      "canonical_code": null,
+      "category": "trend_strength",
+      "description": "Measures fraction of closes above/below a moving average.",
+      "calculation_basis": "Count closes above/below MA in lookback and scale to 0-100.",
+      "common_parameters": {
+        "ma_length": 30,
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "trend_direction_force_index",
+      "name": "Trend Direction Force Index",
+      "canonical_code": null,
+      "category": "trend_strength",
+      "description": "Combines price movement and smoothing to estimate directional force.",
+      "calculation_basis": "Use documented TDFI formulation with selected moving averages and lookback.",
+      "common_parameters": {
+        "length": 13
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Several formulas circulate under this name; exact algebra and scaling must be attached to the implementation."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_meanness_index",
+      "name": "Market Meanness Index",
+      "canonical_code": null,
+      "category": "trend_regime",
+      "description": "Estimates tendency toward mean-reverting or trending sequences.",
+      "calculation_basis": "Count direction changes relative to a rolling median/mean using a named definition.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Name is used for multiple non-identical definitions; version the exact rule."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "choppiness_adaptive_threshold",
+      "name": "Adaptive Choppiness Threshold",
+      "canonical_code": null,
+      "category": "trend_regime",
+      "description": "Percentile-normalised Choppiness Index.",
+      "calculation_basis": "Compute CHOP and compare to trailing empirical distribution rather than fixed 38.2/61.8.",
+      "common_parameters": {
+        "length": 14,
+        "rank_length": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "chop",
+        "percentile"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_ad_line",
+      "name": "Advance Decline Line",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Cumulative advancing issues minus declining issues.",
+      "calculation_basis": "Daily breadth net advances added cumulatively.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "ad_line"
+      ],
+      "data_requirements": [
+        "advances",
+        "declines"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_ad_ratio",
+      "name": "Advance Decline Ratio",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Ratio of advancing to declining issues.",
+      "calculation_basis": "Advances/declines, with zero-denominator handling.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "ratio"
+      ],
+      "data_requirements": [
+        "advances",
+        "declines"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_high_low_index",
+      "name": "High-Low Index",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Compares new highs with new lows.",
+      "calculation_basis": "100*new_highs/(new_highs+new_lows), with universe rules.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "new_highs",
+        "new_lows"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_mcclellan_oscillator",
+      "name": "McClellan Oscillator",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Difference between fast and slow EMA of net advances.",
+      "calculation_basis": "EMA(short,net advances)-EMA(long,net advances).",
+      "common_parameters": {
+        "fast": 19,
+        "slow": 39
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "advances",
+        "declines"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_mcclellan_summation",
+      "name": "McClellan Summation Index",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Cumulative McClellan Oscillator.",
+      "calculation_basis": "Cumulative sum of McClellan Oscillator values.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "value"
+      ],
+      "data_requirements": [
+        "advances",
+        "declines"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_trin_arms",
+      "name": "TRIN / Arms Index",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Breadth/volume ratio comparing advancing and declining issues.",
+      "calculation_basis": "(advances/declines)/(advancing_volume/declining_volume).",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "trin"
+      ],
+      "data_requirements": [
+        "advances",
+        "declines",
+        "advancing_volume",
+        "declining_volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_percent_above_ma",
+      "name": "Percent Above Moving Average",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Share of universe constituents above a selected moving average.",
+      "calculation_basis": "100*count(close>MA)/valid_constituents.",
+      "common_parameters": {
+        "ma_length": 50
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "percent"
+      ],
+      "data_requirements": [
+        "constituent_ohlcv"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "market_breadth_new_high_new_low",
+      "name": "New High-New Low Differential",
+      "canonical_code": null,
+      "category": "market_breadth",
+      "description": "Difference between securities at new highs and lows.",
+      "calculation_basis": "New highs minus new lows over a specified lookback.",
+      "common_parameters": {
+        "lookback": 52
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "differential"
+      ],
+      "data_requirements": [
+        "constituent_ohlcv"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "relative_strength_vs_benchmark",
+      "name": "Relative Strength vs Benchmark",
+      "canonical_code": null,
+      "category": "relative_strength",
+      "description": "Asset performance divided by benchmark performance.",
+      "calculation_basis": "Asset total-return index / benchmark total-return index; optionally smooth.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "relative_strength",
+        "slope"
+      ],
+      "data_requirements": [
+        "close",
+        "benchmark_close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "relative_strength_rank",
+      "name": "Cross-Sectional Relative Strength Rank",
+      "canonical_code": null,
+      "category": "relative_strength",
+      "description": "Ranks securities by trailing return or relative strength.",
+      "calculation_basis": "Rank trailing total returns within point-in-time tradable universe.",
+      "common_parameters": {
+        "lookback": 126
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "rank",
+        "percentile"
+      ],
+      "data_requirements": [
+        "universe_close"
+      ],
+      "known_caveats": [
+        "Use historical membership/point-in-time universe to avoid survivorship and look-ahead bias."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "sector_relative_strength",
+      "name": "Sector Relative Strength",
+      "canonical_code": null,
+      "category": "relative_strength",
+      "description": "Sector or industry performance relative to broad benchmark.",
+      "calculation_basis": "Sector total-return index divided by benchmark total-return index.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "relative_strength",
+        "slope"
+      ],
+      "data_requirements": [
+        "sector_index",
+        "benchmark_index"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "intraday_vwap_distance",
+      "name": "Intraday VWAP Distance",
+      "canonical_code": null,
+      "category": "intraday_context",
+      "description": "Price distance from current session VWAP.",
+      "calculation_basis": "(close-session_VWAP)/ATR or VWAP.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "distance_atr",
+        "distance_pct"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close",
+        "volume",
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "overnight_gap_percent",
+      "name": "Overnight Gap Percent",
+      "canonical_code": null,
+      "category": "session_context",
+      "description": "Open-to-prior-session-close gap.",
+      "calculation_basis": "(session_open-prior_close)/prior_close.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "gap_pct",
+        "gap_atr"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "open",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "day_of_week_effect",
+      "name": "Day of Week Feature",
+      "canonical_code": null,
+      "category": "calendar_feature",
+      "description": "Categorical day-of-week variable for seasonal analysis.",
+      "calculation_basis": "Exchange-calendar day index; encode categorically.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "day_of_week"
+      ],
+      "data_requirements": [
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "month_end_effect",
+      "name": "Month-End Calendar Feature",
+      "canonical_code": null,
+      "category": "calendar_feature",
+      "description": "Distance to month-end and month-end flag.",
+      "calculation_basis": "Exchange calendar days to month-end; point-in-time calendar.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "month_end_flag",
+        "days_to_month_end"
+      ],
+      "data_requirements": [
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "earnings_proximity",
+      "name": "Earnings Proximity Feature",
+      "canonical_code": null,
+      "category": "event_calendar",
+      "description": "Trading sessions to scheduled earnings release.",
+      "calculation_basis": "Join timestamped point-in-time earnings calendar.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "sessions_to_earnings",
+        "earnings_flag"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "earnings_calendar"
+      ],
+      "known_caveats": [
+        "Use announcement schedule as known at the time; revised earnings dates must not leak backward."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "dividend_event_proximity",
+      "name": "Dividend Event Proximity",
+      "canonical_code": null,
+      "category": "event_calendar",
+      "description": "Distance to ex-dividend and distribution events.",
+      "calculation_basis": "Join point-in-time corporate-action calendar.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "sessions_to_ex_date",
+        "dividend_flag"
+      ],
+      "data_requirements": [
+        "timestamp",
+        "corporate_actions"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_implied_volatility_rank",
+      "name": "Options IV Rank",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Current implied volatility relative to its trailing range.",
+      "calculation_basis": "100*(IV-current trailing min)/(trailing max-min).",
+      "common_parameters": {
+        "lookback": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "iv_rank"
+      ],
+      "data_requirements": [
+        "options_chain",
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Requires quality options surface, timestamp, maturity/delta selection and point-in-time quotes."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_implied_volatility_percentile",
+      "name": "Options IV Percentile",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Percentile of current implied volatility in trailing history.",
+      "calculation_basis": "Empirical percentile of selected IV series.",
+      "common_parameters": {
+        "lookback": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "iv_percentile"
+      ],
+      "data_requirements": [
+        "options_chain",
+        "timestamp"
+      ],
+      "known_caveats": [
+        "IV selection must be consistent by tenor/delta and based on contemporaneous bid/ask."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_put_call_open_interest_ratio",
+      "name": "Put Call Open Interest Ratio",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Aggregate put open interest divided by call open interest.",
+      "calculation_basis": "Sum OI over defined expiry/delta universe for puts and calls; ratio.",
+      "common_parameters": {
+        "expiry_scope": "all",
+        "delta_band": "all"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "put_call_oi_ratio"
+      ],
+      "data_requirements": [
+        "options_chain"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_put_call_volume_ratio",
+      "name": "Put Call Volume Ratio",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Put option traded volume divided by call option traded volume.",
+      "calculation_basis": "Aggregate option volume by put/call using defined universe.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "put_call_volume_ratio"
+      ],
+      "data_requirements": [
+        "options_chain"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_skew_25d",
+      "name": "25-Delta Options Skew",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Difference between 25-delta put and call implied volatility.",
+      "calculation_basis": "IV(25d put)-IV(25d call) for matched expiry.",
+      "common_parameters": {
+        "delta": 0.25,
+        "tenor_days": 30
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "skew"
+      ],
+      "data_requirements": [
+        "options_chain"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_term_structure",
+      "name": "Options IV Term Structure",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Implied volatility by expiry tenor.",
+      "calculation_basis": "Interpolate IV to standard tenors and compute curve slope/curvature.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "iv_30d",
+        "iv_60d",
+        "iv_90d",
+        "slope"
+      ],
+      "data_requirements": [
+        "options_chain"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "options_max_pain",
+      "name": "Options Max Pain Estimate",
+      "canonical_code": null,
+      "category": "options_analytics",
+      "description": "Expiration payoff minimisation estimate from open interest.",
+      "calculation_basis": "Calculate aggregate intrinsic payout across strikes at expiry candidate prices.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "max_pain_price"
+      ],
+      "data_requirements": [
+        "options_chain"
+      ],
+      "known_caveats": [
+        "Max pain is a descriptive OI-derived statistic, not evidence of price pinning or a trade signal."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "futures_basis",
+      "name": "Futures Basis",
+      "canonical_code": null,
+      "category": "derivatives_market",
+      "description": "Difference between futures price and spot/index level.",
+      "calculation_basis": "Futures minus spot, optionally annualised by days to expiry.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "basis",
+        "annualised_basis"
+      ],
+      "data_requirements": [
+        "futures_price",
+        "spot_price",
+        "expiry"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "calendar_spread",
+      "name": "Futures Calendar Spread",
+      "canonical_code": null,
+      "category": "derivatives_market",
+      "description": "Price difference between two contract expiries.",
+      "calculation_basis": "Near contract price minus deferred contract price; roll-aware series.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "spread",
+        "normalised_spread"
+      ],
+      "data_requirements": [
+        "near_future",
+        "far_future"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "open_interest_change",
+      "name": "Open Interest Change",
+      "canonical_code": null,
+      "category": "derivatives_market",
+      "description": "Change in outstanding contracts.",
+      "calculation_basis": "Current OI minus prior OI; optionally percentage and price/OI quadrant.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "oi_change",
+        "oi_change_pct"
+      ],
+      "data_requirements": [
+        "open_interest"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "price_oi_quadrant",
+      "name": "Price and Open Interest Quadrant",
+      "canonical_code": null,
+      "category": "derivatives_market",
+      "description": "Classifies price/OI rising or falling combinations.",
+      "calculation_basis": "Compute return sign and OI change sign; classify four quadrants.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "quadrant"
+      ],
+      "data_requirements": [
+        "close",
+        "open_interest"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "funding_rate_zscore",
+      "name": "Perpetual Futures Funding Z-Score",
+      "canonical_code": null,
+      "category": "derivatives_market",
+      "description": "Standardised funding rate versus its trailing history.",
+      "calculation_basis": "Rolling z-score of funding observations aligned to funding timestamps.",
+      "common_parameters": {
+        "length": 90
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "zscore"
+      ],
+      "data_requirements": [
+        "funding_rate",
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Crypto-specific; align realised funding timestamps and exchange definitions."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "liquidation_imbalance",
+      "name": "Liquidation Imbalance",
+      "canonical_code": null,
+      "category": "derivatives_market",
+      "description": "Net long versus short liquidations in a time window.",
+      "calculation_basis": "(long_liquidations-short_liquidations)/total_liquidations.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "imbalance"
+      ],
+      "data_requirements": [
+        "liquidation_feed",
+        "timestamp"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "order_book_imbalance",
+      "name": "Order Book Imbalance",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Bid versus ask depth imbalance near mid-price.",
+      "calculation_basis": "(bid_depth-ask_depth)/(bid_depth+ask_depth) across selected levels.",
+      "common_parameters": {
+        "levels": 5
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "imbalance"
+      ],
+      "data_requirements": [
+        "order_book_snapshots"
+      ],
+      "known_caveats": [
+        "Requires timestamped order-book snapshots; aggregation and venue fragmentation matter."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "microprice",
+      "name": "Microprice",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Queue-size-weighted mid-price estimate.",
+      "calculation_basis": "Weight best bid/ask prices by opposing queue sizes.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "microprice"
+      ],
+      "data_requirements": [
+        "best_bid",
+        "best_ask",
+        "bid_size",
+        "ask_size"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "quoted_spread_bps",
+      "name": "Quoted Spread Basis Points",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Best ask-bid spread relative to mid-price.",
+      "calculation_basis": "10000*(ask-bid)/mid.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "spread_bps"
+      ],
+      "data_requirements": [
+        "best_bid",
+        "best_ask"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "effective_spread_bps",
+      "name": "Effective Spread Basis Points",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Execution price deviation from midpoint at trade time.",
+      "calculation_basis": "2*side*(execution_price-mid)/mid in basis points.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "effective_spread_bps"
+      ],
+      "data_requirements": [
+        "trades",
+        "quotes"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "order_flow_imbalance",
+      "name": "Order Flow Imbalance",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Net signed order-flow changes at best bid/ask.",
+      "calculation_basis": "Aggregate event-based queue additions, cancellations and executions.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "ofi"
+      ],
+      "data_requirements": [
+        "order_book_events",
+        "trades"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "cumulative_delta",
+      "name": "Cumulative Volume Delta",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Cumulative buyer-initiated minus seller-initiated traded volume.",
+      "calculation_basis": "Classify trades by aggressor side and cumulate signed volume.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "delta",
+        "cumulative_delta"
+      ],
+      "data_requirements": [
+        "trades",
+        "quotes"
+      ],
+      "known_caveats": [
+        "OHLCV approximations are not equivalent to aggressor-classified trade data."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "trade_imbalance",
+      "name": "Trade Imbalance",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Signed trade volume or count imbalance over a window.",
+      "calculation_basis": "(buy_initiated-sell_initiated)/(sum); define trade sign algorithm.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "imbalance"
+      ],
+      "data_requirements": [
+        "trades",
+        "quotes"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "amihud_illiquidity",
+      "name": "Amihud Illiquidity",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Price impact proxy per unit traded value.",
+      "calculation_basis": "Mean(abs(return)/dollar_volume) over window.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "illiquidity"
+      ],
+      "data_requirements": [
+        "close",
+        "volume"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "kyle_lambda",
+      "name": "Kyle Lambda",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Estimated price impact per unit signed order flow.",
+      "calculation_basis": "Regression of price changes on signed order flow over defined window.",
+      "common_parameters": {
+        "length": 100
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "lambda"
+      ],
+      "data_requirements": [
+        "trades",
+        "quotes"
+      ],
+      "known_caveats": [
+        "Needs reliable signed flow, event alignment and robust standard errors."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "roll_spread_estimator",
+      "name": "Roll Effective Spread Estimator",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Implicit spread estimated from negative serial covariance of price changes.",
+      "calculation_basis": "2*sqrt(-cov(delta_price_t,delta_price_t-1)) when covariance negative.",
+      "common_parameters": {
+        "length": 60
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "spread"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "tick_rule_signed_volume",
+      "name": "Tick Rule Signed Volume",
+      "canonical_code": null,
+      "category": "market_microstructure",
+      "description": "Approximate buyer/seller initiation using tick direction.",
+      "calculation_basis": "Assign trade sign from price change, carry forward sign for unchanged trades.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "signed_volume"
+      ],
+      "data_requirements": [
+        "trades"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "relative_range",
+      "name": "Relative Range",
+      "canonical_code": null,
+      "category": "range_feature",
+      "description": "Current true range relative to rolling typical range.",
+      "calculation_basis": "True range / rolling median or mean true range.",
+      "common_parameters": {
+        "length": 20
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "relative_range"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "candle_body_pct",
+      "name": "Candle Body Percentage",
+      "canonical_code": null,
+      "category": "candle_feature",
+      "description": "Real body as fraction of full candle range.",
+      "calculation_basis": "abs(close-open)/(high-low), zero-range safe.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "body_pct"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "upper_shadow_pct",
+      "name": "Upper Shadow Percentage",
+      "canonical_code": null,
+      "category": "candle_feature",
+      "description": "Upper wick as fraction of candle range.",
+      "calculation_basis": "(high-max(open,close))/(high-low).",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "upper_shadow_pct"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "lower_shadow_pct",
+      "name": "Lower Shadow Percentage",
+      "canonical_code": null,
+      "category": "candle_feature",
+      "description": "Lower wick as fraction of candle range.",
+      "calculation_basis": "(min(open,close)-low)/(high-low).",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "lower_shadow_pct"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "close_location_in_range",
+      "name": "Close Location in Range",
+      "canonical_code": null,
+      "category": "candle_feature",
+      "description": "Close position from low to high of current bar.",
+      "calculation_basis": "(close-low)/(high-low).",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "close_location"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "gap_to_prior_range",
+      "name": "Gap to Prior Range",
+      "canonical_code": null,
+      "category": "gap_feature",
+      "description": "Distance of current open from prior high/low.",
+      "calculation_basis": "Open minus prior high/low, scaled by ATR.",
+      "common_parameters": {
+        "length": 14
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "gap_up_atr",
+        "gap_down_atr"
+      ],
+      "data_requirements": [
+        "open",
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "swing_distance_atr",
+      "name": "Distance to Last Confirmed Swing",
+      "canonical_code": null,
+      "category": "market_structure_feature",
+      "description": "Distance from price to most recent confirmed swing high/low.",
+      "calculation_basis": "Compute confirmed pivots and normalise distance by ATR.",
+      "common_parameters": {
+        "left": 3,
+        "right": 3
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "distance_high_atr",
+        "distance_low_atr"
+      ],
+      "data_requirements": [
+        "high",
+        "low",
+        "close"
+      ],
+      "known_caveats": [
+        "Swing point becomes available only after right confirmation bars."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_drawdown",
+      "name": "Rolling Drawdown",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Current drawdown from trailing or running peak.",
+      "calculation_basis": "close/running_max(close)-1 with reset convention explicit.",
+      "common_parameters": {
+        "length": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "drawdown"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_max_drawdown",
+      "name": "Rolling Maximum Drawdown",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Worst peak-to-trough loss over rolling window.",
+      "calculation_basis": "Compute running peak-to-trough drawdown within each rolling window.",
+      "common_parameters": {
+        "length": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "max_drawdown"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_sharpe",
+      "name": "Rolling Sharpe Ratio",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Annualised mean excess return divided by return volatility.",
+      "calculation_basis": "Mean(excess returns)/std(excess returns)*sqrt(periods_per_year).",
+      "common_parameters": {
+        "length": 60,
+        "annualisation": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "sharpe"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_sortino",
+      "name": "Rolling Sortino Ratio",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Annualised excess return divided by downside deviation.",
+      "calculation_basis": "Mean(excess returns)/downside deviation with target definition fixed.",
+      "common_parameters": {
+        "length": 60,
+        "annualisation": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "sortino"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_calmar",
+      "name": "Rolling Calmar Ratio",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Annualised return divided by absolute maximum drawdown.",
+      "calculation_basis": "CAGR/abs(max drawdown) over specified window.",
+      "common_parameters": {
+        "length": 252
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "calmar"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_omega",
+      "name": "Rolling Omega Ratio",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Probability-weighted gains above threshold relative to losses below threshold.",
+      "calculation_basis": "Sum(max(return-threshold,0))/sum(max(threshold-return,0)).",
+      "common_parameters": {
+        "length": 60,
+        "threshold": 0
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "omega"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_tail_ratio",
+      "name": "Rolling Tail Ratio",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Ratio of positive to absolute negative return quantiles.",
+      "calculation_basis": "Quantile(returns,q)/abs(quantile(returns,1-q)).",
+      "common_parameters": {
+        "length": 252,
+        "quantile": 0.95
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "tail_ratio"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_var",
+      "name": "Rolling Value at Risk",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Historical or parametric loss quantile estimate.",
+      "calculation_basis": "Quantile of trailing returns at selected confidence.",
+      "common_parameters": {
+        "length": 252,
+        "confidence": 0.95,
+        "method": "historical"
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "var"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
+    },
+    {
+      "id": "rolling_expected_shortfall",
+      "name": "Rolling Expected Shortfall",
+      "canonical_code": null,
+      "category": "risk_analytics",
+      "description": "Average loss conditional on exceeding VaR.",
+      "calculation_basis": "Mean returns below selected VaR quantile.",
+      "common_parameters": {
+        "length": 252,
+        "confidence": 0.95
+      },
+      "implementation_source": "Research specification; implement independently and validate against a documented reference where available.",
+      "outputs": [
+        "expected_shortfall"
+      ],
+      "data_requirements": [
+        "close"
+      ],
+      "known_caveats": [
+        "Formula and initialisation can vary by platform; document exact implementation and warm-up."
+      ],
+      "warmup_policy": "Emit null until the full lookback and recursive initialisation are complete; record warm-up bars.",
+      "no_lookahead_policy": "Use values available at timestamp only. Higher-timeframe bars must be fully closed; revisions must be point-in-time safe."
     }
   ]
 }

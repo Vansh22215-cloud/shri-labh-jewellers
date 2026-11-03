@@ -1,62 +1,68 @@
-# Market Pattern & Technical Indicator Reference Library
+# Market Pattern & Technical Research Library
 
-**Version:** 1.0.0  
-**Generated:** 2026-11-04  
-**Catalog size:** 52 chart patterns, 69 candlestick patterns, 176 indicators/features.
+**Version:** 2.0.0  
+**Generated:** 2026-11-03  
 
-## What this is
+## Catalogue coverage
 
-A machine-readable starter reference for a systematic research engine. It contains a broad baseline of widely recognised chart patterns, the 61 TA-Lib candlestick recognisers plus common non-standard candle setups, and a broad indicator/feature set based on TA-Lib plus widely used additions.
+| Catalogue | Entries |
+|---|---:|
+| Chart patterns and price formations | 148 |
+| Candlestick patterns / variants | 130 |
+| Technical indicators | 324 |
+| Market structure, liquidity and auction events | 85 |
+| Quantitative research features | 104 |
+| **Total records** | **791** |
 
-It is **not literally every pattern ever named**. Different books, platforms and trading communities use different names and slightly different rules. Every non-standard variant is labelled so Claude Code can preserve it as its own version rather than silently mixing definitions.
+This is a large research catalogue, not a claim that every proprietary, regional, discretionary or renamed pattern in existence has been captured. Many named concepts have conflicting textbook/platform definitions. Definitions are versioned and must not be silently merged.
 
 ## Files
 
-- `manifest.json` — version, counts, sources, global safeguards and signal contract.
-- `chart_patterns.json` — structures, deterministic detection outlines, confirmation, invalidation and target models.
-- `candlestick_patterns.json` — names, TA-Lib IDs, candle counts, definitions and implementation guidance.
-- `indicators.json` — indicator families, definitions, calculation basis, typical parameters and input requirements.
+- `manifest.json` — version, counts, datasets and global safeguards.
+- `chart_patterns.json` — structure, deterministic detection outline, confirmation, invalidation and conventional target models.
+- `candlestick_patterns.json` — TA-Lib recognisers plus additional textbook/community variants.
+- `indicators.json` — indicators across trend, momentum, volatility, volume, statistics, cycles, breadth, options and market microstructure.
+- `market_structure_events.json` — HH/HL/LH/LL, BOS/CHoCH/MSS, liquidity sweeps, FVGs, blocks, profile and session events.
+- `quant_research_features.json` — returns, candle anatomy, volume, liquidity, calendar, cross-asset, derivatives and execution features.
+- `aliases.json` — common shorthand/name-to-canonical mappings.
+- `research_engine_contract.json` — testing, validation, logging and daily-cycle requirements for Claude Code.
+- `catalog_index.csv` — flat searchable index across all catalogues.
+- `signal_schema.json` — baseline signal record contract.
+- `SOURCES.md` — external reference catalogues and implementation notes.
+- `CLAUDE_CODE_HANDOFF.md` — implementation brief and first tasks.
 
-## Critical implementation requirements
+## Critical cautions
 
-1. **Do not trade a label.** Build separate detector, context filter, confirmation, entry, stop, exit and sizing modules.
-2. **No look-ahead.** Swing pivots require right-side confirmation bars. A pivot detected at bar `t` with `r` confirmation bars is not tradable until bar `t+r` closes.
-3. **No repainting.** Store the exact time the system could first know a pattern existed. Do not backdate it to the first candle or pivot.
-4. **Exact indicator parity.** Prefer TA-Lib's canonical implementation for rows with a TA-Lib code. Compare local output against TA-Lib on test vectors before using it in research.
-5. **Adaptive candle thresholds.** Candle size and shadow thresholds should be relative to recent ranges/bodies, not fixed rupee/point values.
-6. **Version everything.** Any change to tolerance, pivot settings, pattern logic, indicator calculation or confirmation must create a new `rule_version`.
-7. **Avoid combinatorial overfitting.** Store every test, account for multiple testing, keep untouched holdout periods and use walk-forward evaluation.
-8. **Realistic execution.** Include brokerage, exchange fees, taxes, spread, slippage, liquidity/impact, lot sizes, tick sizes, trading hours, circuit limits and rejected orders appropriate to each instrument/venue.
-9. **Separate universes/timeframes.** Test equities, indices, futures, options, FX and crypto separately; do not assume one signal rule transfers across markets.
-10. **Treat targets as hypotheses.** Pattern target models are conventional geometry, not validated forecasts. Measure target-hit probability and adverse excursion empirically.
+1. **A pattern name is not an edge.** A catalogue item is a hypothesis/specification, not proof of predictive power.
+2. Separate detector, context filter, confirmation, entry, stop, exit, position sizing and fill simulation.
+3. **No look-ahead or repainting.** Swing pivots become available only after right-side confirmation bars; higher-timeframe candles only after close.
+4. Use point-in-time universes, delisted securities, corporate actions and correct session calendars.
+5. Include realistic brokerage, taxes, spread, slippage, impact, lot/tick sizes, liquidity limits, circuits and rejected fills.
+6. Do not test every parameter combination blindly. Use predeclared search spaces, temporal validation, multiple-testing controls and untouched holdouts.
+7. Save all experiment results, including failures. Version data, code, parameters, costs and rules.
+8. Treat Elliott, harmonic, Wyckoff, ICT/SMC, order-block, profile and discretionary formations as definition-sensitive. Record exact chosen convention and confidence.
+9. Options IV, order-flow, volume profile and market microstructure items require specialised data; OHLCV proxies are not equivalent.
+10. Conventional measured-move targets are hypotheses. Measure outcomes and adverse/favourable excursion empirically.
 
-## Suggested JSON loading
+## Suggested Claude Code build order
+
+1. Load and validate every JSON file; build ID/alias registry and duplicate checks.
+2. Implement only deterministic, OHLCV-compatible indicators and patterns first. Add unit tests against reference outputs.
+3. Implement point-in-time event logic and first-knowable timestamps.
+4. Build a vectorised event-driven backtester with instrument/session/cost models.
+5. Add chronological walk-forward evaluation, holdout protection and experiment ledger.
+6. Add specialised data adapters for profile, options, breadth, futures and order flow only when data is actually available.
+7. Schedule daily runs and publish a leaderboard with sample sizes, confidence intervals and net-of-cost metrics.
+
+## Machine-readable loading
 
 ```python
 import json
 from pathlib import Path
-
 root = Path("market_pattern_library")
-charts = json.loads((root / "chart_patterns.json").read_text())['items']
-candles = json.loads((root / "candlestick_patterns.json").read_text())['items']
-indicators = json.loads((root / "indicators.json").read_text())['items']
+charts = json.loads((root / "chart_patterns.json").read_text())["items"]
+candles = json.loads((root / "candlestick_patterns.json").read_text())["items"]
+indicators = json.loads((root / "indicators.json").read_text())["items"]
+market_events = json.loads((root / "market_structure_events.json").read_text())["items"]
+features = json.loads((root / "quant_research_features.json").read_text())["items"]
 ```
-
-## Recommended detector output
-
-Every detector should emit a record conforming to `manifest.json -> standard_signal_contract`. It should also persist its full parameter set, source data version, code commit, and the first bar on which the signal became knowable.
-
-## Scope and source notes
-
-The TA-Lib catalogue is used as a reproducible technical-function baseline. Its function pages document inputs, outputs and implementation links. The candlestick baseline includes its 61 CDL recognisers. Classic chart structures are cross-checked against StockCharts ChartSchool and TradingView's automated pattern taxonomy. Harmonic, Elliott, Wyckoff and price-action entries are included as configurable rule families because conventions differ substantially across practitioners.
-
-A detector being present in this library does **not** imply that it has predictive value. The purpose of the research engine is to test that claim with out-of-sample data.
-
-## Sources
-
-- TA-Lib functions: https://ta-lib.org/functions/
-- TA-Lib candlestick outputs: https://ta-lib.org/api/candlestick-outputs/
-- StockCharts ChartSchool chart patterns: https://chartschool.stockcharts.com/table-of-contents/chart-analysis/chart-patterns
-- TradingView All Chart Patterns: https://www.tradingview.com/support/solutions/43000706927-all-chart-patterns/
-- TradingView candlestick pattern detection: https://www.tradingview.com/support/solutions/43000584462-candlestick-patterns/
-- CRAN TA-Lib candlestick vignette: https://www.stat.ethz.ch/CRAN/web/packages/talib/vignettes/candlestick.html

@@ -11,3 +11,9 @@ if __name__ == "__main__":
         company_of_day()
     except Exception as e:
         print("company of the day failed:", e)
+    try:   # on GitHub: keep the results for the next run (no Claude needed)
+        from swing.ci_save import save
+        print("save:", save("nightly run"))
+    except Exception as e:
+        print("saving results failed:", e)
+

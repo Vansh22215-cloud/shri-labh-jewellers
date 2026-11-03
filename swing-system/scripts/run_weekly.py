@@ -12,3 +12,9 @@ if __name__ == "__main__":
     from swing.config import load_settings
     telegram.send(load_settings(), "🗓 Weekly self-check\n" + "\n".join(f"• {n}" for n in notes)[:3500] +
                   "\nResearch, not advice.")
+    try:   # on GitHub: keep the results for the next run (no Claude needed)
+        from swing.ci_save import save
+        print("save:", save("weekly run"))
+    except Exception as e:
+        print("saving results failed:", e)
+

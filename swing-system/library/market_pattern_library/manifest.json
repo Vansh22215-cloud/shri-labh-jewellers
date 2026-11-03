@@ -1,18 +1,25 @@
 {
   "library_name": "Market Pattern & Technical Indicator Reference Library",
-  "version": "1.0.0",
-  "generated_date": "2026-11-04",
-  "purpose": "Machine-readable research catalogue for systematic detection and backtesting of widely used chart patterns, candlestick patterns and technical indicators.",
-  "scope_note": "No finite catalogue can contain every proprietary, regional, discretionary or renamed variant. This release covers a broad, widely recognised baseline plus explicitly labelled community/derived additions. Treat additions as separate versioned definitions, not interchangeable names.",
+  "version": "2.0.0",
+  "generated_date": "2026-11-03",
+  "purpose": "Expanded machine-readable research catalogue for chart formations, candlestick formations, technical indicators, market structure/liquidity concepts and quantitative research features.",
+  "scope_note": "Broad multi-source catalogue; not literally every proprietary, regional, discretionary or renamed concept. Similar names can have conflicting definitions. Each non-canonical definition must remain versioned and be validated before use.",
   "counts": {
-    "chart_patterns": 52,
-    "candlestick_patterns": 69,
-    "indicators_and_features": 176
+    "chart_patterns": 148,
+    "candlestick_patterns": 130,
+    "indicators_and_features": 324,
+    "market_structure_events": 85,
+    "quant_research_features": 104
   },
   "datasets": {
     "chart_patterns": "chart_patterns.json",
     "candlestick_patterns": "candlestick_patterns.json",
-    "indicators_and_features": "indicators.json"
+    "indicators_and_features": "indicators.json",
+    "market_structure_events": "market_structure_events.json",
+    "quant_research_features": "quant_research_features.json",
+    "aliases": "aliases.json",
+    "research_engine_contract": "research_engine_contract.json",
+    "signal_schema": "signal_schema.json"
   },
   "source_baseline": [
     {
@@ -86,5 +93,19 @@
       "expired"
     ],
     "timestamp_rule": "Timestamp must be the first time the signal was actually knowable, not the first pivot bar if later bars were required for confirmation."
-  }
+  },
+  "research_guardrails": [
+    "A catalogue item is a hypothesis/specification, not evidence of edge or permission to trade.",
+    "Keep detector, context filter, confirmation, entry, sizing, stop, exit and execution-cost models separate.",
+    "Every signal must store first_knowable_at, source bar timestamp, data version, code commit and full parameter JSON.",
+    "All pivots and higher-timeframe bars become available only after confirmation/close; never backdate.",
+    "Use point-in-time universes and corporate-action-adjusted data; avoid survivorship and delisting bias.",
+    "Use chronological train/validation/untouched test splits and nested walk-forward evaluation.",
+    "Track the number of strategy variants tried; use multiple-testing controls and deflated/adjusted performance statistics where appropriate.",
+    "Include brokerage, taxes/fees, spread, slippage, market impact, lot size, tick size, liquidity, circuits and realistic fills.",
+    "Report long/short separately, market/session regimes, instrument, timeframe and liquidity buckets.",
+    "Persist failed experiments; never silently discard weak or losing results.",
+    "Do not optimise on the final holdout. Re-open holdout only under a new dated research version.",
+    "Promotion to paper trading requires minimum trade count, stable out-of-sample results, robustness tests and operational checks."
+  ]
 }

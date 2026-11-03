@@ -1,13 +1,20 @@
-# Source and design notes
+# Sources and implementation references
 
-This library is a synthesis of public technical-analysis terminology and public software documentation. Formula descriptions are intentionally concise. Where calculation conventions vary or an algorithm is complex, the record directs the implementation to a canonical library or requires the exact chosen variant to be versioned.
+These references are starting points for canonical formulas and taxonomy cross-checks. They do not establish that any signal is profitable. Preserve implementation/version details when parity matters.
 
-The TA-Lib official functions catalogue currently lists the technical-function families used here and links to formulas and language implementations: https://ta-lib.org/functions/.
+- TA-Lib Functions: https://ta-lib.org/functions/ — widely used canonical function catalogue spanning momentum, overlap, volatility, volume, statistics, price transforms and cycle functions.
+- TA-Lib Candlestick Outputs: https://ta-lib.org/api/candlestick-outputs/ — candlestick recognition output conventions; detections are descriptive and need context/confirmation.
+- Pandas TA Classic: https://xgboosted.github.io/pandas-ta-classic/indicators.html — broad indicator catalogue and Python implementations; function availability and defaults can change by release.
+- Tulip Indicators: https://tulipindicators.org/list — compact independent library of technical indicators useful for cross-checking.
+- QuantConnect LEAN indicator reference: https://www.quantconnect.com/docs/v2/writing-algorithms/indicators/supported-indicators — implementation-oriented catalogue and supported indicator/pattern classes.
+- StockCharts ChartSchool chart patterns: https://chartschool.stockcharts.com/table-of-contents/chart-analysis/chart-patterns — classic chart-pattern taxonomy and context.
+- TradingView All Chart Patterns: https://www.tradingview.com/support/solutions/43000706927-all-chart-patterns/ — common automated classic formations.
+- TradingView candlestick pattern detection: https://www.tradingview.com/support/solutions/43000584462-candlestick-patterns/ — common candlestick family reference.
 
-TA-Lib candle output documentation clarifies that a positive output is bullish, a negative output bearish, zero means no detected pattern, and detection does not itself check trend context: https://ta-lib.org/api/candlestick-outputs/.
+## Definition policy
 
-StockCharts groups classic chart patterns into reversal and continuation families and explicitly notes that classification may depend on circumstances and can be subjective: https://chartschool.stockcharts.com/table-of-contents/chart-analysis/chart-patterns.
+A source name alone is insufficient. For each implemented function/pattern, record exact formula, code source/version, parameters, seed/warm-up, price input, adjustment policy, session rules and reference test vectors. Community concepts such as Elliott Wave, Wyckoff phases, harmonic variants, ICT/SMC blocks, profile patterns and Gann methods often have multiple non-equivalent definitions; the local detection rule is a research convention, not a claim of universal authority.
 
-TradingView's automated classic chart pattern list is used as an additional cross-check: https://www.tradingview.com/support/solutions/43000706927-all-chart-patterns/.
+## Data requirements
 
-Candlestick taxonomy and adaptive body/shadow threshold notes are cross-checked against the CRAN talib vignette describing 61 TA-Lib candlestick recognizers: https://www.stat.ethz.ch/CRAN/web/packages/talib/vignettes/candlestick.html.
+OHLCV can support many conventional indicators, but not true order-book imbalance, iceberg inference, aggressor-side delta, options surface analytics, TPO profile or official auction imbalance. For such records, mark the required data capability and skip when unavailable rather than manufacturing proxy values.

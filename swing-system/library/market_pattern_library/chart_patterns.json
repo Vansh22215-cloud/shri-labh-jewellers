@@ -1924,6 +1924,3462 @@
       "parameter_warning": "Defaults are starting search values, not universal truths. Calibrate only on training data and preserve a separate out-of-sample set.",
       "subjectivity": "medium",
       "no_lookahead_requirement": "A pivot is usable only after its right-side confirmation bars have closed. Do not backdate signals to the pivot bar."
+    },
+    {
+      "id": "adam_eve_double_top",
+      "name": "Adam and Eve Double Top",
+      "category": "classic_reversal",
+      "typical_bias": "bearish",
+      "structure_definition": "Two peaks near the same resistance; first peak is sharp/narrow (Adam), second is broader/rounded (Eve).",
+      "deterministic_detection_outline": "Detect two confirmed highs within ATR tolerance; first peak width less than second; trough forms neckline.",
+      "confirmation_rule": "Close below neckline with optional retest rejection.",
+      "invalidation_rule": "Close above both peaks invalidates.",
+      "target_model": "Neckline-to-peak height projected below neckline.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "adam_eve_double_bottom",
+      "name": "Adam and Eve Double Bottom",
+      "category": "classic_reversal",
+      "typical_bias": "bullish",
+      "structure_definition": "Sharp V-like first low followed by a rounded second low near the same support.",
+      "deterministic_detection_outline": "Two confirmed lows within ATR tolerance; measure trough widths and require first narrower than second.",
+      "confirmation_rule": "Close above intervening swing-high neckline.",
+      "invalidation_rule": "Close below both lows invalidates.",
+      "target_model": "Neckline-to-low depth projected above neckline.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "megaphone_formation",
+      "name": "Megaphone Formation",
+      "category": "volatility_expansion",
+      "typical_bias": "neutral",
+      "structure_definition": "Broadening formation with diverging resistance and support boundaries.",
+      "deterministic_detection_outline": "Detect at least two highs rising and two lows falling; quantify boundary divergence.",
+      "confirmation_rule": "Trade only after confirmed boundary break; direction is not known beforehand.",
+      "invalidation_rule": "Opposite boundary break invalidates directional thesis.",
+      "target_model": "Width-based measured move; compare volatility-adjusted exits.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "horn_top",
+      "name": "Horn Top",
+      "category": "classic_reversal",
+      "typical_bias": "bearish",
+      "structure_definition": "Two sharp nearby highs separated by a deep, narrow pullback.",
+      "deterministic_detection_outline": "Detect two narrow-duration swing highs and a materially lower intervening trough.",
+      "confirmation_rule": "Break of trough support / neckline.",
+      "invalidation_rule": "Break above horn highs invalidates.",
+      "target_model": "Horn height projected downward.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "horn_bottom",
+      "name": "Horn Bottom",
+      "category": "classic_reversal",
+      "typical_bias": "bullish",
+      "structure_definition": "Two sharp nearby lows separated by a sharp rally.",
+      "deterministic_detection_outline": "Detect two narrow-duration lows and a materially higher intervening peak.",
+      "confirmation_rule": "Break above intervening peak.",
+      "invalidation_rule": "Break below horn lows invalidates.",
+      "target_model": "Horn height projected upward.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "pipe_top",
+      "name": "Pipe Top",
+      "category": "classic_reversal",
+      "typical_bias": "bearish",
+      "structure_definition": "Two long-range bars form adjacent price spikes at a market top.",
+      "deterministic_detection_outline": "Detect adjacent bars with upper extremes above local range and range/body above rolling thresholds.",
+      "confirmation_rule": "Close below the two-bar low or next support.",
+      "invalidation_rule": "Trade above both spike highs invalidates.",
+      "target_model": "Two-bar height / nearby support.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "pipe_bottom",
+      "name": "Pipe Bottom",
+      "category": "classic_reversal",
+      "typical_bias": "bullish",
+      "structure_definition": "Two long-range bars form adjacent price spikes at a market bottom.",
+      "deterministic_detection_outline": "Detect adjacent bars with lower extremes below local range and range above rolling thresholds.",
+      "confirmation_rule": "Close above the two-bar high.",
+      "invalidation_rule": "Trade below both spike lows invalidates.",
+      "target_model": "Two-bar height / nearby resistance.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "island_reversal_top",
+      "name": "Island Reversal Top",
+      "category": "gap_reversal",
+      "typical_bias": "bearish",
+      "structure_definition": "A cluster of bars is isolated by an upside gap and a later downside gap.",
+      "deterministic_detection_outline": "Identify a multi-bar island whose low is above pre-gap range and whose high is below post-gap range.",
+      "confirmation_rule": "Downside gap / close below island low.",
+      "invalidation_rule": "Reclaim and hold above island high invalidates.",
+      "target_model": "Island range projected down or nearest support.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "island_reversal_bottom",
+      "name": "Island Reversal Bottom",
+      "category": "gap_reversal",
+      "typical_bias": "bullish",
+      "structure_definition": "A cluster of bars is isolated by a downside gap and a later upside gap.",
+      "deterministic_detection_outline": "Identify an island whose high is below pre-gap range and whose low is above post-gap range.",
+      "confirmation_rule": "Upside gap / close above island high.",
+      "invalidation_rule": "Close below island low invalidates.",
+      "target_model": "Island range projected up or nearest resistance.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "key_reversal_up",
+      "name": "Key Reversal Up",
+      "category": "single_bar_reversal",
+      "typical_bias": "bullish",
+      "structure_definition": "After a decline, price makes a lower low but closes above the prior bar high or near its high.",
+      "deterministic_detection_outline": "Compare current low and close to prior bar and recent trend; set thresholds by ATR.",
+      "confirmation_rule": "Require close strength and next-bar follow-through.",
+      "invalidation_rule": "Break below reversal-bar low invalidates.",
+      "target_model": "ATR multiple or next resistance; test multiple exits.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "key_reversal_down",
+      "name": "Key Reversal Down",
+      "category": "single_bar_reversal",
+      "typical_bias": "bearish",
+      "structure_definition": "After an advance, price makes a higher high but closes below prior bar low or near its low.",
+      "deterministic_detection_outline": "Compare current high and close to prior bar and recent trend.",
+      "confirmation_rule": "Require close weakness and next-bar follow-through.",
+      "invalidation_rule": "Break above reversal-bar high invalidates.",
+      "target_model": "ATR multiple or next support; test multiple exits.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "v_reversal",
+      "name": "V Reversal",
+      "category": "swing_reversal",
+      "typical_bias": "bullish",
+      "structure_definition": "Fast decline into an extreme low followed by similarly fast recovery.",
+      "deterministic_detection_outline": "Detect steep negative then positive slopes around an extreme pivot; compare slope and duration thresholds.",
+      "confirmation_rule": "Break above the first meaningful lower high after the low.",
+      "invalidation_rule": "New low before confirmation invalidates.",
+      "target_model": "Measured prior leg or volatility-based trailing exit.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "inverted_v_reversal",
+      "name": "Inverted V Reversal",
+      "category": "swing_reversal",
+      "typical_bias": "bearish",
+      "structure_definition": "Fast advance into an extreme high followed by fast decline.",
+      "deterministic_detection_outline": "Detect steep positive then negative slopes around an extreme pivot.",
+      "confirmation_rule": "Break below first meaningful higher low after peak.",
+      "invalidation_rule": "New high before confirmation invalidates.",
+      "target_model": "Measured prior leg or volatility-based trailing exit.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "three_drives_bullish",
+      "name": "Three Drives Pattern Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "Three successive price drives down with approximate symmetry in time and Fibonacci retracements/extensions.",
+      "deterministic_detection_outline": "Use confirmed pivots; compare drive lengths and retracement ratios to configurable Fibonacci bands.",
+      "confirmation_rule": "Reversal candle/structure break from third drive completion zone.",
+      "invalidation_rule": "Extension beyond the third-drive extreme invalidates.",
+      "target_model": "Retrace toward prior drive origin / 61.8%–100% of prior leg.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "three_drives_bearish",
+      "name": "Three Drives Pattern Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Three successive price drives up with approximate symmetry and Fibonacci relationships.",
+      "deterministic_detection_outline": "Use confirmed pivots; compare drive lengths and retracements to configurable ratio bands.",
+      "confirmation_rule": "Bearish reversal / break of local structure after third drive.",
+      "invalidation_rule": "Extension beyond third-drive extreme invalidates.",
+      "target_model": "Retrace toward prior drive origin.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "abcd_bullish",
+      "name": "AB=CD Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "Four-pivot decline/retracement/decline where CD approximates AB in price or ratio terms.",
+      "deterministic_detection_outline": "Detect X/A/B/C/D pivots; test AB=CD distance and BC retracement bands.",
+      "confirmation_rule": "Bullish rejection or structure break from D completion zone.",
+      "invalidation_rule": "New low beyond D tolerance invalidates.",
+      "target_model": "Retrace toward C then A; measure actual hit rates.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "abcd_bearish",
+      "name": "AB=CD Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Four-pivot rise/retracement/rise where CD approximates AB.",
+      "deterministic_detection_outline": "Detect A/B/C/D pivots and compare CD/AB plus BC retracement.",
+      "confirmation_rule": "Bearish rejection or structure break at D.",
+      "invalidation_rule": "New high beyond D tolerance invalidates.",
+      "target_model": "Retrace toward C then A.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "alternate_bat_bullish",
+      "name": "Alternate Bat Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "Bat-family XABCD structure with alternate Fibonacci completion ratios.",
+      "deterministic_detection_outline": "Detect five confirmed pivots; validate versioned Fibonacci ratio bands including alternate-D zone.",
+      "confirmation_rule": "Bullish price action at D plus micro-structure break.",
+      "invalidation_rule": "Close beyond D extreme invalidates.",
+      "target_model": "CD retracement targets at C and A.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "alternate_bat_bearish",
+      "name": "Alternate Bat Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Bearish Bat-family XABCD structure with alternate completion ratios.",
+      "deterministic_detection_outline": "Detect five confirmed pivots and validate ratio bands.",
+      "confirmation_rule": "Bearish rejection and structure break at D.",
+      "invalidation_rule": "Close beyond D extreme invalidates.",
+      "target_model": "CD retracement targets at C and A.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "shark_bullish",
+      "name": "Shark Pattern Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "Five-point harmonic structure using OXABC labels and extension/retracement ratios.",
+      "deterministic_detection_outline": "Detect five confirmed pivots and test selected Shark ratio specification.",
+      "confirmation_rule": "Reversal at final PRZ plus bullish structure shift.",
+      "invalidation_rule": "Extension beyond PRZ invalidates.",
+      "target_model": "Reversal targets at 0.5–0.618 of final leg; version the ratios.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "shark_bearish",
+      "name": "Shark Pattern Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Bearish five-point Shark harmonic structure.",
+      "deterministic_detection_outline": "Detect five confirmed pivots and test selected Shark ratio specification.",
+      "confirmation_rule": "Reversal at PRZ plus bearish structure shift.",
+      "invalidation_rule": "Extension beyond PRZ invalidates.",
+      "target_model": "Reversal targets at 0.5–0.618 of final leg.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "deep_crab_bullish",
+      "name": "Deep Crab Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "Crab-family structure with deep B retracement and extended D completion.",
+      "deterministic_detection_outline": "Validate XABCD pivot ratios against a published, versioned Deep Crab specification.",
+      "confirmation_rule": "Bullish reversal/structure shift at D PRZ.",
+      "invalidation_rule": "New low beyond D invalidates.",
+      "target_model": "Targets at C and A retracements.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "deep_crab_bearish",
+      "name": "Deep Crab Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Bearish Crab-family structure with deep B retracement and extended D.",
+      "deterministic_detection_outline": "Validate XABCD ratios against versioned Deep Crab rules.",
+      "confirmation_rule": "Bearish reversal/structure shift at D PRZ.",
+      "invalidation_rule": "New high beyond D invalidates.",
+      "target_model": "Targets at C and A retracements.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "cypher_bullish",
+      "name": "Cypher Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "XABCD harmonic structure with a distinctive extension of XA into C and 78.6% XC D retracement.",
+      "deterministic_detection_outline": "Check confirmed pivots and ratio tolerances using the selected Cypher standard.",
+      "confirmation_rule": "Bullish reversal from D plus follow-through.",
+      "invalidation_rule": "Close below D invalidates.",
+      "target_model": "Targets at C and A.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "cypher_bearish",
+      "name": "Cypher Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Bearish XABCD Cypher structure.",
+      "deterministic_detection_outline": "Check confirmed pivots and ratio tolerances.",
+      "confirmation_rule": "Bearish reversal from D plus follow-through.",
+      "invalidation_rule": "Close above D invalidates.",
+      "target_model": "Targets at C and A.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "5_0_bullish",
+      "name": "5-0 Bullish",
+      "category": "harmonic",
+      "typical_bias": "bullish",
+      "structure_definition": "Five-point reversal structure with defined Fibonacci relationships among legs.",
+      "deterministic_detection_outline": "Detect confirmed pivots and apply selected 5-0 ratio set.",
+      "confirmation_rule": "Bullish rejection from completion zone with structure confirmation.",
+      "invalidation_rule": "Close below completion extreme invalidates.",
+      "target_model": "50% retracement of BC is a common initial objective; test alternatives.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "5_0_bearish",
+      "name": "5-0 Bearish",
+      "category": "harmonic",
+      "typical_bias": "bearish",
+      "structure_definition": "Bearish five-point reversal structure with Fibonacci relationships.",
+      "deterministic_detection_outline": "Detect confirmed pivots and apply selected 5-0 ratio set.",
+      "confirmation_rule": "Bearish rejection from completion zone.",
+      "invalidation_rule": "Close above completion extreme invalidates.",
+      "target_model": "50% retracement of BC; test alternatives.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "elliott_impulse_wave",
+      "name": "Elliott Impulse Wave",
+      "category": "elliott_wave",
+      "typical_bias": "neutral",
+      "structure_definition": "Five-wave motive sequence with three directional motive waves and two corrective waves.",
+      "deterministic_detection_outline": "Use pivot sequence and optional degree nesting; apply rule checks: wave 2 not beyond origin, wave 3 not shortest, wave 4 overlap rule for standard impulse.",
+      "confirmation_rule": "Only after wave count is confirmed by subsequent pivots; store alternate counts.",
+      "invalidation_rule": "Rule violation invalidates that count, not necessarily price trend.",
+      "target_model": "Wave projection using Fibonacci extensions; treat count as probabilistic.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "elliott_diagonal",
+      "name": "Elliott Diagonal",
+      "category": "elliott_wave",
+      "typical_bias": "neutral",
+      "structure_definition": "Wedge-shaped five-wave motive or ending structure with trendlines converging.",
+      "deterministic_detection_outline": "Detect five legs with overlap and converging boundaries; apply leading/ending diagonal rules separately.",
+      "confirmation_rule": "Break of diagonal boundary and completed wave count.",
+      "invalidation_rule": "Rule violation or new extreme invalidates specific count.",
+      "target_model": "Retrace toward diagonal origin; test by type.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "elliott_flat_correction",
+      "name": "Elliott Flat Correction",
+      "category": "elliott_wave",
+      "typical_bias": "neutral",
+      "structure_definition": "Three-wave A-B-C sideways correction where B retraces near or beyond A origin depending on flat subtype.",
+      "deterministic_detection_outline": "Classify regular, expanded or running flat using pivot ratios and subtype rules.",
+      "confirmation_rule": "Completion of C and break of corrective channel.",
+      "invalidation_rule": "New price action violating subtype rules invalidates count.",
+      "target_model": "Return to prior impulse direction; Fibonacci projections.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "elliott_zigzag",
+      "name": "Elliott Zigzag Correction",
+      "category": "elliott_wave",
+      "typical_bias": "neutral",
+      "structure_definition": "Sharp three-wave A-B-C correction, commonly with 5-3-5 subdivisions.",
+      "deterministic_detection_outline": "Detect A/B/C pivots and ratio constraints; subwave count is lower-confidence.",
+      "confirmation_rule": "Break of correction channel after C.",
+      "invalidation_rule": "Count-rule violation invalidates.",
+      "target_model": "Resume prior impulse direction.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "elliott_triangle",
+      "name": "Elliott Triangle",
+      "category": "elliott_wave",
+      "typical_bias": "neutral",
+      "structure_definition": "Five overlapping corrective legs A-B-C-D-E contracting or expanding.",
+      "deterministic_detection_outline": "Fit boundaries through confirmed pivots; classify contracting, barrier or expanding triangle.",
+      "confirmation_rule": "Breakout after E completion.",
+      "invalidation_rule": "Boundary break opposite expected direction invalidates directional setup.",
+      "target_model": "Widest triangle height or prior trend continuation.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_upthrust",
+      "name": "Wyckoff Upthrust",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Price briefly breaks above trading-range resistance then falls back inside.",
+      "deterministic_detection_outline": "Define range; detect false break and close back beneath resistance within N bars.",
+      "confirmation_rule": "Weakness / SOW or break of local support.",
+      "invalidation_rule": "Acceptance above resistance invalidates.",
+      "target_model": "Range midpoint and range low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_spring_test",
+      "name": "Wyckoff Spring Test",
+      "category": "wyckoff",
+      "typical_bias": "bullish",
+      "structure_definition": "A later low-volume/low-spread test retests the spring area without meaningful supply.",
+      "deterministic_detection_outline": "After spring, measure retest penetration, spread and volume against rolling baseline.",
+      "confirmation_rule": "Test holds, then SOS / break above reaction high.",
+      "invalidation_rule": "Close and acceptance below spring low invalidates.",
+      "target_model": "Range high and measured range objective.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_last_point_of_support",
+      "name": "Wyckoff Last Point of Support",
+      "category": "wyckoff",
+      "typical_bias": "bullish",
+      "structure_definition": "Pullback after sign of strength holds above former resistance or near creek breakout.",
+      "deterministic_detection_outline": "Detect SOS then pullback with reduced spread/volume and higher low above range boundary.",
+      "confirmation_rule": "Demand returns and price breaks pullback high.",
+      "invalidation_rule": "Loss of reclaimed range boundary invalidates.",
+      "target_model": "Next resistance / range projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_last_point_of_supply",
+      "name": "Wyckoff Last Point of Supply",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Rally after sign of weakness fails beneath former support or near ice breakdown.",
+      "deterministic_detection_outline": "Detect SOW then weak rally with reduced spread/volume and lower high beneath boundary.",
+      "confirmation_rule": "Supply returns and price breaks pullback low.",
+      "invalidation_rule": "Reclaim of former support invalidates.",
+      "target_model": "Next support / range projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_sign_of_strength",
+      "name": "Wyckoff Sign of Strength",
+      "category": "wyckoff",
+      "typical_bias": "bullish",
+      "structure_definition": "Wide-spread advance with strong close and demand through resistance after accumulation.",
+      "deterministic_detection_outline": "Compare spread, close location and volume to rolling baselines near range resistance.",
+      "confirmation_rule": "Close above range and hold/retest.",
+      "invalidation_rule": "Failure back into range weakens or invalidates.",
+      "target_model": "Range height projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_sign_of_weakness",
+      "name": "Wyckoff Sign of Weakness",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Wide-spread decline with weak close and supply through support after distribution.",
+      "deterministic_detection_outline": "Compare spread, close location and volume to baselines near range support.",
+      "confirmation_rule": "Close below range and failed retest.",
+      "invalidation_rule": "Reclaim back into range weakens or invalidates.",
+      "target_model": "Range height projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_utad",
+      "name": "Wyckoff UTAD",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Upthrust after distribution: false breakout above range late in distribution.",
+      "deterministic_detection_outline": "Require prior distribution context, range boundary, false breakout and return below range.",
+      "confirmation_rule": "SOW and failed rally beneath range top.",
+      "invalidation_rule": "Acceptance above range top invalidates.",
+      "target_model": "Range low / measured range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "wyckoff_backup_to_edge",
+      "name": "Wyckoff Backup to Edge of Creek",
+      "category": "wyckoff",
+      "typical_bias": "bullish",
+      "structure_definition": "Pullback to former resistance after a successful SOS breakout.",
+      "deterministic_detection_outline": "After confirmed SOS, detect pullback to breakout boundary with limited downside spread/volume.",
+      "confirmation_rule": "Hold boundary then continuation break.",
+      "invalidation_rule": "Close back inside range and acceptance invalidates.",
+      "target_model": "Continuation measured move.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "vcp_volatility_contraction",
+      "name": "Volatility Contraction Pattern",
+      "category": "consolidation",
+      "typical_bias": "bullish",
+      "structure_definition": "Series of progressively shallower pullbacks and contracting volatility before breakout.",
+      "deterministic_detection_outline": "Detect at least 2-4 contractions with declining depth and ATR/volume contraction; define pivot.",
+      "confirmation_rule": "Break above pivot with relative volume expansion.",
+      "invalidation_rule": "Close below latest contraction low or pivot per rule.",
+      "target_model": "Base depth or ATR multiple.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "darvas_box",
+      "name": "Darvas Box",
+      "category": "consolidation",
+      "typical_bias": "bullish",
+      "structure_definition": "Price consolidates in a box; box top and bottom update only after confirmed highs/lows.",
+      "deterministic_detection_outline": "Implement state machine with N-bar high confirmation and subsequent box support; explicit update rules.",
+      "confirmation_rule": "Close above box top.",
+      "invalidation_rule": "Close below box bottom; trailing box stop variant.",
+      "target_model": "Box height projected upward.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "flat_base",
+      "name": "Flat Base",
+      "category": "consolidation",
+      "typical_bias": "bullish",
+      "structure_definition": "Tight sideways range after an advance, with limited depth and volatility.",
+      "deterministic_detection_outline": "Measure base duration, percentage depth, ATR contraction and high proximity.",
+      "confirmation_rule": "Break above base high with volume filter.",
+      "invalidation_rule": "Close below base low or configured stop.",
+      "target_model": "Base depth projection / R multiple.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "ipo_base",
+      "name": "IPO Base",
+      "category": "consolidation",
+      "typical_bias": "bullish",
+      "structure_definition": "Consolidation after a newly listed security establishes a trading range.",
+      "deterministic_detection_outline": "Require listing age window, minimum base duration, volatility contraction and resistance pivot.",
+      "confirmation_rule": "Break above base high; account for lockup/calendar events separately.",
+      "invalidation_rule": "Base-low breach.",
+      "target_model": "Base-depth projection; test with survivorship-aware universe.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "volatility_contraction_triangle",
+      "name": "Volatility Contraction Triangle",
+      "category": "consolidation",
+      "typical_bias": "neutral",
+      "structure_definition": "Repeated swings compress inside converging boundaries while bar ranges contract.",
+      "deterministic_detection_outline": "Fit converging support/resistance to confirmed pivots and quantify ATR contraction.",
+      "confirmation_rule": "Trade confirmed close outside boundary; direction unknown before break.",
+      "invalidation_rule": "Opposite boundary acceptance invalidates.",
+      "target_model": "Widest triangle height.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "ascending_channel",
+      "name": "Ascending Channel",
+      "category": "channel",
+      "typical_bias": "bullish",
+      "structure_definition": "Parallel upward sloping support and resistance boundaries.",
+      "deterministic_detection_outline": "Fit robust lines to at least two confirmed pivot highs/lows; constrain slope similarity.",
+      "confirmation_rule": "Continuation after pullback holds lower boundary or breakout above upper boundary.",
+      "invalidation_rule": "Close below lower channel boundary invalidates.",
+      "target_model": "Channel width / next resistance.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "descending_channel",
+      "name": "Descending Channel",
+      "category": "channel",
+      "typical_bias": "bearish",
+      "structure_definition": "Parallel downward sloping support and resistance boundaries.",
+      "deterministic_detection_outline": "Fit robust lines to confirmed highs/lows with similar negative slope.",
+      "confirmation_rule": "Continuation after failed rally or breakdown below lower boundary.",
+      "invalidation_rule": "Close above upper boundary invalidates.",
+      "target_model": "Channel width / next support.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "horizontal_channel",
+      "name": "Horizontal Channel",
+      "category": "channel",
+      "typical_bias": "neutral",
+      "structure_definition": "Price oscillates repeatedly between flat support and resistance.",
+      "deterministic_detection_outline": "Cluster swing highs/lows into zones within ATR tolerance; require multiple touches.",
+      "confirmation_rule": "Break and hold beyond either boundary; direction unknown beforehand.",
+      "invalidation_rule": "Return into range after failed breakout.",
+      "target_model": "Range height projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "trendline_break_retest",
+      "name": "Trendline Break and Retest",
+      "category": "trendline_event",
+      "typical_bias": "neutral",
+      "structure_definition": "Price breaks a multi-touch trendline then retests it from the opposite side.",
+      "deterministic_detection_outline": "Fit line to confirmed pivots; detect close beyond buffer; within N bars detect retest proximity.",
+      "confirmation_rule": "Retest rejection/hold in breakout direction.",
+      "invalidation_rule": "Reclaim through trendline beyond buffer.",
+      "target_model": "Prior swing or trendline-channel projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "throwback",
+      "name": "Throwback After Breakout",
+      "category": "breakout_event",
+      "typical_bias": "bullish",
+      "structure_definition": "Price breaks resistance, then pulls back to test old resistance as support.",
+      "deterministic_detection_outline": "Detect resistance zone breakout followed by return within tolerance within N bars.",
+      "confirmation_rule": "Support holds and price turns up.",
+      "invalidation_rule": "Close back below breakout zone and accept inside range.",
+      "target_model": "Range height / continuation leg.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "pullback_after_breakdown",
+      "name": "Pullback After Breakdown",
+      "category": "breakdown_event",
+      "typical_bias": "bearish",
+      "structure_definition": "Price breaks support, rallies to retest old support as resistance.",
+      "deterministic_detection_outline": "Detect support breakdown and subsequent retest from below.",
+      "confirmation_rule": "Resistance rejects; price resumes lower.",
+      "invalidation_rule": "Close and accept above former support.",
+      "target_model": "Range height / continuation leg.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "opening_range_breakout",
+      "name": "Opening Range Breakout",
+      "category": "intraday_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Price exits high/low of a defined opening range.",
+      "deterministic_detection_outline": "Build exchange-session opening range over configurable minutes; use only completed range bars.",
+      "confirmation_rule": "Close outside range, optional relative volume/VWAP/context filter.",
+      "invalidation_rule": "Return through opposite edge or volatility stop.",
+      "target_model": "Range height multiple / R-multiple.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "opening_range_reversal",
+      "name": "Opening Range Reversal",
+      "category": "intraday_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Initial move outside opening range fails and price re-enters range.",
+      "deterministic_detection_outline": "Detect break of opening range followed by close back inside within N bars.",
+      "confirmation_rule": "Break through opposite side or confirm with VWAP/structure.",
+      "invalidation_rule": "Acceptance beyond failed-break extreme invalidates.",
+      "target_model": "Range midpoint or opposite edge.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "first_pullback_after_breakout",
+      "name": "First Pullback After Breakout",
+      "category": "trend_continuation",
+      "typical_bias": "bullish",
+      "structure_definition": "First controlled pullback after a confirmed resistance breakout.",
+      "deterministic_detection_outline": "Detect breakout, then first pullback within ATR band with higher low and lower volume/spread.",
+      "confirmation_rule": "Break above pullback high.",
+      "invalidation_rule": "Break below pullback low / reclaimed level.",
+      "target_model": "Measured move or R multiple.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "first_pullback_after_breakdown",
+      "name": "First Pullback After Breakdown",
+      "category": "trend_continuation",
+      "typical_bias": "bearish",
+      "structure_definition": "First controlled rally after confirmed support breakdown.",
+      "deterministic_detection_outline": "Detect breakdown, then first rally to prior support/ATR band with lower high.",
+      "confirmation_rule": "Break below pullback low.",
+      "invalidation_rule": "Reclaim of breakdown level / pullback high.",
+      "target_model": "Measured move or R multiple.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "nr4_inside_day",
+      "name": "NR4 Inside Day",
+      "category": "volatility_compression",
+      "typical_bias": "neutral",
+      "structure_definition": "Daily range is narrowest of four sessions and contained within prior day range.",
+      "deterministic_detection_outline": "Compare current high-low to prior three ranges and require inside-day condition.",
+      "confirmation_rule": "Next session break of NR4 high/low; directional bias not inherent.",
+      "invalidation_rule": "Failure back through opposite boundary.",
+      "target_model": "ATR-based or range projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "low",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "nr7_inside_day",
+      "name": "NR7 Inside Day",
+      "category": "volatility_compression",
+      "typical_bias": "neutral",
+      "structure_definition": "Daily range is narrowest of seven sessions and contained within prior range.",
+      "deterministic_detection_outline": "Compare range to six prior sessions; test inside-day separately.",
+      "confirmation_rule": "Break of high/low with trend/context filter.",
+      "invalidation_rule": "Opposite boundary break.",
+      "target_model": "Range expansion objective.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "low",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "heikin_ashi_trend_run",
+      "name": "Heikin Ashi Trend Run",
+      "category": "price_transform_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Consecutive Heikin-Ashi candles with directional bodies and limited opposing wicks.",
+      "deterministic_detection_outline": "Compute Heikin-Ashi series from OHLC; count same-direction bars and opposing wick size.",
+      "confirmation_rule": "Continuation only after real-price confirmation; execute on actual OHLC.",
+      "invalidation_rule": "Opposite HA reversal plus real-price structure break.",
+      "target_model": "Trailing ATR / swing exit.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "renko_breakout",
+      "name": "Renko Breakout",
+      "category": "price_transform_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Brick sequence shifts direction or exits a consolidation on Renko chart.",
+      "deterministic_detection_outline": "Build Renko from source price with fixed or ATR brick size; record construction method.",
+      "confirmation_rule": "Require close/brick confirmation; execute using time-stamped real market prices.",
+      "invalidation_rule": "Opposite brick sequence.",
+      "target_model": "Brick-count or ATR-based exit.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "point_figure_breakout",
+      "name": "Point and Figure Breakout",
+      "category": "price_transform_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Column of Xs/O shapes breaks a prior congestion high/low.",
+      "deterministic_detection_outline": "Construct P&F using specified box size and reversal amount; detect column breakout.",
+      "confirmation_rule": "Confirmed column completion and underlying price availability.",
+      "invalidation_rule": "Opposite column reversal.",
+      "target_model": "Vertical/horizontal count target; version method.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "gann_square_of_nine_level",
+      "name": "Gann Square of Nine Level Confluence",
+      "category": "price_geometry",
+      "typical_bias": "neutral",
+      "structure_definition": "Price levels derived from square-root/angular transformations overlap market pivots.",
+      "deterministic_detection_outline": "Generate levels with explicit anchor, increment and angle convention; detect confluence bands.",
+      "confirmation_rule": "Only a confluence feature; require independent price-action confirmation.",
+      "invalidation_rule": "No intrinsic invalidation; invalidate anchor/version or level break.",
+      "target_model": "No universal target; test nearest level-to-level exits.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "andrews_pitchfork",
+      "name": "Andrews Pitchfork",
+      "category": "price_geometry",
+      "typical_bias": "neutral",
+      "structure_definition": "Three-pivot median line with parallel upper/lower warning lines.",
+      "deterministic_detection_outline": "Use confirmed pivot triplet; calculate median line and parallel lines.",
+      "confirmation_rule": "Test median-line rejection or break; direction from pivot ordering.",
+      "invalidation_rule": "Close beyond opposite line / invalid pivot triplet.",
+      "target_model": "Median line, parallel line or measured channel move.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "schiff_pitchfork",
+      "name": "Schiff Pitchfork",
+      "category": "price_geometry",
+      "typical_bias": "neutral",
+      "structure_definition": "Modified pitchfork with shifted median-line anchor.",
+      "deterministic_detection_outline": "Use confirmed pivot triplet and explicitly selected Schiff anchor transformation.",
+      "confirmation_rule": "Test median-line interaction plus independent confirmation.",
+      "invalidation_rule": "Break of outer parallel line.",
+      "target_model": "Pitchfork line/parallel targets.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "modified_schiff_pitchfork",
+      "name": "Modified Schiff Pitchfork",
+      "category": "price_geometry",
+      "typical_bias": "neutral",
+      "structure_definition": "Pitchfork variant shifting midpoint anchor in both time and price.",
+      "deterministic_detection_outline": "Apply exact documented anchor transformation to confirmed pivots.",
+      "confirmation_rule": "Line rejection/break plus close confirmation.",
+      "invalidation_rule": "Opposite outer-line break.",
+      "target_model": "Median/outer parallel lines.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "fibonacci_cluster",
+      "name": "Fibonacci Cluster",
+      "category": "price_confluence",
+      "typical_bias": "neutral",
+      "structure_definition": "Multiple Fibonacci retracement/extension levels from distinct swings cluster in a narrow zone.",
+      "deterministic_detection_outline": "Generate levels from confirmed swing legs; cluster prices within ATR/percent tolerance.",
+      "confirmation_rule": "Use rejection/structure shift as confirmation; confluence alone is not entry.",
+      "invalidation_rule": "Acceptance through cluster invalidates zone.",
+      "target_model": "Next Fibonacci cluster or swing zone.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "fibonacci_time_zone",
+      "name": "Fibonacci Time Zone",
+      "category": "time_projection",
+      "typical_bias": "neutral",
+      "structure_definition": "Potential turning windows projected using Fibonacci time intervals from anchor pivots.",
+      "deterministic_detection_outline": "Generate future bar indices from confirmed anchors and selected sequence; avoid future-price leakage.",
+      "confirmation_rule": "Require contemporaneous price-action trigger within window.",
+      "invalidation_rule": "Window passes without trigger; do not force a trade.",
+      "target_model": "No intrinsic price target.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "market_profile_balance_area",
+      "name": "Market Profile Balance Area",
+      "category": "auction_market",
+      "typical_bias": "neutral",
+      "structure_definition": "Auction rotates within a value area with accepted trade around point of control.",
+      "deterministic_detection_outline": "Build session/composite TPO or volume profile; compute VAH/VAL/POC with chosen percentage.",
+      "confirmation_rule": "Fade extremes only with rejection; breakout only with acceptance outside value.",
+      "invalidation_rule": "Acceptance through opposite value boundary.",
+      "target_model": "POC, opposite value edge or measured range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "market_profile_open_drive",
+      "name": "Market Profile Open Drive",
+      "category": "auction_market",
+      "typical_bias": "neutral",
+      "structure_definition": "Session opens and moves directionally with little rotation back through opening price.",
+      "deterministic_detection_outline": "Use exchange session; measure opening drive distance, pullbacks and value relation.",
+      "confirmation_rule": "Continuation on pullback hold; session-aware confirmation.",
+      "invalidation_rule": "Reclaim of opening price / opening range.",
+      "target_model": "Prior day levels or measured range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "market_profile_open_test_drive",
+      "name": "Market Profile Open Test Drive",
+      "category": "auction_market",
+      "typical_bias": "neutral",
+      "structure_definition": "Open tests a prior reference (e.g., prior VAH/VAL) then drives away.",
+      "deterministic_detection_outline": "Detect test of prior-session reference and rejection within configurable tolerance.",
+      "confirmation_rule": "Move away and hold beyond reference.",
+      "invalidation_rule": "Acceptance through tested level.",
+      "target_model": "Next profile reference / range projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "failed_auction",
+      "name": "Failed Auction",
+      "category": "auction_market",
+      "typical_bias": "neutral",
+      "structure_definition": "Price probes beyond a profile extreme but cannot sustain trade and returns into value.",
+      "deterministic_detection_outline": "Detect trade beyond VAH/VAL or prior high/low and close back inside with rejection.",
+      "confirmation_rule": "Follow-through away from extreme.",
+      "invalidation_rule": "Re-acceptance outside level.",
+      "target_model": "POC or opposite value boundary.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "turtle_soup",
+      "name": "Turtle Soup False Break",
+      "category": "false_breakout",
+      "typical_bias": "neutral",
+      "structure_definition": "Price briefly breaches a prior N-day high/low then reverses back through the level.",
+      "deterministic_detection_outline": "Compare current high/low to prior N completed bars; require close back inside.",
+      "confirmation_rule": "Next-bar trigger through reversal bar / structure confirmation.",
+      "invalidation_rule": "New extreme beyond sweep high/low.",
+      "target_model": "Range midpoint or opposite range edge.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "failed_breakout_trap",
+      "name": "Failed Breakout Trap",
+      "category": "false_breakout",
+      "typical_bias": "neutral",
+      "structure_definition": "Breakout attracts entries then quickly re-enters prior range.",
+      "deterministic_detection_outline": "Detect close beyond range then close back within range within M bars.",
+      "confirmation_rule": "Break of failure-bar opposite extreme.",
+      "invalidation_rule": "Re-break and acceptance outside original boundary.",
+      "target_model": "Range midpoint / opposite edge.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "failed_breakdown_trap",
+      "name": "Failed Breakdown Trap",
+      "category": "false_breakout",
+      "typical_bias": "neutral",
+      "structure_definition": "Breakdown attracts sellers then quickly re-enters prior range.",
+      "deterministic_detection_outline": "Detect close below support then reclaim within M bars.",
+      "confirmation_rule": "Break of reclaim-bar high.",
+      "invalidation_rule": "New acceptance below support.",
+      "target_model": "Range midpoint / opposite edge.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "gap_and_go",
+      "name": "Gap and Go",
+      "category": "gap_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Security gaps beyond prior range and continues in gap direction.",
+      "deterministic_detection_outline": "Calculate session gap vs prior close/range; distinguish regular session and corporate actions.",
+      "confirmation_rule": "Hold above/below opening range with volume/relative strength.",
+      "invalidation_rule": "Gap fill or opening-range failure.",
+      "target_model": "ATR multiple / prior range extension.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "gap_fill_reversion",
+      "name": "Gap Fill Reversion",
+      "category": "gap_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Price moves back toward prior close after opening gap.",
+      "deterministic_detection_outline": "Measure gap size and detect movement toward prior close; exclude adjusted/corporate-action artifacts.",
+      "confirmation_rule": "Entry only after rejection of gap extreme / reclaim of VWAP.",
+      "invalidation_rule": "Continuation away from prior close invalidates.",
+      "target_model": "Prior close / partial gap levels.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "breakaway_gap",
+      "name": "Breakaway Gap",
+      "category": "gap_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Gap exits a well-defined base or congestion area.",
+      "deterministic_detection_outline": "Detect gap beyond range boundary exceeding ATR threshold.",
+      "confirmation_rule": "Hold outside base with range/volume confirmation.",
+      "invalidation_rule": "Rapid full gap fill and return into base.",
+      "target_model": "Base height projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "exhaustion_gap",
+      "name": "Exhaustion Gap",
+      "category": "gap_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Large late-trend gap followed by failure to continue and reversal.",
+      "deterministic_detection_outline": "Require extended prior trend, extreme gap/volume and failure to progress.",
+      "confirmation_rule": "Close back through gap zone / structure break.",
+      "invalidation_rule": "Continuation and acceptance beyond gap extreme.",
+      "target_model": "Gap fill / prior swing.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "runaway_gap",
+      "name": "Runaway Gap",
+      "category": "gap_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Gap within an established trend, potentially marking trend acceleration.",
+      "deterministic_detection_outline": "Require established trend, mid-trend gap and no nearby major reversal context.",
+      "confirmation_rule": "Continuation after gap support/resistance holds.",
+      "invalidation_rule": "Full gap failure / trend structure break.",
+      "target_model": "Measured trend leg.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "cup_without_handle",
+      "name": "Cup Without Handle",
+      "category": "classic_continuation",
+      "typical_bias": "bullish",
+      "structure_definition": "Rounded recovery from a deep base to prior resistance without a distinct handle.",
+      "deterministic_detection_outline": "Detect U-shaped base and rim; quantify base symmetry/depth and duration.",
+      "confirmation_rule": "Close above rim with relative volume.",
+      "invalidation_rule": "Break below base low; tighter variants use rim retest.",
+      "target_model": "Cup depth projected above rim.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "saucer_with_handle",
+      "name": "Saucer with Handle",
+      "category": "classic_continuation",
+      "typical_bias": "bullish",
+      "structure_definition": "Long rounded base with a short handle near resistance.",
+      "deterministic_detection_outline": "Detect rounded base then compact pullback/sideways handle.",
+      "confirmation_rule": "Break above handle/rim with volume.",
+      "invalidation_rule": "Close below handle low.",
+      "target_model": "Saucer depth projected upward.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "stair_step_trend",
+      "name": "Stair-Step Trend",
+      "category": "trend_continuation",
+      "typical_bias": "bullish",
+      "structure_definition": "Sequence of impulsive advances separated by shallow consolidations and higher lows.",
+      "deterministic_detection_outline": "Detect alternating positive impulse and consolidation; enforce higher swing lows/highs.",
+      "confirmation_rule": "Break above each consolidation high.",
+      "invalidation_rule": "Break below latest confirmed higher low.",
+      "target_model": "Next consolidation / ATR trail.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "descending_stair_step_trend",
+      "name": "Descending Stair-Step Trend",
+      "category": "trend_continuation",
+      "typical_bias": "bearish",
+      "structure_definition": "Sequence of declines separated by weak rallies and lower highs.",
+      "deterministic_detection_outline": "Detect negative impulses and consolidations with lower highs/lows.",
+      "confirmation_rule": "Break below consolidation low.",
+      "invalidation_rule": "Break above latest confirmed lower high.",
+      "target_model": "Next support / ATR trail.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "outside_bar_reversal_structure",
+      "name": "Outside Bar Reversal Structure",
+      "category": "bar_structure",
+      "typical_bias": "neutral",
+      "structure_definition": "A wide outside bar engulfs the prior bar range at a meaningful swing/location.",
+      "deterministic_detection_outline": "High exceeds prior high and low below prior low; classify close location and context.",
+      "confirmation_rule": "Break of outside-bar high/low in direction of close, optionally next bar.",
+      "invalidation_rule": "Opposite extreme break.",
+      "target_model": "ATR/R multiple or nearby structure.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "low",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "inside_bar_breakout",
+      "name": "Inside Bar Breakout",
+      "category": "bar_structure",
+      "typical_bias": "neutral",
+      "structure_definition": "A smaller bar is fully contained in prior bar range; break resolves compression.",
+      "deterministic_detection_outline": "Check high <= mother high and low >= mother low; allow strict/inclusive version.",
+      "confirmation_rule": "Close beyond mother bar edge; use volume/trend context.",
+      "invalidation_rule": "Opposite mother-bar edge.",
+      "target_model": "Mother bar range multiple / ATR.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "low",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "three_bar_play",
+      "name": "Three Bar Play",
+      "category": "bar_structure",
+      "typical_bias": "neutral",
+      "structure_definition": "Directional impulse bar, narrow pause/inside bar, then continuation breakout.",
+      "deterministic_detection_outline": "Detect impulse relative to ATR, pause inside impulse range and follow-through break.",
+      "confirmation_rule": "Break of pause high/low in impulse direction.",
+      "invalidation_rule": "Break of impulse origin/opposite edge.",
+      "target_model": "Measured impulse or R multiple.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "compression_breakout",
+      "name": "Compression Breakout",
+      "category": "volatility_compression",
+      "typical_bias": "neutral",
+      "structure_definition": "Multiple bars show declining range/volatility before a range expansion.",
+      "deterministic_detection_outline": "Measure rolling true range/ATR percentile, overlapping bars and local boundary.",
+      "confirmation_rule": "Close outside compression range with volume expansion.",
+      "invalidation_rule": "Re-entry and acceptance inside compression.",
+      "target_model": "Compression height / ATR expansion.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "low",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "trend_exhaustion_climax",
+      "name": "Trend Exhaustion Climax",
+      "category": "volume_price_analysis",
+      "typical_bias": "neutral",
+      "structure_definition": "Extreme spread/volume and accelerated price move after an extended trend.",
+      "deterministic_detection_outline": "Compare range, volume and rate-of-change to robust rolling percentiles; check prior extension.",
+      "confirmation_rule": "Require reversal/structure break after climax; not a standalone signal.",
+      "invalidation_rule": "Continued acceptance in climax direction invalidates reversal thesis.",
+      "target_model": "Climax origin / nearest value region.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "selling_climax",
+      "name": "Selling Climax",
+      "category": "wyckoff",
+      "typical_bias": "bullish",
+      "structure_definition": "Exceptionally high volume/spread decline with strong recovery from low in a downtrend.",
+      "deterministic_detection_outline": "Detect high volume/range percentile and close location away from low, after decline.",
+      "confirmation_rule": "Automatic rally and subsequent successful test.",
+      "invalidation_rule": "New low with acceptance below climax.",
+      "target_model": "Trading-range high / automatic-rally high.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "buying_climax",
+      "name": "Buying Climax",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Exceptionally high volume/spread advance with rejection from high in an uptrend.",
+      "deterministic_detection_outline": "Detect high volume/range percentile and close location away from high.",
+      "confirmation_rule": "Automatic reaction and weak secondary test.",
+      "invalidation_rule": "Acceptance above climax high.",
+      "target_model": "Trading-range low / automatic-reaction low.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "secondary_test_wyckoff",
+      "name": "Wyckoff Secondary Test",
+      "category": "wyckoff",
+      "typical_bias": "neutral",
+      "structure_definition": "Retest of a prior climax or range extreme with reduced volume/spread.",
+      "deterministic_detection_outline": "After climax, compare retest distance, volume and spread to event bar.",
+      "confirmation_rule": "Hold and subsequent SOS/SOW as directional confirmation.",
+      "invalidation_rule": "Break beyond climax extreme with expanding activity.",
+      "target_model": "Range boundary / measured range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "last_point_of_resistance",
+      "name": "Wyckoff Last Point of Resistance",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Weak rally following SOW that fails beneath old support, now resistance.",
+      "deterministic_detection_outline": "Detect SOW then rally with lower volume/spread and lower high near boundary.",
+      "confirmation_rule": "Break below reaction low.",
+      "invalidation_rule": "Reclaim boundary invalidates.",
+      "target_model": "Range low / measured range.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "creek_breakout",
+      "name": "Wyckoff Creek Breakout",
+      "category": "wyckoff",
+      "typical_bias": "bullish",
+      "structure_definition": "Price crosses a resistance line (creek) after accumulation and shows acceptance.",
+      "deterministic_detection_outline": "Define creek from range highs; detect close above and hold with spread/volume context.",
+      "confirmation_rule": "Backup/test holds above creek.",
+      "invalidation_rule": "Failure back into range.",
+      "target_model": "Range height projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "ice_breakdown",
+      "name": "Wyckoff Ice Breakdown",
+      "category": "wyckoff",
+      "typical_bias": "bearish",
+      "structure_definition": "Price breaks support line (ice) after distribution.",
+      "deterministic_detection_outline": "Define ice from range lows; detect close below and hold.",
+      "confirmation_rule": "Rally to ice fails.",
+      "invalidation_rule": "Reclaim and acceptance inside range.",
+      "target_model": "Range height projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "very_high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "liquidity_sweep_reversal",
+      "name": "Liquidity Sweep Reversal",
+      "category": "liquidity_setup",
+      "typical_bias": "neutral",
+      "structure_definition": "Price trades beyond a known swing/equal-high-low pool then closes back through it.",
+      "deterministic_detection_outline": "Build confirmed liquidity level; detect wick through level and close back inside within same/next bar.",
+      "confirmation_rule": "Micro-structure shift away from sweep.",
+      "invalidation_rule": "Acceptance beyond swept level.",
+      "target_model": "Opposing range boundary / next liquidity pool.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "high",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "equal_highs_equal_lows",
+      "name": "Equal Highs or Equal Lows",
+      "category": "liquidity_structure",
+      "typical_bias": "neutral",
+      "structure_definition": "Two or more confirmed pivots cluster at similar prices, suggesting a visible liquidity level.",
+      "deterministic_detection_outline": "Cluster confirmed pivots within ATR/percentage tolerance and minimum separation.",
+      "confirmation_rule": "No direction by itself; watch sweep and acceptance.",
+      "invalidation_rule": "Level ceases to be relevant after sustained acceptance through it.",
+      "target_model": "No intrinsic target.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
+    },
+    {
+      "id": "compression_to_expansion",
+      "name": "Compression-to-Expansion Transition",
+      "category": "volatility_regime",
+      "typical_bias": "neutral",
+      "structure_definition": "Low-volatility regime transitions into a high-volatility directional move.",
+      "deterministic_detection_outline": "Use rolling ATR/realised volatility percentile and detect percentile jump plus range break.",
+      "confirmation_rule": "Directional close beyond recent range.",
+      "invalidation_rule": "Re-entry into range / volatility expansion fails.",
+      "target_model": "ATR regime multiple / range projection.",
+      "required_inputs": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume_optional"
+      ],
+      "recommended_features": [
+        "atr",
+        "swing_pivots",
+        "relative_volume",
+        "trend_regime",
+        "support_resistance_zones"
+      ],
+      "default_parameters": {
+        "pivot_left_bars": 3,
+        "pivot_right_bars": 3,
+        "level_tolerance_atr": 0.5,
+        "breakout_buffer_atr": 0.1,
+        "max_lookback_bars": 300
+      },
+      "parameter_warning": "Starting research defaults only. Tune on training data, preserve untouched holdout data, and version every rule change.",
+      "subjectivity": "medium",
+      "no_lookahead_requirement": "Use only confirmed pivots and bars closed at signal time; never backdate recognition to the first visual pivot."
     }
   ]
 }

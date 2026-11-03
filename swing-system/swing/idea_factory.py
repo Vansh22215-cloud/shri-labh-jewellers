@@ -52,7 +52,7 @@ def family_ideas():
     try:   # the owner's pattern library: TA-Lib candles and pivot-confirmed chart patterns
         from .catalog import families as cat_families, get
         for f in cat_families():
-            kind = "candlestick" if f.startswith("cdl_") else "chart_pattern"
+            kind = {"cdl": "candlestick", "cdx": "candlestick", "cp": "chart_pattern", "ms": "market_structure"}[f.split("_", 1)[0]]
             it = get(kind, f.split("_", 1)[1])
             out.append(({"family": f}, f"the {it['name']} pattern from the owner's pattern library may time entries "
                                        f"better than the current rule"))

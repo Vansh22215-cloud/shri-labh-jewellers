@@ -292,7 +292,7 @@ def family_signals(B, p):
         setup = "3-day pullback in uptrend"
     else:
         from .patterns import PATTERN_FAMILIES, signals as pattern_signals
-        if fam.startswith(("cdl_", "cp_")):
+        if fam.startswith(("cdl_", "cdx_", "cp_", "ms_")):
             from .catalog import signals as catalog_signals     # owner's pattern library (TA-Lib + pivot engine)
             entry, setup = catalog_signals(fam, B, p)
         elif fam not in PATTERN_FAMILIES:

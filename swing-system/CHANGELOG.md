@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-11-03 (library v2 + Claude-free)
+- Owner's pattern library v2 (791 records) loaded; 492 items built (was ~230), 3,276 ideas in the factory.
+- GitHub save step fixed (results were being lost); research tests ideas for up to 120 min per day on GitHub.
+- Claude's scheduled sessions switched off; GitHub does everything (D80).
+
 ## 2026-11-02
 - v1 created (see DECISIONS.md D13-D20). Parameters fixed from textbook values before any backtest.
 - Proposal P1 (exclude stocks with results due within 5 trading days) registered before testing.
