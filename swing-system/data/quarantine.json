@@ -44,12 +44,14 @@
  "AEGISCHEM": [
   "too little price history"
  ],
+ "AFFLE": [
+  "latest Yahoo close differs from NSE official close by >1%"
+ ],
  "AGCNET": [
   "too little price history"
  ],
  "AHLUCONT": [
-  "price jump >45% on 2017-09-06 (likely unadjusted split/bonus/demerger)",
-  "Yahoo vs NSE official prices disagree erratically (229 unexplained jumps)"
+  "price jump >45% on 2017-09-06 (likely unadjusted split/bonus/demerger)"
  ],
  "AHMEDFORGE": [
   "too little price history"
@@ -132,9 +134,6 @@
  "BARBEQUE": [
   "too little price history"
  ],
- "BESTAGRO": [
-  "Yahoo vs NSE official prices disagree erratically (7 unexplained jumps)"
- ],
  "BHARATFIN": [
   "too little price history"
  ],
@@ -173,6 +172,9 @@
  ],
  "CAPF": [
   "too little price history"
+ ],
+ "CARTRADE": [
+  "latest Yahoo close differs from NSE official close by >1%"
  ],
  "CASHIETF": [
   "too little price history"
@@ -334,8 +336,7 @@
   "too little price history"
  ],
  "FCL": [
-  "price jump >45% on 2018-06-25 (likely unadjusted split/bonus/demerger)",
-  "Yahoo vs NSE official prices disagree erratically (32 unexplained jumps)"
+  "price jump >45% on 2018-06-25 (likely unadjusted split/bonus/demerger)"
  ],
  "FEDDERLOYD": [
   "too little price history"
@@ -351,9 +352,6 @@
  ],
  "FSC": [
   "too little price history"
- ],
- "FSL": [
-  "Yahoo vs NSE official prices disagree erratically (75 unexplained jumps)"
  ],
  "GAL": [
   "too little price history"
@@ -451,9 +449,6 @@
  "HBLPOWER": [
   "too little price history"
  ],
- "HCL-INSYS": [
-  "Yahoo vs NSE official prices disagree erratically (132 unexplained jumps)"
- ],
  "HDFC": [
   "too little price history"
  ],
@@ -523,9 +518,6 @@
  "IFGLREFRAC": [
   "too little price history"
  ],
- "IIFLCAPS": [
-  "Yahoo vs NSE official prices disagree erratically (6 unexplained jumps)"
- ],
  "IIFLNIFTY": [
   "too little price history"
  ],
@@ -584,8 +576,7 @@
   "too little price history"
  ],
  "J&KBANK": [
-  "price jump >45% on 2017-02-27 (likely unadjusted split/bonus/demerger)",
-  "Yahoo vs NSE official prices disagree erratically (75 unexplained jumps)"
+  "price jump >45% on 2017-02-27 (likely unadjusted split/bonus/demerger)"
  ],
  "JBCHEPHARM": [
   "too little price history"
@@ -730,9 +721,6 @@
  ],
  "MARG": [
   "too little price history"
- ],
- "MARINE": [
-  "Yahoo vs NSE official prices disagree erratically (11 unexplained jumps)"
  ],
  "MASTEK": [
   "price jump >45% on 2015-06-12 (likely unadjusted split/bonus/demerger)"
@@ -933,8 +921,7 @@
   "too little price history"
  ],
  "PSUBNKBEES": [
-  "price jump >45% on 2019-12-19 (likely unadjusted split/bonus/demerger)",
-  "Yahoo vs NSE official prices disagree erratically (16 unexplained jumps)"
+  "price jump >45% on 2019-12-19 (likely unadjusted split/bonus/demerger)"
  ],
  "PUNJLLOYD": [
   "too little price history"
@@ -1017,6 +1004,9 @@
  "SELAN": [
   "too little price history"
  ],
+ "SENORES": [
+  "latest Yahoo close differs from NSE official close by >1%"
+ ],
  "SEQUENT": [
   "too little price history"
  ],
@@ -1072,8 +1062,7 @@
   "too little price history"
  ],
  "SILVER1": [
-  "price jump >45% on 2026-02-27 (likely unadjusted split/bonus/demerger)",
-  "Yahoo vs NSE official prices disagree erratically (46 unexplained jumps)"
+  "price jump >45% on 2026-02-27 (likely unadjusted split/bonus/demerger)"
  ],
  "SILVERETF": [
   "too little price history"
@@ -1256,8 +1245,7 @@
   "price jump >45% on 2026-04-30 (likely unadjusted split/bonus/demerger)"
  ],
  "VENUSREM": [
-  "price jump >45% on 2019-10-27 (likely unadjusted split/bonus/demerger)",
-  "Yahoo vs NSE official prices disagree erratically (314 unexplained jumps)"
+  "price jump >45% on 2019-10-27 (likely unadjusted split/bonus/demerger)"
  ],
  "VIDEOIND": [
   "too little price history"

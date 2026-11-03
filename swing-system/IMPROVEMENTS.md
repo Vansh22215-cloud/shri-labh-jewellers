@@ -146,3 +146,643 @@ written: 2026-11-03
 reason: William O'Neil's CANSLIM (strong recent earnings growth + new highs + leadership) is one of the best-documented growth-stock methods; using point-in-time quarterly EPS growth >= 25% with a 52-week-high breakout should pick stronger trends than the moving-average cross (ROADMAP S2). Coverage: ~208 large stocks with EPS history.
 overrides: {"family": "canslim"}
 ```
+
+```proposal
+id: A1
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (MACD line crosses above its signal line while above zero, above the 200-day average) may time entries better than the current rule.
+overrides: {"family": "macd_cross"}
+```
+
+```proposal
+id: A2
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (14-day RSI crosses up through 50 (momentum turning positive) in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "rsi50_cross"}
+```
+
+```proposal
+id: A3
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "stoch_cross"}
+```
+
+```proposal
+id: A4
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (ADX above 25 (strong trend) and +DI crosses above -DI) may time entries better than the current rule.
+overrides: {"family": "adx_dmi"}
+```
+
+```proposal
+id: A5
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Supertrend (10, 3) flips from down to up) may time entries better than the current rule.
+overrides: {"family": "supertrend_flip"}
+```
+
+```proposal
+id: A6
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (close breaks above the Ichimoku cloud with Tenkan above Kijun) may time entries better than the current rule.
+overrides: {"family": "ichimoku_breakout"}
+```
+
+```proposal
+id: A7
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Money Flow Index crosses up through 20 (selling exhausted) in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "mfi_reversal"}
+```
+
+```proposal
+id: A8
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Chaikin Money Flow above 0.15 (accumulation) with a new 20-day closing high) may time entries better than the current rule.
+overrides: {"family": "cmf_breakout"}
+```
+
+```proposal
+id: A9
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (On-Balance Volume at a 50-day high while price is above its 50-day average) may time entries better than the current rule.
+overrides: {"family": "obv_breakout"}
+```
+
+```proposal
+id: A10
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Commodity Channel Index crosses above +100 (new strength)) may time entries better than the current rule.
+overrides: {"family": "cci_breakout"}
+```
+
+```proposal
+id: A11
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Williams %R crosses up through -80 (oversold turn) in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "williams_r"}
+```
+
+```proposal
+id: A12
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (weekly: top 10% by 20-day rate of change, above the 50-day average) may time entries better than the current rule.
+overrides: {"family": "roc_leaders"}
+```
+
+```proposal
+id: A13
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (50-day average crosses above the 200-day average) may time entries better than the current rule.
+overrides: {"family": "golden_cross"}
+```
+
+```proposal
+id: A14
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (close above the upper Keltner channel (20-day EMA + 2 ATR)) may time entries better than the current rule.
+overrides: {"family": "keltner_breakout"}
+```
+
+```proposal
+id: A15
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Heikin-Ashi candle turns green after 3+ red ones, in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "heikin_ashi_turn"}
+```
+
+```proposal
+id: A16
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (O'Neil/Kacher pocket pivot: up-day volume above every down-day volume of the prior 10 days, rising 50-day average) may time entries better than the current rule.
+overrides: {"family": "pocket_pivot"}
+```
+
+```proposal
+id: A17
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (volume dried up (5-day average < 60% of normal) then a 20-day breakout on 1.5x volume) may time entries better than the current rule.
+overrides: {"family": "volume_dryup_breakout"}
+```
+
+```proposal
+id: A18
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (Larry Williams volatility breakout: close above open + 0.6 x ATR at a 20-day high) may time entries better than the current rule.
+overrides: {"family": "volatility_breakout"}
+```
+
+```proposal
+id: A19
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (bullish engulfing candle after a pullback near the 20-day EMA in an uptrend) may time entries better than the current rule.
+overrides: {"family": "bullish_engulfing"}
+```
+
+```proposal
+id: A20
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (hammer candle (long lower shadow) after a 3-day decline in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "hammer"}
+```
+
+```proposal
+id: A21
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (morning-star three-candle reversal in a long-term uptrend) may time entries better than the current rule.
+overrides: {"family": "morning_star"}
+```
+
+```proposal
+id: A22
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (three strong up candles in a row closing near their highs) may time entries better than the current rule.
+overrides: {"family": "three_white_soldiers"}
+```
+
+```proposal
+id: A23
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (two similar lows 2-8 weeks apart, then a close above the high between them) may time entries better than the current rule.
+overrides: {"family": "double_bottom"}
+```
+
+```proposal
+id: A24
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (flat highs with rising lows over ~6 weeks, then a close above the flat top) may time entries better than the current rule.
+overrides: {"family": "ascending_triangle"}
+```
+
+```proposal
+id: A25
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (15%+ rise (pole), tight 5-day pause on lighter volume (flag), then a close above the flag) may time entries better than the current rule.
+overrides: {"family": "bull_flag"}
+```
+
+```proposal
+id: A26
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (cup and handle: older high, 15%+ dip and recovery, then a close above that high) may time entries better than the current rule.
+overrides: {"family": "cup_handle"}
+```
+
+```proposal
+id: A27
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a well-known setup (strong stock in an uptrend 5-10 days before its results date (pre-results run-up)) may time entries better than the current rule.
+overrides: {"family": "pre_results_runup"}
+```
+
+```proposal
+id: A28
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (Minervini trend template + volatility contraction breakout) may beat the current entry rule with the same exits.
+overrides: {"family": "minervini_vcp"}
+```
+
+```proposal
+id: A29
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (Weinstein stage-2 breakout above a rising 30-week average) may beat the current entry rule with the same exits.
+overrides: {"family": "weinstein_stage2"}
+```
+
+```proposal
+id: A30
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (Darvas box breakout near the 52-week high) may beat the current entry rule with the same exits.
+overrides: {"family": "darvas_box"}
+```
+
+```proposal
+id: A31
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (monthly 12-1 momentum leaders) may beat the current entry rule with the same exits.
+overrides: {"family": "momentum_12_1"}
+```
+
+```proposal
+id: A32
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (stocks closest to their 52-week high) may beat the current entry rule with the same exits.
+overrides: {"family": "high52_rank"}
+```
+
+```proposal
+id: A33
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (post-earnings drift after strong results gaps) may beat the current entry rule with the same exits.
+overrides: {"family": "pead"}
+```
+
+```proposal
+id: A34
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (leaders of the strongest sectors) may beat the current entry rule with the same exits.
+overrides: {"family": "sector_rotation"}
+```
+
+```proposal
+id: A35
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: a published method (sharp dips below the lower Bollinger band in uptrends) may beat the current entry rule with the same exits.
+overrides: {"family": "connors_pctb"}
+```
+
+```proposal
+id: A36
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "trend_pb_bo"}
+```
+
+```proposal
+id: A37
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "donchian"}
+```
+
+```proposal
+id: A38
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "high52"}
+```
+
+```proposal
+id: A39
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "mean_reversion"}
+```
+
+```proposal
+id: A40
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "momentum_leaders"}
+```
+
+```proposal
+id: A41
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "squeeze"}
+```
+
+```proposal
+id: A42
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "volume_surge"}
+```
+
+```proposal
+id: A43
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "nr7"}
+```
+
+```proposal
+id: A44
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "lowvol_momentum"}
+```
+
+```proposal
+id: A45
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "inside_day"}
+```
+
+```proposal
+id: A46
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "gap_go"}
+```
+
+```proposal
+id: A47
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "strong_close"}
+```
+
+```proposal
+id: A48
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "pullback_3d"}
+```
+
+```proposal
+id: A49
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Three Inside Up/Down pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdl3inside"}
+```
+
+```proposal
+id: A50
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Three-Line Strike pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdl3linestrike"}
+```
+
+```proposal
+id: A51
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Three Outside Up/Down pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdl3outside"}
+```
+
+```proposal
+id: A52
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Three Stars in the South pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdl3starsinsouth"}
+```
+
+```proposal
+id: A53
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Three Advancing White Soldiers pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdl3whitesoldiers"}
+```
+
+```proposal
+id: A54
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Abandoned Baby pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlabandonedbaby"}
+```
+
+```proposal
+id: A55
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Belt-hold pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlbelthold"}
+```
+
+```proposal
+id: A56
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Breakaway pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlbreakaway"}
+```
+
+```proposal
+id: A57
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Closing Marubozu pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlclosingmarubozu"}
+```
+
+```proposal
+id: A58
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Concealing Baby Swallow pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlconcealbabyswall"}
+```
+
+```proposal
+id: A59
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Counterattack pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlcounterattack"}
+```
+
+```proposal
+id: A60
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Doji pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdldoji"}
+```
+
+```proposal
+id: A61
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Doji Star pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdldojistar"}
+```
+
+```proposal
+id: A62
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Engulfing Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlengulfing"}
+```
+
+```proposal
+id: A63
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Up/Down-Gap Side-by-Side White Lines pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlgapsidesidewhite"}
+```
+
+```proposal
+id: A64
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Harami Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlharami"}
+```
+
+```proposal
+id: A65
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Harami Cross Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlharamicross"}
+```
+
+```proposal
+id: A66
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the High-Wave Candle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlhighwave"}
+```
+
+```proposal
+id: A67
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Hikkake Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlhikkake"}
+```
+
+```proposal
+id: A68
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Modified Hikkake Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlhikkakemod"}
+```
+
+```proposal
+id: A69
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Homing Pigeon pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlhomingpigeon"}
+```
+
+```proposal
+id: A70
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Kicking pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlkicking"}
+```
+
+```proposal
+id: A71
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Kicking by Length pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlkickingbylength"}
+```
+
+```proposal
+id: A72
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Ladder Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlladderbottom"}
+```
+
+```proposal
+id: A73
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Long-Legged Doji pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdllongleggeddoji"}
+```
+
+```proposal
+id: A74
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Long Line Candle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdllongline"}
+```
+
+```proposal
+id: A75
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Marubozu pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlmarubozu"}
+```
+
+```proposal
+id: A76
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Matching Low pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlmatchinglow"}
+```
+
+```proposal
+id: A77
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Mat Hold pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlmathold"}
+```
+
+```proposal
+id: A78
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Morning Doji Star pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlmorningdojistar"}
+```
+
+```proposal
+id: A79
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Morning Star pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlmorningstar"}
+```
+
+```proposal
+id: A80
+status: proposed
+written: 2026-11-03
+reason: (idea factory) For a1: the Piercing Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlpiercing"}
+```

@@ -1,24 +1,24 @@
 {
  "strategy": "a1",
- "trades": 584,
+ "trades": 583,
  "by": {
   "trend": {
    "downtrend": {
-    "trades": 152,
-    "win_pct": 51.32,
-    "avg_r": 0.18
+    "trades": 154,
+    "win_pct": 50.65,
+    "avg_r": 0.16
    },
    "uptrend": {
-    "trades": 432,
-    "win_pct": 48.38,
-    "avg_r": 0.09
+    "trades": 429,
+    "win_pct": 48.48,
+    "avg_r": 0.11
    }
   },
   "fear": {
    "calm": {
-    "trades": 322,
-    "win_pct": 45.96,
-    "avg_r": 0.09
+    "trades": 319,
+    "win_pct": 46.08,
+    "avg_r": 0.1
    },
    "nervous": {
     "trades": 65,
@@ -26,33 +26,33 @@
     "avg_r": 0.26
    },
    "normal": {
-    "trades": 197,
-    "win_pct": 50.25,
-    "avg_r": 0.11
+    "trades": 199,
+    "win_pct": 49.75,
+    "avg_r": 0.1
    }
   },
   "breadth": {
    "mixed": {
-    "trades": 157,
-    "win_pct": 43.95,
-    "avg_r": -0.07
+    "trades": 159,
+    "win_pct": 44.03,
+    "avg_r": -0.05
    },
    "strong": {
-    "trades": 246,
-    "win_pct": 50.81,
-    "avg_r": 0.17
+    "trades": 244,
+    "win_pct": 52.05,
+    "avg_r": 0.19
    },
    "weak": {
-    "trades": 181,
-    "win_pct": 51.38,
-    "avg_r": 0.21
+    "trades": 180,
+    "win_pct": 49.44,
+    "avg_r": 0.17
    }
   },
   "trend+fear": {
    "downtrend/calm": {
     "trades": 49,
     "win_pct": 42.86,
-    "avg_r": 0.07
+    "avg_r": 0.02
    },
    "downtrend/nervous": {
     "trades": 30,
@@ -60,14 +60,14 @@
     "avg_r": 0.25
    },
    "downtrend/normal": {
-    "trades": 73,
-    "win_pct": 52.05,
-    "avg_r": 0.23
+    "trades": 75,
+    "win_pct": 50.67,
+    "avg_r": 0.21
    },
    "uptrend/calm": {
-    "trades": 273,
-    "win_pct": 46.52,
-    "avg_r": 0.09
+    "trades": 270,
+    "win_pct": 46.67,
+    "avg_r": 0.12
    },
    "uptrend/nervous": {
     "trades": 35,
