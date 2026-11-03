@@ -8783,5 +8783,10 @@
   "name": "candidate-R1",
   "first_tested": "2026-11-03",
   "note": "proposal R1"
+ },
+ "5b724bb997": {
+  "name": "candidate-R2",
+  "first_tested": "2026-11-03",
+  "note": "proposal R2"
  }
 }
