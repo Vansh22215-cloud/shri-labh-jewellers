@@ -229,7 +229,8 @@ def run():
             bs_ = p["backtest_stats"]
             setup_hits = {s_: {"win_rate_pct": bs_["win_rate_pct"], "avg_r": "n/a", "trades": bs_["trades"]}
                           for s_ in ("20/50 average crossover", p.get("family", ""))}
-            bt_ref = {"closed": bs_["trades"], "win_rate_pct": bs_["win_rate_pct"], "avg_r": "-", "total_pnl": "-"}
+            bt_ref = {"closed": bs_["trades"], "win_rate_pct": bs_["win_rate_pct"],
+                      "avg_r": f"avg Rs {bs_.get('avg_per_trade_rs', '?')}/trade", "total_pnl": "-"}
     except Exception:
         setup_hits, bt_ref = {}, {}
     try:
@@ -385,6 +386,10 @@ def run():
     lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
     if today_line():
         lines.append("🧭 " + today_line())
+    _bs = p.get("backtest_stats") or {}
+    if _bs.get("avg_win_rs"):
+        lines.append(f"📐 Per trade (13-yr test): {_bs['win_rate_pct']:.0f}% winners, avg win Rs {_bs['avg_win_rs']}, "
+                     f"avg loss Rs {-_bs['avg_loss_rs']}, avg hold {_bs['avg_days_held']:.0f} days")
     for i, pl in enumerate(tips, 1):
         lines.append(f"{i}. {pl['symbol']} ({pl['setup']}) buy {pl['entry_low']}-{pl['entry_high']}, "
                      f"stop {pl['stop']}, T1 {pl['target1']}, T2 {pl['target2']}, qty {pl['qty']}")

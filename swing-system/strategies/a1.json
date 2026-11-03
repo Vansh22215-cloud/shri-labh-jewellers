@@ -49,8 +49,15 @@
     "cagr_pct": 9.03,
     "max_drawdown_pct": -9.92,
     "trades": 516,
-    "win_rate_pct": 49.6,
+    "win_rate_pct": 47.2,
     "holdout_return_pct": 5.46,
-    "holdout_period": "2025-05 to 2026-11"
+    "holdout_period": "2025-05 to 2026-11",
+    "trades_per_month": 3.5,
+    "avg_days_held": 21.2,
+    "avg_win_rs": 496,
+    "avg_loss_rs": -388,
+    "avg_per_trade_rs": 29,
+    "time_exits_pct": 65,
+    "max_losing_streak": 9
   }
 }

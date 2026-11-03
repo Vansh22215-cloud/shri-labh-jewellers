@@ -186,6 +186,11 @@ def run(send=True):
            f"Breadth    {adv} up / {dec} down (top 500)\n"
            f"Market     {'HEALTHY' if market_ok else 'WEAK (below 200-day avg)'}\n"
            f"Strategy   {E(sname)} {'(validated)' if validated else '(NOT validated - aggressive mode)'}</pre>")
+    bs = p.get("backtest_stats") or {}
+    if bs.get("avg_win_rs"):
+        hdr += (f"\n📐 <b>Per trade (13-yr test, after charges):</b> {bs['win_rate_pct']:.0f}% winners, avg win "
+                f"₹{bs['avg_win_rs']:,}, avg loss ₹{-bs['avg_loss_rs']:,}, avg hold {bs['avg_days_held']:.0f} days, "
+                f"~{bs['trades_per_month']} trades/month. Losing streaks of up to {bs['max_losing_streak']} happen.")
     from .research import today_line
     rl = today_line()
     if rl:
