@@ -322,18 +322,30 @@ def format_reply(tip, verdict, reasons, d):
 
 
 def check_text(text, source="", capital=45000.0):
+    from . import options_check
+    o = options_check.parse_option(text)
+    if o and o.get("symbol"):
+        verdict, reasons, d = options_check.evaluate_option(o, capital)
+        save({"symbol": o["symbol"], "side": f"{o['strike']:g} {o['kind']}", "horizon": "option",
+              "raw": o["raw"]}, verdict, {"entry": d.get("premium"), "stop": o.get("stop"),
+                                           "target": (o.get("targets") or [None])[0], "ltp": d.get("spot"),
+                                           "hist_target_first_pct": d.get("hist_pct"),
+                                           "breakeven_win_pct": d.get("need_pct"), "expected_r": d.get("expected_r")},
+             source, outcome="n/a (option - outcome not tracked yet)")
+        return options_check.format_option_reply(o, verdict, reasons, d)
     tip = parse(text)
     verdict, reasons, d = evaluate(tip, capital)
     save(tip, verdict, d, source)
     return format_reply(tip, verdict, reasons, d)
 
 
-def save(tip, verdict, d, source):
+def save(tip, verdict, d, source, outcome=None):
     row = {"checked": str(pd.Timestamp.now().round("s")), "source": source, "symbol": tip.get("symbol"),
            "side": tip.get("side"), "horizon": tip.get("horizon"), "verdict": verdict,
            "entry": d.get("entry"), "stop": d.get("stop"), "target": d.get("target"), "ltp": d.get("ltp"),
            "hist_pct": d.get("hist_target_first_pct"), "need_pct": d.get("breakeven_win_pct"),
-           "expected_r": d.get("expected_r"), "outcome": "open" if tip.get("symbol") else "n/a",
+           "expected_r": d.get("expected_r"),
+           "outcome": outcome or ("open" if tip.get("symbol") else "n/a"),
            "raw": tip.get("raw", "").replace("\n", " ")[:300]}
     df = pd.read_csv(TIPS_F) if TIPS_F.exists() else pd.DataFrame()
     pd.concat([df, pd.DataFrame([row])], ignore_index=True).to_csv(TIPS_F, index=False)

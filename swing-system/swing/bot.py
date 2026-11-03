@@ -128,6 +128,6 @@ def run_forever():
                     owner = handle(token, owner, msg, float(s.get("capital", 45000)))
             backoff = 5
         except Exception as e:
-            log.warning("bot loop error: %s (retrying in %ss)", e, backoff)
+            log.warning("bot loop error: %s (retrying in %ss)", type(e).__name__, backoff)   # never log the token
             time.sleep(backoff)
             backoff = min(backoff * 2, 300)
