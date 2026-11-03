@@ -28,6 +28,7 @@ if __name__ == "__main__":
         notes.append("New ideas written for the next runs: " + "; ".join(new))
     research.run()
     notes.append(research.today_line())
-    msg = "🔬 Daily research\n" + "\n".join(f"• {n}" for n in notes) + f"\n{len(todo) - 1 if todo else 0} ideas left to test."
+    queued = len([p for p in weekly.parse_proposals() if p.get("status") == "proposed"])
+    msg = "🔬 Daily research\n" + "\n".join(f"• {n}" for n in notes) + f"\n{queued} ideas queued for the next runs (about 900 in the library)."
     print(msg)
     print(telegram.send(load_settings(), msg))   # owner wants every result on Telegram
