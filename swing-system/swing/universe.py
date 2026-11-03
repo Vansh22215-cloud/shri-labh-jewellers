@@ -59,12 +59,21 @@ def build_history(start="2013-01-01", n=500):
     first_seen = samples.groupby("symbol")["date"].min()
     first_seen[first_seen == samples["date"].min()] = pd.Timestamp("1900-01-01")
     months = pd.date_range(start, pd.Timestamp.today(), freq="MS")
+    old = pd.read_csv(UNIVERSE_FILE, parse_dates=["asof"]) if UNIVERSE_FILE.exists() else None
     rows = []
     for m in months:
+        n_days = samples[(samples["date"] < m) & (samples["date"] >= m - pd.Timedelta(days=120))]["date"].nunique()
+        if n_days < 15 and old is not None and (old["asof"] == m).any():
+            rows.append(old[old["asof"] == m][["symbol", "med_value", "rank", "asof"]])   # keep: not enough data here
+            continue
+        if n_days < 15 and old is not None:
+            continue
         u = universe_at(samples, m, n=n, first_seen=first_seen)
         u["asof"] = m
         rows.append(u)
     hist = pd.concat(rows, ignore_index=True)
+    if old is not None:   # months never rebuilt stay as they were
+        hist = pd.concat([old[~old["asof"].isin(hist["asof"])], hist]).sort_values(["asof", "rank"])
     hist.to_csv(UNIVERSE_FILE, index=False)
     log.info("Universe history: %d months, %d distinct symbols", len(months), hist["symbol"].nunique())
     return hist

@@ -27,7 +27,9 @@ def refresh(first_time=False, hist_start="2012-09-01"):
 
     # Official NSE bhavcopies: every 5th trading day since hist_start + every one of the last 15 days.
     hist_days = cal[cal >= pd.Timestamp(hist_start)]
-    sample = set(hist_days[::5]) | set(cal[-15:])
+    # A fresh machine (e.g. GitHub Actions) with the committed universe list only fetches recent days.
+    have_hist = len(list(universe.BHAV.glob("*.csv"))) >= 300 or not universe.UNIVERSE_FILE.exists()
+    sample = (set(hist_days[::5]) if have_hist else set()) | set(cal[-15:])
     # Today's file too (Yahoo's calendar may not include today yet).
     today = pd.Timestamp.today().normalize()
     if today.weekday() < 5:

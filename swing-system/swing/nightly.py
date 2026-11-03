@@ -443,6 +443,8 @@ def run():
             lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines))
+    if settings.get("send_report_file", True):
+        telegram.send_document(settings, f, "Full report (open in your browser)")
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,
                   "telegram": tg})

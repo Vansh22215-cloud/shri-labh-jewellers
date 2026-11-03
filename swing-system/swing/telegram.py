@@ -19,7 +19,10 @@ def _chat_id(token):
 
 def _remember_chat(chat):
     """Telegram forgets messages after ~24h, so store the chat id permanently in my_secrets.yaml."""
+    import os
     import re
+    if os.environ.get("GITHUB_ACTIONS"):
+        return   # on GitHub the chat id comes from a secret; never write private values to files there
     from .config import ROOT
     f = ROOT / "my_secrets.yaml"
     txt = f.read_text(encoding="utf-8") if f.exists() else ""
@@ -62,3 +65,20 @@ def send(settings, text, html=False):
     except Exception as e:
         log.warning("Telegram failed: %s", e)
         return f"Telegram failed: {e}"
+
+
+def send_document(settings, path, caption=""):
+    """Send a file (e.g. the evening HTML report) to the owner's chat."""
+    token = (settings.get("telegram_bot_token") or "").strip()
+    chat = str(settings.get("telegram_chat_id") or "").strip()
+    if not token or not chat:
+        return "Telegram not set up"
+    try:
+        with open(path, "rb") as fh:
+            requests.post(f"https://api.telegram.org/bot{token}/sendDocument", data={"chat_id": chat, "caption": caption[:1000]},
+                          files={"document": (path.name if hasattr(path, "name") else "report.html", fh, "text/html")},
+                          timeout=60).raise_for_status()
+        return "report sent"
+    except Exception as e:
+        log.warning("Telegram document failed: %s", e)
+        return f"Telegram document failed: {e}"

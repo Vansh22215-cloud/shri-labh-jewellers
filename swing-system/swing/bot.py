@@ -22,7 +22,9 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "• GOOD / RISKY / AVOID with reasons\n• the odds from that stock's own 5-year history vs what you need "
         "after Zerodha charges\n• red flags: no stop-loss, pump-and-dump stocks, results, trend\n\n"
         "You can also type a tip, e.g.  BUY TATASTEEL 175 SL 170 TGT 185\n"
-        "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n\n" + DISCLAIMER)
+        "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
+        "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
+        "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n\n" + DISCLAIMER)
 
 
 def _api(token, method, **params):
@@ -72,6 +74,54 @@ def _score_text():
     return "\n".join(lines)
 
 
+def trade_command(text):
+    """/bought SYMBOL QTY PRICE [STOP]  |  /sold SYMBOL [PRICE]  |  /trades   (updates data/my_trades.csv)"""
+    import pandas as pd
+    from . import data_prices, journal
+    from .config import DATA, load_settings, load_strategy
+    parts = text.split()
+    cmd = parts[0].lower()
+    my = journal.load_my_trades()
+    if cmd == "/trades":
+        if my.empty:
+            return "No open trades recorded. Use /bought SYMBOL QTY PRICE [STOP]."
+        return "Your open trades:\n" + "\n".join(f"- {r.symbol}: {int(r.qty)} @ {r.buy_price} (stop {r.stop})" for r in my.itertuples())
+    if len(parts) < 2:
+        return "Usage: /bought ICICIBANK 5 1425 1340   or   /sold ICICIBANK 1500"
+    sym = parts[1].upper()
+    if cmd == "/bought":
+        try:
+            qty, price = int(parts[2]), float(parts[3])
+        except Exception:
+            return "Usage: /bought SYMBOL QTY PRICE [STOP], e.g. /bought ICICIBANK 5 1425 1340"
+        stop = float(parts[4]) if len(parts) > 4 else None
+        if stop is None:   # default: the tips strategy's stop (3 x ATR below the buy price, or 2 x for v1)
+            s_ = load_settings()
+            p = load_strategy(s_.get("aggressive_strategy", "a1") if s_.get("tips_mode") == "aggressive" else s_["live_strategy"])
+            df = data_prices.load(sym)
+            if df is not None and len(df) > 20:
+                tr = (df["high"] - df["low"]).tail(14).mean()
+                stop = round(price - p["stop_atr_mult"] * tr, 2)
+        row = pd.DataFrame([{"symbol": sym, "buy_date": str(pd.Timestamp.today().date()), "buy_price": price,
+                             "qty": qty, "stop": stop}])
+        out = pd.concat([my[my["symbol"] != sym], row], ignore_index=True)
+        out.to_csv(journal.MY_TRADES, index=False)
+        return f"Recorded: bought {qty} {sym} @ {price}" + (f", stop {stop}. Set this stop as a GTT in Kite now." if stop else ".")
+    if cmd == "/sold":
+        if sym not in set(my["symbol"]):
+            return f"{sym} is not in your open trades."
+        r = my[my["symbol"] == sym].iloc[0]
+        px = float(parts[2]) if len(parts) > 2 else None
+        f = DATA / "closed_trades.csv"
+        rec = pd.DataFrame([{"symbol": sym, "buy_date": r["buy_date"], "buy_price": r["buy_price"], "qty": r["qty"],
+                             "exit_date": str(pd.Timestamp.today().date()), "exit_price": px,
+                             "pnl": round((px - float(r["buy_price"])) * float(r["qty"]), 2) if px else None}])
+        (pd.concat([pd.read_csv(f), rec]) if f.exists() else rec).to_csv(f, index=False)
+        my[my["symbol"] != sym].to_csv(journal.MY_TRADES, index=False)
+        return f"Recorded: sold {sym}" + (f" @ {px}. P&L Rs {rec.iloc[0]['pnl']:,.0f}" if px else "") + ". Delete its GTT in Kite."
+    return "Unknown command."
+
+
 def handle(token, owner, msg, capital):
     chat = str(msg["chat"]["id"])
     if owner and chat != owner:
@@ -89,6 +139,8 @@ def handle(token, owner, msg, capital):
         reply = _report_summary()
     elif text.startswith("/score"):
         reply = _score_text()
+    elif text.lower().startswith(("/bought", "/sold", "/trades")):
+        reply = trade_command(text)
     else:
         try:
             reply = tipcheck.check_text(text, source=_source(msg), capital=capital)
@@ -131,3 +183,22 @@ def run_forever():
             log.warning("bot loop error: %s (retrying in %ss)", type(e).__name__, backoff)   # never log the token
             time.sleep(backoff)
             backoff = min(backoff * 2, 300)
+
+
+def poll_once():
+    """Answer every waiting message once and exit (used by GitHub Actions every hour)."""
+    s = load_settings()
+    token = (s.get("telegram_bot_token") or "").strip()
+    if not token:
+        return 0
+    owner = str(s.get("telegram_chat_id") or "").strip()
+    offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
+    res = _api(token, "getUpdates", offset=offset, timeout=0)
+    n = 0
+    for u in res.get("result", []):
+        OFFSET.write_text(str(u["update_id"] + 1))
+        msg = u.get("message")
+        if msg:
+            owner = handle(token, owner, msg, float(s.get("capital", 45000)))
+            n += 1
+    return n

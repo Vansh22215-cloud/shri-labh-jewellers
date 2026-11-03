@@ -23,10 +23,10 @@ import pandas as pd
 import requests
 
 from . import costs, data_prices, fundamentals
-from .config import DISCLAIMER, EVENTS, JOURNAL, get_logger
+from .config import DATA, DISCLAIMER, EVENTS, JOURNAL, get_logger
 
 log = get_logger()
-TIPS_F = JOURNAL / "forwarded_tips.csv"
+TIPS_F = DATA / "forwarded_tips.csv"   # personal (channel names, messages): not in the public repo
 STOPWORDS = {"BUY", "SELL", "SL", "TGT", "CMP", "NSE", "BSE", "TARGET", "TARGETS", "STOP", "LOSS", "ABOVE",
              "BELOW", "NEAR", "AT", "ON", "FOR", "THE", "AND", "OR", "INTRADAY", "SWING", "BTST", "STBT", "CALL",
              "ENTRY", "EXIT", "RANGE", "ZONE", "HOLD", "LONG", "SHORT", "TERM", "DAYS", "WEEK", "WEEKS", "ADD",

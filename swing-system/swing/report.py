@@ -34,10 +34,12 @@ def stock_chart(sym, raw, plan, day):
     axv.set_ylabel("Volume", fontsize=7)
     fig.autofmt_xdate()
     fig.tight_layout()
-    f = CHARTS / f"{day}_{sym}.png"
-    fig.savefig(f, dpi=90)
+    import base64
+    import io
+    buf = io.BytesIO()
+    fig.savefig(buf, dpi=80, format="png")
     plt.close(fig)
-    return f"charts/{f.name}"
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()   # self-contained report file
 
 
 def append_stock_note(sym, day, plan, extra):

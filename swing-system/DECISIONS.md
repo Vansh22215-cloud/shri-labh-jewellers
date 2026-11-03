@@ -270,3 +270,11 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   years it beats the single-pick procedure that currently feeds aggressive mode (6.49%/yr, worst fall -22.1%).
   Decision: aggressive mode will move to the ensemble (today: ma_cross S385 + volume_surge S444 + nr7 S489, one third
   of the risk budget each) once the live multi-strategy plumbing is built and tested (next ROADMAP step).
+
+## Running without Claude (2026-11-03, the owner's Claude plan ends)
+- **D73.** All daily jobs run on GitHub Actions (free for public repositories): hourly scan, evening trades,
+  research (pre-registered ideas only; no NEW ideas without Claude), weekly self-check with monthly searches, and an
+  hourly Telegram bot poll. Data is kept between runs in the Actions cache; the committed universe list lets a fresh
+  runner start with recent data only. The repository is PUBLIC, so personal files (your trades, forwarded tips,
+  daily reports) are kept out of git: they live in the cache and are backed up as 90-day private run artifacts.
+  NSE data use stays at option B (small daily downloads) until the owner decides otherwise (D70).

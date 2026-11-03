@@ -7,30 +7,25 @@ Every weekday evening this system downloads free market data, checks it, and wri
 **"No tips today"** and the reason. It only gives tips if its strategy has passed a strict honesty test
 (the "validation gate"). It never connects to your broker.
 
-## Your 3 steps
+## How it runs (no Claude, no laptop needed)
+Everything runs **automatically on GitHub's free computers** (GitHub Actions, file `.github/workflows/swing.yml`):
+| When (IST, weekdays) | What you get on Telegram |
+|---|---|
+| 10:20 - 15:20, hourly | only if something needs action: a new buy signal, or your stop/target was hit |
+| 18:40 | tomorrow's trades (stock, buy range, stop, target, quantity) + the full report as a file |
+| every hour | answers to tips you forward, and to /bought /sold /trades |
+| 20:17 | (silent) tests one pre-registered improvement idea |
+| Saturday 10:17 | (silent) weekly self-check; once a month it re-runs all strategy searches |
 
-**Step 1 - Install Python (once, 5 minutes)**
-1. Open https://www.python.org/downloads/ and click the yellow **Download Python 3.12** (or newer) button.
-2. Open the downloaded file. **Tick the box "Add python.exe to PATH"** at the bottom of the first screen.
-3. Click **Install Now**, wait, then click **Close**.
+**One-time setup (2 minutes, on your phone):** GitHub repo -> Settings -> Secrets and variables -> Actions ->
+New repository secret: `TELEGRAM_BOT_TOKEN` = your bot token, and `TELEGRAM_CHAT_ID` = your chat id.
 
-**Step 2 - Get this folder and run setup (once, 1-3 hours, mostly waiting)**
-1. On the laptop, open https://github.com/Vansh22215-cloud/shri-labh-jewellers and sign in to GitHub.
-2. Click the branch button (it says **main**) and choose **claude/nse-swing-trading-system-sqncpt**.
-3. Click the green **Code** button -> **Download ZIP**. Open your Downloads folder, right-click the ZIP ->
-   **Extract All...** -> **Extract**. Open the extracted folder, then the **swing-system** folder inside it.
-4. Open the **windows** folder and **double-click `SETUP.bat`**. If Windows says "Windows protected your PC",
-   click **More info -> Run anyway**. Leave the black window open until it says **DONE**.
-   (No Claude login is needed on the laptop.)
+**Record your trades** by messaging the bot: `/bought ICICIBANK 5 1425 1340` (symbol, qty, price, stop) and
+`/sold ICICIBANK 1500`. These stay private (not in the public repository).
 
-**Step 3 (optional) - Telegram from the laptop**
-Your evening tips and the tip-checker bot already run from Claude's cloud, so the laptop does NOT send Telegram
-messages by default (two senders would send everything twice). The laptop keeps its own copy of the report in
-`reports/latest.html` as a backup.
-
-## Your dashboard (phone-friendly)
-https://claude.ai/artifact/LKLWX4WHnvo6bvDoa6botT - market today, ranked trade ideas, your trades, odds, research and
-the tips journal. Refreshed after every hourly scan and the evening run. (Page source: dashboard_page.html.)
+**Optional - run it on a laptop any time:** install Python, download this folder from GitHub (Code -> Download
+ZIP), double-click `windows/SETUP.bat` once, then `windows/run_nightly.bat` whenever you want a fresh report.
+The laptop never sends Telegram messages (only GitHub does), so nothing is sent twice.
 
 ## Check any tip on Telegram
 Forward any stock tip (from a channel, group or friend) to your bot **@Vsjshsjsbaksnsjsh_bot**. Within seconds it
