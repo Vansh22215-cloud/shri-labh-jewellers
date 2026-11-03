@@ -8768,5 +8768,10 @@
   "name": "I119",
   "first_tested": "2026-11-03",
   "note": "intraday: first_hour_momo, target none (exit 3:15 pm), stop at first-hour midpoint, trend filter off, max 2 trade(s)/day"
+ },
+ "fbe62c02ed": {
+  "name": "S385",
+  "first_tested": "2026-11-03",
+  "note": "aggressive-mode check: ma_cross risk 2.0%"
  }
 }

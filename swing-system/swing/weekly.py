@@ -176,6 +176,29 @@ def ask_claude_for_proposals(summary):
         return f"Claude proposal step failed: {e}"
 
 
+def refresh_aggressive(out, settings):
+    """Aggressive mode follows the walk-forward search's CURRENT pick (re-chosen monthly from the last 36 months)."""
+    cur = settings.get("aggressive_strategy", "a1")
+    try:
+        cur_p = load_strategy(cur)
+    except Exception:
+        cur_p = {}
+    pick = out["latest_pick"]
+    if cur_p.get("search_variant") == pick["variant"]:
+        return f"Aggressive mode keeps {cur} ({pick['how']})."
+    aggs = sorted((p.stem for p in STRATEGIES.glob("a*.json")), key=lambda x: int(x[1:]))
+    n = int(aggs[-1][1:]) + 1 if aggs else 1
+    newp = dict(pick["params"], name=f"a{n}", created=str(date.today()), search_variant=pick["variant"],
+                risk_per_trade_pct=1.0, drawdown_pause_pct=10,
+                description="AGGRESSIVE MODE (NOT validated): walk-forward search pick - " + pick["how"])
+    (STRATEGIES / f"a{n}.json").write_text(json.dumps(newp, indent=2))
+    f = ROOT / "settings.yaml"
+    f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: a{n}", f.read_text(encoding="utf-8")),
+                 encoding="utf-8")
+    changelog(f"- Aggressive mode switched {cur} -> a{n}: {pick['how']} (monthly re-pick from the last 36 months).")
+    return f"Aggressive mode switched to a{n}: {pick['how']}."
+
+
 def strategy_search(live, live_table, max_age_days=30):
     """Re-run the walk-forward strategy search monthly; promote its pick only if the search passes the gate."""
     from . import search
@@ -205,6 +228,9 @@ def strategy_search(live, live_table, max_age_days=30):
            f"NIFTYBEES in {sum(p['beat_niftybees'] for p in out['picks'])} of {len(out['picks'])} years; "
            f"gate {'PASSED' if out['passed'] else 'FAILED'}; " + "; ".join(extra))
     if not out["passed"]:
+        settings = load_settings()
+        if settings.get("tips_mode") == "aggressive":
+            return msg + " - nothing validated. " + refresh_aggressive(out, settings)
         return msg + " - nothing promoted."
     pick = out["latest_pick"]
     for v in versions():

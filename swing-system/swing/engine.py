@@ -20,6 +20,10 @@ def build(params, use_results_filter=False, start="2011-06-01"):
     nifty = data_prices.adjusted(data_prices.load("NIFTY50"))["close"]
     # Use only dates on which Nifty traded (drops stray non-trading-day rows from Yahoo).
     idx = P["close"].index.intersection(nifty.index)
+    # Never use today's bar before the market has closed (it would be a half-day, incomplete bar).
+    now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    if now.hour < 16:
+        idx = idx[idx < now.normalize()]
     P = {k: v.loc[idx] for k, v in P.items()}
     mask = universe.membership_mask(hist, idx, list(P["close"].columns))
     # Live: today's universe = most recent month's list (same rule, latest data).

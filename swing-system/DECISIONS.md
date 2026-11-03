@@ -165,3 +165,22 @@ You asked for short trades (hours to 2-3 days, exit at target) and allowed the r
 - **D51. Learning:** every checked tip is stored with its source (channel/person) and its real outcome is
   tracked; the report shows hit rates per source and per verdict. After 30 resolved tips the weekly job checks
   that GOOD tips beat AVOID tips and flags the checker for review if not. Only the owner's chat is answered.
+
+## Aggressive mode (added 2026-11-03 - the owner's explicit choice)
+You said you want daily tips even if somewhat risky, and do not want the index fund. It is your money, so:
+- **D52.** `tips_mode: aggressive` in settings.yaml. When no strategy passes the gate, the system still gives
+  tips from the walk-forward search's CURRENT pick (chosen by the fixed rule: best Sharpe over the last 36
+  months), clearly labelled **NOT validated**. Today that is a1 = 20/50-day moving-average crossover above the
+  200-day average, stop 3 ATR, targets 2R/4R, max 25 days, no market filter.
+- **D53. Expectations (backtest, after costs, idle cash in a liquid fund):** 2013-Apr 2025 about 9% a year,
+  worst fall about 10%, ~516 trades, ~50% winners; untouched holdout May 2025-Nov 2026 +5.5% (NIFTYBEES -1%).
+  It earned LESS than NIFTYBEES over the full period. These are estimates, not promises.
+- **D54. Risk 1% per trade, not 2%.** Tested both (2 more variants counted): 2% risk earned LESS (8.4% vs
+  9.0% a year, 2013-Apr 2025) with a much worse fall (-26% vs -10%). More risk did not mean more money.
+- **D55. Brakes:** max 4 positions, max 25% of capital each, a 4-week pause after a 10% fall, and a HARD STOP
+  when aggressive tips have lost 20% of capital in total (only you can restart it). Kill switch still works.
+  Mode set to live (paper_weeks 0) at your request; every tip and its outcome is still journaled. The weekly
+  job moves aggressive mode to the new search pick each month (a2, a3, ...), logged in CHANGELOG.md.
+- **D56.** Idle cash: the backtest assumes money not in a trade sits in a liquid fund (LIQUIDBEES or a liquid
+  mutual fund - this is cash parking, not index investing). If it sits idle in the trading account instead,
+  expect about 4-5% a year less.

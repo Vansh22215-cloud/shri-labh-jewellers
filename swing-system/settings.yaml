@@ -8,11 +8,20 @@ capital: 45000
 # KILL SWITCH: change "false" to "true" to stop ALL tips immediately.
 kill_switch: false
 
+# TIPS MODE
+#   validated  = tips only when a strategy passes the strict validation gate (safest; currently none passes)
+#   aggressive = you asked for daily ideas anyway: uses the best strategy the system can find today,
+#                clearly labelled NOT validated, with hard safety brakes (see DECISIONS.md D52-D55)
+tips_mode: aggressive
+aggressive_strategy: a1
+# Stop ALL aggressive tips if their total result reaches this loss (% of capital).
+aggressive_hard_stop_pct: 20
+
 # "paper" = tips are recorded and tracked but you should NOT trade real money yet.
 # The system stays in paper mode for at least paper_weeks after paper_start_date.
-mode: paper
+mode: live
 paper_start_date: 2026-11-02
-paper_weeks: 8
+paper_weeks: 0
 
 # Optional: let Claude (headless "claude -p") write a risk review of the shortlist.
 # Needs Claude Code installed and signed in on this PC. true / false

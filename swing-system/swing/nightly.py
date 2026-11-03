@@ -126,6 +126,11 @@ def run():
     settings = load_settings()
     state = load_state()
     sname = settings.get("live_strategy", "v1")
+    g = gate_status(sname)
+    # AGGRESSIVE MODE (owner's explicit choice): if nothing is validated, use the best available strategy
+    aggressive = settings.get("tips_mode") == "aggressive" and not g.get("passed")
+    if aggressive:
+        sname = settings.get("aggressive_strategy", "a1")
     p = load_strategy(sname)
     capital = float(settings["capital"])
     blockers, health_items = [], []
@@ -219,6 +224,11 @@ def run():
         stats_file = json.loads((ROOT / "validation" / "latest.json").read_text())
         setup_hits = stats_file.get("setup_stats", {})
         bt_ref = stats_file.get("wf_summary", {})
+        if aggressive and p.get("backtest_stats"):
+            bs_ = p["backtest_stats"]
+            setup_hits = {s_: {"win_rate_pct": bs_["win_rate_pct"], "avg_r": "n/a", "trades": bs_["trades"]}
+                          for s_ in ("20/50 average crossover", p.get("family", ""))}
+            bt_ref = {"closed": bs_["trades"], "win_rate_pct": bs_["win_rate_pct"], "avg_r": "-", "total_pnl": "-"}
     except Exception:
         setup_hits, bt_ref = {}, {}
     try:
@@ -278,17 +288,30 @@ def run():
         paper_dd = float((eq / np.maximum.accumulate(np.r_[capital, eq.values])[1:] - 1).min() * 100)
     open_paper = int(tips_df[(tips_df["kind"] == "tip") & tips_df["status"].isin(["open", "pending"])].shape[0])
 
-    g = gate_status(sname)
     if settings.get("kill_switch"):
         blockers.insert(0, "Kill switch is ON in settings.yaml")
-    if not g.get("passed"):
+    if not g.get("passed") and not aggressive:
         blockers.append("Strategy not validated: it did not pass the validation gate (see the table below)")
+    if aggressive:
+        agg = tips_df[(tips_df["kind"] == "tip") & (tips_df["strategy"].astype(str).str.startswith("a"))]
+        agg_pnl = float(agg["pnl"].astype(float).fillna(0).sum()) if len(agg) else 0.0
+        if agg_pnl <= -capital * settings.get("aggressive_hard_stop_pct", 20) / 100:
+            blockers.append(f"HARD STOP: aggressive tips have lost Rs {-agg_pnl:,.0f} "
+                            f"(limit {settings.get('aggressive_hard_stop_pct', 20)}% of capital). Change the setting "
+                            "only after reviewing what went wrong.")
     if state.get("auto_paused"):
         blockers.append(f"Automatic pause: {state['auto_paused']}")
     if not regime:
         blockers.append("Weak market: Nifty below its 200-day average or too few stocks in uptrends")
-    if paper_dd <= -p["drawdown_pause_pct"]:
-        blockers.append(f"Paper drawdown {paper_dd:.1f}% exceeds the {p['drawdown_pause_pct']}% pause limit")
+    if len(closed):
+        eqc = capital + closed["pnl"].astype(float).cumsum()
+        cur_dd = float(eqc.iloc[-1] / max(capital, eqc.max()) - 1) * 100
+        breach = closed.loc[(eqc / np.maximum.accumulate(np.r_[capital, eqc.values])[1:] - 1) * 100
+                            <= -p["drawdown_pause_pct"], "exit_date"]
+        if cur_dd <= -p["drawdown_pause_pct"] and len(breach) and \
+                (pd.Timestamp(d) - pd.Timestamp(breach.iloc[0])).days < 28:
+            blockers.append(f"Drawdown {cur_dd:.1f}% exceeds the {p['drawdown_pause_pct']}% limit: "
+                            f"4-week pause (capital protection)")
     slots = max(0, p["max_open_positions"] - open_paper)
 
     # Claude review (optional explainer)
@@ -307,12 +330,17 @@ def run():
     weeks = (pd.Timestamp(day) - paper_start).days / 7
     in_paper = settings.get("mode", "paper") == "paper" or weeks < settings.get("paper_weeks", 8)
     mode_text = f"PAPER (week {int(weeks) + 1} of {settings.get('paper_weeks', 8)})" if in_paper else "LIVE"
+    if aggressive:
+        mode_text += " | AGGRESSIVE MODE - strategy NOT validated (your choice)"
 
     if tips:
         headline = (f"{len(tips)} trade idea(s) for tomorrow, best first. You can hold {slots} more position(s) "
                     f"- take them in order and skip any that open outside the buy zone.")
         if in_paper:
             headline = "PAPER MODE - do not use real money yet. " + headline
+        if aggressive:
+            headline = ("AGGRESSIVE MODE (not validated - higher risk, your choice): " + headline +
+                        " Never risk more than the quantity shown.")
         why, money = [], None
     else:
         if not g.get("passed"):
