@@ -65,7 +65,8 @@ def _keys(sym, name):
     n = re.sub(r"\b(LIMITED|LTD|INDIA|THE|COMPANY|CORPORATION|INDUSTRIES|ENTERPRISES|OF)\b", " ", str(name).upper())
     words = [w for w in re.findall(r"[A-Z][A-Z&]+", n) if len(w) >= 3]
     if words:
-        keys.add(" ".join(words[:2]) if len(words) > 1 and len(words[0]) < 5 else words[0])
+        # two words when available ("ICICI BANK" must not match "ICICI Securities"); one word otherwise
+        keys.add(" ".join(words[:2]) if len(words) > 1 else words[0])
     return keys
 
 
