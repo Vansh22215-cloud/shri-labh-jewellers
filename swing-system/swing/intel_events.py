@@ -33,8 +33,17 @@ def calendar(start="2013-01-01", end=None):
     end = pd.Timestamp(end or date.today() + timedelta(days=120))
     rows = [{"date": pd.Timestamp(d), "event": "Union Budget"} for d in BUDGET]
     rows += [{"date": pd.Timestamp(d), "event": "Election results"} for d in ELECTION_RESULTS]
+    real = None
+    try:   # the real expiry from NSE's F&O file beats the computed rule (holidays shift it)
+        from .intel_fno import expiry_for
+        real = expiry_for("NIFTY")
+    except Exception:
+        pass
     for p in pd.period_range(start, end, freq="M"):
-        rows.append({"date": pd.Timestamp(monthly_expiry(p.year, p.month)), "event": "Monthly F&O expiry"})
+        e = monthly_expiry(p.year, p.month)
+        if real is not None and (real.year, real.month) == (e.year, e.month):
+            e = real
+        rows.append({"date": pd.Timestamp(e), "event": "Monthly F&O expiry"})
     if MANUAL.exists():
         m = pd.read_csv(MANUAL, parse_dates=["date"])
         rows += m.to_dict("records")
