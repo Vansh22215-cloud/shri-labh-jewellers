@@ -36,7 +36,7 @@ def calendar(start="2013-01-01", end=None):
     real = None
     try:   # the real expiry from NSE's F&O file beats the computed rule (holidays shift it)
         from .intel_fno import expiry_for
-        real = expiry_for("NIFTY")
+        real = expiry_for("RELIANCE")   # stock options = monthly expiry (Nifty has weekly ones)
     except Exception:
         pass
     for p in pd.period_range(start, end, freq="M"):
