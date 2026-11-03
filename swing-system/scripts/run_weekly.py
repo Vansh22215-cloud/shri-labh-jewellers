@@ -6,8 +6,8 @@ from swing.weekly import run
 
 if __name__ == "__main__":
     notes = run()
-    for line in notes:
-        print(line)
+    from swing.config import public_print
+    public_print("\n".join(notes), "weekly notes")
     from swing import telegram
     from swing.config import load_settings
     telegram.send(load_settings(), "🗓 Weekly self-check\n" + "\n".join(f"• {n}" for n in notes)[:3500] +

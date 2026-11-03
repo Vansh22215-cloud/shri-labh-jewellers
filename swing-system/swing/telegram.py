@@ -67,7 +67,7 @@ def send(settings, text, html=False):
         return f"Telegram failed: {e}"
 
 
-def send_document(settings, path, caption=""):
+def send_document(settings, path, caption="", mime="text/html"):
     """Send a file (e.g. the evening HTML report) to the owner's chat."""
     token = (settings.get("telegram_bot_token") or "").strip()
     chat = str(settings.get("telegram_chat_id") or "").strip()
@@ -76,7 +76,7 @@ def send_document(settings, path, caption=""):
     try:
         with open(path, "rb") as fh:
             requests.post(f"https://api.telegram.org/bot{token}/sendDocument", data={"chat_id": chat, "caption": caption[:1000]},
-                          files={"document": (path.name if hasattr(path, "name") else "report.html", fh, "text/html")},
+                          files={"document": (path.name if hasattr(path, "name") else "report.html", fh, mime)},
                           timeout=60).raise_for_status()
         return "report sent"
     except Exception as e:

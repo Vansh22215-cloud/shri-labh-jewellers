@@ -38,6 +38,13 @@ def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
     P = data_prices.panel(clean, start=start)
     if not P:
         raise RuntimeError("No price data available")
+    try:   # lifelong store: stocks Yahoo has dropped (delisted) and bars Yahoo lost come back from the archive
+        from . import archive
+        P = archive.fill_panel(P, clean)
+        if start is not None:
+            P = {k: v[v.index >= pd.Timestamp(start)] for k, v in P.items()}
+    except Exception as e:
+        log.warning("archive fill skipped: %s", e)
     nifty = data_prices.adjusted(data_prices.load("NIFTY50"))["close"]
     # Use only dates on which Nifty traded (drops stray non-trading-day rows from Yahoo).
     idx = P["close"].index.intersection(nifty.index)

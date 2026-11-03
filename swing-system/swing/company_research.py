@@ -63,7 +63,15 @@ def refresh_batch(n=120):
 
 
 def _years(snap):
-    y = snap.get("annual") or {}
+    """Statement years, oldest first: Yahoo's latest ~4 years plus every older year kept in the lifelong store."""
+    y = dict(snap.get("annual") or {})
+    try:
+        from .archive import fundamentals_years
+        for k, row in fundamentals_years(snap.get("symbol", "")).items():
+            if not k.startswith("_") and k not in y:
+                y[k] = row
+    except Exception:
+        pass
     return [y[k] for k in sorted(y) if y[k].get("revenue")]
 
 

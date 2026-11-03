@@ -362,5 +362,11 @@ def run():
     if settings.get("claude_review"):
         notes.append(ask_claude_for_proposals("\n".join(notes)))
     notes.append(f"Variants tried so far: {validate.n_variants()}")
+    try:   # lifelong data store status + backups to your own Telegram (trades/tips weekly, data archive monthly)
+        from . import archive
+        notes.append(archive.stats_line())
+        notes += archive.send_backups(settings)
+    except Exception as e:
+        notes.append(f"archive/backup step failed: {e}")
     changelog("- Weekly session summary:\n" + "\n".join(f"  - {n}" for n in notes))
     return notes

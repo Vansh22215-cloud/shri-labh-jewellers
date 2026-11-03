@@ -11,6 +11,11 @@ if __name__ == "__main__":
         company_of_day()
     except Exception as e:
         print("company of the day failed:", e)
+    try:   # lifelong store: keep everything collected today (prices incl. stocks Yahoo may drop, hourly, 5-min,
+        from swing import archive          # news, statement years) - the research data grows every day
+        archive.run_daily()
+    except Exception as e:
+        print("archive failed:", e)
     try:   # on GitHub: keep the results for the next run (no Claude needed)
         from swing.ci_save import save
         print("save:", save("nightly run"))

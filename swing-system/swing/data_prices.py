@@ -99,6 +99,22 @@ def save(symbol, df):
     df.to_csv(_path(symbol))
 
 
+def keep_older_history(old, new, min_overlap=20):
+    """Never lose history: if a fresh Yahoo download starts later than what we already had (Yahoo trimmed it),
+    keep our older rows. Their adjusted close is rescaled to the new adjustment basis at the overlap."""
+    if old is None or not len(old) or not len(new) or old.index.min() >= new.index.min():
+        return new
+    ov = old.index.intersection(new.index)
+    older = old[old.index < new.index.min()].copy()
+    if len(ov) >= min_overlap:
+        ratio = (new.loc[ov, "adj_close"] / new.loc[ov, "close"]).median() / \
+                (old.loc[ov, "adj_close"] / old.loc[ov, "close"]).median()
+        if np.isfinite(ratio) and ratio > 0:
+            older["adj_close"] = older["adj_close"] * ratio
+    log.info("Kept %d older bars Yahoo no longer returns", len(older))
+    return pd.concat([older, new]).sort_index()
+
+
 def download_full(symbols, start="2011-01-01", batch=40):
     """Download complete history for symbols (used on first run and after corporate actions)."""
     got = 0
@@ -107,7 +123,7 @@ def download_full(symbols, start="2011-01-01", batch=40):
         tick = {yahoo_ticker(s): s for s in chunk}
         res = _download_batch(list(tick), start=start)
         for t, df in res.items():
-            save(tick[t], df)
+            save(tick[t], keep_older_history(load(tick[t]), df))
             got += 1
         log.info("Yahoo full history: %d/%d symbols", min(i + batch, len(symbols)), len(symbols))
         time.sleep(1.5)
