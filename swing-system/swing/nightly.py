@@ -237,7 +237,9 @@ def run():
         deals = None
     plans, removed = [], []
     elig = sig["eligible"].loc[d]
-    names = list(sig["score"].loc[d, elig[elig].index].sort_values(ascending=False).index[:15])
+    from .tipcheck import equity_list
+    _eq = set(equity_list()["SYMBOL"])          # company shares only (excludes ETFs / funds)
+    names = [x for x in sig["score"].loc[d, elig[elig].index].sort_values(ascending=False).index if x in _eq][:15]
     if not regime:
         names = []   # same as the backtest: no candidates at all in a weak market
     for sym in names:

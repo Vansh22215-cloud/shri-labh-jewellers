@@ -30,7 +30,7 @@ def _remember_chat(chat):
     f.write_text(txt, encoding="utf-8")
 
 
-def send(settings, text):
+def send(settings, text, html=False):
     token = (settings.get("telegram_bot_token") or "").strip()
     if not token:
         return "Telegram not set up"
@@ -41,9 +41,23 @@ def send(settings, text):
             if not chat:
                 return "Telegram: open your bot in Telegram and send it any message (e.g. hi), so it knows where to reply"
             _remember_chat(chat)
+        chunks = text.split("\n\n\u2063") if html else None   # html: pre-split cards (no broken tags)
+        if html:
+            buf, parts = "", []
+            for c in chunks:
+                if len(buf) + len(c) > 3800 and buf:
+                    parts.append(buf); buf = ""
+                buf += ("\n\n" if buf else "") + c
+            parts.append(buf)
+            for part in parts:
+                requests.post(f"https://api.telegram.org/bot{token}/sendMessage",
+                              data={"chat_id": chat, "text": part, "parse_mode": "HTML",
+                                    "disable_web_page_preview": "true"}, timeout=20).raise_for_status()
+            return "Telegram message sent"
         for i in range(0, len(text), 3800):
             requests.post(f"https://api.telegram.org/bot{token}/sendMessage",
-                          data={"chat_id": chat, "text": text[i:i + 3800]}, timeout=20).raise_for_status()
+                          data={"chat_id": chat, "text": text[i:i + 3800],
+                                **({"parse_mode": "HTML", "disable_web_page_preview": "true"} if html else {})}, timeout=20).raise_for_status()
         return "Telegram message sent"
     except Exception as e:
         log.warning("Telegram failed: %s", e)

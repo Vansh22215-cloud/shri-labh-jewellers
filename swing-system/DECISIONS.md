@@ -184,3 +184,15 @@ You said you want daily tips even if somewhat risky, and do not want the index f
 - **D56.** Idle cash: the backtest assumes money not in a trade sits in a liquid fund (LIQUIDBEES or a liquid
   mutual fund - this is cash parking, not index investing). If it sits idle in the trading account instead,
   expect about 4-5% a year less.
+
+## Hourly scan and risk score (added 2026-11-03 at your request)
+- **D57. Risk score 1-10** (`swing/risk_score.py`): +3 if the strategy is not validated (+1 if it is),
+  +0-3 volatility (daily range), +0-2 liquidity, +1 not in a long-term uptrend, +1 weak market, +2 results within
+  7 days, +1 stretched > 15% above the 50-day average. A checklist, not a probability.
+- **D58. Hourly scan** 10:20-15:20 IST on weekdays (the scheduler's minimum is hourly; every 10 minutes is not
+  possible and would use up the Claude plan). Live 5-minute data for the top ~500 company shares (ETFs/funds
+  excluded) feeds the SAME strategy code on a provisional "today so far" bar. Signals are provisional until the
+  close; the 6:40 pm run confirms them and the plan is to buy at the next open inside the buy zone (as tested).
+  Your trades are checked live for stop/target hits.
+- **D59. Kite Connect: declined.** Paid, needs a daily login with your Zerodha password (which this system must
+  never hold), and free 5-minute data is enough for hourly scans.

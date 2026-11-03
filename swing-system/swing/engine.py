@@ -8,7 +8,9 @@ from .config import get_logger
 log = get_logger()
 
 
-def build(params, use_results_filter=False, start="2011-06-01"):
+def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
+    """extra_bar (optional, live scans only): {"date", "open", "high", "low", "close", "volume" (Series by
+    symbol), "nifty": float} = today's PROVISIONAL bar so far. Signals on it are provisional until the close."""
     hist = universe.load_history()
     n500 = data_nse.nifty500_list()
     syms = sorted(set(hist["symbol"]) | set(n500["Symbol"].dropna()))
@@ -25,6 +27,15 @@ def build(params, use_results_filter=False, start="2011-06-01"):
     if now.hour < 16:
         idx = idx[idx < now.normalize()]
     P = {k: v.loc[idx] for k, v in P.items()}
+    if extra_bar is not None:
+        d = pd.Timestamp(extra_bar["date"]).normalize()
+        if d not in idx:
+            for k in ("open", "high", "low", "close", "volume"):
+                P[k].loc[d] = extra_bar[k].reindex(P[k].columns)
+            P["raw_close"].loc[d] = extra_bar["close"].reindex(P["raw_close"].columns)
+            nifty = nifty.copy()
+            nifty.loc[d] = extra_bar["nifty"]
+            idx = P["close"].index
     mask = universe.membership_mask(hist, idx, list(P["close"].columns))
     # Live: today's universe = most recent month's list (same rule, latest data).
     industry = dict(zip(n500["Symbol"], n500["Industry"]))
