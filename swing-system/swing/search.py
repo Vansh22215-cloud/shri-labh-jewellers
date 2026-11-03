@@ -79,10 +79,17 @@ def library_space(base):
     return out
 
 
+def combined_space(base):
+    """All swing + library variants pooled (D66)."""
+    return variant_space(base) + library_space(base)
+
+
 SPACES = {
     "swing": (variant_space, SEARCH_NAME, "search_latest.json"),
     "short": (short_space, "wf-search-short-v1: 1-5 day holds, 36m Sharpe pick, yearly, min 30 trades",
               "search_short.json"),
+    "combined": (combined_space, "wf-search-combined-v1: swing+library, 36m Sharpe of excess over liquid fund",
+                 "search_combined.json"),
     "library": (library_space, "wf-search-library-v1: famous methods, 36m Sharpe pick, yearly, min 30 trades",
                 "search_library.json"),
 }
@@ -157,13 +164,18 @@ def run_search(processes=None, space="swing"):
 
     bees = data_prices.benchmark()["close"]
     bm = bees.resample("ME").last().pct_change().reindex(R.index)
+    # save the monthly-return matrix so later analyses do not need to re-run every variant
+    R.to_csv(VAL / f"search_R_{space}.csv.gz", compression="gzip")
+    T.to_csv(VAL / f"search_T_{space}.csv.gz", compression="gzip")
+    lfm = lf.resample("ME").last().pct_change().reindex(R.index).fillna(0)
+    RS = R.sub(lfm, axis=0) if space == "combined" else R      # selection basis (D66)
 
     # walk-forward selection chain
     chain, picks = [], []
     years = sorted({d.year for d in R.index if d.year >= FIRST_YEAR})
     for y in years:
         start_y = pd.Timestamp(f"{y}-01-01")
-        win = R[(R.index < start_y) & (R.index >= start_y - pd.DateOffset(months=LOOKBACK_M))]
+        win = RS[(RS.index < start_y) & (RS.index >= start_y - pd.DateOffset(months=LOOKBACK_M))]
         tw = T.loc[win.index].sum()
         ok = tw[tw >= MIN_TRADES].index
         if len(ok) == 0:
@@ -187,7 +199,7 @@ def run_search(processes=None, space="swing"):
 
     # holdout: pick with the 36 months before the holdout, run once, fresh
     hs = pd.Timestamp(validate.holdout_start())
-    win = R[(R.index < hs) & (R.index >= hs - pd.DateOffset(months=LOOKBACK_M))]
+    win = RS[(RS.index < hs) & (RS.index >= hs - pd.DateOffset(months=LOOKBACK_M))]
     tw = T.loc[win.index].sum()
     ok = tw[tw >= MIN_TRADES].index
     sh = win[ok].mean() / win[ok].std().replace(0, np.nan) * math.sqrt(12)
@@ -238,7 +250,7 @@ def run_search(processes=None, space="swing"):
 
     # latest pick (what would go live if the gate passed)
     last = R.index[-1]
-    win = R[R.index > last - pd.DateOffset(months=LOOKBACK_M)]
+    win = RS[RS.index > last - pd.DateOffset(months=LOOKBACK_M)]
     tw = T.loc[win.index].sum()
     ok = tw[tw >= MIN_TRADES].index
     sh = win[ok].mean() / win[ok].std().replace(0, np.nan) * math.sqrt(12)

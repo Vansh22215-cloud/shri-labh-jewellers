@@ -229,3 +229,12 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   profit, so it must earn its cost through better research. Security: API key/secret stored only in
   my_secrets.yaml (never on GitHub); the daily access token is obtained by the owner logging in on Kite's own page;
   the system never asks for the Zerodha password/TOTP and NEVER calls any order API. Access tokens expire daily.
+
+## Selection-rule fix (written 2026-11-03 BEFORE running the combined search)
+- **D66. Flaw found:** walk-forward selection used the Sharpe ratio of equity that INCLUDES liquid-fund interest on
+  idle cash, which rewards strategies that barely trade (smooth cash-like curves; e.g. the library pick PEAD made
+  < 1 trade a month and its trades lost slightly in the holdout). New procedure "wf-search-combined-v1": pool ALL
+  swing + library variants (684) and pick each year the variant with the highest Sharpe of monthly returns IN
+  EXCESS OF THE LIQUID FUND over the previous 36 months (>= 30 trades). Everything else as D39-D40. This counts
+  as one more search procedure (stricter gate). If its gate fails, aggressive mode follows this procedure's
+  current pick anyway (owner's choice, D52), because it measures what the TRADES add over parking cash.

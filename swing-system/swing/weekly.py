@@ -294,9 +294,16 @@ def strategy_search(live, live_table, max_age_days=30):
            f"gate {'PASSED' if out['passed'] else 'FAILED'}; " + "; ".join(extra))
     if not out["passed"]:
         settings = load_settings()
-        if settings.get("tips_mode") == "aggressive":
-            return msg + " - nothing validated. " + refresh_aggressive(out, settings)
-        return msg + " - nothing promoted."
+        if settings.get("tips_mode") != "aggressive":
+            return msg + " - nothing promoted."
+        # D66: aggressive mode follows the COMBINED search (excess-over-liquid-fund selection), re-run monthly
+        fc = ROOT / "validation" / "search_combined.json"
+        oc = json.loads(fc.read_text()) if fc.exists() else None
+        if oc is None or (pd.Timestamp.today() - pd.Timestamp(oc["date"])).days > max_age_days:
+            oc = search.run_search(space="combined")
+        if not oc["passed"]:
+            return msg + " - nothing validated. " + refresh_aggressive(oc, settings)
+        out = oc   # the combined search passed the gate -> promote it through the normal path below
     pick = out["latest_pick"]
     for v in versions():
         if load_strategy(v).get("search_variant") == pick["variant"] and load_strategy(v).get("search_date") == out["date"]:
