@@ -1,0 +1,345 @@
+{
+ "date": "2026-11-03",
+ "procedure": "wf-search-library-v1: famous methods, 36m Sharpe pick, yearly, min 30 trades",
+ "space": "library",
+ "variants_searched": 128,
+ "raw_variants_ever": 1895,
+ "search_procedures_tried": 4,
+ "passed": false,
+ "checks": [
+  {
+   "check": "Walk-forward search: picks beat NIFTYBEES in most years",
+   "passed": false,
+   "detail": "won 3 of 10 years (30%); needed 66%"
+  },
+  {
+   "check": "Holdout: beats NIFTYBEES and liquid fund",
+   "passed": false,
+   "detail": "L092 8.85% vs NIFTYBEES -1.04% vs liquid fund 9.75%"
+  },
+  {
+   "check": "Holdout drawdown <= 15%",
+   "passed": true,
+   "detail": "-1.88%"
+  },
+  {
+   "check": "Walk-forward drawdown <= 20%",
+   "passed": true,
+   "detail": "-5.6%"
+  },
+  {
+   "check": "Enough trades (>= 100)",
+   "passed": true,
+   "detail": "136 trades"
+  },
+  {
+   "check": "Excess return statistically convincing",
+   "passed": false,
+   "detail": "t-stat -1.14; needed 1.67 (4 search procedure(s) tried)"
+  }
+ ],
+ "picks": [
+  {
+   "year": 2016,
+   "picked": "L093",
+   "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 4.07,
+   "return_pct": 6.77,
+   "niftybees_pct": 3.97,
+   "trades": 12,
+   "beat_niftybees": true
+  },
+  {
+   "year": 2017,
+   "picked": "L093",
+   "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 3.6,
+   "return_pct": 8.37,
+   "niftybees_pct": 29.89,
+   "trades": 10,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2018,
+   "picked": "L093",
+   "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 3.17,
+   "return_pct": 9.06,
+   "niftybees_pct": 4.82,
+   "trades": 14,
+   "beat_niftybees": true
+  },
+  {
+   "year": 2019,
+   "picked": "L093",
+   "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.19,
+   "return_pct": 10.58,
+   "niftybees_pct": 13.61,
+   "trades": 13,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2020,
+   "picked": "L089",
+   "how": "pead, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.33,
+   "return_pct": 2.37,
+   "niftybees_pct": 15.42,
+   "trades": 17,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2021,
+   "picked": "L093",
+   "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.91,
+   "return_pct": 5.43,
+   "niftybees_pct": 25.97,
+   "trades": 19,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2022,
+   "picked": "L094",
+   "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.53,
+   "return_pct": 2.46,
+   "niftybees_pct": 5.46,
+   "trades": 12,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2023,
+   "picked": "L055",
+   "how": "momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.41,
+   "return_pct": 33.82,
+   "niftybees_pct": 21.01,
+   "trades": 24,
+   "beat_niftybees": true
+  },
+  {
+   "year": 2024,
+   "picked": "L090",
+   "how": "pead, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.5,
+   "return_pct": 7.89,
+   "niftybees_pct": 10.36,
+   "trades": 15,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2025,
+   "picked": "L090",
+   "how": "pead, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.19,
+   "return_pct": 2.27,
+   "niftybees_pct": 2.84,
+   "trades": 0,
+   "beat_niftybees": false
+  }
+ ],
+ "holdout": {
+  "picked": "L092",
+  "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades",
+  "total_return_pct": 8.85,
+  "cagr_pct": 5.79,
+  "max_drawdown_pct": -1.88,
+  "sharpe": 2.57,
+  "trades": 12,
+  "win_rate_pct": 41.7,
+  "avg_r": -0.053,
+  "avg_days": 21.6,
+  "profit_factor": 0.94,
+  "niftybees_return_pct": -1.04,
+  "liquid_fund_return_pct": 9.75
+ },
+ "chain_t": -1.14,
+ "chain_max_dd": -5.55,
+ "chain_cagr_pct": 9.22,
+ "niftybees_cagr_pct_wf": 12.99,
+ "cherry_picked_top10": [
+  {
+   "variant": "L106",
+   "how": "sector_rotation, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.31,
+   "cagr_pct": 12.65,
+   "max_dd_pct": -9.92,
+   "trades": 245
+  },
+  {
+   "variant": "L002",
+   "how": "minervini_vcp, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.4,
+   "cagr_pct": 11.87,
+   "max_dd_pct": -13.67,
+   "trades": 380
+  },
+  {
+   "variant": "L110",
+   "how": "sector_rotation, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.42,
+   "cagr_pct": 12.22,
+   "max_dd_pct": -8.02,
+   "trades": 307
+  },
+  {
+   "variant": "L102",
+   "how": "sector_rotation, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.44,
+   "cagr_pct": 11.61,
+   "max_dd_pct": -11.78,
+   "trades": 343
+  },
+  {
+   "variant": "L014",
+   "how": "minervini_vcp, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.47,
+   "cagr_pct": 11.8,
+   "max_dd_pct": -10.56,
+   "trades": 359
+  },
+  {
+   "variant": "L098",
+   "how": "sector_rotation, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.51,
+   "cagr_pct": 11.44,
+   "max_dd_pct": -12.51,
+   "trades": 327
+  },
+  {
+   "variant": "L006",
+   "how": "minervini_vcp, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.53,
+   "cagr_pct": 10.82,
+   "max_dd_pct": -16.72,
+   "trades": 404
+  },
+  {
+   "variant": "L010",
+   "how": "minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.54,
+   "cagr_pct": 11.54,
+   "max_dd_pct": -7.56,
+   "trades": 258
+  },
+  {
+   "variant": "L055",
+   "how": "momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.57,
+   "cagr_pct": 11.16,
+   "max_dd_pct": -23.82,
+   "trades": 352
+  },
+  {
+   "variant": "L000",
+   "how": "minervini_vcp, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.61,
+   "cagr_pct": 10.74,
+   "max_dd_pct": -13.8,
+   "trades": 496
+  }
+ ],
+ "cherry_haircut_t_needed": 3.89,
+ "family_medians": [
+  {
+   "family": "sector_rotation",
+   "cagr_pct": 10.36,
+   "max_drawdown_pct": -12.43,
+   "sharpe": 1.16
+  },
+  {
+   "family": "minervini_vcp",
+   "cagr_pct": 9.64,
+   "max_drawdown_pct": -14.75,
+   "sharpe": 1.06
+  },
+  {
+   "family": "pead",
+   "cagr_pct": 9.4,
+   "max_drawdown_pct": -6.82,
+   "sharpe": 2.01
+  },
+  {
+   "family": "momentum_12_1",
+   "cagr_pct": 8.87,
+   "max_drawdown_pct": -11.42,
+   "sharpe": 1.17
+  },
+  {
+   "family": "connors_pctb",
+   "cagr_pct": 7.24,
+   "max_drawdown_pct": -14.83,
+   "sharpe": 0.83
+  },
+  {
+   "family": "darvas_box",
+   "cagr_pct": 6.87,
+   "max_drawdown_pct": -23.54,
+   "sharpe": 0.78
+  },
+  {
+   "family": "high52_rank",
+   "cagr_pct": 6.62,
+   "max_drawdown_pct": -13.9,
+   "sharpe": 0.92
+  },
+  {
+   "family": "weinstein_stage2",
+   "cagr_pct": 5.11,
+   "max_drawdown_pct": -11.42,
+   "sharpe": 1.03
+  }
+ ],
+ "share_variants_beating_niftybees_cagr": 0.0,
+ "latest_pick": {
+  "variant": "L092",
+  "how": "pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades",
+  "params": {
+   "universe_size": 500,
+   "min_price": 50,
+   "min_history_days": 250,
+   "liquidity_lookback": 60,
+   "regime_sma": 200,
+   "breadth_min_pct_above_50dma": 40,
+   "trend_fast_sma": 50,
+   "trend_slow_sma": 200,
+   "slope_lookback": 20,
+   "max_extension_above_50dma_pct": 25,
+   "mom_long": 126,
+   "mom_short": 63,
+   "mom_skip": 5,
+   "min_rs_percentile": 70,
+   "breakout_lookback": 50,
+   "breakout_volume_mult": 1.5,
+   "pullback_ema": 20,
+   "pullback_band_pct": 3,
+   "atr_period": 14,
+   "stop_atr_mult": 3.0,
+   "do_not_buy_gap_atr": 0.5,
+   "target1_r": 1.5,
+   "target2_r": 3.0,
+   "max_hold_days": 25,
+   "risk_per_trade_pct": 1.0,
+   "max_position_pct": 25,
+   "max_open_positions": 4,
+   "drawdown_pause_pct": 10,
+   "drawdown_pause_days": 20,
+   "exclude_results_within_days": 5,
+   "score_weights": {
+    "rs_long": 0.35,
+    "rs_short": 0.2,
+    "sector_rs": 0.15,
+    "trend_quality": 0.2,
+    "liquidity": 0.1
+   },
+   "results_rule": "flag",
+   "family": "pead",
+   "use_regime_filter": true,
+   "exit_style": "trail",
+   "trail_atr_mult": 3.0,
+   "name": "L092"
+  }
+ }
+}

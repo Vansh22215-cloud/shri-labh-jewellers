@@ -13,6 +13,23 @@ send a Telegram summary. Mark items [x] done or [~] built-but-did-not-help (keep
 Give the best trades one can find, every day: learn from the best-known traders, funds and research, combine the
 best of all of them into OUR own system, keep only what proves itself on data, and run on its own.
 
+
+## INTELLIGENCE DESK (owner's institutional brief, 2026-11-03) - see ARCHITECTURE.md
+- [ ] I1. FII/DII/Pro/Client positioning from NSE participant-wise OI (daily history) -> regime feature + report.
+- [ ] I2. F&O end-of-day data (futures + options bhavcopy): OI build-up (long/short build-up, unwinding), PCR,
+      max pain, implied volatility per stock -> features + "options view" in each trade card.
+- [ ] I3. Global markets overnight (US, Asia, crude, USD/INR, US yields, gold) -> pre-market risk line + feature.
+- [ ] I4. News & announcements: headlines (RSS) and NSE/BSE corporate announcements, matched to stocks;
+      Claude summarises/flags them in sessions; shown as "news check" on trade cards.
+- [ ] I5. Economic/event calendar (RBI, Budget, CPI, Fed, results season) -> abnormal-day flags.
+- [ ] T1. Trade card upgrade: T1/T2/T3, calibrated probability of T1-before-stop with sample size, confidence
+      score, invalidation conditions, expected holding period from history.
+- [ ] T2. Daily loss limit + abnormal-market detector (VIX spike, big gap, data outage) -> no new trades.
+- [ ] UI1. DASHBOARD: phone-friendly web dashboard (published Artifact) refreshed after every scan: market
+      overview, ranked opportunities, interactive charts, open trades & risk, performance analytics, research log.
+- [ ] A1. Performance analytics: per strategy / per regime / per month: win rate, avg R, P&L, drawdown, Sharpe,
+      after tax; mistakes review ("why did losers lose").
+
 ## Week 1 PRIORITY - Strategy library: the best-known methods, each built and tested on NSE data
 Each becomes a family in swing/families.py (with tests), joins the walk-forward search, and is pre-registered.
 - [ ] S1. Mark Minervini "Trend Template" + VCP (volatility contraction pattern) breakouts.
