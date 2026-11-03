@@ -54,6 +54,10 @@ def snapshot(symbols):
     return {k: pd.Series(v, dtype=float) for k, v in out.items()}, last_ts
 
 
+def p_t1r(pl):
+    return (pl["target1"] - pl["ltp"]) / max(1e-9, pl["ltp"] - pl["stop"])
+
+
 def _card(i, pl):
     rs = pl["risk"]
     bar = "🟩" * (10 - rs) + "🟥" * rs
@@ -62,9 +66,15 @@ def _card(i, pl):
              f"<b>Risk:</b> {rs}/10 {risk_score.label(rs)}  {bar}",
              f"<pre>Price now   ₹{pl['ltp']:,.2f}\nBuy zone    ₹{pl['entry_low']:,.2f} – ₹{pl['entry_high']:,.2f}\n"
              f"Stop-loss   ₹{pl['stop']:,.2f}  ({pl['stop_pct']:.1f}%)\nTarget 1    ₹{pl['target1']:,.2f}  (sell half)\n"
-             f"Target 2    ₹{pl['target2']:,.2f}\nQuantity    {pl['qty']} sh  (≈₹{pl['qty'] * pl['ltp']:,.0f})\n"
+             f"Target 2    ₹{pl['target2']:,.2f}\nTarget 3    ₹{pl['target3']:,.2f}  (stretch)\n"
+             f"Risk:reward 1 : {p_t1r(pl):.1f} (to T1)\nQuantity    {pl['qty']} sh  (≈₹{pl['qty'] * pl['ltp']:,.0f})\n"
              f"Max loss    ≈₹{pl['risk_rupees']:,.0f}\nHold        up to {pl['max_hold']} trading days</pre>",
+             (f"<b>Odds (history, {E(pl['cal']['regime'])}, {pl['cal']['signals']} signals, estimate reliability "
+              f"{pl['cal']['confidence']}):</b> T1 before stop {pl['cal']['p_t1']:.0f}% · T2 {pl['cal']['p_t2']:.0f}% · "
+              f"T3 {pl['cal']['p_t3']:.0f}% · stop {pl['cal']['p_stop']:.0f}% · otherwise sold at the time limit. "
+              f"Median {pl['cal']['median_days_t1']:.0f} days to T1." if pl.get("cal") else ""),
              "<b>Why:</b> " + E("; ".join(pl["reasons"][:5])),
+             "<b>Cancel the idea if:</b> " + E("; ".join(pl.get("invalid", []))),
              "<b>Risk factors:</b> " + E("; ".join(pl["risk_reasons"]) or "none flagged")]
     return "\n".join(lines)
 
@@ -149,7 +159,19 @@ def run(send=True):
                     rs_why.append("F&O shows selling (short build-up/long unwinding)")
         except Exception:
             pass
-        return {"symbol": s, "name": names.get(s, ""), "setup": setup, "score": float(sig["score"].at[d, s]), "ltp": close, **lv, "qty": qty,
+        cal = None
+        try:
+            from .calibration import for_regime
+            from .research import regime_frame
+            rg = regime_frame(nifty, sig["breadth"]).iloc[-1]
+            cal = for_regime(sname, f"{rg['trend']}/{rg['fear']}")
+        except Exception:
+            pass
+        lv["target3"] = round(close + p["target2_r"] * 1.5 * (close - lv["stop"]), 2)
+        invalid = [f"price opens above ₹{lv['entry_high']:,.2f} or at/below ₹{lv['stop']:,.2f}",
+                   "a big negative news / results surprise appears before you buy",
+                   "the market opens sharply lower (Nifty gap below -1.5%) - a caution, still being tested (idea R13)"]
+        return {"cal": cal, "invalid": invalid, "symbol": s, "name": names.get(s, ""), "setup": setup, "score": float(sig["score"].at[d, s]), "ltp": close, **lv, "qty": qty,
                 "risk_rupees": qty * (close - lv["stop"]), "stop_pct": (close - lv["stop"]) / close * 100,
                 "max_hold": p["max_hold_days"], "risk": rs_val, "risk_reasons": rs_why, "reasons": reasons}
 

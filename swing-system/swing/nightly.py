@@ -283,6 +283,18 @@ def run():
                 "hit_rate": setup_hits.get(sig["setup"].at[d, sym], {}),
                 "exit_style": p.get("exit_style", "targets"), "trail_atr": round(p.get("trail_atr_mult", 3.0) * a, 2)}
         plan["reasons"], plan["risks"] = build_reasons_risks(sym, sig, d, plan, qsum, rd, p, deals)
+        plan["target3"] = round(close + p["target2_r"] * 1.5 * (close - lv["stop"]), 2)
+        try:
+            from .calibration import for_regime
+            from .research import regime_frame
+            rg = regime_frame(nifty.reindex(P["close"].index), sig["breadth"]).loc[d]
+            cal = for_regime(sname, f"{rg['trend']}/{rg['fear']}")
+            if cal:
+                plan["hit_rate"] = {"win_rate_pct": f"T1 {cal['p_t1']:.0f}% / T2 {cal['p_t2']:.0f}% / stop {cal['p_stop']:.0f}% "
+                                                    f"(rest: time exit)", "avg_r": f"median {cal['median_days_t1']:.0f} days to T1",
+                                    "trades": f"{cal['signals']} past signals, {cal['regime']}, reliability {cal['confidence']}"}
+        except Exception as e:
+            log.warning("calibration unavailable: %s", e)
         plans.append(plan)
 
     probs = health.sanity_check_plans(plans, capital)
@@ -415,7 +427,8 @@ def run():
                      f"avg loss Rs {-_bs['avg_loss_rs']}, avg hold {_bs['avg_days_held']:.0f} days")
     for i, pl in enumerate(tips, 1):
         lines.append(f"{i}. {pl['symbol']} ({pl['setup']}) buy {pl['entry_low']}-{pl['entry_high']}, "
-                     f"stop {pl['stop']}, T1 {pl['target1']}, T2 {pl['target2']}, qty {pl['qty']}")
+                     f"stop {pl['stop']}, T1 {pl['target1']}, T2 {pl['target2']}, T3 {pl.get('target3')}, qty {pl['qty']}"
+                     + (f" | odds: {pl['hit_rate'].get('win_rate_pct')}" if isinstance(pl.get('hit_rate'), dict) else ""))
     for s in my_status:
         lines.append(f"[Your trade] {s['symbol']}: {s['status']}")
     lines.append(DISCLAIMER)

@@ -110,3 +110,6 @@
 
 ## 2026-11-03 - I5 event calendar built
 - Union Budget, election results, monthly F&O expiry; 'Upcoming events' line in messages. a1 trades entered within 2 days of Budget/election: 13 trades, 69% winners (vs 47%), +Rs 171 avg - sample too small, no rule adopted.
+
+## 2026-11-03 - T1 trade card upgrade
+- Calibrated odds from all 8,694 historical a1 signals: T1 (2R) before stop 16%, T2 2.5%, T3 0.6%, stop 34%, ~50% end at the 25-day limit; by regime T1 ranges 11-25%. Cards now show these honestly with sample size, plus T3, risk:reward and cancel-if conditions.

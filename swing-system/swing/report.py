@@ -112,7 +112,8 @@ def daily_html(ctx):
             ("DO NOT BUY if", f"price is above Rs {pl['entry_high']} or below Rs {pl['stop']} at the open"),
             ("Stop-loss", f"Rs {pl['stop']} (sell everything if price closes/trades below)"),
             *((("Target 1", f"Rs {pl['target1']} - sell half, then move stop to your buy price"),
-               ("Target 2", f"Rs {pl['target2']} - sell the rest"))
+               ("Target 2", f"Rs {pl['target2']} - sell the rest"),
+               ("Target 3 (stretch)", f"Rs {pl.get('target3', '-')}"))
               if pl.get("exit_style", "targets") == "targets" else
               ((("Exit", f"No fixed target. Trailing stop: each evening raise your stop to (highest close since "
                          f"you bought - Rs {pl.get('trail_atr')}); never lower it. The report shows the level."),)
@@ -122,7 +123,8 @@ def daily_html(ctx):
                          f"loss if stopped ~Rs {pl['risk_rupees']:,.0f} + charges (limit: 1% of capital)"),
             ("Expected holding", f"up to {pl['max_hold']} trading days (sell at the open after that)"),
             ("Next results date", pl.get("results") or "unknown - check before buying"),
-            ("Historical hit-rate of this setup", f"{hr.get('win_rate_pct','?')}% winners, avg {hr.get('avg_r','?')}R "
+            ("Cancel the idea if", f"it opens above Rs {pl['entry_high']} or at/below Rs {pl['stop']}; big negative news; Nifty gaps down more than 1.5% (caution, being tested)"),
+            ("Historical odds of this setup", f"{hr.get('win_rate_pct','?')}% winners, avg {hr.get('avg_r','?')}R "
                                                   f"over {hr.get('trades','?')} backtest trades" if hr else "n/a"),
         ]
         parts.append("<table class='kv'>" + "".join(f"<tr><td>{a}</td><td>{html.escape(str(b))}</td></tr>" for a, b in rows) + "</table>")
