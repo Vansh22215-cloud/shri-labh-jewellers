@@ -88,3 +88,11 @@
 ## 2026-11-03 - Research round 2 (vs a1): all rejected
 - R7 delivery filter 4.3%/yr, R8 high-delivery breakout family 4.6%, R10 nearer targets (1R/2R) 3.6% - vs a1 9.15%.
 - ROADMAP D1 (delivery data) and P2 (industry limit) built and tested: did not help a1 -> marked [~].
+
+## 2026-11-03 - Strategy library + combined fair search (684 variants, D66 selection rule)
+- Library (8 famous methods, 128 variants): best families by median - sector rotation 10.4%/yr, Minervini 9.6%,
+  PEAD 9.4% (Sharpe 2.0, few trades), 12-1 momentum 8.9%. Hindsight-best variants made Rs 150-250 per trade vs a1 Rs 33.
+- Combined fair walk-forward search (all 684, pick by excess-over-liquid-fund Sharpe): FAILED - beat NIFTYBEES in
+  3/10 years, 6.5%/yr, worst fall -22%. Today's fair pick is S385 = a1 itself, so tips stay on a1.
+- Lesson: methods that look best in hindsight do not stay best year to year (the yearly re-pick chases last
+  period's winner). Next: the meta-system S12 (combine signals of several families instead of picking one).

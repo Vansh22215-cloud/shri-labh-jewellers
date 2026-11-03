@@ -32,15 +32,15 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 
 ## Week 1 PRIORITY - Strategy library: the best-known methods, each built and tested on NSE data
 Each becomes a family in swing/families.py (with tests), joins the walk-forward search, and is pre-registered.
-- [ ] S1. Mark Minervini "Trend Template" + VCP (volatility contraction pattern) breakouts.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S1. Mark Minervini "Trend Template" + VCP (volatility contraction pattern) breakouts.
 - [ ] S2. William O'Neil CANSLIM-style: new highs + earnings growth + relative strength (uses fundamentals).
-- [ ] S3. Stan Weinstein Stage Analysis: buy only stage-2 breakouts above the 30-week average.
-- [ ] S4. Nicolas Darvas boxes: breakouts from tight boxes near highs with volume.
-- [ ] S5. Jegadeesh-Titman / AQR cross-sectional momentum (12-1 month), monthly top-decile rotation.
-- [ ] S6. George & Hwang 52-week-high momentum (stocks closest to their 52-week high).
-- [ ] S7. Post-Earnings-Announcement Drift (Ball & Brown; widely used by quant funds): buy strong results gaps.
-- [ ] S8. Larry Connors short-term mean reversion (RSI(2), %b) in uptrends - already partly done, extend.
-- [ ] S9. Antonacci dual momentum / Faber sector rotation using NSE sector indices.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S3. Stan Weinstein Stage Analysis: buy only stage-2 breakouts above the 30-week average.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S4. Nicolas Darvas boxes: breakouts from tight boxes near highs with volume.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S5. Jegadeesh-Titman / AQR cross-sectional momentum (12-1 month), monthly top-decile rotation.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S6. George & Hwang 52-week-high momentum (stocks closest to their 52-week high).
+- [x] (built+tested 2026-11-03, see CHANGELOG) S7. Post-Earnings-Announcement Drift (Ball & Brown; widely used by quant funds): buy strong results gaps.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S8. Larry Connors short-term mean reversion (RSI(2), %b) in uptrends - already partly done, extend.
+- [x] (built+tested 2026-11-03, see CHANGELOG) S9. Antonacci dual momentum / Faber sector rotation using NSE sector indices.
 - [ ] S10. Quality + momentum (AQR "quality minus junk" idea) using fundamentals as a filter.
 - [ ] S11. Turtle/Donchian trend following with volatility sizing (Richard Dennis) - extend existing.
 - [ ] S12. "Best of all" META-SYSTEM: every evening rank each family by its recent walk-forward performance

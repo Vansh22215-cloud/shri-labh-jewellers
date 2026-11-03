@@ -1,0 +1,404 @@
+{
+ "date": "2026-11-03",
+ "procedure": "wf-search-combined-v1: swing+library, 36m Sharpe of excess over liquid fund",
+ "space": "combined",
+ "variants_searched": 684,
+ "raw_variants_ever": 1895,
+ "search_procedures_tried": 5,
+ "passed": false,
+ "checks": [
+  {
+   "check": "Walk-forward search: picks beat NIFTYBEES in most years",
+   "passed": false,
+   "detail": "won 3 of 10 years (30%); needed 68%"
+  },
+  {
+   "check": "Holdout: beats NIFTYBEES and liquid fund",
+   "passed": false,
+   "detail": "S385 7.92% vs NIFTYBEES -1.04% vs liquid fund 9.75%"
+  },
+  {
+   "check": "Holdout drawdown <= 15%",
+   "passed": true,
+   "detail": "-6.94%"
+  },
+  {
+   "check": "Walk-forward drawdown <= 20%",
+   "passed": false,
+   "detail": "-22.1%"
+  },
+  {
+   "check": "Enough trades (>= 100)",
+   "passed": true,
+   "detail": "305 trades"
+  },
+  {
+   "check": "Excess return statistically convincing",
+   "passed": false,
+   "detail": "t-stat -1.66; needed 1.79 (5 search procedure(s) tried)"
+  }
+ ],
+ "picks": [
+  {
+   "year": 2016,
+   "picked": "L081",
+   "how": "pead, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.32,
+   "return_pct": 6.49,
+   "niftybees_pct": 3.97,
+   "trades": 13,
+   "beat_niftybees": true
+  },
+  {
+   "year": 2017,
+   "picked": "L008",
+   "how": "minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.29,
+   "return_pct": 13.69,
+   "niftybees_pct": 29.89,
+   "trades": 39,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2018,
+   "picked": "L009",
+   "how": "minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.12,
+   "return_pct": -7.58,
+   "niftybees_pct": 4.82,
+   "trades": 46,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2019,
+   "picked": "S474",
+   "how": "nr7, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.73,
+   "return_pct": -7.88,
+   "niftybees_pct": 13.61,
+   "trades": 37,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2020,
+   "picked": "L103",
+   "how": "sector_rotation, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.91,
+   "return_pct": -3.45,
+   "niftybees_pct": 15.42,
+   "trades": 40,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2021,
+   "picked": "L111",
+   "how": "sector_rotation, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 0.78,
+   "return_pct": 18.09,
+   "niftybees_pct": 25.97,
+   "trades": 35,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2022,
+   "picked": "L055",
+   "how": "momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.73,
+   "return_pct": 10.1,
+   "niftybees_pct": 5.46,
+   "trades": 29,
+   "beat_niftybees": true
+  },
+  {
+   "year": 2023,
+   "picked": "L055",
+   "how": "momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 2.04,
+   "return_pct": 33.82,
+   "niftybees_pct": 21.01,
+   "trades": 24,
+   "beat_niftybees": true
+  },
+  {
+   "year": 2024,
+   "picked": "L055",
+   "how": "momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.69,
+   "return_pct": 5.76,
+   "niftybees_pct": 10.36,
+   "trades": 31,
+   "beat_niftybees": false
+  },
+  {
+   "year": 2025,
+   "picked": "S489",
+   "how": "nr7, stop 3.0 ATR, targets 1.5R/3.0R, max 50 days, market filter off, risk 1.0% x 4 trades",
+   "past_36m_sharpe": 1.34,
+   "return_pct": -1.82,
+   "niftybees_pct": 2.84,
+   "trades": 11,
+   "beat_niftybees": false
+  }
+ ],
+ "holdout": {
+  "picked": "S385",
+  "how": "ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades",
+  "total_return_pct": 7.92,
+  "cagr_pct": 5.19,
+  "max_drawdown_pct": -6.94,
+  "sharpe": 0.69,
+  "trades": 65,
+  "win_rate_pct": 38.5,
+  "avg_r": 0.038,
+  "avg_days": 19.8,
+  "profit_factor": 1.02,
+  "niftybees_return_pct": -1.04,
+  "liquid_fund_return_pct": 9.75
+ },
+ "chain_t": -1.66,
+ "chain_max_dd": -22.07,
+ "chain_cagr_pct": 6.49,
+ "niftybees_cagr_pct_wf": 12.99,
+ "cherry_picked_top10": [
+  {
+   "variant": "S517",
+   "how": "lowvol_momentum, stop 1.5 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "t_vs_niftybees": 0.09,
+   "cagr_pct": 13.58,
+   "max_dd_pct": -18.01,
+   "trades": 639
+  },
+  {
+   "variant": "S529",
+   "how": "lowvol_momentum, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "t_vs_niftybees": 0.06,
+   "cagr_pct": 13.93,
+   "max_dd_pct": -14.37,
+   "trades": 569
+  },
+  {
+   "variant": "S516",
+   "how": "lowvol_momentum, stop 1.5 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": 0.05,
+   "cagr_pct": 13.77,
+   "max_dd_pct": -18.08,
+   "trades": 443
+  },
+  {
+   "variant": "S260",
+   "how": "momentum_leaders, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.04,
+   "cagr_pct": 13.64,
+   "max_dd_pct": -10.0,
+   "trades": 317
+  },
+  {
+   "variant": "S535",
+   "how": "lowvol_momentum, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.1,
+   "cagr_pct": 12.92,
+   "max_dd_pct": -18.91,
+   "trades": 586
+  },
+  {
+   "variant": "S178",
+   "how": "high52, stop 1.5 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.22,
+   "cagr_pct": 11.85,
+   "max_dd_pct": -18.31,
+   "trades": 485
+  },
+  {
+   "variant": "S176",
+   "how": "high52, stop 1.5 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.3,
+   "cagr_pct": 11.59,
+   "max_dd_pct": -20.77,
+   "trades": 599
+  },
+  {
+   "variant": "L106",
+   "how": "sector_rotation, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.31,
+   "cagr_pct": 12.65,
+   "max_dd_pct": -9.92,
+   "trades": 245
+  },
+  {
+   "variant": "S332",
+   "how": "squeeze, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.38,
+   "cagr_pct": 12.27,
+   "max_dd_pct": -8.13,
+   "trades": 263
+  },
+  {
+   "variant": "S194",
+   "how": "high52, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades",
+   "t_vs_niftybees": -0.38,
+   "cagr_pct": 11.56,
+   "max_dd_pct": -16.24,
+   "trades": 531
+  }
+ ],
+ "cherry_haircut_t_needed": 3.89,
+ "family_medians": [
+  {
+   "family": "sector_rotation",
+   "cagr_pct": 10.36,
+   "max_drawdown_pct": -12.43,
+   "sharpe": 1.16
+  },
+  {
+   "family": "minervini_vcp",
+   "cagr_pct": 9.64,
+   "max_drawdown_pct": -14.75,
+   "sharpe": 1.06
+  },
+  {
+   "family": "pead",
+   "cagr_pct": 9.4,
+   "max_drawdown_pct": -6.82,
+   "sharpe": 2.01
+  },
+  {
+   "family": "lowvol_momentum",
+   "cagr_pct": 9.18,
+   "max_drawdown_pct": -17.76,
+   "sharpe": 1.01
+  },
+  {
+   "family": "momentum_12_1",
+   "cagr_pct": 8.87,
+   "max_drawdown_pct": -11.42,
+   "sharpe": 1.17
+  },
+  {
+   "family": "momentum_leaders",
+   "cagr_pct": 7.76,
+   "max_drawdown_pct": -15.4,
+   "sharpe": 0.87
+  },
+  {
+   "family": "connors_pctb",
+   "cagr_pct": 7.24,
+   "max_drawdown_pct": -14.83,
+   "sharpe": 0.83
+  },
+  {
+   "family": "darvas_box",
+   "cagr_pct": 6.87,
+   "max_drawdown_pct": -23.54,
+   "sharpe": 0.78
+  },
+  {
+   "family": "high52_rank",
+   "cagr_pct": 6.62,
+   "max_drawdown_pct": -13.9,
+   "sharpe": 0.92
+  },
+  {
+   "family": "trend_pb_bo",
+   "cagr_pct": 6.16,
+   "max_drawdown_pct": -21.74,
+   "sharpe": 0.65
+  },
+  {
+   "family": "high52",
+   "cagr_pct": 5.48,
+   "max_drawdown_pct": -21.01,
+   "sharpe": 0.59
+  },
+  {
+   "family": "squeeze",
+   "cagr_pct": 5.32,
+   "max_drawdown_pct": -23.85,
+   "sharpe": 0.55
+  },
+  {
+   "family": "nr7",
+   "cagr_pct": 5.12,
+   "max_drawdown_pct": -25.01,
+   "sharpe": 0.55
+  },
+  {
+   "family": "weinstein_stage2",
+   "cagr_pct": 5.11,
+   "max_drawdown_pct": -11.42,
+   "sharpe": 1.03
+  },
+  {
+   "family": "ma_cross",
+   "cagr_pct": 4.72,
+   "max_drawdown_pct": -26.26,
+   "sharpe": 0.54
+  },
+  {
+   "family": "volume_surge",
+   "cagr_pct": 4.07,
+   "max_drawdown_pct": -27.82,
+   "sharpe": 0.46
+  },
+  {
+   "family": "donchian",
+   "cagr_pct": 2.24,
+   "max_drawdown_pct": -30.7,
+   "sharpe": 0.26
+  },
+  {
+   "family": "mean_reversion",
+   "cagr_pct": -0.46,
+   "max_drawdown_pct": -31.78,
+   "sharpe": -0.06
+  }
+ ],
+ "share_variants_beating_niftybees_cagr": 0.006,
+ "latest_pick": {
+  "variant": "S385",
+  "how": "ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades",
+  "params": {
+   "universe_size": 500,
+   "min_price": 50,
+   "min_history_days": 250,
+   "liquidity_lookback": 60,
+   "regime_sma": 200,
+   "breadth_min_pct_above_50dma": 40,
+   "trend_fast_sma": 50,
+   "trend_slow_sma": 200,
+   "slope_lookback": 20,
+   "max_extension_above_50dma_pct": 25,
+   "mom_long": 126,
+   "mom_short": 63,
+   "mom_skip": 5,
+   "min_rs_percentile": 70,
+   "breakout_lookback": 50,
+   "breakout_volume_mult": 1.5,
+   "pullback_ema": 20,
+   "pullback_band_pct": 3,
+   "atr_period": 14,
+   "stop_atr_mult": 3.0,
+   "do_not_buy_gap_atr": 0.5,
+   "target1_r": 2.0,
+   "target2_r": 4.0,
+   "max_hold_days": 25,
+   "risk_per_trade_pct": 1.0,
+   "max_position_pct": 25,
+   "max_open_positions": 4,
+   "drawdown_pause_pct": 10,
+   "drawdown_pause_days": 20,
+   "exclude_results_within_days": 5,
+   "score_weights": {
+    "rs_long": 0.35,
+    "rs_short": 0.2,
+    "sector_rs": 0.15,
+    "trend_quality": 0.2,
+    "liquidity": 0.1
+   },
+   "results_rule": "flag",
+   "family": "ma_cross",
+   "use_regime_filter": false,
+   "exit_style": "targets",
+   "name": "S385"
+  }
+ }
+}
