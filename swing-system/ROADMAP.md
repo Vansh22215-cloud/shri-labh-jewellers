@@ -25,7 +25,7 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 - [x] T1. (2026-11-03: built - T3, risk:reward, calibrated odds from 8,694 past a1 signals by regime (T1 16%, T2 2.5%, stop 34%, rest time exit; median 15 days to T1), estimate reliability, cancel-if conditions) Trade card upgrade: T1/T2/T3, calibrated probability of T1-before-stop with sample size, confidence
       score, invalidation conditions, expected holding period from history.
 - [x] T2. (2026-11-03: built - VIX spike/level, Nifty shock day, 2% daily loss limit; blocks new trades in nightly and hourly scans) Daily loss limit + abnormal-market detector (VIX spike, big gap, data outage) -> no new trades.
-- [ ] UI1. DASHBOARD: phone-friendly web dashboard (published Artifact) refreshed after every scan: market
+- [x] UI1. (2026-11-03: built - https://claude.ai/artifact/LKLWX4WHnvo6bvDoa6botT; market tiles, ranked ideas with odds, your trades, per-trade stats, strategy vs NIFTYBEES chart, FII chart, leaderboard, market types, research log, journal; refreshed by the hourly scan and evening run) DASHBOARD: phone-friendly web dashboard (published Artifact) refreshed after every scan: market
       overview, ranked opportunities, interactive charts, open trades & risk, performance analytics, research log.
 - [ ] A1. Performance analytics: per strategy / per regime / per month: win rate, avg R, P&L, drawdown, Sharpe,
       after tax; mistakes review ("why did losers lose").

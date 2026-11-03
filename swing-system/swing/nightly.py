@@ -412,6 +412,12 @@ def run():
            "gate_html": search_html() + gate_html(g),
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
     f = report.daily_html(ctx)
+    try:
+        from .dashboard_export import save_ideas
+        save_ideas([{k: v for k, v in pl.items() if k not in ("chart",)} for pl in (tips or [])],
+                   my_status, "evening run")
+    except Exception as e:
+        log.warning("dashboard ideas save failed: %s", e)
 
     from .research import today_line
     lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]

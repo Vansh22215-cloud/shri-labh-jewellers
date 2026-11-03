@@ -116,3 +116,6 @@
 
 ## 2026-11-03 (automatic)
 - Tested proposal R11: rejected. R11 vs a1: beat it in 6/13 walk-forward years, CAGR 7.42% vs 9.15%, worst fall -10.31% vs -9.92%, gate FAIL
+
+## 2026-11-03 - UI1 dashboard
+- Phone-friendly dashboard published (private): https://claude.ai/artifact/LKLWX4WHnvo6bvDoa6botT, fed by data/dashboard/desk.json from swing/dashboard_export.py; refreshed by scheduled runs.

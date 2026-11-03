@@ -28,6 +28,10 @@ Your evening tips and the tip-checker bot already run from Claude's cloud, so th
 messages by default (two senders would send everything twice). The laptop keeps its own copy of the report in
 `reports/latest.html` as a backup.
 
+## Your dashboard (phone-friendly)
+https://claude.ai/artifact/LKLWX4WHnvo6bvDoa6botT - market today, ranked trade ideas, your trades, odds, research and
+the tips journal. Refreshed after every hourly scan and the evening run. (Page source: dashboard_page.html.)
+
 ## Check any tip on Telegram
 Forward any stock tip (from a channel, group or friend) to your bot **@Vsjshsjsbaksnsjsh_bot**. Within seconds it
 answers 🟢 GOOD / 🟡 RISKY / 🔴 AVOID with reasons, using real prices and Zerodha charges. Send /score to see

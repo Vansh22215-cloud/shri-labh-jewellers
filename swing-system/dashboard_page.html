@@ -1,0 +1,292 @@
+<meta name="dash-one-writer">
+<style>
+.sd { display: grid; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); }
+.sd-hd { display: grid; gap: var(--cds-gap-xs); }
+.sd-hd h1 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); text-wrap: balance; }
+.sd-take { margin: 0; font-size: var(--cds-font-size-body); max-width: 70ch; }
+.sd-meta { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.sd h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.sd-sec { display: grid; gap: var(--cds-gap-md); }
+.sd-sub { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); max-width: 75ch; }
+.sd-tiles { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+.sd-tile, .sd-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); align-content: start; min-width: 0; }
+.sd-lbl { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); letter-spacing: .02em; }
+.sd-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; }
+.sd-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.sd-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.sd-card h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+.sd-scroll { overflow-x: auto; max-height: 34rem; overflow-y: auto; }
+.sd table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.sd th { text-align: left; color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); position: sticky; top: 0; background: var(--color-panel); white-space: nowrap; }
+.sd td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.sd td.num, .sd th.num { text-align: right; white-space: nowrap; }
+.sd td.wrap { min-width: 16rem; }
+.sd-pill { display: inline-block; padding: 0 var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); white-space: nowrap; }
+.sd-chart { position: relative; min-height: 260px; }
+.sd-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; }
+.sd-tip .k { color: var(--cds-text-secondary); }
+.sd-empty { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+.sd-legend { display: flex; gap: var(--cds-gap-md); flex-wrap: wrap; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sd-sw { display: inline-block; width: .75rem; height: .2rem; border-radius: 2px; vertical-align: middle; margin-right: .35rem; }
+</style>
+
+<div class="sd">
+  <header class="sd-hd" id="top">
+    <h1>Swing Trading Desk</h1>
+    <p class="sd-take"><span data-draw="txt" data-source="headline" data-field="takeaway" data-row="0">—</span></p>
+    <p class="sd-meta">Updated <span data-draw="txt" data-source="headline" data-field="updated" data-row="0">—</span> · strategy <span data-draw="txt" data-source="headline" data-field="strategy" data-row="0">—</span> · Research, not advice: you decide and place every order yourself.</p>
+  </header>
+
+  <section class="sd-sec" id="market">
+    <h2>Market today</h2>
+    <div class="sd-tiles">
+      <div class="sd-tile"><span class="sd-lbl">Nifty 50</span><b class="sd-big" data-draw="mval" data-source="market" data-field="value" data-where="metric=Nifty 50">—</b><span class="sd-note" data-draw="txt" data-source="market" data-field="note" data-where="metric=Nifty 50">—</span></div>
+      <div class="sd-tile"><span class="sd-lbl">Breadth</span><b class="sd-big" data-draw="mval" data-source="market" data-field="value" data-where="metric=Breadth">—</b><span class="sd-note" data-draw="txt" data-source="market" data-field="note" data-where="metric=Breadth">—</span></div>
+      <div class="sd-tile"><span class="sd-lbl">India VIX</span><b class="sd-big" data-draw="mval" data-source="market" data-field="value" data-where="metric=India VIX">—</b><span class="sd-note" data-draw="txt" data-source="market" data-field="note" data-where="metric=India VIX">—</span></div>
+      <div class="sd-tile"><span class="sd-lbl">FII index futures</span><b class="sd-big" data-draw="mval" data-source="market" data-field="value" data-where="metric=FII index futures">—</b><span class="sd-note" data-draw="txt" data-source="market" data-field="note" data-where="metric=FII index futures">—</span></div>
+      <div class="sd-tile"><span class="sd-lbl">Market type</span><b class="sd-big" data-draw="mval" data-source="market" data-field="value" data-where="metric=Market type">—</b><span class="sd-note" data-draw="txt" data-source="market" data-field="note" data-where="metric=Market type">—</span></div>
+    </div>
+  </section>
+
+  <section class="sd-sec" id="ideas">
+    <h2>Ranked trade ideas</h2>
+    <p class="sd-sub">From the latest scan. Buy next morning only inside the buy zone, at most the quantity shown, and set a stop-loss order straight away. Risk is a 1-10 checklist score. "T1 odds" is how often T1 came before the stop in past signals of this strategy.</p>
+    <p class="sd-empty sd-ideas-empty" hidden>No trade ideas right now: no stock meets every rule. That is a valid answer, not a fault.</p>
+    <div class="sd-card"><div class="sd-scroll">
+      <table data-source="ideas" data-row-key="symbol">
+        <thead><tr>
+          <th class="num" data-field="rank">#</th><th data-field="symbol">Stock</th><th data-field="setup">Signal</th>
+          <th class="num" data-field="risk">Risk /10</th><th class="num" data-field="ltp">Price</th>
+          <th class="num" data-field="entry_low">Buy from</th><th class="num" data-field="entry_high">Buy up to</th>
+          <th class="num" data-field="stop">Stop</th><th class="num" data-field="target1">T1</th><th class="num" data-field="target2">T2</th>
+          <th class="num" data-field="target3">T3</th><th class="num" data-field="qty">Qty</th><th class="num" data-field="max_loss">Max loss ₹</th>
+          <th class="num" data-field="p_t1">T1 odds %</th><th class="num" data-field="p_stop">Stop odds %</th><th data-field="why">Why</th><th data-field="risk_factors">Risk factors</th>
+        </tr></thead>
+        <tbody data-draw="ideas"></tbody>
+      </table>
+    </div></div>
+  </section>
+
+  <div class="sd-grid">
+    <section class="sd-card" id="trades">
+      <h3>Your open trades</h3>
+      <p class="sd-sub">Trades you told Claude you placed, checked against the latest prices.</p>
+      <p class="sd-empty sd-trades-empty" hidden>No open trades recorded.</p>
+      <div class="sd-scroll"><table data-source="trades" data-row-key="symbol">
+        <thead><tr><th data-field="symbol">Stock</th><th class="num" data-field="buy">Bought</th><th class="num" data-field="last">Last</th><th class="num" data-field="pnl_pct">P&amp;L %</th><th data-field="status">What to do</th></tr></thead>
+        <tbody data-draw="trades"></tbody>
+      </table></div>
+    </section>
+    <section class="sd-card" id="pertrade">
+      <h3>What one trade looks like</h3>
+      <p class="sd-sub">13-year test of the current strategy after Zerodha charges, and target odds from every past signal.</p>
+      <table data-source="pertrade" data-row-key="metric">
+        <thead><tr><th data-field="metric">Measure</th><th class="num" data-field="value">Value</th><th data-field="unit">Unit</th></tr></thead>
+        <tbody data-draw="pertrade"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="sd-grid">
+    <section class="sd-card" id="equity">
+      <h3>Strategy vs NIFTYBEES, Rs 45,000 start</h3>
+      <p class="sd-sub">Monthly, walk-forward period (2013 to Apr 2025), after costs, idle cash in a liquid fund.</p>
+      <div class="sd-legend"><span><i class="sd-sw" style="background: var(--sd-c0)"></i>Strategy</span><span><i class="sd-sw" style="background: var(--sd-c1)"></i>NIFTYBEES</span></div>
+      <div class="sd-chart" data-source="equity" data-draw="equity"></div>
+    </section>
+    <section class="sd-card" id="fii">
+      <h3>FII positioning in Nifty futures</h3>
+      <p class="sd-sub">Share of foreign funds' index-futures contracts that are long, weekly. Below 30% they are heavily hedged.</p>
+      <p class="sd-empty sd-fii-empty" hidden>History is still downloading; it appears after the next refresh.</p>
+      <div class="sd-chart" data-source="fii" data-draw="fii"></div>
+    </section>
+  </div>
+
+  <div class="sd-grid">
+    <section class="sd-card" id="families">
+      <h3>Strategy leaderboard</h3>
+      <p class="sd-sub">Median yearly growth of all tested versions of each method, 2013 to Apr 2025, after costs.</p>
+      <div class="sd-chart" data-source="families" data-draw="families"></div>
+    </section>
+    <section class="sd-card" id="regimes">
+      <h3>How the strategy does by market type</h3>
+      <p class="sd-sub">Past trades grouped by Nifty trend and mood (VIX) on the signal day.</p>
+      <table data-source="regimes" data-row-key="regime">
+        <thead><tr><th data-field="regime">Market type</th><th class="num" data-field="trades">Trades</th><th class="num" data-field="win_pct">Winners %</th><th class="num" data-field="avg_r">Avg R</th></tr></thead>
+        <tbody data-draw="regimes"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <section class="sd-card" id="research">
+    <h3>Research log</h3>
+    <p class="sd-sub">Every improvement idea, written down before testing. Adopted only if it beats the current strategy in most past years without a deeper worst fall.</p>
+    <div class="sd-scroll"><table data-source="research" data-row-key="id">
+      <thead><tr><th data-field="id">Idea</th><th data-field="result">Result</th><th class="num" data-field="cagr_pct">Its yearly %</th><th class="num" data-field="base_cagr_pct">Current %</th><th data-field="idea">Why it was tried</th></tr></thead>
+      <tbody data-draw="research"></tbody>
+    </table></div>
+  </section>
+
+  <section class="sd-card" id="journal">
+    <h3>Tips journal</h3>
+    <p class="sd-sub">Every tip the system gave, followed with the exact tested rules.</p>
+    <div class="sd-scroll"><table data-source="tips" data-row-key="date,symbol">
+      <thead><tr><th data-field="date">Date</th><th data-field="symbol">Stock</th><th data-field="status">Status</th><th class="num" data-field="entry_price">Entry</th><th data-field="exit_reason">Exit</th><th class="num" data-field="pnl">P&amp;L ₹</th><th class="num" data-field="r_multiple">R</th></tr></thead>
+      <tbody data-draw="tips"></tbody>
+    </table></div>
+  </section>
+</div>
+
+<script>
+  const pick = (t) => (desk) => desk.filter((r) => r.table === t).map(({ table, ...r }) => r);
+  dash.calc('headline', { inputs: ['desk'], fn: pick('headline'), title: 'Latest run', description: 'When the desk data was made and its one-line summary.' });
+  dash.calc('market', { inputs: ['desk'], fn: pick('market'), title: 'Market today', description: 'Nifty, breadth, VIX, FII positioning and market type from the latest run.' });
+  dash.calc('ideas', { inputs: ['desk'], fn: pick('idea'), title: 'Trade ideas', description: 'Ranked ideas from the latest hourly scan or evening run.' });
+  dash.calc('trades', { inputs: ['desk'], fn: pick('trade'), title: 'Your open trades', description: 'Trades you reported, with the latest status.' });
+  dash.calc('pertrade', { inputs: ['desk'], fn: pick('pertrade'), title: 'Per-trade statistics', description: '13-year test statistics and target odds of the current strategy.' });
+  dash.calc('equity', { inputs: ['desk'], fn: pick('equity'), title: 'Strategy vs NIFTYBEES', description: 'Monthly value of Rs 45,000 in the strategy and in NIFTYBEES.' });
+  dash.calc('fii', { inputs: ['desk'], fn: pick('fii'), title: 'FII positioning', description: 'Weekly FII index-futures long share from NSE participant open interest.' });
+  dash.calc('families', { inputs: ['desk'], fn: pick('family'), title: 'Strategy leaderboard', description: 'Median results of each tested strategy family.' });
+  dash.calc('regimes', { inputs: ['desk'], fn: pick('regime'), title: 'Results by market type', description: 'Past trades grouped by market trend and mood.' });
+  dash.calc('research', { inputs: ['desk'], fn: pick('research'), title: 'Research log', description: 'Pre-registered improvement ideas and their test results.' });
+  dash.calc('tips', { inputs: ['desk'], fn: pick('tip'), title: 'Tips journal', description: 'Every tip and its tracked outcome.' });
+
+  window.sdFmt = {
+    rs: (v) => (v == null || v === '' ? '' : d3.format(',.2f')(+v)),
+    int: (v) => (v == null || v === '' ? '' : d3.format(',')(Math.round(+v))),
+    pct: (v) => (v == null || v === '' ? '' : d3.format('.1f')(+v)),
+    r: (v) => (v == null || v === '' ? '' : d3.format('+.2f')(+v)),
+    text: (v) => (v == null ? '' : String(v)),
+  };
+  window.sdRows = (id) => { const g = dash.data(id); return g.status === 'ok' && Array.isArray(g.data) ? g.data : null; };
+  window.sdWhere = (el, rows) => {
+    if (el.dataset.row != null) return rows[+el.dataset.row];
+    const [k, v] = (el.dataset.where || '').split('=');
+    return rows.find((r) => String(r[decodeURIComponent(k)]) === decodeURIComponent(v || ''));
+  };
+  window.sdTable = (tbody, id, cols) => {
+    const rows = window.sdRows(id) || [];
+    tbody.replaceChildren(...rows.map((r) => {
+      const tr = document.createElement('tr');
+      cols.forEach(([f, kind, cls]) => {
+        const td = document.createElement('td');
+        if (cls) td.className = cls;
+        td.textContent = window.sdFmt[kind](r[f]);
+        tr.appendChild(td);
+      });
+      return tr;
+    }));
+    return rows;
+  };
+</script>
+
+<script>
+  document.querySelectorAll('.sd').forEach((root) => {
+    const cs = getComputedStyle(root);
+    root.style.setProperty('--sd-c0', dash.colors[0]);
+    root.style.setProperty('--sd-c1', dash.colors[1]);
+  });
+  dash.onData(() => {
+    const empty = (cls, id) => {
+      const g = dash.data(id);
+      document.querySelectorAll(cls).forEach((p) => { p.hidden = !(g.status === 'ok' && Array.isArray(g.data) && g.data.length === 0); });
+    };
+    empty('.sd-ideas-empty', 'ideas');
+    empty('.sd-trades-empty', 'trades');
+    empty('.sd-fii-empty', 'fii');
+  });
+  dash.draw('txt', (el) => {
+    const rows = window.sdRows(el.dataset.source);
+    const r = rows && window.sdWhere(el, rows);
+    el.textContent = r ? window.sdFmt.text(r[el.dataset.field]) : '—';
+  });
+  dash.draw('mval', (el) => {
+    const rows = window.sdRows('market');
+    const r = rows && window.sdWhere(el, rows);
+    el.textContent = r ? String(r.value) : '—';
+    el.style.color = r ? ({ good: 'var(--color-ok)', warn: 'var(--color-warn)', bad: 'var(--color-bad)' }[r.status] || '') : '';
+  });
+  dash.draw('ideas', (tb) => window.sdTable(tb, 'ideas', [['rank', 'int', 'num'], ['symbol', 'text'], ['setup', 'text'], ['risk', 'int', 'num'],
+    ['ltp', 'rs', 'num'], ['entry_low', 'rs', 'num'], ['entry_high', 'rs', 'num'], ['stop', 'rs', 'num'], ['target1', 'rs', 'num'],
+    ['target2', 'rs', 'num'], ['target3', 'rs', 'num'], ['qty', 'int', 'num'], ['max_loss', 'int', 'num'], ['p_t1', 'pct', 'num'],
+    ['p_stop', 'pct', 'num'], ['why', 'text', 'wrap'], ['risk_factors', 'text', 'wrap']]));
+  dash.draw('trades', (tb) => window.sdTable(tb, 'trades', [['symbol', 'text'], ['buy', 'rs', 'num'], ['last', 'rs', 'num'], ['pnl_pct', 'pct', 'num'], ['status', 'text', 'wrap']]));
+  dash.draw('pertrade', (tb) => window.sdTable(tb, 'pertrade', [['metric', 'text'], ['value', 'text', 'num'], ['unit', 'text']]));
+  dash.draw('regimes', (tb) => window.sdTable(tb, 'regimes', [['regime', 'text'], ['trades', 'int', 'num'], ['win_pct', 'pct', 'num'], ['avg_r', 'r', 'num']]));
+  dash.draw('research', (tb) => window.sdTable(tb, 'research', [['id', 'text'], ['result', 'text'], ['cagr_pct', 'pct', 'num'], ['base_cagr_pct', 'pct', 'num'], ['idea', 'text', 'wrap']]));
+  dash.draw('tips', (tb) => window.sdTable(tb, 'tips', [['date', 'text'], ['symbol', 'text'], ['status', 'text'], ['entry_price', 'rs', 'num'], ['exit_reason', 'text'], ['pnl', 'int', 'num'], ['r_multiple', 'r', 'num']]));
+</script>
+
+<script>
+  // Line chart helper: series = [{key, label, color}], x = date field
+  window.sdLine = (el, rows, xKey, series, yFmt, refY) => {
+    el.replaceChildren();
+    if (!rows || !rows.length) return;
+    const W = Math.max(280, el.clientWidth), H = 260;
+    const pts = rows.map((r) => ({ x: new Date(r[xKey]), ...r })).filter((r) => !isNaN(r.x));
+    const vals = pts.flatMap((p) => series.map((s) => +p[s.key]).filter((v) => isFinite(v)));
+    if (refY != null) vals.push(refY);
+    const y = d3.scaleLinear(d3.extent(vals), [H - 28, 10]).nice();
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const ticks = y.ticks(5);
+    const probe = svg.append('text').attr('font-size', 11).text(yFmt(ticks[ticks.length - 1]));
+    const left = Math.ceil(probe.node().getComputedTextLength()) + 10; probe.remove();
+    const x = d3.scaleUtc(d3.extent(pts, (p) => p.x), [left, W - 12]);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', left).attr('x2', W - 12).attr('y1', y).attr('y2', y).attr('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(yFmt);
+    const xt = x.ticks(Math.max(2, Math.floor(W / 90)));
+    svg.append('g').selectAll('text').data(xt).join('text').attr('x', x).attr('y', H - 8).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(d3.utcFormat('%Y'));
+    if (refY != null) svg.append('line').attr('x1', left).attr('x2', W - 12).attr('y1', y(refY)).attr('y2', y(refY)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
+    series.forEach((s) => {
+      const line = d3.line().defined((p) => isFinite(+p[s.key]) && p[s.key] !== null).x((p) => x(p.x)).y((p) => y(+p[s.key]));
+      svg.append('path').datum(pts).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round').attr('d', line);
+    });
+    const tip = document.createElement('div'); tip.className = 'sd-tip'; tip.hidden = true; el.appendChild(tip);
+    const dot = svg.append('g');
+    const bis = d3.bisector((p) => p.x).center;
+    svg.on('pointermove', (ev) => {
+      const [mx] = d3.pointer(ev); const p = pts[bis(pts, x.invert(mx))]; if (!p) return;
+      dot.selectAll('circle').data(series).join('circle').attr('r', 4).attr('cx', x(p.x)).attr('cy', (s) => y(+p[s.key])).attr('fill', (s) => s.color).attr('opacity', (s) => (isFinite(+p[s.key]) ? 1 : 0));
+      tip.hidden = false;
+      tip.replaceChildren();
+      const k = document.createElement('div'); k.className = 'k'; k.textContent = d3.utcFormat('%b %Y')(p.x); tip.appendChild(k);
+      series.forEach((s) => { const d = document.createElement('div'); d.textContent = `${s.label}: ${yFmt(+p[s.key])}`; tip.appendChild(d); });
+      const tx = Math.min(W - tip.offsetWidth - 4, Math.max(0, x(p.x) * el.clientWidth / W + 10));
+      tip.style.left = tx + 'px'; tip.style.top = '8px';
+    });
+    svg.on('pointerleave', () => { tip.hidden = true; dot.selectAll('circle').remove(); });
+  };
+  dash.draw('equity', (el) => {
+    const rows = window.sdRows('equity');
+    if (!rows) { el.replaceChildren(); return; }
+    window.sdLine(el, rows, 'month', [{ key: 'strategy', label: 'Strategy', color: dash.colors[0] }, { key: 'niftybees', label: 'NIFTYBEES', color: dash.colors[1] }],
+      (v) => '₹' + Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(v), 45000);
+  });
+  dash.draw('fii', (el) => {
+    const rows = window.sdRows('fii');
+    if (!rows || !rows.length) { el.replaceChildren(); return; }
+    window.sdLine(el, rows, 'week', [{ key: 'fii_long_pct', label: 'FII long', color: dash.colors[0] }], (v) => d3.format('.0f')(v) + '%', 30);
+  });
+  dash.draw('families', (el) => {
+    el.replaceChildren();
+    const rows = (window.sdRows('families') || []).slice().sort((a, b) => b.cagr_pct - a.cagr_pct);
+    if (!rows.length) return;
+    const W = Math.max(280, el.clientWidth), bh = 18, gap = 8, H = rows.length * (bh + gap) + 10;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const probe = svg.append('text').attr('font-size', 11);
+    let lw = 0; rows.forEach((r) => { probe.text(r.family); lw = Math.max(lw, probe.node().getComputedTextLength()); }); probe.remove();
+    const left = Math.ceil(lw) + 10;
+    const ext = d3.extent([0, ...rows.map((r) => r.cagr_pct)]);
+    const x = d3.scaleLinear(ext, [left, W - 48]);
+    rows.forEach((r, i) => {
+      const yy = 5 + i * (bh + gap);
+      svg.append('text').attr('x', left - 6).attr('y', yy + bh / 2 + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg)').text(r.family);
+      svg.append('rect').attr('x', Math.min(x(0), x(r.cagr_pct))).attr('y', yy).attr('width', Math.abs(x(r.cagr_pct) - x(0))).attr('height', bh).attr('rx', 3)
+        .attr('fill', r.group === 'famous methods' ? dash.colors[0] : 'var(--cds-chart-muted)');
+      svg.append('text').attr('x', Math.max(x(0), x(r.cagr_pct)) + 4).attr('y', yy + bh / 2 + 4).attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(d3.format('.1f')(r.cagr_pct) + '%');
+    });
+    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).attr('stroke', 'var(--cds-chart-axis)');
+  });
+</script>
