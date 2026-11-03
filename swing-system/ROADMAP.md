@@ -33,7 +33,7 @@ best of all of them into OUR own system, keep only what proves itself on data, a
 ## Week 1 PRIORITY - Strategy library: the best-known methods, each built and tested on NSE data
 Each becomes a family in swing/families.py (with tests), joins the walk-forward search, and is pre-registered.
 - [x] (built+tested 2026-11-03, see CHANGELOG) S1. Mark Minervini "Trend Template" + VCP (volatility contraction pattern) breakouts.
-- [ ] S2. William O'Neil CANSLIM-style: new highs + earnings growth + relative strength (uses fundamentals).
+- [~] S2. (2026-11-03: built - point-in-time quarterly EPS growth for ~208 stocks + canslim family; R16 vs a1: 7.3%/yr vs 9.2%, beat it 7/13 years, smaller worst fall -8.7% vs -9.9% - not adopted (CAGR lower); EPS coverage limited) William O'Neil CANSLIM-style: new highs + earnings growth + relative strength (uses fundamentals).
 - [x] (built+tested 2026-11-03, see CHANGELOG) S3. Stan Weinstein Stage Analysis: buy only stage-2 breakouts above the 30-week average.
 - [x] (built+tested 2026-11-03, see CHANGELOG) S4. Nicolas Darvas boxes: breakouts from tight boxes near highs with volume.
 - [x] (built+tested 2026-11-03, see CHANGELOG) S5. Jegadeesh-Titman / AQR cross-sectional momentum (12-1 month), monthly top-decile rotation.

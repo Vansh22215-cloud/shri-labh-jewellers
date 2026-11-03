@@ -32,7 +32,8 @@ def synthetic_panel(n_sym=30, n_days=420, seed=1):
     vol = pd.DataFrame(rng.integers(1e5, 5e5, close.shape), index=idx, columns=syms).astype(float)
     deliv = pd.DataFrame(rng.uniform(20, 80, close.shape), index=idx, columns=syms)
     P = {"open": op, "high": high, "low": low, "close": close, "volume": vol, "raw_close": close, "deliv": deliv,
-         "results_day": pd.DataFrame(rng.random(close.shape) < 0.02, index=idx, columns=syms)}
+         "results_day": pd.DataFrame(rng.random(close.shape) < 0.02, index=idx, columns=syms),
+         "eps_growth": pd.DataFrame(rng.normal(0.2, 0.3, close.shape), index=idx, columns=syms)}
     nifty = close.mean(axis=1)
     mask = pd.DataFrame(True, index=idx, columns=syms)
     return P, nifty, mask

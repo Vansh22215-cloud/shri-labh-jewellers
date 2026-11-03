@@ -37,6 +37,8 @@ Families:
                    (industry rank >= 85%) in an uptrend
   connors_pctb     Connors %b: above the 200-day average and the close is below the lower Bollinger band
                    (%b < 0) - a sharp dip in an uptrend; exits via the exit rules
+  canslim          O'Neil-style: latest quarterly EPS up >= 25% vs a year earlier (known by then), close at a new
+                   52-week high on 1.5x volume, RS >= 80 (market direction via the market filter)
   delivery_breakout new 20-day closing high on 1.5x volume where the DELIVERY % is >= 1.3x its 20-day average
                    and >= 45% (genuine buying, not intraday churn), in an uptrend
 """
@@ -52,6 +54,7 @@ DELIVERY_FAMILIES = ["delivery_breakout"]
 # Strategy LIBRARY: well-known published methods (ROADMAP S1-S9, added 2026-11-03)
 LIBRARY_FAMILIES = ["minervini_vcp", "weinstein_stage2", "darvas_box", "momentum_12_1", "high52_rank",
                     "pead", "sector_rotation", "connors_pctb"]
+FUNDAMENTAL_FAMILIES = ["canslim"]   # needs point-in-time EPS history (ROADMAP S2)
 
 
 def sma(df, n):
@@ -173,6 +176,8 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
         B["deliv_avg"] = dv.shift(1).rolling(20, min_periods=10).mean()   # past 20 days only
     else:
         B["deliv"] = B["deliv_avg"] = None
+    eg = P.get("eps_growth")
+    B["eps_growth"] = eg.reindex(index=c.index, columns=c.columns) if eg is not None else None
     rd = P.get("results_day")
     B["results_day"] = rd.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool) if rd is not None else None
     B["results_soon"] = None if results_soon is None else \
@@ -271,6 +276,11 @@ def family_signals(B, p):
     elif fam == "connors_pctb":
         entry = B["above200"] & (c < B["bb_lower"])
         setup = "sharp dip below lower band in uptrend"
+    elif fam == "canslim":
+        if B.get("eps_growth") is None:
+            raise ValueError("EPS history not available")
+        entry = (B["eps_growth"] >= 0.25) & (c >= B["hi252"].shift(1)) & (v > 1.5 * B["avg_vol"]) & (B["rs_rank"] >= 0.8)
+        setup = "CANSLIM: earnings growth + new high"
     elif fam == "delivery_breakout":
         if B.get("deliv") is None:
             raise ValueError("delivery data not available")

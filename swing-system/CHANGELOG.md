@@ -122,3 +122,9 @@
 
 ## 2026-11-03 - A1 performance analytics
 - a1 trades only (no liquid-fund interest), 576 trades 2013-Nov 2026: +Rs 16,780 before tax, Rs 5,647 tax, +Rs 11,132 after tax on Rs 45,000 (~Rs 800/yr); 7 losing years out of 14. Losers: 59% at the stop (avg -Rs 521), 37% at the time limit (avg -Rs 154), 4% gap-through-stop (avg -Rs 585).
+
+## 2026-11-03 (automatic)
+- Tested proposal R16: rejected. R16 vs a1: beat it in 7/13 walk-forward years, CAGR 7.25% vs 9.15%, worst fall -8.73% vs -9.92%, gate FAIL
+
+## 2026-11-03 - S2 CANSLIM
+- Point-in-time EPS growth (Yahoo reported EPS, ~208 stocks) + canslim family. R16 rejected: 7.25%/yr vs a1 9.15%, beat a1 in 7/13 years, worst fall -8.7% vs -9.9%.

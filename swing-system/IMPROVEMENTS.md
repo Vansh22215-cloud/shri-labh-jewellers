@@ -138,3 +138,11 @@ written: 2026-11-03
 reason: 12-1 month momentum is the most documented equity anomaly; a moving-average cross in a stock that is ALSO in the top 30% by 12-month momentum is trend continuation rather than a bounce in a long-term loser, so its trades should be better.
 overrides: {"min_mom12_rank": 0.7}
 ```
+
+```proposal
+id: R16
+status: rejected 2026-11-03 - R16 vs a1: beat it in 7/13 walk-forward years, CAGR 7.25% vs 9.15%, worst fall -8.73% vs -9.92%, gate FAIL
+written: 2026-11-03
+reason: William O'Neil's CANSLIM (strong recent earnings growth + new highs + leadership) is one of the best-documented growth-stock methods; using point-in-time quarterly EPS growth >= 25% with a 52-week-high breakout should pick stronger trends than the moving-average cross (ROADMAP S2). Coverage: ~208 large stocks with EPS history.
+overrides: {"family": "canslim"}
+```

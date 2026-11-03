@@ -62,6 +62,12 @@ def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
             P["deliv"] = dp.reindex(index=idx, columns=P["close"].columns)
     except Exception as e:
         log.warning("delivery panel unavailable: %s", e)
+    try:   # point-in-time quarterly EPS growth (CANSLIM family, ROADMAP S2)
+        from .fundamentals import EPS, eps_growth_panel
+        if any(EPS.glob("*.csv")):
+            P["eps_growth"] = eps_growth_panel(list(P["close"].columns), idx)
+    except Exception as e:
+        log.warning("EPS growth panel unavailable: %s", e)
     try:   # historical results dates -> reaction days (for the earnings-drift family)
         from .fundamentals import results_day_mask
         P["results_day"] = results_day_mask(list(P["close"].columns), idx)
