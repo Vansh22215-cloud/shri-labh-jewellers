@@ -10,6 +10,7 @@ Each run (10:20, 11:20 ... 15:20 IST):
 Every idea has a full plan and a risk score out of 10 (swing/risk_score.py).
 """
 import html
+import re
 import time
 from datetime import datetime
 
@@ -281,7 +282,17 @@ def run(send=True):
                    [{"symbol": l.split("</b>")[0].replace("<b>", ""), "status": l} for l in my_lines], "hourly scan")
     except Exception as e:
         log.warning("dashboard ideas save failed: %s", e)
-    if send:
+    new_sigs = [pl for pl in forming if pl.get("new")]
+    acts = [l for l in my_lines if "Hold. Nothing to do" not in l]
+    if send and (new_sigs or acts):
+        lines = []
+        for l in acts:
+            lines.append("⚠️ " + re.sub("<[^>]+>", "", l).replace("\n", " "))
+        for pl in new_sigs[:3]:
+            lines.append(f"🟢 BUY {pl['symbol']} tomorrow {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
+                         f"target {pl['target1']:,.0f} | qty {pl['qty']} | risk {pl['risk']}/10 (confirm at 6:40 pm)")
+        res = telegram.send(settings, "\n".join(lines) + "\nResearch, not advice.")
+    elif False:
         res = telegram.send(settings, text, html=True)
-        log.info("Hourly scan sent: %s (%d forming, %d trades)", res, len(forming), len(my_lines))
+        log.info("Hourly scan sent: %s (%d new, %d actions)", res, len(new_sigs), len(acts))
     return text

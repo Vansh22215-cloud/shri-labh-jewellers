@@ -419,29 +419,16 @@ def run():
     except Exception as e:
         log.warning("dashboard ideas save failed: %s", e)
 
-    from .research import today_line
-    lines = [f"Swing report {day}", headline] + [f"- {w}" for w in (why or [])]
-    if today_line():
-        lines.append("🧭 " + today_line())
-    from .intel_events import line as _ev
-    if _ev():
-        lines.append("📅 " + _ev())
-    from .intel_global import overnight_line as _gl
-    if _gl():
-        lines.append("🌍 " + _gl())
-    from .intel_positioning import today_line as _fii
-    if _fii():
-        lines.append("🏦 " + _fii())
-    _bs = p.get("backtest_stats") or {}
-    if _bs.get("avg_win_rs"):
-        lines.append(f"📐 Per trade (13-yr test): {_bs['win_rate_pct']:.0f}% winners, avg win Rs {_bs['avg_win_rs']}, "
-                     f"avg loss Rs {-_bs['avg_loss_rs']}, avg hold {_bs['avg_days_held']:.0f} days")
-    for i, pl in enumerate(tips, 1):
-        lines.append(f"{i}. {pl['symbol']} ({pl['setup']}) buy {pl['entry_low']}-{pl['entry_high']}, "
-                     f"stop {pl['stop']}, T1 {pl['target1']}, T2 {pl['target2']}, T3 {pl.get('target3')}, qty {pl['qty']}"
-                     + (f" | odds: {pl['hit_rate'].get('win_rate_pct')}" if isinstance(pl.get('hit_rate'), dict) else ""))
-    for s in my_status:
-        lines.append(f"[Your trade] {s['symbol']}: {s['status']}")
+    if tips:
+        lines = [f"📋 Trades for tomorrow ({day}) - buy only inside the price range, set the stop-loss straight away:"]
+        for i, pl in enumerate(tips[:3], 1):
+            lines.append(f"{i}. BUY {pl['symbol']} {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
+                         f"target {pl['target1']:,.0f} | qty {pl['qty']} (max loss ~Rs {pl['risk_rupees']:,.0f})")
+    else:
+        lines = [f"📋 No trade for tomorrow ({day}). Reason: {why[0] if why else 'nothing met the rules'}"]
+    for s_ in my_status:
+        if "Hold." not in s_["status"]:
+            lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines))
     state = load_state()

@@ -19,4 +19,4 @@ if __name__ == "__main__":
     notes.append(research.today_line())
     msg = "🔬 Daily research\n" + "\n".join(f"• {n}" for n in notes) + f"\n{len(todo) - 1 if todo else 0} ideas left to test."
     print(msg)
-    print(telegram.send(load_settings(), msg))
+    # research results stay in the reports/dashboard; no Telegram (owner wants only actionable messages)
