@@ -15,6 +15,7 @@ Steps:
 Everything is recorded in CHANGELOG.md.
 """
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -236,12 +237,16 @@ def test_proposal(prop, settings, live, live_res=None, live_table=None):
     wins = int((wf.loc[common, "total_return_pct"] > base_wf.loc[common, "total_return_pct"]).sum())
     c_new, c_old = res["continuous"].get("cagr_pct", -99), live_res["continuous"].get("cagr_pct", -99)
     dd_new, dd_old = res["continuous"].get("max_drawdown_pct", -99), live_res["continuous"].get("max_drawdown_pct", -99)
+    # The more ideas have been tried, the bigger the improvement must be (protection against lucky flukes, D75).
+    n_tested = sum(1 for p_ in parse_proposals() if p_.get("status") != "proposed")
+    margin = 0.25 * math.sqrt(math.log(max(n_tested, 2)))           # CAGR points
+    need_wins = max(len(common) / 2, math.ceil(0.6 * len(common)) if n_tested >= 50 else 0)
     if aggressive:
-        promote = wins > len(common) / 2 and c_new > c_old and dd_new >= dd_old - 2
+        promote = wins > need_wins and c_new > c_old + margin and dd_new >= dd_old - 2
     else:
         promote = res["gate"]["passed"] and wins > len(common) / 2 and c_new > c_old
     summary = (f"{prop.get('id')} vs {base}: beat it in {wins}/{len(common)} walk-forward years, CAGR {c_new}% vs "
-               f"{c_old}%, worst fall {dd_new}% vs {dd_old}%, gate {'PASS' if res['gate']['passed'] else 'FAIL'}")
+               f"{c_old}% (needs +{margin:.2f}), worst fall {dd_new}% vs {dd_old}%, gate {'PASS' if res['gate']['passed'] else 'FAIL'}")
     if not promote:
         set_proposal_status(prop["_raw"], f"rejected {date.today()} - {summary}")
         changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
@@ -335,6 +340,8 @@ def run():
     notes.append(f"Live {live} re-validated: gate {'PASSED' if live_res['gate']['passed'] else 'FAILED'}")
     notes.append(rollback_check(settings, live_res.get("wf_summary", {})))
 
+    from .idea_factory import top_up
+    top_up(min_open=8, n_new=8)            # weekend batch: test up to 8 ideas
     for prop in parse_proposals():
         if prop.get("status") == "proposed":
             notes.append(test_proposal(prop, settings, live, live_res, live_table))

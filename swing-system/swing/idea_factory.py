@@ -34,6 +34,30 @@ MENU = [
 ]
 
 
+def family_ideas():
+    """Every pattern/method family as a candidate entry rule with the current strategy's exits."""
+    from .families import FAMILIES, LIBRARY_FAMILIES, SHORT_FAMILIES
+    from .patterns import DESCRIPTIONS, PATTERN_FAMILIES
+    lib_desc = {"minervini_vcp": "Minervini trend template + volatility contraction breakout",
+                "weinstein_stage2": "Weinstein stage-2 breakout above a rising 30-week average",
+                "darvas_box": "Darvas box breakout near the 52-week high", "momentum_12_1": "monthly 12-1 momentum leaders",
+                "high52_rank": "stocks closest to their 52-week high", "pead": "post-earnings drift after strong results gaps",
+                "sector_rotation": "leaders of the strongest sectors", "connors_pctb": "sharp dips below the lower Bollinger band in uptrends"}
+    out = [({"family": f}, f"a well-known setup ({DESCRIPTIONS[f]}) may time entries better than the current rule")
+           for f in PATTERN_FAMILIES]
+    out += [({"family": f}, f"a published method ({lib_desc[f]}) may beat the current entry rule with the same exits")
+            for f in LIBRARY_FAMILIES]
+    out += [({"family": f}, "an alternative core entry rule may beat the current one with the same exits")
+            for f in FAMILIES + SHORT_FAMILIES]
+    return out
+
+
+def combo_ideas():
+    """Second wave: each filter/exit change from MENU combined with every family (thousands of candidates)."""
+    fams = [o["family"] for o, _ in family_ideas()]
+    return [({"family": f, **ov}, f"{why} - applied to the {f} entry rule") for f in fams for ov, why in MENU]
+
+
 def top_up(min_open=3, n_new=2):
     props = parse_proposals()
     open_ = [p for p in props if p.get("status") == "proposed"]
@@ -47,7 +71,7 @@ def top_up(min_open=3, n_new=2):
     ids = [int(p["id"][1:]) for p in props if str(p.get("id", "")).startswith("A") and p["id"][1:].isdigit()]
     nxt = max(ids, default=0) + 1
     added = []
-    for ov, why in MENU:
+    for ov, why in family_ideas() + MENU + combo_ideas():
         if len(added) >= n_new:
             break
         if all(base.get(k) == v for k, v in ov.items()):

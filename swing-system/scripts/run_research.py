@@ -10,13 +10,20 @@ from swing.config import load_settings
 if __name__ == "__main__":
     s = load_settings()
     notes = []
-    todo = [p for p in weekly.parse_proposals() if p.get("status") == "proposed"]
-    if todo:
-        notes.append(weekly.test_proposal(todo[0], s, s["live_strategy"]))
-    else:
-        notes.append("No untested ideas left in IMPROVEMENTS.md - Claude should add new, pre-registered ones.")
     from swing.idea_factory import top_up
-    new = top_up()
+    n_per_run = int(s.get("research_ideas_per_run", 2))
+    top_up(min_open=n_per_run + 2, n_new=n_per_run + 2)   # make sure ideas written on EARLIER runs are waiting
+    todo = [p for p in weekly.parse_proposals() if p.get("status") == "proposed" and p.get("written", "") < str(__import__("datetime").date.today())]
+    if not todo:   # first run of the day: only ideas dated before today are tested (reason on record first)
+        todo = [p for p in weekly.parse_proposals() if p.get("status") == "proposed"][:0]
+    for prop in todo[:n_per_run]:
+        notes.append(weekly.test_proposal(prop, load_settings(), s["live_strategy"]))
+        if notes[-1].startswith("PROMOTED"):
+            notes.append("🎉 Upgrade adopted - tomorrow's trades use the improved rules.")
+            break
+    if not todo:
+        notes.append("No idea old enough to test yet (new ideas are written today and tested next run).")
+    new = top_up(min_open=n_per_run + 2, n_new=n_per_run + 2)
     if new:
         notes.append("New ideas written for the next runs: " + "; ".join(new))
     research.run()

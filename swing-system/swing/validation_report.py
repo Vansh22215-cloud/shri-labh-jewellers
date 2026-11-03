@@ -37,7 +37,8 @@ def run(strategy_name, params=None, note="live version re-validation", write=Tru
     from .config import load_strategy
     p = params or load_strategy(strategy_name)
     n_var = validate.register_variant(p, note)
-    P, sig, nifty, industry, coverage, hist = engine.build(p, use_results_filter=(p.get("results_rule") == "exclude"))
+    P, sig, nifty, industry, coverage, hist = engine.build(p, use_results_filter=(p.get("results_rule") == "exclude"
+                                                                                or p.get("family") == "pre_results_runup"))
     table, trades = validate.evaluate(P, sig, p)
     ceq, ctr, cex, t = validate.continuous(P, sig, p)
     g = validate.gate(table, ceq, ctr, t, n_var)

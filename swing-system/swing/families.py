@@ -291,7 +291,10 @@ def family_signals(B, p):
         entry = B["down3"] & B["up_trend"] & (c > B["sma50"])
         setup = "3-day pullback in uptrend"
     else:
-        raise ValueError(f"unknown family {fam}")
+        from .patterns import PATTERN_FAMILIES, signals as pattern_signals
+        if fam not in PATTERN_FAMILIES:
+            raise ValueError(f"unknown family {fam}")
+        entry, setup = pattern_signals(fam, B, p)
     eligible = B["member"] & entry & B["atr"].notna()
     # optional filters used by research proposals (IMPROVEMENTS.md)
     if p.get("min_sector_rank"):

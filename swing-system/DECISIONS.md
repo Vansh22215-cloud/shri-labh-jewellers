@@ -282,3 +282,8 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   ideas from a fixed menu of sensible single changes whenever fewer than 3 are queued; the evening research run tests
   one per weekday with the normal promotion rules. Telegram now reports every job (hourly pulse or actions, evening
   trades + report file + any system problems, research result, weekly self-check), at the owner's request.
+- **D75. Pattern library + compounding search (2026-11-03):** 27 well-known patterns/indicators (swing/patterns.py)
+  join the families; the idea factory queues ~900 candidates (every family with the current exits, every rule change,
+  and family x rule combinations), tested 2 per weekday evening and up to 8 on Saturdays. Anti-fluke rule: an idea
+  must beat the current strategy by at least 0.25 x sqrt(ln N) CAGR points (N = ideas tested so far) and, after 50
+  ideas, in at least 60% of walk-forward years, with a worst fall no more than 2 points deeper.
