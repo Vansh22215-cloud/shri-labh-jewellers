@@ -15,17 +15,18 @@ Every weekday evening this system downloads free market data, checks it, and wri
 3. Click **Install Now**, wait, then click **Close**.
 
 **Step 2 - Get this folder and run setup (once, 1-3 hours, mostly waiting)**
-1. Download the file **swing-system.zip** that Claude sent you in the chat. Right-click it -> **Extract All...**
-   -> choose e.g. `C:\swing` -> **Extract**. Open the `swing-system` folder inside it.
-2. Open the `windows` folder and **double-click `SETUP.bat`**. If Windows says "Windows protected your PC",
-   click **More info -> Run anyway**.
-3. Leave the black window open until it says **DONE**. Your first report opens in your browser. From now on
-   it runs by itself every weekday at 6:30 pm (and catches up if your PC was off), and a self-check runs on
-   Saturdays.
+1. On the laptop, open https://github.com/Vansh22215-cloud/shri-labh-jewellers and sign in to GitHub.
+2. Click the branch button (it says **main**) and choose **claude/nse-swing-trading-system-sqncpt**.
+3. Click the green **Code** button -> **Download ZIP**. Open your Downloads folder, right-click the ZIP ->
+   **Extract All...** -> **Extract**. Open the extracted folder, then the **swing-system** folder inside it.
+4. Open the **windows** folder and **double-click `SETUP.bat`**. If Windows says "Windows protected your PC",
+   click **More info -> Run anyway**. Leave the black window open until it says **DONE**.
+   (No Claude login is needed on the laptop.)
 
-**Step 3 (optional) - Get the report on your phone via Telegram**
-Already done for you: your bot token is saved in `my_secrets.yaml` (private, never uploaded). Just open your bot
-**@Vsjshsjsbaksnsjsh_bot** in Telegram and send it any message (e.g. "hi"). Reports then also arrive in Telegram.
+**Step 3 (optional) - Telegram from the laptop**
+Your evening tips and the tip-checker bot already run from Claude's cloud, so the laptop does NOT send Telegram
+messages by default (two senders would send everything twice). The laptop keeps its own copy of the report in
+`reports/latest.html` as a backup.
 
 ## Check any tip on Telegram
 Forward any stock tip (from a channel, group or friend) to your bot **@Vsjshsjsbaksnsjsh_bot**. Within seconds it
