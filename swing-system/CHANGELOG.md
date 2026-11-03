@@ -128,3 +128,6 @@
 
 ## 2026-11-03 - S2 CANSLIM
 - Point-in-time EPS growth (Yahoo reported EPS, ~208 stocks) + canslim family. R16 rejected: 7.25%/yr vs a1 9.15%, beat a1 in 7/13 years, worst fall -8.7% vs -9.9%.
+
+## 2026-11-03 - S12 meta-system evaluated
+- Top-3-families ensemble (walk-forward, yearly re-pick): 7.75%/yr, worst fall -8.4%, beat NIFTYBEES 1/10 years (gate failed). Better than the single-pick procedure (6.49%, -22.1%). Plan D72: move aggressive mode to the ensemble once live plumbing exists.

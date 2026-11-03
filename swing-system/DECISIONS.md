@@ -257,3 +257,16 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   cash API, shareholding, announcements, insider trades were found reachable but are not used). The owner decides
   how to continue (see the conversation of 2026-11-03): licensed data via a broker API (Kite Connect, Rs 500/month),
   NSE's paid data products, or accept the terms risk for low-volume personal downloads.
+
+## S12 meta-system (written 2026-11-03 BEFORE computing it)
+- **D71.** "Best of all" = an ENSEMBLE, not a single pick: each January choose the 3 variants with the highest
+  Sharpe of excess-over-liquid-fund monthly returns over the previous 36 months (>= 30 trades), each from a
+  DIFFERENT family, and give each one third of the capital for that year. Evaluated from the saved monthly-return
+  matrix of the combined search (validation/search_R_combined.csv.gz) against NIFTYBEES per year, with the same gate
+  (counts as one more search procedure). Simplification: per-strategy returns are taken as if run on full capital
+  (fixed DP charges on smaller positions are under-counted, which flatters the ensemble slightly).
+- **D72. S12 result (2026-11-03):** the 3-family ensemble, honest walk-forward 2016-2025: 7.75%/yr, worst fall -8.4%,
+  beat NIFTYBEES in 1/10 years, t -1.47 -> gate FAILED. But compared procedure-to-procedure on the same walk-forward
+  years it beats the single-pick procedure that currently feeds aggressive mode (6.49%/yr, worst fall -22.1%).
+  Decision: aggressive mode will move to the ensemble (today: ma_cross S385 + volume_surge S444 + nr7 S489, one third
+  of the risk budget each) once the live multi-strategy plumbing is built and tested (next ROADMAP step).

@@ -41,9 +41,9 @@ Each becomes a family in swing/families.py (with tests), joins the walk-forward 
 - [x] (built+tested 2026-11-03, see CHANGELOG) S7. Post-Earnings-Announcement Drift (Ball & Brown; widely used by quant funds): buy strong results gaps.
 - [x] (built+tested 2026-11-03, see CHANGELOG) S8. Larry Connors short-term mean reversion (RSI(2), %b) in uptrends - already partly done, extend.
 - [x] (built+tested 2026-11-03, see CHANGELOG) S9. Antonacci dual momentum / Faber sector rotation using NSE sector indices.
-- [ ] S10. Quality + momentum (AQR "quality minus junk" idea) using fundamentals as a filter.
-- [ ] S11. Turtle/Donchian trend following with volatility sizing (Richard Dennis) - extend existing.
-- [ ] S12. "Best of all" META-SYSTEM: every evening rank each family by its recent walk-forward performance
+- [~] S10. (2026-11-03: not testable honestly - no free point-in-time history of balance-sheet quality; live quality screen already removes weak companies) Quality + momentum (AQR "quality minus junk" idea) using fundamentals as a filter.
+- [x] S11. (exists: donchian 20/55 family with ATR stops/sizing, tested in the swing search) Turtle/Donchian trend following with volatility sizing (Richard Dennis) - extend existing.
+- [~] S12. (2026-11-03: ensemble evaluated walk-forward: 7.75%/yr, worst fall -8.4% vs single-pick 6.5%/-22%; gate failed; live multi-strategy plumbing next, see D72) "Best of all" META-SYSTEM: every evening rank each family by its recent walk-forward performance
       (only past data), and give the top trades from the top families, with risk score 1-10. This becomes the
       daily "best trades" list once it beats the single-strategy a1 in walk-forward testing.
 - [ ] K1. (If the owner buys Kite Connect) Kite integration: daily login via Telegram, live quotes and minute
