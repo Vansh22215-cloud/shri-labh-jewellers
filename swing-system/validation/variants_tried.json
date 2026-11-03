@@ -8833,5 +8833,645 @@
   "name": "candidate-R10",
   "first_tested": "2026-11-03",
   "note": "proposal R10"
+ },
+ "009bf01f27": {
+  "name": "L000",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "dbb17fa2ad": {
+  "name": "L001",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "7c51576d36": {
+  "name": "L002",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "45f5c0620e": {
+  "name": "L003",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "10bb297271": {
+  "name": "L004",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "edc588ffb3": {
+  "name": "L005",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "58db1732d0": {
+  "name": "L006",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "bab0b20522": {
+  "name": "L007",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "e9968ac956": {
+  "name": "L008",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "850ee34c35": {
+  "name": "L009",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "efa4ccc92d": {
+  "name": "L010",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "ff93fb0913": {
+  "name": "L011",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "baac0e62d6": {
+  "name": "L012",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "5bdd041158": {
+  "name": "L013",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "9194ce886f": {
+  "name": "L014",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "8e58a11df4": {
+  "name": "L015",
+  "first_tested": "2026-11-03",
+  "note": "search: minervini_vcp, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "33e7a228c2": {
+  "name": "L016",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "206ff94f0a": {
+  "name": "L017",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "05e0de20cd": {
+  "name": "L018",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "0e8583707a": {
+  "name": "L019",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "98c29e528c": {
+  "name": "L020",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "d47614386f": {
+  "name": "L021",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "dc93c67f32": {
+  "name": "L022",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "7ed1c174fb": {
+  "name": "L023",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "90b3d64835": {
+  "name": "L024",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "933d27abf0": {
+  "name": "L025",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "3e83a7cc12": {
+  "name": "L026",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "51c0396a4b": {
+  "name": "L027",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "dae1a92d8d": {
+  "name": "L028",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "47faf59238": {
+  "name": "L029",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "383e22f374": {
+  "name": "L030",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "77740b851d": {
+  "name": "L031",
+  "first_tested": "2026-11-03",
+  "note": "search: weinstein_stage2, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "517401a0db": {
+  "name": "L032",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "06c4783fd2": {
+  "name": "L033",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "e3e8abe434": {
+  "name": "L034",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "a348229a4d": {
+  "name": "L035",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "79b1d53df1": {
+  "name": "L036",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "e4b1619b1b": {
+  "name": "L037",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "989250d18f": {
+  "name": "L038",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "52558a82e2": {
+  "name": "L039",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "f8dfdd3008": {
+  "name": "L040",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "efab2c626b": {
+  "name": "L041",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "cb9dfe8e46": {
+  "name": "L042",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "66e00f77ef": {
+  "name": "L043",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "3846966cbb": {
+  "name": "L044",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "e295cf1843": {
+  "name": "L045",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "447059366d": {
+  "name": "L046",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "da81896c2c": {
+  "name": "L047",
+  "first_tested": "2026-11-03",
+  "note": "search: darvas_box, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "723441ea54": {
+  "name": "L048",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "de389322bd": {
+  "name": "L049",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "94f378a0a8": {
+  "name": "L050",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "4a5655ea4e": {
+  "name": "L051",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "d791329c14": {
+  "name": "L052",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "bfdde8582a": {
+  "name": "L053",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "f7efc84053": {
+  "name": "L054",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "a3d2be0d7c": {
+  "name": "L055",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "0bc8ed5205": {
+  "name": "L056",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "fdbf2a9b24": {
+  "name": "L057",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "76eb98203e": {
+  "name": "L058",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "0434ca6aae": {
+  "name": "L059",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "66bdbabf61": {
+  "name": "L060",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "0e51dd860a": {
+  "name": "L061",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "be0b76ebfd": {
+  "name": "L062",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "d8752c0ebe": {
+  "name": "L063",
+  "first_tested": "2026-11-03",
+  "note": "search: momentum_12_1, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "34e2b22183": {
+  "name": "L064",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "1000d97387": {
+  "name": "L065",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "0353872cec": {
+  "name": "L066",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "b9a5b4445f": {
+  "name": "L067",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "5c770d5ad3": {
+  "name": "L068",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "5a2576317d": {
+  "name": "L069",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "50c9d3257b": {
+  "name": "L070",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "d39ab1f129": {
+  "name": "L071",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "0db5f6b891": {
+  "name": "L072",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "1699ba8b0d": {
+  "name": "L073",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "822faacae9": {
+  "name": "L074",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "86fcd802d5": {
+  "name": "L075",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "8fceb0f9c6": {
+  "name": "L076",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "86083fa8c9": {
+  "name": "L077",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "9905073b8d": {
+  "name": "L078",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "d2ffa368bc": {
+  "name": "L079",
+  "first_tested": "2026-11-03",
+  "note": "search: high52_rank, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "83469d9ae5": {
+  "name": "L080",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "aeba826fa6": {
+  "name": "L081",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "ef8ae98418": {
+  "name": "L082",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "95b759da52": {
+  "name": "L083",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "baca889cf2": {
+  "name": "L084",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "9d9bf27c84": {
+  "name": "L085",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "ddf95bb471": {
+  "name": "L086",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "37235d3d3f": {
+  "name": "L087",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "a8702433f3": {
+  "name": "L088",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "0b307785d3": {
+  "name": "L089",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "0c020dc5f3": {
+  "name": "L090",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "c0b34d7959": {
+  "name": "L091",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "1b815b2874": {
+  "name": "L092",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "bd4e008aea": {
+  "name": "L093",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "a5b21c3437": {
+  "name": "L094",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "e65529601c": {
+  "name": "L095",
+  "first_tested": "2026-11-03",
+  "note": "search: pead, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "c1d9759dfa": {
+  "name": "L096",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "2df35448c6": {
+  "name": "L097",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "d2b3969dd3": {
+  "name": "L098",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "841435f4a9": {
+  "name": "L099",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "02a707ce23": {
+  "name": "L100",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "9bdd36f730": {
+  "name": "L101",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "070f631d4b": {
+  "name": "L102",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "2aeb832ae8": {
+  "name": "L103",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "f6d6e8c588": {
+  "name": "L104",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "1f0d428098": {
+  "name": "L105",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "7f0c608b05": {
+  "name": "L106",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "cdd8f7a4fb": {
+  "name": "L107",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "15c69949f2": {
+  "name": "L108",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "b50abf8983": {
+  "name": "L109",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "3b4065f3b6": {
+  "name": "L110",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "a2886d08e4": {
+  "name": "L111",
+  "first_tested": "2026-11-03",
+  "note": "search: sector_rotation, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "0958fd6e0f": {
+  "name": "L112",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "1785620cde": {
+  "name": "L113",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "ca27966791": {
+  "name": "L114",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "23f9f35123": {
+  "name": "L115",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "7235c2fc73": {
+  "name": "L116",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "7711849c17": {
+  "name": "L117",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "31f32450b8": {
+  "name": "L118",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "555bc62670": {
+  "name": "L119",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 2.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "fbed1d470c": {
+  "name": "L120",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "c1315b6191": {
+  "name": "L121",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "ab67e4d4c2": {
+  "name": "L122",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "08b0eed8aa": {
+  "name": "L123",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, targets 2.0R/4.0R, max 50 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "380b43546b": {
+  "name": "L124",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "df7c709d06": {
+  "name": "L125",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, trailing stop 3.0 ATR, max 25 days, market filter off, risk 1.0% x 4 trades"
+ },
+ "6b5a0743ac": {
+  "name": "L126",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter on, risk 1.0% x 4 trades"
+ },
+ "a7545164f3": {
+  "name": "L127",
+  "first_tested": "2026-11-03",
+  "note": "search: connors_pctb, stop 3.0 ATR, trailing stop 3.0 ATR, max 50 days, market filter off, risk 1.0% x 4 trades"
  }
 }
