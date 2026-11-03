@@ -298,6 +298,16 @@ def evaluate(tip, capital=45000.0):
             flags.append("CAUTION")
     except Exception:
         pass
+    try:   # news headlines about the stock (ROADMAP I4)
+        from .intel_news import fetch as _nf, line as _nl
+        _nf()
+        nl = _nl(sym, row["NAME OF COMPANY"].iloc[0] if len(row) else "")
+        if nl:
+            reasons.append(nl)
+            if "RED FLAG" in nl:
+                flags.append("CAUTION")
+    except Exception:
+        pass
     qty = int(max(0, min(capital * 0.01 / risk, capital * 0.25 / entry)))
     details["qty_1pct_risk"] = qty
     verdict = "AVOID" if "AVOID" in flags else ("RISKY" if flags.count("CAUTION") >= 1 else "GOOD")

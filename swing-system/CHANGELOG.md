@@ -104,3 +104,6 @@
 
 ## 2026-11-03 - I3 global markets built
 - S&P 500, Nasdaq, Dow, US VIX, Nikkei, Hang Seng, FTSE, Brent, gold, USD/INR, US 10y. Nifty open gap after S&P moves (2015-2026): S&P < -1.5% -> -0.68% avg gap (180 days), > +1.5% -> +0.68% (151 days). Idea R13 pre-registered.
+
+## 2026-11-03 - I4 news built
+- Headlines from ET, Moneycontrol, Business Standard, Mint matched to stocks; red-flag words (fraud, raid, SEBI order, downgrade, default...) raise caution on trade cards and tip checks.

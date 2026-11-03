@@ -64,7 +64,7 @@ def _card(i, pl):
              f"Stop-loss   ₹{pl['stop']:,.2f}  ({pl['stop_pct']:.1f}%)\nTarget 1    ₹{pl['target1']:,.2f}  (sell half)\n"
              f"Target 2    ₹{pl['target2']:,.2f}\nQuantity    {pl['qty']} sh  (≈₹{pl['qty'] * pl['ltp']:,.0f})\n"
              f"Max loss    ≈₹{pl['risk_rupees']:,.0f}\nHold        up to {pl['max_hold']} trading days</pre>",
-             "<b>Why:</b> " + E("; ".join(pl["reasons"][:4])),
+             "<b>Why:</b> " + E("; ".join(pl["reasons"][:5])),
              "<b>Risk factors:</b> " + E("; ".join(pl["risk_reasons"]) or "none flagged")]
     return "\n".join(lines)
 
@@ -89,6 +89,11 @@ def run(send=True):
     tips = journal.load_tips()
     recent_tips = tips[(tips["kind"] == "tip") & tips["status"].isin(["pending", "open"])]
     syms = sorted({s for s in cur if s not in q} | set(my["symbol"]) | set(recent_tips["symbol"]))
+    try:
+        from .intel_news import fetch as fetch_news
+        fetch_news()
+    except Exception as e:
+        log.warning("news fetch failed: %s", e)
     snap, last_ts = snapshot(syms + ["NIFTY50"])
     if last_ts is None or "NIFTY50" not in snap["close"]:
         msg = "Market closed today (no live prices). Next scan on the next trading day."
@@ -126,6 +131,15 @@ def run(send=True):
                    f"next results {rd.date()}" if rd is not None else "results date unknown"]
         if (close - lv["stop"]) / close < 0.01:
             return None   # no real price movement (fund/ETF-like) - not a trade
+        try:
+            from .intel_news import line as news_line
+            nl = news_line(s, names.get(s, ""))
+            if nl:
+                reasons.append(nl)
+                if "RED FLAG" in nl:
+                    rs_why.append("negative news headline - read it before buying")
+        except Exception:
+            pass
         try:
             from .intel_fno import line as fno_line
             fl = fno_line(s)

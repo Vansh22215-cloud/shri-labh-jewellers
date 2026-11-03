@@ -114,6 +114,13 @@ def build_reasons_risks(sym, sig, d, plan, q, results_date, p, deals):
         risks.append(f"Promoter/insider holding only {q['insider_pct']*100:.0f}% (approx.)")
     risks.append("Promoter pledge data not available from a free automatable source - check on Zerodha/Tijori")
     try:
+        from .intel_news import line as news_line
+        nl = news_line(sym, plan.get("name") or "")
+        if nl:
+            (risks if "RED FLAG" in nl else reasons).append(nl)
+    except Exception:
+        pass
+    try:
         from .intel_fno import line as fno_line
         fl = fno_line(sym)
         if fl:
