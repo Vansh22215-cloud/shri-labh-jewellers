@@ -38,6 +38,8 @@ def summarise(df):
             r.update({"fut_close": f0["ClsPric"], "fut_prev": f0["PrvsClsgPric"], "fut_oi": fut["OpnIntrst"].sum(),
                       "fut_oi_chg": fut["ChngInOpnIntrst"].sum(), "spot": f0["UndrlygPric"],
                       "fut_expiry": str(f0["XpryDt"].date())})
+            if len(fut) > 1:
+                r["fut_next_close"] = fut.iloc[1]["ClsPric"]
         if not opt.empty:
             near = opt[opt["XpryDt"] == opt["XpryDt"].min()]
             ce, pe = near[near["OptnTp"] == "CE"], near[near["OptnTp"] == "PE"]
@@ -55,6 +57,14 @@ def summarise(df):
                 pain = [((np.maximum(0, k - cs.index.values) * cs.values).sum() +
                          (np.maximum(0, ps.index.values - k) * ps.values).sum()) for k in strikes]
                 r["max_pain"] = float(strikes[int(np.argmin(pain))])
+            try:   # implied volatility, skew, term slope and option volumes (library v2 options items)
+                from .feeds import option_iv_fields
+                day = df["TradDt"].iloc[0] if "TradDt" in df else None
+                spot = r.get("spot") or (g["UndrlygPric"].dropna().iloc[0] if "UndrlygPric" in g and g["UndrlygPric"].notna().any() else None)
+                if day is not None and spot:
+                    r.update(option_iv_fields(opt, float(spot), day))
+            except Exception:
+                pass
         out.append(r)
     return pd.DataFrame(out)
 

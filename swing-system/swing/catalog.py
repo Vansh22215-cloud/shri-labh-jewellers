@@ -126,7 +126,6 @@ def candle_x(cid, B):
             "long_legged_doji": lambda: doji & ((h - top) >= 0.35 * rng) & ((bot - l) >= 0.35 * rng) & decline,
             "rickshaw_man": lambda: doji & ((((o + c) / 2) - (h + l) / 2).abs() <= 0.1 * rng) & (rng >= A) & decline,
             "dragonfly_doji": lambda: doji & ((h - top) <= 0.1 * rng) & ((bot - l) >= 0.6 * rng) & decline,
-            "four_price_doji": lambda: (rng.isna() | ((h - l) <= 0.001 * c)) & False,     # data-quality flag only
             "bullish_harami_cross": lambda: S(dn) & S(big) & doji & (top <= S(o)) & (bot >= S(c)),
             "bullish_homing_pigeon": lambda: S(dn) & S(big) & dn & (o < S(o)) & (c > S(c)) & decline,
             "bullish_matching_low": lambda: S(dn) & dn & ((c - S(c)).abs() <= tol) & decline,
@@ -157,6 +156,11 @@ def candle_x(cid, B):
             "bullish_concealing_baby_swallow": lambda: S(dn, 3) & S(dn, 2) & S(dn, 1) & dn & (o > S(h)) & (c < S(l)) & False,
             "bullish_gap_side_by_side_white_lines": lambda: S(up, 1) & up & (S(l, 1) > S(h, 2)) & ((o - S(o)).abs() <= tol),
             "bullish_gapping_side_by_side_white_lines": lambda: S(up, 1) & up & (S(l, 1) > S(h, 2)) & ((o - S(o)).abs() <= tol),
+            "bearish_downside_gap_three_methods": lambda: S(dn, 2) & S(dn, 1) & (S(h, 1) < S(l, 2)) & up & (o > S(c)) & (c >= S(l, 2)),
+            "bearish_three_star_south": lambda: S(dn, 2) & S(dn, 1) & dn & (S(body, 1) < S(body, 2)) & (body < S(body, 1))
+                                                & ((h - l) < S(h - l, 1)) & (S(h - l, 1) < S(h - l, 2)) & (l >= S(l, 1)) & decline,
+            "bullish_concealing_baby_swallow": lambda: cdl_panel("CDLCONCEALBABYSWALL", B) > 0,
+            "four_price_doji": lambda: ((h - l) <= 0.0005 * c),      # data-quality flag (detector-only)
         }
     if cid not in r:
         raise KeyError(cid)
@@ -167,7 +171,11 @@ def candle_x(cid, B):
 DUPLICATE_OF = {"candlestick/bullish_tweezer_bottom": "cdx_tweezer_bottom",
                 "candlestick/bullish_railroad_tracks": "cdx_railroad_tracks",
                 "candlestick/bullish_gapping_side_by_side_white_lines": "cdx_bullish_gap_side_by_side_white_lines",
-                "chart_pattern/rounding_bottom": "cp_cup_without_handle"}
+                "chart_pattern/rounding_bottom": "cp_cup_without_handle",
+                "chart_pattern/cypher_bullish": "cp_harmonic_cypher", "chart_pattern/deep_crab_bullish": "cp_harmonic_deep_crab",
+                "chart_pattern/shark_bullish": "cp_harmonic_shark", "chart_pattern/abcd_bullish": "cp_harmonic_ab_cd",
+                "chart_pattern/elliott_impulse_wave": "cp_elliott_impulse", "chart_pattern/gap_exhaustion": "cp_exhaustion_gap",
+                "market_structure/session_open_drive": "cp_market_profile_open_drive"}
 CANDLE_X = ["tweezer_bottom", "railroad_tracks", "belt_hold",
             "belt_hold_bullish", "three_bar_reversal", "fakey_inside_bar", "bullish_fakey", "long_legged_doji",
             "rickshaw_man", "dragonfly_doji", "bullish_harami_cross", "bullish_homing_pigeon", "bullish_matching_low",
@@ -175,7 +183,9 @@ CANDLE_X = ["tweezer_bottom", "railroad_tracks", "belt_hold",
             "bullish_three_line_strike", "bullish_three_white_soldiers_strict", "bullish_hammer_contextual",
             "bullish_inverted_hammer_contextual", "bullish_counterattack", "bullish_gap_fill_reclaim_candle",
             "bullish_rising_three_methods", "bullish_mat_hold", "bullish_stick_sandwich", "bullish_ladder_bottom",
-            "bullish_unique_three_river", "bullish_abandoned_baby", "bullish_gap_side_by_side_white_lines",]
+            "bullish_unique_three_river", "bullish_abandoned_baby", "bullish_gap_side_by_side_white_lines",
+            "bearish_downside_gap_three_methods", "bearish_three_star_south", "bullish_concealing_baby_swallow"]
+CANDLE_DETECTOR_ONLY = ["four_price_doji"]
 
 
 # ----------------------------------------------------------------------------- swing pivots (no look-ahead)
@@ -371,7 +381,14 @@ def chart_signal(pid, B, p):
         lh = dfm(np.where(PHv[:, :, 2] < PHv[:, :, 1], PHv[:, :, 2], np.nan))
         broke = (c > lh).rolling(10).max().astype(bool)
         e = broke & (l <= lh + 0.3 * B["atr"]) & (c > lh) & (c > o)
-    else:
+    else:   # library v2 remainder: swing geometry, Wyckoff/weekly/P&F/renko, intraday profile
+        from . import advanced, profile, zigzag
+        if pid in zigzag.DETECTORS:
+            return zigzag.signal(pid, B, p)
+        if pid in advanced.CHART:
+            return advanced.chart(pid, B, p)
+        if pid in profile.ENTRIES["chart_pattern"]:
+            return profile.signal(pid, B, p)
         raise ValueError(f"no detector for chart pattern {pid}")
     return (e & B["member"]).fillna(False)
 
@@ -476,6 +493,11 @@ def ms_signal(mid, B, p):
             rng = (h - l)
             e = ((o - l) <= 0.2 * rng) & ((h - c) <= 0.1 * rng) & (rng >= 1.5 * A)
         else:
+            from . import advanced, profile
+            if mid in advanced.MS or mid in advanced.MS_DETECTOR_ONLY:
+                return advanced.ms(mid, B, p)
+            if mid in profile.ENTRIES["market_structure"] or mid in profile.DETECTOR_ONLY["market_structure"]:
+                return profile.signal(mid, B, p)
             raise ValueError(f"no detector for market-structure event {mid}")
     return (e.fillna(False).astype(bool) & B["member"]).fillna(False)
 
@@ -512,6 +534,16 @@ def families():
     out += [f"cp_{x}" for x in CHART_DETECTORS]
     have = {it["id"] for it in cat.values() if it["_type"] == "market_structure"}
     out += [f"ms_{x}" for x in MS_DETECTORS if x in have]
+    from . import advanced, profile, zigzag
+    have_cp = {it["id"] for it in cat.values() if it["_type"] == "chart_pattern"}
+    out += [f"cp_{x}" for x in zigzag.DETECTORS + advanced.CHART if x in have_cp]
+    out += [f"ms_{x}" for x in advanced.MS if x in have]
+    try:   # intraday-profile entries join automatically once a year of 5-minute history has been stored
+        if profile.ready():
+            out += [f"cp_{x}" for x in profile.ENTRIES["chart_pattern"] if x in have_cp]
+            out += [f"ms_{x}" for x in profile.ENTRIES["market_structure"] if x in have]
+    except Exception:
+        pass
     return out
 
 

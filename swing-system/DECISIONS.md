@@ -329,3 +329,29 @@ You said you want daily tips even if somewhat risky, and do not want the index f
 - Claude's hourly/daily improvement sessions are disabled (owner: "no need of Claude"). Code changes to the system
   itself (new detectors) now only happen if the owner opens a new Claude session; idea testing, strategy searches,
   rollback, company of the day and all Telegram messages continue on GitHub for free.
+
+## D81 (2026-11-04) Lifelong data store; personal files out of public reach
+- The repository is PUBLIC (Actions logs and artifacts are readable by anyone). Personal files moved to
+  data/private/ (only in the private Actions cache), so the old artifact step uploads nothing; on GitHub, scripts
+  print only message lengths, never trade/position contents. Backups go to the owner's own Telegram instead
+  (weekly: trades + forwarded tips; monthly: the data archive) and are restored by forwarding them to the bot.
+- swing/archive.py keeps everything collected, append-only, forever (data/archive in the cache - market data is
+  not redistributed in the public repo): daily bars of every stock (so stocks Yahoo later drops stay in the
+  backtests = less survivorship bias), hourly bars beyond Yahoo's ~730 days, 5-minute bars beyond Yahoo's ~60 days,
+  news beyond the 60-day store, every statement year ever seen (Yahoo shows ~4). The engine, intraday research and
+  company analysis read it. Yahoo full re-downloads can no longer shorten a stock's history.
+- Walk-forward periods already extend every year and the holdout rotates yearly, so tests use all data to date.
+
+## D82 (2026-11-04) Library v2 completed (cat-v3): nothing left unbuilt
+- 603 items implemented, 28 detector-only, 98 bearish (not applicable to a long-only system), 0 not built.
+- New: ATR-zigzag swing engine (confirmed swings only) with 10 harmonic patterns, three drives, 6 Elliott
+  structures, 3 pitchforks, diamond, megaphone, Fibonacci cluster/time zone; Wyckoff phases (accumulation, SOS,
+  LPS, backup to edge, secondary test, creek), weekly pipe/horn bottoms, point & figure and renko breakouts,
+  exhaustion gap/climax, Gann square-of-nine, IPO base; 16 more market-structure entries; remaining indicators.
+- 34 items are 'implemented_collecting_data': intraday market-profile rules (need ~250 days of stored 5-minute
+  bars - they join the idea tests by themselves when reached) and option IV rank/skew/term structure (IV is now
+  computed from the F&O file each evening). 28 items are 'ready_waiting_for_feed': tick/order-book/auction
+  metrics in swing/feeds.py start working the day such files are placed in data/feeds/ (e.g. via Kite Connect).
+- Breadth (A/D, McClellan, TRIN, high-low index), futures basis/OI/max pain/PCR and execution estimates are now
+  computed from data already collected.
+- Idea factory: 239 entry ideas + 4,063 combinations. Every no-look-ahead test passes (349 tests).

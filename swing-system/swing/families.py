@@ -115,6 +115,7 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
         sector_rank = sector_rank.fillna(0.5)
     B["sector_rank"] = sector_rank
     B["industry"] = {s_: industry.get(s_) for s_ in c.columns}
+    B["nifty"] = nifty
 
     B["up_trend"] = (c > B["sma50"]) & (B["sma50"] > B["sma200"]) & (B["sma200"] > B["sma200"].shift(p["slope_lookback"]))
     B["above200"] = c > B["sma200"]

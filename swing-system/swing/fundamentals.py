@@ -86,6 +86,7 @@ def fetch_fundamentals(symbol, max_age_days=30):
         snap.update({"ok": bool(years), "annual": years,
                      "pe": _safe(info.get("trailingPE")), "pb": _safe(info.get("priceToBook")),
                      "insider_pct": _safe(info.get("heldPercentInsiders")),
+                     "float_shares": _safe(info.get("floatShares")),
                      "sector": info.get("sector"), "industry": info.get("industry"),
                      "name": info.get("longName") or info.get("shortName"),
                      "market_cap": _safe(info.get("marketCap")), "dividend_yield": _safe(info.get("dividendYield")),

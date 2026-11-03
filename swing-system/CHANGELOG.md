@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-11-04 (lifelong data + library complete)
+- Lifelong append-only data store (prices incl. delisted, hourly, 5-minute, news, statement years) used by research.
+- Personal files hidden from the public repo/logs; backups to the owner's Telegram (D81).
+- Pattern library v2 fully built: 0 items left; 34 switch on as history grows, 28 when a tick/book feed is added (D82).
+
 ## 2026-11-03 (library v2 + Claude-free)
 - Owner's pattern library v2 (791 records) loaded; 492 items built (was ~230), 3,276 ideas in the factory.
 - GitHub save step fixed (results were being lost); research tests ideas for up to 120 min per day on GitHub.

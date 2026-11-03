@@ -80,3 +80,54 @@ def test_v2_indicators_compute_without_lookahead(params):
         assert full.shape == B["c"].shape, iid
         a, b = full.loc[d].astype(float).values, part.loc[d].astype(float).values
         assert np.allclose(a, b, equal_nan=True, rtol=1e-6, atol=1e-9), iid
+
+
+from swing import advanced as _adv, zigzag as _zz
+V3_FAMS = [f"cp_{x}" for x in _zz.DETECTORS + _adv.CHART] + [f"ms_{x}" for x in _adv.MS + _adv.MS_DETECTOR_ONLY] + \
+    ["cdx_bearish_downside_gap_three_methods", "cdx_bearish_three_star_south", "cdx_bullish_concealing_baby_swallow"]
+
+
+@pytest.mark.parametrize("fam", V3_FAMS)
+def test_v3_family_has_no_lookahead(params, fam):
+    P, nifty, mask = synthetic_panel(n_sym=12, n_days=460, seed=21)
+    p = dict(params, family=fam)
+    full = family_signals(base_indicators(P, nifty, mask, {}, p), p)
+    cut = 420
+    Pc = {k: v.iloc[:cut] for k, v in P.items()}
+    part = family_signals(base_indicators(Pc, nifty.iloc[:cut], mask.iloc[:cut], {}, p), p)
+    for d in P["close"].index[cut - 6:cut]:
+        assert (full["eligible"].loc[d] == part["eligible"].loc[d]).all(), d
+
+
+def test_zigzag_swing_is_known_only_after_the_move():
+    idx = pd.bdate_range("2024-01-01", periods=30)
+    px = np.r_[np.linspace(100, 120, 10), np.linspace(119, 100, 20)]
+    c = pd.DataFrame({"A": px}, index=idx)
+    B = {"c": c, "h": c + 0.5, "l": c - 0.5, "atr": c * 0 + 2.0}
+    E = _zz.events(B, k=2.0)
+    hi = [(t, v) for t, v, ty in zip(E["t"], E["V"][:, -1], E["Ty"][:, -1]) if ty == 1]
+    assert hi and hi[0][1] == pytest.approx(120.5) and hi[0][0] > 9     # top at bar 9, confirmed later
+
+
+def test_v3_features_have_no_lookahead(params):
+    P, nifty, mask = synthetic_panel(n_sym=6, n_days=330, seed=4)
+    B = base_indicators(P, nifty, mask, {}, params)
+    cut = 300
+    Bc = base_indicators({k: v.iloc[:cut] for k, v in P.items()}, nifty.iloc[:cut], mask.iloc[:cut], {}, params)
+    d = P["close"].index[cut - 1]
+    from swing import feeds
+    for fid in _adv.FEATURES:
+        a, b = _adv.feature(fid, B), _adv.feature(fid, Bc)
+        if a is None:
+            continue
+        assert np.allclose(a.loc[d].astype(float), b.loc[d].astype(float), equal_nan=True, rtol=1e-6), fid
+    for fid in feeds.BREADTH:
+        a, b = feeds.breadth(fid, B), feeds.breadth(fid, Bc)
+        assert np.allclose(a.loc[d], b.loc[d], equal_nan=True), fid
+
+
+def test_pnf_and_renko_fire_on_clean_reversals():
+    up_down_up = np.r_[np.linspace(100, 130, 30), np.linspace(130, 110, 20), np.linspace(110, 140, 30)][:, None]
+    assert _adv._pnf_double_top(up_down_up).any()
+    down_up = np.r_[np.linspace(130, 100, 30), np.linspace(100, 115, 15)][:, None]
+    assert _adv._renko_reversal(down_up).sum() == 1
