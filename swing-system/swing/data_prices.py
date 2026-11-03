@@ -248,3 +248,69 @@ def repair_isolated_spikes(df, tol=0.3):
 def benchmark():
     """NIFTYBEES, total-return adjusted, with isolated bad quotes repaired."""
     return adjusted(repair_isolated_spikes(load("NIFTYBEES")))
+
+
+def patch_today_from_intraday(symbol, day):
+    """If the daily history lacks `day` (Yahoo sometimes publishes an empty daily bar), rebuild that day's bar
+    from 5-minute data: open = first, high = max, low = min, close = last, volume = sum. Returns True if patched."""
+    df = load(symbol)
+    day = pd.Timestamp(day).normalize()
+    if df is not None and len(df) and df.index[-1] >= day:
+        return False
+    try:
+        raw = yf.download(yahoo_ticker(symbol), period="5d", interval="5m", progress=False, auto_adjust=False)
+        if isinstance(raw.columns, pd.MultiIndex):
+            raw.columns = raw.columns.get_level_values(0)
+        raw = raw.dropna(subset=["Close"])
+        idx = raw.index.tz_convert("Asia/Kolkata").tz_localize(None) if raw.index.tz is not None else raw.index
+        bars = raw[idx.normalize() == day]
+        if bars.empty:
+            return False
+        row = pd.DataFrame({"open": [bars["Open"].iloc[0]], "high": [bars["High"].max()], "low": [bars["Low"].min()],
+                            "close": [bars["Close"].iloc[-1]], "adj_close": [bars["Close"].iloc[-1]],
+                            "volume": [bars["Volume"].sum()], "dividends": [0.0], "splits": [0.0]},
+                           index=pd.DatetimeIndex([day], name="date"))
+        save(symbol, pd.concat([df, row]) if df is not None else row)
+        log.warning("%s: daily bar for %s rebuilt from 5-minute data (Yahoo daily bar was missing)", symbol, day.date())
+        return True
+    except Exception as e:
+        log.warning("intraday patch failed for %s: %s", symbol, e)
+        return False
+
+
+def patch_missing_day_batch(symbols, day, batch=200):
+    """Batch version of patch_today_from_intraday for many stocks (one 5-minute download per 200 symbols)."""
+    day = pd.Timestamp(day).normalize()
+    need = [s for s in symbols if (load(s) is not None and load(s).index[-1] < day)]
+    fixed = 0
+    for i in range(0, len(need), batch):
+        chunk = need[i:i + batch]
+        tick = {yahoo_ticker(s): s for s in chunk}
+        try:
+            raw = yf.download(list(tick), period="5d", interval="5m", group_by="ticker", progress=False,
+                              auto_adjust=False, threads=True)
+        except Exception as e:
+            log.warning("batch intraday patch failed: %s", e)
+            continue
+        for t, s in tick.items():
+            try:
+                g = (raw[t] if len(tick) > 1 else raw).dropna(subset=["Close"])
+            except KeyError:
+                continue
+            if g.empty:
+                continue
+            idx = g.index.tz_convert("Asia/Kolkata").tz_localize(None) if g.index.tz is not None else g.index
+            b = g[idx.normalize() == day]
+            if b.empty:
+                continue
+            df = load(s)
+            row = pd.DataFrame({"open": [b["Open"].iloc[0]], "high": [b["High"].max()], "low": [b["Low"].min()],
+                                "close": [b["Close"].iloc[-1]], "adj_close": [b["Close"].iloc[-1]],
+                                "volume": [b["Volume"].sum()], "dividends": [0.0], "splits": [0.0]},
+                               index=pd.DatetimeIndex([day], name="date"))
+            save(s, pd.concat([df, row]))
+            fixed += 1
+    if fixed:
+        log.warning("%d stocks: daily bar for %s rebuilt from 5-minute data (Yahoo daily bars were missing)",
+                    fixed, day.date())
+    return fixed

@@ -174,9 +174,18 @@ def run():
         # attempt a fix: force a full re-download of the index data, then re-check
         log.warning("Stale index data (%s vs %s); retrying full download", last_bar.date(), expected.date())
         data_prices.download_full(list(data_prices.INDEX_TICKERS))
+        for k in ("NIFTY50", "NIFTYBEES", "INDIAVIX"):
+            data_prices.patch_today_from_intraday(k, expected)
         nifty_raw = data_prices.load("NIFTY50")
         last_bar = nifty_raw.index[-1]
         fresh = health.freshness(last_bar, expected)
+    if fresh:   # stocks too: Yahoo sometimes publishes empty daily bars in the evening -> rebuild from 5-minute data
+        try:
+            u = pd.read_csv(update.universe.UNIVERSE_FILE, parse_dates=["asof"])
+            cur = list(u[u["asof"] == u["asof"].max()]["symbol"])
+            data_prices.patch_missing_day_batch(cur, expected)
+        except Exception as e:
+            log.warning("stock bar patch failed: %s", e)
     (ok if fresh else bad)(f"latest prices dated {last_bar.date()} (NSE latest trading day {expected.date()})")
     if not fresh:
         blockers.append("Price data is not up to date - the free data source may be late. Will retry tomorrow.")
