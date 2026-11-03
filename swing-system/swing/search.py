@@ -77,7 +77,7 @@ SPACES = {
 def describe(v):
     ex = v.get("exit_style")
     exs = (f"targets {v['target1_r']}R/{v['target2_r']}R" if ex == "targets" else
-           "trailing stop 3 ATR" if ex == "trail" else "exit on bounce")
+           f"trailing stop {v.get('trail_atr_mult', 3.0)} ATR" if ex == "trail" else "exit on bounce")
     fam = v["family"] + (f"({v['donchian_n']})" if v["family"] == "donchian" else "")
     return (f"{fam}, stop {v['stop_atr_mult']} ATR, {exs}, max {v['max_hold_days']} days, "
             f"market filter {'on' if v.get('use_regime_filter', True) else 'off'}, "

@@ -41,13 +41,14 @@ Already done for you: your bot token is saved in `my_secrets.yaml` (private, nev
 `DECISIONS.md` why every default was chosen | `IMPROVEMENTS.md` tested ideas | `CHANGELOG.md` history |
 `logs/system.log` errors.
 
-## Status (2026-11-02)
-The system tested **556 different strategies** (10 families: breakouts, pullbacks, dip-buying, 52-week highs,
-momentum leaders, squeezes, crossovers, volume surges, NR7, low-volatility momentum - each with different
-stop-losses, exits and holding periods), with Zerodha costs, from 2013 to today.
-- Picking each year's strategy from the previous 3 years (the fair test) beat simply holding NIFTYBEES in only
-  **2 of 10 years** (about 4.9% a year vs about 13% for NIFTYBEES).
-- Even with hindsight, only 2 of 556 strategies grew faster than NIFTYBEES, and not convincingly.
-- So the validation gate **FAILED** and the daily report says **"No tips: strategy not validated. Use the index fund."**
-  The system re-runs this search every month and will only give tips if something honestly passes.
-Details: `validation/search.html` and `validation/latest.html`.
+## Status (2026-11-03)
+Three honest searches, all with Zerodha charges, all **FAILED** the validation gate:
+| Search | Strategies tested | Fair walk-forward result | Newest untouched period |
+|---|---|---|---|
+| Swing (days-weeks) | 556 | beat NIFTYBEES in 2 of 10 years | +5.4% vs liquid fund +9.8% |
+| Short-term (1-5 days) | 1,080 | beat NIFTYBEES in 1 of 10 years | -13.2% |
+| Intraday (same day) | 120 | lost Rs 985 on Rs 45,000 | -2.6% |
+
+Short trades fail mainly because of **charges and slippage on every trade**. So the daily report says
+**"No tips: strategy not validated. Use the index fund."** All searches re-run monthly by themselves.
+Details: `validation/search.html`, `validation/search_short.html`, `validation/search_intraday.html`.

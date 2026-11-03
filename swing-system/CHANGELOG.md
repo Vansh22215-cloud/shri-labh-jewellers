@@ -23,3 +23,12 @@
 - Even with hindsight, only 2 of 556 variants (0.4%) grew faster than NIFTYBEES over 2013-Apr 2025, and none
   beat it convincingly (best t-stat about 0). Best families on average: low-volatility momentum, momentum leaders.
 - Live version stays v1 (not validated) -> reports say "No tips: strategy not validated. Use the index fund."
+
+## 2026-11-03 - Short-term and intraday searches (your request: trades of hours to a few days)
+- Short-term (1-5 day holds, 10 patterns incl. inside-day, gap-and-go, strong close, 3-day pullback; 2% risk x 6
+  trades allowed): 1,080 variants. Walk-forward picks beat NIFTYBEES in 1 of 10 years, -2.9%/yr vs +13%/yr;
+  holdout -13.2%; worst fall -38.8%. **Gate FAILED.** Median variant lost 20-30% a year: frequent trading pays
+  STT, DP charges and slippage on every trade (e.g. best 3-day-pullback variant: +23%/yr before charges, +7% after).
+- Intraday (hourly bars, Nov 2023-Nov 2026, 150 stocks, Zerodha MIS charges, no leverage): 120 variants; only
+  5.8% made money; walk-forward picks lost Rs 985 on Rs 45,000; holdout -2.6%. **Gate FAILED.**
+- Nothing promoted. Reports still say "No tips: strategy not validated."

@@ -1,0 +1,10 @@
+<!doctype html><meta charset='utf-8'><title>Swing report error</title><body style='font-family:sans-serif'><h1>No tips today: the system hit an error</h1><p>Research, not advice. No system can guarantee profit; you can lose money. You decide and place every order yourself.</p><p>The nightly run crashed, so no tips are given. It will retry tomorrow. Technical details (for Claude to fix) are in logs/system.log.</p><pre>Traceback (most recent call last):
+  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 364, in main
+    return run()
+  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 342, in run
+    "gate_html": search_html() + gate_html(g),
+                 ~~~~~~~~~~~^^
+  File "/home/user/shri-labh-jewellers/swing-system/swing/nightly.py", line 66, in search_html
+    won = sum(p["beat_niftybees"] for p in o["picks"])
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+</pre></body>
