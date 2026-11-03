@@ -181,3 +181,22 @@ def next_results_date(symbol, today=None):
     today = pd.Timestamp(today or date.today()).normalize()
     fut = [d for d in earnings_dates(symbol) if d >= today]
     return min(fut) if fut else None
+
+
+def results_day_mask(symbols, dates):
+    """bool DataFrame: True on the first trading day ON or AFTER each historical results date (the market's
+    reaction day; Indian results often come after market hours). Uses cached earnings dates only."""
+    m = pd.DataFrame(False, index=dates, columns=symbols)
+    idx = pd.DatetimeIndex(dates)
+    for s in symbols:
+        f = EARN / f"{s}.csv"
+        if not f.exists():
+            continue
+        for e in pd.read_csv(f, parse_dates=["date"])["date"]:
+            # Yahoo stamps US time, so the Indian calendar date is the date shown: react on that day or the next
+            pos = idx.searchsorted(e.normalize())
+            if pos < len(idx):
+                m.iat[pos, m.columns.get_loc(s)] = True
+                if pos + 1 < len(idx):
+                    m.iat[pos + 1, m.columns.get_loc(s)] = True
+    return m

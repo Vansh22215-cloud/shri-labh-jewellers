@@ -15,7 +15,7 @@ import pandas as pd
 
 from . import backtest, data_prices, engine, validate
 from .config import ROOT, get_logger, load_strategy
-from .families import FAMILIES, SHORT_FAMILIES, base_indicators, family_signals
+from .families import FAMILIES, LIBRARY_FAMILIES, SHORT_FAMILIES, base_indicators, family_signals
 
 log = get_logger()
 VAL = ROOT / "validation"
@@ -67,10 +67,24 @@ def short_space(base):
     return out
 
 
+def library_space(base):
+    """Strategy library (ROADMAP S1-S9): famous published methods x exits (added 2026-11-03)."""
+    out = []
+    exits = {"targets": {"exit_style": "targets", "target1_r": 2.0, "target2_r": 4.0},
+             "trail": {"exit_style": "trail", "trail_atr_mult": 3.0}}
+    for fam, stop, ex, hold, reg in product(LIBRARY_FAMILIES, [2.0, 3.0], list(exits), [25, 50], [True, False]):
+        out.append(dict(base, family=fam, stop_atr_mult=stop, max_hold_days=hold, use_regime_filter=reg, **exits[ex]))
+    for i, v in enumerate(out):
+        v["name"] = f"L{i:03d}"
+    return out
+
+
 SPACES = {
     "swing": (variant_space, SEARCH_NAME, "search_latest.json"),
     "short": (short_space, "wf-search-short-v1: 1-5 day holds, 36m Sharpe pick, yearly, min 30 trades",
               "search_short.json"),
+    "library": (library_space, "wf-search-library-v1: famous methods, 36m Sharpe pick, yearly, min 30 trades",
+                "search_library.json"),
 }
 
 

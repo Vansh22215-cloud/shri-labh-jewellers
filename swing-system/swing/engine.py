@@ -62,6 +62,11 @@ def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
             P["deliv"] = dp.reindex(index=idx, columns=P["close"].columns)
     except Exception as e:
         log.warning("delivery panel unavailable: %s", e)
+    try:   # historical results dates -> reaction days (for the earnings-drift family)
+        from .fundamentals import results_day_mask
+        P["results_day"] = results_day_mask(list(P["close"].columns), idx)
+    except Exception as e:
+        log.warning("results-day mask unavailable: %s", e)
     mask = universe.membership_mask(hist, idx, list(P["close"].columns))
     # Live: today's universe = most recent month's list (same rule, latest data).
     industry = dict(zip(n500["Symbol"], n500["Industry"]))

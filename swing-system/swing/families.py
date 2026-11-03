@@ -20,6 +20,23 @@ Families:
   gap_go           opens >= 1% above yesterday's high and closes strong on 1.5x volume (gap-and-go)
   strong_close     up > 2% closing in the top 10% of the day's range, strong RS, above 50-day average
   pullback_3d      three lower closes in a row inside an uptrend (short dip), above the 50-day average
+  --- strategy library (approximations of published methods, see ROADMAP S1-S9) ---
+  minervini_vcp    Minervini trend template (price > 50 > 150 > 200-day avg, 200 rising, >= 30% above 52-week low,
+                   within 25% of 52-week high, RS >= 70) + volatility contraction (10-day range < 50% of the
+                   50-day range) + breakout above the 20-day high on 1.5x volume
+  weinstein_stage2 Weinstein: close crosses above a RISING 30-week (150-day) average on 2x volume, RS >= 50
+  darvas_box       Darvas: tight 20-day box (range <= 12% of price) within 10% of the 52-week high; close breaks
+                   above the box top on 1.5x volume
+  momentum_12_1    Jegadeesh-Titman/AQR: on the first trading day of each month buy the top 10% by 12-month
+                   return skipping the last month, above the 200-day average
+  high52_rank      George & Hwang: first trading day of each month, top 10% of stocks by closeness to the
+                   52-week high, in an uptrend
+  pead             Post-earnings drift: on the results reaction day the stock gaps up >= 3% and closes in the top
+                   half of the day on 2x volume, above the 200-day average
+  sector_rotation  Faber-style: first trading day of each week, leaders (RS >= 80) of the strongest industries
+                   (industry rank >= 85%) in an uptrend
+  connors_pctb     Connors %b: above the 200-day average and the close is below the lower Bollinger band
+                   (%b < 0) - a sharp dip in an uptrend; exits via the exit rules
   delivery_breakout new 20-day closing high on 1.5x volume where the DELIVERY % is >= 1.3x its 20-day average
                    and >= 45% (genuine buying, not intraday churn), in an uptrend
 """
@@ -32,6 +49,9 @@ FAMILIES = ["trend_pb_bo", "donchian", "high52", "mean_reversion", "momentum_lea
 SHORT_FAMILIES = ["inside_day", "gap_go", "strong_close", "pullback_3d"]
 # Needs NSE delivery data (ROADMAP D1, added 2026-11-03)
 DELIVERY_FAMILIES = ["delivery_breakout"]
+# Strategy LIBRARY: well-known published methods (ROADMAP S1-S9, added 2026-11-03)
+LIBRARY_FAMILIES = ["minervini_vcp", "weinstein_stage2", "darvas_box", "momentum_12_1", "high52_rank",
+                    "pead", "sector_rotation", "connors_pctb"]
 
 
 def sma(df, n):
@@ -112,6 +132,16 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     B["hi20"] = c.shift(1).rolling(20, min_periods=20).max()
     B["hi55"] = c.shift(1).rolling(55, min_periods=55).max()
     B["hi252"] = h.rolling(252, min_periods=200).max()
+    B["lo252"] = l.rolling(252, min_periods=200).min()
+    B["sma150"] = sma(c, 150)
+    rng10 = h.rolling(10, min_periods=10).max() - l.rolling(10, min_periods=10).min()
+    rng50 = h.rolling(50, min_periods=50).max() - l.rolling(50, min_periods=50).min()
+    B["contraction"] = (rng10 / rng50.replace(0, np.nan)).shift(1)        # up to yesterday
+    hb20, lb20 = h.shift(1).rolling(20, min_periods=20).max(), l.shift(1).rolling(20, min_periods=20).min()
+    B["box_top"], B["box_width"] = hb20, (hb20 - lb20) / c
+    B["mom_12_1_rank"] = xs_rank(c.shift(21) / c.shift(252) - 1, member)
+    B["near_high_rank"] = xs_rank(c / B["hi252"], member)
+    B["bb_lower"] = None   # set below
     B["low5_min"] = l.rolling(5, min_periods=5).min()
     B["prev_high"] = h.shift(1)
     B["inside_prev"] = ((h.shift(1) < h.shift(2)) & (l.shift(1) > l.shift(2)))
@@ -119,6 +149,7 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     B["rsi2"] = rsi(c, 2)
     mid, sd = sma(c, 20), c.rolling(20, min_periods=20).std()
     B["bb_upper"] = mid + 2 * sd
+    B["bb_lower"] = mid - 2 * sd
     bw = (4 * sd / mid)
     bw_lo, bw_hi = bw.rolling(126, min_periods=100).min(), bw.rolling(126, min_periods=100).max()
     B["bw_pct"] = ((bw - bw_lo) / (bw_hi - bw_lo).replace(0, np.nan)).shift(1)
@@ -127,6 +158,8 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     B["ret1"] = c / c.shift(1) - 1
     B["ema20_prev_below"] = (B["ema20"].shift(1) <= B["sma50"].shift(1))
     idx = c.index
+    _m = pd.Series(idx.month, index=idx)
+    B["month_start"] = _m.ne(_m.shift(1))
     B["week_start"] = pd.Series(np.asarray(idx.isocalendar().week, dtype=float), index=idx).diff().fillna(1).ne(0)
 
     breadth = ((c > B["sma50"]) & member).sum(axis=1) / member.sum(axis=1).replace(0, np.nan) * 100
@@ -140,6 +173,8 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
         B["deliv_avg"] = dv.shift(1).rolling(20, min_periods=10).mean()   # past 20 days only
     else:
         B["deliv"] = B["deliv_avg"] = None
+    rd = P.get("results_day")
+    B["results_day"] = rd.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool) if rd is not None else None
     B["results_soon"] = None if results_soon is None else \
         results_soon.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool)
     return B
@@ -196,6 +231,43 @@ def family_signals(B, p):
     elif fam == "strong_close":
         entry = (B["ret1"] > 0.02) & (B["close_pos"] >= 0.9) & rs_ok & (c > B["sma50"])
         setup = "strong close"
+    elif fam == "minervini_vcp":
+        tt = (c > B["sma50"]) & (B["sma50"] > B["sma150"]) & (B["sma150"] > B["sma200"]) & \
+             (B["sma200"] > B["sma200"].shift(21)) & (c >= 1.3 * B["lo252"]) & (c >= 0.75 * B["hi252"]) & \
+             (B["rs_rank"] >= 0.7)
+        entry = tt & (B["contraction"] < 0.5) & (c > B["hi20"]) & (v > 1.5 * B["avg_vol"])
+        setup = "Minervini trend template + VCP breakout"
+    elif fam == "weinstein_stage2":
+        entry = (c > B["sma150"]) & (c.shift(1) <= B["sma150"].shift(1)) & (B["sma150"] > B["sma150"].shift(20)) & \
+                (v > 2 * B["avg_vol"]) & (B["rs_rank"] >= 0.5)
+        setup = "Weinstein stage-2 breakout"
+    elif fam == "darvas_box":
+        entry = (B["box_width"] <= 0.12) & (c >= 0.9 * B["hi252"]) & (c > B["box_top"]) & (v > 1.5 * B["avg_vol"])
+        setup = "Darvas box breakout"
+    elif fam == "momentum_12_1":
+        ms = pd.DataFrame(np.repeat(B["month_start"].to_numpy(dtype=bool)[:, None], c.shape[1], axis=1),
+                          index=c.index, columns=c.columns)
+        entry = ms & (B["mom_12_1_rank"] >= 0.9) & B["above200"]
+        setup = "12-month momentum leader (monthly)"
+    elif fam == "high52_rank":
+        ms = pd.DataFrame(np.repeat(B["month_start"].to_numpy(dtype=bool)[:, None], c.shape[1], axis=1),
+                          index=c.index, columns=c.columns)
+        entry = ms & (B["near_high_rank"] >= 0.9) & B["up_trend"]
+        setup = "closest to 52-week high (monthly)"
+    elif fam == "pead":
+        if B.get("results_day") is None:
+            raise ValueError("results dates not available")
+        entry = B["results_day"] & (B["o"] >= c.shift(1) * 1.03) & (B["close_pos"] >= 0.5) & \
+                (v > 2 * B["avg_vol"]) & B["above200"]
+        setup = "strong results reaction (earnings drift)"
+    elif fam == "sector_rotation":
+        ws = pd.DataFrame(np.repeat(B["week_start"].to_numpy(dtype=bool)[:, None], c.shape[1], axis=1),
+                          index=c.index, columns=c.columns)
+        entry = ws & (B["sector_rank"] >= 0.85) & (B["rs_rank"] >= 0.8) & B["up_trend"]
+        setup = "leader of a top sector"
+    elif fam == "connors_pctb":
+        entry = B["above200"] & (c < B["bb_lower"])
+        setup = "sharp dip below lower band in uptrend"
     elif fam == "delivery_breakout":
         if B.get("deliv") is None:
             raise ValueError("delivery data not available")
