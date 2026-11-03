@@ -55,6 +55,13 @@ def build(params, use_results_filter=False, start="2011-06-01", extra_bar=None):
             nifty = nifty.copy()
             nifty.loc[d] = extra_bar["nifty"]
             idx = P["close"].index
+    try:   # NSE delivery % (ROADMAP D1); optional - families that need it check for it
+        from .data_delivery import load_panel
+        dp = load_panel()
+        if dp is not None:
+            P["deliv"] = dp.reindex(index=idx, columns=P["close"].columns)
+    except Exception as e:
+        log.warning("delivery panel unavailable: %s", e)
     mask = universe.membership_mask(hist, idx, list(P["close"].columns))
     # Live: today's universe = most recent month's list (same rule, latest data).
     industry = dict(zip(n500["Symbol"], n500["Industry"]))

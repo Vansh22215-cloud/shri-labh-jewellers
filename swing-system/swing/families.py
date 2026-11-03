@@ -20,6 +20,8 @@ Families:
   gap_go           opens >= 1% above yesterday's high and closes strong on 1.5x volume (gap-and-go)
   strong_close     up > 2% closing in the top 10% of the day's range, strong RS, above 50-day average
   pullback_3d      three lower closes in a row inside an uptrend (short dip), above the 50-day average
+  delivery_breakout new 20-day closing high on 1.5x volume where the DELIVERY % is >= 1.3x its 20-day average
+                   and >= 45% (genuine buying, not intraday churn), in an uptrend
 """
 import numpy as np
 import pandas as pd
@@ -28,6 +30,8 @@ FAMILIES = ["trend_pb_bo", "donchian", "high52", "mean_reversion", "momentum_lea
             "squeeze", "ma_cross", "volume_surge", "nr7", "lowvol_momentum"]
 # Short-term (1-5 day) chart patterns, added 2026-11-03
 SHORT_FAMILIES = ["inside_day", "gap_go", "strong_close", "pullback_3d"]
+# Needs NSE delivery data (ROADMAP D1, added 2026-11-03)
+DELIVERY_FAMILIES = ["delivery_breakout"]
 
 
 def sma(df, n):
@@ -87,6 +91,7 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
             sector_rank[cols] = np.repeat(ind_rank[[g]].values, len(cols), axis=1)
         sector_rank = sector_rank.fillna(0.5)
     B["sector_rank"] = sector_rank
+    B["industry"] = {s_: industry.get(s_) for s_ in c.columns}
 
     B["up_trend"] = (c > B["sma50"]) & (B["sma50"] > B["sma200"]) & (B["sma200"] > B["sma200"].shift(p["slope_lookback"]))
     B["above200"] = c > B["sma200"]
@@ -128,6 +133,13 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
     B["breadth"] = breadth
     B["regime_ok"] = (nifty > nifty.rolling(p["regime_sma"], min_periods=p["regime_sma"]).mean()) & \
                      (breadth >= p["breadth_min_pct_above_50dma"])
+    dv = P.get("deliv")
+    if dv is not None:
+        dv = dv.reindex(index=c.index, columns=c.columns)
+        B["deliv"] = dv
+        B["deliv_avg"] = dv.shift(1).rolling(20, min_periods=10).mean()   # past 20 days only
+    else:
+        B["deliv"] = B["deliv_avg"] = None
     B["results_soon"] = None if results_soon is None else \
         results_soon.reindex(index=c.index, columns=c.columns).fillna(False).astype(bool)
     return B
@@ -184,6 +196,12 @@ def family_signals(B, p):
     elif fam == "strong_close":
         entry = (B["ret1"] > 0.02) & (B["close_pos"] >= 0.9) & rs_ok & (c > B["sma50"])
         setup = "strong close"
+    elif fam == "delivery_breakout":
+        if B.get("deliv") is None:
+            raise ValueError("delivery data not available")
+        entry = (c > B["hi20"]) & (v > 1.5 * B["avg_vol"]) & (B["deliv"] >= 1.3 * B["deliv_avg"]) & \
+                (B["deliv"] >= 45) & B["up_trend"]
+        setup = "high-delivery breakout"
     elif fam == "pullback_3d":
         entry = B["down3"] & B["up_trend"] & (c > B["sma50"])
         setup = "3-day pullback in uptrend"
@@ -197,6 +215,8 @@ def family_signals(B, p):
         eligible &= v >= p["min_volume_mult"] * B["avg_vol"]
     if p.get("min_rs_filter"):
         eligible &= B["rs_rank"] * 100 >= p["min_rs_filter"]
+    if p.get("min_delivery_ratio") and B.get("deliv") is not None:
+        eligible &= B["deliv"] >= p["min_delivery_ratio"] * B["deliv_avg"]
     if p.get("max_atr_pct"):
         eligible &= (B["atr"] / c * 100) <= p["max_atr_pct"]
     if B.get("results_soon") is not None and p.get("results_rule") == "exclude":
@@ -210,4 +230,4 @@ def family_signals(B, p):
     return {"score": score, "eligible": eligible, "setup": setup, "atr": B["atr"], "regime_ok": regime,
             "market_regime_ok": B["regime_ok"], "breadth": B["breadth"], "rs_rank": B["rs_rank"],
             "sector_rank": B["sector_rank"], "sma50": B["sma50"], "sma200": B["sma200"], "ema20": B["ema20"],
-            "member": B["member"]}
+            "member": B["member"], "industry": B.get("industry", {})}

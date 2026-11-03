@@ -8773,5 +8773,15 @@
   "name": "S385",
   "first_tested": "2026-11-03",
   "note": "aggressive-mode check: ma_cross risk 2.0%"
+ },
+ "eb77324aa4": {
+  "name": "a1",
+  "first_tested": "2026-11-03",
+  "note": "base for proposal"
+ },
+ "773a660143": {
+  "name": "candidate-R1",
+  "first_tested": "2026-11-03",
+  "note": "proposal R1"
  }
 }

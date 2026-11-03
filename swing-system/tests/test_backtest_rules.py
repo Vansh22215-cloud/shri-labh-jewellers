@@ -119,3 +119,16 @@ def test_targets_then_trail(params):
     _, tr, _ = backtest.run(P, sig, p, idx[0], idx[-1], 45000)
     t = tr.iloc[0]
     assert t["exit_reason"] in ("stop", "stop_gap") and t["r_multiple"] > 2   # rode the trend past 3R
+
+
+def test_max_per_industry_limits_entries(params):
+    import pandas as pd
+    idx = pd.bdate_range("2024-01-01", periods=5)
+    f = lambda: pd.DataFrame({"A": [100.0] * 5, "B": [100.0] * 5}, index=idx)
+    P = {"open": f(), "high": f() + 1, "low": f() - 1, "close": f()}
+    elig = pd.DataFrame(False, index=idx, columns=["A", "B"]); elig.iloc[0] = True
+    sig = {"score": f(), "eligible": elig, "setup": pd.DataFrame("x", index=idx, columns=["A", "B"]),
+           "atr": f() * 0 + 2.0, "regime_ok": pd.Series(True, index=idx), "industry": {"A": "Bank", "B": "Bank"}}
+    _, _, ex1 = backtest.run(P, sig, dict(params, max_per_industry=1), idx[0], idx[-1], 45000)
+    _, _, ex2 = backtest.run(P, sig, params, idx[0], idx[-1], 45000)
+    assert ex1.iloc[-1] < ex2.iloc[-1]      # only one bank bought when capped

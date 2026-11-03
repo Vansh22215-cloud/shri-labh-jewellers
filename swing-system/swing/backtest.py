@@ -81,6 +81,12 @@ def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candid
                 s = cand["symbol"]
                 if s in held:
                     continue
+                cap_ind = p.get("max_per_industry")
+                if cap_ind:   # diversification: limit open trades in the same industry (ROADMAP P2)
+                    ind_map = sig.get("industry") or {}
+                    ind = ind_map.get(s)
+                    if ind and sum(1 for ps_ in positions if ind_map.get(ps_.symbol) == ind) >= cap_ind:
+                        continue
                 op = o.at[d, s]
                 if not np.isfinite(op) or op <= 0:
                     continue

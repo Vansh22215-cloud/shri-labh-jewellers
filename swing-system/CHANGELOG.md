@@ -48,3 +48,6 @@
 - Short-term search: still FAILED (0 of 10 years); holdout -3.2%.
 - Regime study refreshed: a1 trades average +0.07R; in today's market type (downtrend, calm, weak breadth) past
   trades won 43%.
+
+## 2026-11-03 (automatic)
+- Tested proposal R1: rejected. R1 vs a1: beat it in 4/13 walk-forward years, CAGR 8.43% vs 9.15%, worst fall -12.66% vs -9.92%, gate FAIL

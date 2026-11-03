@@ -21,7 +21,7 @@ one per weekday evening by the daily research session, with the rules in weekly.
 
 ```proposal
 id: R1
-status: proposed
+status: rejected 2026-11-03 - R1 vs a1: beat it in 4/13 walk-forward years, CAGR 8.43% vs 9.15%, worst fall -12.66% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Industry momentum persists (Moskowitz & Grinblatt 1999); only buying stocks whose industry is in the stronger half should avoid fighting sector headwinds.
 overrides: {"min_sector_rank": 0.5}
@@ -65,4 +65,28 @@ status: proposed
 written: 2026-11-03
 reason: Results cause gaps that jump stops; for the tips strategy, skipping entries within 5 trading days of results should cut gap losses (P1 reduced drawdown for v1).
 overrides: {"results_rule": "exclude"}
+```
+
+```proposal
+id: R7
+status: proposed
+written: 2026-11-03
+reason: Delivery % shows whether buyers took shares home; requiring signal-day delivery to be at least 1.2x the stock's own 20-day average should keep trend changes backed by real investors and drop speculative ones.
+overrides: {"min_delivery_ratio": 1.2}
+```
+
+```proposal
+id: R8
+status: proposed
+written: 2026-11-03
+reason: Breakouts to a new 20-day high with high volume AND unusually high delivery reflect accumulation by investors; this setup (ROADMAP D1) may beat the moving-average-cross entry with the same exits.
+overrides: {"family": "delivery_breakout"}
+```
+
+```proposal
+id: R9
+status: proposed
+written: 2026-11-03
+reason: Stocks in one industry fall together on sector news; allowing at most 1 open trade per industry should spread risk and reduce drawdowns without hurting average returns (ROADMAP P2).
+overrides: {"max_per_industry": 1}
 ```
