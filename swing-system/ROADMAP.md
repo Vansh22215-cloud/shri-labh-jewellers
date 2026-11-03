@@ -1,4 +1,7 @@
-# ROADMAP.md - 6-month capability plan (worked through by the deep upgrade session every 2 days)
+# ROADMAP.md - capability plan, COMPRESSED TO ONE MONTH (target: done by 2026-12-03)
+
+Worked through by: hourly improvement sessions (weekdays 16:53-23:53, weekends 08:53-23:53 IST), the daily deep
+upgrade (21:47) and the daily research session (20:17). 'Month N' below now means 'Week ~N' of the month.
 
 Goal: a wider, smarter, more robust research and trading-signal system - every upgrade built with tests,
 validated honestly (walk-forward, untouched holdout, costs, variant counting) and adopted only if it helps.
