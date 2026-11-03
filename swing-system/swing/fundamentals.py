@@ -89,7 +89,12 @@ def fetch_fundamentals(symbol, max_age_days=30):
                      "sector": info.get("sector"), "industry": info.get("industry"),
                      "name": info.get("longName") or info.get("shortName"),
                      "market_cap": _safe(info.get("marketCap")), "dividend_yield": _safe(info.get("dividendYield")),
-                     "summary": (info.get("longBusinessSummary") or "")[:600], "v": 2})
+                     "summary": (info.get("longBusinessSummary") or "")[:600], "v": 2,
+                     "info_ok": bool(info),
+                     # summary figures used when the statements have gaps
+                     "roe_info": _safe(info.get("returnOnEquity")), "de_info": _safe(info.get("debtToEquity")),
+                     "margin_info": _safe(info.get("profitMargins")), "rev_growth_info": _safe(info.get("revenueGrowth")),
+                     "eps_growth_info": _safe(info.get("earningsGrowth")), "current_ratio_info": _safe(info.get("currentRatio"))})
     except Exception as e:
         snap["error"] = str(e)
         log.warning("Fundamentals failed for %s: %s", symbol, e)

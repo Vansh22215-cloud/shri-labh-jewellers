@@ -289,5 +289,9 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   ideas, in at least 60% of walk-forward years, with a worst fall no more than 2 points deeper.
 - **D76. Company of the day (2026-11-03):** all ~2,391 NSE EQ companies; ~120 statements refreshed per night
   (Yahoo, free), scored 0-100 (quality 25, growth 20, financial health 20, cash flow 15, valuation 10, Piotroski 10;
-  -8 per red flag). Pick: best score without red flags, tradeable (>= Rs 1 cr/day, price >= Rs 20, P/E <= 100), not
-  shown in the last 60 days. Research pick, not a tip; every pick is logged (journal/company_picks.csv) to measure it.
+  -8 per red flag). Pick (changed 2026-11-03 at the owner's request): simply the best score, no trading-volume or price limits;
+  red flags are shown as red flags (and cost points); not shown in the last 60 days. Thin trading is marked on the card. Research pick, not a tip; every pick is logged (journal/company_picks.csv) to measure it.
+- **D77. Data sources for company analysis:** Yahoo statements, with gaps filled from Yahoo's company-summary
+  figures and re-fetched within days when its profile service failed. Bloomberg/Refinitiv/Capitaline are paid
+  (thousands of dollars a year); Screener, Moneycontrol, Tickertape and NSE/BSE websites forbid automated copying in
+  their terms, so they are not scraped. A licensed source can be added later if the owner decides to pay for one.

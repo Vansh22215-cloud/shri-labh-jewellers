@@ -14,6 +14,7 @@ point-in-time) and sometimes incomplete; the message shows what is missing.
 import html
 import json
 import math
+import time
 from datetime import date
 
 import numpy as np
@@ -44,7 +45,12 @@ def refresh_batch(n=120):
         if not f.exists():
             return 1e12
         try:
-            return 1e11 if json.loads(f.read_text()).get("v") != 2 else -f.stat().st_mtime
+            snap = json.loads(f.read_text())
+            if snap.get("v") != 2:
+                return 1e11
+            gap = not snap.get("info_ok", True)          # profile service was down last time: retry after 2 days
+            age_days = (time.time() - f.stat().st_mtime) / 86400
+            return 5e10 if (gap and age_days > 2) else -f.stat().st_mtime
         except Exception:
             return 1e12
     todo = sorted(syms, key=age, reverse=True)[:n]
@@ -94,6 +100,15 @@ def analyse(snap):
     capex = last.get("capex")
     r["fcf_cr"] = (ocf + capex) / 1e7 if (ocf is not None and capex is not None) else None   # capex is negative
     r["pe"], r["pb"] = snap.get("pe"), snap.get("pb")
+    # fill gaps in the statements from Yahoo's company summary figures (second source)
+    if r["roe"] is None and snap.get("roe_info") is not None:
+        r["roe"] = snap["roe_info"] * 100
+    if r["de"] is None and snap.get("de_info") is not None:
+        r["de"] = snap["de_info"] / 100
+    if r["net_margin"] is None and snap.get("margin_info") is not None:
+        r["net_margin"] = snap["margin_info"] * 100
+    if r["current_ratio"] is None and snap.get("current_ratio_info") is not None:
+        r["current_ratio"] = snap["current_ratio_info"]
     r["mcap_cr"] = snap["market_cap"] / 1e7 if snap.get("market_cap") else None
     r["promoter_pct"] = snap["insider_pct"] * 100 if snap.get("insider_pct") is not None else None
     # Piotroski F-score (9 tests; missing data counts as 'no')
@@ -166,7 +181,7 @@ def price_context(sym):
     return out
 
 
-def pick_of_the_day(min_value_cr=1.0, min_price=20, cooldown_days=60):
+def pick_of_the_day(min_value_cr=0.0, min_price=0.0, cooldown_days=60):
     rows = []
     for f in FUND.glob("*.json"):
         try:
@@ -176,7 +191,7 @@ def pick_of_the_day(min_value_cr=1.0, min_price=20, cooldown_days=60):
         if not snap.get("ok"):
             continue
         a = analyse(snap)
-        if a and not a["flags"]:
+        if a:
             rows.append(a)
     if not rows:
         return None, 0
@@ -188,9 +203,7 @@ def pick_of_the_day(min_value_cr=1.0, min_price=20, cooldown_days=60):
     for a in rows[:60]:
         if a["symbol"] in recent:
             continue
-        pc = price_context(a["symbol"])
-        if not pc or pc["value_cr"] < min_value_cr or pc["price"] < min_price:
-            continue
+        pc = price_context(a["symbol"]) or {"price": None, "value_cr": None, "ret_1y": None, "hi52_gap": None}
         a["px"] = pc
         # backups when Yahoo's profile service is down: name from NSE's list, valuation from price x shares
         if not a.get("name") or a["name"] == a["symbol"]:
@@ -198,20 +211,18 @@ def pick_of_the_day(min_value_cr=1.0, min_price=20, cooldown_days=60):
             a["name"] = nm or a["symbol"]
         snap = json.loads((FUND / f"{a['symbol']}.json").read_text())
         last = _years(snap)[-1]
-        if last.get("shares"):
+        if last.get("shares") and pc.get("price"):
             mcap = pc["price"] * last["shares"]
             a["mcap_cr"] = a.get("mcap_cr") or mcap / 1e7
             if a.get("pe") is None and last.get("net_income") and last["net_income"] > 0:
                 a["pe"] = mcap / last["net_income"]
             if a.get("pb") is None and last.get("equity") and last["equity"] > 0:
                 a["pb"] = mcap / last["equity"]
-            if a["pe"] is not None and a["pe"] > 100:
-                continue
             a["parts"]["Valuation"] = round(((1.0 if (a["pe"] or 99) <= 25 else 0.5 if (a["pe"] or 99) <= 45 else 0)
                                              + (1.0 if (a["pb"] or 99) <= 4 else 0.5 if (a["pb"] or 99) <= 8 else 0)) / 2 * 10, 1)
             a["score"] = round(sum(a["parts"].values()) - 8 * len(a["flags"]), 1)
         rec = pd.DataFrame([{"date": str(date.today()), "symbol": a["symbol"], "score": a["score"],
-                             "price": round(pc["price"], 2), "fscore": a["fscore"]}])
+                             "price": round(pc["price"], 2) if pc.get("price") else None, "fscore": a["fscore"]}])
         (pd.concat([pd.read_csv(PICKS), rec]) if PICKS.exists() else rec).to_csv(PICKS, index=False)
         return a, len(rows)
     return None, len(rows)
@@ -221,10 +232,36 @@ def _f(x, fmt="{:,.1f}", suffix=""):
     return "n/a" if x is None or (isinstance(x, float) and not math.isfinite(x)) else fmt.format(x) + suffix
 
 
+def why_good(a):
+    w = []
+    if (a.get("roce") or 0) >= 20:
+        w.append(f"earns {a['roce']:.0f} paise of operating profit on every Rs 1 of capital (ROCE) - a sign of a strong business")
+    elif (a.get("roce") or 0) >= 12:
+        w.append(f"decent return on capital (ROCE {a['roce']:.0f}%)")
+    if (a.get("profit_cagr") or 0) >= 15:
+        w.append(f"profit has grown about {a['profit_cagr']:.0f}% a year")
+    if (a.get("rev_cagr") or 0) >= 12:
+        w.append(f"sales have grown about {a['rev_cagr']:.0f}% a year")
+    if a.get("de") is not None and a["de"] < 0.3:
+        w.append("little or no debt, so bad years are unlikely to sink it")
+    if (a.get("ocf_to_profit") or 0) >= 0.9:
+        w.append("its reported profit is backed by real cash coming in")
+    if (a.get("fcf_cr") or 0) > 0:
+        w.append("it has cash left over after investing in the business (free cash flow)")
+    if a.get("fscore", 0) >= 7:
+        w.append(f"passes {a['fscore']} of 9 classic financial-health tests (Piotroski)")
+    if a.get("pe") is not None and a["pe"] <= 25:
+        w.append(f"the price is not stretched (P/E {a['pe']:.0f})")
+    if (a.get("net_margin") or 0) >= 12:
+        w.append(f"keeps {a['net_margin']:.0f}% of sales as profit")
+    return w or ["scores well across quality, growth, health, cash and valuation"]
+
+
 def message(a, n_scored, n_total):
     if not a:
         return f"🏢 Company of the day: none today (scored {n_scored} of {n_total} NSE companies so far)."
     px = a["px"]
+    nz = lambda k: px.get(k) if px.get(k) is not None else float("nan")
     good = [k for k, v in a["ftests"].items() if v]
     bad = [k for k, v in a["ftests"].items() if not v]
     parts = " · ".join(f"{k} {v:g}" for k, v in a["parts"].items())
@@ -234,9 +271,13 @@ def message(a, n_scored, n_total):
         f"<i>{E(a.get('sector') or '')} · {E(a.get('industry') or '')}</i>",
         f"<b>Score {a['score']:.0f}/100</b> (best of {n_scored} companies analysed so far, out of {n_total} on NSE)",
         f"<pre>{parts}</pre>",
+        "💡 <b>Why it looks like a good company</b>",
+        *[f"• {E(x)}" for x in why_good(a)],
+        *(["🚩 <b>Red flags</b>"] + [f"• {E(x)}" for x in a["flags"]] if a.get("flags") else ["🚩 <b>Red flags:</b> none found"]),
         "📋 <b>Snapshot</b>",
-        f"<pre>Price        ₹{px['price']:,.2f}  (1-yr {px['ret_1y']:+.0f}%, {px['hi52_gap']:+.0f}% from 52-wk high)\n"
-        f"Market cap   ₹{_f(a['mcap_cr'], '{:,.0f}')} cr   Traded ~₹{px['value_cr']:,.1f} cr/day\n"
+        f"<pre>Price        ₹{_f(px.get('price'), '{:,.2f}')}  (1-yr {_f(px.get('ret_1y'), '{:+.0f}', '%')}, {_f(px.get('hi52_gap'), '{:+.0f}', '%')} from 52-wk high)\n"
+        f"Market cap   ₹{_f(a['mcap_cr'], '{:,.0f}')} cr   Traded ~₹{_f(px.get('value_cr'), '{:,.1f}')} cr/day"
+        + ("  ⚠️ thinly traded" if (px.get('value_cr') or 0) < 1 else "") + "\n"
         f"Revenue      ₹{_f(a['revenue_cr'], '{:,.0f}')} cr   Profit ₹{_f(a['profit_cr'], '{:,.0f}')} cr\n"
         f"Trend        {trend}</pre>",
         "🏆 <b>Business quality</b>",
