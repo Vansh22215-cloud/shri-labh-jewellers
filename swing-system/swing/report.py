@@ -142,6 +142,14 @@ def daily_html(ctx):
                  "<p class='muted'>To add a trade you placed: open <b>my_trades.csv</b> in Excel/Notepad and add a line "
                  "like <code>INFY,2026-11-03,1500,7,1430</code> (symbol, buy date, buy price, quantity, stop).</p></div>")
 
+    fw = ctx.get("forwarded") or {}
+    rows = [{"group": f"source: {k}", **v} for k, v in fw.get("by_source", {}).items()] + \
+           [{"group": f"bot verdict: {k}", **v} for k, v in fw.get("by_verdict", {}).items()]
+    parts.append("<div class='card'><h2>Tips you forwarded to the bot - what really happened</h2>" +
+                 _table(rows, ["group", "tips", "target_hit_pct", "stop_hit_pct"]) +
+                 "<p class='muted'>Forward any tip to your Telegram bot; it answers GOOD / RISKY / AVOID and tracks the "
+                 "real outcome here. Full list: journal/forwarded_tips.csv</p></div>")
+
     ps, bt = ctx["paper"], ctx["backtest_ref"]
     parts.append("<div class='card'><h2>Paper trading vs backtest</h2>"
                  f"<p>Paper period: {html.escape(ctx['paper_text'])}</p>" +

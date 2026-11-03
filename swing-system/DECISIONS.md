@@ -150,3 +150,18 @@ You asked for short trades (hours to 2-3 days, exit at target) and allowed the r
 - **D48. Kite Connect:** not used. It is paid (about Rs 500/month) and the free data is enough for this
   research; orders are placed by you. Revisit only if a strategy passes and needs minute-level data to confirm.
   Never share API keys in chat.
+
+## Telegram tip checker (added 2026-11-03 at your request)
+- **D49.** Forward any tip to your bot; it parses stock / entry / stop / targets / intraday-or-swing, checks the
+  live price, and judges the tip by the stock's OWN last 5 years: how often the target distance was reached
+  before the stop distance within the holding window (1 day intraday, 2 BTST, 10 swing, 40 positional;
+  stop-first if both on one day), versus the win rate needed to break even after Zerodha charges + slippage.
+- **D50. Verdicts:** AVOID if the odds are > 5 points below break-even, the stock is illiquid (< Rs 5 crore a
+  day - classic pump-and-dump), in a surveillance series, the entry is > 10% from today's price, or the tip has
+  already failed. RISKY if any caution flag (no stop-loss, odds within 5 points of break-even, tight/wide stop,
+  below 200-day average, weak market, results within 7 days, price already ran > 1.5%). Otherwise GOOD.
+  These base rates are unconditional (they ignore the tip-giver's chart reasoning), so they are a reality check,
+  not a prediction.
+- **D51. Learning:** every checked tip is stored with its source (channel/person) and its real outcome is
+  tracked; the report shows hit rates per source and per verdict. After 30 resolved tips the weekly job checks
+  that GOOD tips beat AVOID tips and flags the checker for review if not. Only the owner's chat is answered.

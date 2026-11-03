@@ -123,6 +123,24 @@ def claude_effect():
                if helped else "No evidence the review improves results - kept as an explainer only."))
 
 
+def tip_checker_review(min_tips=30):
+    """Is the Telegram tip-checker's verdict actually useful? (GOOD tips should beat AVOID tips.)"""
+    from . import tipcheck
+    sc = tipcheck.source_scorecard()
+    bv = sc.get("by_verdict", {}) if sc else {}
+    n = sum(v["tips"] for v in bv.values())
+    if n < min_tips:
+        return f"Tip checker: {n} forwarded tips resolved so far - need {min_tips} before judging its verdicts."
+    good, avoid = bv.get("GOOD"), bv.get("AVOID")
+    if good and avoid and good["target_hit_pct"] <= avoid["target_hit_pct"]:
+        msg = (f"Tip checker WARNING: GOOD tips hit target {good['target_hit_pct']}% vs AVOID {avoid['target_hit_pct']}% "
+               f"- its verdicts are not helping; flagged in IMPROVEMENTS.md for review.")
+        with open(IMPROVEMENTS, "a", encoding="utf-8") as f:
+            f.write(f"\n- {date.today()}: {msg} (needs a human/Claude review of tipcheck.py rules)\n")
+        return msg
+    return f"Tip checker verdicts by outcome: {bv}"
+
+
 def rotate_holdout(data_end):
     hs = pd.Timestamp(validate.holdout_start())
     if (pd.Timestamp(data_end) - hs).days > 30 * 30.4:
@@ -260,6 +278,7 @@ def run():
         notes.append("Rejected " + summary)
 
     notes.append(strategy_search(live, live_table))
+    notes.append(tip_checker_review())
     notes.append(claude_effect())
     notes.append(rotate_holdout(live_res["data_end"]))
     if settings.get("claude_review"):

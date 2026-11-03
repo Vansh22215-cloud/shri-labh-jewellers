@@ -27,6 +27,12 @@ Every weekday evening this system downloads free market data, checks it, and wri
 Already done for you: your bot token is saved in `my_secrets.yaml` (private, never uploaded). Just open your bot
 **@Vsjshsjsbaksnsjsh_bot** in Telegram and send it any message (e.g. "hi"). Reports then also arrive in Telegram.
 
+## Check any tip on Telegram
+Forward any stock tip (from a channel, group or friend) to your bot **@Vsjshsjsbaksnsjsh_bot**. Within seconds it
+answers 🟢 GOOD / 🟡 RISKY / 🔴 AVOID with reasons, using real prices and Zerodha charges. Send /score to see
+how forwarded tips actually turned out, and /report for tonight's summary. (The bot runs on your PC, so it answers
+while the PC is on; tips sent while it was off are answered when it starts.)
+
 ## Everyday use
 - Read `reports/latest.html` each evening. In **paper mode** (first 8 weeks) do not use real money - watch how
   the ideas perform.

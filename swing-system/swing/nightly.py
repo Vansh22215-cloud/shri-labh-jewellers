@@ -328,6 +328,13 @@ def run():
     my = journal.load_my_trades()
     my_status = journal.monitor_my_trades(my, data_prices.load, p,
                                           lambda s: fundamentals.next_results_date(s, d)) if len(my) else []
+    # forwarded tips (Telegram bot): update outcomes and show the scorecard
+    try:
+        from . import tipcheck
+        fwd = tipcheck.source_scorecard()
+    except Exception as e:
+        log.warning("forwarded-tip scorecard failed: %s", e)
+        fwd = {}
     for e in error_summary(since):
         health_items.append(("warn", "log: " + e))
 
@@ -337,7 +344,7 @@ def run():
         report.append_stock_note(pl["symbol"], day, pl, {"Shown as": "TIP" if tips else "shadow (not shown, tips blocked)"})
 
     ctx = {"day": day, "strategy": sname, "mode_text": mode_text, "headline": headline, "why": why,
-           "money_advice": money, "market": market, "tips": tips, "removed": removed, "my_trades": my_status,
+           "money_advice": money, "market": market, "forwarded": fwd, "tips": tips, "removed": removed, "my_trades": my_status,
            "paper": paper, "shadow": shadow, "backtest_ref": bt_ref, "health": health_items,
            "gate_html": search_html() + gate_html(g),
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
