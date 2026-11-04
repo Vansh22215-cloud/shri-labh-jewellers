@@ -5,7 +5,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from swing.bot import poll_once
 
 if __name__ == "__main__":
-    print("answered", poll_once())
+    from swing.config import on_github
+    if on_github():   # GitHub drops scheduled runs: stay alive and run every job on time (swing/daemon.py)
+        from swing.daemon import run as daemon
+        print("answered", daemon())
+    else:
+        print("answered", poll_once())
     try:   # on GitHub: keep the results for the next run (no Claude needed)
         from swing.ci_save import save
         print("save:", save("bot"))

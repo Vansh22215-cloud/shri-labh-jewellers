@@ -9,6 +9,11 @@ from swing import research, telegram, weekly
 from swing.config import load_settings
 
 if __name__ == "__main__":
+    from swing.config import on_github
+    from swing.daemon import claim
+    if on_github() and not claim("research"):
+        print("research: already done (skipped)")
+        sys.exit(0)
     s = load_settings()
     notes = []
     from swing.idea_factory import top_up
@@ -20,7 +25,7 @@ if __name__ == "__main__":
     import os, time
     t0 = time.time()
     on_gh = os.environ.get("GITHUB_ACTIONS") == "true"
-    budget = float(s.get("research_minutes_budget", 120)) * 60 if on_gh else None
+    budget = float(os.environ.get("SWING_RESEARCH_BUDGET") or s.get("research_minutes_budget", 120)) * 60 if on_gh else None
     tested, results = 0, []
     for prop in todo:
         if budget is None and tested >= n_per_run:

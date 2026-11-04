@@ -5,6 +5,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from swing.nightly import main
 
 if __name__ == "__main__":
+    from swing.config import on_github
+    from swing.daemon import claim
+    if on_github() and not claim("nightly"):
+        print("nightly: already done (skipped)")
+        sys.exit(0)
     main()
     try:   # company of the day (all NSE companies, deep fundamental analysis) - after the trades message
         from swing.company_research import run as company_of_day

@@ -5,6 +5,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from swing.weekly import run
 
 if __name__ == "__main__":
+    from swing.config import on_github
+    from swing.daemon import claim
+    if on_github() and not claim("weekly"):
+        print("weekly: already done (skipped)")
+        sys.exit(0)
     notes = run()
     from swing.config import public_print
     public_print("\n".join(notes), "weekly notes")
