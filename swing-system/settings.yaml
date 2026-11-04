@@ -13,7 +13,7 @@ kill_switch: false
 #   aggressive = you asked for daily ideas anyway: uses the best strategy the system can find today,
 #                clearly labelled NOT validated, with hard safety brakes (see DECISIONS.md D52-D55)
 tips_mode: aggressive
-aggressive_strategy: a2
+aggressive_strategy: a3
 # Stop ALL aggressive tips if their total result reaches this loss (% of capital).
 aggressive_hard_stop_pct: 20
 

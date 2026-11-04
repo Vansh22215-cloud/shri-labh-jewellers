@@ -159,3 +159,6 @@
 
 ## 2026-11-04 (automatic)
 - PROMOTED proposal A2 as a2 (previous a1 kept). A2 vs a1: beat it in 7/13 walk-forward years, CAGR 9.76% vs 8.8% (needs +0.43), worst fall -10.84% vs -9.92%, gate FAIL
+
+## 2026-11-04 (automatic)
+- PROMOTED proposal A3 as a3 (previous a2 kept). A3 vs a2: beat it in 8/13 walk-forward years, CAGR 12.41% vs 9.76% (needs +0.43), worst fall -10.71% vs -10.84%, gate FAIL

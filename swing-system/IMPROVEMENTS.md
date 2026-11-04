@@ -165,7 +165,7 @@ overrides: {"family": "rsi50_cross"}
 
 ```proposal
 id: A3
-status: proposed
+status: PROMOTED to a3 on 2026-11-04 - A3 vs a2: beat it in 8/13 walk-forward years, CAGR 12.41% vs 9.76% (needs +0.43), worst fall -10.71% vs -10.84%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "stoch_cross"}
