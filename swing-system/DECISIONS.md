@@ -355,3 +355,11 @@ You said you want daily tips even if somewhat risky, and do not want the index f
 - Breadth (A/D, McClellan, TRIN, high-low index), futures basis/OI/max pain/PCR and execution estimates are now
   computed from data already collected.
 - Idea factory: 239 entry ideas + 4,063 combinations. Every no-look-ahead test passes (349 tests).
+
+## D83 (2026-11-04) Reliable start times: free external timer
+- GitHub's own scheduler dropped most runs. The owner set up cron-job.org (free) to start the workflow
+  (task "bot" = always-on run, swing/daemon.py) daily at 09:50, 14:50, 19:50 and 00:50 IST using a fine-grained
+  GitHub token limited to Actions on this one repository (held only by cron-job.org, never in the repo or chats).
+  Each run lasts ~5h15m; a start that arrives while one is running waits and continues after it, so scans,
+  evening trades, research and the weekly check run on time. GitHub's own schedule stays as a backup.
+- If the token expires, runs stop: the owner renews it (same steps) before the expiry date.
