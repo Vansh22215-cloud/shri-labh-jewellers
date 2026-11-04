@@ -477,7 +477,7 @@ overrides: {"family": "squeeze"}
 
 ```proposal
 id: A42
-status: proposed
+status: rejected 2026-11-04 - A42 vs a3: beat it in 3/13 walk-forward years, CAGR 4.5% vs 12.55% (needs +0.50), worst fall -16.61% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "volume_surge"}
@@ -485,7 +485,7 @@ overrides: {"family": "volume_surge"}
 
 ```proposal
 id: A43
-status: proposed
+status: rejected 2026-11-04 - A43 vs a3: beat it in 4/13 walk-forward years, CAGR 6.19% vs 12.55% (needs +0.50), worst fall -13.08% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "nr7"}
@@ -493,7 +493,7 @@ overrides: {"family": "nr7"}
 
 ```proposal
 id: A44
-status: proposed
+status: rejected 2026-11-04 - A44 vs a3: beat it in 8/13 walk-forward years, CAGR 8.3% vs 12.55% (needs +0.51), worst fall -17.47% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "lowvol_momentum"}
@@ -501,7 +501,7 @@ overrides: {"family": "lowvol_momentum"}
 
 ```proposal
 id: A45
-status: proposed
+status: rejected 2026-11-04 - A45 vs a3: beat it in 7/13 walk-forward years, CAGR 9.22% vs 12.55% (needs +0.51), worst fall -13.74% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "inside_day"}
@@ -509,7 +509,7 @@ overrides: {"family": "inside_day"}
 
 ```proposal
 id: A46
-status: proposed
+status: rejected 2026-11-04 - A46 vs a3: beat it in 2/13 walk-forward years, CAGR 4.62% vs 12.55% (needs +0.51), worst fall -11.83% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "gap_go"}
@@ -517,7 +517,7 @@ overrides: {"family": "gap_go"}
 
 ```proposal
 id: A47
-status: proposed
+status: rejected 2026-11-04 - A47 vs a3: beat it in 6/13 walk-forward years, CAGR 5.15% vs 12.55% (needs +0.51), worst fall -15.28% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "strong_close"}
@@ -525,7 +525,7 @@ overrides: {"family": "strong_close"}
 
 ```proposal
 id: A48
-status: proposed
+status: rejected 2026-11-04 - A48 vs a3: beat it in 7/13 walk-forward years, CAGR 14.01% vs 12.55% (needs +0.51), worst fall -9.69% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "pullback_3d"}
@@ -533,7 +533,7 @@ overrides: {"family": "pullback_3d"}
 
 ```proposal
 id: A49
-status: proposed
+status: rejected 2026-11-04 - A49 vs a3: beat it in 5/13 walk-forward years, CAGR 6.49% vs 12.55% (needs +0.51), worst fall -15.62% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Three Inside Up/Down pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdl3inside"}
@@ -541,7 +541,7 @@ overrides: {"family": "cdl_cdl3inside"}
 
 ```proposal
 id: A50
-status: proposed
+status: rejected 2026-11-04 - A50 vs a3: beat it in 4/13 walk-forward years, CAGR 7.33% vs 12.55% (needs +0.51), worst fall -10.82% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Three-Line Strike pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdl3linestrike"}
@@ -549,7 +549,7 @@ overrides: {"family": "cdl_cdl3linestrike"}
 
 ```proposal
 id: A51
-status: proposed
+status: rejected 2026-11-04 - A51 vs a3: beat it in 7/13 walk-forward years, CAGR 7.83% vs 12.55% (needs +0.51), worst fall -15.73% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Three Outside Up/Down pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdl3outside"}
@@ -557,7 +557,7 @@ overrides: {"family": "cdl_cdl3outside"}
 
 ```proposal
 id: A52
-status: proposed
+status: rejected 2026-11-04 - A52 vs a3: beat it in 6/13 walk-forward years, CAGR 6.86% vs 12.55% (needs +0.51), worst fall -0.32% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Three Stars in the South pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdl3starsinsouth"}
@@ -565,7 +565,7 @@ overrides: {"family": "cdl_cdl3starsinsouth"}
 
 ```proposal
 id: A53
-status: proposed
+status: rejected 2026-11-04 - A53 vs a3: beat it in 6/13 walk-forward years, CAGR 7.31% vs 12.55% (needs +0.51), worst fall -1.58% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Three Advancing White Soldiers pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdl3whitesoldiers"}
@@ -573,7 +573,7 @@ overrides: {"family": "cdl_cdl3whitesoldiers"}
 
 ```proposal
 id: A54
-status: proposed
+status: rejected 2026-11-04 - A54 vs a3: beat it in 6/13 walk-forward years, CAGR 7.04% vs 12.55% (needs +0.52), worst fall -0.61% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Abandoned Baby pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlabandonedbaby"}
@@ -581,7 +581,7 @@ overrides: {"family": "cdl_cdlabandonedbaby"}
 
 ```proposal
 id: A55
-status: proposed
+status: rejected 2026-11-04 - A55 vs a3: beat it in 3/13 walk-forward years, CAGR 6.04% vs 12.55% (needs +0.52), worst fall -17.42% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Belt-hold pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlbelthold"}
@@ -589,7 +589,7 @@ overrides: {"family": "cdl_cdlbelthold"}
 
 ```proposal
 id: A56
-status: proposed
+status: rejected 2026-11-04 - A56 vs a3: beat it in 6/13 walk-forward years, CAGR 7.12% vs 12.55% (needs +0.52), worst fall -2.35% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Breakaway pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlbreakaway"}
@@ -597,7 +597,7 @@ overrides: {"family": "cdl_cdlbreakaway"}
 
 ```proposal
 id: A57
-status: proposed
+status: rejected 2026-11-04 - A57 vs a3: beat it in 6/13 walk-forward years, CAGR 5.92% vs 12.55% (needs +0.52), worst fall -12.45% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Closing Marubozu pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlclosingmarubozu"}
@@ -605,7 +605,7 @@ overrides: {"family": "cdl_cdlclosingmarubozu"}
 
 ```proposal
 id: A58
-status: proposed
+status: rejected 2026-11-04 - A58 vs a3: beat it in 6/13 walk-forward years, CAGR 6.87% vs 12.55% (needs +0.52), worst fall -0.88% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Concealing Baby Swallow pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlconcealbabyswall"}
@@ -613,7 +613,7 @@ overrides: {"family": "cdl_cdlconcealbabyswall"}
 
 ```proposal
 id: A59
-status: proposed
+status: rejected 2026-11-04 - A59 vs a3: beat it in 5/13 walk-forward years, CAGR 5.86% vs 12.55% (needs +0.52), worst fall -9.4% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Counterattack pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlcounterattack"}
@@ -621,7 +621,7 @@ overrides: {"family": "cdl_cdlcounterattack"}
 
 ```proposal
 id: A60
-status: proposed
+status: rejected 2026-11-04 - A60 vs a3: beat it in 6/13 walk-forward years, CAGR 10.13% vs 12.55% (needs +0.52), worst fall -18.37% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Doji pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdldoji"}
@@ -629,7 +629,7 @@ overrides: {"family": "cdl_cdldoji"}
 
 ```proposal
 id: A61
-status: proposed
+status: rejected 2026-11-04 - A61 vs a3: beat it in 5/13 walk-forward years, CAGR 6.05% vs 12.55% (needs +0.52), worst fall -17.71% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Doji Star pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdldojistar"}
@@ -637,7 +637,7 @@ overrides: {"family": "cdl_cdldojistar"}
 
 ```proposal
 id: A62
-status: proposed
+status: rejected 2026-11-04 - A62 vs a3: beat it in 4/13 walk-forward years, CAGR 5.61% vs 12.55% (needs +0.52), worst fall -11.68% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Engulfing Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlengulfing"}
@@ -645,7 +645,7 @@ overrides: {"family": "cdl_cdlengulfing"}
 
 ```proposal
 id: A63
-status: proposed
+status: rejected 2026-11-04 - A63 vs a3: beat it in 5/13 walk-forward years, CAGR 6.47% vs 12.55% (needs +0.52), worst fall -11.62% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Up/Down-Gap Side-by-Side White Lines pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlgapsidesidewhite"}
@@ -653,7 +653,7 @@ overrides: {"family": "cdl_cdlgapsidesidewhite"}
 
 ```proposal
 id: A64
-status: proposed
+status: rejected 2026-11-04 - A64 vs a3: beat it in 6/13 walk-forward years, CAGR 5.18% vs 12.55% (needs +0.52), worst fall -22.34% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Harami Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlharami"}
@@ -661,7 +661,7 @@ overrides: {"family": "cdl_cdlharami"}
 
 ```proposal
 id: A65
-status: proposed
+status: rejected 2026-11-04 - A65 vs a3: beat it in 6/13 walk-forward years, CAGR 7.61% vs 12.55% (needs +0.52), worst fall -17.11% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Harami Cross Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlharamicross"}
@@ -669,7 +669,7 @@ overrides: {"family": "cdl_cdlharamicross"}
 
 ```proposal
 id: A66
-status: proposed
+status: rejected 2026-11-04 - A66 vs a3: beat it in 8/13 walk-forward years, CAGR 10.41% vs 12.55% (needs +0.52), worst fall -13.93% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the High-Wave Candle pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlhighwave"}
@@ -677,7 +677,7 @@ overrides: {"family": "cdl_cdlhighwave"}
 
 ```proposal
 id: A67
-status: proposed
+status: rejected 2026-11-04 - A67 vs a3: beat it in 7/13 walk-forward years, CAGR 9.61% vs 12.55% (needs +0.53), worst fall -11.65% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Hikkake Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlhikkake"}
@@ -685,7 +685,7 @@ overrides: {"family": "cdl_cdlhikkake"}
 
 ```proposal
 id: A68
-status: proposed
+status: rejected 2026-11-04 - A68 vs a3: beat it in 6/13 walk-forward years, CAGR 9.06% vs 12.55% (needs +0.53), worst fall -12.77% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Modified Hikkake Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlhikkakemod"}
@@ -693,7 +693,7 @@ overrides: {"family": "cdl_cdlhikkakemod"}
 
 ```proposal
 id: A69
-status: proposed
+status: rejected 2026-11-04 - A69 vs a3: beat it in 7/13 walk-forward years, CAGR 7.04% vs 12.55% (needs +0.53), worst fall -15.56% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Homing Pigeon pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlhomingpigeon"}
@@ -701,7 +701,7 @@ overrides: {"family": "cdl_cdlhomingpigeon"}
 
 ```proposal
 id: A70
-status: proposed
+status: rejected 2026-11-04 - A70 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.53), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Kicking pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlkicking"}
@@ -709,7 +709,7 @@ overrides: {"family": "cdl_cdlkicking"}
 
 ```proposal
 id: A71
-status: proposed
+status: rejected 2026-11-04 - A71 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.53), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Kicking by Length pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlkickingbylength"}
@@ -717,7 +717,7 @@ overrides: {"family": "cdl_cdlkickingbylength"}
 
 ```proposal
 id: A72
-status: proposed
+status: rejected 2026-11-04 - A72 vs a3: beat it in 4/13 walk-forward years, CAGR 6.68% vs 12.55% (needs +0.53), worst fall -9.17% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Ladder Bottom pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlladderbottom"}
@@ -725,7 +725,7 @@ overrides: {"family": "cdl_cdlladderbottom"}
 
 ```proposal
 id: A73
-status: proposed
+status: rejected 2026-11-04 - A73 vs a3: beat it in 8/13 walk-forward years, CAGR 10.09% vs 12.55% (needs +0.53), worst fall -15.84% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Long-Legged Doji pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdllongleggeddoji"}
@@ -733,7 +733,7 @@ overrides: {"family": "cdl_cdllongleggeddoji"}
 
 ```proposal
 id: A74
-status: proposed
+status: rejected 2026-11-04 - A74 vs a3: beat it in 4/13 walk-forward years, CAGR 3.44% vs 12.55% (needs +0.53), worst fall -21.25% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Long Line Candle pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdllongline"}
@@ -741,7 +741,7 @@ overrides: {"family": "cdl_cdllongline"}
 
 ```proposal
 id: A75
-status: proposed
+status: rejected 2026-11-04 - A75 vs a3: beat it in 5/13 walk-forward years, CAGR 5.92% vs 12.55% (needs +0.53), worst fall -11.78% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Marubozu pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlmarubozu"}
@@ -749,7 +749,7 @@ overrides: {"family": "cdl_cdlmarubozu"}
 
 ```proposal
 id: A76
-status: proposed
+status: rejected 2026-11-04 - A76 vs a3: beat it in 7/13 walk-forward years, CAGR 8.57% vs 12.55% (needs +0.53), worst fall -10.69% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Matching Low pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlmatchinglow"}
@@ -757,7 +757,7 @@ overrides: {"family": "cdl_cdlmatchinglow"}
 
 ```proposal
 id: A77
-status: proposed
+status: rejected 2026-11-04 - A77 vs a3: beat it in 5/13 walk-forward years, CAGR 6.84% vs 12.55% (needs +0.53), worst fall -2.49% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Mat Hold pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlmathold"}
@@ -785,4 +785,644 @@ status: proposed
 written: 2026-11-03
 reason: (idea factory) For a1: the Piercing Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlpiercing"}
+```
+
+```proposal
+id: A81
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: an alternative core entry rule may beat the current one with the same exits.
+overrides: {"family": "ma_cross"}
+```
+
+```proposal
+id: A82
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Rickshaw Man pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlrickshawman"}
+```
+
+```proposal
+id: A83
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Rising/Falling Three Methods pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlrisefall3methods"}
+```
+
+```proposal
+id: A84
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Separating Lines pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlseparatinglines"}
+```
+
+```proposal
+id: A85
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Short Line Candle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlshortline"}
+```
+
+```proposal
+id: A86
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Spinning Top pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlspinningtop"}
+```
+
+```proposal
+id: A87
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Stick Sandwich pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlsticksandwich"}
+```
+
+```proposal
+id: A88
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Tasuki Gap pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdltasukigap"}
+```
+
+```proposal
+id: A89
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Tristar pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdltristar"}
+```
+
+```proposal
+id: A90
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Unique Three River pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlunique3river"}
+```
+
+```proposal
+id: A91
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Upside/Downside Gap Three Methods pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdl_cdlxsidegap3methods"}
+```
+
+```proposal
+id: A92
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Tweezer Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_tweezer_bottom"}
+```
+
+```proposal
+id: A93
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Railroad Tracks pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_railroad_tracks"}
+```
+
+```proposal
+id: A94
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Belt Hold (generic variant) pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_belt_hold"}
+```
+
+```proposal
+id: A95
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Belt Hold pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_belt_hold_bullish"}
+```
+
+```proposal
+id: A96
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Three-Bar Reversal pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_three_bar_reversal"}
+```
+
+```proposal
+id: A97
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Fakey / Failed Inside-Bar Breakout pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_fakey_inside_bar"}
+```
+
+```proposal
+id: A98
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Fakey pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_fakey"}
+```
+
+```proposal
+id: A99
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Long-Legged Doji pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_long_legged_doji"}
+```
+
+```proposal
+id: A100
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Rickshaw Man pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_rickshaw_man"}
+```
+
+```proposal
+id: A101
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Dragonfly Doji pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_dragonfly_doji"}
+```
+
+```proposal
+id: A102
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Harami Cross pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_harami_cross"}
+```
+
+```proposal
+id: A103
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Homing Pigeon pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_homing_pigeon"}
+```
+
+```proposal
+id: A104
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Matching Low pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_matching_low"}
+```
+
+```proposal
+id: A105
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Meeting Lines pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_meeting_lines"}
+```
+
+```proposal
+id: A106
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Separating Lines pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_separating_lines"}
+```
+
+```proposal
+id: A107
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Piercing Line (strict variant) pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_piercing_line_variant"}
+```
+
+```proposal
+id: A108
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Kicker pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_kicker"}
+```
+
+```proposal
+id: A109
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Three-Line Strike pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_three_line_strike"}
+```
+
+```proposal
+id: A110
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Three White Soldiers (strict variant) pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_three_white_soldiers_strict"}
+```
+
+```proposal
+id: A111
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Hammer (contextual strict) pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_hammer_contextual"}
+```
+
+```proposal
+id: A112
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Inverted Hammer (contextual strict) pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_inverted_hammer_contextual"}
+```
+
+```proposal
+id: A113
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bullish Counterattack Lines pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_counterattack"}
+```
+
+```proposal
+id: A114
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Gap-Fill Reclaim Candle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_gap_fill_reclaim_candle"}
+```
+
+```proposal
+id: A115
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Rising Three Methods pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_rising_three_methods"}
+```
+
+```proposal
+id: A116
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Mat Hold pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_mat_hold"}
+```
+
+```proposal
+id: A117
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Stick Sandwich pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_stick_sandwich"}
+```
+
+```proposal
+id: A118
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Ladder Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_ladder_bottom"}
+```
+
+```proposal
+id: A119
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Unique Three River Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_unique_three_river"}
+```
+
+```proposal
+id: A120
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Abandoned Baby Bullish pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_abandoned_baby"}
+```
+
+```proposal
+id: A121
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Upside Gap Side-by-Side White Lines pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_gap_side_by_side_white_lines"}
+```
+
+```proposal
+id: A122
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Downside Gap Three Methods pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bearish_downside_gap_three_methods"}
+```
+
+```proposal
+id: A123
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Three Stars in the South pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bearish_three_star_south"}
+```
+
+```proposal
+id: A124
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Concealing Baby Swallow pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cdx_bullish_concealing_baby_swallow"}
+```
+
+```proposal
+id: A125
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Double Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_double_bottom"}
+```
+
+```proposal
+id: A126
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Triple Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_triple_bottom"}
+```
+
+```proposal
+id: A127
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Inverse Head and Shoulders pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_inverse_head_and_shoulders"}
+```
+
+```proposal
+id: A128
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Ascending Triangle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_ascending_triangle"}
+```
+
+```proposal
+id: A129
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Rectangle / Trading Range pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_rectangle_range"}
+```
+
+```proposal
+id: A130
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Falling Wedge pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_falling_wedge"}
+```
+
+```proposal
+id: A131
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Broadening Bottom pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_broadening_bottom"}
+```
+
+```proposal
+id: A132
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Measured Move Up / AB=CD Projection pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_measured_move_up"}
+```
+
+```proposal
+id: A133
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Bull Pennant pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_bull_pennant"}
+```
+
+```proposal
+id: A134
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Breakout and Retest pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_breakout_retest"}
+```
+
+```proposal
+id: A135
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the False Breakout / Failed Auction pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_false_breakout"}
+```
+
+```proposal
+id: A136
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Outside Bar / Engulfing Range Bar pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_outside_bar"}
+```
+
+```proposal
+id: A137
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Pin Bar / Rejection Bar pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_pin_bar_rejection"}
+```
+
+```proposal
+id: A138
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Breakaway Gap pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_gap_breakaway"}
+```
+
+```proposal
+id: A139
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Runaway / Measuring Gap pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_gap_runaway"}
+```
+
+```proposal
+id: A140
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Wyckoff Spring pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_wyckoff_spring"}
+```
+
+```proposal
+id: A141
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Island Reversal pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_island_reversal"}
+```
+
+```proposal
+id: A142
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Inside Bar Breakout pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_inside_bar_breakout"}
+```
+
+```proposal
+id: A143
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the NR4 Inside Day pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_nr4_inside_day"}
+```
+
+```proposal
+id: A144
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the NR7 Inside Day pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_nr7_inside_day"}
+```
+
+```proposal
+id: A145
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Darvas Box pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_darvas_box"}
+```
+
+```proposal
+id: A146
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Flat Base pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_flat_base"}
+```
+
+```proposal
+id: A147
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Volatility Contraction Pattern pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_vcp_volatility_contraction"}
+```
+
+```proposal
+id: A148
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Key Reversal Up pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_key_reversal_up"}
+```
+
+```proposal
+id: A149
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Turtle Soup False Break pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_turtle_soup"}
+```
+
+```proposal
+id: A150
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Three Bar Play pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_three_bar_play"}
+```
+
+```proposal
+id: A151
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Gap and Go pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_gap_and_go"}
+```
+
+```proposal
+id: A152
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Gap Fill Reversion pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_gap_fill_reversion"}
+```
+
+```proposal
+id: A153
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the First Pullback After Breakout pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_first_pullback_after_breakout"}
+```
+
+```proposal
+id: A154
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Symmetrical Triangle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_symmetrical_triangle"}
+```
+
+```proposal
+id: A155
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Ascending Channel pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_ascending_channel"}
+```
+
+```proposal
+id: A156
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Cup Without Handle pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_cup_without_handle"}
+```
+
+```proposal
+id: A157
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the V Reversal pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_v_reversal"}
+```
+
+```proposal
+id: A158
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Selling Climax pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_selling_climax"}
+```
+
+```proposal
+id: A159
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Liquidity Sweep Reversal pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_liquidity_sweep_reversal"}
+```
+
+```proposal
+id: A160
+status: proposed
+written: 2026-11-04
+reason: (idea factory) For a3: the Compression Breakout pattern from the owner's pattern library may time entries better than the current rule.
+overrides: {"family": "cp_compression_breakout"}
 ```
