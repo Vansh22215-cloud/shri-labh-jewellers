@@ -141,3 +141,6 @@
 
 ## 2026-11-03 - S12 meta-system evaluated
 - Top-3-families ensemble (walk-forward, yearly re-pick): 7.75%/yr, worst fall -8.4%, beat NIFTYBEES 1/10 years (gate failed). Better than the single-pick procedure (6.49%, -22.1%). Plan D72: move aggressive mode to the ensemble once live plumbing exists.
+
+## 2026-11-04 (automatic)
+- Tested proposal R12: rejected. R12 vs a1: beat it in 0/13 walk-forward years, CAGR 8.8% vs 8.8% (needs +0.40), worst fall -9.92% vs -9.92%, gate FAIL

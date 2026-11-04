@@ -109,7 +109,7 @@ overrides: {"target1_r": 2.0, "target2_r": 2.0}
 
 ```proposal
 id: R12
-status: proposed
+status: rejected 2026-11-04 - R12 vs a1: beat it in 0/13 walk-forward years, CAGR 8.8% vs 8.8% (needs +0.40), worst fall -9.92% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: FIIs are the largest informed participants in Nifty futures; when their index-futures positions are less than 30% long they are heavily hedged/bearish, and new long swing trades should face a hostile market - skipping new entries then should cut losses (ROADMAP I1).
 overrides: {"min_fii_long_pct": 30}
