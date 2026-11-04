@@ -9488,5 +9488,30 @@
   "name": "candidate-R12",
   "first_tested": "2026-11-04",
   "note": "proposal R12"
+ },
+ "209b7cea2d": {
+  "name": "candidate-R13",
+  "first_tested": "2026-11-04",
+  "note": "proposal R13"
+ },
+ "dd258e2aef": {
+  "name": "candidate-R14",
+  "first_tested": "2026-11-04",
+  "note": "proposal R14"
+ },
+ "05d07b48c9": {
+  "name": "candidate-R15",
+  "first_tested": "2026-11-04",
+  "note": "proposal R15"
+ },
+ "9e415190f9": {
+  "name": "candidate-A1",
+  "first_tested": "2026-11-04",
+  "note": "proposal A1"
+ },
+ "ff223ec9e2": {
+  "name": "candidate-A2",
+  "first_tested": "2026-11-04",
+  "note": "proposal A2"
  }
 }

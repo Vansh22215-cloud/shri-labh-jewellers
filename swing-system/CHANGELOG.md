@@ -144,3 +144,18 @@
 
 ## 2026-11-04 (automatic)
 - Tested proposal R12: rejected. R12 vs a1: beat it in 0/13 walk-forward years, CAGR 8.8% vs 8.8% (needs +0.40), worst fall -9.92% vs -9.92%, gate FAIL
+
+## 2026-11-04 (automatic)
+- Tested proposal R13: rejected. R13 vs a1: beat it in 5/13 walk-forward years, CAGR 7.91% vs 8.8% (needs +0.41), worst fall -13.07% vs -9.92%, gate FAIL
+
+## 2026-11-04 (automatic)
+- Tested proposal R14: rejected. R14 vs a1: beat it in 7/13 walk-forward years, CAGR 7.87% vs 8.8% (needs +0.41), worst fall -12.94% vs -9.92%, gate FAIL
+
+## 2026-11-04 (automatic)
+- Tested proposal R15: rejected. R15 vs a1: beat it in 7/13 walk-forward years, CAGR 4.36% vs 8.8% (needs +0.42), worst fall -17.46% vs -9.92%, gate FAIL
+
+## 2026-11-04 (automatic)
+- Tested proposal A1: rejected. A1 vs a1: beat it in 8/13 walk-forward years, CAGR 8.06% vs 8.8% (needs +0.42), worst fall -13.66% vs -9.92%, gate FAIL
+
+## 2026-11-04 (automatic)
+- PROMOTED proposal A2 as a2 (previous a1 kept). A2 vs a1: beat it in 7/13 walk-forward years, CAGR 9.76% vs 8.8% (needs +0.43), worst fall -10.84% vs -9.92%, gate FAIL

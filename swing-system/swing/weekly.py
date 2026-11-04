@@ -209,6 +209,36 @@ def tips_strategy(settings):
     return live, False
 
 
+def compute_stats(params, capital=45000.0):
+    """Per-trade statistics of a strategy for the Telegram cards (walk-forward span; holdout shown separately)."""
+    from . import backtest, data_prices, engine
+    P, sig, *_ = engine.build(params)
+    lf = data_prices.liquid_fund_nav()
+    hs = pd.Timestamp(validate.HOLDOUT_START)
+    eq, tr, _ = backtest.run(P, sig, params, validate.WF_START, hs - pd.Timedelta(days=1), capital, lf)
+    heq, htr, _ = backtest.run(P, sig, params, hs, P["close"].index[-1], capital, lf)
+    yrs = (eq.index[-1] - eq.index[0]).days / 365.25
+    out = {"period": f"{eq.index[0]:%Y-%m} to {eq.index[-1]:%Y-%m}",
+           "cagr_pct": round(((eq.iloc[-1] / eq.iloc[0]) ** (1 / yrs) - 1) * 100, 2),
+           "max_drawdown_pct": round((eq / eq.cummax() - 1).min() * 100, 2), "trades": int(len(tr)),
+           "holdout_return_pct": round((heq.iloc[-1] / heq.iloc[0] - 1) * 100, 2) if len(heq) else None,
+           "holdout_period": f"{hs:%Y-%m} to {P['close'].index[-1]:%Y-%m}", "holdout_trades": int(len(htr))}
+    if len(tr):
+        w, l_ = tr[tr["pnl"] > 0], tr[tr["pnl"] <= 0]
+        streak = mx = 0
+        for x in tr["pnl"]:
+            streak = streak + 1 if x <= 0 else 0
+            mx = max(mx, streak)
+        out.update({"win_rate_pct": round(len(w) / len(tr) * 100, 1),
+                    "trades_per_month": round(len(tr) / (yrs * 12), 1), "avg_days_held": round(tr["days"].mean(), 1),
+                    "avg_win_rs": int(round(w["pnl"].mean())) if len(w) else 0,
+                    "avg_loss_rs": int(round(l_["pnl"].mean())) if len(l_) else 0,
+                    "avg_per_trade_rs": int(round(tr["pnl"].mean())),
+                    "time_exits_pct": int(round((tr["exit_reason"].astype(str).str.contains("time")).mean() * 100)),
+                    "max_losing_streak": int(mx)})
+    return out
+
+
 def test_proposal(prop, settings, live, live_res=None, live_table=None):
     """Test ONE pre-registered proposal against the strategy that currently gives tips.
     Validated line (vN): promote only if it passes the full gate AND beats the base in most walk-forward
@@ -256,6 +286,11 @@ def test_proposal(prop, settings, live, live_res=None, live_table=None):
     n = int(fam[-1][1:]) + 1
     newp = dict(cand, name=f"{prefix}{n}", created=str(date.today()),
                 description=base_p.get("description", "") + f" | {prefix}{n}: {prop.get('reason')}")
+    newp.pop("backtest_stats", None)                 # never carry the old strategy's numbers over
+    try:
+        newp["backtest_stats"] = compute_stats(newp)
+    except Exception as e:
+        log.warning("stats for %s%d failed: %s", prefix, n, e)
     (STRATEGIES / f"{prefix}{n}.json").write_text(json.dumps(newp, indent=2))
     if aggressive:
         f = ROOT / "settings.yaml"

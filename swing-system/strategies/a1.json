@@ -46,18 +46,19 @@
   "description": "AGGRESSIVE MODE (your choice, NOT validated): today's pick of the walk-forward search - ma_cross, stop 3.0 ATR, targets 2.0R/4.0R, max 25 days, market filter off",
   "backtest_stats": {
     "period": "2013-01 to 2025-04",
-    "cagr_pct": 9.03,
+    "cagr_pct": 8.8,
     "max_drawdown_pct": -9.92,
-    "trades": 516,
-    "win_rate_pct": 47.2,
-    "holdout_return_pct": 5.46,
+    "trades": 517,
+    "holdout_return_pct": 6.26,
     "holdout_period": "2025-05 to 2026-11",
+    "holdout_trades": 64,
+    "win_rate_pct": 49.1,
     "trades_per_month": 3.5,
-    "avg_days_held": 21.2,
-    "avg_win_rs": 496,
-    "avg_loss_rs": -388,
-    "avg_per_trade_rs": 29,
-    "time_exits_pct": 65,
-    "max_losing_streak": 9
+    "avg_days_held": 21.3,
+    "avg_win_rs": 754,
+    "avg_loss_rs": -568,
+    "avg_per_trade_rs": 82,
+    "time_exits_pct": 66,
+    "max_losing_streak": 10
   }
 }

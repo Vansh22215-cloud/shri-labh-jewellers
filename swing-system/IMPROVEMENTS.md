@@ -117,7 +117,7 @@ overrides: {"min_fii_long_pct": 30}
 
 ```proposal
 id: R13
-status: proposed
+status: rejected 2026-11-04 - R13 vs a1: beat it in 5/13 walk-forward years, CAGR 7.91% vs 8.8% (needs +0.41), worst fall -13.07% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: History shows Nifty opens ~0.7% lower after an S&P 500 fall of more than 1.5% (correlation 0.47); such risk-off nights often start weak days, so skipping new entries at that open should avoid buying into global selling (ROADMAP I3).
 overrides: {"skip_if_us_drop_pct": 1.5}
@@ -125,7 +125,7 @@ overrides: {"skip_if_us_drop_pct": 1.5}
 
 ```proposal
 id: R14
-status: proposed
+status: rejected 2026-11-04 - R14 vs a1: beat it in 7/13 walk-forward years, CAGR 7.87% vs 8.8% (needs +0.41), worst fall -12.94% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: Calibration shows ~50% of a1 trades end at the 25-day limit while still drifting and only 16% reach T1; price momentum persists for 1-3 months in the literature, so allowing 40 trading days should let more of that drift be captured.
 overrides: {"max_hold_days": 40}
@@ -133,7 +133,7 @@ overrides: {"max_hold_days": 40}
 
 ```proposal
 id: R15
-status: proposed
+status: rejected 2026-11-04 - R15 vs a1: beat it in 7/13 walk-forward years, CAGR 4.36% vs 8.8% (needs +0.42), worst fall -17.46% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: 12-1 month momentum is the most documented equity anomaly; a moving-average cross in a stock that is ALSO in the top 30% by 12-month momentum is trend continuation rather than a bounce in a long-term loser, so its trades should be better.
 overrides: {"min_mom12_rank": 0.7}
@@ -149,7 +149,7 @@ overrides: {"family": "canslim"}
 
 ```proposal
 id: A1
-status: proposed
+status: rejected 2026-11-04 - A1 vs a1: beat it in 8/13 walk-forward years, CAGR 8.06% vs 8.8% (needs +0.42), worst fall -13.66% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (MACD line crosses above its signal line while above zero, above the 200-day average) may time entries better than the current rule.
 overrides: {"family": "macd_cross"}
@@ -157,7 +157,7 @@ overrides: {"family": "macd_cross"}
 
 ```proposal
 id: A2
-status: proposed
+status: PROMOTED to a2 on 2026-11-04 - A2 vs a1: beat it in 7/13 walk-forward years, CAGR 9.76% vs 8.8% (needs +0.43), worst fall -10.84% vs -9.92%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (14-day RSI crosses up through 50 (momentum turning positive) in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "rsi50_cross"}
