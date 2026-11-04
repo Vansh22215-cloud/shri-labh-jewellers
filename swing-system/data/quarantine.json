@@ -44,9 +44,6 @@
  "AEGISCHEM": [
   "too little price history"
  ],
- "AFFLE": [
-  "latest Yahoo close differs from NSE official close by >1%"
- ],
  "AGCNET": [
   "too little price history"
  ],
@@ -172,9 +169,6 @@
  ],
  "CAPF": [
   "too little price history"
- ],
- "CARTRADE": [
-  "latest Yahoo close differs from NSE official close by >1%"
  ],
  "CASHIETF": [
   "too little price history"
@@ -1003,9 +997,6 @@
  ],
  "SELAN": [
   "too little price history"
- ],
- "SENORES": [
-  "latest Yahoo close differs from NSE official close by >1%"
  ],
  "SEQUENT": [
   "too little price history"
