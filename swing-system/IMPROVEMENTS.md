@@ -765,7 +765,7 @@ overrides: {"family": "cdl_cdlmathold"}
 
 ```proposal
 id: A78
-status: proposed
+status: rejected 2026-11-04 - A78 vs a3: beat it in 2/13 walk-forward years, CAGR 3.87% vs 12.55% (needs +0.53), worst fall -13.53% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Morning Doji Star pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlmorningdojistar"}
@@ -773,7 +773,7 @@ overrides: {"family": "cdl_cdlmorningdojistar"}
 
 ```proposal
 id: A79
-status: proposed
+status: rejected 2026-11-04 - A79 vs a3: beat it in 5/13 walk-forward years, CAGR 6.4% vs 12.55% (needs +0.53), worst fall -11.81% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Morning Star pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlmorningstar"}
@@ -781,7 +781,7 @@ overrides: {"family": "cdl_cdlmorningstar"}
 
 ```proposal
 id: A80
-status: proposed
+status: rejected 2026-11-04 - A80 vs a3: beat it in 3/13 walk-forward years, CAGR 7.3% vs 12.55% (needs +0.53), worst fall -13.17% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: the Piercing Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cdl_cdlpiercing"}
