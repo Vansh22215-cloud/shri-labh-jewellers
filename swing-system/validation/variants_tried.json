@@ -9528,5 +9528,195 @@
   "name": "a3",
   "first_tested": "2026-11-04",
   "note": "base for proposal"
+ },
+ "dc9f6365f5": {
+  "name": "candidate-A4",
+  "first_tested": "2026-11-04",
+  "note": "proposal A4"
+ },
+ "ce68ad00b8": {
+  "name": "candidate-A5",
+  "first_tested": "2026-11-04",
+  "note": "proposal A5"
+ },
+ "2e9c47389a": {
+  "name": "candidate-A6",
+  "first_tested": "2026-11-04",
+  "note": "proposal A6"
+ },
+ "61702b70b1": {
+  "name": "candidate-A7",
+  "first_tested": "2026-11-04",
+  "note": "proposal A7"
+ },
+ "e624c0c4f6": {
+  "name": "candidate-A8",
+  "first_tested": "2026-11-04",
+  "note": "proposal A8"
+ },
+ "d35a1e2d44": {
+  "name": "candidate-A9",
+  "first_tested": "2026-11-04",
+  "note": "proposal A9"
+ },
+ "5e9c3f6e42": {
+  "name": "candidate-A10",
+  "first_tested": "2026-11-04",
+  "note": "proposal A10"
+ },
+ "fb063b000a": {
+  "name": "candidate-A11",
+  "first_tested": "2026-11-04",
+  "note": "proposal A11"
+ },
+ "fbc8e261f1": {
+  "name": "candidate-A12",
+  "first_tested": "2026-11-04",
+  "note": "proposal A12"
+ },
+ "309c645d84": {
+  "name": "candidate-A13",
+  "first_tested": "2026-11-04",
+  "note": "proposal A13"
+ },
+ "83034f39b7": {
+  "name": "candidate-A14",
+  "first_tested": "2026-11-04",
+  "note": "proposal A14"
+ },
+ "87a11bed94": {
+  "name": "candidate-A15",
+  "first_tested": "2026-11-04",
+  "note": "proposal A15"
+ },
+ "b4c9e7677a": {
+  "name": "candidate-A16",
+  "first_tested": "2026-11-04",
+  "note": "proposal A16"
+ },
+ "b22d452539": {
+  "name": "candidate-A17",
+  "first_tested": "2026-11-04",
+  "note": "proposal A17"
+ },
+ "9fab34618d": {
+  "name": "candidate-A18",
+  "first_tested": "2026-11-04",
+  "note": "proposal A18"
+ },
+ "dd1eb92e26": {
+  "name": "candidate-A19",
+  "first_tested": "2026-11-04",
+  "note": "proposal A19"
+ },
+ "d4bda1d7a9": {
+  "name": "candidate-A20",
+  "first_tested": "2026-11-04",
+  "note": "proposal A20"
+ },
+ "66a6e03c18": {
+  "name": "candidate-A21",
+  "first_tested": "2026-11-04",
+  "note": "proposal A21"
+ },
+ "c1067fee7b": {
+  "name": "candidate-A22",
+  "first_tested": "2026-11-04",
+  "note": "proposal A22"
+ },
+ "d959af6312": {
+  "name": "candidate-A23",
+  "first_tested": "2026-11-04",
+  "note": "proposal A23"
+ },
+ "66a2376f1e": {
+  "name": "candidate-A24",
+  "first_tested": "2026-11-04",
+  "note": "proposal A24"
+ },
+ "ffbfe3e889": {
+  "name": "candidate-A25",
+  "first_tested": "2026-11-04",
+  "note": "proposal A25"
+ },
+ "2060069d3b": {
+  "name": "candidate-A26",
+  "first_tested": "2026-11-04",
+  "note": "proposal A26"
+ },
+ "62964a32a0": {
+  "name": "candidate-A27",
+  "first_tested": "2026-11-04",
+  "note": "proposal A27"
+ },
+ "41d0bb58cc": {
+  "name": "candidate-A28",
+  "first_tested": "2026-11-04",
+  "note": "proposal A28"
+ },
+ "74c0585c50": {
+  "name": "candidate-A29",
+  "first_tested": "2026-11-04",
+  "note": "proposal A29"
+ },
+ "f13c87392d": {
+  "name": "candidate-A30",
+  "first_tested": "2026-11-04",
+  "note": "proposal A30"
+ },
+ "808f686748": {
+  "name": "candidate-A31",
+  "first_tested": "2026-11-04",
+  "note": "proposal A31"
+ },
+ "c2a9ecd5ad": {
+  "name": "candidate-A32",
+  "first_tested": "2026-11-04",
+  "note": "proposal A32"
+ },
+ "46a9a0181d": {
+  "name": "candidate-A33",
+  "first_tested": "2026-11-04",
+  "note": "proposal A33"
+ },
+ "0926f60f5b": {
+  "name": "candidate-A34",
+  "first_tested": "2026-11-04",
+  "note": "proposal A34"
+ },
+ "aec9621798": {
+  "name": "candidate-A35",
+  "first_tested": "2026-11-04",
+  "note": "proposal A35"
+ },
+ "93032382ec": {
+  "name": "candidate-A36",
+  "first_tested": "2026-11-04",
+  "note": "proposal A36"
+ },
+ "d79764edd1": {
+  "name": "candidate-A37",
+  "first_tested": "2026-11-04",
+  "note": "proposal A37"
+ },
+ "8ecff8d526": {
+  "name": "candidate-A38",
+  "first_tested": "2026-11-04",
+  "note": "proposal A38"
+ },
+ "ee3008d17e": {
+  "name": "candidate-A39",
+  "first_tested": "2026-11-04",
+  "note": "proposal A39"
+ },
+ "b7061d24af": {
+  "name": "candidate-A40",
+  "first_tested": "2026-11-04",
+  "note": "proposal A40"
+ },
+ "8732644f4d": {
+  "name": "candidate-A41",
+  "first_tested": "2026-11-04",
+  "note": "proposal A41"
  }
 }

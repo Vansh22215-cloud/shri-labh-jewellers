@@ -173,7 +173,7 @@ overrides: {"family": "stoch_cross"}
 
 ```proposal
 id: A4
-status: proposed
+status: rejected 2026-11-04 - A4 vs a3: beat it in 0/13 walk-forward years, CAGR 4.11% vs 12.41% (needs +0.43), worst fall -18.43% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (ADX above 25 (strong trend) and +DI crosses above -DI) may time entries better than the current rule.
 overrides: {"family": "adx_dmi"}
@@ -181,7 +181,7 @@ overrides: {"family": "adx_dmi"}
 
 ```proposal
 id: A5
-status: proposed
+status: rejected 2026-11-04 - A5 vs a3: beat it in 3/13 walk-forward years, CAGR 7.39% vs 12.41% (needs +0.44), worst fall -17.03% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Supertrend (10, 3) flips from down to up) may time entries better than the current rule.
 overrides: {"family": "supertrend_flip"}
@@ -189,7 +189,7 @@ overrides: {"family": "supertrend_flip"}
 
 ```proposal
 id: A6
-status: proposed
+status: rejected 2026-11-04 - A6 vs a3: beat it in 5/13 walk-forward years, CAGR 5.11% vs 12.41% (needs +0.44), worst fall -18.63% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (close breaks above the Ichimoku cloud with Tenkan above Kijun) may time entries better than the current rule.
 overrides: {"family": "ichimoku_breakout"}
@@ -197,7 +197,7 @@ overrides: {"family": "ichimoku_breakout"}
 
 ```proposal
 id: A7
-status: proposed
+status: rejected 2026-11-04 - A7 vs a3: beat it in 8/13 walk-forward years, CAGR 10.75% vs 12.41% (needs +0.44), worst fall -12.22% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Money Flow Index crosses up through 20 (selling exhausted) in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "mfi_reversal"}
@@ -205,7 +205,7 @@ overrides: {"family": "mfi_reversal"}
 
 ```proposal
 id: A8
-status: proposed
+status: rejected 2026-11-04 - A8 vs a3: beat it in 7/13 walk-forward years, CAGR 6.8% vs 12.41% (needs +0.45), worst fall -18.44% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Chaikin Money Flow above 0.15 (accumulation) with a new 20-day closing high) may time entries better than the current rule.
 overrides: {"family": "cmf_breakout"}
@@ -213,7 +213,7 @@ overrides: {"family": "cmf_breakout"}
 
 ```proposal
 id: A9
-status: proposed
+status: rejected 2026-11-04 - A9 vs a3: beat it in 8/13 walk-forward years, CAGR 8.98% vs 12.41% (needs +0.45), worst fall -19.87% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (On-Balance Volume at a 50-day high while price is above its 50-day average) may time entries better than the current rule.
 overrides: {"family": "obv_breakout"}
@@ -221,7 +221,7 @@ overrides: {"family": "obv_breakout"}
 
 ```proposal
 id: A10
-status: proposed
+status: rejected 2026-11-04 - A10 vs a3: beat it in 6/13 walk-forward years, CAGR 7.92% vs 12.41% (needs +0.45), worst fall -17.2% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Commodity Channel Index crosses above +100 (new strength)) may time entries better than the current rule.
 overrides: {"family": "cci_breakout"}
@@ -229,7 +229,7 @@ overrides: {"family": "cci_breakout"}
 
 ```proposal
 id: A11
-status: proposed
+status: rejected 2026-11-04 - A11 vs a3: beat it in 5/13 walk-forward years, CAGR 9.07% vs 12.41% (needs +0.45), worst fall -20.23% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Williams %R crosses up through -80 (oversold turn) in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "williams_r"}
@@ -237,7 +237,7 @@ overrides: {"family": "williams_r"}
 
 ```proposal
 id: A12
-status: proposed
+status: rejected 2026-11-04 - A12 vs a3: beat it in 7/13 walk-forward years, CAGR 9.64% vs 12.41% (needs +0.46), worst fall -13.13% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (weekly: top 10% by 20-day rate of change, above the 50-day average) may time entries better than the current rule.
 overrides: {"family": "roc_leaders"}
@@ -245,7 +245,7 @@ overrides: {"family": "roc_leaders"}
 
 ```proposal
 id: A13
-status: proposed
+status: rejected 2026-11-04 - A13 vs a3: beat it in 3/13 walk-forward years, CAGR 5.77% vs 12.41% (needs +0.46), worst fall -16.93% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (50-day average crosses above the 200-day average) may time entries better than the current rule.
 overrides: {"family": "golden_cross"}
@@ -253,7 +253,7 @@ overrides: {"family": "golden_cross"}
 
 ```proposal
 id: A14
-status: proposed
+status: rejected 2026-11-04 - A14 vs a3: beat it in 5/13 walk-forward years, CAGR 8.17% vs 12.41% (needs +0.46), worst fall -15.74% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (close above the upper Keltner channel (20-day EMA + 2 ATR)) may time entries better than the current rule.
 overrides: {"family": "keltner_breakout"}
@@ -261,7 +261,7 @@ overrides: {"family": "keltner_breakout"}
 
 ```proposal
 id: A15
-status: proposed
+status: rejected 2026-11-04 - A15 vs a3: beat it in 6/13 walk-forward years, CAGR 8.39% vs 12.41% (needs +0.46), worst fall -14.46% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Heikin-Ashi candle turns green after 3+ red ones, in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "heikin_ashi_turn"}
@@ -269,7 +269,7 @@ overrides: {"family": "heikin_ashi_turn"}
 
 ```proposal
 id: A16
-status: proposed
+status: rejected 2026-11-04 - A16 vs a3: beat it in 7/13 walk-forward years, CAGR 6.31% vs 12.41% (needs +0.47), worst fall -20.26% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (O'Neil/Kacher pocket pivot: up-day volume above every down-day volume of the prior 10 days, rising 50-day average) may time entries better than the current rule.
 overrides: {"family": "pocket_pivot"}
@@ -277,7 +277,7 @@ overrides: {"family": "pocket_pivot"}
 
 ```proposal
 id: A17
-status: proposed
+status: rejected 2026-11-04 - A17 vs a3: beat it in 3/13 walk-forward years, CAGR 7.41% vs 12.41% (needs +0.47), worst fall -15.26% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (volume dried up (5-day average < 60% of normal) then a 20-day breakout on 1.5x volume) may time entries better than the current rule.
 overrides: {"family": "volume_dryup_breakout"}
@@ -285,7 +285,7 @@ overrides: {"family": "volume_dryup_breakout"}
 
 ```proposal
 id: A18
-status: proposed
+status: rejected 2026-11-04 - A18 vs a3: beat it in 6/13 walk-forward years, CAGR 6.24% vs 12.41% (needs +0.47), worst fall -23.34% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (Larry Williams volatility breakout: close above open + 0.6 x ATR at a 20-day high) may time entries better than the current rule.
 overrides: {"family": "volatility_breakout"}
@@ -293,7 +293,7 @@ overrides: {"family": "volatility_breakout"}
 
 ```proposal
 id: A19
-status: proposed
+status: rejected 2026-11-04 - A19 vs a3: beat it in 6/13 walk-forward years, CAGR 7.32% vs 12.41% (needs +0.47), worst fall -13.9% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (bullish engulfing candle after a pullback near the 20-day EMA in an uptrend) may time entries better than the current rule.
 overrides: {"family": "bullish_engulfing"}
@@ -301,7 +301,7 @@ overrides: {"family": "bullish_engulfing"}
 
 ```proposal
 id: A20
-status: proposed
+status: rejected 2026-11-04 - A20 vs a3: beat it in 6/13 walk-forward years, CAGR 9.15% vs 12.41% (needs +0.47), worst fall -12.87% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (hammer candle (long lower shadow) after a 3-day decline in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "hammer"}
@@ -309,7 +309,7 @@ overrides: {"family": "hammer"}
 
 ```proposal
 id: A21
-status: proposed
+status: rejected 2026-11-04 - A21 vs a3: beat it in 5/13 walk-forward years, CAGR 5.95% vs 12.41% (needs +0.48), worst fall -12.0% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (morning-star three-candle reversal in a long-term uptrend) may time entries better than the current rule.
 overrides: {"family": "morning_star"}
@@ -317,7 +317,7 @@ overrides: {"family": "morning_star"}
 
 ```proposal
 id: A22
-status: proposed
+status: rejected 2026-11-04 - A22 vs a3: beat it in 7/13 walk-forward years, CAGR 4.54% vs 12.41% (needs +0.48), worst fall -16.83% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (three strong up candles in a row closing near their highs) may time entries better than the current rule.
 overrides: {"family": "three_white_soldiers"}
@@ -325,7 +325,7 @@ overrides: {"family": "three_white_soldiers"}
 
 ```proposal
 id: A23
-status: proposed
+status: rejected 2026-11-04 - A23 vs a3: beat it in 3/13 walk-forward years, CAGR 4.74% vs 12.41% (needs +0.48), worst fall -18.59% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (two similar lows 2-8 weeks apart, then a close above the high between them) may time entries better than the current rule.
 overrides: {"family": "double_bottom"}
@@ -333,7 +333,7 @@ overrides: {"family": "double_bottom"}
 
 ```proposal
 id: A24
-status: proposed
+status: rejected 2026-11-04 - A24 vs a3: beat it in 3/13 walk-forward years, CAGR 4.19% vs 12.41% (needs +0.48), worst fall -16.13% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (flat highs with rising lows over ~6 weeks, then a close above the flat top) may time entries better than the current rule.
 overrides: {"family": "ascending_triangle"}
@@ -341,7 +341,7 @@ overrides: {"family": "ascending_triangle"}
 
 ```proposal
 id: A25
-status: proposed
+status: rejected 2026-11-04 - A25 vs a3: beat it in 7/13 walk-forward years, CAGR 7.58% vs 12.41% (needs +0.48), worst fall -10.57% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (15%+ rise (pole), tight 5-day pause on lighter volume (flag), then a close above the flag) may time entries better than the current rule.
 overrides: {"family": "bull_flag"}
@@ -349,7 +349,7 @@ overrides: {"family": "bull_flag"}
 
 ```proposal
 id: A26
-status: proposed
+status: rejected 2026-11-04 - A26 vs a3: beat it in 6/13 walk-forward years, CAGR 7.34% vs 12.41% (needs +0.48), worst fall -20.09% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (cup and handle: older high, 15%+ dip and recovery, then a close above that high) may time entries better than the current rule.
 overrides: {"family": "cup_handle"}
@@ -357,7 +357,7 @@ overrides: {"family": "cup_handle"}
 
 ```proposal
 id: A27
-status: proposed
+status: rejected 2026-11-04 - A27 vs a3: beat it in 6/13 walk-forward years, CAGR 7.18% vs 12.41% (needs +0.48), worst fall -12.54% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a well-known setup (strong stock in an uptrend 5-10 days before its results date (pre-results run-up)) may time entries better than the current rule.
 overrides: {"family": "pre_results_runup"}
@@ -365,7 +365,7 @@ overrides: {"family": "pre_results_runup"}
 
 ```proposal
 id: A28
-status: proposed
+status: rejected 2026-11-04 - A28 vs a3: beat it in 4/13 walk-forward years, CAGR 9.57% vs 12.41% (needs +0.49), worst fall -14.48% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (Minervini trend template + volatility contraction breakout) may beat the current entry rule with the same exits.
 overrides: {"family": "minervini_vcp"}
@@ -373,7 +373,7 @@ overrides: {"family": "minervini_vcp"}
 
 ```proposal
 id: A29
-status: proposed
+status: rejected 2026-11-04 - A29 vs a3: beat it in 5/13 walk-forward years, CAGR 5.42% vs 12.41% (needs +0.49), worst fall -10.69% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (Weinstein stage-2 breakout above a rising 30-week average) may beat the current entry rule with the same exits.
 overrides: {"family": "weinstein_stage2"}
@@ -381,7 +381,7 @@ overrides: {"family": "weinstein_stage2"}
 
 ```proposal
 id: A30
-status: proposed
+status: rejected 2026-11-04 - A30 vs a3: beat it in 6/13 walk-forward years, CAGR 5.39% vs 12.41% (needs +0.49), worst fall -18.58% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (Darvas box breakout near the 52-week high) may beat the current entry rule with the same exits.
 overrides: {"family": "darvas_box"}
@@ -389,7 +389,7 @@ overrides: {"family": "darvas_box"}
 
 ```proposal
 id: A31
-status: proposed
+status: rejected 2026-11-04 - A31 vs a3: beat it in 4/13 walk-forward years, CAGR 6.65% vs 12.41% (needs +0.49), worst fall -10.84% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (monthly 12-1 momentum leaders) may beat the current entry rule with the same exits.
 overrides: {"family": "momentum_12_1"}
@@ -397,7 +397,7 @@ overrides: {"family": "momentum_12_1"}
 
 ```proposal
 id: A32
-status: proposed
+status: rejected 2026-11-04 - A32 vs a3: beat it in 5/13 walk-forward years, CAGR 5.64% vs 12.41% (needs +0.49), worst fall -15.98% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (stocks closest to their 52-week high) may beat the current entry rule with the same exits.
 overrides: {"family": "high52_rank"}
@@ -405,7 +405,7 @@ overrides: {"family": "high52_rank"}
 
 ```proposal
 id: A33
-status: proposed
+status: rejected 2026-11-04 - A33 vs a3: beat it in 9/13 walk-forward years, CAGR 8.69% vs 12.41% (needs +0.49), worst fall -6.84% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (post-earnings drift after strong results gaps) may beat the current entry rule with the same exits.
 overrides: {"family": "pead"}
@@ -413,7 +413,7 @@ overrides: {"family": "pead"}
 
 ```proposal
 id: A34
-status: proposed
+status: rejected 2026-11-04 - A34 vs a3: beat it in 7/13 walk-forward years, CAGR 9.07% vs 12.41% (needs +0.49), worst fall -15.59% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (leaders of the strongest sectors) may beat the current entry rule with the same exits.
 overrides: {"family": "sector_rotation"}
@@ -421,7 +421,7 @@ overrides: {"family": "sector_rotation"}
 
 ```proposal
 id: A35
-status: proposed
+status: rejected 2026-11-04 - A35 vs a3: beat it in 3/13 walk-forward years, CAGR 8.83% vs 12.41% (needs +0.50), worst fall -11.67% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: a published method (sharp dips below the lower Bollinger band in uptrends) may beat the current entry rule with the same exits.
 overrides: {"family": "connors_pctb"}
@@ -429,7 +429,7 @@ overrides: {"family": "connors_pctb"}
 
 ```proposal
 id: A36
-status: proposed
+status: rejected 2026-11-04 - A36 vs a3: beat it in 7/13 walk-forward years, CAGR 6.06% vs 12.41% (needs +0.50), worst fall -19.79% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "trend_pb_bo"}
@@ -437,7 +437,7 @@ overrides: {"family": "trend_pb_bo"}
 
 ```proposal
 id: A37
-status: proposed
+status: rejected 2026-11-04 - A37 vs a3: beat it in 4/13 walk-forward years, CAGR 8.82% vs 12.41% (needs +0.50), worst fall -16.39% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "donchian"}
@@ -445,7 +445,7 @@ overrides: {"family": "donchian"}
 
 ```proposal
 id: A38
-status: proposed
+status: rejected 2026-11-04 - A38 vs a3: beat it in 6/13 walk-forward years, CAGR 9.31% vs 12.41% (needs +0.50), worst fall -21.31% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "high52"}
@@ -453,7 +453,7 @@ overrides: {"family": "high52"}
 
 ```proposal
 id: A39
-status: proposed
+status: rejected 2026-11-04 - A39 vs a3: beat it in 4/13 walk-forward years, CAGR 9.99% vs 12.41% (needs +0.50), worst fall -12.44% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "mean_reversion"}
@@ -461,7 +461,7 @@ overrides: {"family": "mean_reversion"}
 
 ```proposal
 id: A40
-status: proposed
+status: rejected 2026-11-04 - A40 vs a3: beat it in 6/13 walk-forward years, CAGR 8.43% vs 12.41% (needs +0.50), worst fall -12.56% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "momentum_leaders"}
@@ -469,7 +469,7 @@ overrides: {"family": "momentum_leaders"}
 
 ```proposal
 id: A41
-status: proposed
+status: rejected 2026-11-04 - A41 vs a3: beat it in 4/13 walk-forward years, CAGR 8.13% vs 12.41% (needs +0.50), worst fall -17.04% vs -10.71%, gate FAIL
 written: 2026-11-03
 reason: (idea factory) For a1: an alternative core entry rule may beat the current one with the same exits.
 overrides: {"family": "squeeze"}
