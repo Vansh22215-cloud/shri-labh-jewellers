@@ -1189,7 +1189,7 @@ overrides: {"family": "cp_falling_wedge"}
 
 ```proposal
 id: A131
-status: proposed
+status: rejected 2026-11-05 - A131 vs a3: beat it in 4/13 walk-forward years, CAGR 5.13% vs 12.55% (needs +0.56), worst fall -16.02% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Broadening Bottom pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_broadening_bottom"}
@@ -1197,7 +1197,7 @@ overrides: {"family": "cp_broadening_bottom"}
 
 ```proposal
 id: A132
-status: proposed
+status: rejected 2026-11-05 - A132 vs a3: beat it in 5/13 walk-forward years, CAGR 8.51% vs 12.55% (needs +0.56), worst fall -20.29% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Measured Move Up / AB=CD Projection pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_measured_move_up"}
@@ -1205,7 +1205,7 @@ overrides: {"family": "cp_measured_move_up"}
 
 ```proposal
 id: A133
-status: proposed
+status: rejected 2026-11-05 - A133 vs a3: beat it in 3/13 walk-forward years, CAGR 6.06% vs 12.55% (needs +0.56), worst fall -4.72% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Bull Pennant pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_bull_pennant"}
@@ -1213,7 +1213,7 @@ overrides: {"family": "cp_bull_pennant"}
 
 ```proposal
 id: A134
-status: proposed
+status: rejected 2026-11-05 - A134 vs a3: beat it in 6/13 walk-forward years, CAGR 3.93% vs 12.55% (needs +0.56), worst fall -28.26% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Breakout and Retest pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_breakout_retest"}
@@ -1221,7 +1221,7 @@ overrides: {"family": "cp_breakout_retest"}
 
 ```proposal
 id: A135
-status: proposed
+status: rejected 2026-11-05 - A135 vs a3: beat it in 5/13 walk-forward years, CAGR 5.41% vs 12.55% (needs +0.56), worst fall -18.15% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the False Breakout / Failed Auction pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_false_breakout"}
@@ -1229,7 +1229,7 @@ overrides: {"family": "cp_false_breakout"}
 
 ```proposal
 id: A136
-status: proposed
+status: rejected 2026-11-05 - A136 vs a3: beat it in 5/13 walk-forward years, CAGR 8.64% vs 12.55% (needs +0.56), worst fall -18.42% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Outside Bar / Engulfing Range Bar pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_outside_bar"}
@@ -1237,7 +1237,7 @@ overrides: {"family": "cp_outside_bar"}
 
 ```proposal
 id: A137
-status: proposed
+status: rejected 2026-11-05 - A137 vs a3: beat it in 3/13 walk-forward years, CAGR 6.55% vs 12.55% (needs +0.56), worst fall -15.82% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Pin Bar / Rejection Bar pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_pin_bar_rejection"}
@@ -1245,7 +1245,7 @@ overrides: {"family": "cp_pin_bar_rejection"}
 
 ```proposal
 id: A138
-status: proposed
+status: rejected 2026-11-05 - A138 vs a3: beat it in 5/13 walk-forward years, CAGR 5.68% vs 12.55% (needs +0.56), worst fall -17.35% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Breakaway Gap pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_gap_breakaway"}
@@ -1253,7 +1253,7 @@ overrides: {"family": "cp_gap_breakaway"}
 
 ```proposal
 id: A139
-status: proposed
+status: rejected 2026-11-05 - A139 vs a3: beat it in 5/13 walk-forward years, CAGR 9.99% vs 12.55% (needs +0.56), worst fall -9.7% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Runaway / Measuring Gap pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_gap_runaway"}
@@ -1261,7 +1261,7 @@ overrides: {"family": "cp_gap_runaway"}
 
 ```proposal
 id: A140
-status: proposed
+status: rejected 2026-11-05 - A140 vs a3: beat it in 4/13 walk-forward years, CAGR 8.85% vs 12.55% (needs +0.56), worst fall -12.83% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Wyckoff Spring pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_wyckoff_spring"}
@@ -1269,7 +1269,7 @@ overrides: {"family": "cp_wyckoff_spring"}
 
 ```proposal
 id: A141
-status: proposed
+status: rejected 2026-11-05 - A141 vs a3: beat it in 7/13 walk-forward years, CAGR 7.37% vs 12.55% (needs +0.56), worst fall -7.83% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Island Reversal pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_island_reversal"}
@@ -1277,7 +1277,7 @@ overrides: {"family": "cp_island_reversal"}
 
 ```proposal
 id: A142
-status: proposed
+status: rejected 2026-11-05 - A142 vs a3: beat it in 5/13 walk-forward years, CAGR 7.47% vs 12.55% (needs +0.56), worst fall -13.04% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Inside Bar Breakout pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_inside_bar_breakout"}
@@ -1285,7 +1285,7 @@ overrides: {"family": "cp_inside_bar_breakout"}
 
 ```proposal
 id: A143
-status: proposed
+status: rejected 2026-11-05 - A143 vs a3: beat it in 7/13 walk-forward years, CAGR 8.12% vs 12.55% (needs +0.56), worst fall -12.51% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the NR4 Inside Day pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_nr4_inside_day"}
@@ -1293,7 +1293,7 @@ overrides: {"family": "cp_nr4_inside_day"}
 
 ```proposal
 id: A144
-status: proposed
+status: rejected 2026-11-05 - A144 vs a3: beat it in 6/13 walk-forward years, CAGR 8.32% vs 12.55% (needs +0.56), worst fall -11.9% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the NR7 Inside Day pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_nr7_inside_day"}
@@ -1301,7 +1301,7 @@ overrides: {"family": "cp_nr7_inside_day"}
 
 ```proposal
 id: A145
-status: proposed
+status: rejected 2026-11-05 - A145 vs a3: beat it in 3/13 walk-forward years, CAGR 7.3% vs 12.55% (needs +0.56), worst fall -16.46% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Darvas Box pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_darvas_box"}
@@ -1309,7 +1309,7 @@ overrides: {"family": "cp_darvas_box"}
 
 ```proposal
 id: A146
-status: proposed
+status: rejected 2026-11-05 - A146 vs a3: beat it in 5/13 walk-forward years, CAGR 8.28% vs 12.55% (needs +0.56), worst fall -19.87% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Flat Base pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_flat_base"}
@@ -1317,7 +1317,7 @@ overrides: {"family": "cp_flat_base"}
 
 ```proposal
 id: A147
-status: proposed
+status: rejected 2026-11-05 - A147 vs a3: beat it in 6/13 walk-forward years, CAGR 7.26% vs 12.55% (needs +0.56), worst fall -14.5% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Volatility Contraction Pattern pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_vcp_volatility_contraction"}
@@ -1325,7 +1325,7 @@ overrides: {"family": "cp_vcp_volatility_contraction"}
 
 ```proposal
 id: A148
-status: proposed
+status: rejected 2026-11-05 - A148 vs a3: beat it in 3/13 walk-forward years, CAGR 5.3% vs 12.55% (needs +0.56), worst fall -17.71% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Key Reversal Up pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_key_reversal_up"}
@@ -1333,7 +1333,7 @@ overrides: {"family": "cp_key_reversal_up"}
 
 ```proposal
 id: A149
-status: proposed
+status: rejected 2026-11-05 - A149 vs a3: beat it in 6/13 walk-forward years, CAGR 4.37% vs 12.55% (needs +0.56), worst fall -14.16% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Turtle Soup False Break pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_turtle_soup"}
@@ -1341,7 +1341,7 @@ overrides: {"family": "cp_turtle_soup"}
 
 ```proposal
 id: A150
-status: proposed
+status: rejected 2026-11-05 - A150 vs a3: beat it in 6/13 walk-forward years, CAGR 9.25% vs 12.55% (needs +0.57), worst fall -9.6% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Three Bar Play pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_three_bar_play"}
@@ -1349,7 +1349,7 @@ overrides: {"family": "cp_three_bar_play"}
 
 ```proposal
 id: A151
-status: proposed
+status: rejected 2026-11-05 - A151 vs a3: beat it in 6/13 walk-forward years, CAGR 7.34% vs 12.55% (needs +0.57), worst fall -11.09% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Gap and Go pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_gap_and_go"}
@@ -1357,7 +1357,7 @@ overrides: {"family": "cp_gap_and_go"}
 
 ```proposal
 id: A152
-status: proposed
+status: rejected 2026-11-05 - A152 vs a3: beat it in 3/13 walk-forward years, CAGR 5.5% vs 12.55% (needs +0.57), worst fall -16.27% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Gap Fill Reversion pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_gap_fill_reversion"}
@@ -1365,7 +1365,7 @@ overrides: {"family": "cp_gap_fill_reversion"}
 
 ```proposal
 id: A153
-status: proposed
+status: rejected 2026-11-05 - A153 vs a3: beat it in 5/13 walk-forward years, CAGR 8.45% vs 12.55% (needs +0.57), worst fall -11.07% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the First Pullback After Breakout pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_first_pullback_after_breakout"}
@@ -1373,7 +1373,7 @@ overrides: {"family": "cp_first_pullback_after_breakout"}
 
 ```proposal
 id: A154
-status: proposed
+status: rejected 2026-11-05 - A154 vs a3: beat it in 6/13 walk-forward years, CAGR 7.76% vs 12.55% (needs +0.57), worst fall -22.66% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Symmetrical Triangle pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_symmetrical_triangle"}
@@ -1381,7 +1381,7 @@ overrides: {"family": "cp_symmetrical_triangle"}
 
 ```proposal
 id: A155
-status: proposed
+status: rejected 2026-11-05 - A155 vs a3: beat it in 5/13 walk-forward years, CAGR 6.87% vs 12.55% (needs +0.57), worst fall -13.34% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Ascending Channel pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_ascending_channel"}
@@ -1389,7 +1389,7 @@ overrides: {"family": "cp_ascending_channel"}
 
 ```proposal
 id: A156
-status: proposed
+status: rejected 2026-11-05 - A156 vs a3: beat it in 5/13 walk-forward years, CAGR 8.71% vs 12.55% (needs +0.57), worst fall -23.3% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Cup Without Handle pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_cup_without_handle"}
@@ -1397,7 +1397,7 @@ overrides: {"family": "cp_cup_without_handle"}
 
 ```proposal
 id: A157
-status: proposed
+status: rejected 2026-11-05 - A157 vs a3: beat it in 2/13 walk-forward years, CAGR 2.06% vs 12.55% (needs +0.57), worst fall -16.46% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the V Reversal pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_v_reversal"}
@@ -1405,7 +1405,7 @@ overrides: {"family": "cp_v_reversal"}
 
 ```proposal
 id: A158
-status: proposed
+status: rejected 2026-11-05 - A158 vs a3: beat it in 5/13 walk-forward years, CAGR 4.32% vs 12.55% (needs +0.57), worst fall -10.72% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Selling Climax pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_selling_climax"}
@@ -1413,7 +1413,7 @@ overrides: {"family": "cp_selling_climax"}
 
 ```proposal
 id: A159
-status: proposed
+status: rejected 2026-11-05 - A159 vs a3: beat it in 7/13 walk-forward years, CAGR 9.01% vs 12.55% (needs +0.57), worst fall -13.84% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Liquidity Sweep Reversal pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_liquidity_sweep_reversal"}
@@ -1421,7 +1421,7 @@ overrides: {"family": "cp_liquidity_sweep_reversal"}
 
 ```proposal
 id: A160
-status: proposed
+status: rejected 2026-11-05 - A160 vs a3: beat it in 4/13 walk-forward years, CAGR 8.71% vs 12.55% (needs +0.57), worst fall -16.15% vs -10.71%, gate FAIL
 written: 2026-11-04
 reason: (idea factory) For a3: the Compression Breakout pattern from the owner's pattern library may time entries better than the current rule.
 overrides: {"family": "cp_compression_breakout"}
