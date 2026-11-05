@@ -1,0 +1,792 @@
+type,id,name,category,direction_or_output,canonical_code
+chart_pattern,head_and_shoulders_top,Head and Shoulders Top,classic_reversal,bearish,
+chart_pattern,inverse_head_and_shoulders,Inverse Head and Shoulders,classic_reversal,bullish,
+chart_pattern,double_top,Double Top,classic_reversal,bearish,
+chart_pattern,double_bottom,Double Bottom,classic_reversal,bullish,
+chart_pattern,triple_top,Triple Top,classic_reversal,bearish,
+chart_pattern,triple_bottom,Triple Bottom,classic_reversal,bullish,
+chart_pattern,ascending_triangle,Ascending Triangle,classic_continuation_or_reversal,usually_bullish,
+chart_pattern,descending_triangle,Descending Triangle,classic_continuation_or_reversal,usually_bearish,
+chart_pattern,symmetrical_triangle,Symmetrical Triangle,classic_continuation,neutral_until_breakout,
+chart_pattern,bull_flag,Bull Flag,classic_continuation,bullish,
+chart_pattern,bear_flag,Bear Flag,classic_continuation,bearish,
+chart_pattern,bull_pennant,Bull Pennant,classic_continuation,bullish,
+chart_pattern,bear_pennant,Bear Pennant,classic_continuation,bearish,
+chart_pattern,rectangle_range,Rectangle / Trading Range,classic_continuation_or_reversal,neutral_until_breakout,
+chart_pattern,rising_wedge,Rising Wedge,classic_reversal_or_continuation,often_bearish,
+chart_pattern,falling_wedge,Falling Wedge,classic_reversal_or_continuation,often_bullish,
+chart_pattern,broadening_top,Broadening Top / Megaphone,classic_reversal,often_bearish,
+chart_pattern,broadening_bottom,Broadening Bottom,classic_reversal,often_bullish,
+chart_pattern,cup_and_handle,Cup and Handle,classic_continuation,bullish,
+chart_pattern,inverted_cup_and_handle,Inverted Cup and Handle,classic_continuation,bearish,
+chart_pattern,rounding_bottom,Rounding Bottom / Saucer,classic_reversal,bullish,
+chart_pattern,rounding_top,Rounding Top,classic_reversal,bearish,
+chart_pattern,diamond_top,Diamond Top,classic_reversal,bearish,
+chart_pattern,diamond_bottom,Diamond Bottom,classic_reversal,bullish,
+chart_pattern,bump_and_run_reversal,Bump-and-Run Reversal,classic_reversal,bearish_or_bullish_mirror,
+chart_pattern,measured_move_up,Measured Move Up / AB=CD Projection,measured_move,bullish,
+chart_pattern,measured_move_down,Measured Move Down,measured_move,bearish,
+chart_pattern,price_channel,Ascending / Descending / Horizontal Channel,trend_structure,directional_with_channel,
+chart_pattern,island_reversal,Island Reversal,gap_reversal,bullish_or_bearish,
+chart_pattern,gap_breakaway,Breakaway Gap,gap_pattern,trend_continuation_or_reversal,
+chart_pattern,gap_runaway,Runaway / Measuring Gap,gap_pattern,trend_continuation,
+chart_pattern,gap_exhaustion,Exhaustion Gap,gap_pattern,possible_reversal,
+chart_pattern,harmonic_ab_cd,AB=CD Harmonic Pattern,harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_gartley,Gartley (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_bat,Bat (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_butterfly,Butterfly (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_crab,Crab (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_deep_crab,Deep Crab (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_cypher,Cypher (XABCD),harmonic,bullish_or_bearish_at_D,
+chart_pattern,harmonic_shark,Shark (0XABC),harmonic,bullish_or_bearish_at_C,
+chart_pattern,elliott_impulse,Elliott Impulse Wave (1–5),wave_theory,trend_direction,
+chart_pattern,elliott_abc_correction,Elliott ABC Correction,wave_theory,countertrend,
+chart_pattern,wyckoff_accumulation,Wyckoff Accumulation Schematic,wyckoff,bullish_after_confirmation,
+chart_pattern,wyckoff_distribution,Wyckoff Distribution Schematic,wyckoff,bearish_after_confirmation,
+chart_pattern,wyckoff_spring,Wyckoff Spring,wyckoff_event,bullish,
+chart_pattern,wyckoff_upthrust_utad,Wyckoff Upthrust / UTAD,wyckoff_event,bearish,
+chart_pattern,breakout_retest,Breakout and Retest,price_action_setup,directional,
+chart_pattern,false_breakout,False Breakout / Failed Auction,price_action_setup,contrarian,
+chart_pattern,inside_bar,Inside Bar / Mother-Bar Compression,price_action_setup,neutral_until_breakout,
+chart_pattern,outside_bar,Outside Bar / Engulfing Range Bar,price_action_setup,directional_by_close,
+chart_pattern,pin_bar_rejection,Pin Bar / Rejection Bar,price_action_setup,contextual,
+chart_pattern,engulfing_price_action,Bullish / Bearish Engulfing (price-action setup),price_action_setup,bullish_or_bearish,
+chart_pattern,adam_eve_double_top,Adam and Eve Double Top,classic_reversal,bearish,
+chart_pattern,adam_eve_double_bottom,Adam and Eve Double Bottom,classic_reversal,bullish,
+chart_pattern,megaphone_formation,Megaphone Formation,volatility_expansion,neutral,
+chart_pattern,horn_top,Horn Top,classic_reversal,bearish,
+chart_pattern,horn_bottom,Horn Bottom,classic_reversal,bullish,
+chart_pattern,pipe_top,Pipe Top,classic_reversal,bearish,
+chart_pattern,pipe_bottom,Pipe Bottom,classic_reversal,bullish,
+chart_pattern,island_reversal_top,Island Reversal Top,gap_reversal,bearish,
+chart_pattern,island_reversal_bottom,Island Reversal Bottom,gap_reversal,bullish,
+chart_pattern,key_reversal_up,Key Reversal Up,single_bar_reversal,bullish,
+chart_pattern,key_reversal_down,Key Reversal Down,single_bar_reversal,bearish,
+chart_pattern,v_reversal,V Reversal,swing_reversal,bullish,
+chart_pattern,inverted_v_reversal,Inverted V Reversal,swing_reversal,bearish,
+chart_pattern,three_drives_bullish,Three Drives Pattern Bullish,harmonic,bullish,
+chart_pattern,three_drives_bearish,Three Drives Pattern Bearish,harmonic,bearish,
+chart_pattern,abcd_bullish,AB=CD Bullish,harmonic,bullish,
+chart_pattern,abcd_bearish,AB=CD Bearish,harmonic,bearish,
+chart_pattern,alternate_bat_bullish,Alternate Bat Bullish,harmonic,bullish,
+chart_pattern,alternate_bat_bearish,Alternate Bat Bearish,harmonic,bearish,
+chart_pattern,shark_bullish,Shark Pattern Bullish,harmonic,bullish,
+chart_pattern,shark_bearish,Shark Pattern Bearish,harmonic,bearish,
+chart_pattern,deep_crab_bullish,Deep Crab Bullish,harmonic,bullish,
+chart_pattern,deep_crab_bearish,Deep Crab Bearish,harmonic,bearish,
+chart_pattern,cypher_bullish,Cypher Bullish,harmonic,bullish,
+chart_pattern,cypher_bearish,Cypher Bearish,harmonic,bearish,
+chart_pattern,5_0_bullish,5-0 Bullish,harmonic,bullish,
+chart_pattern,5_0_bearish,5-0 Bearish,harmonic,bearish,
+chart_pattern,elliott_impulse_wave,Elliott Impulse Wave,elliott_wave,neutral,
+chart_pattern,elliott_diagonal,Elliott Diagonal,elliott_wave,neutral,
+chart_pattern,elliott_flat_correction,Elliott Flat Correction,elliott_wave,neutral,
+chart_pattern,elliott_zigzag,Elliott Zigzag Correction,elliott_wave,neutral,
+chart_pattern,elliott_triangle,Elliott Triangle,elliott_wave,neutral,
+chart_pattern,wyckoff_upthrust,Wyckoff Upthrust,wyckoff,bearish,
+chart_pattern,wyckoff_spring_test,Wyckoff Spring Test,wyckoff,bullish,
+chart_pattern,wyckoff_last_point_of_support,Wyckoff Last Point of Support,wyckoff,bullish,
+chart_pattern,wyckoff_last_point_of_supply,Wyckoff Last Point of Supply,wyckoff,bearish,
+chart_pattern,wyckoff_sign_of_strength,Wyckoff Sign of Strength,wyckoff,bullish,
+chart_pattern,wyckoff_sign_of_weakness,Wyckoff Sign of Weakness,wyckoff,bearish,
+chart_pattern,wyckoff_utad,Wyckoff UTAD,wyckoff,bearish,
+chart_pattern,wyckoff_backup_to_edge,Wyckoff Backup to Edge of Creek,wyckoff,bullish,
+chart_pattern,vcp_volatility_contraction,Volatility Contraction Pattern,consolidation,bullish,
+chart_pattern,darvas_box,Darvas Box,consolidation,bullish,
+chart_pattern,flat_base,Flat Base,consolidation,bullish,
+chart_pattern,ipo_base,IPO Base,consolidation,bullish,
+chart_pattern,volatility_contraction_triangle,Volatility Contraction Triangle,consolidation,neutral,
+chart_pattern,ascending_channel,Ascending Channel,channel,bullish,
+chart_pattern,descending_channel,Descending Channel,channel,bearish,
+chart_pattern,horizontal_channel,Horizontal Channel,channel,neutral,
+chart_pattern,trendline_break_retest,Trendline Break and Retest,trendline_event,neutral,
+chart_pattern,throwback,Throwback After Breakout,breakout_event,bullish,
+chart_pattern,pullback_after_breakdown,Pullback After Breakdown,breakdown_event,bearish,
+chart_pattern,opening_range_breakout,Opening Range Breakout,intraday_setup,neutral,
+chart_pattern,opening_range_reversal,Opening Range Reversal,intraday_setup,neutral,
+chart_pattern,first_pullback_after_breakout,First Pullback After Breakout,trend_continuation,bullish,
+chart_pattern,first_pullback_after_breakdown,First Pullback After Breakdown,trend_continuation,bearish,
+chart_pattern,nr4_inside_day,NR4 Inside Day,volatility_compression,neutral,
+chart_pattern,nr7_inside_day,NR7 Inside Day,volatility_compression,neutral,
+chart_pattern,heikin_ashi_trend_run,Heikin Ashi Trend Run,price_transform_setup,neutral,
+chart_pattern,renko_breakout,Renko Breakout,price_transform_setup,neutral,
+chart_pattern,point_figure_breakout,Point and Figure Breakout,price_transform_setup,neutral,
+chart_pattern,gann_square_of_nine_level,Gann Square of Nine Level Confluence,price_geometry,neutral,
+chart_pattern,andrews_pitchfork,Andrews Pitchfork,price_geometry,neutral,
+chart_pattern,schiff_pitchfork,Schiff Pitchfork,price_geometry,neutral,
+chart_pattern,modified_schiff_pitchfork,Modified Schiff Pitchfork,price_geometry,neutral,
+chart_pattern,fibonacci_cluster,Fibonacci Cluster,price_confluence,neutral,
+chart_pattern,fibonacci_time_zone,Fibonacci Time Zone,time_projection,neutral,
+chart_pattern,market_profile_balance_area,Market Profile Balance Area,auction_market,neutral,
+chart_pattern,market_profile_open_drive,Market Profile Open Drive,auction_market,neutral,
+chart_pattern,market_profile_open_test_drive,Market Profile Open Test Drive,auction_market,neutral,
+chart_pattern,failed_auction,Failed Auction,auction_market,neutral,
+chart_pattern,turtle_soup,Turtle Soup False Break,false_breakout,neutral,
+chart_pattern,failed_breakout_trap,Failed Breakout Trap,false_breakout,neutral,
+chart_pattern,failed_breakdown_trap,Failed Breakdown Trap,false_breakout,neutral,
+chart_pattern,gap_and_go,Gap and Go,gap_setup,neutral,
+chart_pattern,gap_fill_reversion,Gap Fill Reversion,gap_setup,neutral,
+chart_pattern,breakaway_gap,Breakaway Gap,gap_setup,neutral,
+chart_pattern,exhaustion_gap,Exhaustion Gap,gap_setup,neutral,
+chart_pattern,runaway_gap,Runaway Gap,gap_setup,neutral,
+chart_pattern,cup_without_handle,Cup Without Handle,classic_continuation,bullish,
+chart_pattern,saucer_with_handle,Saucer with Handle,classic_continuation,bullish,
+chart_pattern,stair_step_trend,Stair-Step Trend,trend_continuation,bullish,
+chart_pattern,descending_stair_step_trend,Descending Stair-Step Trend,trend_continuation,bearish,
+chart_pattern,outside_bar_reversal_structure,Outside Bar Reversal Structure,bar_structure,neutral,
+chart_pattern,inside_bar_breakout,Inside Bar Breakout,bar_structure,neutral,
+chart_pattern,three_bar_play,Three Bar Play,bar_structure,neutral,
+chart_pattern,compression_breakout,Compression Breakout,volatility_compression,neutral,
+chart_pattern,trend_exhaustion_climax,Trend Exhaustion Climax,volume_price_analysis,neutral,
+chart_pattern,selling_climax,Selling Climax,wyckoff,bullish,
+chart_pattern,buying_climax,Buying Climax,wyckoff,bearish,
+chart_pattern,secondary_test_wyckoff,Wyckoff Secondary Test,wyckoff,neutral,
+chart_pattern,last_point_of_resistance,Wyckoff Last Point of Resistance,wyckoff,bearish,
+chart_pattern,creek_breakout,Wyckoff Creek Breakout,wyckoff,bullish,
+chart_pattern,ice_breakdown,Wyckoff Ice Breakdown,wyckoff,bearish,
+chart_pattern,liquidity_sweep_reversal,Liquidity Sweep Reversal,liquidity_setup,neutral,
+chart_pattern,equal_highs_equal_lows,Equal Highs or Equal Lows,liquidity_structure,neutral,
+chart_pattern,compression_to_expansion,Compression-to-Expansion Transition,volatility_regime,neutral,
+candlestick_pattern,cdl2crows,Two Crows,,bearish,CDL2CROWS
+candlestick_pattern,cdl3blackcrows,Three Black Crows,,bearish,CDL3BLACKCROWS
+candlestick_pattern,cdl3inside,Three Inside Up/Down,,both,CDL3INSIDE
+candlestick_pattern,cdl3linestrike,Three-Line Strike,,both,CDL3LINESTRIKE
+candlestick_pattern,cdl3outside,Three Outside Up/Down,,both,CDL3OUTSIDE
+candlestick_pattern,cdl3starsinsouth,Three Stars in the South,,bullish,CDL3STARSINSOUTH
+candlestick_pattern,cdl3whitesoldiers,Three Advancing White Soldiers,,bullish,CDL3WHITESOLDIERS
+candlestick_pattern,cdlabandonedbaby,Abandoned Baby,,both,CDLABANDONEDBABY
+candlestick_pattern,cdladvanceblock,Advance Block,,bearish,CDLADVANCEBLOCK
+candlestick_pattern,cdlbelthold,Belt-hold,,both,CDLBELTHOLD
+candlestick_pattern,cdlbreakaway,Breakaway,,both,CDLBREAKAWAY
+candlestick_pattern,cdlclosingmarubozu,Closing Marubozu,,both,CDLCLOSINGMARUBOZU
+candlestick_pattern,cdlconcealbabyswall,Concealing Baby Swallow,,bullish,CDLCONCEALBABYSWALL
+candlestick_pattern,cdlcounterattack,Counterattack,,both,CDLCOUNTERATTACK
+candlestick_pattern,cdldarkcloudcover,Dark Cloud Cover,,bearish,CDLDARKCLOUDCOVER
+candlestick_pattern,cdldoji,Doji,,neutral,CDLDOJI
+candlestick_pattern,cdldojistar,Doji Star,,both,CDLDOJISTAR
+candlestick_pattern,cdldragonflydoji,Dragonfly Doji,,contextual_bullish,CDLDRAGONFLYDOJI
+candlestick_pattern,cdlengulfing,Engulfing Pattern,,both,CDLENGULFING
+candlestick_pattern,cdleveningdojistar,Evening Doji Star,,bearish,CDLEVENINGDOJISTAR
+candlestick_pattern,cdleveningstar,Evening Star,,bearish,CDLEVENINGSTAR
+candlestick_pattern,cdlgapsidesidewhite,Up/Down-Gap Side-by-Side White Lines,,both,CDLGAPSIDESIDEWHITE
+candlestick_pattern,cdlgravestonedoji,Gravestone Doji,,contextual_bearish,CDLGRAVESTONEDOJI
+candlestick_pattern,cdlhammer,Hammer,,contextual_bullish,CDLHAMMER
+candlestick_pattern,cdlhangingman,Hanging Man,,contextual_bearish,CDLHANGINGMAN
+candlestick_pattern,cdlharami,Harami Pattern,,both,CDLHARAMI
+candlestick_pattern,cdlharamicross,Harami Cross Pattern,,both,CDLHARAMICROSS
+candlestick_pattern,cdlhighwave,High-Wave Candle,,neutral,CDLHIGHWAVE
+candlestick_pattern,cdlhikkake,Hikkake Pattern,,both,CDLHIKKAKE
+candlestick_pattern,cdlhikkakemod,Modified Hikkake Pattern,,both,CDLHIKKAKEMOD
+candlestick_pattern,cdlhomingpigeon,Homing Pigeon,,bullish,CDLHOMINGPIGEON
+candlestick_pattern,cdlidentical3crows,Identical Three Crows,,bearish,CDLIDENTICAL3CROWS
+candlestick_pattern,cdlinneck,In-Neck Pattern,,bearish,CDLINNECK
+candlestick_pattern,cdlinvertedhammer,Inverted Hammer,,contextual_bullish,CDLINVERTEDHAMMER
+candlestick_pattern,cdlkicking,Kicking,,both,CDLKICKING
+candlestick_pattern,cdlkickingbylength,Kicking by Length,,both,CDLKICKINGBYLENGTH
+candlestick_pattern,cdlladderbottom,Ladder Bottom,,bullish,CDLLADDERBOTTOM
+candlestick_pattern,cdllongleggeddoji,Long-Legged Doji,,neutral,CDLLONGLEGGEDDOJI
+candlestick_pattern,cdllongline,Long Line Candle,,both,CDLLONGLINE
+candlestick_pattern,cdlmarubozu,Marubozu,,both,CDLMARUBOZU
+candlestick_pattern,cdlmatchinglow,Matching Low,,bullish,CDLMATCHINGLOW
+candlestick_pattern,cdlmathold,Mat Hold,,bullish,CDLMATHOLD
+candlestick_pattern,cdlmorningdojistar,Morning Doji Star,,bullish,CDLMORNINGDOJISTAR
+candlestick_pattern,cdlmorningstar,Morning Star,,bullish,CDLMORNINGSTAR
+candlestick_pattern,cdlonneck,On-Neck Pattern,,bearish,CDLONNECK
+candlestick_pattern,cdlpiercing,Piercing Pattern,,bullish,CDLPIERCING
+candlestick_pattern,cdlrickshawman,Rickshaw Man,,neutral,CDLRICKSHAWMAN
+candlestick_pattern,cdlrisefall3methods,Rising/Falling Three Methods,,both,CDLRISEFALL3METHODS
+candlestick_pattern,cdlseparatinglines,Separating Lines,,both,CDLSEPARATINGLINES
+candlestick_pattern,cdlshootingstar,Shooting Star,,contextual_bearish,CDLSHOOTINGSTAR
+candlestick_pattern,cdlshortline,Short Line Candle,,both,CDLSHORTLINE
+candlestick_pattern,cdlspinningtop,Spinning Top,,neutral,CDLSPINNINGTOP
+candlestick_pattern,cdlstalledpattern,Stalled Pattern / Deliberation,,bearish,CDLSTALLEDPATTERN
+candlestick_pattern,cdlsticksandwich,Stick Sandwich,,bullish,CDLSTICKSANDWICH
+candlestick_pattern,cdltakuri,Takuri,,contextual_bullish,CDLTAKURI
+candlestick_pattern,cdltasukigap,Tasuki Gap,,both,CDLTASUKIGAP
+candlestick_pattern,cdlthrusting,Thrusting Pattern,,bearish,CDLTHRUSTING
+candlestick_pattern,cdltristar,Tristar,,both,CDLTRISTAR
+candlestick_pattern,cdlunique3river,Unique Three River,,bullish,CDLUNIQUE3RIVER
+candlestick_pattern,cdlupsidegap2crows,Upside Gap Two Crows,,bearish,CDLUPSIDEGAP2CROWS
+candlestick_pattern,cdlxsidegap3methods,Upside/Downside Gap Three Methods,,both,CDLXSIDEGAP3METHODS
+candlestick_pattern,tweezer_top,Tweezer Top,,bearish,
+candlestick_pattern,tweezer_bottom,Tweezer Bottom,,bullish,
+candlestick_pattern,inside_bar,Inside Bar,,neutral,
+candlestick_pattern,outside_bar,Outside Bar,,contextual,
+candlestick_pattern,railroad_tracks,Railroad Tracks,,both,
+candlestick_pattern,belt_hold,Belt Hold (generic variant),,both,
+candlestick_pattern,three_bar_reversal,Three-Bar Reversal,,both,
+candlestick_pattern,fakey_inside_bar,Fakey / Failed Inside-Bar Breakout,,both,
+candlestick_pattern,long_legged_doji,Long-Legged Doji,,neutral,
+candlestick_pattern,dragonfly_doji,Dragonfly Doji,,bullish,
+candlestick_pattern,gravestone_doji,Gravestone Doji,,bearish,
+candlestick_pattern,four_price_doji,Four Price Doji,,neutral,
+candlestick_pattern,rickshaw_man,Rickshaw Man,,neutral,
+candlestick_pattern,belt_hold_bullish,Bullish Belt Hold,,bullish,
+candlestick_pattern,belt_hold_bearish,Bearish Belt Hold,,bearish,
+candlestick_pattern,bullish_harami_cross,Bullish Harami Cross,,bullish,
+candlestick_pattern,bearish_harami_cross,Bearish Harami Cross,,bearish,
+candlestick_pattern,bullish_homing_pigeon,Homing Pigeon,,bullish,
+candlestick_pattern,bearish_descending_hawk,Descending Hawk,,bearish,
+candlestick_pattern,bullish_matching_low,Matching Low,,bullish,
+candlestick_pattern,bearish_matching_high,Matching High,,bearish,
+candlestick_pattern,bullish_meeting_lines,Bullish Meeting Lines,,bullish,
+candlestick_pattern,bearish_meeting_lines,Bearish Meeting Lines,,bearish,
+candlestick_pattern,bullish_separating_lines,Bullish Separating Lines,,bullish,
+candlestick_pattern,bearish_separating_lines,Bearish Separating Lines,,bearish,
+candlestick_pattern,bullish_on_neck,Bullish On-Neck Line,,bearish,
+candlestick_pattern,bearish_in_neck,Bearish In-Neck Line,,bearish,
+candlestick_pattern,bullish_thrusting_line,Bullish Thrusting Line,,bearish,
+candlestick_pattern,dark_cloud_cover_variant,Dark Cloud Cover (strict variant),,bearish,
+candlestick_pattern,piercing_line_variant,Piercing Line (strict variant),,bullish,
+candlestick_pattern,bullish_tweezer_bottom,Bullish Tweezer Bottom,,bullish,
+candlestick_pattern,bearish_tweezer_top,Bearish Tweezer Top,,bearish,
+candlestick_pattern,bullish_railroad_tracks,Bullish Railroad Tracks,,bullish,
+candlestick_pattern,bearish_railroad_tracks,Bearish Railroad Tracks,,bearish,
+candlestick_pattern,bullish_kicker,Bullish Kicker,,bullish,
+candlestick_pattern,bearish_kicker,Bearish Kicker,,bearish,
+candlestick_pattern,bullish_fakey,Bullish Fakey,,bullish,
+candlestick_pattern,bearish_fakey,Bearish Fakey,,bearish,
+candlestick_pattern,bullish_three_line_strike,Bullish Three-Line Strike,,bullish,
+candlestick_pattern,bearish_three_line_strike,Bearish Three-Line Strike,,bearish,
+candlestick_pattern,bullish_rising_three_methods,Rising Three Methods,,bullish,
+candlestick_pattern,bearish_falling_three_methods,Falling Three Methods,,bearish,
+candlestick_pattern,bullish_mat_hold,Mat Hold,,bullish,
+candlestick_pattern,bearish_mat_hold,Mat Hold Bearish,,bearish,
+candlestick_pattern,bullish_gapping_side_by_side_white_lines,Gapping Side-by-Side White Lines Bullish,,bullish,
+candlestick_pattern,bearish_gapping_side_by_side_white_lines,Gapping Side-by-Side White Lines Bearish,,bearish,
+candlestick_pattern,bullish_stick_sandwich,Stick Sandwich,,bullish,
+candlestick_pattern,bearish_three_star_south,Three Stars in the South,,bullish,
+candlestick_pattern,bearish_three_black_crows_strict,Three Black Crows (strict variant),,bearish,
+candlestick_pattern,bullish_three_white_soldiers_strict,Three White Soldiers (strict variant),,bullish,
+candlestick_pattern,bullish_abandoned_baby,Abandoned Baby Bullish,,bullish,
+candlestick_pattern,bearish_abandoned_baby,Abandoned Baby Bearish,,bearish,
+candlestick_pattern,bullish_upside_gap_two_crows,Upside Gap Two Crows,,bearish,
+candlestick_pattern,bearish_downside_gap_three_methods,Downside Gap Three Methods,,bullish,
+candlestick_pattern,bullish_ladder_bottom,Ladder Bottom,,bullish,
+candlestick_pattern,bullish_unique_three_river,Unique Three River Bottom,,bullish,
+candlestick_pattern,bearish_advance_block,Advance Block,,bearish,
+candlestick_pattern,bearish_deliberation,Deliberation,,bearish,
+candlestick_pattern,bullish_concealing_baby_swallow,Concealing Baby Swallow,,bullish,
+candlestick_pattern,bullish_counterattack,Bullish Counterattack Lines,,bullish,
+candlestick_pattern,bearish_counterattack,Bearish Counterattack Lines,,bearish,
+candlestick_pattern,bullish_gap_side_by_side_white_lines,Upside Gap Side-by-Side White Lines,,bullish,
+candlestick_pattern,bearish_gap_side_by_side_white_lines,Downside Gap Side-by-Side White Lines,,bearish,
+candlestick_pattern,bullish_hammer_contextual,Hammer (contextual strict),,bullish,
+candlestick_pattern,bearish_hanging_man_contextual,Hanging Man (contextual strict),,bearish,
+candlestick_pattern,bearish_shooting_star_contextual,Shooting Star (contextual strict),,bearish,
+candlestick_pattern,bullish_inverted_hammer_contextual,Inverted Hammer (contextual strict),,bullish,
+candlestick_pattern,bullish_gap_fill_reclaim_candle,Gap-Fill Reclaim Candle,,bullish,
+candlestick_pattern,bearish_gap_fill_reject_candle,Gap-Fill Rejection Candle,,bearish,
+indicator,accbands,Acceleration Bands,volatility_envelope,volatility_envelope,ACCBANDS
+indicator,alma,Arnaud Legoux Moving Average,moving_average,moving_average,ALMA
+indicator,bbands,Bollinger Bands,volatility_envelope,volatility_envelope,BBANDS
+indicator,ce,Chandelier Exit,trend_stop,trend_stop,CE
+indicator,cksp,Chande Kroll Stop,trend_stop,trend_stop,CKSP
+indicator,dema,Double Exponential Moving Average,moving_average,moving_average,DEMA
+indicator,donchian,Donchian Channels,price_channel,price_channel,DONCHIAN
+indicator,ema,Exponential Moving Average,moving_average,moving_average,EMA
+indicator,frama,Fractal Adaptive Moving Average,adaptive_average,adaptive_average,FRAMA
+indicator,hma,Hull Moving Average,moving_average,moving_average,HMA
+indicator,ht_trendline,Hilbert Transform Instantaneous Trendline,cycle_trend,cycle_trend,HT_TRENDLINE
+indicator,ichimoku,Ichimoku Kinko Hyo,trend_system,trend_system,ICHIMOKU
+indicator,kama,Kaufman Adaptive Moving Average,adaptive_average,adaptive_average,KAMA
+indicator,kc,Keltner Channels,volatility_envelope,volatility_envelope,KC
+indicator,ma,Moving Average,moving_average,moving_average,MA
+indicator,mama,MESA Adaptive Moving Average,adaptive_average,adaptive_average,MAMA
+indicator,mavp,Moving Average Variable Period,moving_average,moving_average,MAVP
+indicator,mcgd,McGinley Dynamic,adaptive_average,adaptive_average,MCGD
+indicator,midpoint,Rolling Midpoint,price_channel,price_channel,MIDPOINT
+indicator,midprice,Rolling Midprice,price_channel,price_channel,MIDPRICE
+indicator,rma,Wilder Moving Average / RMA,moving_average,moving_average,RMA
+indicator,sar,Parabolic SAR,trend_stop,trend_stop,SAR
+indicator,sarext,Parabolic SAR Extended,trend_stop,trend_stop,SAREXT
+indicator,sma,Simple Moving Average,moving_average,moving_average,SMA
+indicator,supertrend,SuperTrend,trend_stop,trend_stop,SUPERTREND
+indicator,swak_butter,Butterworth Filter,smoothing_filter,smoothing_filter,SWAK_BUTTER
+indicator,swak_gauss,Gaussian Filter,smoothing_filter,smoothing_filter,SWAK_GAUSS
+indicator,t3,Tillson T3,moving_average,moving_average,T3
+indicator,tema,Triple Exponential Moving Average,moving_average,moving_average,TEMA
+indicator,trima,Triangular Moving Average,moving_average,moving_average,TRIMA
+indicator,vidya,Variable Index Dynamic Average,adaptive_average,adaptive_average,VIDYA
+indicator,vwma,Volume Weighted Moving Average,moving_average,moving_average,VWMA
+indicator,wma,Weighted Moving Average,moving_average,moving_average,WMA
+indicator,zigzag,Zig Zag,swing_analysis,swing_analysis,ZIGZAG
+indicator,zlema,Zero-Lag Exponential Moving Average,moving_average,moving_average,ZLEMA
+indicator,ac,Accelerator/Decelerator Oscillator,momentum,momentum,AC
+indicator,adx,Average Directional Index,trend_strength,trend_strength,ADX
+indicator,adxr,Average Directional Movement Index Rating,trend_strength,trend_strength,ADXR
+indicator,ao,Awesome Oscillator,momentum,momentum,AO
+indicator,apo,Absolute Price Oscillator,momentum,momentum,APO
+indicator,aroon,Aroon,trend_strength,trend_strength,AROON
+indicator,aroonosc,Aroon Oscillator,trend_strength,trend_strength,AROONOSC
+indicator,asi,Wilder Accumulative Swing Index,momentum,momentum,ASI
+indicator,bop,Balance of Power,momentum,momentum,BOP
+indicator,cci,Commodity Channel Index,momentum,momentum,CCI
+indicator,cg,Center of Gravity Oscillator,momentum,momentum,CG
+indicator,chop,Choppiness Index,trend_regime,trend_regime,CHOP
+indicator,choptr,Choppiness Index True Range Box,trend_regime,trend_regime,CHOPTR
+indicator,cmo,Chande Momentum Oscillator,momentum,momentum,CMO
+indicator,cmou,Chande Momentum Oscillator Unsmoothed,momentum,momentum,CMOU
+indicator,coppock,Coppock Curve,momentum,momentum,COPPOCK
+indicator,crsi,Connors RSI,momentum,momentum,CRSI
+indicator,cti,Correlation Trend Indicator,trend_strength,trend_strength,CTI
+indicator,dosc,Derivative Oscillator,momentum,momentum,DOSC
+indicator,dpo,Detrended Price Oscillator,cycle,cycle,DPO
+indicator,dx,Directional Movement Index,trend_strength,trend_strength,DX
+indicator,er,Kaufman Efficiency Ratio,trend_regime,trend_regime,ER
+indicator,eri,Elder Ray Index,momentum,momentum,ERI
+indicator,fisher,Fisher Transform,cycle_momentum,cycle_momentum,FISHER
+indicator,fosc,Forecast Oscillator,momentum,momentum,FOSC
+indicator,fractal,Williams Fractal,swing_analysis,swing_analysis,FRACTAL
+indicator,ibs,Internal Bar Strength,momentum,momentum,IBS
+indicator,imi,Intraday Momentum Index,momentum,momentum,IMI
+indicator,kdj,KDJ Stochastic,momentum,momentum,KDJ
+indicator,kst,Know Sure Thing,momentum,momentum,KST
+indicator,kstext,Know Sure Thing Extended,momentum,momentum,KSTEXT
+indicator,macd,Moving Average Convergence Divergence,momentum,momentum,MACD
+indicator,macdext,MACD Extended,momentum,momentum,MACDEXT
+indicator,macdfix,MACD Fixed,momentum,momentum,MACDFIX
+indicator,macdv,MACD-V,momentum,momentum,MACDV
+indicator,mfi,Money Flow Index,volume_momentum,volume_momentum,MFI
+indicator,minus_di,Minus Directional Indicator,trend_strength,trend_strength,MINUS_DI
+indicator,minus_dm,Minus Directional Movement,trend_strength,trend_strength,MINUS_DM
+indicator,mom,Momentum,momentum,momentum,MOM
+indicator,plus_di,Plus Directional Indicator,trend_strength,trend_strength,PLUS_DI
+indicator,plus_dm,Plus Directional Movement,trend_strength,trend_strength,PLUS_DM
+indicator,ppo,Percentage Price Oscillator,momentum,momentum,PPO
+indicator,pso,Premier Stochastic Oscillator,momentum,momentum,PSO
+indicator,qstick,Qstick,momentum,momentum,QSTICK
+indicator,roc,Rate of Change,momentum,momentum,ROC
+indicator,rocp,Rate of Change Percentage,momentum,momentum,ROCP
+indicator,rocr,Rate of Change Ratio,momentum,momentum,ROCR
+indicator,rocr100,Rate of Change Ratio 100,momentum,momentum,ROCR100
+indicator,rsi,Relative Strength Index,momentum,momentum,RSI
+indicator,si,Wilder Swing Index,momentum,momentum,SI
+indicator,smi,Stochastic Momentum Index,momentum,momentum,SMI
+indicator,sqzmom,Squeeze Momentum,volatility_momentum,volatility_momentum,SQZMOM
+indicator,stc,Schaff Trend Cycle,cycle_momentum,cycle_momentum,STC
+indicator,stoch,Stochastic Oscillator,momentum,momentum,STOCH
+indicator,stochf,Stochastic Fast,momentum,momentum,STOCHF
+indicator,stochrsi,Stochastic RSI,momentum,momentum,STOCHRSI
+indicator,trix,TRIX,momentum,momentum,TRIX
+indicator,tsi,True Strength Index,momentum,momentum,TSI
+indicator,ultosc,Ultimate Oscillator,momentum,momentum,ULTOSC
+indicator,vhf,Vertical Horizontal Filter,trend_regime,trend_regime,VHF
+indicator,vortex,Vortex Indicator,trend_strength,trend_strength,VORTEX
+indicator,wad,Williams Accumulation/Distribution,volume_momentum,volume_momentum,WAD
+indicator,wavetrend,WaveTrend Oscillator,momentum,momentum,WAVETREND
+indicator,willr,Williams %R,momentum,momentum,WILLR
+indicator,adr,Average Day Range,volatility,volatility,ADR
+indicator,atr,Average True Range,volatility,volatility,ATR
+indicator,bbw,Bollinger BandWidth,volatility,volatility,BBW
+indicator,cvi,Chaikin Volatility,volatility,volatility,CVI
+indicator,massi,Mass Index,volatility_reversal,volatility_reversal,MASSI
+indicator,natr,Normalized ATR,volatility,volatility,NATR
+indicator,percentb,Bollinger %B,volatility,volatility,PERCENTB
+indicator,rogerssatchell,Rogers-Satchell Volatility,volatility,volatility,ROGERSSATCHELL
+indicator,rvi,Relative Volatility Index,volatility_momentum,volatility_momentum,RVI
+indicator,rvir,Relative Volatility Index Refined,volatility_momentum,volatility_momentum,RVIR
+indicator,trange,True Range,volatility,volatility,TRANGE
+indicator,ad,Chaikin Accumulation/Distribution Line,volume,volume,AD
+indicator,adosc,Chaikin A/D Oscillator,volume,volume,ADOSC
+indicator,cmf,Chaikin Money Flow,volume,volume,CMF
+indicator,efi,Elder Force Index,volume_momentum,volume_momentum,EFI
+indicator,emv,Ease of Movement,volume,volume,EMV
+indicator,kvo,Klinger Volume Oscillator,volume_momentum,volume_momentum,KVO
+indicator,marketfi,Market Facilitation Index,volume,volume,MARKETFI
+indicator,nvi,Negative Volume Index,volume,volume,NVI
+indicator,obv,On-Balance Volume,volume,volume,OBV
+indicator,pvi,Positive Volume Index,volume,volume,PVI
+indicator,pvo,Percentage Volume Oscillator,volume_momentum,volume_momentum,PVO
+indicator,pvt,Price Volume Trend,volume,volume,PVT
+indicator,rvol,Relative Volume,volume,volume,RVOL
+indicator,vwap,Volume Weighted Average Price,volume_price,volume_price,VWAP
+indicator,beta,Rolling Beta,statistics,statistics,BETA
+indicator,correl,Rolling Correlation,statistics,statistics,CORREL
+indicator,kurtosis,Rolling Excess Kurtosis,statistics,statistics,KURTOSIS
+indicator,linearreg,Linear Regression Value,statistics,statistics,LINEARREG
+indicator,linearreg_angle,Linear Regression Angle,statistics,statistics,LINEARREG_ANGLE
+indicator,linearreg_intercept,Linear Regression Intercept,statistics,statistics,LINEARREG_INTERCEPT
+indicator,linearreg_slope,Linear Regression Slope,statistics,statistics,LINEARREG_SLOPE
+indicator,median,Rolling Median,statistics,statistics,MEDIAN
+indicator,percentile,Rolling Percentile,statistics,statistics,PERCENTILE
+indicator,percentrank,Rolling Percent Rank,statistics,statistics,PERCENTRANK
+indicator,skew,Rolling Skewness,statistics,statistics,SKEW
+indicator,stddev,Rolling Standard Deviation,statistics,statistics,STDDEV
+indicator,tsf,Time Series Forecast,statistics,statistics,TSF
+indicator,var,Rolling Variance,statistics,statistics,VAR
+indicator,ht_dcperiod,Hilbert Dominant Cycle Period,cycle,cycle,HT_DCPERIOD
+indicator,ht_dcphase,Hilbert Dominant Cycle Phase,cycle,cycle,HT_DCPHASE
+indicator,ht_phasor,Hilbert Phasor Components,cycle,cycle,HT_PHASOR
+indicator,ht_sine,Hilbert SineWave,cycle,cycle,HT_SINE
+indicator,ht_trendmode,Hilbert Trend vs Cycle Mode,cycle_regime,cycle_regime,HT_TRENDMODE
+indicator,swak_2php,Two-Pole High-Pass Filter,cycle_filter,cycle_filter,SWAK_2PHP
+indicator,swak_bp,Band-Pass Filter,cycle_filter,cycle_filter,SWAK_BP
+indicator,swak_hp,High-Pass Filter,cycle_filter,cycle_filter,SWAK_HP
+indicator,avgprice,Average Price,price_transform,price_transform,AVGPRICE
+indicator,ha,Heikin-Ashi,price_transform,price_transform,HA
+indicator,medprice,Median Price,price_transform,price_transform,MEDPRICE
+indicator,typprice,Typical Price,price_transform,price_transform,TYPPRICE
+indicator,wclprice,Weighted Close Price,price_transform,price_transform,WCLPRICE
+indicator,avgdev,Average Deviation,statistics,statistics,AVGDEV
+indicator,anchored_vwap,Anchored VWAP,volume_price,volume_price,
+indicator,volume_profile,"Volume Profile (POC, VAH, VAL)",volume_price,volume_price,
+indicator,cumulative_volume_delta,Cumulative Volume Delta (CVD),volume_orderflow,volume_orderflow,
+indicator,volume_delta,Volume Delta,volume_orderflow,volume_orderflow,
+indicator,parkinson_volatility,Parkinson Volatility,volatility,volatility,
+indicator,garman_klass_volatility,Garman-Klass Volatility,volatility,volatility,
+indicator,yang_zhang_volatility,Yang-Zhang Volatility,volatility,volatility,
+indicator,historical_volatility,Historical Volatility,volatility,volatility,
+indicator,relative_strength_line,Relative Strength vs Benchmark,relative_strength,relative_strength,
+indicator,elder_impulse_system,Elder Impulse System,trend_momentum,trend_momentum,
+indicator,heikin_ashi_trend,Heikin-Ashi Trend State,price_transform,price_transform,
+indicator,supertrend_multi,Multi-timeframe SuperTrend,trend_stop,trend_stop,
+indicator,pivot_points_classic,Classic Pivot Points,support_resistance,support_resistance,
+indicator,pivot_points_fibonacci,Fibonacci Pivot Points,support_resistance,support_resistance,
+indicator,pivot_points_camarilla,Camarilla Pivots,support_resistance,support_resistance,
+indicator,zigzag_atr,ATR ZigZag,swing_analysis,swing_analysis,
+indicator,market_structure_hh_hl,Market Structure HH/HL/LH/LL,price_action,price_action,
+indicator,bos_choch,Break of Structure / Change of Character,price_action,price_action,
+indicator,vwap_deviation_bands,VWAP Deviation Bands,volume_price,volume_price,
+indicator,rsi_divergence,RSI Divergence,momentum_pattern,momentum_pattern,
+indicator,macd_divergence,MACD Divergence,momentum_pattern,momentum_pattern,
+indicator,stoch_divergence,Stochastic Divergence,momentum_pattern,momentum_pattern,
+indicator,atr_percentile,ATR Percentile,volatility_regime,volatility_regime,
+indicator,volatility_squeeze,Volatility Squeeze State,volatility_regime,volatility_regime,
+indicator,mcginley_dynamic,McGinley Dynamic,moving_average,moving_average,
+indicator,jma,Jurik Moving Average (JMA-style),moving_average,moving_average,
+indicator,swma,Symmetric Weighted Moving Average,moving_average,moving_average,
+indicator,smma,Smoothed Moving Average (SMMA/RMA),moving_average,moving_average,
+indicator,lsma,Least Squares Moving Average,moving_average,moving_average,
+indicator,epma,Endpoint Moving Average,moving_average,moving_average,
+indicator,kama_efficiency_ratio,Kaufman Efficiency Ratio,adaptive_trend,adaptive_trend,
+indicator,t3_average,Tillson T3 Moving Average,moving_average,moving_average,
+indicator,tema_slope,Triple EMA Slope,trend_strength,trend_strength,
+indicator,ma_spread,Moving Average Spread,trend,trend,
+indicator,ma_ribbon_width,Moving Average Ribbon Width,trend_regime,trend_regime,
+indicator,price_ma_distance,Price-to-Moving-Average Distance,trend,trend,
+indicator,connors_rsi,Connors RSI,momentum,momentum,
+indicator,ultimate_oscillator,Ultimate Oscillator,momentum,momentum,
+indicator,schaff_trend_cycle,Schaff Trend Cycle,momentum,momentum,
+indicator,coppock_curve,Coppock Curve,momentum,momentum,
+indicator,vortex_indicator,Vortex Indicator,trend,trend,
+indicator,chande_momentum_oscillator,Chande Momentum Oscillator,momentum,momentum,
+indicator,relative_vigor_index,Relative Vigor Index,momentum,momentum,
+indicator,smoothed_rvi,Smoothed Relative Vigor Index,momentum,momentum,
+indicator,fisher_transform,Fisher Transform,momentum,momentum,
+indicator,inverse_fisher_rsi,Inverse Fisher RSI,momentum,momentum,
+indicator,rsi_of_ema,RSI of EMA,momentum,momentum,
+indicator,rsi_divergence_score,RSI Divergence Score,momentum_divergence,momentum_divergence,
+indicator,macd_histogram_slope,MACD Histogram Slope,momentum,momentum,
+indicator,macd_normalised,Normalised MACD,momentum,momentum,
+indicator,elder_force_index,Elder Force Index,volume_momentum,volume_momentum,
+indicator,ease_of_movement,Ease of Movement,volume_momentum,volume_momentum,
+indicator,volume_zone_oscillator,Volume Zone Oscillator,volume_momentum,volume_momentum,
+indicator,negative_volume_index,Negative Volume Index,volume_momentum,volume_momentum,
+indicator,positive_volume_index,Positive Volume Index,volume_momentum,volume_momentum,
+indicator,chaikin_oscillator,Chaikin Oscillator,volume_momentum,volume_momentum,
+indicator,chaikin_money_flow,Chaikin Money Flow,volume_flow,volume_flow,
+indicator,volume_price_trend,Volume Price Trend,volume_flow,volume_flow,
+indicator,volume_weighted_macd,Volume Weighted MACD,volume_momentum,volume_momentum,
+indicator,relative_volume_time_of_day,Relative Volume Time of Day,volume,volume,
+indicator,volume_weighted_average_price_bands,VWAP Standard Deviation Bands,volume_weighted_price,volume_weighted_price,
+indicator,rolling_vwap,Rolling VWAP,volume_weighted_price,volume_weighted_price,
+indicator,volume_profile_poc,Volume Profile Point of Control,volume_profile,volume_profile,
+indicator,volume_profile_value_area,Volume Profile Value Area,volume_profile,volume_profile,
+indicator,volume_profile_high_volume_nodes,High Volume Nodes,volume_profile,volume_profile,
+indicator,volume_profile_low_volume_nodes,Low Volume Nodes,volume_profile,volume_profile,
+indicator,ulcer_index,Ulcer Index,risk_volatility,risk_volatility,
+indicator,ulcer_performance_index,Ulcer Performance Index,risk_adjusted_performance,risk_adjusted_performance,
+indicator,rogers_satchell_volatility,Rogers-Satchell Volatility,volatility_estimator,volatility_estimator,
+indicator,realised_volatility,Realised Volatility,volatility_estimator,volatility_estimator,
+indicator,realised_bipower_variation,Realised Bipower Variation,volatility_estimator,volatility_estimator,
+indicator,realised_kernel_volatility,Realised Kernel Volatility,volatility_estimator,volatility_estimator,
+indicator,ewma_volatility,EWMA Volatility,volatility_estimator,volatility_estimator,
+indicator,garch_11_volatility,"GARCH(1,1) Volatility",volatility_model,volatility_model,
+indicator,egarch_volatility,EGARCH Volatility,volatility_model,volatility_model,
+indicator,volatility_of_volatility,Volatility of Volatility,volatility_regime,volatility_regime,
+indicator,choppiness_index,Choppiness Index,trend_regime,trend_regime,
+indicator,vertical_horizontal_filter,Vertical Horizontal Filter,trend_regime,trend_regime,
+indicator,efficiency_ratio,Price Efficiency Ratio,trend_regime,trend_regime,
+indicator,hurst_exponent,Hurst Exponent,statistical_regime,statistical_regime,
+indicator,permutation_entropy,Permutation Entropy,statistical_regime,statistical_regime,
+indicator,sample_entropy,Sample Entropy,statistical_regime,statistical_regime,
+indicator,rolling_skewness,Rolling Skewness,statistical_moments,statistical_moments,
+indicator,rolling_kurtosis,Rolling Kurtosis,statistical_moments,statistical_moments,
+indicator,rolling_autocorrelation,Rolling Autocorrelation,statistical_dependence,statistical_dependence,
+indicator,rolling_beta,Rolling Beta,cross_asset_statistics,cross_asset_statistics,
+indicator,rolling_correlation,Rolling Correlation,cross_asset_statistics,cross_asset_statistics,
+indicator,rolling_cointegration_residual,Cointegration Residual,cross_asset_statistics,cross_asset_statistics,
+indicator,spread_zscore,Spread Z-Score,statistical_spread,statistical_spread,
+indicator,rolling_linear_regression_slope,Rolling Linear Regression Slope,statistical_trend,statistical_trend,
+indicator,rolling_linear_regression_r2,Rolling Regression R-Squared,statistical_trend,statistical_trend,
+indicator,rolling_zscore,Rolling Z-Score,statistical_normalisation,statistical_normalisation,
+indicator,robust_mad_zscore,Robust MAD Z-Score,statistical_normalisation,statistical_normalisation,
+indicator,rolling_percentile_rank,Rolling Percentile Rank,statistical_normalisation,statistical_normalisation,
+indicator,cusum_change_detector,CUSUM Change Detector,statistical_change_point,statistical_change_point,
+indicator,bollinger_bandwidth_percentile,Bollinger Bandwidth Percentile,volatility_regime,volatility_regime,
+indicator,keltner_channel_width,Keltner Channel Width,volatility_envelope,volatility_envelope,
+indicator,donchian_width,Donchian Channel Width,volatility_envelope,volatility_envelope,
+indicator,mass_index,Mass Index,volatility_reversal,volatility_reversal,
+indicator,relative_volatility_index,Relative Volatility Index,volatility_momentum,volatility_momentum,
+indicator,detrended_price_oscillator,Detrended Price Oscillator,cycle,cycle,
+indicator,ehlers_mama,MESA Adaptive Moving Average,cycle_adaptive_average,cycle_adaptive_average,
+indicator,hilbert_dominant_cycle,Hilbert Transform Dominant Cycle,cycle,cycle,
+indicator,autocorrelation_periodogram,Autocorrelation Periodogram,cycle,cycle,
+indicator,fisher_cycle_indicator,Fisher Cycle Indicator,cycle,cycle,
+indicator,aroon_oscillator,Aroon Oscillator,trend,trend,
+indicator,demand_index,Demand Index,volume_flow,volume_flow,
+indicator,intraday_intensity_index,Intraday Intensity Index,volume_flow,volume_flow,
+indicator,close_location_value,Close Location Value,price_location,price_location,
+indicator,buying_pressure,Buying Pressure,price_location,price_location,
+indicator,selling_pressure,Selling Pressure,price_location,price_location,
+indicator,trend_intensity_index,Trend Intensity Index,trend_strength,trend_strength,
+indicator,trend_direction_force_index,Trend Direction Force Index,trend_strength,trend_strength,
+indicator,market_meanness_index,Market Meanness Index,trend_regime,trend_regime,
+indicator,choppiness_adaptive_threshold,Adaptive Choppiness Threshold,trend_regime,trend_regime,
+indicator,market_breadth_ad_line,Advance Decline Line,market_breadth,market_breadth,
+indicator,market_breadth_ad_ratio,Advance Decline Ratio,market_breadth,market_breadth,
+indicator,market_breadth_high_low_index,High-Low Index,market_breadth,market_breadth,
+indicator,market_breadth_mcclellan_oscillator,McClellan Oscillator,market_breadth,market_breadth,
+indicator,market_breadth_mcclellan_summation,McClellan Summation Index,market_breadth,market_breadth,
+indicator,market_breadth_trin_arms,TRIN / Arms Index,market_breadth,market_breadth,
+indicator,market_breadth_percent_above_ma,Percent Above Moving Average,market_breadth,market_breadth,
+indicator,market_breadth_new_high_new_low,New High-New Low Differential,market_breadth,market_breadth,
+indicator,relative_strength_vs_benchmark,Relative Strength vs Benchmark,relative_strength,relative_strength,
+indicator,relative_strength_rank,Cross-Sectional Relative Strength Rank,relative_strength,relative_strength,
+indicator,sector_relative_strength,Sector Relative Strength,relative_strength,relative_strength,
+indicator,intraday_vwap_distance,Intraday VWAP Distance,intraday_context,intraday_context,
+indicator,overnight_gap_percent,Overnight Gap Percent,session_context,session_context,
+indicator,day_of_week_effect,Day of Week Feature,calendar_feature,calendar_feature,
+indicator,month_end_effect,Month-End Calendar Feature,calendar_feature,calendar_feature,
+indicator,earnings_proximity,Earnings Proximity Feature,event_calendar,event_calendar,
+indicator,dividend_event_proximity,Dividend Event Proximity,event_calendar,event_calendar,
+indicator,options_implied_volatility_rank,Options IV Rank,options_analytics,options_analytics,
+indicator,options_implied_volatility_percentile,Options IV Percentile,options_analytics,options_analytics,
+indicator,options_put_call_open_interest_ratio,Put Call Open Interest Ratio,options_analytics,options_analytics,
+indicator,options_put_call_volume_ratio,Put Call Volume Ratio,options_analytics,options_analytics,
+indicator,options_skew_25d,25-Delta Options Skew,options_analytics,options_analytics,
+indicator,options_term_structure,Options IV Term Structure,options_analytics,options_analytics,
+indicator,options_max_pain,Options Max Pain Estimate,options_analytics,options_analytics,
+indicator,futures_basis,Futures Basis,derivatives_market,derivatives_market,
+indicator,calendar_spread,Futures Calendar Spread,derivatives_market,derivatives_market,
+indicator,open_interest_change,Open Interest Change,derivatives_market,derivatives_market,
+indicator,price_oi_quadrant,Price and Open Interest Quadrant,derivatives_market,derivatives_market,
+indicator,funding_rate_zscore,Perpetual Futures Funding Z-Score,derivatives_market,derivatives_market,
+indicator,liquidation_imbalance,Liquidation Imbalance,derivatives_market,derivatives_market,
+indicator,order_book_imbalance,Order Book Imbalance,market_microstructure,market_microstructure,
+indicator,microprice,Microprice,market_microstructure,market_microstructure,
+indicator,quoted_spread_bps,Quoted Spread Basis Points,market_microstructure,market_microstructure,
+indicator,effective_spread_bps,Effective Spread Basis Points,market_microstructure,market_microstructure,
+indicator,order_flow_imbalance,Order Flow Imbalance,market_microstructure,market_microstructure,
+indicator,cumulative_delta,Cumulative Volume Delta,market_microstructure,market_microstructure,
+indicator,trade_imbalance,Trade Imbalance,market_microstructure,market_microstructure,
+indicator,amihud_illiquidity,Amihud Illiquidity,market_microstructure,market_microstructure,
+indicator,kyle_lambda,Kyle Lambda,market_microstructure,market_microstructure,
+indicator,roll_spread_estimator,Roll Effective Spread Estimator,market_microstructure,market_microstructure,
+indicator,tick_rule_signed_volume,Tick Rule Signed Volume,market_microstructure,market_microstructure,
+indicator,relative_range,Relative Range,range_feature,range_feature,
+indicator,candle_body_pct,Candle Body Percentage,candle_feature,candle_feature,
+indicator,upper_shadow_pct,Upper Shadow Percentage,candle_feature,candle_feature,
+indicator,lower_shadow_pct,Lower Shadow Percentage,candle_feature,candle_feature,
+indicator,close_location_in_range,Close Location in Range,candle_feature,candle_feature,
+indicator,gap_to_prior_range,Gap to Prior Range,gap_feature,gap_feature,
+indicator,swing_distance_atr,Distance to Last Confirmed Swing,market_structure_feature,market_structure_feature,
+indicator,rolling_drawdown,Rolling Drawdown,risk_analytics,risk_analytics,
+indicator,rolling_max_drawdown,Rolling Maximum Drawdown,risk_analytics,risk_analytics,
+indicator,rolling_sharpe,Rolling Sharpe Ratio,risk_analytics,risk_analytics,
+indicator,rolling_sortino,Rolling Sortino Ratio,risk_analytics,risk_analytics,
+indicator,rolling_calmar,Rolling Calmar Ratio,risk_analytics,risk_analytics,
+indicator,rolling_omega,Rolling Omega Ratio,risk_analytics,risk_analytics,
+indicator,rolling_tail_ratio,Rolling Tail Ratio,risk_analytics,risk_analytics,
+indicator,rolling_var,Rolling Value at Risk,risk_analytics,risk_analytics,
+indicator,rolling_expected_shortfall,Rolling Expected Shortfall,risk_analytics,risk_analytics,
+market_structure_event,higher_high,Higher High (HH),swing_structure,bullish,
+market_structure_event,higher_low,Higher Low (HL),swing_structure,bullish,
+market_structure_event,lower_high,Lower High (LH),swing_structure,bearish,
+market_structure_event,lower_low,Lower Low (LL),swing_structure,bearish,
+market_structure_event,break_of_structure_bullish,Bullish Break of Structure (BOS),structure_break,bullish,
+market_structure_event,break_of_structure_bearish,Bearish Break of Structure (BOS),structure_break,bearish,
+market_structure_event,change_of_character_bullish,Bullish Change of Character (CHoCH),structure_shift,bullish,
+market_structure_event,change_of_character_bearish,Bearish Change of Character (CHoCH),structure_shift,bearish,
+market_structure_event,market_structure_shift_bullish,Bullish Market Structure Shift (MSS),structure_shift,bullish,
+market_structure_event,market_structure_shift_bearish,Bearish Market Structure Shift (MSS),structure_shift,bearish,
+market_structure_event,internal_structure_break,Internal Structure Break,structure_break,neutral,
+market_structure_event,external_structure_break,External Structure Break,structure_break,neutral,
+market_structure_event,equal_highs_liquidity_pool,Equal Highs Liquidity Pool,liquidity_pool,neutral,
+market_structure_event,equal_lows_liquidity_pool,Equal Lows Liquidity Pool,liquidity_pool,neutral,
+market_structure_event,buy_side_liquidity_sweep,Buy-Side Liquidity Sweep,liquidity_sweep,bearish,
+market_structure_event,sell_side_liquidity_sweep,Sell-Side Liquidity Sweep,liquidity_sweep,bullish,
+market_structure_event,internal_liquidity_sweep,Internal Liquidity Sweep,liquidity_sweep,neutral,
+market_structure_event,external_liquidity_sweep,External Liquidity Sweep,liquidity_sweep,neutral,
+market_structure_event,fair_value_gap_bullish,Bullish Fair Value Gap (FVG),imbalance,bullish,
+market_structure_event,fair_value_gap_bearish,Bearish Fair Value Gap (FVG),imbalance,bearish,
+market_structure_event,inverse_fair_value_gap_bullish,Bullish Inverse FVG (IFVG),imbalance,bullish,
+market_structure_event,inverse_fair_value_gap_bearish,Bearish Inverse FVG (IFVG),imbalance,bearish,
+market_structure_event,volume_imbalance_bullish,Bullish Volume Imbalance,imbalance,bullish,
+market_structure_event,volume_imbalance_bearish,Bearish Volume Imbalance,imbalance,bearish,
+market_structure_event,order_block_bullish,Bullish Order Block (heuristic),order_block,bullish,
+market_structure_event,order_block_bearish,Bearish Order Block (heuristic),order_block,bearish,
+market_structure_event,breaker_block_bullish,Bullish Breaker Block,order_block,bullish,
+market_structure_event,breaker_block_bearish,Bearish Breaker Block,order_block,bearish,
+market_structure_event,mitigation_block_bullish,Bullish Mitigation Block,order_block,bullish,
+market_structure_event,mitigation_block_bearish,Bearish Mitigation Block,order_block,bearish,
+market_structure_event,rejection_block_bullish,Bullish Rejection Block,order_block,bullish,
+market_structure_event,rejection_block_bearish,Bearish Rejection Block,order_block,bearish,
+market_structure_event,premium_zone,Premium Zone,dealing_range,bearish,
+market_structure_event,discount_zone,Discount Zone,dealing_range,bullish,
+market_structure_event,equilibrium_level,Equilibrium (50%),dealing_range,neutral,
+market_structure_event,optimal_trade_entry_zone,Optimal Trade Entry (OTE) Zone,fibonacci_zone,neutral,
+market_structure_event,consequent_encroachment,Consequent Encroachment (CE),imbalance,neutral,
+market_structure_event,breaker_retest,Breaker Retest,order_block,neutral,
+market_structure_event,liquidity_void,Liquidity Void,imbalance,neutral,
+market_structure_event,displacement_bullish,Bullish Displacement,displacement,bullish,
+market_structure_event,displacement_bearish,Bearish Displacement,displacement,bearish,
+market_structure_event,consolidation_range,Consolidation / Dealing Range,range_structure,neutral,
+market_structure_event,range_acceptance_above,Acceptance Above Range,auction_event,bullish,
+market_structure_event,range_acceptance_below,Acceptance Below Range,auction_event,bearish,
+market_structure_event,range_rejection_above,Rejection Above Range,auction_event,bearish,
+market_structure_event,range_rejection_below,Rejection Below Range,auction_event,bullish,
+market_structure_event,vwap_reclaim,VWAP Reclaim,intraday_reference,bullish,
+market_structure_event,vwap_rejection,VWAP Rejection,intraday_reference,bearish,
+market_structure_event,prior_day_high_sweep,Prior Day High Sweep,liquidity_sweep,bearish,
+market_structure_event,prior_day_low_sweep,Prior Day Low Sweep,liquidity_sweep,bullish,
+market_structure_event,prior_week_high_sweep,Prior Week High Sweep,liquidity_sweep,bearish,
+market_structure_event,prior_week_low_sweep,Prior Week Low Sweep,liquidity_sweep,bullish,
+market_structure_event,opening_range_high_sweep,Opening Range High Sweep,intraday_liquidity,bearish,
+market_structure_event,opening_range_low_sweep,Opening Range Low Sweep,intraday_liquidity,bullish,
+market_structure_event,trend_day_up,Up Trend Day,session_regime,bullish,
+market_structure_event,trend_day_down,Down Trend Day,session_regime,bearish,
+market_structure_event,neutral_day,Neutral Day,session_regime,neutral,
+market_structure_event,double_distribution_day,Double Distribution Day,session_regime,neutral,
+market_structure_event,poor_high,Poor High,auction_reference,bearish,
+market_structure_event,poor_low,Poor Low,auction_reference,bullish,
+market_structure_event,single_print_zone,Single Prints,auction_reference,neutral,
+market_structure_event,excess_high,Excess High,auction_reference,bearish,
+market_structure_event,excess_low,Excess Low,auction_reference,bullish,
+market_structure_event,value_area_migration_up,Value Area Migration Up,auction_event,bullish,
+market_structure_event,value_area_migration_down,Value Area Migration Down,auction_event,bearish,
+market_structure_event,anchored_vwap_reclaim,Anchored VWAP Reclaim,intraday_reference,bullish,
+market_structure_event,anchored_vwap_rejection,Anchored VWAP Rejection,intraday_reference,bearish,
+market_structure_event,parabolic_run,Parabolic Run,trend_exhaustion,neutral,
+market_structure_event,climax_volume_spike,Climax Volume Spike,volume_event,neutral,
+market_structure_event,absorption_bid,Bid-Side Absorption (trade-level),order_flow_event,bullish,
+market_structure_event,absorption_ask,Ask-Side Absorption (trade-level),order_flow_event,bearish,
+market_structure_event,iceberg_order_inference,Iceberg Order Inference,order_flow_event,neutral,
+market_structure_event,stop_run_inference,Stop Run Inference,liquidity_sweep,neutral,
+market_structure_event,squeeze_release,Volatility Squeeze Release,volatility_regime,neutral,
+market_structure_event,atr_trailing_stop_flip,ATR Trailing Stop Flip,trend_state,neutral,
+market_structure_event,parabolic_sar_flip,Parabolic SAR State Flip,trend_state,neutral,
+market_structure_event,weekly_open_reclaim,Weekly Open Reclaim,higher_timeframe_reference,bullish,
+market_structure_event,weekly_open_rejection,Weekly Open Rejection,higher_timeframe_reference,bearish,
+market_structure_event,monthly_open_reclaim,Monthly Open Reclaim,higher_timeframe_reference,bullish,
+market_structure_event,monthly_open_rejection,Monthly Open Rejection,higher_timeframe_reference,bearish,
+market_structure_event,multi_timeframe_alignment,Multi-Timeframe Alignment,multi_timeframe_context,neutral,
+market_structure_event,multi_timeframe_conflict,Multi-Timeframe Conflict,multi_timeframe_context,neutral,
+market_structure_event,session_open_drive,Session Open Drive,intraday_auction,neutral,
+market_structure_event,lunch_session_compression,Midday Session Compression,intraday_regime,neutral,
+market_structure_event,closing_auction_imbalance,Closing Auction Imbalance,auction_event,neutral,
+research_feature,log_return,Log Return,returns,returns,
+research_feature,simple_return,Simple Return,returns,returns,
+research_feature,overnight_return,Overnight Return,returns,returns,
+research_feature,intraday_return,Intraday Return,returns,returns,
+research_feature,close_to_close_return_5,Five-Bar Return,returns,returns,
+research_feature,close_to_close_return_20,Twenty-Bar Return,returns,returns,
+research_feature,close_to_close_return_60,Sixty-Bar Return,returns,returns,
+research_feature,rolling_return_volatility,Rolling Return Volatility,returns,returns,
+research_feature,downside_return_volatility,Downside Return Volatility,returns,returns,
+research_feature,upside_return_volatility,Upside Return Volatility,returns,returns,
+research_feature,return_skewness,Return Skewness,returns_distribution,returns_distribution,
+research_feature,return_excess_kurtosis,Return Excess Kurtosis,returns_distribution,returns_distribution,
+research_feature,gap_size_atr,Gap Size in ATR,gap,gap,
+research_feature,true_range_atr,True Range / ATR,range,range,
+research_feature,bar_range_percent,Bar Range Percent,range,range,
+research_feature,body_atr,Body Size in ATR,candle_anatomy,candle_anatomy,
+research_feature,upper_wick_atr,Upper Wick in ATR,candle_anatomy,candle_anatomy,
+research_feature,lower_wick_atr,Lower Wick in ATR,candle_anatomy,candle_anatomy,
+research_feature,close_location_value,Close Location Value,candle_anatomy,candle_anatomy,
+research_feature,bar_overlap_ratio,Bar Overlap Ratio,bar_structure,bar_structure,
+research_feature,inside_bar_flag,Inside Bar Flag,bar_structure,bar_structure,
+research_feature,outside_bar_flag,Outside Bar Flag,bar_structure,bar_structure,
+research_feature,consecutive_up_bars,Consecutive Up Bars,bar_structure,bar_structure,
+research_feature,consecutive_down_bars,Consecutive Down Bars,bar_structure,bar_structure,
+research_feature,close_above_prior_high,Close Above Prior High,bar_structure,bar_structure,
+research_feature,close_below_prior_low,Close Below Prior Low,bar_structure,bar_structure,
+research_feature,distance_from_rolling_high,Distance from Rolling High,price_location,price_location,
+research_feature,distance_from_rolling_low,Distance from Rolling Low,price_location,price_location,
+research_feature,distance_from_prior_day_high,Distance from Prior Day High,price_location,price_location,
+research_feature,distance_from_prior_day_low,Distance from Prior Day Low,price_location,price_location,
+research_feature,distance_from_prior_week_high,Distance from Prior Week High,price_location,price_location,
+research_feature,distance_from_prior_week_low,Distance from Prior Week Low,price_location,price_location,
+research_feature,distance_from_poc,Distance from Point of Control,profile_location,profile_location,
+research_feature,distance_from_vah,Distance from Value Area High,profile_location,profile_location,
+research_feature,distance_from_val,Distance from Value Area Low,profile_location,profile_location,
+research_feature,profile_value_overlap,Profile Value Area Overlap,profile_location,profile_location,
+research_feature,relative_volume_20,Relative Volume 20,volume,volume,
+research_feature,relative_volume_median_20,Relative Volume Median 20,volume,volume,
+research_feature,volume_zscore_60,Volume Z-Score 60,volume,volume,
+research_feature,dollar_volume,Dollar Volume,liquidity,liquidity,
+research_feature,turnover_ratio,Turnover Ratio,liquidity,liquidity,
+research_feature,amihud_20,Amihud 20,liquidity,liquidity,
+research_feature,quoted_spread_bps,Quoted Spread BPS,execution,execution,
+research_feature,spread_to_atr,Quoted Spread to ATR,execution,execution,
+research_feature,estimated_slippage_bps,Estimated Slippage BPS,execution,execution,
+research_feature,participation_rate,Participation Rate,execution,execution,
+research_feature,market_impact_estimate,Market Impact Estimate,execution,execution,
+research_feature,time_of_day_bucket,Time of Day Bucket,calendar,calendar,
+research_feature,minutes_since_open,Minutes Since Open,calendar,calendar,
+research_feature,minutes_to_close,Minutes to Close,calendar,calendar,
+research_feature,is_first_15_minutes,First 15 Minutes Flag,calendar,calendar,
+research_feature,is_last_30_minutes,Last 30 Minutes Flag,calendar,calendar,
+research_feature,weekday,Weekday,calendar,calendar,
+research_feature,month,Month,calendar,calendar,
+research_feature,quarter_end_flag,Quarter-End Flag,calendar,calendar,
+research_feature,expiry_week_flag,Expiry Week Flag,calendar,calendar,
+research_feature,corporate_action_flag,Corporate Action Flag,events,events,
+research_feature,earnings_event_flag,Earnings Event Flag,events,events,
+research_feature,macro_event_flag,Macro Event Flag,events,events,
+research_feature,benchmark_return,Benchmark Return,cross_asset,cross_asset,
+research_feature,sector_return,Sector Return,cross_asset,cross_asset,
+research_feature,market_return_dispersion,Market Return Dispersion,cross_asset,cross_asset,
+research_feature,market_correlation,Market Correlation,cross_asset,cross_asset,
+research_feature,breadth_above_20dma,Breadth Above 20DMA,breadth,breadth,
+research_feature,breadth_above_50dma,Breadth Above 50DMA,breadth,breadth,
+research_feature,breadth_above_200dma,Breadth Above 200DMA,breadth,breadth,
+research_feature,new_52w_high_count,New 52-Week High Count,breadth,breadth,
+research_feature,new_52w_low_count,New 52-Week Low Count,breadth,breadth,
+research_feature,sector_strength_rank,Sector Strength Rank,cross_sectional,cross_sectional,
+research_feature,stock_strength_rank,Stock Strength Rank,cross_sectional,cross_sectional,
+research_feature,market_cap_bucket,Market Capitalisation Bucket,cross_sectional,cross_sectional,
+research_feature,free_float_market_cap,Free Float Market Capitalisation,cross_sectional,cross_sectional,
+research_feature,distance_to_earnings,Sessions to Earnings,events,events,
+research_feature,distance_to_expiry,Sessions to Expiry,derivatives,derivatives,
+research_feature,days_to_dividend,Days to Ex-Dividend,events,events,
+research_feature,futures_roll_days,Days to Futures Roll,derivatives,derivatives,
+research_feature,basis_percent,Futures Basis Percent,derivatives,derivatives,
+research_feature,basis_annualised,Annualised Futures Basis,derivatives,derivatives,
+research_feature,funding_rate,Perpetual Funding Rate,derivatives,derivatives,
+research_feature,open_interest_delta,Open Interest Delta,derivatives,derivatives,
+research_feature,put_call_oi_ratio,Put Call OI Ratio,options,options,
+research_feature,iv_skew,Implied Volatility Skew,options,options,
+research_feature,iv_term_slope,IV Term Structure Slope,options,options,
+research_feature,order_book_depth_imbalance,Order Book Depth Imbalance,microstructure,microstructure,
+research_feature,trade_sign_imbalance,Trade Sign Imbalance,microstructure,microstructure,
+research_feature,cumulative_delta_change,Cumulative Delta Change,microstructure,microstructure,
+research_feature,queue_imbalance,Best Quote Queue Imbalance,microstructure,microstructure,
+research_feature,trade_intensity,Trade Intensity,microstructure,microstructure,
+research_feature,order_cancel_rate,Order Cancellation Rate,microstructure,microstructure,
+research_feature,realised_spread,Realised Spread,microstructure,microstructure,
+research_feature,price_impact_5m,Five-Minute Price Impact,microstructure,microstructure,
+research_feature,fvg_size_atr,Fair Value Gap Size ATR,imbalance,imbalance,
+research_feature,order_block_size_atr,Order Block Size ATR,structure,structure,
+research_feature,swing_prominence_atr,Swing Prominence ATR,structure,structure,
+research_feature,trend_slope_atr,Trend Slope ATR,trend,trend,
+research_feature,distance_from_ema20_atr,Distance from EMA20 in ATR,trend,trend,
+research_feature,distance_from_ema50_atr,Distance from EMA50 in ATR,trend,trend,
+research_feature,distance_from_ema200_atr,Distance from EMA200 in ATR,trend,trend,
+research_feature,multi_timeframe_trend_score,Multi-Timeframe Trend Score,multi_timeframe,multi_timeframe,
+research_feature,multi_timeframe_momentum_score,Multi-Timeframe Momentum Score,multi_timeframe,multi_timeframe,
+research_feature,regime_trend_probability,Trend Regime Probability,regime,regime,
+research_feature,regime_mean_reversion_probability,Mean Reversion Regime Probability,regime,regime,
+research_feature,regime_high_vol_probability,High Volatility Regime Probability,regime,regime,
+research_feature,regime_liquidity_stress,Liquidity Stress Score,regime,regime,

@@ -1,92 +1,92 @@
 {
- "strategy": "a1",
- "trades": 584,
+ "strategy": "a3",
+ "trades": 598,
  "by": {
   "trend": {
    "downtrend": {
-    "trades": 152,
-    "win_pct": 51.32,
-    "avg_r": 0.18
+    "trades": 160,
+    "win_pct": 54.37,
+    "avg_r": 0.14
    },
    "uptrend": {
-    "trades": 432,
-    "win_pct": 48.38,
-    "avg_r": 0.09
+    "trades": 438,
+    "win_pct": 52.51,
+    "avg_r": 0.16
    }
   },
   "fear": {
    "calm": {
-    "trades": 322,
-    "win_pct": 45.96,
-    "avg_r": 0.09
+    "trades": 313,
+    "win_pct": 50.8,
+    "avg_r": 0.13
    },
    "nervous": {
-    "trades": 65,
-    "win_pct": 61.54,
-    "avg_r": 0.26
+    "trades": 76,
+    "win_pct": 65.79,
+    "avg_r": 0.46
    },
    "normal": {
-    "trades": 197,
-    "win_pct": 50.25,
-    "avg_r": 0.11
+    "trades": 209,
+    "win_pct": 51.67,
+    "avg_r": 0.09
    }
   },
   "breadth": {
    "mixed": {
-    "trades": 157,
-    "win_pct": 43.95,
-    "avg_r": -0.07
+    "trades": 146,
+    "win_pct": 43.84,
+    "avg_r": 0.02
    },
    "strong": {
-    "trades": 246,
-    "win_pct": 50.81,
-    "avg_r": 0.17
+    "trades": 255,
+    "win_pct": 58.43,
+    "avg_r": 0.29
    },
    "weak": {
-    "trades": 181,
-    "win_pct": 51.38,
-    "avg_r": 0.21
+    "trades": 197,
+    "win_pct": 52.79,
+    "avg_r": 0.09
    }
   },
   "trend+fear": {
    "downtrend/calm": {
-    "trades": 49,
-    "win_pct": 42.86,
-    "avg_r": 0.07
+    "trades": 40,
+    "win_pct": 47.5,
+    "avg_r": 0.08
    },
    "downtrend/nervous": {
-    "trades": 30,
-    "win_pct": 63.33,
-    "avg_r": 0.25
+    "trades": 41,
+    "win_pct": 60.98,
+    "avg_r": 0.3
    },
    "downtrend/normal": {
-    "trades": 73,
-    "win_pct": 52.05,
-    "avg_r": 0.23
+    "trades": 79,
+    "win_pct": 54.43,
+    "avg_r": 0.1
    },
    "uptrend/calm": {
     "trades": 273,
-    "win_pct": 46.52,
-    "avg_r": 0.09
+    "win_pct": 51.28,
+    "avg_r": 0.13
    },
    "uptrend/nervous": {
     "trades": 35,
-    "win_pct": 60.0,
-    "avg_r": 0.28
+    "win_pct": 71.43,
+    "avg_r": 0.66
    },
    "uptrend/normal": {
-    "trades": 124,
-    "win_pct": 49.19,
-    "avg_r": 0.04
+    "trades": 130,
+    "win_pct": 50.0,
+    "avg_r": 0.09
    }
   }
  },
  "today": {
-  "date": "2026-11-03",
+  "date": "2026-11-04",
   "trend": "downtrend",
   "fear": "calm",
-  "breadth": "weak",
-  "vix": 15.7,
-  "breadth_pct": 33.0
+  "breadth": "mixed",
+  "vix": 15.2,
+  "breadth_pct": 43.0
  }
 }

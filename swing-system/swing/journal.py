@@ -11,10 +11,10 @@ import numpy as np
 import pandas as pd
 
 from . import costs
-from .config import DATA, JOURNAL, ROOT
+from .config import DATA, PRIVATE, JOURNAL, ROOT
 
 TIPS = JOURNAL / "tips.csv"
-MY_TRADES = DATA / "my_trades.csv"   # personal: never committed to the (public) repository
+MY_TRADES = PRIVATE / "my_trades.csv"   # personal: never committed to the (public) repository
 COLUMNS = ["date", "symbol", "kind", "strategy", "setup", "score", "signal_close", "entry_low", "entry_high",
            "stop", "target1", "target2", "qty", "claude_verdict", "status", "entry_date", "entry_price",
            "exit_date", "exit_price", "exit_reason", "pnl", "r_multiple", "days"]

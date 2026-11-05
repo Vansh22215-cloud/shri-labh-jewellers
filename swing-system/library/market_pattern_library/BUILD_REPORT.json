@@ -1,0 +1,85 @@
+{
+  "version": "2.0.0",
+  "generated_date": "2026-11-03",
+  "counts": {
+    "chart_patterns": 148,
+    "candlestick_patterns": 130,
+    "indicators_and_features": 324,
+    "market_structure_events": 85,
+    "quant_research_features": 104
+  },
+  "total_records": 791,
+  "files": [
+    {
+      "name": "CLAUDE_CODE_HANDOFF.md",
+      "bytes": 3813,
+      "sha256": "52620886352fedbd90667cad5f3bc13809b31d2249c7caaede14dd00e7a70874"
+    },
+    {
+      "name": "README.md",
+      "bytes": 4399,
+      "sha256": "f64969d9598595ec7085fc2c31ce1e9608a84e72eb9be47a3178243deb2dbbc3"
+    },
+    {
+      "name": "SOURCES.md",
+      "bytes": 2490,
+      "sha256": "cb65830a4252c6137b2420ebc54e8b29a76940c80250446aa5bba80385081571"
+    },
+    {
+      "name": "aliases.json",
+      "bytes": 194061,
+      "sha256": "27096e2ee10cdb27e44873bff6453fbfa97468bf6fe50eb1292545e3d1beb76b"
+    },
+    {
+      "name": "candlestick_patterns.json",
+      "bytes": 130233,
+      "sha256": "760efd350f8a94e28b3500502fefbcde82086159bf60957c63cbcea2e9ff99c0"
+    },
+    {
+      "name": "catalog_index.csv",
+      "bytes": 63721,
+      "sha256": "24a43398b68c922f9f8af9fe8a613c55056978b4d3c93aef3f4b694fd43ad306"
+    },
+    {
+      "name": "chart_patterns.json",
+      "bytes": 219464,
+      "sha256": "83f36d6d4b4efe8d23aabfa588337b4dc5a94e5e595697fe5539183fe9f60c26"
+    },
+    {
+      "name": "indicators.json",
+      "bytes": 317180,
+      "sha256": "3b2d24b7b2b78a78142759810e21ce74e78a8c6b6e47928003f69fc86bda9f2a"
+    },
+    {
+      "name": "manifest.json",
+      "bytes": 5765,
+      "sha256": "379999b54ec8fc7615460606db300084b0c359a243f70ad1cb9485ea8a7699d8"
+    },
+    {
+      "name": "market_structure_events.json",
+      "bytes": 81554,
+      "sha256": "0233cf46a820d5183ac3047872539343d5db2cc12d32c31e6909b02110b14fe9"
+    },
+    {
+      "name": "quant_research_features.json",
+      "bytes": 67602,
+      "sha256": "3850d7fd42ddad53a882d3ef8d5b9df7cea267e29026e6d4bb1bcb0d11769608"
+    },
+    {
+      "name": "research_engine_contract.json",
+      "bytes": 4449,
+      "sha256": "4de9d5e9a2aa79e648d12fd9b9f45ca1dab1a788e5ae3e7ebef19ce91f4316e5"
+    },
+    {
+      "name": "signal_schema.json",
+      "bytes": 1893,
+      "sha256": "9f7a619a0e5007877d7114c5400d814fe7e36886229e3e046272d787c26771ec"
+    }
+  ],
+  "validation": {
+    "json_files_parse": true,
+    "duplicate_ids": 0,
+    "catalog_index_rows": 791,
+    "zip_test": "passed"
+  }
+}

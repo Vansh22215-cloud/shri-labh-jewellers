@@ -12,7 +12,7 @@ import time
 import requests
 
 from . import tipcheck
-from .config import DATA, DISCLAIMER, REPORTS, get_logger, load_settings, load_state
+from .config import DATA, PRIVATE, DISCLAIMER, REPORTS, get_logger, load_settings, load_state
 from .telegram import _remember_chat
 
 log = get_logger()
@@ -112,7 +112,7 @@ def trade_command(text):
             return f"{sym} is not in your open trades."
         r = my[my["symbol"] == sym].iloc[0]
         px = float(parts[2]) if len(parts) > 2 else None
-        f = DATA / "closed_trades.csv"
+        f = PRIVATE / "closed_trades.csv"
         rec = pd.DataFrame([{"symbol": sym, "buy_date": r["buy_date"], "buy_price": r["buy_price"], "qty": r["qty"],
                              "exit_date": str(pd.Timestamp.today().date()), "exit_price": px,
                              "pnl": round((px - float(r["buy_price"])) * float(r["qty"]), 2) if px else None}])
@@ -120,6 +120,27 @@ def trade_command(text):
         my[my["symbol"] != sym].to_csv(journal.MY_TRADES, index=False)
         return f"Recorded: sold {sym}" + (f" @ {px}. P&L Rs {rec.iloc[0]['pnl']:,.0f}" if px else "") + ". Delete its GTT in Kite."
     return "Unknown command."
+
+
+def _restore_backup(token, doc):
+    """The owner forwarded a backup file the system sent earlier -> merge it back (trades, tips, data archive)."""
+    import requests
+    from . import archive
+    try:
+        info = _api(token, "getFile", file_id=doc["file_id"])
+        path = (info.get("result") or {}).get("file_path")
+        if not path:
+            return "Could not download that file from Telegram (files over 20 MB can't be restored by the bot)."
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{path}", timeout=120)
+        r.raise_for_status()
+        tmp = DATA / "restore.tar.gz"
+        tmp.write_bytes(r.content)
+        n = archive.restore(tmp)
+        tmp.unlink(missing_ok=True)
+        return f"Backup restored: {n} files/rows merged. Nothing already stored was overwritten."
+    except Exception as e:
+        log.error("restore failed: %s", type(e).__name__)
+        return f"Restore failed ({type(e).__name__}). The file must be one the system sent you."
 
 
 def handle(token, owner, msg, capital):
@@ -131,7 +152,10 @@ def handle(token, owner, msg, capital):
         owner = chat
         _remember_chat(chat)
     text = (msg.get("text") or msg.get("caption") or "").strip()
-    if not text:
+    doc = msg.get("document") or {}
+    if str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
+        reply = _restore_backup(token, doc)
+    elif not text:
         reply = "Send or forward the tip as text (I can't read pictures of tips yet)."
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP

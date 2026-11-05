@@ -67,8 +67,17 @@ def load_cube(symbols):
     frames = {}
     for s in symbols:
         f = INTRA / f"{s}.csv"
-        if f.exists():
-            frames[s] = pd.read_csv(f, index_col=0, parse_dates=True)
+        df = pd.read_csv(f, index_col=0, parse_dates=True) if f.exists() else None
+        try:   # lifelong store: hourly bars older than Yahoo's ~730-day window
+            from .archive import hourly_history
+            old = hourly_history(s)
+            if old is not None and len(old):
+                old = old[["open", "high", "low", "close", "volume"]]
+                df = old if df is None else pd.concat([old[old.index < df.index.min()], df]).sort_index()
+        except Exception:
+            pass
+        if df is not None and len(df):
+            frames[s] = df
     syms = sorted(frames)
     days = sorted(set().union(*[set(df.index.normalize()) for df in frames.values()]))
     days = pd.DatetimeIndex(days)

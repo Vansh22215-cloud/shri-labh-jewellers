@@ -278,3 +278,106 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   runner start with recent data only. The repository is PUBLIC, so personal files (your trades, forwarded tips,
   daily reports) are kept out of git: they live in the cache and are backed up as 90-day private run artifacts.
   NSE data use stays at option B (small daily downloads) until the owner decides otherwise (D70).
+- **D74. Self-improvement without Claude (2026-11-03):** an idea factory (swing/idea_factory.py) writes 2 new dated
+  ideas from a fixed menu of sensible single changes whenever fewer than 3 are queued; the evening research run tests
+  one per weekday with the normal promotion rules. Telegram now reports every job (hourly pulse or actions, evening
+  trades + report file + any system problems, research result, weekly self-check), at the owner's request.
+- **D75. Pattern library + compounding search (2026-11-03):** 27 well-known patterns/indicators (swing/patterns.py)
+  join the families; the idea factory queues ~900 candidates (every family with the current exits, every rule change,
+  and family x rule combinations), tested 2 per weekday evening and up to 8 on Saturdays. Anti-fluke rule: an idea
+  must beat the current strategy by at least 0.25 x sqrt(ln N) CAGR points (N = ideas tested so far) and, after 50
+  ideas, in at least 60% of walk-forward years, with a worst fall no more than 2 points deeper.
+- **D76. Company of the day (2026-11-03):** all ~2,391 NSE EQ companies; ~120 statements refreshed per night
+  (Yahoo, free), scored 0-100 (quality 25, growth 20, financial health 20, cash flow 15, valuation 10, Piotroski 10;
+  -8 per red flag). Pick (changed 2026-11-03 at the owner's request): simply the best score, no trading-volume or price limits;
+  red flags are shown as red flags (and cost points); not shown in the last 60 days. Thin trading is marked on the card. Research pick, not a tip; every pick is logged (journal/company_picks.csv) to measure it.
+- **D77. Data sources for company analysis:** Yahoo statements, with gaps filled from Yahoo's company-summary
+  figures and re-fetched within days when its profile service failed. Bloomberg/Refinitiv/Capitaline are paid
+  (thousands of dollars a year); Screener, Moneycontrol, Tickertape and NSE/BSE websites forbid automated copying in
+  their terms, so they are not scraped. A licensed source can be added later if the owner decides to pay for one.
+
+## Owner's pattern library (2026-11-04)
+- **D78.** library/market_pattern_library (52 chart, 69 candlestick, 176 indicators) is the source of truth, loaded by
+  swing/catalog.py. TA-Lib (installed) provides the canonical candle and indicator functions; chart patterns use a
+  swing-pivot engine with right-side confirmation (no back-dating). library/IMPLEMENTATION_AUDIT.md lists every item's
+  status: candles 44 implemented as entries + 19 bearish detector-only; chart 22 implemented, 15 bearish
+  (not applicable to a long-only system), 15 planned (harmonic/Elliott/Wyckoff phases need more pivot geometry);
+  indicators 164 implemented, 4 blocked by data (tick/intraday), 8 planned. All new entry rules joined the idea
+  factory queue (~108 entry ideas + ~1,800 combinations); nothing is used for tips unless it passes the tests.
+
+## D79 (2026-11-03) Pattern library v2 (791 records) replaces v1
+- The owner's v2 library is a superset of v1 (every v1 id kept), adding market-structure/liquidity events (85) and
+  quant research features (104). Loaded as five catalogues keyed by type; 1,212 aliases resolved; 0 validation problems.
+- Built now (rule version cat-v2): 30 non-TA-Lib bullish candle rules (adaptive body/ATR thresholds), 24 more chart
+  detectors (Darvas, VCP, flat base, NR4/NR7, turtle soup, 3-bar play, gap-and-go, symmetrical triangle, ...),
+  21 market-structure events (BOS, CHoCH, MSS, liquidity sweeps, FVG, order block, displacement, weekly/monthly
+  open reclaim, SAR/chandelier flips, ...), 110 more indicators and 53 quant features. Every new family/indicator has
+  a test that its value on a past day does not change when later data is added (no look-ahead).
+- Four v2 names that are the same rule as another detector are merged (not counted as separate tests).
+- Audit: 492 built (incl. 20 detector-only), 97 bearish/not applicable (long-only), 62 need data we do not have
+  (options IV history, order book, tick, volume profile, futures basis), 120 still to build (mostly harmonic/Elliott/
+  Wyckoff phases and intraday-session events). Idea queue grows to 182 entry ideas + 3,094 combinations.
+- A detector is not an edge: nothing reaches the tips unless it beats the live rule in the walk-forward test.
+
+## D80 (2026-11-03) GitHub runs everything; Claude's scheduled sessions switched off
+- The first GitHub nightly ran and sent Telegram, but its save step was rejected (pull --rebase with unstaged files),
+  so results were not kept. Fix in branch code (no change to main needed): swing/ci_save.py commits the fixed
+  non-personal list, rebases with --autostash (this run's results win conflicts), pushes with 5 retries; every
+  scheduled script calls it at the end. Tested against a throwaway remote with a concurrent commit.
+- Research on GitHub now tests as many queued ideas as fit in 120 minutes (was 2 per day) and keeps 80 ideas
+  pre-written for the next run, so self-improvement no longer depends on Claude.
+- Claude's hourly/daily improvement sessions are disabled (owner: "no need of Claude"). Code changes to the system
+  itself (new detectors) now only happen if the owner opens a new Claude session; idea testing, strategy searches,
+  rollback, company of the day and all Telegram messages continue on GitHub for free.
+
+## D81 (2026-11-04) Lifelong data store; personal files out of public reach
+- The repository is PUBLIC (Actions logs and artifacts are readable by anyone). Personal files moved to
+  data/private/ (only in the private Actions cache), so the old artifact step uploads nothing; on GitHub, scripts
+  print only message lengths, never trade/position contents. Backups go to the owner's own Telegram instead
+  (weekly: trades + forwarded tips; monthly: the data archive) and are restored by forwarding them to the bot.
+- swing/archive.py keeps everything collected, append-only, forever (data/archive in the cache - market data is
+  not redistributed in the public repo): daily bars of every stock (so stocks Yahoo later drops stay in the
+  backtests = less survivorship bias), hourly bars beyond Yahoo's ~730 days, 5-minute bars beyond Yahoo's ~60 days,
+  news beyond the 60-day store, every statement year ever seen (Yahoo shows ~4). The engine, intraday research and
+  company analysis read it. Yahoo full re-downloads can no longer shorten a stock's history.
+- Walk-forward periods already extend every year and the holdout rotates yearly, so tests use all data to date.
+
+## D82 (2026-11-04) Library v2 completed (cat-v3): nothing left unbuilt
+- 603 items implemented, 28 detector-only, 98 bearish (not applicable to a long-only system), 0 not built.
+- New: ATR-zigzag swing engine (confirmed swings only) with 10 harmonic patterns, three drives, 6 Elliott
+  structures, 3 pitchforks, diamond, megaphone, Fibonacci cluster/time zone; Wyckoff phases (accumulation, SOS,
+  LPS, backup to edge, secondary test, creek), weekly pipe/horn bottoms, point & figure and renko breakouts,
+  exhaustion gap/climax, Gann square-of-nine, IPO base; 16 more market-structure entries; remaining indicators.
+- 34 items are 'implemented_collecting_data': intraday market-profile rules (need ~250 days of stored 5-minute
+  bars - they join the idea tests by themselves when reached) and option IV rank/skew/term structure (IV is now
+  computed from the F&O file each evening). 28 items are 'ready_waiting_for_feed': tick/order-book/auction
+  metrics in swing/feeds.py start working the day such files are placed in data/feeds/ (e.g. via Kite Connect).
+- Breadth (A/D, McClellan, TRIN, high-low index), futures basis/OI/max pain/PCR and execution estimates are now
+  computed from data already collected.
+- Idea factory: 239 entry ideas + 4,063 combinations. Every no-look-ahead test passes (349 tests).
+
+## D83 (2026-11-04) Reliable start times: free external timer
+- GitHub's own scheduler dropped most runs. The owner set up cron-job.org (free) to start the workflow
+  (task "bot" = always-on run, swing/daemon.py) daily at 09:50, 14:50, 19:50 and 00:50 IST using a fine-grained
+  GitHub token limited to Actions on this one repository (held only by cron-job.org, never in the repo or chats).
+  Each run lasts ~5h15m; a start that arrives while one is running waits and continues after it, so scans,
+  evening trades, research and the weekly check run on time. GitHub's own schedule stays as a backup.
+- If the token expires, runs stop: the owner renews it (same steps) before the expiry date.
+
+## D84 (2026-11-05) Nothing may stop silently: self-restarting runs, retried and logged messages
+Problem found: on 4 Nov the always-on run did the evening job, but no run started after 10:30 am on 5 Nov (GitHub
+dropped its schedule and no cron-job.org start arrived after the test), and Telegram send results were never
+written to the log, so a missing message (company of the day) could not be traced.
+- Each GitHub run now starts the next one when it ends (scripts/keep_alive.py, uses only the run's own
+  short-lived GITHUB_TOKEN; needs `actions: write` in the workflow). It skips if another run is already waiting and
+  pauses itself after 4 restarts in an hour (crash-loop guard, Telegram warning). cron-job.org stays as a backup.
+  Free: public repositories have unlimited standard GitHub Actions minutes. Switch off with `keep_alive: false`.
+- Telegram: up to 4 tries with backoff, rate-limit aware, splits on line breaks with balanced HTML tags, falls back
+  to plain text if formatting is rejected, and logs "Telegram <name> sent/FAILED" (length only - public log).
+- Company of the day is its own job (daemon "company", after the trades message, or by 19:30 even if the evening
+  job failed), retried up to 3 times if Telegram does not take it; a retry re-sends the same pick. Picks without a
+  live price are skipped.
+- Evening message gets a "System: n of 6 market scans ran today" line, so any gap is visible the same day.
+- In aggressive mode the no-tips headline names the real blocker (was "strategy not validated").
+- 5-minute store: the intraday list is rebuilt from the liquidity history when its file is missing (was failing on GitHub).
+- Removed the public artifact upload step (backups go to the owner's Telegram, D81).

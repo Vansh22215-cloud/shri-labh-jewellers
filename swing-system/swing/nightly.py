@@ -387,7 +387,11 @@ def run():
                         " Never risk more than the quantity shown.")
         why, money = [], None
     else:
-        if not g.get("passed"):
+        if aggressive:   # aggressive mode ignores the validation gate, so say what really stopped today's tips
+            headline = ("No tips today: " + blockers[0] + "." if blockers else
+                        "No tips today: no stock met every rule of the aggressive strategy.")
+            money = None
+        elif not g.get("passed"):
             headline = "No tips: strategy not validated. Use the index fund."
             money = ("Put long-term money in a low-cost Nifty 50 index fund or NIFTYBEES via SIP, and keep "
                      "short-term money in a liquid fund. The system will keep testing itself and will tell you "
@@ -450,8 +454,16 @@ def run():
     for s_ in my_status:
         if "Hold." not in s_["status"]:
             lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
+    try:   # what ran today on its own (so a gap is visible to the owner the same evening)
+        from .daemon import jobs_today_line
+        lines.append(jobs_today_line())
+    except Exception as e:
+        log.warning("jobs summary failed: %s", e)
+    probs = [t for c_, t in health_items if c_ == "bad"]
+    if probs:
+        lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
-    tg = telegram.send(settings, "\n".join(lines))
+    tg = telegram.send(settings, "\n".join(lines), label="evening trades")
     if settings.get("send_report_file", True):
         telegram.send_document(settings, f, "Full report (open in your browser)")
     state = load_state()

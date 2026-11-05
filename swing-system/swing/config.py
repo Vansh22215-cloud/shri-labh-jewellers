@@ -22,12 +22,32 @@ JOURNAL = ROOT / "journal"
 LOGS = ROOT / "logs"
 STRATEGIES = ROOT / "strategies"
 STATE = DATA / "state.json"
+# Personal files (your trades, forwarded tips). The GitHub repository is PUBLIC: these live only in the private
+# Actions cache and your own Telegram backups, never in git, logs or public artifacts.
+PRIVATE = DATA / "private"
+ARCHIVE = DATA / "archive"     # lifelong append-only store of everything collected (swing/archive.py)
 
 DISCLAIMER = ("Research, not advice. No system can guarantee profit; you can lose money. "
               "You decide and place every order yourself.")
 
-for _d in (DATA, PRICES, BHAV, FUND, EVENTS, REPORTS, STOCKS, JOURNAL, LOGS):
+for _d in (DATA, PRICES, BHAV, FUND, EVENTS, REPORTS, STOCKS, JOURNAL, LOGS, PRIVATE, ARCHIVE):
     _d.mkdir(parents=True, exist_ok=True)
+for _f in ("my_trades.csv", "closed_trades.csv", "forwarded_tips.csv"):   # one-time move from the old place
+    if (DATA / _f).exists() and not (PRIVATE / _f).exists():
+        (DATA / _f).rename(PRIVATE / _f)
+
+
+def on_github():
+    import os
+    return os.environ.get("GITHUB_ACTIONS") == "true"
+
+
+def public_print(text, label="message"):
+    """Print to the console, but on GitHub (public logs) only a one-line summary - never trade/position details."""
+    if on_github():
+        print(f"{label}: {len(str(text or ''))} characters (contents hidden: public log)")
+    else:
+        print(text)
 
 
 def load_settings(path=None):

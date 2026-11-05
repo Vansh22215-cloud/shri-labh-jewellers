@@ -115,6 +115,7 @@ def base_indicators(P, nifty_close, member_mask, industry, p, results_soon=None)
         sector_rank = sector_rank.fillna(0.5)
     B["sector_rank"] = sector_rank
     B["industry"] = {s_: industry.get(s_) for s_ in c.columns}
+    B["nifty"] = nifty
 
     B["up_trend"] = (c > B["sma50"]) & (B["sma50"] > B["sma200"]) & (B["sma200"] > B["sma200"].shift(p["slope_lookback"]))
     B["above200"] = c > B["sma200"]
@@ -291,7 +292,14 @@ def family_signals(B, p):
         entry = B["down3"] & B["up_trend"] & (c > B["sma50"])
         setup = "3-day pullback in uptrend"
     else:
-        raise ValueError(f"unknown family {fam}")
+        from .patterns import PATTERN_FAMILIES, signals as pattern_signals
+        if fam.startswith(("cdl_", "cdx_", "cp_", "ms_")):
+            from .catalog import signals as catalog_signals     # owner's pattern library (TA-Lib + pivot engine)
+            entry, setup = catalog_signals(fam, B, p)
+        elif fam not in PATTERN_FAMILIES:
+            raise ValueError(f"unknown family {fam}")
+        else:
+            entry, setup = pattern_signals(fam, B, p)
     eligible = B["member"] & entry & B["atr"].notna()
     # optional filters used by research proposals (IMPROVEMENTS.md)
     if p.get("min_sector_rank"):

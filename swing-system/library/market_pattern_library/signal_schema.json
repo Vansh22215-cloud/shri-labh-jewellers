@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Market Research Signal Event",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "instrument",
+    "timeframe",
+    "feature_id",
+    "rule_version",
+    "direction",
+    "status",
+    "parameters_hash"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First timestamp at which the signal was knowable, not necessarily the first pivot bar."
+    },
+    "instrument": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timeframe": {
+      "type": "string",
+      "minLength": 1
+    },
+    "feature_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rule_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "direction": {
+      "enum": [
+        "bullish",
+        "bearish",
+        "neutral"
+      ]
+    },
+    "status": {
+      "enum": [
+        "forming",
+        "detected_unconfirmed",
+        "confirmed",
+        "invalidated",
+        "expired"
+      ]
+    },
+    "confidence_optional": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "anchor_start": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "anchor_end": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "trigger_price_optional": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "invalidation_price_optional": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "target_price_optional": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "parameters_hash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_version": {
+      "type": "string"
+    },
+    "detector_commit": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

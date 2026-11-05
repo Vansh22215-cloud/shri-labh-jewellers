@@ -15,6 +15,7 @@ Steps:
 Everything is recorded in CHANGELOG.md.
 """
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -208,6 +209,36 @@ def tips_strategy(settings):
     return live, False
 
 
+def compute_stats(params, capital=45000.0):
+    """Per-trade statistics of a strategy for the Telegram cards (walk-forward span; holdout shown separately)."""
+    from . import backtest, data_prices, engine
+    P, sig, *_ = engine.build(params)
+    lf = data_prices.liquid_fund_nav()
+    hs = pd.Timestamp(validate.HOLDOUT_START)
+    eq, tr, _ = backtest.run(P, sig, params, validate.WF_START, hs - pd.Timedelta(days=1), capital, lf)
+    heq, htr, _ = backtest.run(P, sig, params, hs, P["close"].index[-1], capital, lf)
+    yrs = (eq.index[-1] - eq.index[0]).days / 365.25
+    out = {"period": f"{eq.index[0]:%Y-%m} to {eq.index[-1]:%Y-%m}",
+           "cagr_pct": round(((eq.iloc[-1] / eq.iloc[0]) ** (1 / yrs) - 1) * 100, 2),
+           "max_drawdown_pct": round((eq / eq.cummax() - 1).min() * 100, 2), "trades": int(len(tr)),
+           "holdout_return_pct": round((heq.iloc[-1] / heq.iloc[0] - 1) * 100, 2) if len(heq) else None,
+           "holdout_period": f"{hs:%Y-%m} to {P['close'].index[-1]:%Y-%m}", "holdout_trades": int(len(htr))}
+    if len(tr):
+        w, l_ = tr[tr["pnl"] > 0], tr[tr["pnl"] <= 0]
+        streak = mx = 0
+        for x in tr["pnl"]:
+            streak = streak + 1 if x <= 0 else 0
+            mx = max(mx, streak)
+        out.update({"win_rate_pct": round(len(w) / len(tr) * 100, 1),
+                    "trades_per_month": round(len(tr) / (yrs * 12), 1), "avg_days_held": round(tr["days"].mean(), 1),
+                    "avg_win_rs": int(round(w["pnl"].mean())) if len(w) else 0,
+                    "avg_loss_rs": int(round(l_["pnl"].mean())) if len(l_) else 0,
+                    "avg_per_trade_rs": int(round(tr["pnl"].mean())),
+                    "time_exits_pct": int(round((tr["exit_reason"].astype(str).str.contains("time")).mean() * 100)),
+                    "max_losing_streak": int(mx)})
+    return out
+
+
 def test_proposal(prop, settings, live, live_res=None, live_table=None):
     """Test ONE pre-registered proposal against the strategy that currently gives tips.
     Validated line (vN): promote only if it passes the full gate AND beats the base in most walk-forward
@@ -236,12 +267,16 @@ def test_proposal(prop, settings, live, live_res=None, live_table=None):
     wins = int((wf.loc[common, "total_return_pct"] > base_wf.loc[common, "total_return_pct"]).sum())
     c_new, c_old = res["continuous"].get("cagr_pct", -99), live_res["continuous"].get("cagr_pct", -99)
     dd_new, dd_old = res["continuous"].get("max_drawdown_pct", -99), live_res["continuous"].get("max_drawdown_pct", -99)
+    # The more ideas have been tried, the bigger the improvement must be (protection against lucky flukes, D75).
+    n_tested = sum(1 for p_ in parse_proposals() if p_.get("status") != "proposed")
+    margin = 0.25 * math.sqrt(math.log(max(n_tested, 2)))           # CAGR points
+    need_wins = max(len(common) / 2, math.ceil(0.6 * len(common)) if n_tested >= 50 else 0)
     if aggressive:
-        promote = wins > len(common) / 2 and c_new > c_old and dd_new >= dd_old - 2
+        promote = wins > need_wins and c_new > c_old + margin and dd_new >= dd_old - 2
     else:
         promote = res["gate"]["passed"] and wins > len(common) / 2 and c_new > c_old
     summary = (f"{prop.get('id')} vs {base}: beat it in {wins}/{len(common)} walk-forward years, CAGR {c_new}% vs "
-               f"{c_old}%, worst fall {dd_new}% vs {dd_old}%, gate {'PASS' if res['gate']['passed'] else 'FAIL'}")
+               f"{c_old}% (needs +{margin:.2f}), worst fall {dd_new}% vs {dd_old}%, gate {'PASS' if res['gate']['passed'] else 'FAIL'}")
     if not promote:
         set_proposal_status(prop["_raw"], f"rejected {date.today()} - {summary}")
         changelog(f"- Tested proposal {prop.get('id')}: rejected. {summary}")
@@ -251,6 +286,11 @@ def test_proposal(prop, settings, live, live_res=None, live_table=None):
     n = int(fam[-1][1:]) + 1
     newp = dict(cand, name=f"{prefix}{n}", created=str(date.today()),
                 description=base_p.get("description", "") + f" | {prefix}{n}: {prop.get('reason')}")
+    newp.pop("backtest_stats", None)                 # never carry the old strategy's numbers over
+    try:
+        newp["backtest_stats"] = compute_stats(newp)
+    except Exception as e:
+        log.warning("stats for %s%d failed: %s", prefix, n, e)
     (STRATEGIES / f"{prefix}{n}.json").write_text(json.dumps(newp, indent=2))
     if aggressive:
         f = ROOT / "settings.yaml"
@@ -282,7 +322,7 @@ def strategy_search(live, live_table, max_age_days=30):
     o3 = json.loads(fi.read_text()) if fi.exists() else None
     if o3 is None or (pd.Timestamp.today() - pd.Timestamp(o3["date"])).days > max_age_days:
         from . import intraday, intraday_data, search_report
-        intraday_data.download((DATA_DIR / "intraday_universe.txt").read_text().split())
+        intraday_data.download(__import__("swing.archive", fromlist=["x"]).intraday_universe())
         o3 = intraday.run_search()
         search_report.write_intraday()
     extra.append(f"intraday search gate {'PASSED' if o3['passed'] else 'FAILED'}"
@@ -335,6 +375,15 @@ def run():
     notes.append(f"Live {live} re-validated: gate {'PASSED' if live_res['gate']['passed'] else 'FAILED'}")
     notes.append(rollback_check(settings, live_res.get("wf_summary", {})))
 
+    from .idea_factory import top_up
+    top_up(min_open=8, n_new=8)            # weekend batch: test up to 8 ideas
+    try:   # refresh the owner's pattern-library implementation audit (library/IMPLEMENTATION_AUDIT.md)
+        from .audit import build as build_audit
+        cnt = build_audit().sum()
+        notes.append(f"Pattern library: {int(cnt.get('implemented', 0))} items built, "
+                     f"{int(cnt.get('not_yet_implemented', 0))} still to build, {int(cnt.get('blocked_by_data', 0))} need paid data")
+    except Exception as e:
+        notes.append(f"pattern-library audit failed: {e}")
     for prop in parse_proposals():
         if prop.get("status") == "proposed":
             notes.append(test_proposal(prop, settings, live, live_res, live_table))
@@ -348,5 +397,11 @@ def run():
     if settings.get("claude_review"):
         notes.append(ask_claude_for_proposals("\n".join(notes)))
     notes.append(f"Variants tried so far: {validate.n_variants()}")
+    try:   # lifelong data store status + backups to your own Telegram (trades/tips weekly, data archive monthly)
+        from . import archive
+        notes.append(archive.stats_line())
+        notes += archive.send_backups(settings)
+    except Exception as e:
+        notes.append(f"archive/backup step failed: {e}")
     changelog("- Weekly session summary:\n" + "\n".join(f"  - {n}" for n in notes))
     return notes
