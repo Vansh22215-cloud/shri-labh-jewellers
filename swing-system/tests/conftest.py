@@ -42,3 +42,12 @@ def synthetic_panel(n_sym=30, n_days=420, seed=1):
 @pytest.fixture
 def panel():
     return synthetic_panel()
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _clean_job_environment(monkeypatch):
+    """The self-tests run inside a GitHub job: never let that job's own settings change test results."""
+    for k in ("SWING_CLAIMED", "SWING_RESEARCH_BUDGET", "SWING_DAEMON_MINUTES", "GITHUB_ACTIONS", "GH_TOKEN",
+              "GITHUB_RUN_ID", "GITHUB_REF_NAME", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
+        monkeypatch.delenv(k, raising=False)

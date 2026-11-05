@@ -24,9 +24,15 @@ log = get_logger()
 
 def run_tests():
     try:
-        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", str(ROOT / "tests")],
-                           capture_output=True, text=True, timeout=900, cwd=ROOT)
-        tail = (r.stdout or "").strip().splitlines()[-1:] or [""]
+        import os   # run the tests in a clean environment (no job settings, no private keys)
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("SWING_", "TELEGRAM_", "GH_"))}
+        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", "-p", "no:cacheprovider", str(ROOT / "tests")],
+                           capture_output=True, text=True, timeout=900, cwd=ROOT, env=env)
+        out = (r.stdout or "").strip().splitlines()
+        tail = out[-1:] or [""]
+        if r.returncode != 0:   # name the failing test in the log, so it can be fixed (no private data in tests)
+            failed = [l for l in out if l.startswith("FAILED")][:3]
+            log.warning("Self-tests failed: %s", "; ".join(failed) or tail[0])
         return r.returncode == 0, tail[0]
     except Exception as e:
         return False, str(e)

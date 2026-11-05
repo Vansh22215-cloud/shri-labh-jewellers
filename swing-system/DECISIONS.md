@@ -381,3 +381,7 @@ written to the log, so a missing message (company of the day) could not be trace
 - In aggressive mode the no-tips headline names the real blocker (was "strategy not validated").
 - 5-minute store: the intraday list is rebuilt from the liquidity history when its file is missing (was failing on GitHub).
 - Removed the public artifact upload step (backups go to the owner's Telegram, D81).
+- (5 Nov evening) Found: the nightly self-tests always failed on GitHub because the test run inherited the job's
+  own setting (SWING_CLAIMED=nightly), which changes one daemon test - so the evening blocked all tips. Fixed: tests
+  run in a clean environment (conftest + run_tests strips SWING_/TELEGRAM_/GH_ variables) and a failure now names
+  the failing test in the log.
