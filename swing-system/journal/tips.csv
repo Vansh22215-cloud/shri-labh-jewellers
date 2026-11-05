@@ -1,7 +1,9 @@
 date,symbol,kind,strategy,setup,score,signal_close,entry_low,entry_high,stop,target1,target2,qty,claude_verdict,status,entry_date,entry_price,exit_date,exit_price,exit_reason,pnl,r_multiple,days
-2026-11-02,FEDERALBNK,tip,a1,20/50 average crossover,64.4,337.5,332.31,342.69,306.33,399.84,462.17,14,,open,2026-11-03,,,,,-37.89,-0.087,2.0
-2026-11-03,ICICIBANK,tip,a1,20/50 average crossover,65.3,1424.5,1410.35,1438.65,1339.62,1594.26,1764.01,5,,open,2026-11-04,,,,,-18.65,-0.044,1.0
-2026-11-04,CYIENTDLM,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,71.5,753.65,721.52,785.78,560.85,1139.26,1524.86,2,,pending,,,,,,,,
-2026-11-04,FILATEX,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,71.1,91.66,88.68,94.64,73.75,127.47,163.28,25,,pending,,,,,,,,
-2026-11-04,RAIN,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,59.8,183.97,178.29,189.65,149.88,252.15,320.32,13,,pending,,,,,,,,
-2026-11-04,CUB,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,56.1,213.5,208.62,218.38,184.23,272.04,330.58,15,,pending,,,,,,,,
+2026-11-02,FEDERALBNK,tip,a1,20/50 average crossover,64.4,337.5,332.31,342.69,306.33,399.84,462.17,14,,open,2026-11-03,,,,,8.31,0.019,3.0
+2026-11-03,ICICIBANK,tip,a1,20/50 average crossover,65.3,1424.5,1410.35,1438.65,1339.62,1594.26,1764.01,5,,open,2026-11-04,,,,,360.85,0.85,2.0
+2026-11-04,CYIENTDLM,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,71.5,753.65,721.52,785.78,560.85,1139.26,1524.86,2,,open,2026-11-05,,,,,108.63,0.282,1.0
+2026-11-04,FILATEX,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,71.1,91.66,88.68,94.64,73.75,127.47,163.28,25,,open,2026-11-05,,,,,10.2,0.023,1.0
+2026-11-04,RAIN,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,59.8,183.97,178.29,189.65,149.88,252.15,320.32,13,,skipped (opened outside entry zone),2026-11-05,,,,,,,
+2026-11-04,CUB,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,56.1,213.5,208.62,218.38,184.23,272.04,330.58,15,,open,2026-11-05,,,,,30.29,0.069,1.0
+2026-11-05,CYIENT,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,77.5,1128.9,1102.08,1155.72,968.0,1450.7,1772.5,2,,pending,,,,,,,,
+2026-11-05,BALAMINES,shadow,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,52.9,1794.0,1751.71,1836.29,1540.26,2301.47,2808.94,1,,pending,,,,,,,,
