@@ -175,7 +175,7 @@ def run_search():
     from . import validate
     from .config import ROOT
     VAL = ROOT / "validation"
-    syms = (DATA / "intraday_universe.txt").read_text().split()
+    syms = __import__("swing.archive", fromlist=["x"]).intraday_universe()
     days, syms, cube = intraday_data.load_cube(syms)
     ctx = context(days, syms, cube)
     variants = variant_space()

@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: write     # only so a run can start the next one (keeps the system running all day, see keep_alive.py)
 
 concurrency:
   group: swing-system
@@ -82,6 +83,14 @@ jobs:
             bot)      python scripts/bot_poll.py ;;
           esac
 
+      - name: Start the next run (keeps the system running all day, no outside timer needed)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/keep_alive.py || true
+
       - name: Save data for the next run
         if: always()
         uses: actions/cache/save@v4
@@ -89,26 +98,8 @@ jobs:
           path: swing-system/data
           key: swing-data-${{ github.run_id }}
 
-      - name: Back up your private files (trades, forwarded tips)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: private-backup-${{ github.run_id }}
-          path: |
-            swing-system/data/my_trades.csv
-            swing-system/data/closed_trades.csv
-            swing-system/data/forwarded_tips.csv
-          if-no-files-found: ignore
-          retention-days: 90
+      # (no file uploads here: this repository is public, so personal files are backed up to your Telegram instead)
 
       - name: Save results to GitHub
         if: always()
-        run: |
-          git config user.name "swing-system-bot"
-          git config user.email "swing-system-bot@users.noreply.github.com"
-          # only non-personal results are saved; trades, forwarded tips, reports and data stay private
-          git add journal/tips.csv validation strategies stocks IMPROVEMENTS.md CHANGELOG.md settings.yaml ROADMAP.md \
-                  data/universe_history.csv data/quarantine.json data/no_yahoo_data.json 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "swing-system: ${{ steps.task.outputs.task }} run ${{ github.run_id }}"
-          git pull --rebase origin "$SWING_BRANCH" || true
-          git push origin "HEAD:$SWING_BRANCH" || true
+        run: python -c "from swing.ci_save import save; print('save:', save('end of run'))" || true

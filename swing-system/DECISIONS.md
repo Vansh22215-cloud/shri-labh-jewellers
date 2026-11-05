@@ -363,3 +363,21 @@ You said you want daily tips even if somewhat risky, and do not want the index f
   Each run lasts ~5h15m; a start that arrives while one is running waits and continues after it, so scans,
   evening trades, research and the weekly check run on time. GitHub's own schedule stays as a backup.
 - If the token expires, runs stop: the owner renews it (same steps) before the expiry date.
+
+## D84 (2026-11-05) Nothing may stop silently: self-restarting runs, retried and logged messages
+Problem found: on 4 Nov the always-on run did the evening job, but no run started after 10:30 am on 5 Nov (GitHub
+dropped its schedule and no cron-job.org start arrived after the test), and Telegram send results were never
+written to the log, so a missing message (company of the day) could not be traced.
+- Each GitHub run now starts the next one when it ends (scripts/keep_alive.py, uses only the run's own
+  short-lived GITHUB_TOKEN; needs `actions: write` in the workflow). It skips if another run is already waiting and
+  pauses itself after 4 restarts in an hour (crash-loop guard, Telegram warning). cron-job.org stays as a backup.
+  Free: public repositories have unlimited standard GitHub Actions minutes. Switch off with `keep_alive: false`.
+- Telegram: up to 4 tries with backoff, rate-limit aware, splits on line breaks with balanced HTML tags, falls back
+  to plain text if formatting is rejected, and logs "Telegram <name> sent/FAILED" (length only - public log).
+- Company of the day is its own job (daemon "company", after the trades message, or by 19:30 even if the evening
+  job failed), retried up to 3 times if Telegram does not take it; a retry re-sends the same pick. Picks without a
+  live price are skipped.
+- Evening message gets a "System: n of 6 market scans ran today" line, so any gap is visible the same day.
+- In aggressive mode the no-tips headline names the real blocker (was "strategy not validated").
+- 5-minute store: the intraday list is rebuilt from the liquidity history when its file is missing (was failing on GitHub).
+- Removed the public artifact upload step (backups go to the owner's Telegram, D81).

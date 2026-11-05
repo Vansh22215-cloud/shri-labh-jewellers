@@ -60,13 +60,28 @@ def key(job, t=None):
         slot = current_scan_slot(t)
         return None if slot is None else f"scan {slot:%H:%M} {t:%Y-%m-%d}"
     # a manual run outside the job's own time is not recorded (so it never blocks the real evening run)
-    if job == "nightly" and (t.weekday() >= 5 or t.hour < 18):
+    if job in ("nightly", "company") and (t.weekday() >= 5 or t.hour < 18):
         return None
     if job == "research" and (t.weekday() >= 5 or t.hour < 20):
         return None
     if job == "weekly" and (t.weekday() != 5 or t.hour < 10):
         return None
     return f"{job} {t:%Y-%m-%d}"
+
+
+def failed(job, t=None, max_tries=3):
+    """The job ran but did not finish its work (e.g. Telegram did not take the message): free it so the always-on
+    run tries again a few minutes later - at most max_tries times a day, so a lasting problem cannot spam."""
+    k = key(job, t)
+    if k is None:
+        return
+    st = _load()
+    tries = int(st.get("tries " + k, 0)) + 1
+    st["tries " + k] = tries
+    if tries < max_tries:
+        st.pop(k, None)
+    STATE.write_text(json.dumps(st, indent=1))
+    log.warning("Daemon: %s did not complete (attempt %d of %d)", job, tries, max_tries)
 
 
 def current_scan_slot(t):
@@ -89,6 +104,9 @@ def due(t=None):
     wd = t.weekday()
     if wd < 5 and t >= t.replace(hour=18, minute=40, second=0) and not st.get(key("nightly", t)):
         out.append("nightly")
+    if wd < 5 and t >= t.replace(hour=18, minute=45, second=0) and not st.get(key("company", t)) \
+            and (st.get(key("nightly", t)) or t >= t.replace(hour=19, minute=30)) and "nightly" not in out:
+        out.append("company")
     if wd < 5 and t >= t.replace(hour=20, minute=17, second=0) and not st.get(key("research", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=21, minute=30)):
         out.append("research")
@@ -97,7 +115,22 @@ def due(t=None):
     return out
 
 
-SCRIPTS = {"scan": "run_scan.py", "nightly": "run_nightly.py", "research": "run_research.py", "weekly": "run_weekly.py"}
+def jobs_today_line(t=None):
+    """One line for the evening message: which of today's hourly scans ran."""
+    t = t or now()
+    st = _load()
+    day = f"{t:%Y-%m-%d}"
+    done = [f"{h}:{m:02d}" for h, m in SCAN_SLOTS if st.get(f"scan {h:02d}:{m:02d} {day}")]
+    missed = [f"{h}:{m:02d}" for h, m in SCAN_SLOTS if not st.get(f"scan {h:02d}:{m:02d} {day}")]
+    if t.weekday() >= 5:
+        return "🩺 System: weekend, no market scans."
+    if not missed:
+        return f"🩺 System: all {len(SCAN_SLOTS)} market scans ran today."
+    return (f"🩺 System: {len(done)} of {len(SCAN_SLOTS)} market scans ran today"
+            + (f" (missed {', '.join(missed)} - GitHub did not start a run in time)" if missed else "") + ".")
+
+
+SCRIPTS = {"scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py"}
 
 
 def run_job(job, minutes_left):

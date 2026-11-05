@@ -322,7 +322,7 @@ def strategy_search(live, live_table, max_age_days=30):
     o3 = json.loads(fi.read_text()) if fi.exists() else None
     if o3 is None or (pd.Timestamp.today() - pd.Timestamp(o3["date"])).days > max_age_days:
         from . import intraday, intraday_data, search_report
-        intraday_data.download((DATA_DIR / "intraday_universe.txt").read_text().split())
+        intraday_data.download(__import__("swing.archive", fromlist=["x"]).intraday_universe())
         o3 = intraday.run_search()
         search_report.write_intraday()
     extra.append(f"intraday search gate {'PASSED' if o3['passed'] else 'FAILED'}"

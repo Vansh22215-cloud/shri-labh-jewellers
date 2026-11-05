@@ -223,6 +223,26 @@ def record_fundamentals(max_age_days=2):
     return n
 
 
+def intraday_universe(n=150):
+    """The ~150 most-traded stocks for 5-minute/hourly data. Built from the liquidity history when the list file is
+    missing (it is not in git, so a fresh GitHub computer did not have it and the 5-minute store failed)."""
+    f = DATA / "intraday_universe.txt"
+    try:
+        syms = [s.strip() for s in f.read_text().split() if s.strip()]
+        if syms:
+            return syms
+    except Exception:
+        pass
+    u = pd.read_csv(DATA / "universe_history.csv")
+    last = u[u["asof"] == u["asof"].max()].sort_values("rank")
+    syms = [str(s) for s in last["symbol"].head(n)]
+    try:
+        f.write_text("\n".join(syms))
+    except Exception:
+        pass
+    return syms
+
+
 def run_daily():
     """Evening job: store everything collected today. Each part is independent (one failing never stops the rest)."""
     out = {}
@@ -234,7 +254,7 @@ def run_daily():
             log.warning("archive %s failed: %s", name, e)
             out[name] = f"failed ({type(e).__name__})"
     try:
-        syms = [s.strip() for s in (DATA / "intraday_universe.txt").read_text().split() if s.strip()]
+        syms = intraday_universe()
         out["m5"] = record_m5(sorted(set(syms) | {"NIFTY50"}))
     except Exception as e:
         log.warning("archive m5 failed: %s", e)

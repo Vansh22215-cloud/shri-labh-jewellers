@@ -11,9 +11,9 @@ if __name__ == "__main__":
         print("nightly: already done (skipped)")
         sys.exit(0)
     main()
-    try:   # company of the day (all NSE companies, deep fundamental analysis) - after the trades message
-        from swing.company_research import run as company_of_day
-        company_of_day()
+    try:   # company of the day (all NSE companies, deep fundamental analysis) - its own job, so a problem in the
+        import subprocess   # trades part can never stop it; it is retried if Telegram did not take the message
+        subprocess.run([sys.executable, str(Path(__file__).resolve().parent / "company_of_day.py")], timeout=1800)
     except Exception as e:
         print("company of the day failed:", e)
     try:   # lifelong store: keep everything collected today (prices incl. stocks Yahoo may drop, hourly, 5-min,

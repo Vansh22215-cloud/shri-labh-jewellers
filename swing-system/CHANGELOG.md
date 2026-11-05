@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-11-05 (never stop)
+- GitHub runs now restart themselves all day (no outside timer needed); crash-loop guard (D84).
+- Telegram messages retried, plain-text fallback, every send logged; company of the day is its own retried job.
+- Evening message shows how many hourly scans ran; clearer no-tips reason in aggressive mode.
+
 ## 2026-11-04 (lifelong data + library complete)
 - Lifelong append-only data store (prices incl. delisted, hourly, 5-minute, news, statement years) used by research.
 - Personal files hidden from the public repo/logs; backups to the owner's Telegram (D81).

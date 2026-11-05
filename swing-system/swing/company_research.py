@@ -204,14 +204,19 @@ def pick_of_the_day(min_value_cr=0.0, min_price=0.0, cooldown_days=60):
     if not rows:
         return None, 0
     rows.sort(key=lambda x: -x["score"])
-    recent = set()
+    recent, today_pick = set(), None
     if PICKS.exists():
         pk = pd.read_csv(PICKS)
         recent = set(pk[pd.to_datetime(pk["date"]) >= pd.Timestamp.today() - pd.Timedelta(days=cooldown_days)]["symbol"])
-    for a in rows[:60]:
-        if a["symbol"] in recent:
+        t = pk[pk["date"].astype(str) == str(date.today())]
+        today_pick = str(t["symbol"].iloc[-1]) if len(t) else None   # a retry re-sends today's pick, never a second one
+    order = ([a for a in rows if a["symbol"] == today_pick] if today_pick else []) + rows[:60]
+    for a in order:
+        if a["symbol"] in recent and a["symbol"] != today_pick:
             continue
         pc = price_context(a["symbol"]) or {"price": None, "value_cr": None, "ret_1y": None, "hi52_gap": None}
+        if not pc.get("price") and a["symbol"] != today_pick:
+            continue   # no live price (suspended / not trading / data gap): not a useful pick today
         a["px"] = pc
         # backups when Yahoo's profile service is down: name from NSE's list, valuation from price x shares
         if not a.get("name") or a["name"] == a["symbol"]:
@@ -229,6 +234,8 @@ def pick_of_the_day(min_value_cr=0.0, min_price=0.0, cooldown_days=60):
             a["parts"]["Valuation"] = round(((1.0 if (a["pe"] or 99) <= 25 else 0.5 if (a["pe"] or 99) <= 45 else 0)
                                              + (1.0 if (a["pb"] or 99) <= 4 else 0.5 if (a["pb"] or 99) <= 8 else 0)) / 2 * 10, 1)
             a["score"] = round(sum(a["parts"].values()) - 8 * len(a["flags"]), 1)
+        if a["symbol"] == today_pick:
+            return a, len(rows)
         rec = pd.DataFrame([{"date": str(date.today()), "symbol": a["symbol"], "score": a["score"],
                              "price": round(pc["price"], 2) if pc.get("price") else None, "fscore": a["fscore"]}])
         (pd.concat([pd.read_csv(PICKS), rec]) if PICKS.exists() else rec).to_csv(PICKS, index=False)
@@ -321,5 +328,5 @@ def run(send=True, batch=120):
     a, n = pick_of_the_day()
     msg = message(a, n, total)
     if send:
-        telegram.send(load_settings(), msg, html=True)
-    return msg
+        return telegram.send(load_settings(), msg, html=True, label="company of the day"), msg
+    return "not sent (dry run)", msg

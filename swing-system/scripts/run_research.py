@@ -63,7 +63,7 @@ if __name__ == "__main__":
            f"\n{queued} ideas queued; {total} candidate ideas in the library in all.")[:3900]
     from swing.config import public_print
     public_print(msg, "research message")
-    print(telegram.send(load_settings(), msg))   # owner wants every result on Telegram
+    print(telegram.send(load_settings(), msg, label="daily research"))   # owner wants every result on Telegram
     try:   # on GitHub: keep the results for the next run (no Claude needed)
         from swing.ci_save import save
         print("save:", save("research run"))

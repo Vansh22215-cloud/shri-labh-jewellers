@@ -291,9 +291,9 @@ def run(send=True):
         for pl in new_sigs[:3]:
             lines.append(f"🟢 BUY {pl['symbol']} tomorrow {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
                          f"target {pl['target1']:,.0f} | qty {pl['qty']} | risk {pl['risk']}/10 (confirm at 6:40 pm)")
-        res = telegram.send(settings, "\n".join(lines) + "\nResearch, not advice.")
+        res = telegram.send(settings, "\n".join(lines) + "\nResearch, not advice.", label="hourly scan")
     elif send:   # nothing to act on: one short pulse line (owner wants to hear everything)
         res = telegram.send(settings, f"⏱ {last_ts:%I:%M %p} market: Nifty {nifty_now:,.0f} ({(nifty_now / n_prev - 1) * 100:+.2f}%), "
-                                      f"{adv} up / {dec} down. No new signal; your trades need no action.")
+                                      f"{adv} up / {dec} down. No new signal; your trades need no action.", label="hourly pulse")
         log.info("Hourly scan: %s (%d new, %d actions)", res, len(new_sigs), len(acts))
     return text
