@@ -428,3 +428,14 @@ A forwarded chart picture was answered by the old code because the always-on run
 it ends cleanly and keep_alive starts a fresh run with the new code (data-only commits do not trigger this). The
 crash-loop guard only counts runs that ended within 8 minutes. At start each run self-checks the picture reader and
 warns the owner on Telegram (once a day) if it cannot start.
+
+## D88 (2026-11-06) One clear reply card for everything forwarded to the bot
+Owner: replies must be structured, answer WHY, and be quick to understand. Every reply (stock tip, option tip,
+index/forex/gold/crypto view or setup, chart picture) now uses swing/reply_card.py:
+answer first in plain words (WORTH CONSIDERING / COIN FLIP / RISKY / SKIP IT / CAN'T JUDGE YET) -> what I read on
+the picture -> what the tip says -> where the price is now -> why it could work -> why it could fail (deal-breakers
+first) -> the odds as a bar ("48 out of 100, need 50") -> good to know -> the plan (hidden when the answer is skip)
+-> bottom line (what to do and why; skipping costs nothing) -> the channel's scoreboard -> tracking note.
+Hype words ("sure shot", "jackpot", "100%", "guaranteed" ...) are flagged with why they matter. Right/wrong alerts
+say what they said, what happened (with time) and what it means. Fixed: option odds used per-share charges when
+the lot size was unknown (showed "need 229%"); now an Rs 5 lakh lot is assumed.

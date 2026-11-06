@@ -179,13 +179,17 @@ def evaluate_option(o, capital=45000.0, today=None):
             win, loss, neither, n = br
             p = win / (win + loss) if (win + loss) else 0
             reward, risk = (tgts[0] - prem), (prem - stop)
-            q = lot or 1
+            q = lot or max(1, int(500000 / spot))   # lot unknown: NSE lots are worth about Rs 5 lakh
             c = option_costs(prem * q, tgts[0] * q) / q
             need = (risk + c) / (reward + risk)
             d.update({"hist_pct": round(p * 100, 1), "need_pct": round(need * 100, 1),
                       "expected_r": round((p * (reward - c) - (1 - p) * (risk + c)) / risk, 2)})
-            reasons.insert(0, f"History (5 yrs of {sym}): the stock moved {mv_t:+.1f}% before {mv_s:+.1f}% within "
-                              f"{horizon} trading days {p*100:.0f}% of the time; after charges you need {need*100:.0f}%.")
+            reasons.insert(0, f"For the target, {sym} must move {mv_t:+.1f}% before it moves {mv_s:+.1f}%, within "
+                              f"{horizon} trading days. In its last 5 years that happened only {p*100:.0f} times in 100 - "
+                              f"it needs {need*100:.0f} to make money after charges." if p < need else
+                              f"For the target, {sym} must move {mv_t:+.1f}% before it moves {mv_s:+.1f}%, within "
+                              f"{horizon} trading days. In its last 5 years that happened {p*100:.0f} times in 100 "
+                              f"(needs {need*100:.0f}).")
             if p < need - 0.05:
                 flags.append("AVOID")
             elif p < need + 0.05:
@@ -205,13 +209,17 @@ def evaluate_option(o, capital=45000.0, today=None):
     return verdict, reasons, d
 
 
-def format_option_reply(o, verdict, reasons, d):
-    icon = {"RISKY": "🟡", "AVOID": "🔴", "UNKNOWN": "⚪"}.get(verdict, "🟡")
-    lines = [f"{icon} {verdict}: {o.get('symbol')} {o.get('strike'):g} {o.get('kind')} (option, expiry ~{d.get('expiry', '?')})"]
-    if d.get("spot"):
-        lines.append(f"Stock now {d['spot']} | premium {d.get('premium')} | implied vol {d.get('iv_pct')}% vs recent {d.get('hv_pct')}%")
-    if d.get("hist_pct") is not None:
-        lines.append(f"Odds from history: {d['hist_pct']}% vs {d['need_pct']}% needed; expected {d['expected_r']:+} R after charges")
-    lines += [f"• {r}" for r in reasons[:8]]
-    lines.append(DISCLAIMER)
-    return "\n".join(lines)
+def format_option_reply(o, verdict, reasons, d, source=""):
+    """Same clear card as every other forwarded tip."""
+    from . import reply_card as rc
+    said = next((r for r in reasons if r.startswith("This is a bet")), None)
+    info = [r for r in reasons if r.startswith(("Target 1", "One lot"))]
+    cons = [r for r in reasons if r not in info and r != said]
+    now = (f"Stock {d['spot']}, option premium {d.get('premium')}. Option price implies {d.get('iv_pct')}% yearly "
+           f"movement vs {d.get('hv_pct')}% actually seen lately" + (" (expensive)." if (d.get("iv_pct") or 0) >
+                                                                        1.2 * (d.get("hv_pct") or 1e9) else ".")) \
+        if d.get("spot") else None
+    return rc.build(verdict, f"{o.get('symbol')} {o.get('strike'):g} {o.get('kind')} · option tip (expiry ~{d.get('expiry', '?')})",
+                    said=said, now=now, pros=[], cons=cons, info=info, p=d.get("hist_pct"), need=d.get("need_pct"),
+                    source=source, raw=o.get("raw"),
+                    missing=reasons[0] if verdict == "UNKNOWN" and reasons else None)

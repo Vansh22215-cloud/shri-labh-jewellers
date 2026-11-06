@@ -68,7 +68,7 @@ def test_track_expires_after_its_time(monkeypatch, tmp_path):
                   extra={"kind": "commodity setup", "ticker": "GC=F", "checked_utc": t0.isoformat(), "hours": 24})
     flat = _bars([2650] * 30, start="2026-11-06 05:00")
     later = datetime(2026, 11, 8, 4, tzinfo=timezone.utc)
-    assert "ran out of time" in mv.track(send=False, now=later, fetch=lambda tk, period=None: flat)[0]
+    assert "NO RESULT" in mv.track(send=False, now=later, fetch=lambda tk, period=None: flat)[0]
 
 
 def test_earlier_unknown_message_is_reread_and_tracked(monkeypatch, tmp_path):
@@ -84,3 +84,14 @@ def test_earlier_unknown_message_is_reread_and_tracked(monkeypatch, tmp_path):
     out = pd.read_csv(tipcheck.TIPS_F).iloc[0]
     assert out["ticker"] == "^NSEI" and out["stop"] == 24290
     assert out["outcome"] in ("open", "target") and (out["outcome"] == "open" or "RIGHT" in msgs[0])
+
+
+def test_reply_card_structure():
+    from swing import reply_card as rc
+    t = rc.build("RISKY", "Nifty 50 · view (buy)", said="Bullish", now="24,600", pros=["trend up"],
+                 cons=["odds weak"], p=48, need=50, plan={"side": "buy", "entry": 24600, "stop": 24290,
+                                                          "target": 24910, "rr": 1.0}, raw="SURE SHOT jackpot")
+    for part in ("RISKY", "What the tip says", "Why it could work", "Why it could fail", "The odds", "Bottom line",
+                 "hype words", "48 out of 100"):
+        assert part in t
+    assert "The plan" not in rc.build("AVOID", "x", plan={"stop": 1, "entry": 2, "target": 3})   # no plan on skip

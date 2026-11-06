@@ -225,43 +225,64 @@ def evaluate(v, h=None, d=None):
         return "AVOID", [f"Price {_fmt(px)} is already at/through the target {_fmt(target)}: nothing left to gain."], plan
     word = "bullish" if side == "buy" else "bearish"
     dist = abs(px - stop) / px * 100
+    days = max(1, v["hours"] // 24)
+    tf = f"{v['timeframe']} chart" if v["timeframe"] != "not stated" else "no timeframe given"
     if v["type"] == "view":
-        reasons.append(f"Understood: {word} view on {v['name']} ("
-                       + (f"{v['timeframe']} chart" if v['timeframe'] != "not stated" else "timeframe not stated")
-                       + "), wrong if it "
-                       f"{'falls below' if side == 'buy' else 'rises above'} {_fmt(stop)}.")
-        reasons.append(f"Now {_fmt(px)}: {dist:.2f}% {'above' if side == 'buy' else 'below'} that level. "
-                       f"I test it as: reaches {_fmt(target)} (same distance the other way) before breaking "
-                       f"{_fmt(stop)}, within ~{max(1, v['hours'] // 24)} day(s).")
+        plan["said"] = (f"{v['name']} looks {word} ({tf}). The call is wrong if it "
+                        f"{'falls below' if side == 'buy' else 'rises above'} {_fmt(stop)}.")
+        reasons.append(("info", f"No target was given, so I judge it fairly as: does it move {_fmt(abs(target - entry))} "
+                                f"{'up' if side == 'buy' else 'down'} (to {_fmt(target)}) before it breaks {_fmt(stop)}, "
+                                f"within about {days} day(s)?"))
     else:
-        reasons.append(f"Setup: {side.upper()} {v['name']} at {_fmt(entry)}, stop {_fmt(stop)}, target "
-                       f"{_fmt(target)} (reward:risk {rr:.2f}).")
-        if v["entry"] and abs(px - entry) / entry > 0.003:
-            reasons.append(f"Price now {_fmt(px)} - not at the entry yet; I start tracking when it trades there.")
+        plan["said"] = (f"{'Buy' if side == 'buy' else 'Sell'} {v['name']} at {_fmt(entry)}, stop {_fmt(stop)}, "
+                        f"target {' / '.join(_fmt(x) for x in v['targets']) or _fmt(target)} ({tf}).")
+    plan["now"] = (f"{_fmt(px)} - {dist:.1f}% away from the 'wrong' level {_fmt(stop)}"
+                   + (", so there is room before it fails." if dist > 0.8 else ", very close - one small move can end it."))
+    if v["type"] == "setup" and v["entry"] and abs(px - entry) / entry > 0.003:
+        plan["now"] += f" Not at the entry {_fmt(entry)} yet - wait for it, don't chase."
     agree = (side == "buy" and h_trend == "up") or (side == "sell" and h_trend == "down")
-    reasons.append(f"Trend: hourly {h_trend}" + (f", daily {d_trend}" if d_trend else "") +
-                   (" - the call goes WITH the trend." if agree else " - the call goes AGAINST the hourly trend."))
+    against = (side == "buy" and h_trend == "down") or (side == "sell" and h_trend == "up")
+    if agree:
+        reasons.append(("pro", f"It goes WITH the short-term trend (hourly chart moving {h_trend}) - trends tend to "
+                               "continue more often than they reverse."))
+    elif against:
+        reasons.append(("con", f"It goes AGAINST the short-term trend (hourly chart moving {h_trend}) - fighting the "
+                               "trend fails more often."))
+    else:
+        reasons.append(("info", "The hourly chart is moving sideways - no trend to help or hurt."))
+    if d_trend == ("up" if side == "buy" else "down"):
+        reasons.append(("pro", f"The bigger daily trend is {d_trend} too, so both timeframes agree."))
+    elif d_trend == ("down" if side == "buy" else "up"):
+        reasons.append(("con", f"The bigger daily trend is {d_trend} - the opposite direction."))
+    elif d_trend == "mixed":
+        reasons.append(("info", "The bigger daily trend is mixed (no clear direction)."))
+    if dist < 0.4:
+        reasons.append(("con", f"The 'wrong' level is only {dist:.1f}% away - normal noise can hit it."))
     bars = _hours_to_bars(v["hours"], v["kind"])
     pct, n = base_rate(h, reward / entry, risk / entry, bars, side)
     need = round(100 / (1 + rr), 1) if rr > 0 else None
-    plan.update(hist_pct=pct, need_pct=need, bars=bars)
-    if pct is not None:
-        reasons.append(f"History ({n} past starts, 2 years of hourly bars): a move like this came first {pct}% of "
-                       f"the time; {need}% is needed to break even at this reward:risk.")
+    plan.update(hist_pct=pct, need_pct=need, bars=bars, samples=n)
+    if pct is not None and need is not None:
+        if pct >= need + 3:
+            reasons.append(("pro", f"In the last 2 years, a move like this went the right way first {pct:.0f} times in "
+                                   f"100 ({n} cases) - more than the {need:.0f} needed."))
+        else:
+            reasons.append(("con", f"In the last 2 years, a move like this went the right way first only {pct:.0f} times "
+                                   f"in 100 ({n} cases) - it needs {need:.0f} to pay off."))
     edge = pct is not None and need is not None and pct >= need + 3
     if pct is not None and pct < need - 3:
         verdict = "RISKY"
     elif edge and agree:
         verdict = "GOOD"
     else:
-        verdict = "RISKY" if not agree else "NEUTRAL"
+        verdict = "RISKY" if against else "NEUTRAL"
     if v["kind"] == "forex":
-        reasons.append(FX_NOTE)
+        reasons.append(("info", FX_NOTE))
     return verdict, reasons, plan
 
 
 def source_record(source, rows=None):
-    """'This channel: 3 of 5 past calls right' - from the private journal of forwarded tips."""
+    """'Dark Horse: 3 of 5 finished calls were right (60%) - ...' from the private journal of forwarded tips."""
     from .tipcheck import TIPS_F
     if rows is None:
         if not TIPS_F.exists():
@@ -271,19 +292,22 @@ def source_record(source, rows=None):
         return None
     g = rows[(rows["source"] == source) & rows["outcome"].isin(["target", "stop", "expired"])]
     if len(g) == 0:
-        return f"Track record of '{source}': no finished calls yet - this is the first being tracked."
+        return f"{source}: no finished calls yet - this is one of the first I'm tracking, so I can't say yet if they are any good."
     w = int((g["outcome"] == "target").sum())
-    return f"Track record of '{source}': {w} of {len(g)} finished calls reached the target ({w / len(g) * 100:.0f}%)."
+    pct = w / len(g) * 100
+    judge = ("too few calls to judge yet" if len(g) < 10 else
+             "clearly better than chance" if pct >= 60 else "about a coin flip" if pct >= 45 else "worse than a coin flip")
+    return f"{source}: {w} of {len(g)} finished calls were right ({pct:.0f}%) - {judge}."
 
 
 def check(text, source="", image=None):
     """Returns a reply, or None if the message is not about an index/forex/commodity/crypto.
     image: what chart_reader.read_image found on a forwarded chart picture (levels, pattern names)."""
+    from . import reply_card as rc
     v = parse(text)
     if not v:
         return None
-    notes = []
-    h = None
+    picture, h = None, None
     if image:
         from .chart_reader import apply_image
         try:
@@ -291,36 +315,42 @@ def check(text, source="", image=None):
         except Exception:
             h = None
         price = float(h["close"].iloc[-1]) if h is not None and len(h) else None
-        notes = apply_image(v, image, price)
+        picture = apply_image(v, image, price)
+        if image.get("guessed"):
+            picture.insert(0, f"No name was readable, so I matched the price scale: it looks like {image['guessed']}.")
     verdict, reasons, plan = evaluate(v, h=h)
-    reasons = notes + reasons
-    try:
-        from .chart_reader import own_patterns_line
-        own = own_patterns_line(v["ticker"])
-        if own:
-            reasons.append(own)
-    except Exception:
-        pass
+    tag = "con" if verdict == "AVOID" else "missing" if verdict == "UNKNOWN" else "info"
+    reasons = [r if isinstance(r, tuple) else (tag, r) for r in reasons]
+    own = None
+    if verdict not in ("UNKNOWN",):
+        try:
+            from .chart_reader import own_patterns_for
+            own = own_patterns_for(v["ticker"])
+        except Exception:
+            pass
     from .tipcheck import save
     now = datetime.now(timezone.utc)
+    tracking = bool(plan.get("stop")) and verdict not in ("AVOID", "UNKNOWN")
     save({"symbol": v["name"], "side": plan.get("side") or v.get("side"), "horizon": v["timeframe"], "raw": v["raw"]},
          verdict, {"entry": plan.get("entry"), "stop": plan.get("stop"), "target": plan.get("target"),
                    "ltp": plan.get("price"), "hist_target_first_pct": plan.get("hist_pct"),
                    "breakeven_win_pct": plan.get("need_pct")},
-         source, outcome=("open" if v["type"] == "view" or not v["entry"] else "waiting entry")
-         if plan.get("stop") and verdict != "AVOID" else "n/a",
+         source, outcome=("open" if v["type"] == "view" or not v["entry"] else "waiting entry") if tracking else "n/a",
          extra={"kind": v["kind"] + " " + v["type"], "ticker": v["ticker"], "checked_utc": now.isoformat(),
                 "hours": v["hours"]})
-    icon = {"GOOD": "🟢", "NEUTRAL": "🔵", "RISKY": "🟡", "AVOID": "🔴", "UNKNOWN": "⚪"}[verdict]
-    lines = [f"{icon} {verdict}: {v['name']} {v['type']} ({(plan.get('side') or '?').upper()}, {v['timeframe']})"]
-    lines += [f"• {r}" for r in reasons]
-    rec = source_record(source)
-    if rec:
-        lines.append("📒 " + rec)
-    if plan.get("stop") and verdict != "AVOID":
-        lines.append("⏳ Tracking it: I'll message you when it reaches the target, breaks the level, or runs out of time.")
-    lines.append(DISCLAIMER)
-    return "\n".join(lines)
+    k = lambda kind: [t for kk, t in reasons if kk == kind]
+    pros, cons = k("pro"), k("con")
+    pp, pc = rc.pattern_points(own, plan.get("side") or "buy")
+    pros += pp
+    cons += pc
+    side = plan.get("side")
+    return rc.build(verdict, f"{v['name']} · {v['type']} ({'buy' if side == 'buy' else 'sell' if side == 'sell' else '?'})",
+                    said=plan.get("said"), now=plan.get("now"), pros=pros, cons=cons, info=k("info"),
+                    p=plan.get("hist_pct"), need=plan.get("need_pct"),
+                    plan={"side": side, "entry": plan.get("entry"), "stop": plan.get("stop"), "target": plan.get("target"),
+                          "rr": plan.get("rr")} if plan.get("stop") else None,
+                    record=source_record(source), tracking=tracking, source=source, raw=v["raw"],
+                    missing=(k("missing") or [None])[0], picture=picture)
 
 
 # ----------------------------------------------------------------------------- tracking + alerts
@@ -414,22 +444,33 @@ def track(send=True, now=None, fetch=hourly):
             continue
         df.at[i, "outcome"] = status
         if status == "open":
-            msgs.append(f"▶️ {r['symbol']}: your forwarded setup ({r['source'] or 'forwarded'}) reached its entry "
-                        f"{_fmt(float(r['entry']))} - now being tracked.")
+            msgs.append(f"▶️ ENTRY REACHED - {r['symbol']} ({r['side']}) from {r['source'] or 'forwarded'}\n"
+                        f"The price came to the entry {_fmt(float(r['entry']))}. If you took it, your exit-if-wrong level "
+                        f"is {_fmt(float(r['stop']))}. I keep tracking it.")
             continue
         last = float(bars["close"].iloc[-1]) if len(bars) else None
-        word = {"target": "✅ RIGHT - reached the target", "stop": "❌ WRONG - broke the stop/'wrong if' level",
-                "expired": "⌛ ran out of time (neither level hit)",
-                "never filled": "⌛ never reached its entry (no trade)"}[status]
-        msgs.append(f"{word}: {r['symbol']} {r['side']} call from {r['source'] or 'forwarded'} "
-                    f"({str(r['checked'])[:10]}). Entry {_fmt(float(r['entry']))}, stop {_fmt(float(r['stop']))}, "
-                    f"target {_fmt(float(r['target']))}" + (f", now {_fmt(last)}" if last else "") + ".")
+        head = {"target": "✅ RIGHT", "stop": "❌ WRONG", "expired": "⌛ NO RESULT", "never filled": "⌛ NO TRADE"}[status]
+        what = {"target": f"it reached the target {_fmt(float(r['target']))}",
+                "stop": f"it broke the exit-if-wrong level {_fmt(float(r['stop']))}",
+                "expired": "neither the target nor the exit level was hit in the time allowed",
+                "never filled": f"the price never came to the entry {_fmt(float(r['entry']))}"}[status]
+        when_txt = f" ({pd.Timestamp(when).tz_convert('Asia/Kolkata'):%d %b, %I:%M %p})" if when is not None else ""
+        lesson = {"target": "The call worked. One win proves little - the score below is what matters.",
+                  "stop": "The call failed. This is why the exit level matters: a small, planned loss.",
+                  "expired": "Counts as not right. Calls that go nowhere tie up money.",
+                  "never filled": "No trade, no loss - waiting for the entry protected you."}[status]
+        msgs.append(f"{head} - {r['symbol']} ({r['side']}) from {r['source'] or 'forwarded'}\n"
+                    f"What they said ({str(r['checked'])[:10]}): {r['side']} near {_fmt(float(r['entry']))}, "
+                    f"wrong if {'below' if r['side'] == 'buy' else 'above'} {_fmt(float(r['stop']))}\n"
+                    f"What happened: {what}{when_txt}" + (f"; price now {_fmt(last)}" if last else "") + ".\n"
+                    f"What it means: {lesson}")
     df.to_csv(TIPS_F, index=False)
     if send and msgs:
         from . import telegram
         from .config import load_settings
         rec_lines = sorted({source_record(s, df) for s in df["source"].dropna().unique()
                             if any(str(s) in m for m in msgs)} - {None})
-        telegram.send(load_settings(), "\n".join(msgs + ["📒 " + x for x in rec_lines] + [DISCLAIMER]),
+        telegram.send(load_settings(), "\n\n".join(msgs + ["📒 Scoreboard\n" + "\n".join(rec_lines)] * bool(rec_lines)
+                                                     + [DISCLAIMER]),
                       label="forwarded call update")
     return msgs

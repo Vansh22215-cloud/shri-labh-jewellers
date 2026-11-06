@@ -33,7 +33,7 @@ def test_forwarded_picture_is_read_and_checked(monkeypatch, tmp_path):
     bot.handle("T", "1", msg, 45000)
     assert seen["text"].startswith("Nifty") and "24290" in seen["text"] and seen["source"] == "Dark Horse"
     assert seen["image"]["levels"] == [24296.0]
-    assert sent["t"].startswith("🖼 Read your chart picture") and "looks like Nifty" in sent["t"]
+    assert sent["t"].startswith("🖼 I read your chart picture") and seen["image"]["guessed"] == "Nifty"
 
 
 def test_unreadable_picture_gets_a_clear_answer(monkeypatch):

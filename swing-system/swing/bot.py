@@ -210,15 +210,27 @@ def handle(token, owner, msg, capital):
     else:
         try:
             reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
-            if image:
-                reply = ("🖼 Read your chart picture" + (" (blurry/small pictures may be misread)" if image.get("axis") is False
-                         else "") + (f". No name was readable, so I matched the price scale: it looks like "
-                                     f"{image['guessed']}" if image.get("guessed") else "") + ".\n" + reply)
+            if image and "What I read on the picture" not in reply:
+                reply = ("🖼 I read your chart picture" + (" (it was hard to read - blurry or small)" if not image.get("axis")
+                         else "") + ".\n\n" + reply)
         except Exception as e:
             log.error("tip check failed: %s", e)
             reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."
-    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=msg["message_id"])
+    _send_reply(token, chat, reply, msg["message_id"])
     return owner
+
+
+def _send_reply(token, chat, reply, reply_to):
+    """Cards are formatted (bold headings); if Telegram rejects the formatting, the same words go as plain text."""
+    import html as _h
+    import re as _re
+    if "<b>" in reply:
+        r = _api(token, "sendMessage", chat_id=chat, text=reply[:4000], parse_mode="HTML",
+                 disable_web_page_preview="true", reply_to_message_id=reply_to)
+        if not isinstance(r, dict) or r.get("ok", True) is not False:
+            return
+        reply = _h.unescape(_re.sub(r"</?(b|i|pre|code)>", "", reply))
+    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=reply_to)
 
 
 def run_forever():

@@ -267,6 +267,24 @@ def own_patterns(df, lookback=3):
     return fired, candles[:6]
 
 
+def own_patterns_for(ticker_or_symbol, nse_stock=False):
+    """(fired, candles) from the system's own detectors on real daily prices, or None if no data."""
+    try:
+        import yfinance as yf
+        tk = f"{ticker_or_symbol}.NS" if nse_stock else ticker_or_symbol
+        df = yf.download(tk, period="3y", interval="1d", progress=False, auto_adjust=False)
+        if df is None or not len(df):
+            return None
+        if hasattr(df.columns, "levels"):
+            df.columns = df.columns.get_level_values(0)
+        df = df.rename(columns=str.lower).dropna(subset=["close"])
+        fired, candles = own_patterns(df)
+        return None if fired is None else (fired, candles)
+    except Exception as e:
+        log.warning("own patterns failed: %s", type(e).__name__)
+        return None
+
+
 def own_patterns_line(ticker_or_symbol, nse_stock=False):
     """One reply line with the system's own pattern check on daily bars."""
     try:
