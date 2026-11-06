@@ -512,6 +512,11 @@ def track(send=True, now=None, fetch=hourly):
         if status == r["outcome"]:
             continue
         df.at[i, "outcome"] = status
+        if status != "open":
+            if "resolved" not in df:
+                df["resolved"] = None
+            df["resolved"] = df["resolved"].astype(object)
+            df.at[i, "resolved"] = str(pd.Timestamp.now(tz="Asia/Kolkata").date())
         if status == "open":
             msgs.append(f"▶️ ENTRY REACHED - {r['symbol']} ({r['side']}) from {r['source'] or 'forwarded'}\n"
                         f"The price came to the entry {_fmt(float(r['entry']))}. If you took it, your exit-if-wrong level "

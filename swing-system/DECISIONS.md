@@ -455,3 +455,12 @@ Owner forwarded a 15-minute XAU/USD chart with a long position tool; the bot ana
   drawn on top, solid candles ignored) and their edges priced through the axis -> entry, stop, target, side.
 Rehearsal on a mock XAU/USD 15-min long chart: read entry 4,046.49 / stop 4,034.93 / target 4,057.44, 0.30% futures
 gap adjusted, verdict RISKY (against the 15-min downtrend, stop only 0.3% away, 47 vs 51 needed).
+
+## D90 (2026-11-06) Hourly message = TIPS UPDATE for every tip (Nifty pulse removed)
+Owner: every hourly update must show each tip given so far and from now on; no Nifty line. The hourly scan now
+sends (swing/tip_status.py): new signals / actions first, the owner's recorded trades, then every tip -
+system tips (pending: vs buy zone; open: gain, Rs P&L on the tip quantity, distance to stop and target),
+the hourly-scan "BUY ... tomorrow" signals (journal/scan_signals.csv) until the 6:40 pm list confirms or drops them,
+and every forwarded tip (stocks and index/forex/gold/crypto calls) grouped by channel, with my verdict at the
+time and "if you took it: ..." advice. Each line: icon, plain status (in profit / close to stop / target
+reached today ...) and one "what to do". Finished forwarded calls are shown once on the day they finish.

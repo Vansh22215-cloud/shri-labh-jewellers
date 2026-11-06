@@ -99,7 +99,9 @@ def run(send=True):
     my = journal.load_my_trades()
     tips = journal.load_tips()
     recent_tips = tips[(tips["kind"] == "tip") & tips["status"].isin(["pending", "open"])]
-    syms = sorted({s for s in cur if s not in q} | set(my["symbol"]) | set(recent_tips["symbol"]))
+    from . import tip_status
+    syms = sorted({s for s in cur if s not in q} | set(my["symbol"]) | set(recent_tips["symbol"])
+                  | set(tip_status.symbols_needed()))
     try:
         from .intel_news import fetch as fetch_news
         fetch_news()
@@ -284,16 +286,25 @@ def run(send=True):
         log.warning("dashboard ideas save failed: %s", e)
     new_sigs = [pl for pl in forming if pl.get("new")]
     acts = [l for l in my_lines if "Hold. Nothing to do" not in l]
-    if send and (new_sigs or acts):
+    if send:   # every hour: actions + new signals first, then where EVERY tip stands (no Nifty line - owner's choice)
         lines = []
         for l in acts:
-            lines.append("⚠️ " + re.sub("<[^>]+>", "", l).replace("\n", " "))
+            lines.append("⚠️ " + E(re.sub("<[^>]+>", "", l).replace("\n", " ")))
         for pl in new_sigs[:3]:
-            lines.append(f"🟢 BUY {pl['symbol']} tomorrow {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
-                         f"target {pl['target1']:,.0f} | qty {pl['qty']} | risk {pl['risk']}/10 (confirm at 6:40 pm)")
-        res = telegram.send(settings, "\n".join(lines) + "\nResearch, not advice.", label="hourly scan")
-    elif send:   # nothing to act on: one short pulse line (owner wants to hear everything)
-        res = telegram.send(settings, f"⏱ {last_ts:%I:%M %p} market: Nifty {nifty_now:,.0f} ({(nifty_now / n_prev - 1) * 100:+.2f}%), "
-                                      f"{adv} up / {dec} down. No new signal; your trades need no action.", label="hourly pulse")
+            lines.append(f"🟢 <b>NEW: BUY {E(pl['symbol'])} tomorrow</b> {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop "
+                         f"{pl['stop']:,.0f} | target {pl['target1']:,.0f} | qty {pl['qty']} | risk {pl['risk']}/10 "
+                         "(provisional - the 6:40 pm list confirms it)")
+        try:
+            tip_status.record_signals(d.date(), new_sigs[:3])
+        except Exception as e:
+            log.warning("saving scan signals failed: %s", e)
+        try:
+            upd = tip_status.message(snap, journal.load_tips(), last_ts)
+        except Exception as e:
+            log.warning("tips update failed: %s", e)
+            upd = "⏱ Tips update could not be built this hour (logged)."
+        mine = ("💼 <b>Your trades</b>\n" + "\n\n".join(my_lines) + "\n\n\u2063") if my_lines else ""
+        body = ("\n".join(lines) + "\n\n\u2063" if lines else "") + mine + upd
+        res = telegram.send(settings, body, html=True, label="hourly tips update")
         log.info("Hourly scan: %s (%d new, %d actions)", res, len(new_sigs), len(acts))
     return text

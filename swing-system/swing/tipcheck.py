@@ -454,8 +454,14 @@ def update_and_notify(send=True):
     before = pd.read_csv(TIPS_F)["outcome"].tolist()
     df = update_outcomes()
     msgs = []
+    changed = False
     for (i, r), old in zip(df.iterrows(), before):
         if old == "open" and r["outcome"] != "open":
+            if "resolved" not in df:
+                df["resolved"] = None
+            df["resolved"] = df["resolved"].astype(object)
+            df.at[i, "resolved"] = str(pd.Timestamp.now(tz="Asia/Kolkata").date())
+            changed = True
             head = {"target": "✅ RIGHT", "stop": "❌ WRONG", "expired": "⌛ NO RESULT"}.get(r["outcome"], r["outcome"])
             what = {"target": f"it reached the target {r['target']}", "stop": f"it hit the stop-loss {r['stop']}",
                     "expired": "neither target nor stop was hit in the time allowed"}.get(r["outcome"], r["outcome"])
@@ -463,6 +469,8 @@ def update_and_notify(send=True):
                 r["verdict"], str(r["verdict"]).lower())
             msgs.append(f"{head} - {r['symbol']} ({r['side']}) tip from {r['source'] or 'forwarded'} ({str(r['checked'])[:10]})\n"
                         f"What happened: {what}.\nMy verdict then was: {ours}.")
+    if changed:
+        df.to_csv(TIPS_F, index=False)
     if send and msgs:
         from . import telegram
         from .config import load_settings
