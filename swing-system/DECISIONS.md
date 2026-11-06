@@ -420,3 +420,11 @@ NSE stock". Now (swing/market_views.py):
 - Optional paid upgrade NOT enabled (needs the owner's approval): an AI vision model could describe the drawing
   itself (trendlines, zones, arrows) at roughly Rs 1-3 per picture. Free OCR + real-price detectors cover the
   useful part; revisit only if many forwarded charts carry no readable text.
+
+## D87 (2026-11-06) New program code reaches the running system within ~10 minutes
+A forwarded chart picture was answered by the old code because the always-on run had started before the update
+(runs keep the code they started with, up to ~5 hours). Now every 10 minutes the run compares the program files
+(swing/, scripts/, requirements, strategies, settings) on the branch with the ones it started with; if they changed
+it ends cleanly and keep_alive starts a fresh run with the new code (data-only commits do not trigger this). The
+crash-loop guard only counts runs that ended within 8 minutes. At start each run self-checks the picture reader and
+warns the owner on Telegram (once a day) if it cannot start.

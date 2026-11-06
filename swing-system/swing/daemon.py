@@ -146,13 +146,78 @@ def run_job(job, minutes_left):
         log.warning("Daemon: %s failed: %s", job, type(e).__name__)
 
 
+CODE_PATHS = ["swing-system/swing", "swing-system/scripts", "swing-system/requirements.txt",
+              "swing-system/strategies", "swing-system/settings.yaml"]
+
+
+def code_version(ref="HEAD"):
+    """Fingerprint of the program files at a git ref (data/results commits do not change it)."""
+    out = []
+    for p in CODE_PATHS:
+        r = subprocess.run(["git", "rev-parse", f"{ref}:{p}"], cwd=ROOT.parent, capture_output=True, text=True)
+        out.append(r.stdout.strip())
+    return "|".join(out)
+
+
+def update_waiting(start_version):
+    """True if newer program code was pushed to the branch since this run started (then the run ends early and
+    the next one - started automatically by keep_alive - uses the new code within minutes)."""
+    branch = os.environ.get("SWING_BRANCH")
+    if not branch or not os.environ.get("GITHUB_ACTIONS"):
+        return False
+    try:
+        subprocess.run(["git", "fetch", "-q", "origin", branch], cwd=ROOT.parent, timeout=60, check=True)
+        new = code_version("FETCH_HEAD")
+        return bool(new.replace("|", "")) and new != start_version
+    except Exception:
+        return False
+
+
+def self_check():
+    """At start: is the picture reader working on this computer? Warn the owner once a day if not."""
+    try:
+        import numpy as np
+        from .chart_reader import _ocr
+        _ocr()(np.full((60, 200, 3), 255, dtype=np.uint8))
+        log.info("Self-check: chart picture reader ready")
+        return True
+    except Exception as e:
+        log.warning("Self-check: chart picture reader NOT working: %s %s", type(e).__name__, str(e)[:120])
+        if claim_once("picture reader warning"):
+            from . import telegram
+            from .config import load_settings
+            telegram.send(load_settings(), "⚠️ System check: the chart-picture reader could not start on GitHub "
+                                           f"today ({type(e).__name__}). Text tips still work. Open a Claude "
+                                           "session to fix it.", label="self-check warning")
+        return False
+
+
+def claim_once(name, t=None):
+    t = t or now()
+    st = _load()
+    k = f"{name} {t:%Y-%m-%d}"
+    if st.get(k):
+        return False
+    st[k] = now().isoformat(timespec="minutes")
+    STATE.write_text(json.dumps(st, indent=1))
+    return True
+
+
 def run():
     from .bot import poll_once
     start = time.time()
     left = lambda: MAX_MIN - (time.time() - start) / 60
     answered = 0
     last_track = 0.0
+    start_version = code_version()
+    last_update_check = time.time()
+    self_check()
     while left() > 2:
+        if time.time() - last_update_check > 600:     # new program code pushed? hand over to a fresh run
+            last_update_check = time.time()
+            if update_waiting(start_version):
+                log.info("Daemon: newer program code found - ending this run so the next one uses it")
+                break
         if time.time() - last_track > 1800:    # forwarded calls: alert the owner when one is right / wrong
             last_track = time.time()
             for name, fn in (("views", "swing.market_views:track"), ("stock tips", "swing.tipcheck:update_and_notify")):
