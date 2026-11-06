@@ -77,17 +77,46 @@ def _wait_line(name, origin, side, ltp, zone, stop, target, icon, status, todo):
             f"👉 {E(todo)}")
 
 
-def system_tips(snap, tips):
+RESULT = {"target": "✅ RIGHT - reached the target", "stop": "❌ WRONG - hit the stop", "expired": "⌛ ran out of time",
+          "never filled": "⌛ never reached its entry", "closed": "closed"}
+VERDICT_WORD = {"GOOD": "worth considering", "RISKY": "risky", "AVOID": "skip", "NEUTRAL": "coin flip",
+                "UNKNOWN": "couldn't judge"}
+DAYS_KEPT = 60          # every tip from the last 60 days is listed
+
+
+def _since(ltp, then, side="buy"):
+    try:
+        then = float(then)
+    except (TypeError, ValueError):
+        return ""
+    if not then or then != then:
+        return ""
+    ch = (ltp / then - 1) * 100 * (1 if side != "sell" else -1)
+    return f" ({ch:+.1f}% since then, was {_f(then)})"
+
+
+def system_tips(snap, tips, today=None):
+    """All system tips of the last 60 days: open/pending in full, finished ones as one result line."""
     out = []
-    t = tips[(tips["kind"] == "tip") & tips["status"].isin(["pending", "open"])]
-    for _, r in t.iterrows():
+    t = tips[tips["kind"] == "tip"].copy()
+    if not len(t):
+        return out
+    t = t[pd.to_datetime(t["date"]) >= pd.Timestamp.today().normalize() - pd.Timedelta(days=DAYS_KEPT)]
+    for _, r in t.sort_values("date", ascending=False).iterrows():
         s = r["symbol"]
-        if s not in snap["close"]:
-            continue
-        ltp = float(snap["close"][s])
-        hi, lo = float(snap["high"].get(s, ltp)), float(snap["low"].get(s, ltp))
         origin = f"system tip {pd.Timestamp(r['date']):%d %b}"
+        ltp = float(snap["close"][s]) if s in snap["close"] else None
         zone = (float(r["entry_low"]), float(r["entry_high"]))
+        if r["status"] not in ("pending", "open"):
+            res = str(r.get("exit_reason") or r["status"])
+            pnl = f" · result ₹{float(r['pnl']):+,.0f}" if pd.notna(r.get("pnl")) else ""
+            out.append(f"🏁 <b>{E(s)}</b> <i>({E(origin)})</i> - finished: {E(res)}{pnl}"
+                       + (f"\n<code>Now {_f(ltp)}</code>" if ltp else ""))
+            continue
+        if ltp is None:
+            out.append(f"❔ <b>{E(s)}</b> <i>({E(origin)})</i> - no live price this hour (data source); shown again next hour.")
+            continue
+        hi, lo = float(snap["high"].get(s, ltp)), float(snap["low"].get(s, ltp))
         if r["status"] == "pending":
             out.append(_wait_line(s, origin, "buy", ltp, zone, r["stop"], r["target1"],
                                   *judge("buy", ltp, None, None, None, waiting=True, zone=zone)))
@@ -108,10 +137,11 @@ def scan_signals(snap, tips, today):
     out = []
     for _, r in sg.drop_duplicates("symbol", keep="last").iterrows():
         s = r["symbol"]
-        if s not in snap["close"]:
-            continue
         if f"{s} {r['date']}" in confirmed:
             continue                     # it became an evening tip: shown with the system tips
+        if s not in snap["close"]:
+            out.append(f"❔ <b>{E(s)}</b> <i>(scan signal {pd.Timestamp(r['date']):%d %b})</i> - no live price this hour.")
+            continue
         ltp = float(snap["close"][s])
         zone = (float(r["entry_low"]), float(r["entry_high"]))
         if str(r["date"]) < str(today):
@@ -124,62 +154,96 @@ def scan_signals(snap, tips, today):
     return out
 
 
-def forwarded(snap, today):
+def _market_price(tk, offset, cache):
+    if tk not in cache:
+        try:
+            from .market_views import hourly
+            h = hourly(tk, period="5d")
+            cache[tk] = float(h["close"].iloc[-1]) if h is not None and len(h) else None
+        except Exception:
+            cache[tk] = None
+    return cache[tk] + offset if cache[tk] is not None else None
+
+
+def forwarded(snap, today, since=None):
+    """EVERY forwarded tip of the last 60 days, grouped by channel, newest first:
+    tracked ones in full; finished ones with their result; ones that could not be tracked (skip verdict, option,
+    missing stop/target) with the price change since forwarding. 🆕 = forwarded since the last update."""
     from .tipcheck import TIPS_F
     if not TIPS_F.exists():
         return {}
     df = pd.read_csv(TIPS_F)
-    groups = {}
-    live = df["outcome"].isin(["open", "waiting entry"])
-    done_today = df["outcome"].isin(["target", "stop", "expired", "never filled"]) & \
-        (df.get("resolved", pd.Series([""] * len(df))).astype(str).str[:10] == str(today))
-    for _, r in df[live | done_today].iterrows():
-        if pd.isna(r.get("entry")) or pd.isna(r.get("stop")) or pd.isna(r.get("target")):
+    if not len(df):
+        return {}
+    df["_t"] = pd.to_datetime(df["checked"], errors="coerce")
+    df = df[df["_t"] >= pd.Timestamp.today().normalize() - pd.Timedelta(days=DAYS_KEPT)]
+    df = df.sort_values("_t", ascending=False)
+    df["_key"] = df["symbol"].astype(str) + "|" + df["source"].astype(str) + "|" + df["side"].astype(str)
+    df = df.drop_duplicates("_key", keep="first")              # the same tip forwarded twice: latest only
+    groups, cache = {}, {}
+    for _, r in df.iterrows():
+        src = str(r.get("source")) if pd.notna(r.get("source")) and str(r.get("source")) else "forwarded"
+        new = "🆕 " if since is not None and r["_t"] > pd.Timestamp(since) else ""
+        when = f"{r['_t']:%d %b}"
+        if pd.isna(r.get("symbol")) or not str(r.get("symbol")).strip() or str(r.get("symbol")) == "nan":
+            raw = str(r.get("raw") or "")[:60].replace("\n", " ")
+            groups.setdefault(src, []).append(f"{new}❔ <i>(forwarded {when})</i> I couldn't read a stock or market "
+                                              f"in it: “{E(raw)}…” - forward it with the name to track it.")
             continue
         name, side = str(r["symbol"]), str(r.get("side") or "buy")
+        trade_side = "sell" if side == "sell" else "buy"
         tk = r.get("ticker") if isinstance(r.get("ticker"), str) and r.get("ticker") else None
-        ltp = None
-        if tk is None and name in snap["close"]:
+        off = float(r.get("offset") or 0) if "offset" in r and pd.notna(r.get("offset")) else 0.0
+        hi = lo = None
+        if tk:
+            ltp = _market_price(tk, off, cache)
+        elif name in snap["close"]:
             ltp = float(snap["close"][name])
             hi, lo = float(snap["high"].get(name, ltp)), float(snap["low"].get(name, ltp))
-        elif tk:
-            try:
-                from .market_views import hourly
-                h = hourly(tk, period="5d")
-                off = float(r.get("offset") or 0) if pd.notna(r.get("offset")) else 0.0
-                ltp, hi, lo = float(h["close"].iloc[-1]) + off, None, None
-            except Exception:
-                ltp = None
-        if ltp is None:
-            continue
-        origin = f"forwarded {pd.Timestamp(str(r['checked'])[:10]):%d %b}, my verdict: " + \
-            {"GOOD": "worth considering", "RISKY": "risky", "AVOID": "skip", "NEUTRAL": "coin flip"}.get(
-                str(r.get("verdict")), str(r.get("verdict")).lower())
-        src = str(r.get("source") or "forwarded") if pd.notna(r.get("source")) else "forwarded"
-        if r["outcome"] in ("target", "stop", "expired", "never filled"):
-            word = {"target": "✅ RIGHT - target reached", "stop": "❌ WRONG - stop hit",
-                    "expired": "⌛ ran out of time", "never filled": "⌛ never reached its entry"}[r["outcome"]]
-            groups.setdefault(src, []).append(f"{word}: <b>{E(name)}</b> <i>({E(origin)})</i>\n<code>Now {_f(ltp)}</code>")
-            continue
-        entry, stop, target = float(r["entry"]), float(r["stop"]), float(r["target"])
-        if r["outcome"] == "waiting entry":
-            groups.setdefault(src, []).append(_wait_line(name, origin, side, ltp, (entry, entry), stop, target,
-                                                         *judge(side, ltp, None, None, None, waiting=True, zone=(entry, entry))))
         else:
-            icon, status, todo = judge(side, ltp, entry, stop, target, hi=hi, lo=lo)
-            groups.setdefault(src, []).append(_line(name, origin, side, ltp, entry, stop, target, icon, status,
-                                                    "If you took it: " + todo[0].lower() + todo[1:]))
+            ltp = None
+        verdict = VERDICT_WORD.get(str(r.get("verdict")), str(r.get("verdict")).lower())
+        origin = f"forwarded {when}, my verdict: {verdict}"
+        if ltp is None:
+            groups.setdefault(src, []).append(f"{new}❔ <b>{E(name)}</b> <i>({E(origin)})</i> - no live price this hour.")
+            continue
+        outcome = str(r.get("outcome"))
+        has_levels = all(pd.notna(r.get(k)) for k in ("entry", "stop", "target"))
+        if outcome in RESULT:
+            groups.setdefault(src, []).append(
+                f"{new}{RESULT[outcome]}: <b>{E(name)}</b> <i>({E(origin)})</i>\n<code>Now {_f(ltp)}"
+                f"{_since(ltp, r.get('entry'), trade_side)}</code>")
+            continue
+        if outcome in ("open", "waiting entry") and has_levels:
+            entry, stop, target = float(r["entry"]), float(r["stop"]), float(r["target"])
+            if outcome == "waiting entry":
+                groups.setdefault(src, []).append(new + _wait_line(
+                    name, origin, trade_side, ltp, (entry, entry), stop, target,
+                    *judge(trade_side, ltp, None, None, None, waiting=True, zone=(entry, entry))))
+            else:
+                icon, status, todo = judge(trade_side, ltp, entry, stop, target, hi=hi, lo=lo)
+                groups.setdefault(src, []).append(new + _line(name, origin, trade_side, ltp, entry, stop, target, icon,
+                                                              status, "If you took it: " + todo[0].lower() + todo[1:]))
+            continue
+        # not tracked to a result (skip verdict, option tip, no levels): still shown, with the move since then
+        why = ("option tip - I show the stock's move" if "option" in outcome or any(x in side for x in ("CE", "PE"))
+               else "no stop/target to track" if not has_levels else "not tracked")
+        groups.setdefault(src, []).append(
+            f"{new}📌 <b>{E(name)}{(' ' + E(side)) if any(x in side for x in ('CE', 'PE')) else ''}</b> <i>({E(origin)})</i> - {E(why)}"
+            f"\n<code>Now {_f(ltp)}{_since(ltp, r.get('ltp'), trade_side)}</code>")
     return groups
 
 
 def symbols_needed():
-    """Stocks whose live price the hourly scan must fetch for this update."""
+    """Stocks whose live price the hourly scan must fetch for this update (every tip of the last 60 days)."""
     from . import journal
     from .tipcheck import TIPS_F
     syms = set()
+    cut = pd.Timestamp.today().normalize() - pd.Timedelta(days=DAYS_KEPT)
     try:
         t = journal.load_tips()
-        syms |= set(t.loc[(t["kind"] == "tip") & t["status"].isin(["pending", "open"]), "symbol"])
+        t = t[(t["kind"] == "tip") & (pd.to_datetime(t["date"]) >= cut)]
+        syms |= set(t["symbol"])
     except Exception:
         pass
     if SIGNALS_F.exists():
@@ -187,27 +251,29 @@ def symbols_needed():
         syms |= set(sg.loc[pd.to_datetime(sg["date"]) >= pd.Timestamp.today().normalize() - pd.Timedelta(days=1), "symbol"])
     if TIPS_F.exists():
         df = pd.read_csv(TIPS_F)
-        m = df["outcome"].isin(["open", "waiting entry"])
+        m = pd.to_datetime(df["checked"], errors="coerce") >= cut
         if "ticker" in df:
             m &= df["ticker"].isna() | (df["ticker"].astype(str) == "")
-        syms |= set(df.loc[m, "symbol"].dropna().astype(str))
+        syms |= set(df.loc[m, "symbol"].dropna().astype(str)) - {"nan", ""}
     return sorted(syms)
 
 
-def message(snap, tips, ts, today=None):
+def message(snap, tips, ts, today=None, since=None):
     today = today or pd.Timestamp(ts).date()
-    blocks = [f"⏱ <b>TIPS UPDATE</b> · {pd.Timestamp(ts):%I:%M %p}"]
-    st = system_tips(snap, tips)
+    blocks = [f"⏱ <b>TIPS UPDATE</b> · {pd.Timestamp(ts):%I:%M %p} · every tip of the last {DAYS_KEPT} days"]
+    st = system_tips(snap, tips, today)
     if st:
         blocks.append("🤖 <b>System tips</b>\n" + "\n\n".join(st))
     sg = scan_signals(snap, tips, today)
     if sg:
         blocks.append("🔔 <b>Today's scan signals</b>\n" + "\n\n".join(sg))
-    fw = forwarded(snap, today)
+    fw = forwarded(snap, today, since)
     for src, lines in fw.items():
-        blocks.append(f"📨 <b>Forwarded from {E(src)}</b>\n" + "\n\n".join(lines))
+        blocks.append(f"📨 <b>Forwarded from {E(src)}</b> ({len(lines)})\n" + "\n\n".join(lines))
     if len(blocks) == 1:
-        blocks.append("No open tips right now. Forward any tip to the bot and it will appear here every hour.")
+        blocks.append("No tips yet. Forward any tip to the bot and it will appear here every hour.")
     n = len(st) + len(sg) + sum(len(v) for v in fw.values())
-    blocks.append(f"<i>{n} tip(s) followed. Research, not advice - you decide and place every order yourself.</i>")
-    return "\n\n⁣".join(blocks)
+    n_new = sum(l.startswith("🆕") for v in fw.values() for l in v)
+    blocks.append(f"<i>{n} tip(s) listed" + (f", {n_new} new since the last update (🆕)" if n_new else "") +
+                  ". Research, not advice - you decide and place every order yourself.</i>")
+    return "\n\n\u2063".join(blocks)

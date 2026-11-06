@@ -299,7 +299,10 @@ def run(send=True):
         except Exception as e:
             log.warning("saving scan signals failed: %s", e)
         try:
-            upd = tip_status.message(snap, journal.load_tips(), last_ts)
+            since = pd.Timestamp(st["last_tips_update"]) if st.get("last_tips_update") else None
+            upd = tip_status.message(snap, journal.load_tips(), last_ts, since=since)
+            st["last_tips_update"] = str(pd.Timestamp.now().round("s"))   # same clock as forwarded tips' times
+            save_state(st)
         except Exception as e:
             log.warning("tips update failed: %s", e)
             upd = "⏱ Tips update could not be built this hour (logged)."

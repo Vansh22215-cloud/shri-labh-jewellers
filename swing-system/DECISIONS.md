@@ -464,3 +464,8 @@ the hourly-scan "BUY ... tomorrow" signals (journal/scan_signals.csv) until the 
 and every forwarded tip (stocks and index/forex/gold/crypto calls) grouped by channel, with my verdict at the
 time and "if you took it: ..." advice. Each line: icon, plain status (in profit / close to stop / target
 reached today ...) and one "what to do". Finished forwarded calls are shown once on the day they finish.
+- (6 Nov, after the 2:20 pm update) Owner: only a few tips were shown. The update listed only tips still being
+  tracked with entry+stop+target. Now EVERY tip of the last 60 days is listed every hour: system tips (finished ones
+  with their result), and every forwarded tip - tracked ones in full, finished ones with right/wrong, option tips /
+  "skip" tips / tips without levels with the price change since forwarding, and unreadable messages so nothing
+  disappears. The same tip forwarded twice shows once. Tips forwarded since the previous update are marked 🆕.
