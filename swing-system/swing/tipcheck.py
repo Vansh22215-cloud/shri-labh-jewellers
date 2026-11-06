@@ -178,7 +178,7 @@ def evaluate(tip, capital=45000.0):
     reasons, flags, details = [], [], {}
     sym = tip.get("symbol")
     if not sym:
-        return "UNKNOWN", ["I could not find an NSE stock symbol in this message. Try e.g. 'BUY TATASTEEL 150 SL 145 TGT 160'."], {}
+        return "UNKNOWN", ["I could not find an NSE stock symbol in this message. Try e.g. 'BUY TATASTEEL 150 SL 145 TGT 160', or for an index/forex/gold/crypto: 'Nifty weakness only below 24290', 'XAUUSD BUY 2650 SL 2640 TP 2670'."], {}
     eq = equity_list()
     row = eq[eq["SYMBOL"] == sym]
     series = str(row[" SERIES"].iloc[0] if " SERIES" in row else row["SERIES"].iloc[0]).strip() if len(row) else "?"
@@ -344,19 +344,27 @@ def check_text(text, source="", capital=45000.0):
              source, outcome="n/a (option - outcome not tracked yet)")
         return options_check.format_option_reply(o, verdict, reasons, d)
     tip = parse(text)
+    if not tip.get("symbol"):   # not an NSE stock: an index / forex / gold / crypto view or setup?
+        from . import market_views
+        try:
+            r = market_views.check(text, source)
+            if r:
+                return r
+        except Exception as e:
+            log.warning("market view check failed: %s", type(e).__name__)
     verdict, reasons, d = evaluate(tip, capital)
     save(tip, verdict, d, source)
     return format_reply(tip, verdict, reasons, d)
 
 
-def save(tip, verdict, d, source, outcome=None):
+def save(tip, verdict, d, source, outcome=None, extra=None):
     row = {"checked": str(pd.Timestamp.now().round("s")), "source": source, "symbol": tip.get("symbol"),
            "side": tip.get("side"), "horizon": tip.get("horizon"), "verdict": verdict,
            "entry": d.get("entry"), "stop": d.get("stop"), "target": d.get("target"), "ltp": d.get("ltp"),
            "hist_pct": d.get("hist_target_first_pct"), "need_pct": d.get("breakeven_win_pct"),
            "expected_r": d.get("expected_r"),
            "outcome": outcome or ("open" if tip.get("symbol") else "n/a"),
-           "raw": tip.get("raw", "").replace("\n", " ")[:300]}
+           "raw": tip.get("raw", "").replace("\n", " ")[:300], **(extra or {})}
     df = pd.read_csv(TIPS_F) if TIPS_F.exists() else pd.DataFrame()
     pd.concat([df, pd.DataFrame([row])], ignore_index=True).to_csv(TIPS_F, index=False)
 
@@ -386,6 +394,28 @@ def update_outcomes():
                 df.at[i, "outcome"] = "expired"; break
     df.to_csv(TIPS_F, index=False)
     return df
+
+
+def update_and_notify(send=True):
+    """Re-check open forwarded STOCK tips and message the owner about each one that finished."""
+    if not TIPS_F.exists():
+        return []
+    before = pd.read_csv(TIPS_F)["outcome"].tolist()
+    df = update_outcomes()
+    msgs = []
+    for (i, r), old in zip(df.iterrows(), before):
+        if old == "open" and r["outcome"] != "open":
+            word = {"target": "✅ RIGHT - target reached", "stop": "❌ WRONG - stop-loss hit",
+                    "expired": "⌛ ran out of time"}.get(r["outcome"], r["outcome"])
+            msgs.append(f"{word}: {r['symbol']} {r['side']} tip from {r['source'] or 'forwarded'} "
+                        f"({str(r['checked'])[:10]}); our verdict then was {r['verdict']}.")
+    if send and msgs:
+        from . import telegram
+        from .config import load_settings
+        from .market_views import source_record
+        recs = sorted({source_record(s, df) for s in df["source"].dropna().unique() if any(str(s) in m for m in msgs)} - {None})
+        telegram.send(load_settings(), "\n".join(msgs + ["📒 " + x for x in recs] + [DISCLAIMER]), label="stock tip update")
+    return msgs
 
 
 def source_scorecard():

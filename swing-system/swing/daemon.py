@@ -151,7 +151,16 @@ def run():
     start = time.time()
     left = lambda: MAX_MIN - (time.time() - start) / 60
     answered = 0
+    last_track = 0.0
     while left() > 2:
+        if time.time() - last_track > 1800:    # forwarded calls: alert the owner when one is right / wrong
+            last_track = time.time()
+            for name, fn in (("views", "swing.market_views:track"), ("stock tips", "swing.tipcheck:update_and_notify")):
+                try:
+                    mod, f = fn.split(":")
+                    getattr(__import__(mod, fromlist=[f]), f)()
+                except Exception as e:
+                    log.warning("Daemon: tracking %s failed: %s", name, type(e).__name__)
         try:
             answered += poll_once()
         except Exception as e:

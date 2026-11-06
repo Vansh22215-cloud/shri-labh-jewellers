@@ -22,6 +22,9 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "• GOOD / RISKY / AVOID with reasons\n• the odds from that stock's own 5-year history vs what you need "
         "after Zerodha charges\n• red flags: no stop-loss, pump-and-dump stocks, results, trend\n\n"
         "You can also type a tip, e.g.  BUY TATASTEEL 175 SL 170 TGT 185\n"
+        "Index, forex, gold, crude and crypto views/setups work too (Nifty, Bank Nifty, Sensex, EURUSD, USDINR, "
+        "XAUUSD, BTC ...), e.g. 'Nifty weakness only below 24290' or 'XAUUSD BUY 2650 SL 2640 TP 2670'. "
+        "I track every one and message you when it is right, wrong or runs out of time.\n"
         "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n\n" + DISCLAIMER)

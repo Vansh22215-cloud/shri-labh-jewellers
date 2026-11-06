@@ -385,3 +385,19 @@ written to the log, so a missing message (company of the day) could not be trace
   own setting (SWING_CLAIMED=nightly), which changes one daemon test - so the evening blocked all tips. Fixed: tests
   run in a clean environment (conftest + run_tests strips SWING_/TELEGRAM_/GH_ variables) and a failure now names
   the failing test in the log.
+
+## D85 (2026-11-06) Forwarded index / forex / gold / crypto views and setups are understood and tracked
+Owner forwarded a Nifty view ("trend continuation on 60 min, weakness only below 24290") and got "could not find an
+NSE stock". Now (swing/market_views.py):
+- Understands indices (Nifty, Bank Nifty, Fin Nifty, Midcap, Sensex), forex pairs (any of EUR GBP USD JPY AUD NZD
+  CAD CHF INR), gold, silver, crude, Bitcoin, Ethereum; SETUPS (entry/SL/TP) and VIEWS with a "wrong if" level.
+- A view with no target is tested as a 1:1 move (as far the other way as the "wrong if" level) - the fairest yes/no
+  test; time allowed follows the chart timeframe (60 min -> ~3 days, daily -> 2 weeks, ...).
+- Reply: live price, distance to the level, hourly/daily trend, base rate from ~2 years of hourly bars (same-bar tie
+  = loss), break-even rate, the channel's track record so far.
+- Tracking every 30 minutes by the always-on run on hourly bars; the owner gets a Telegram message when a call is
+  right, wrong, expired, or (setups) reaches its entry. Stock tips now also get a "right/wrong" message.
+- Messages the old checker could not read in the last 7 days are re-read once, judged at the price of the hour
+  they were forwarded.
+- Forex replies carry the legal note: in India only rupee pairs on NSE/BSE are legal for residents (RBI alert list).
+- Pictures are not read (no free OCR on GitHub); the caption text is used.
