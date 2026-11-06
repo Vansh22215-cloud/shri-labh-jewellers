@@ -103,7 +103,7 @@ def parse(text):
     if m and _n(m.group(1)) not in v["targets"] and _n(m.group(1)) != v["stop"]:
         v["entry"] = _n(m.group(1))
     # "weakness only (sustaining) below X" / "invalid below X" -> bullish, wrong if below X (and the mirror)
-    m = re.search(r"\b(?:WEAK(?:NESS)?|BEARISH|SELL(?:ING)?|INVALID(?:ATION)?|NEGATIVE|BREAKDOWN)\b[\w\s]{0,30}?"
+    m = re.search(r"\b(?:WEAK\w*|BEARISH|SELL(?:ING)?|INVALID(?:ATION)?|NEGATIVE|BREAKDOWN)\b[\w\s]{0,30}?"
                   r"\bBELOW\b\s*" + NUM, t)
     if m:
         v["wrong_if"], v["side"] = ("below", _n(m.group(1))), v["side"] or "buy"
@@ -226,7 +226,9 @@ def evaluate(v, h=None, d=None):
     word = "bullish" if side == "buy" else "bearish"
     dist = abs(px - stop) / px * 100
     if v["type"] == "view":
-        reasons.append(f"Understood: {word} view on {v['name']} ({v['timeframe']} chart), wrong if it "
+        reasons.append(f"Understood: {word} view on {v['name']} ("
+                       + (f"{v['timeframe']} chart" if v['timeframe'] != "not stated" else "timeframe not stated")
+                       + "), wrong if it "
                        f"{'falls below' if side == 'buy' else 'rises above'} {_fmt(stop)}.")
         reasons.append(f"Now {_fmt(px)}: {dist:.2f}% {'above' if side == 'buy' else 'below'} that level. "
                        f"I test it as: reaches {_fmt(target)} (same distance the other way) before breaking "
@@ -274,12 +276,31 @@ def source_record(source, rows=None):
     return f"Track record of '{source}': {w} of {len(g)} finished calls reached the target ({w / len(g) * 100:.0f}%)."
 
 
-def check(text, source=""):
-    """Returns a reply, or None if the message is not about an index/forex/commodity/crypto."""
+def check(text, source="", image=None):
+    """Returns a reply, or None if the message is not about an index/forex/commodity/crypto.
+    image: what chart_reader.read_image found on a forwarded chart picture (levels, pattern names)."""
     v = parse(text)
     if not v:
         return None
-    verdict, reasons, plan = evaluate(v)
+    notes = []
+    h = None
+    if image:
+        from .chart_reader import apply_image
+        try:
+            h = hourly(v["ticker"])
+        except Exception:
+            h = None
+        price = float(h["close"].iloc[-1]) if h is not None and len(h) else None
+        notes = apply_image(v, image, price)
+    verdict, reasons, plan = evaluate(v, h=h)
+    reasons = notes + reasons
+    try:
+        from .chart_reader import own_patterns_line
+        own = own_patterns_line(v["ticker"])
+        if own:
+            reasons.append(own)
+    except Exception:
+        pass
     from .tipcheck import save
     now = datetime.now(timezone.utc)
     save({"symbol": v["name"], "side": plan.get("side") or v.get("side"), "horizon": v["timeframe"], "raw": v["raw"]},

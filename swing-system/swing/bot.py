@@ -146,6 +146,31 @@ def _restore_backup(token, doc):
         return f"Restore failed ({type(e).__name__}). The file must be one the system sent you."
 
 
+def _read_picture(token, msg):
+    """A forwarded chart picture -> what chart_reader found on it (None if no picture / it failed).
+    The picture is kept only in memory/temp and deleted at once (it can be personal)."""
+    import tempfile
+    photo = (msg.get("photo") or [None])[-1]
+    doc = msg.get("document") or {}
+    fid = photo["file_id"] if photo else (doc.get("file_id") if str(doc.get("mime_type", "")).startswith("image/") else None)
+    if not fid:
+        return None
+    try:
+        info = _api(token, "getFile", file_id=fid).get("result") or {}
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{info['file_path']}", timeout=60)
+        r.raise_for_status()
+        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=True) as f:
+            f.write(r.content); f.flush()
+            from .chart_reader import read_image
+            out = read_image(f.name)
+        log.info("Chart picture read: %d words, %d lines, %d pattern names", len(out["text"].split()),
+                 len(out["levels"]), len(out["patterns"]))
+        return out
+    except Exception as e:
+        log.warning("Chart picture could not be read: %s", type(e).__name__)
+        return {"text": "", "levels": [], "patterns": [], "axis": False, "failed": True}
+
+
 def handle(token, owner, msg, capital):
     chat = str(msg["chat"]["id"])
     if owner and chat != owner:
@@ -156,10 +181,24 @@ def handle(token, owner, msg, capital):
         _remember_chat(chat)
     text = (msg.get("text") or msg.get("caption") or "").strip()
     doc = msg.get("document") or {}
+    image = None
+    if not str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
+        image = _read_picture(token, msg)
+        if image and image.get("text"):
+            text = (text + "\n" + image["text"]).strip()     # caption first, then what is written on the chart
+        if image and image.get("range"):
+            from . import market_views
+            if not market_views.find_instrument(text) and not tipcheck.parse(text).get("symbol"):
+                from .chart_reader import guess_instrument
+                g = guess_instrument(image["range"])
+                if g:
+                    image["guessed"] = g
+                    text = g + " " + text
     if str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
         reply = _restore_backup(token, doc)
     elif not text:
-        reply = "Send or forward the tip as text (I can't read pictures of tips yet)."
+        reply = ("I couldn't read any words or prices on that picture. Forward it with its caption, or type the "
+                 "name and level, e.g. 'Nifty weakness below 24290'.")
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
     elif text.startswith("/report"):
@@ -170,7 +209,11 @@ def handle(token, owner, msg, capital):
         reply = trade_command(text)
     else:
         try:
-            reply = tipcheck.check_text(text, source=_source(msg), capital=capital)
+            reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
+            if image:
+                reply = ("🖼 Read your chart picture" + (" (blurry/small pictures may be misread)" if image.get("axis") is False
+                         else "") + (f". No name was readable, so I matched the price scale: it looks like "
+                                     f"{image['guessed']}" if image.get("guessed") else "") + ".\n" + reply)
         except Exception as e:
             log.error("tip check failed: %s", e)
             reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."

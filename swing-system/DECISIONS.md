@@ -401,3 +401,22 @@ NSE stock". Now (swing/market_views.py):
   they were forwarded.
 - Forex replies carry the legal note: in India only rupee pairs on NSE/BSE are legal for residents (RBI alert list).
 - Pictures are not read (no free OCR on GitHub); the caption text is used.
+
+## D86 (2026-11-06) The bot reads forwarded chart pictures (free)
+- Free OCR (rapidocr-onnxruntime, runs on GitHub's computer, no key, no cost) reads the words on the picture:
+  title/symbol, timeframe, written levels, entry/SL/TP boxes and pattern names (head and shoulders, double
+  bottom, flag, wedge, triangle, cup and handle, order block, FVG, BOS/CHoCH, support/resistance ...).
+- The price scale on the right is fitted (robust line through the axis numbers, misreads dropped), so long
+  horizontal lines drawn on the chart are converted to prices. Tested on the owner's (blurry, re-screenshotted)
+  Dark Horse chart: lines read at 23,961 / 24,313 / 24,458 vs labels 23,947 / 24,296 / 24,442 (within ~0.07%).
+- No name readable: the instrument is guessed from the price scale only if exactly one index/commodity/crypto/major
+  pair trades inside it (said in the reply). No stop written: the nearest drawn line on the other side of the
+  price is used as the "wrong if" level (said in the reply).
+- Every tip/view reply (picture or text) also carries the system's OWN pattern check on real daily prices: which of
+  the library's chart-pattern / market-structure entries fired in the last 3 days, and TA-Lib candles on the last
+  bar - labelled as clues, not tested edges.
+- The picture is held only in a temporary file and deleted at once (can be personal); only the words read are kept
+  in the private journal.
+- Optional paid upgrade NOT enabled (needs the owner's approval): an AI vision model could describe the drawing
+  itself (trendlines, zones, arrows) at roughly Rs 1-3 per picture. Free OCR + real-price detectors cover the
+  useful part; revisit only if many forwarded charts carry no readable text.

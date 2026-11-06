@@ -324,14 +324,14 @@ def format_reply(tip, verdict, reasons, d):
     if d.get("hist_target_first_pct") is not None:
         lines.append(f"Odds from history: {d['hist_target_first_pct']}% vs {d['breakeven_win_pct']}% needed; "
                      f"expected {d.get('expected_r'):+} R per trade after charges")
-    lines += [f"• {r}" for r in reasons[:7]]
+    lines += [f"• {r}" for r in reasons[:10]]
     if d.get("qty_1pct_risk"):
         lines.append(f"If you still take it: max {d['qty_1pct_risk']} shares (risking 1% of your capital).")
     lines.append(DISCLAIMER)
     return "\n".join(lines)
 
 
-def check_text(text, source="", capital=45000.0):
+def check_text(text, source="", capital=45000.0, image=None):
     from . import options_check
     o = options_check.parse_option(text)
     if o and o.get("symbol"):
@@ -347,12 +347,22 @@ def check_text(text, source="", capital=45000.0):
     if not tip.get("symbol"):   # not an NSE stock: an index / forex / gold / crypto view or setup?
         from . import market_views
         try:
-            r = market_views.check(text, source)
+            r = market_views.check(text, source, image=image)
             if r:
                 return r
         except Exception as e:
             log.warning("market view check failed: %s", type(e).__name__)
     verdict, reasons, d = evaluate(tip, capital)
+    if tip.get("symbol"):
+        from .chart_reader import apply_image, own_patterns_line
+        if image:
+            reasons = apply_image(dict(tip, side=tip.get("side"), wrong_if=True), image, d.get("ltp")) + reasons
+        try:
+            own = own_patterns_line(tip["symbol"], nse_stock=True)
+            if own:
+                reasons.append(own)
+        except Exception:
+            pass
     save(tip, verdict, d, source)
     return format_reply(tip, verdict, reasons, d)
 

@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## 2026-11-06 (forwarded market calls)
+- Bot reads chart pictures: words, pattern names, price lines (via the price scale), instrument from the scale (D86).
+- Every check adds the system's own pattern scan on real prices.
 - Bot understands index, forex, gold, crude and crypto views/setups, tracks them and reports right/wrong (D85).
 - Stock tips forwarded to the bot now also get a message when they hit target/stop.
 
