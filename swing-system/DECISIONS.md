@@ -439,3 +439,19 @@ first) -> the odds as a bar ("48 out of 100, need 50") -> good to know -> the pl
 Hype words ("sure shot", "jackpot", "100%", "guaranteed" ...) are flagged with why they matter. Right/wrong alerts
 say what they said, what happened (with time) and what it means. Fixed: option odds used per-share charges when
 the lot size was unknown (showed "need 229%"); now an Rs 5 lakh lot is assumed.
+
+## D89 (2026-11-06) Wrong-instrument bug fixed; picture title, timeframe and position tool are read
+Owner forwarded a 15-minute XAU/USD chart with a long position tool; the bot analysed the NSE stock DOLLAR
+(Rs 265) because the title "Gold Spot / U.S. Dollar" contains that word and stock symbols were tried first.
+- An index/forex/gold/crypto name now beats a stock symbol that is only an ordinary word in the text (a stock still
+  wins when clearly named: #SYMBOL or right after BUY/SELL).
+- SAFETY RULE: if the chart's own price (title line "O.. H.. L.. C..") differs from the data for the chosen
+  instrument by more than 3% (markets) / 5% (stocks), the bot answers CAN'T JUDGE YET and asks for the name - it
+  never analyses an instrument that does not match the picture. Small gaps (futures vs spot, e.g. GC=F vs XAU/USD
+  ~0.3%) are measured and the data is shifted to the chart's price; tracking uses the same shift.
+- Title line also gives the timeframe (e.g. "· 15 · OANDA"); 15-minute-or-less charts are judged on real 15-minute
+  bars (last 60 days) instead of hourly bars, and the reply names the data used.
+- TradingView long/short position tool: the pale green (target) and red (stop) boxes are found (bridging candles
+  drawn on top, solid candles ignored) and their edges priced through the axis -> entry, stop, target, side.
+Rehearsal on a mock XAU/USD 15-min long chart: read entry 4,046.49 / stop 4,034.93 / target 4,057.44, 0.30% futures
+gap adjusted, verdict RISKY (against the 15-min downtrend, stop only 0.3% away, 47 vs 51 needed).

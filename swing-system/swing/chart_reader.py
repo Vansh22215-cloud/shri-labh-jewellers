@@ -150,6 +150,84 @@ def horizontal_lines(img, min_frac=0.3):
     return [float(np.mean(g)) for g in groups]
 
 
+EXCHANGES = r"OANDA|FXCM|FX_IDC|FX|NSE|BSE|TVC|FOREXCOM|FOREX\.COM|CAPITALCOM|PEPPERSTONE|BINANCE|COINBASE|BITSTAMP|" \
+            r"SAXO|ICMARKETS|COMEX|NYMEX|MCX|BLACKBULL|EIGHTCAP|FUSIONMARKETS|VANTAGE|EXNESS|BYBIT|KRAKEN"
+
+
+def header_info(text):
+    """TradingView-style title line: 'Gold Spot / U.S. Dollar · 15 · OANDA  O4,050.13 H4,052.06 L4,044.88 C4,046.51'
+    -> {'timeframe_min': 15, 'chart_price': 4046.51}. Missing parts are left out."""
+    out = {}
+    up = text.upper()
+    m = re.search(r"(?:^|[\s·•.\-])(\d{1,3}|\d{1,2}[HDWM])\s*[·•.\-]?\s*(?:" + EXCHANGES + r")\b", up)
+    if m:
+        tf = m.group(1)
+        mult = {"H": 60, "D": 1440, "W": 10080, "M": 43200}
+        out["timeframe_min"] = int(tf[:-1]) * mult[tf[-1]] if tf[-1] in mult else int(tf)
+    m = re.search(r"\bC\s*([\d,]+\.\d+)", up)
+    if m and re.search(r"\bH\s*[\d,]+\.\d+", up) and re.search(r"\bL\s*[\d,]+\.\d+", up):
+        try:
+            out["chart_price"] = float(m.group(1).replace(",", ""))
+        except ValueError:
+            pass
+    return out
+
+
+def _longest_run(r, gap=25):
+    """Longest stretch of True, bridging gaps up to `gap` px (candles drawn on top of a box)."""
+    xs = np.flatnonzero(r)
+    if not len(xs):
+        return 0
+    breaks = np.flatnonzero(np.diff(xs) > gap)
+    starts = np.r_[xs[0], xs[breaks + 1]]
+    ends = np.r_[xs[breaks], xs[-1]]
+    return int((ends - starts).max()) + 1
+
+
+def _zone_rows(mask, W, min_frac=0.12):
+    rows = []
+    for y in range(mask.shape[0]):
+        r = mask[y]
+        if r.sum() < 0.6 * min_frac * W:
+            continue
+        if _longest_run(r) >= min_frac * W:
+            rows.append(y)
+    groups, cur = [], []
+    for y in rows:
+        if cur and y - cur[-1] > 3:
+            groups.append(cur); cur = []
+        cur.append(y)
+    if cur:
+        groups.append(cur)
+    return max(groups, key=len) if groups else None
+
+
+def position_tool(img, axis):
+    """TradingView long/short position tool: a green (target) box touching a red (stop) box.
+    -> {'side', 'entry', 'stop', 'target'} as prices, or None."""
+    if not axis:
+        return None
+    a, b, _ = axis
+    A = np.asarray(img.convert("RGB")).astype(int)
+    H, W, _ = A.shape
+    top, bot = int(0.06 * H), int(0.92 * H)
+    R, G, Bc = A[top:bot, : int(0.9 * W), 0], A[top:bot, : int(0.9 * W), 1], A[top:bot, : int(0.9 * W), 2]
+    spread = np.maximum(np.maximum(R, G), Bc) - np.minimum(np.minimum(R, G), Bc)
+    pale = (spread >= 12) & (spread <= 90)          # see-through boxes, not solid candles
+    green = ((G - R) > 15) & ((G - Bc) > -25) & pale
+    red = ((R - G) > 15) & ((R - Bc) > 8) & pale
+    g, r = _zone_rows(green, W), _zone_rows(red, W)
+    if not g or not r or len(g) < 8 or len(r) < 8:
+        return None
+    g0, g1, r0, r1 = g[0] + top, g[-1] + top, r[0] + top, r[-1] + top
+    price = lambda y: a + b * y
+    if 0 <= r0 - g1 <= 0.03 * H:          # green above red: long
+        return {"side": "buy", "target": price(g0), "entry": price((g1 + r0) / 2), "stop": price(r1)}
+    if 0 <= g0 - r1 <= 0.03 * H:          # red above green: short
+        return {"side": "sell", "stop": price(r0), "entry": price((r1 + g0) / 2), "target": price(g1)}
+    return None
+
+
 def read_image(path):
     """-> {'text': all words read, 'levels': prices of drawn lines, 'patterns': [(name, side)], 'axis': bool}"""
     from PIL import Image
@@ -183,7 +261,15 @@ def read_image(path):
             if name in ("head and shoulders",) and "inverse head and shoulders" in [p[0] for p in pats]:
                 continue
             pats.append((name, side))
-    return {"text": text, "levels": sorted(set(levels)), "patterns": pats, "axis": bool(axis), "range": rng}
+    out = {"text": text, "levels": sorted(set(levels)), "patterns": pats, "axis": bool(axis), "range": rng}
+    out.update(header_info(text))
+    try:
+        pos = position_tool(img, axis)
+        if pos:
+            out["position"] = {k: (round(v, 5 if abs(v) < 10 else 2) if isinstance(v, float) else v) for k, v in pos.items()}
+    except Exception as e:
+        log.warning("position tool reading failed: %s", type(e).__name__)
+    return out
 
 
 def guess_instrument(rng, prices=None):

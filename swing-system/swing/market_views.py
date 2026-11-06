@@ -30,7 +30,7 @@ INSTRUMENTS = [
     (r"MIDCP ?NIFTY|NIFTY ?MIDCAP ?(?:SELECT|50)?", "^NSEMDCP50", "Nifty Midcap", "index"),
     (r"SENSEX", "^BSESN", "Sensex", "index"),
     (r"NIFTY ?(?:50)?(?! ?(?:IT|AUTO|PHARMA|METAL|FMCG|REALTY|ENERGY|MEDIA|PSU|NEXT))", "^NSEI", "Nifty 50", "index"),
-    (r"XAU ?/?USD|GOLD", "GC=F", "Gold (USD)", "commodity"),
+    (r"XAU ?/?USD|GOLD ?SPOT|GOLD", "GC=F", "Gold (USD)", "commodity"),
     (r"XAG ?/?USD|SILVER", "SI=F", "Silver (USD)", "commodity"),
     (r"US ?OIL|WTI|CRUDE(?: ?OIL)?", "CL=F", "Crude oil (WTI)", "commodity"),
     (r"BTC ?/?USDT?|BITCOIN", "BTC-USD", "Bitcoin", "crypto"),
@@ -79,6 +79,28 @@ def _timeframe(t):
     return "not stated", 24 * 5
 
 
+def tf_minutes(label):
+    m = re.match(r"(\d+) (min|hour)", str(label))
+    if m:
+        return int(m.group(1)) * (60 if m.group(2) == "hour" else 1)
+    return {"daily": 1440, "weekly": 10080, "intraday": 15}.get(label)
+
+
+def set_timeframe(v, minutes):
+    """Timeframe read from the chart picture (e.g. 15 for a 15-minute chart)."""
+    v["tf_min"] = minutes
+    if minutes <= 15:
+        v["timeframe"], v["hours"] = f"{minutes} min", 8
+    elif minutes <= 60:
+        v["timeframe"], v["hours"] = f"{minutes} min", 24 * 3
+    elif minutes < 1440:
+        v["timeframe"], v["hours"] = f"{minutes // 60} hour", 24 * 7
+    elif minutes < 10080:
+        v["timeframe"], v["hours"] = "daily", 24 * 14
+    else:
+        v["timeframe"], v["hours"] = "weekly", 24 * 60
+
+
 def parse(text):
     inst = find_instrument(text)
     if not inst:
@@ -114,15 +136,16 @@ def parse(text):
     if v["stop"] and (v["entry"] or v["targets"]):
         v["type"] = "setup"
     v["timeframe"], v["hours"] = _timeframe(t)
+    v["tf_min"] = tf_minutes(v["timeframe"])
     if re.search(r"\bTREND CONTINUATION\b", t) and v["side"] is None:
         v["side"] = "trend"        # decided from the actual trend once prices are loaded
     return v
 
 
 # ----------------------------------------------------------------------------- prices
-def hourly(ticker, period="730d"):
+def hourly(ticker, period="730d", interval="60m"):
     import yfinance as yf
-    df = yf.download(ticker, period=period, interval="60m", progress=False, auto_adjust=False)
+    df = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=False)
     if df is None or not len(df):
         return None
     if isinstance(df.columns, pd.MultiIndex):
@@ -170,19 +193,34 @@ def base_rate(h, up, down, bars, side):
 def _fmt(x):
     if x is None:
         return "n/a"
-    return f"{x:,.5f}".rstrip("0").rstrip(".") if abs(x) < 10 else f"{x:,.2f}" if abs(x) < 1000 else f"{x:,.0f}"
+    return f"{x:,.5f}".rstrip("0").rstrip(".") if abs(x) < 10 else f"{x:,.2f}" if abs(x) < 10000 else f"{x:,.0f}"
 
 
-def _hours_to_bars(hours, kind):
-    per_day = 24 if kind in ("forex", "crypto", "commodity") else 7     # NSE: ~7 hourly bars a day
+def _hours_to_bars(hours, kind, bar_min=60):
+    per_day = (24 * 60 if kind in ("forex", "crypto", "commodity") else 375) / bar_min   # NSE: 6h15m a day
     return max(4, int(round(hours / 24 * per_day)))
+
+
+def bars_for(v):
+    """Price bars matching the chart: 15-minute bars (last 60 days) for charts of 15 min or less, else hourly (2 yrs)."""
+    if v.get("tf_min") and v["tf_min"] <= 15:
+        return 15, "60d", "15m", "15-minute prices of the last 60 days"
+    return 60, "730d", "60m", "hourly prices of the last 2 years"
+
+
+def prices(v):
+    bar_min, period, interval, _ = bars_for(v)
+    return hourly(v["ticker"], period=period, interval=interval)
 
 
 # ----------------------------------------------------------------------------- checking a message
 def evaluate(v, h=None, d=None):
     """Fill in live price, plan levels, trend and odds. Returns (verdict, reasons, plan)."""
-    h = hourly(v["ticker"]) if h is None else h
+    h = prices(v) if h is None else h
     d = daily(v["ticker"]) if d is None else d
+    bar_min, _, _, data_note = bars_for(v)
+    if v.get("offset"):
+        d = d + v["offset"] if d is not None else d
     if h is None or not len(h):
         return "UNKNOWN", ["Could not get prices for this right now (free data source). It is saved and will be "
                            "checked again."], {}
@@ -243,13 +281,13 @@ def evaluate(v, h=None, d=None):
     agree = (side == "buy" and h_trend == "up") or (side == "sell" and h_trend == "down")
     against = (side == "buy" and h_trend == "down") or (side == "sell" and h_trend == "up")
     if agree:
-        reasons.append(("pro", f"It goes WITH the short-term trend (hourly chart moving {h_trend}) - trends tend to "
+        reasons.append(("pro", f"It goes WITH the short-term trend ({'15-minute' if bar_min == 15 else 'hourly'} chart moving {h_trend}) - trends tend to "
                                "continue more often than they reverse."))
     elif against:
-        reasons.append(("con", f"It goes AGAINST the short-term trend (hourly chart moving {h_trend}) - fighting the "
+        reasons.append(("con", f"It goes AGAINST the short-term trend ({'15-minute' if bar_min == 15 else 'hourly'} chart moving {h_trend}) - fighting the "
                                "trend fails more often."))
     else:
-        reasons.append(("info", "The hourly chart is moving sideways - no trend to help or hurt."))
+        reasons.append(("info", f"The {'15-minute' if bar_min == 15 else 'hourly'} chart is moving sideways - no trend to help or hurt."))
     if d_trend == ("up" if side == "buy" else "down"):
         reasons.append(("pro", f"The bigger daily trend is {d_trend} too, so both timeframes agree."))
     elif d_trend == ("down" if side == "buy" else "up"):
@@ -258,16 +296,16 @@ def evaluate(v, h=None, d=None):
         reasons.append(("info", "The bigger daily trend is mixed (no clear direction)."))
     if dist < 0.4:
         reasons.append(("con", f"The 'wrong' level is only {dist:.1f}% away - normal noise can hit it."))
-    bars = _hours_to_bars(v["hours"], v["kind"])
+    bars = _hours_to_bars(v["hours"], v["kind"], bar_min)
     pct, n = base_rate(h, reward / entry, risk / entry, bars, side)
     need = round(100 / (1 + rr), 1) if rr > 0 else None
     plan.update(hist_pct=pct, need_pct=need, bars=bars, samples=n)
     if pct is not None and need is not None:
         if pct >= need + 3:
-            reasons.append(("pro", f"In the last 2 years, a move like this went the right way first {pct:.0f} times in "
+            reasons.append(("pro", f"In real {data_note}, a move like this went the right way first {pct:.0f} times in "
                                    f"100 ({n} cases) - more than the {need:.0f} needed."))
         else:
-            reasons.append(("con", f"In the last 2 years, a move like this went the right way first only {pct:.0f} times "
+            reasons.append(("con", f"In real {data_note}, a move like this went the right way first only {pct:.0f} times "
                                    f"in 100 ({n} cases) - it needs {need:.0f} to pay off."))
     edge = pct is not None and need is not None and pct >= need + 3
     if pct is not None and pct < need - 3:
@@ -310,14 +348,41 @@ def check(text, source="", image=None):
     picture, h = None, None
     if image:
         from .chart_reader import apply_image
+        picture = [f"Instrument: {v['name']}" + (" (matched from the price scale - no name was readable)"
+                                                 if image.get("guessed") else "")]
+        if image.get("timeframe_min"):
+            set_timeframe(v, image["timeframe_min"])
+            picture.append(f"Timeframe: {v['timeframe']} chart")
+        pos = image.get("position")
+        if pos and not v.get("stop"):
+            v.update(side=pos["side"], entry=pos["entry"], stop=pos["stop"], targets=[pos["target"]], type="setup")
+            picture.append(f"Position tool drawn: {'LONG (buy)' if pos['side'] == 'buy' else 'SHORT (sell)'} - entry "
+                           f"{_fmt(pos['entry'])}, stop {_fmt(pos['stop'])}, target {_fmt(pos['target'])} (read from the box edges)")
         try:
-            h = hourly(v["ticker"])
+            h = prices(v)
         except Exception:
             h = None
         price = float(h["close"].iloc[-1]) if h is not None and len(h) else None
-        picture = apply_image(v, image, price)
-        if image.get("guessed"):
-            picture.insert(0, f"No name was readable, so I matched the price scale: it looks like {image['guessed']}.")
+        cp = image.get("chart_price")
+        if cp and price:
+            gap = cp / price - 1
+            if abs(gap) > 0.03:     # safety rule: the data must be the same instrument as the chart
+                from . import reply_card as rc
+                return rc.build("UNKNOWN", f"{v['name']} · {v['type']}", source=source, picture=picture + [
+                    f"Price on the chart: {_fmt(cp)}"], missing=(
+                    f"the chart shows {_fmt(cp)} but my free data for {v['name']} is at {_fmt(price)} "
+                    f"({gap * 100:+.1f}%), so this may be a different instrument or contract. Please type the exact name "
+                    "with the picture (e.g. XAUUSD, NIFTY, BANKNIFTY, EURUSD)"))
+            if abs(gap) > 0.0005:
+                v["offset"] = cp - price
+                h = h.copy()
+                h[["open", "high", "low", "close"]] += v["offset"]
+                picture.append(f"Price on the chart {_fmt(cp)}; my free data ({v['ticker']}) is {_fmt(price)} - "
+                               f"{abs(gap) * 100:.2f}% apart (e.g. futures vs spot), so I shifted the data to match the chart.")
+                price = cp
+            else:
+                picture.append(f"Price on the chart {_fmt(cp)} matches my data.")
+        picture += apply_image(v, image, price)
     verdict, reasons, plan = evaluate(v, h=h)
     tag = "con" if verdict == "AVOID" else "missing" if verdict == "UNKNOWN" else "info"
     reasons = [r if isinstance(r, tuple) else (tag, r) for r in reasons]
@@ -337,7 +402,7 @@ def check(text, source="", image=None):
                    "breakeven_win_pct": plan.get("need_pct")},
          source, outcome=("open" if v["type"] == "view" or not v["entry"] else "waiting entry") if tracking else "n/a",
          extra={"kind": v["kind"] + " " + v["type"], "ticker": v["ticker"], "checked_utc": now.isoformat(),
-                "hours": v["hours"]})
+                "hours": v["hours"], "offset": v.get("offset", 0.0)})
     k = lambda kind: [t for kk, t in reasons if kk == kind]
     pros, cons = k("pro"), k("con")
     pp, pc = rc.pattern_points(own, plan.get("side") or "buy")
@@ -435,6 +500,10 @@ def track(send=True, now=None, fetch=hourly):
         if h is None:
             continue
         bars = h[h.index > t0]
+        off = float(r.get("offset") or 0) if "offset" in r and not pd.isna(r.get("offset")) else 0.0
+        if off:
+            bars = bars.copy()
+            bars[["open", "high", "low", "close"]] += off
         status, when = _walk(bars, r["side"], float(r["entry"]), float(r["stop"]), float(r["target"]),
                              r["outcome"] == "waiting entry")
         hours = float(r.get("hours") or 120)

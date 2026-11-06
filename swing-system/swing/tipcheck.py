@@ -87,9 +87,9 @@ def parse(text, eq=None):
     tagged = [w.lstrip("#") for w in words if w.startswith("#") and w.lstrip("#") in syms]
     after = re.findall(r"\b(?:BUY|SELL|SHORT)\s+#?([A-Z0-9][A-Z0-9&\-]{1,19})", t)
     after = [a for a in after if a in syms]
-    for group in (tagged, after, cands):
+    for how, group in (("tag", tagged), ("after", after), ("word", cands)):
         if group:
-            tip["symbol"] = group[0]
+            tip["symbol"], tip["symbol_how"] = group[0], how
             break
     if tip["symbol"] is None:
         norm_t = " " + _norm_name(t) + " "
@@ -99,7 +99,7 @@ def parse(text, eq=None):
             if len(nn) >= 4 and f" {nn} " in norm_t and (best is None or len(nn) > len(best[1])):
                 best = (s, nn)
         if best:
-            tip["symbol"] = best[0]
+            tip["symbol"], tip["symbol_how"] = best[0], "name"
     # stop-loss
     m = re.search(r"\b(?:SL|S\.L\.?|STOP ?LOSS|STOPLOSS|STOP)\b\s*[:\-=]?\s*(?:AT|BELOW|ABOVE)?\s*" + NUM, t)
     if m:
@@ -373,8 +373,14 @@ def check_text(text, source="", capital=45000.0, image=None):
              source, outcome="n/a (option - outcome not tracked yet)")
         return options_check.format_option_reply(o, verdict, reasons, d, source=source)
     tip = parse(text)
+    from . import market_views
+    inst = market_views.find_instrument(text)
+    # an index / forex / gold / crypto name beats a stock symbol that is only an ordinary word in the text
+    # (e.g. "Gold Spot / U.S. Dollar" contains DOLLAR, which is also an NSE stock) - unless the stock was
+    # clearly named (#SYMBOL or right after BUY/SELL)
+    if inst and tip.get("symbol_how") in ("word", "name", None):
+        tip["symbol"] = None
     if not tip.get("symbol"):   # not an NSE stock: an index / forex / gold / crypto view or setup?
-        from . import market_views
         try:
             r = market_views.check(text, source, image=image)
             if r:
@@ -382,6 +388,14 @@ def check_text(text, source="", capital=45000.0, image=None):
         except Exception as e:
             log.warning("market view check failed: %s", type(e).__name__)
     verdict, reasons, d = evaluate(tip, capital)
+    if image and image.get("chart_price") and d.get("ltp") and abs(image["chart_price"] / d["ltp"] - 1) > 0.05:
+        # safety rule: never analyse an instrument whose price does not match the chart
+        from . import reply_card as rc
+        return rc.build("UNKNOWN", f"{tip['symbol']} · stock tip", source=source,
+                        missing=(f"the chart shows a price of {rc.fmt(image['chart_price'])}, but {tip['symbol']} is at "
+                                 f"{rc.fmt(d['ltp'])}, so I may have picked the wrong instrument. Please type the name "
+                                 "(e.g. 'XAUUSD' or the NSE symbol) with the picture"),
+                        picture=[f"Price on the chart: {rc.fmt(image['chart_price'])}"])
     picture, own, record = None, None, None
     if tip.get("symbol"):
         from .chart_reader import apply_image, own_patterns_for

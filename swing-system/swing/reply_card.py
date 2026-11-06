@@ -52,7 +52,7 @@ def fmt(x):
     if x is None:
         return "n/a"
     x = float(x)
-    return f"{x:,.5f}".rstrip("0").rstrip(".") if abs(x) < 10 else f"{x:,.2f}" if abs(x) < 1000 else f"{x:,.0f}"
+    return f"{x:,.5f}".rstrip("0").rstrip(".") if abs(x) < 10 else f"{x:,.2f}" if abs(x) < 10000 else f"{x:,.0f}"
 
 
 def bottom_line(verdict, pros, cons, p=None, need=None, missing=None):
@@ -90,20 +90,20 @@ def pattern_points(own, side):
     if fired:
         names = ", ".join(fired[:4])
         if side == "buy":
-            pros.append(f"My own pattern scan on real prices agrees: {len(fired)} bullish setup(s) appeared in the "
-                        f"last 3 days ({names}).")
+            pros.append(f"On the daily chart, my own pattern scan of real prices found {len(fired)} bullish setup(s) "
+                        f"in the last 3 days ({names}) - the bigger picture supports a rise.")
         else:
-            cons.append(f"My own pattern scan shows {len(fired)} bullish setup(s) in the last 3 days ({names}) - "
-                        "that works against a sell call.")
+            cons.append(f"On the daily chart, my own pattern scan found {len(fired)} bullish setup(s) in the last 3 days "
+                        f"({names}) - that works against a sell call.")
     elif side == "buy":
-        cons.append("My own pattern scan found no bullish setup on real prices in the last 3 days - the chart "
-                    "does not confirm the call yet.")
+        cons.append("On the daily chart, my own pattern scan found no bullish setup in the last 3 days - the "
+                    "bigger picture does not confirm the call yet.")
     bull = [c for c in candles if c.startswith("bullish ")]
     bear = [c for c in candles if c.startswith("bearish ")]
     if bull:
-        (pros if side == "buy" else cons).append("Today's candle looks positive (" + ", ".join(bull[:2]) + ").")
+        (pros if side == "buy" else cons).append("Today's daily candle looks positive (" + ", ".join(bull[:2]) + ").")
     if bear:
-        (cons if side == "buy" else pros).append("Today's candle looks negative (" + ", ".join(bear[:2]) + ").")
+        (cons if side == "buy" else pros).append("Today's daily candle looks negative (" + ", ".join(bear[:2]) + ").")
     return pros, cons
 
 

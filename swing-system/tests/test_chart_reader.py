@@ -55,3 +55,44 @@ def test_own_patterns_runs_on_one_instrument():
     fired, candles = cr.own_patterns(df)
     assert isinstance(fired, list) and isinstance(candles, list)
     assert cr.own_patterns(df.iloc[:100]) == ([], [])                    # too little history
+
+
+def test_title_line_gives_timeframe_and_price():
+    h = cr.header_info("Gold Spot / U.S. Dollar · 15 · OANDA O 4,050.13 H 4,052.06 L 4,044.88 C 4,046.51")
+    assert h == {"timeframe_min": 15, "chart_price": 4046.51}
+    assert cr.header_info("Nifty 50 Index . 1H . NSE")["timeframe_min"] == 60
+    assert "chart_price" not in cr.header_info("C 100.5 only")
+
+
+def test_position_tool_long_and_short_light_and_dark():
+    for bg, gz, rz in (("white", (206, 235, 230), (252, 215, 218)), ((19, 23, 34), (17, 49, 53), (54, 29, 40))):
+        for short in (False, True):
+            img = Image.new("RGB", (1200, 800), bg)
+            d = ImageDraw.Draw(img)
+            a, b = (rz, gz) if short else (gz, rz)
+            d.rectangle([500, 330, 900, 440], fill=a)
+            d.rectangle([500, 440, 900, 555], fill=b)
+            for x in range(100, 1000, 12):                                  # solid candles on top
+                d.rectangle([x, 400 + x % 50, x + 6, 460 + x % 50], fill=(8, 153, 129) if x % 24 else (242, 54, 69))
+            p = cr.position_tool(img, (4090.0, -0.1, 5))
+            assert p["side"] == ("sell" if short else "buy")
+            assert abs(p["entry"] - 4046) < 0.5 and {round(p["stop"]), round(p["target"])} == {4057, 4034}
+        plain = Image.new("RGB", (1200, 800), bg)
+        assert cr.position_tool(plain, (4090.0, -0.1, 5)) is None
+
+
+def test_gold_chart_title_is_not_read_as_dollar_stock(monkeypatch):
+    from swing import market_views, tipcheck
+    eq = pd.DataFrame({"SYMBOL": ["DOLLAR", "GOLDBEES"], "NAME OF COMPANY": ["Dollar Industries Ltd", "Gold ETF"],
+                       " SERIES": ["EQ", "EQ"]})
+    monkeypatch.setattr(tipcheck, "equity_list", lambda: eq)
+    seen = {}
+    monkeypatch.setattr(market_views, "check", lambda text, source="", image=None: seen.setdefault("ok", text) or "market")
+    monkeypatch.setattr(tipcheck, "save", lambda *a, **k: None)
+    tipcheck.check_text("Gold Spot / U.S. Dollar · 15 · OANDA", source="x")
+    assert "ok" in seen                                                     # went to the gold check, not DOLLAR
+    seen.clear()
+    monkeypatch.setattr(tipcheck, "evaluate", lambda tip, capital: ("RISKY", [], {"ltp": 265.0}))
+    monkeypatch.setattr("swing.chart_reader.own_patterns_for", lambda *a, **k: None)
+    r = tipcheck.check_text("BUY DOLLAR 265 SL 250", source="x", image={"chart_price": 4046.5})
+    assert "CAN'T JUDGE" in r and "wrong instrument" in r                   # price mismatch: refuses to guess
