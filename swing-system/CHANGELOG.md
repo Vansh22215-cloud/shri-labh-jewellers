@@ -886,3 +886,6 @@
 
 ## 2026-11-06 (automatic)
 - Tested proposal A240: rejected. A240 vs a3: beat it in 6/13 walk-forward years, CAGR 8.42% vs 12.55% (needs +0.59), worst fall -13.57% vs -10.71%, gate FAIL
+
+## 2026-11-07 (automatic)
+- Weekly session aborted: sandbox tests failed. Live system untouched.
