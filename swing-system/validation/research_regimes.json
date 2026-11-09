@@ -1,11 +1,11 @@
 {
  "strategy": "a3",
- "trades": 598,
+ "trades": 599,
  "by": {
   "trend": {
    "downtrend": {
-    "trades": 160,
-    "win_pct": 54.37,
+    "trades": 161,
+    "win_pct": 54.66,
     "avg_r": 0.14
    },
    "uptrend": {
@@ -16,8 +16,8 @@
   },
   "fear": {
    "calm": {
-    "trades": 313,
-    "win_pct": 50.8,
+    "trades": 314,
+    "win_pct": 50.96,
     "avg_r": 0.13
    },
    "nervous": {
@@ -43,15 +43,15 @@
     "avg_r": 0.29
    },
    "weak": {
-    "trades": 197,
-    "win_pct": 52.79,
+    "trades": 198,
+    "win_pct": 53.03,
     "avg_r": 0.09
    }
   },
   "trend+fear": {
    "downtrend/calm": {
-    "trades": 40,
-    "win_pct": 47.5,
+    "trades": 41,
+    "win_pct": 48.78,
     "avg_r": 0.08
    },
    "downtrend/nervous": {
@@ -82,11 +82,11 @@
   }
  },
  "today": {
-  "date": "2026-11-06",
+  "date": "2026-11-09",
   "trend": "uptrend",
   "fear": "normal",
   "breadth": "mixed",
-  "vix": 17.5,
-  "breadth_pct": 48.0
+  "vix": 17.4,
+  "breadth_pct": 55.0
  }
 }
