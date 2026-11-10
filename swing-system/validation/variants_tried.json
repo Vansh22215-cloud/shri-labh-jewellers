@@ -10863,5 +10863,520 @@
   "name": "candidate-A270",
   "first_tested": "2026-11-09",
   "note": "proposal A270"
+ },
+ "95ed6c4812": {
+  "name": "candidate-A271",
+  "first_tested": "2026-11-10",
+  "note": "proposal A271"
+ },
+ "794fd90796": {
+  "name": "candidate-A272",
+  "first_tested": "2026-11-10",
+  "note": "proposal A272"
+ },
+ "5742014d3e": {
+  "name": "candidate-A273",
+  "first_tested": "2026-11-10",
+  "note": "proposal A273"
+ },
+ "822b78a546": {
+  "name": "candidate-A274",
+  "first_tested": "2026-11-10",
+  "note": "proposal A274"
+ },
+ "aa242d078b": {
+  "name": "candidate-A275",
+  "first_tested": "2026-11-10",
+  "note": "proposal A275"
+ },
+ "db0a74365e": {
+  "name": "candidate-A276",
+  "first_tested": "2026-11-10",
+  "note": "proposal A276"
+ },
+ "dd2c1a42ff": {
+  "name": "candidate-A277",
+  "first_tested": "2026-11-10",
+  "note": "proposal A277"
+ },
+ "cd70e3abcb": {
+  "name": "candidate-A278",
+  "first_tested": "2026-11-10",
+  "note": "proposal A278"
+ },
+ "4e3b4e32f2": {
+  "name": "candidate-A279",
+  "first_tested": "2026-11-10",
+  "note": "proposal A279"
+ },
+ "476dda9546": {
+  "name": "candidate-A280",
+  "first_tested": "2026-11-10",
+  "note": "proposal A280"
+ },
+ "bcb8017364": {
+  "name": "candidate-A281",
+  "first_tested": "2026-11-10",
+  "note": "proposal A281"
+ },
+ "3a310137ad": {
+  "name": "candidate-A282",
+  "first_tested": "2026-11-10",
+  "note": "proposal A282"
+ },
+ "b77768457b": {
+  "name": "candidate-A283",
+  "first_tested": "2026-11-10",
+  "note": "proposal A283"
+ },
+ "b5e940be84": {
+  "name": "candidate-A284",
+  "first_tested": "2026-11-10",
+  "note": "proposal A284"
+ },
+ "d4c83bc477": {
+  "name": "candidate-A285",
+  "first_tested": "2026-11-10",
+  "note": "proposal A285"
+ },
+ "0d6c00ba94": {
+  "name": "candidate-A286",
+  "first_tested": "2026-11-10",
+  "note": "proposal A286"
+ },
+ "861b620ac0": {
+  "name": "candidate-A287",
+  "first_tested": "2026-11-10",
+  "note": "proposal A287"
+ },
+ "f9576cda6f": {
+  "name": "candidate-A288",
+  "first_tested": "2026-11-10",
+  "note": "proposal A288"
+ },
+ "579500f315": {
+  "name": "candidate-A289",
+  "first_tested": "2026-11-10",
+  "note": "proposal A289"
+ },
+ "8b808a2ea1": {
+  "name": "candidate-A290",
+  "first_tested": "2026-11-10",
+  "note": "proposal A290"
+ },
+ "20398db889": {
+  "name": "candidate-A307",
+  "first_tested": "2026-11-10",
+  "note": "proposal A307"
+ },
+ "36e43c44f5": {
+  "name": "candidate-A308",
+  "first_tested": "2026-11-10",
+  "note": "proposal A308"
+ },
+ "c1b1d65007": {
+  "name": "candidate-A309",
+  "first_tested": "2026-11-10",
+  "note": "proposal A309"
+ },
+ "702f54371a": {
+  "name": "candidate-A310",
+  "first_tested": "2026-11-10",
+  "note": "proposal A310"
+ },
+ "b4a2523586": {
+  "name": "candidate-A311",
+  "first_tested": "2026-11-10",
+  "note": "proposal A311"
+ },
+ "9429d79b8f": {
+  "name": "candidate-A312",
+  "first_tested": "2026-11-10",
+  "note": "proposal A312"
+ },
+ "c2a2648b2b": {
+  "name": "candidate-A313",
+  "first_tested": "2026-11-10",
+  "note": "proposal A313"
+ },
+ "775a393f99": {
+  "name": "candidate-A314",
+  "first_tested": "2026-11-10",
+  "note": "proposal A314"
+ },
+ "bee89f55f5": {
+  "name": "candidate-A315",
+  "first_tested": "2026-11-10",
+  "note": "proposal A315"
+ },
+ "3f8321124c": {
+  "name": "candidate-A316",
+  "first_tested": "2026-11-10",
+  "note": "proposal A316"
+ },
+ "d6e4088d26": {
+  "name": "candidate-A317",
+  "first_tested": "2026-11-10",
+  "note": "proposal A317"
+ },
+ "cd10188596": {
+  "name": "candidate-A318",
+  "first_tested": "2026-11-10",
+  "note": "proposal A318"
+ },
+ "1cb45a80d9": {
+  "name": "candidate-A319",
+  "first_tested": "2026-11-10",
+  "note": "proposal A319"
+ },
+ "a9b0264b70": {
+  "name": "candidate-A320",
+  "first_tested": "2026-11-10",
+  "note": "proposal A320"
+ },
+ "cce1c6a35c": {
+  "name": "candidate-A321",
+  "first_tested": "2026-11-10",
+  "note": "proposal A321"
+ },
+ "b4d01efd6c": {
+  "name": "candidate-A322",
+  "first_tested": "2026-11-10",
+  "note": "proposal A322"
+ },
+ "e4fea77815": {
+  "name": "candidate-A323",
+  "first_tested": "2026-11-10",
+  "note": "proposal A323"
+ },
+ "a568aa6fb2": {
+  "name": "candidate-A324",
+  "first_tested": "2026-11-10",
+  "note": "proposal A324"
+ },
+ "87eabc20e0": {
+  "name": "candidate-A325",
+  "first_tested": "2026-11-10",
+  "note": "proposal A325"
+ },
+ "b7927318b4": {
+  "name": "candidate-A326",
+  "first_tested": "2026-11-10",
+  "note": "proposal A326"
+ },
+ "009dd9aa86": {
+  "name": "candidate-A327",
+  "first_tested": "2026-11-10",
+  "note": "proposal A327"
+ },
+ "9d8fcd7cf3": {
+  "name": "candidate-A328",
+  "first_tested": "2026-11-10",
+  "note": "proposal A328"
+ },
+ "4db7e21072": {
+  "name": "candidate-A329",
+  "first_tested": "2026-11-10",
+  "note": "proposal A329"
+ },
+ "19e20e76ef": {
+  "name": "candidate-A330",
+  "first_tested": "2026-11-10",
+  "note": "proposal A330"
+ },
+ "f33f0d4e6d": {
+  "name": "candidate-A331",
+  "first_tested": "2026-11-10",
+  "note": "proposal A331"
+ },
+ "4713187510": {
+  "name": "candidate-A332",
+  "first_tested": "2026-11-10",
+  "note": "proposal A332"
+ },
+ "0b356e058f": {
+  "name": "candidate-A333",
+  "first_tested": "2026-11-10",
+  "note": "proposal A333"
+ },
+ "4110976fed": {
+  "name": "candidate-A334",
+  "first_tested": "2026-11-10",
+  "note": "proposal A334"
+ },
+ "a8abe90daf": {
+  "name": "candidate-A335",
+  "first_tested": "2026-11-10",
+  "note": "proposal A335"
+ },
+ "d4e9c2128d": {
+  "name": "candidate-A336",
+  "first_tested": "2026-11-10",
+  "note": "proposal A336"
+ },
+ "86dffb9fdf": {
+  "name": "candidate-A337",
+  "first_tested": "2026-11-10",
+  "note": "proposal A337"
+ },
+ "7e5c8d06e7": {
+  "name": "candidate-A338",
+  "first_tested": "2026-11-10",
+  "note": "proposal A338"
+ },
+ "1734b0db76": {
+  "name": "candidate-A339",
+  "first_tested": "2026-11-10",
+  "note": "proposal A339"
+ },
+ "700d4b80ed": {
+  "name": "candidate-A340",
+  "first_tested": "2026-11-10",
+  "note": "proposal A340"
+ },
+ "ad4737029d": {
+  "name": "candidate-A341",
+  "first_tested": "2026-11-10",
+  "note": "proposal A341"
+ },
+ "5db5c703da": {
+  "name": "candidate-A342",
+  "first_tested": "2026-11-10",
+  "note": "proposal A342"
+ },
+ "98533ad4fa": {
+  "name": "candidate-A343",
+  "first_tested": "2026-11-10",
+  "note": "proposal A343"
+ },
+ "7bda631574": {
+  "name": "candidate-A344",
+  "first_tested": "2026-11-10",
+  "note": "proposal A344"
+ },
+ "ee8314cfb4": {
+  "name": "candidate-A345",
+  "first_tested": "2026-11-10",
+  "note": "proposal A345"
+ },
+ "3ad4484f14": {
+  "name": "candidate-A346",
+  "first_tested": "2026-11-10",
+  "note": "proposal A346"
+ },
+ "a37a00a806": {
+  "name": "candidate-A347",
+  "first_tested": "2026-11-10",
+  "note": "proposal A347"
+ },
+ "2fd3df0afe": {
+  "name": "candidate-A348",
+  "first_tested": "2026-11-10",
+  "note": "proposal A348"
+ },
+ "485f9afcd9": {
+  "name": "candidate-A349",
+  "first_tested": "2026-11-10",
+  "note": "proposal A349"
+ },
+ "b8eb6188bf": {
+  "name": "candidate-A350",
+  "first_tested": "2026-11-10",
+  "note": "proposal A350"
+ },
+ "7f2627137d": {
+  "name": "candidate-A351",
+  "first_tested": "2026-11-10",
+  "note": "proposal A351"
+ },
+ "5df8083a36": {
+  "name": "candidate-A352",
+  "first_tested": "2026-11-10",
+  "note": "proposal A352"
+ },
+ "0b6b579b43": {
+  "name": "candidate-A353",
+  "first_tested": "2026-11-10",
+  "note": "proposal A353"
+ },
+ "d3a63ace49": {
+  "name": "candidate-A354",
+  "first_tested": "2026-11-10",
+  "note": "proposal A354"
+ },
+ "55253f4190": {
+  "name": "candidate-A355",
+  "first_tested": "2026-11-10",
+  "note": "proposal A355"
+ },
+ "89691d9b3d": {
+  "name": "candidate-A356",
+  "first_tested": "2026-11-10",
+  "note": "proposal A356"
+ },
+ "38280e0e1e": {
+  "name": "candidate-A357",
+  "first_tested": "2026-11-10",
+  "note": "proposal A357"
+ },
+ "8b62fae56a": {
+  "name": "candidate-A358",
+  "first_tested": "2026-11-10",
+  "note": "proposal A358"
+ },
+ "1aa32528c3": {
+  "name": "candidate-A359",
+  "first_tested": "2026-11-10",
+  "note": "proposal A359"
+ },
+ "a3dd4781e1": {
+  "name": "candidate-A360",
+  "first_tested": "2026-11-10",
+  "note": "proposal A360"
+ },
+ "13457fab44": {
+  "name": "candidate-A361",
+  "first_tested": "2026-11-10",
+  "note": "proposal A361"
+ },
+ "cb902643da": {
+  "name": "candidate-A362",
+  "first_tested": "2026-11-10",
+  "note": "proposal A362"
+ },
+ "a81e6a1714": {
+  "name": "candidate-A363",
+  "first_tested": "2026-11-10",
+  "note": "proposal A363"
+ },
+ "41373fd78a": {
+  "name": "candidate-A364",
+  "first_tested": "2026-11-10",
+  "note": "proposal A364"
+ },
+ "96aca13445": {
+  "name": "candidate-A365",
+  "first_tested": "2026-11-10",
+  "note": "proposal A365"
+ },
+ "7c09bd9269": {
+  "name": "candidate-A366",
+  "first_tested": "2026-11-10",
+  "note": "proposal A366"
+ },
+ "e2b64e718e": {
+  "name": "candidate-A367",
+  "first_tested": "2026-11-10",
+  "note": "proposal A367"
+ },
+ "679e30ee37": {
+  "name": "candidate-A368",
+  "first_tested": "2026-11-10",
+  "note": "proposal A368"
+ },
+ "3126b9ad82": {
+  "name": "candidate-A369",
+  "first_tested": "2026-11-10",
+  "note": "proposal A369"
+ },
+ "b3b6a9f941": {
+  "name": "candidate-A370",
+  "first_tested": "2026-11-10",
+  "note": "proposal A370"
+ },
+ "be1772f9c6": {
+  "name": "candidate-A371",
+  "first_tested": "2026-11-10",
+  "note": "proposal A371"
+ },
+ "c2849578d0": {
+  "name": "candidate-A372",
+  "first_tested": "2026-11-10",
+  "note": "proposal A372"
+ },
+ "ac7eff6906": {
+  "name": "candidate-A373",
+  "first_tested": "2026-11-10",
+  "note": "proposal A373"
+ },
+ "a8dbccbc44": {
+  "name": "candidate-A374",
+  "first_tested": "2026-11-10",
+  "note": "proposal A374"
+ },
+ "4732012b96": {
+  "name": "candidate-A375",
+  "first_tested": "2026-11-10",
+  "note": "proposal A375"
+ },
+ "d3bdc4e03f": {
+  "name": "candidate-A376",
+  "first_tested": "2026-11-10",
+  "note": "proposal A376"
+ },
+ "9ed92a7dbe": {
+  "name": "candidate-A377",
+  "first_tested": "2026-11-10",
+  "note": "proposal A377"
+ },
+ "823a243a56": {
+  "name": "candidate-A378",
+  "first_tested": "2026-11-10",
+  "note": "proposal A378"
+ },
+ "4307aa96b1": {
+  "name": "candidate-A379",
+  "first_tested": "2026-11-10",
+  "note": "proposal A379"
+ },
+ "a6b1e4a619": {
+  "name": "candidate-A380",
+  "first_tested": "2026-11-10",
+  "note": "proposal A380"
+ },
+ "7de039cf93": {
+  "name": "candidate-A381",
+  "first_tested": "2026-11-10",
+  "note": "proposal A381"
+ },
+ "0f63b5d586": {
+  "name": "candidate-A382",
+  "first_tested": "2026-11-10",
+  "note": "proposal A382"
+ },
+ "823f1faee4": {
+  "name": "candidate-A383",
+  "first_tested": "2026-11-10",
+  "note": "proposal A383"
+ },
+ "02fac4f1bc": {
+  "name": "candidate-A384",
+  "first_tested": "2026-11-10",
+  "note": "proposal A384"
+ },
+ "3126325ca4": {
+  "name": "candidate-A385",
+  "first_tested": "2026-11-10",
+  "note": "proposal A385"
+ },
+ "2d03487662": {
+  "name": "candidate-A386",
+  "first_tested": "2026-11-10",
+  "note": "proposal A386"
+ },
+ "adf9e0a748": {
+  "name": "candidate-A387",
+  "first_tested": "2026-11-10",
+  "note": "proposal A387"
+ },
+ "f762104b6e": {
+  "name": "candidate-A388",
+  "first_tested": "2026-11-10",
+  "note": "proposal A388"
+ },
+ "5f7e944a29": {
+  "name": "candidate-A389",
+  "first_tested": "2026-11-10",
+  "note": "proposal A389"
  }
 }
