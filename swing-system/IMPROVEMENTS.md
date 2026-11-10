@@ -3261,7 +3261,7 @@ overrides: {"family": "cmf_breakout", "max_per_industry": 2}
 
 ```proposal
 id: A390
-status: proposed
+status: rejected 2026-11-10 - A390 vs a3: beat it in 7/13 walk-forward years, CAGR 8.8% vs 12.55% (needs +0.61), worst fall -17.43% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the cmf_breakout entry rule.
 overrides: {"family": "cmf_breakout", "skip_if_us_drop_pct": 2.0}
@@ -3269,7 +3269,7 @@ overrides: {"family": "cmf_breakout", "skip_if_us_drop_pct": 2.0}
 
 ```proposal
 id: A391
-status: proposed
+status: rejected 2026-11-10 - A391 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.61), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the cmf_breakout entry rule.
 overrides: {"family": "cmf_breakout", "min_fii_long_pct": 25}
@@ -3277,7 +3277,7 @@ overrides: {"family": "cmf_breakout", "min_fii_long_pct": 25}
 
 ```proposal
 id: A392
-status: proposed
+status: rejected 2026-11-10 - A392 vs a3: beat it in 4/13 walk-forward years, CAGR 5.55% vs 12.55% (needs +0.61), worst fall -23.18% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "stop_atr_mult": 2.5}
@@ -3285,7 +3285,7 @@ overrides: {"family": "obv_breakout", "stop_atr_mult": 2.5}
 
 ```proposal
 id: A393
-status: proposed
+status: rejected 2026-11-10 - A393 vs a3: beat it in 6/13 walk-forward years, CAGR 8.32% vs 12.55% (needs +0.61), worst fall -15.23% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "stop_atr_mult": 3.5}
@@ -3293,7 +3293,7 @@ overrides: {"family": "obv_breakout", "stop_atr_mult": 3.5}
 
 ```proposal
 id: A394
-status: proposed
+status: rejected 2026-11-10 - A394 vs a3: beat it in 2/13 walk-forward years, CAGR 3.93% vs 12.55% (needs +0.61), worst fall -24.5% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "max_hold_days": 15}
@@ -3301,7 +3301,7 @@ overrides: {"family": "obv_breakout", "max_hold_days": 15}
 
 ```proposal
 id: A395
-status: proposed
+status: rejected 2026-11-10 - A395 vs a3: beat it in 6/13 walk-forward years, CAGR 7.81% vs 12.55% (needs +0.61), worst fall -16.11% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "max_hold_days": 35}
@@ -3309,7 +3309,7 @@ overrides: {"family": "obv_breakout", "max_hold_days": 35}
 
 ```proposal
 id: A396
-status: proposed
+status: rejected 2026-11-10 - A396 vs a3: beat it in 6/13 walk-forward years, CAGR 8.33% vs 12.55% (needs +0.61), worst fall -17.64% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "target1_r": 1.5}
@@ -3317,7 +3317,7 @@ overrides: {"family": "obv_breakout", "target1_r": 1.5}
 
 ```proposal
 id: A397
-status: proposed
+status: rejected 2026-11-10 - A397 vs a3: beat it in 7/13 walk-forward years, CAGR 10.9% vs 12.55% (needs +0.61), worst fall -19.75% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "target2_r": 3.0}
@@ -3325,7 +3325,7 @@ overrides: {"family": "obv_breakout", "target2_r": 3.0}
 
 ```proposal
 id: A398
-status: proposed
+status: rejected 2026-11-10 - A398 vs a3: beat it in 3/13 walk-forward years, CAGR 9.39% vs 12.55% (needs +0.61), worst fall -17.96% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "exit_style": "trail", "trail_atr_mult": 3.0}
@@ -3333,7 +3333,7 @@ overrides: {"family": "obv_breakout", "exit_style": "trail", "trail_atr_mult": 3
 
 ```proposal
 id: A399
-status: proposed
+status: rejected 2026-11-10 - A399 vs a3: beat it in 6/13 walk-forward years, CAGR 8.8% vs 12.55% (needs +0.61), worst fall -19.0% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "min_rs_filter": 50}
@@ -3341,7 +3341,7 @@ overrides: {"family": "obv_breakout", "min_rs_filter": 50}
 
 ```proposal
 id: A400
-status: proposed
+status: rejected 2026-11-10 - A400 vs a3: beat it in 7/13 walk-forward years, CAGR 7.75% vs 12.55% (needs +0.61), worst fall -22.58% vs -10.71%, gate FAIL
 written: 2026-11-09
 reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the obv_breakout entry rule.
 overrides: {"family": "obv_breakout", "min_mom12_rank": 0.5}
