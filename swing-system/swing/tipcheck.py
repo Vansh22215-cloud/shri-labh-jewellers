@@ -44,9 +44,15 @@ def equity_list():
             r = requests.get("https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv",
                              headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
             r.raise_for_status()
-            pd.read_csv(io.BytesIO(r.content)).to_csv(f, index=False)
+            new = pd.read_csv(io.BytesIO(r.content))
+            new.columns = [c.strip() for c in new.columns]
+            if "SYMBOL" not in new.columns or len(new) < 1000:     # an error page or broken file: keep the old list
+                raise ValueError(f"unexpected NSE file ({len(new)} rows)")
+            new.to_csv(f, index=False)
         except Exception as e:
             log.warning("NSE equity list download failed: %s", e)
+            if f.exists():
+                f.touch()                                             # retry tomorrow, not on every message
     df = pd.read_csv(f)
     df.columns = [c.strip() for c in df.columns]
     return df
