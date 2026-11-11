@@ -402,6 +402,11 @@ def weekly_summary(today=None):
         extra.append(f"🩺 System: {ran} of {len(due)} hourly updates ran this week.")
     except Exception:
         pass
+    try:
+        from .intraday_paper import week_line
+        extra.append(week_line(today))
+    except Exception:
+        pass
     if extra:
         blocks.append("\n".join(extra))
     blocks.append("<i>Research, not advice - you decide and place every order yourself.</i>")

@@ -204,6 +204,7 @@ def claim_once(name, t=None):
 
 
 _last_filings = 0.0
+_last_intraday = 0.0
 
 
 def minute_tasks(t=None):
@@ -248,6 +249,15 @@ def minute_tasks(t=None):
                       "\n\n<i>Research, not advice.</i>")
     except Exception as e:
         log.warning("Daemon: filings check failed: %s", type(e).__name__)
+    try:   # intraday PAPER trading (no tips): every 5 minutes 09:35-15:25
+        global _last_intraday
+        m = t.hour * 60 + t.minute
+        if wd and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
+            _last_intraday = time.time()
+            from . import intraday_paper
+            intraday_paper.step()
+    except Exception as e:
+        log.warning("Daemon: intraday paper failed: %s", type(e).__name__)
     try:
         from . import alerts
         if alerts.market_open(pd_now(t)):
@@ -264,6 +274,11 @@ def minute_tasks(t=None):
         elif start and (t.date() - datetime.fromisoformat(start).date()).days >= 14 and t.hour >= 19 \
                 and not _load().get("paper review sent"):
             txt = risk.paper_review(start)
+            try:
+                from .intraday_paper import week_line
+                txt = (txt or "") + "\n\n" + week_line()
+            except Exception:
+                pass
             if txt:
                 _send(txt + "\n\nReply here if you want live orders later (needs a static IP, see DECISIONS). "
                             "<i>Research, not advice.</i>")
