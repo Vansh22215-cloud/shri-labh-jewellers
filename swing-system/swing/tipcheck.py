@@ -366,6 +366,9 @@ def format_reply(tip, verdict, reasons, d, source="", picture=None, own=None, re
                     missing=(kinds("missing") or [None])[0], picture=picture)
 
 
+LAST_TICKET = None   # the ticket made for the last forwarded stock tip (the bot sends it with its buttons)
+
+
 def check_text(text, source="", capital=45000.0, image=None):
     from . import options_check
     o = options_check.parse_option(text)
@@ -411,6 +414,16 @@ def check_text(text, source="", capital=45000.0, image=None):
         own = own_patterns_for(tip["symbol"], nse_stock=True)
         record = source_record(source)
     save(tip, verdict, d, source)
+    global LAST_TICKET
+    LAST_TICKET = None
+    if tip.get("symbol") and verdict in ("GOOD", "RISKY", "NEUTRAL") and tip.get("side", "buy") == "buy" \
+            and all(d.get(k) for k in ("entry", "stop", "target")):
+        try:
+            from . import risk
+            LAST_TICKET = risk.new_ticket(tip["symbol"], "buy", d["entry"], d["stop"], d["target"],
+                                          f"forwarded from {source or 'a channel'}")
+        except Exception as e:
+            log.warning("ticket failed: %s", type(e).__name__)
     return format_reply(tip, verdict, reasons, d, source=source, picture=picture, own=own, record=record)
 
 

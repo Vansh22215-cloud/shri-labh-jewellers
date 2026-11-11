@@ -203,6 +203,60 @@ def claim_once(name, t=None):
     return True
 
 
+def minute_tasks(t=None):
+    """Small things checked every minute: Kite login prompt/reminder, instant alerts, the 2-week paper review."""
+    import html as _html
+    t = t or now()
+    wd = t.weekday() < 5
+    try:
+        from . import kite
+        if wd and kite.configured() and not kite.logged_in():
+            if t >= t.replace(hour=8, minute=45, second=0) and t.hour < 15 and claim_once("kite login prompt", t):
+                _send(f"🔑 <b>Log in to Kite for today</b>\n<a href=\"{_html.escape(kite.login_url())}\">Tap here to log in</a> - "
+                      "then tap <b>Start</b> when Telegram opens. Live Zerodha prices for alerts and updates until 6 am "
+                      "tomorrow. (Until then I use Yahoo prices.)")
+            elif t >= t.replace(hour=9, minute=30, second=0) and t.hour < 15 and claim_once("kite login reminder", t):
+                _send(f"⏰ Reminder: not logged in to Kite yet - alerts are using slower Yahoo prices. "
+                      f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>")
+    except Exception as e:
+        log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
+    try:
+        from . import alerts
+        if alerts.market_open(pd_now(t)):
+            alerts.check()
+    except Exception as e:
+        log.warning("Daemon: alerts failed: %s", type(e).__name__)
+    try:
+        from . import risk
+        start = _load().get("tickets_start")
+        if not start and risk.TICKETS_F.exists():
+            st = _load()
+            st["tickets_start"] = f"{t:%Y-%m-%d}"
+            STATE.write_text(json.dumps(st, indent=1))
+        elif start and (t.date() - datetime.fromisoformat(start).date()).days >= 14 and t.hour >= 19 \
+                and not _load().get("paper review sent"):
+            txt = risk.paper_review(start)
+            if txt:
+                _send(txt + "\n\nReply here if you want live orders later (needs a static IP, see DECISIONS). "
+                            "<i>Research, not advice.</i>")
+            st = _load()
+            st["paper review sent"] = f"{t:%Y-%m-%d}"
+            STATE.write_text(json.dumps(st, indent=1))
+    except Exception as e:
+        log.warning("Daemon: paper review failed: %s", type(e).__name__)
+
+
+def pd_now(t):
+    import pandas as pd
+    return pd.Timestamp(t)
+
+
+def _send(text):
+    from . import telegram
+    from .config import load_settings
+    telegram.send(load_settings(), text, html=True, label="system notice")
+
+
 def run():
     from .bot import poll_once
     start = time.time()
@@ -230,6 +284,7 @@ def run():
             answered += poll_once()
         except Exception as e:
             log.warning("Daemon: bot poll failed: %s", type(e).__name__)
+        minute_tasks()
         for job in due():
             if job == "research" and left() < 30:
                 continue                       # not enough time left: the next run does it

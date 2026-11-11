@@ -105,11 +105,16 @@ def trade_command(text):
             if df is not None and len(df) > 20:
                 tr = (df["high"] - df["low"]).tail(14).mean()
                 stop = round(price - p["stop_atr_mult"] * tr, 2)
+        from .risk import check as risk_check
+        ok, why, _n = risk_check("buy", qty, price, stop) if stop else (False, ["No stop-loss could be set."], {})
         row = pd.DataFrame([{"symbol": sym, "buy_date": str(pd.Timestamp.today().date()), "buy_price": price,
                              "qty": qty, "stop": stop}])
         out = pd.concat([my[my["symbol"] != sym], row], ignore_index=True)
         out.to_csv(journal.MY_TRADES, index=False)
-        return f"Recorded: bought {qty} {sym} @ {price}" + (f", stop {stop}. Set this stop as a GTT in Kite now." if stop else ".")
+        risk_line = ("\n🛡 Risk check: PASS." if ok else "\n🛡 Risk check: WARNING - " + " ".join(why) +
+                     " (recorded anyway - it's your trade).")
+        return (f"Recorded: bought {qty} {sym} @ {price}" + (f", stop {stop}. Set this stop as a GTT in Kite now." if stop
+                                                             else ".") + risk_line)
     if cmd == "/sold":
         if sym not in set(my["symbol"]):
             return f"{sym} is not in your open trades."
@@ -199,6 +204,9 @@ def handle(token, owner, msg, capital):
     elif not text:
         reply = ("I couldn't read any words or prices on that picture. Forward it with its caption, or type the "
                  "name and level, e.g. 'Nifty weakness below 24290'.")
+    elif text.startswith("/start kite_"):
+        from . import kite
+        ok, reply = kite.exchange(text.split("kite_", 1)[1].strip())
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
     elif text.startswith("/report"):
@@ -208,6 +216,7 @@ def handle(token, owner, msg, capital):
     elif text.lower().startswith(("/bought", "/sold", "/trades")):
         reply = trade_command(text)
     else:
+        tipcheck.LAST_TICKET = None
         try:
             reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
             if image and "What I read on the picture" not in reply:
@@ -217,7 +226,41 @@ def handle(token, owner, msg, capital):
             log.error("tip check failed: %s", e)
             reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."
     _send_reply(token, chat, reply, msg["message_id"])
+    t = getattr(tipcheck, "LAST_TICKET", None)
+    if t:
+        tipcheck.LAST_TICKET = None
+        try:
+            send_ticket(token, chat, t)
+        except Exception as e:
+            log.warning("sending ticket failed: %s", type(e).__name__)
     return owner
+
+
+def handle_button(token, owner, cq):
+    """A tap on a ticket button (✅ I placed it / ⏭ Skip). Only the owner's taps count."""
+    chat = str(((cq.get("message") or {}).get("chat") or {}).get("id", ""))
+    if owner and chat != owner:
+        _api(token, "answerCallbackQuery", callback_query_id=cq["id"], text="Not your ticket.")
+        return
+    from .risk import on_button
+    try:
+        reply = on_button(cq.get("data", ""))
+    except Exception as e:
+        log.error("ticket button failed: %s", type(e).__name__)
+        reply = "Sorry, that button failed (logged). You can type /bought SYMBOL QTY PRICE STOP instead."
+    _api(token, "answerCallbackQuery", callback_query_id=cq["id"], text=reply[:190])
+    _api(token, "sendMessage", chat_id=chat, text=reply[:4000])
+
+
+def send_ticket(token, chat, t):
+    """Send an order ticket with its two buttons."""
+    import json as _j
+    from .risk import buttons, ticket_text
+    b = buttons(t)
+    params = dict(chat_id=chat, text=ticket_text(t), parse_mode="HTML")
+    if b:
+        params["reply_markup"] = _j.dumps(b)
+    return _api(token, "sendMessage", **params)
 
 
 def _send_reply(token, chat, reply, reply_to):
@@ -282,5 +325,9 @@ def poll_once():
         msg = u.get("message")
         if msg:
             owner = handle(token, owner, msg, float(s.get("capital", 45000)))
+            n += 1
+        cq = u.get("callback_query")
+        if cq:
+            handle_button(token, owner, cq)
             n += 1
     return n

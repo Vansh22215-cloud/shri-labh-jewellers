@@ -29,3 +29,10 @@ telegram_chat_id: ""
 
 # Which strategy version is live (managed by the weekly improvement job).
 live_strategy: v1
+
+# Safety limits for order tickets and recorded trades (owner's choice: standard).
+risk_limits:
+  risk_per_trade_pct: 1      # max loss at the stop per trade (% of capital)
+  daily_loss_pct: 2          # no new trades after losing this much in a day
+  max_trades_per_day: 3
+  max_order_pct: 25          # no single order above this share of capital

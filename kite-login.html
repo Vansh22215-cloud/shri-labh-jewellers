@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kite login</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --bg:#f6f7f9; --fg:#14171f; --muted:#5b6270; --btn:#2a7de1; --btnfg:#fff; --card:#fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#12151b; --fg:#e8eaee; --muted:#a3a9b6; --btn:#4b95ef; --card:#1b1f27; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+  main { max-width:420px; margin:12vh auto; padding:24px 16px; }
+  .card { background:var(--card); border-radius:14px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.12); }
+  h1 { font-size:20px; margin:0 0 8px; }
+  p { color:var(--muted); margin:8px 0 18px; }
+  a.btn { display:block; text-align:center; background:var(--btn); color:var(--btnfg); text-decoration:none;
+          padding:14px; border-radius:10px; font-weight:600; }
+</style>
+</head>
+<body>
+<main><div class="card">
+  <h1 id="t">Connecting…</h1>
+  <p id="m">Taking you back to your Telegram bot.</p>
+  <a class="btn" id="b" href="#" style="display:none">Open Telegram and tap Start</a>
+</div></main>
+<script>
+  // Zerodha sends you here after login with a one-time request token (useless without the secret,
+  // which only the GitHub run has). This page only hands it to your own bot; it stores nothing.
+  var BOT = "Vsjshsjsbaksnsjsh_bot";
+  var q = new URLSearchParams(location.search);
+  var tok = q.get("request_token") || "";
+  var ok = q.get("status") === "success" && /^[A-Za-z0-9]{8,64}$/.test(tok);
+  var t = document.getElementById("t"), m = document.getElementById("m"), b = document.getElementById("b");
+  if (ok) {
+    var url = "https://t.me/" + BOT + "?start=kite_" + tok;
+    b.href = url; b.style.display = "block";
+    t.textContent = "Logged in to Zerodha";
+    m.textContent = "One last tap: open Telegram and press Start, so your system can use today's live prices.";
+    setTimeout(function () { location.href = url; }, 600);
+  } else {
+    t.textContent = "Login not completed";
+    m.textContent = "Zerodha did not confirm the login. Go back to Telegram and tap the login link again.";
+  }
+</script>
+</body>
+</html>
