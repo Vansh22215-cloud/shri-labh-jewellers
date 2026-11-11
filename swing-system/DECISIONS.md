@@ -508,3 +508,11 @@ GitHub + Telegram parts for NSE; nothing needs a Claude session.
   owner's yes. 2-week paper review of tickets + intraday sent automatically.
 - Not adapted: US Congress (Pelosi) tracker -> replaced by Indian insider/promoter disclosures; US pattern-day-trader
   rules (not applicable in India).
+
+## D93 (2026-11-11) Pre-GitHub leftovers removed (owner: "your view" for all)
+Removed: laptop bot loop (run_bot.py, bot.run_forever, bot.lock), saving the chat id to a local secrets file, the
+5 manual fetch scripts and run_validation.py (the evening/Saturday jobs do these), ROADMAP.md (Claude-session plan;
+history is in CHANGELOG/DECISIONS), and 4 of the 5 fixed GitHub schedules (the always-on run does every job; one
+hourly schedule stays as a safety net). README and ARCHITECTURE rewritten for the GitHub-only setup. Kept:
+first-time setup scripts (emergency rebuild), strategies a1/a2 (rollback history). Owner deletes the 2 public
+backup artifacts of 3 Nov and the cron-job.org job + its GitHub key.

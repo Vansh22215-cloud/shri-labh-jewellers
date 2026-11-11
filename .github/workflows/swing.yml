@@ -4,11 +4,9 @@ name: swing-system
 
 on:
   schedule:
-    - cron: "50 4-9 * * 1-5"    # hourly market scan 10:20-15:20 IST, weekdays
-    - cron: "10 13 * * 1-5"     # evening trades 18:40 IST, weekdays
-    - cron: "47 14 * * 1-5"     # research: test one pre-registered idea, 20:17 IST
-    - cron: "47 4 * * 6"        # weekly self-check (+ monthly strategy searches), Saturday 10:17 IST
-    - cron: "25 * * * *"        # Telegram bot: answer forwarded tips and /bought /sold commands, hourly
+    # Safety net only: the always-on run does every job on time and starts the next run itself (keep_alive.py).
+    # If that chain ever breaks, this hourly start brings it back.
+    - cron: "25 * * * *"
   workflow_dispatch:
     inputs:
       task:
@@ -42,10 +40,6 @@ jobs:
           S="${{ github.event.schedule }}"
           T="${{ github.event.inputs.task }}"
           case "$S" in
-            "50 4-9 * * 1-5") T=scan ;;
-            "10 13 * * 1-5") T=nightly ;;
-            "47 14 * * 1-5") T=research ;;
-            "47 4 * * 6") T=weekly ;;
             "25 * * * *") T=bot ;;
           esac
           echo "task=${T:-nightly}" >> "$GITHUB_OUTPUT"
