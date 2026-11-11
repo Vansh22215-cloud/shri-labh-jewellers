@@ -140,3 +140,37 @@ def test_login_handback_in_any_form(monkeypatch, tmp_path):
     calls.clear()
     bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 1, "text": "/kite"}, 45000)
     assert "kite.zerodha.com/connect/login" in calls[-1]
+
+
+def test_blocked_updates_are_fixed_or_reported(monkeypatch, tmp_path):
+    from swing import bot, daemon
+    monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs.json")
+    monkeypatch.setattr(bot, "OFFSET", tmp_path / "off.txt")
+    monkeypatch.setattr(bot, "load_settings", lambda: {"telegram_bot_token": "T", "telegram_chat_id": "1"})
+    calls, seq = [], [{"ok": False, "error_code": 409, "description": "Conflict: can't use getUpdates method while webhook is active"},
+                      {"ok": True}, {"ok": True, "result": [{"update_id": 5, "message": {"chat": {"id": 1}, "message_id": 1,
+                                                                                         "text": "/help"}}]}]
+
+    def fake(tok, method, **p):
+        calls.append(method)
+        return seq.pop(0) if method in ("getUpdates", "deleteWebhook") and seq else {"ok": True}
+    monkeypatch.setattr(bot, "_api", fake)
+    assert bot.poll_once() == 1 and "deleteWebhook" in calls                 # webhook switched off, message read
+    calls.clear()
+    seq[:] = [{"ok": False, "error_code": 409, "description": "Conflict: terminated by other getUpdates request"}]
+    assert bot.poll_once() == 0 and "sendMessage" in calls                   # owner told once
+    calls.clear()
+    seq[:] = [{"ok": False, "error_code": 409, "description": "Conflict: terminated by other getUpdates request"}]
+    bot.poll_once()
+    assert "sendMessage" not in calls                                        # not again the same day
+
+
+def test_login_refusal_explains_why(monkeypatch, tmp_path):
+    _keys(monkeypatch, tmp_path)
+    monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
+                                                                       "message": "Invalid `checksum`."}))
+    ok, msg = kite.exchange("reqtok99")
+    assert not ok and "API SECRET" in msg and "Invalid `checksum`" in msg
+    monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
+                                                                       "message": "Token is invalid or has expired."}))
+    assert "expired" in kite.exchange("reqtok99")[1]

@@ -313,6 +313,31 @@ def _send_reply(token, chat, reply, reply_to):
     _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=reply_to)
 
 
+def _updates_problem(token, owner, res, offset):
+    """Telegram refused to hand over messages. Log why (never the token), fix the common cause, tell the owner."""
+    code, desc = res.get("error_code"), str(res.get("description", ""))[:200]
+    log.warning("Bot: Telegram getUpdates refused (%s): %s", code, desc)
+    if code == 409 and "webhook" in desc.lower():
+        # a webhook (set by some other tool) blocks reading messages: switch it off, keep waiting messages
+        d = _api(token, "deleteWebhook", drop_pending_updates="false")
+        log.info("Bot: webhook removed (%s)", d.get("ok"))
+        res = _api(token, "getUpdates", offset=offset, timeout=0)
+        if res.get("ok"):
+            return res
+    try:
+        from .daemon import claim_once
+        if owner and claim_once("bot read problem"):
+            hint = ("Another program or website is also connected to your bot and reads its messages first. "
+                    "Close/disconnect it (only this system should use the bot)." if code == 409 else
+                    "Telegram did not accept the bot key - check TELEGRAM_BOT_TOKEN in GitHub Secrets."
+                    if code in (401, 404) else "Telegram had a problem; I keep trying every minute.")
+            _api(token, "sendMessage", chat_id=owner,
+                 text=f"⚠️ I can't read your messages right now (Telegram said: {desc or code}).\n{hint}")
+    except Exception:
+        pass
+    return {"ok": False, "result": []}
+
+
 def poll_once():
     """Answer every waiting message once and exit (used by GitHub Actions every hour)."""
     s = load_settings()
@@ -322,6 +347,8 @@ def poll_once():
     owner = str(s.get("telegram_chat_id") or "").strip()
     offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
     res = _api(token, "getUpdates", offset=offset, timeout=0)
+    if not res.get("ok", False):
+        res = _updates_problem(token, owner, res, offset)
     n = 0
     for u in res.get("result", []):
         OFFSET.write_text(str(u["update_id"] + 1))
@@ -333,4 +360,6 @@ def poll_once():
         if cq:
             handle_button(token, owner, cq)
             n += 1
+    if n:
+        log.info("Bot: answered %d message(s)", n)
     return n

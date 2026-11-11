@@ -20,39 +20,41 @@
 <body>
 <main><div class="card">
   <h1 id="t">Connecting…</h1>
-  <p id="m">Taking you back to your Telegram bot.</p>
-  <a class="btn" id="b" href="#" style="display:none">Open Telegram and tap Start</a>
-  <div id="fb" style="display:none; margin-top:18px">
-    <p style="margin:0 0 8px">If Telegram opens but nothing happens, copy this and send it to the bot (within 5 minutes):</p>
-    <code id="c" style="display:block; padding:12px; border-radius:8px; background:rgba(127,127,127,.15); word-break:break-all"></code>
-    <a class="btn" id="cp" href="#" style="margin-top:10px">Copy</a>
+  <p id="m">One moment.</p>
+  <div id="ok" style="display:none">
+    <p style="margin:0 0 8px"><b>1.</b> Copy this code:</p>
+    <code id="c" style="display:block; padding:12px; border-radius:8px; background:rgba(127,127,127,.15); word-break:break-all; color:var(--fg)"></code>
+    <a class="btn" id="cp" href="#" style="margin-top:10px">Copy code</a>
+    <p style="margin:18px 0 8px"><b>2.</b> Open your bot and paste it as a message (within 5 minutes):</p>
+    <a class="btn" id="tg" href="#">Open Telegram</a>
   </div>
 </div></main>
 <script>
   // Zerodha sends you here after login with a one-time request token (useless without the secret,
-  // which only the GitHub run has). This page only hands it to your own bot; it stores nothing.
+  // which only the GitHub run has). This page only helps you hand it to your own bot; it stores nothing.
+  // No automatic jump: some Indian networks block the t.me website, so the Telegram app is opened directly.
   var BOT = "Vsjshsjsbaksnsjsh_bot";
   var q = new URLSearchParams(location.search);
   var tok = q.get("request_token") || "";
-  var ok = q.get("status") === "success" && /^[A-Za-z0-9]{8,64}$/.test(tok);
-  var t = document.getElementById("t"), m = document.getElementById("m"), b = document.getElementById("b");
-  if (ok) {
-    var url = "https://t.me/" + BOT + "?start=kite_" + tok;
-    b.href = url; b.style.display = "block";
+  var good = q.get("status") === "success" && /^[A-Za-z0-9]{8,64}$/.test(tok);
+  var t = document.getElementById("t"), m = document.getElementById("m");
+  if (good) {
     var msg = "kite_" + tok;
+    t.textContent = "Logged in to Zerodha ✓";
+    m.textContent = "Last step - give the code to your bot:";
+    document.getElementById("ok").style.display = "block";
     document.getElementById("c").textContent = msg;
-    document.getElementById("fb").style.display = "block";
-    document.getElementById("cp").onclick = function (e) {
+    document.getElementById("tg").href = "tg://resolve?domain=" + BOT + "&start=" + msg;
+    var cp = document.getElementById("cp");
+    cp.onclick = function (e) {
       e.preventDefault();
-      var done = function () { document.getElementById("cp").textContent = "Copied - now paste it in the bot chat"; };
-      if (navigator.clipboard) { navigator.clipboard.writeText(msg).then(done, done); } else { done(); }
+      var done = function () { cp.textContent = "Copied ✓ - now tap Open Telegram and paste"; };
+      if (navigator.clipboard) { navigator.clipboard.writeText(msg).then(done, function () {
+        cp.textContent = "Press and hold the code above to copy it"; }); } else { done(); }
     };
-    t.textContent = "Logged in to Zerodha";
-    m.textContent = "One last tap: open Telegram and press Start, so your system can use today's live prices.";
-    setTimeout(function () { location.href = url; }, 1500);
   } else {
     t.textContent = "Login not completed";
-    m.textContent = "Zerodha did not confirm the login. Go back to Telegram and tap the login link again.";
+    m.textContent = "Zerodha did not confirm the login. Go back to Telegram and send /kite for a new link.";
   }
 </script>
 </body>
