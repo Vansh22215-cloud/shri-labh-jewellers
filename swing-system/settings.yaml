@@ -23,11 +23,6 @@ mode: live
 paper_start_date: 2026-11-02
 paper_weeks: 0
 
-# Optional: let Claude (headless "claude -p") write a risk review of the shortlist.
-# Needs Claude Code installed and signed in on this PC. true / false
-claude_review: false
-claude_review_max_stocks: 6
-
 # Optional: Telegram alerts. Paste your bot token and chat id between the quotes.
 telegram_bot_token: ""
 telegram_chat_id: ""

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Clean-up (fully automated)
+- Less noise: research only on upgrades, report file weekly, no smart-money lines; Saturday = scorecards + week's tips (D91).
+- Removed laptop scripts, paid Claude review, Claude dashboard and old Claude scheduled tasks.
+
 ## 2026-11-06 (forwarded market calls)
 - Bot replies redesigned: answer first, why it could work / fail, odds bar, plan, plain bottom line (D88).
 - Runs pick up new code within ~10 minutes (D87).

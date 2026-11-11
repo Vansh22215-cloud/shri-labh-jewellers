@@ -59,3 +59,24 @@ def test_every_forwarded_tip_is_listed_and_new_ones_marked(monkeypatch, tmp_path
     for part in ("RELIANCE 1500 CE", "option tip", "couldn't read", "RIGHT - reached the target", "FEDERALBNK",
                  "🆕 📌 <b>ICICIBANK", "4 tip(s) listed", "1 new since the last update"):
         assert part in t, part
+
+
+def test_weekly_summary_scorecards_and_every_tip(monkeypatch, tmp_path):
+    monkeypatch.setattr(tipcheck, "TIPS_F", tmp_path / "ft.csv")
+    sv = tipcheck.save
+    sv({"symbol": "TATASTEEL", "side": "buy", "raw": "x"}, "RISKY", {"entry": 178, "stop": 170, "target": 195, "ltp": 178}, "DH")
+    sv({"symbol": "FEDERALBNK", "side": "buy", "raw": "x"}, "GOOD", {"entry": 330, "stop": 320, "target": 338}, "SG",
+       outcome="target")
+    sv({"symbol": "SBIN", "side": "buy", "raw": "x"}, "RISKY", {"entry": 800, "stop": 780, "target": 850}, "SG", outcome="stop")
+    from swing import journal
+    monkeypatch.setattr(journal, "load_tips", lambda: pd.DataFrame([
+        {"date": str(pd.Timestamp.today().date()), "symbol": "ICICIBANK", "kind": "tip", "status": "open",
+         "entry_low": 1410, "entry_high": 1438, "stop": 1340, "target1": 1594, "qty": 5, "entry_price": 1400.0}]))
+    monkeypatch.setattr(ts, "daily_snap", lambda syms: {k: pd.Series({"TATASTEEL": 185.0, "ICICIBANK": 1450.0,
+                                                                       "FEDERALBNK": 340.0, "SBIN": 790.0})
+                                                         for k in ("close", "high", "low")})
+    t = ts.weekly_summary()
+    for part in ("WEEKLY SUMMARY", "4 tip(s) this week", "1 ✅ right", "1 ❌ wrong", "2 🟢 open in profit",
+                 "Channel scorecards", "SG: 1 of 2 finished calls were right", "ICICIBANK", "₹+250 on 5",
+                 "closed - target reached", "closed - stop hit"):
+        assert part in t, part

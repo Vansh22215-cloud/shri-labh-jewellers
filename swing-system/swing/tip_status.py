@@ -277,3 +277,132 @@ def message(snap, tips, ts, today=None, since=None):
     blocks.append(f"<i>{n} tip(s) listed" + (f", {n_new} new since the last update (🆕)" if n_new else "") +
                   ". Research, not advice - you decide and place every order yourself.</i>")
     return "\n\n\u2063".join(blocks)
+
+
+# ----------------------------------------------------------------------------- Saturday weekly summary
+def daily_snap(symbols):
+    """Last daily close/high/low of each stock (weekend: Friday's bar), from the stored price files."""
+    from . import data_prices
+    out = {k: {} for k in ("close", "high", "low")}
+    for s in symbols:
+        try:
+            df = data_prices.load(s)
+            if df is None or not len(df):
+                continue
+            last = df.iloc[-1]
+            out["close"][s], out["high"][s], out["low"][s] = float(last["close"]), float(last["high"]), float(last["low"])
+        except Exception:
+            continue
+    return {k: pd.Series(v, dtype=float) for k, v in out.items()}
+
+
+def _state(side, ltp, entry, stop, target, outcome=None):
+    """-> (bucket, icon, words) for the weekly overview."""
+    if outcome in ("target",):
+        return "right", "✅", "closed - target reached"
+    if outcome in ("stop",):
+        return "wrong", "❌", "closed - stop hit"
+    if outcome in ("expired", "never filled"):
+        return "nores", "⌛", "closed - " + ("ran out of time" if outcome == "expired" else "never reached entry")
+    if outcome == "waiting entry":
+        return "waiting", "⏳", "waiting for its entry"
+    if ltp is None or entry is None:
+        return "untracked", "📌", "not tracked (no levels / option / skip)"
+    g = (ltp / entry - 1) * 100 * (1 if side != "sell" else -1)
+    return ("profit", "🟢", f"open, {g:+.1f}%") if g >= 0 else ("loss", "🔴", f"open, {g:+.1f}%")
+
+
+def weekly_summary(today=None):
+    """Owner's Saturday message: channel scorecards + every tip of the week (closed/open, profit/loss)."""
+    from . import journal
+    from .tipcheck import TIPS_F
+    from .market_views import source_record
+    today = pd.Timestamp(today or pd.Timestamp.today()).normalize()
+    week0 = today - pd.Timedelta(days=7)
+    rows, buckets = [], {}
+    tips = journal.load_tips()
+    t = tips[tips["kind"] == "tip"]
+    t = t[(pd.to_datetime(t["date"]) >= week0) | t["status"].isin(["pending", "open"])]
+    fw = pd.read_csv(TIPS_F) if TIPS_F.exists() else pd.DataFrame(columns=["checked", "outcome", "symbol"])
+    fw["_t"] = pd.to_datetime(fw["checked"], errors="coerce")
+    fw = fw[((fw["_t"] >= week0) | fw["outcome"].isin(["open", "waiting entry"])) & fw["symbol"].notna()]
+    fw = fw.sort_values("_t", ascending=False).drop_duplicates(["symbol", "source", "side"], keep="first")
+    no_tk = fw["ticker"].isna() | (fw["ticker"].astype(str) == "") if "ticker" in fw else pd.Series(True, index=fw.index)
+    stock_syms = set(t["symbol"]) | set(fw.loc[no_tk, "symbol"].astype(str))
+    snap = daily_snap(sorted(stock_syms))
+    sys_lines = []
+    for _, r in t.sort_values("date").iterrows():
+        s = r["symbol"]
+        ltp = float(snap["close"][s]) if s in snap["close"] else None
+        if r["status"] in ("pending",):
+            b, icon, words = "waiting", "⏳", "waiting for the buy zone"
+        elif r["status"] == "open":
+            entry = float(r["entry_price"]) if pd.notna(r.get("entry_price")) else (r["entry_low"] + r["entry_high"]) / 2
+            b, icon, words = _state("buy", ltp, entry, r["stop"], r["target1"])
+            if pd.notna(r.get("qty")) and ltp:
+                words += f", ₹{(ltp - entry) * float(r['qty']):+,.0f} on {int(r['qty'])}"
+        else:
+            pnl = float(r["pnl"]) if pd.notna(r.get("pnl")) else 0
+            b = "right" if pnl > 0 else "wrong"
+            icon, words = ("✅" if pnl > 0 else "❌"), f"closed ({r.get('exit_reason') or r['status']}), ₹{pnl:+,.0f}"
+        buckets[b] = buckets.get(b, 0) + 1
+        sys_lines.append(f"{icon} <b>{E(s)}</b> <i>({pd.Timestamp(r['date']):%d %b})</i> - {E(words)}")
+    by_src, cache = {}, {}
+    for _, r in fw.iterrows():
+        src = str(r.get("source")) if pd.notna(r.get("source")) and str(r.get("source")) else "forwarded"
+        name, side = str(r["symbol"]), str(r.get("side") or "buy")
+        tk = r.get("ticker") if isinstance(r.get("ticker"), str) and r.get("ticker") else None
+        off = float(r.get("offset") or 0) if "offset" in r and pd.notna(r.get("offset")) else 0.0
+        ltp = _market_price(tk, off, cache) if tk else (float(snap["close"][name]) if name in snap["close"] else None)
+        tracked = r["outcome"] in ("open", "waiting entry", "target", "stop", "expired", "never filled") and \
+            pd.notna(r.get("entry"))
+        b, icon, words = _state("sell" if side == "sell" else "buy", ltp, float(r["entry"]) if tracked else None,
+                                r.get("stop"), r.get("target"), r["outcome"] if tracked else None)
+        if b == "untracked" and ltp and pd.notna(r.get("ltp")):
+            words += f"; {(ltp / float(r['ltp']) - 1) * 100:+.1f}% since forwarded"
+        buckets[b] = buckets.get(b, 0) + 1
+        by_src.setdefault(src, []).append(f"{icon} <b>{E(name)}</b> <i>({r['_t']:%d %b})</i> - {E(words)}")
+    n = len(sys_lines) + sum(len(v) for v in by_src.values())
+    word = {"right": "✅ right", "wrong": "❌ wrong", "nores": "⌛ no result", "profit": "🟢 open in profit",
+            "loss": "🔴 open in loss", "waiting": "⏳ waiting for entry", "untracked": "📌 not tracked"}
+    head = (f"🗓 <b>WEEKLY SUMMARY</b> · week to {today:%d %b %Y}\n{n} tip(s) this week: " +
+            ", ".join(f"{buckets[k]} {word[k]}" for k in word if buckets.get(k)) if n else
+            f"🗓 <b>WEEKLY SUMMARY</b> · week to {today:%d %b %Y}\nNo tips this week.")
+    blocks = [head]
+    cards = []
+    allfw = pd.read_csv(TIPS_F) if TIPS_F.exists() else pd.DataFrame(columns=["source"])
+    for src in sorted(set(allfw["source"].dropna().astype(str)) - {""}):
+        g = allfw[allfw["source"] == src]
+        rec = source_record(src, allfw)
+        n_open = int(g["outcome"].isin(["open", "waiting entry"]).sum())
+        cards.append(f"• {E(rec)}" + (f" {n_open} still open." if n_open else ""))
+    if cards:
+        blocks.append("📒 <b>Channel scorecards</b> (all time)\n" + "\n".join(cards))
+    if sys_lines:
+        blocks.append("🤖 <b>System tips</b>\n" + "\n".join(sys_lines))
+    for src, lines in by_src.items():
+        blocks.append(f"📨 <b>{E(src)}</b>\n" + "\n".join(lines))
+    extra = []
+    try:
+        import json
+        from .config import DATA
+        rw = json.loads((DATA / "research_week.json").read_text())
+        wk = {d: v for d, v in rw.items() if d >= str(week0.date())}
+        tested, adopted = sum(v["tested"] for v in wk.values()), sum(v["adopted"] for v in wk.values())
+        extra.append(f"🔬 Research: {tested} ideas tested this week, {adopted} adopted"
+                     + (" - the tips strategy was upgraded." if adopted else " - the tips strategy is unchanged."))
+    except Exception:
+        pass
+    try:
+        from .daemon import SCAN_SLOTS, _load
+        st = _load()
+        days = [today - pd.Timedelta(days=i) for i in range(1, 8)]
+        due = [(d_, h, m) for d_ in days if d_.weekday() < 5 for h, m in SCAN_SLOTS]
+        ran = sum(1 for d_, h, m in due if st.get(f"scan {h:02d}:{m:02d} {d_:%Y-%m-%d}"))
+        extra.append(f"🩺 System: {ran} of {len(due)} hourly updates ran this week.")
+    except Exception:
+        pass
+    if extra:
+        blocks.append("\n".join(extra))
+    blocks.append("<i>Research, not advice - you decide and place every order yourself.</i>")
+    return "\n\n⁣".join(blocks)

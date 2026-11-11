@@ -14,7 +14,7 @@ from datetime import date, datetime
 import numpy as np
 import pandas as pd
 
-from . import data_nse, data_prices, engine, fundamentals, health, journal, report, review, telegram, update
+from . import data_nse, data_prices, engine, fundamentals, health, journal, report, telegram, update
 from .config import (DISCLAIMER, LOGS, ROOT, get_logger, load_settings, load_state, load_strategy, save_state)
 from .strategy import position_size, trade_plan
 from .validate import GATE
@@ -364,11 +364,6 @@ def run():
                             f"4-week pause (capital protection)")
     slots = max(0, p["max_open_positions"] - open_paper)
 
-    # Claude review (optional explainer)
-    if settings.get("claude_review") and plans:
-        msg = review.review(plans, int(settings.get("claude_review_max_stocks", 6)))
-        health_items.append(("good", msg))
-
     tips = plans if not blockers else []
     day = str(d.date())
     if tips:
@@ -431,12 +426,6 @@ def run():
            "gate_html": search_html() + gate_html(g),
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
     f = report.daily_html(ctx)
-    try:
-        from .dashboard_export import save_ideas
-        save_ideas([{k: v for k, v in pl.items() if k not in ("chart",)} for pl in (tips or [])],
-                   my_status, "evening run")
-    except Exception as e:
-        log.warning("dashboard ideas save failed: %s", e)
 
     if tips:
         lines = [f"📋 Trades for tomorrow ({day}) - buy only inside the price range, set the stop-loss straight away:"]
@@ -445,18 +434,6 @@ def run():
                          f"target {pl['target1']:,.0f} | qty {pl['qty']} (max loss ~Rs {pl['risk_rupees']:,.0f})")
     else:
         lines = [f"📋 No trade for tomorrow ({day}). Reason: {why[0] if why else 'nothing met the rules'}"]
-    try:   # follow the smart money (bulk/block deals by funds / well-known investors in liquid, uptrending stocks)
-        from .smart_money import todays_buys
-        sm = todays_buys(deals, set(sig["member"].loc[d][sig["member"].loc[d]].index))
-        sm = sm[sm["trend_ok"]] if len(sm) else sm
-        for _, r in sm.head(3).iterrows():
-            a_ = float(sig["atr"].at[d, r["symbol"]]) if r["symbol"] in sig["atr"].columns else None
-            stop_ = round(r["close"] - p["stop_atr_mult"] * a_, 0) if a_ else None
-            lines.append(f"💼 Smart money: {r['buyer'][:40]} bought Rs {r['net_buy_cr']:.0f} cr of {r['symbol']} at "
-                         f"{r['deal_price']:,.0f} (now {r['close']:,.0f}, uptrend)" + (f" | idea stop {stop_:,.0f}" if stop_ else "")
-                         + " - untested idea, small size only")
-    except Exception as e:
-        log.warning("smart-money check failed: %s", e)
     for s_ in my_status:
         if "Hold." not in s_["status"]:
             lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
@@ -470,8 +447,7 @@ def run():
         lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines), label="evening trades")
-    if settings.get("send_report_file", True):
-        telegram.send_document(settings, f, "Full report (open in your browser)")
+    # the full HTML report file is sent once a week (Saturday summary), not every evening (owner's choice)
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,
                   "telegram": tg})

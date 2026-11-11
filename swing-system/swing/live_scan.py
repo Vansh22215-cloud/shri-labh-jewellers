@@ -278,12 +278,6 @@ def run(send=True):
     st["scan_sent"] = {k: v for k, v in st["scan_sent"].items() if k >= str((d - pd.Timedelta(days=7)).date())}
     st["last_scan"] = str(datetime.now())
     save_state(st)
-    try:
-        from .dashboard_export import save_ideas
-        save_ideas([{k: v for k, v in pl.items() if k != "invalid"} for pl in forming],
-                   [{"symbol": l.split("</b>")[0].replace("<b>", ""), "status": l} for l in my_lines], "hourly scan")
-    except Exception as e:
-        log.warning("dashboard ideas save failed: %s", e)
     new_sigs = [pl for pl in forming if pl.get("new")]
     acts = [l for l in my_lines if "Hold. Nothing to do" not in l]
     if send:   # every hour: actions + new signals first, then where EVERY tip stands (no Nifty line - owner's choice)

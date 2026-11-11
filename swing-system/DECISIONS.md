@@ -469,3 +469,15 @@ reached today ...) and one "what to do". Finished forwarded calls are shown once
   with their result), and every forwarded tip - tracked ones in full, finished ones with right/wrong, option tips /
   "skip" tips / tips without levels with the price change since forwarding, and unreadable messages so nothing
   disappears. The same tip forwarded twice shows once. Tips forwarded since the previous update are marked 🆕.
+
+## D91 Clean-up: fully automated, no Claude, less noise (owner's choices)
+- Daily research message: sent only when an idea is ADOPTED (tips change); otherwise counts go to the Saturday summary.
+- Evening HTML report file: sent once a week with the Saturday summary instead of every evening.
+- "Smart money" lines removed from the evening message (never tested).
+- Saturday message is now: channel scorecards (all time) + every tip of the week (closed right/wrong, open in
+  profit/loss, waiting, not tracked) + research count + how many hourly updates ran. Technical self-check notes stay
+  in the log.
+- Removed: windows/ laptop scripts, the paid Claude review option (review.py, claude_review settings, weekly Claude
+  proposal step), the Claude-fed dashboard (dashboard_export.py, dashboard_page.html, the stale dashboard page),
+  and the 8 switched-off Claude scheduled tasks. Kept: validated-mode fallback (v1) and feed-ready library items.
+- cron-job.org: no longer needed (runs restart themselves); the owner deletes the job and its GitHub key.
