@@ -74,8 +74,20 @@ def exchange(request_token):
     except Exception as e:
         return False, f"Could not reach Zerodha ({type(e).__name__}). Try the login link again."
     if r.status_code != 200 or d.get("status") != "success":
-        return False, "Zerodha did not accept the login (it may have expired - links work for a few minutes). " \
-                      "Tap the login link again."
+        etype, emsg = str(d.get("error_type", "")), str(d.get("message", ""))[:160]
+        log.warning("Kite login refused by Zerodha: HTTP %s %s %s", r.status_code, etype, emsg)   # no secrets in these
+        low = (etype + " " + emsg).lower()
+        if "checksum" in low or "api_secret" in low or "api secret" in low:
+            why = ("the API SECRET in GitHub does not match your Kite app. In GitHub -> Settings -> Secrets and "
+                   "variables -> Actions, tap KITE_API_SECRET -> Update, paste the API secret again (not the key).")
+        elif "api_key" in low or "api key" in low:
+            why = "the API KEY in GitHub does not match your Kite app - update KITE_API_KEY in GitHub Secrets."
+        elif "expired" in low or "invalid" in low or "token" in low:
+            why = ("the login code expired or was already used (they last only a few minutes and work once). "
+                   "Send /kite for a fresh link and send the code back right away.")
+        else:
+            why = "see Zerodha's message below."
+        return False, f"❌ Zerodha did not accept the login: {why}\n(Zerodha said: {etype} {emsg})"
     tok = d["data"]["access_token"]
     save_token(tok)
     log.info("Kite: logged in for today")

@@ -163,3 +163,14 @@ def test_blocked_updates_are_fixed_or_reported(monkeypatch, tmp_path):
     seq[:] = [{"ok": False, "error_code": 409, "description": "Conflict: terminated by other getUpdates request"}]
     bot.poll_once()
     assert "sendMessage" not in calls                                        # not again the same day
+
+
+def test_login_refusal_explains_why(monkeypatch, tmp_path):
+    _keys(monkeypatch, tmp_path)
+    monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
+                                                                       "message": "Invalid `checksum`."}))
+    ok, msg = kite.exchange("reqtok99")
+    assert not ok and "API SECRET" in msg and "Invalid `checksum`" in msg
+    monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
+                                                                       "message": "Token is invalid or has expired."}))
+    assert "expired" in kite.exchange("reqtok99")[1]
