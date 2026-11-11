@@ -108,7 +108,7 @@ def pattern_points(own, side):
 
 
 def build(verdict, title, said=None, now=None, pros=(), cons=(), info=(), p=None, need=None,
-          plan=None, record=None, tracking=False, source=None, raw=None, missing=None, picture=None):
+          plan=None, record=None, tracking=False, source=None, raw=None, missing=None, picture=None, tm=None):
     """plan: {'side','entry','stop','target','rr','qty','risk_rs','unit'}"""
     icon, word, meaning = VERDICT.get(verdict, VERDICT["UNKNOWN"])
     pros, cons = list(pros), list(cons)
@@ -129,6 +129,8 @@ def build(verdict, title, said=None, now=None, pros=(), cons=(), info=(), p=None
     ob = odds_bar(p, need)
     if ob:
         L += ["", "📊 <b>The odds</b> (similar past moves of this same instrument)", f"<code>{ob}</code>"]
+    if tm:
+        L += ["", "🎰 <b>Time Machine</b> (the trade replayed 10,000 times)", E(tm)]
     if info:
         L += ["", "ℹ️ <b>Good to know</b>"] + [f"• {E(x)}" for x in info[:4]]
     if plan and plan.get("stop") and verdict not in ("UNKNOWN", "AVOID"):

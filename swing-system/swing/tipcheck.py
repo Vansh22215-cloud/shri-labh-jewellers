@@ -331,7 +331,7 @@ def evaluate(tip, capital=45000.0):
     return verdict, reasons, details
 
 
-def format_reply(tip, verdict, reasons, d, source="", picture=None, own=None, record=None):
+def format_reply(tip, verdict, reasons, d, source="", picture=None, own=None, record=None, tm=None):
     from . import reply_card as rc
     side = tip.get("side", "buy")
     kinds = lambda k: [t for kk, t in reasons if kk == k]
@@ -363,7 +363,7 @@ def format_reply(tip, verdict, reasons, d, source="", picture=None, own=None, re
                     pros=pros, cons=cons, info=info, p=d.get("hist_target_first_pct"),
                     need=d.get("breakeven_win_pct"), plan=plan, record=record, tracking=bool(tip.get("symbol")) and
                     verdict != "UNKNOWN", source=source, raw=tip.get("raw"),
-                    missing=(kinds("missing") or [None])[0], picture=picture)
+                    missing=(kinds("missing") or [None])[0], picture=picture, tm=tm)
 
 
 LAST_TICKET = None   # the ticket made for the last forwarded stock tip (the bot sends it with its buttons)
@@ -424,7 +424,17 @@ def check_text(text, source="", capital=45000.0, image=None):
                                           f"forwarded from {source or 'a channel'}")
         except Exception as e:
             log.warning("ticket failed: %s", type(e).__name__)
-    return format_reply(tip, verdict, reasons, d, source=source, picture=picture, own=own, record=record)
+    tm = None
+    if tip.get("symbol") and all(d.get(k) for k in ("entry", "stop", "target")):
+        try:
+            from . import timemachine
+            hz = {"intraday": 1, "btst": 2, "swing": 10, "positional": 40}.get(tip.get("horizon"), 10)
+            tm = timemachine.line(timemachine.simulate(history(tip["symbol"]), tip.get("side", "buy"), d["entry"],
+                                                       d["stop"], d["target"], hz),
+                                  "trading days", f"{tip['symbol']}'s own last year of daily bars, {hz}-day window")
+        except Exception as e:
+            log.warning("time machine failed: %s", type(e).__name__)
+    return format_reply(tip, verdict, reasons, d, source=source, picture=picture, own=own, record=record, tm=tm)
 
 
 def save(tip, verdict, d, source, outcome=None, extra=None):

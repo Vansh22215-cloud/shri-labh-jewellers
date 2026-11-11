@@ -409,13 +409,26 @@ def check(text, source="", image=None):
     pros += pp
     cons += pc
     side = plan.get("side")
+    tm = None
+    if plan.get("stop") and plan.get("target") and verdict not in ("UNKNOWN",):
+        try:
+            from . import timemachine
+            hb = h if h is not None else prices(v)
+            if v.get("offset") and h is None:
+                hb = hb.copy(); hb[["open", "high", "low", "close"]] += v["offset"]
+            bar_min, _, _, note = bars_for(v)
+            tm = timemachine.line(timemachine.simulate(hb, side, plan["entry"], plan["stop"], plan["target"],
+                                                       plan.get("bars") or 24, lookback=1000),
+                                  "bars", f"real {note.replace(' of the last', ', last')}")
+        except Exception as e:
+            log.warning("time machine failed: %s", type(e).__name__)
     return rc.build(verdict, f"{v['name']} · {v['type']} ({'buy' if side == 'buy' else 'sell' if side == 'sell' else '?'})",
                     said=plan.get("said"), now=plan.get("now"), pros=pros, cons=cons, info=k("info"),
                     p=plan.get("hist_pct"), need=plan.get("need_pct"),
                     plan={"side": side, "entry": plan.get("entry"), "stop": plan.get("stop"), "target": plan.get("target"),
                           "rr": plan.get("rr")} if plan.get("stop") else None,
                     record=source_record(source), tracking=tracking, source=source, raw=v["raw"],
-                    missing=(k("missing") or [None])[0], picture=picture)
+                    missing=(k("missing") or [None])[0], picture=picture, tm=tm)
 
 
 # ----------------------------------------------------------------------------- tracking + alerts

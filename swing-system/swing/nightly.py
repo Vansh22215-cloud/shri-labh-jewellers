@@ -432,6 +432,15 @@ def run():
         for i, pl in enumerate(tips[:3], 1):
             lines.append(f"{i}. BUY {pl['symbol']} {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
                          f"target {pl['target1']:,.0f} | qty {pl['qty']} (max loss ~Rs {pl['risk_rupees']:,.0f})")
+            try:
+                from . import timemachine
+                tm = timemachine.simulate(data_prices.load(pl["symbol"]), "buy", (pl["entry_low"] + pl["entry_high"]) / 2,
+                                          pl["stop"], pl["target1"], int(p.get("max_hold_days", 25)))
+                if tm:
+                    lines.append(f"   🎰 Time Machine: {tm['target']:.0f} in 100 replays hit the target first, "
+                                 f"{tm['stop']:.0f} the stop, {tm['neither']:.0f} neither (within {p.get('max_hold_days', 25)} days)")
+            except Exception as e:
+                log.warning("time machine failed: %s", type(e).__name__)
     else:
         lines = [f"📋 No trade for tomorrow ({day}). Reason: {why[0] if why else 'nothing met the rules'}"]
     for s_ in my_status:
