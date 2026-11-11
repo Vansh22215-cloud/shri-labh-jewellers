@@ -18,6 +18,7 @@ import pandas as pd
 
 from .config import get_logger
 from . import intraday_paper as ip
+from .setups import WORDS as SETUP_WORDS
 
 log = get_logger()
 MIN_TRADES = 40
@@ -57,7 +58,8 @@ def history(sym, days=200):
 def simulate_day(day_bars, prev_close):
     """All setup trades of one stock-day, with exits, after charges. -> list of dicts."""
     out = []
-    for sg in ip.signals(day_bars, prev_close):
+    from .setups import all_signals
+    for sg in all_signals(day_bars, prev_close):
         risk_ps = abs(sg["entry"] - sg["stop"])
         if risk_ps <= 0:
             continue
@@ -123,7 +125,7 @@ def decide(tr, n_symbols=0):
                          "newer_avg": round(b["net"].mean(), 1) if len(b) else None, "allowed": bool(ok)}
             if ok:
                 allowed.append(st)
-            lines.append(f"{'✅' if ok else '❌'} {ip.SETUP_WORDS.get(st, st)}: {len(g)} trades, {stats[st]['win_pct']:.0f}% "
+            lines.append(f"{'✅' if ok else '❌'} {SETUP_WORDS.get(st, st)}: {len(g)} trades, {stats[st]['win_pct']:.0f}% "
                          f"won, average ₹{stats[st]['avg_net']:+,.0f} per trade after charges (older half "
                          f"₹{stats[st]['older_avg'] or 0:+,.0f}, newer half ₹{stats[st]['newer_avg'] or 0:+,.0f})")
     ip.SETUPS_F.write_text(json.dumps({"allowed": allowed, "stats": stats, "tested": str(pd.Timestamp.now().date()),
@@ -131,7 +133,7 @@ def decide(tr, n_symbols=0):
                                                                      "in both halves"}, indent=1))
     head = (f"🧪 <b>Intraday setups tested on Kite history</b> ({n_symbols} stocks, last ~200 days of 5-minute bars, "
             "Zerodha charges included)")
-    tail = ("From tomorrow, live intraday tips only from: " + ", ".join(ip.SETUP_WORDS[a] for a in allowed) + "."
+    tail = ("From tomorrow, live intraday tips only from: " + ", ".join(SETUP_WORDS.get(a, a) for a in allowed) + "."
             if allowed else "None passed - so NO live intraday tips from tomorrow (paper tracking continues). "
             "It re-tests every week; a setup that starts passing switches on by itself.")
     return "\n".join([head] + lines + [tail, "<i>Past results don't guarantee future ones. Research, not advice.</i>"])

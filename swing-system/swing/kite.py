@@ -151,7 +151,7 @@ def quotes(symbols):
     try:
         for i in range(0, len(syms), 500):
             chunk = syms[i:i + 500]
-            r = _get("/quote/ohlc", params=[("i", _instrument(s)) for s in chunk])
+            r = _get("/quote", params=[("i", _instrument(s)) for s in chunk])   # full quote: incl. volume
             data = r.json().get("data", {})
             for s in chunk:
                 q = data.get(_instrument(s))
@@ -160,7 +160,9 @@ def quotes(symbols):
                 o = q.get("ohlc", {})
                 out[s] = {"last": float(q["last_price"]), "open": float(o.get("open") or q["last_price"]),
                           "high": float(o.get("high") or q["last_price"]), "low": float(o.get("low") or q["last_price"]),
-                          "prev": float(o.get("close") or q["last_price"])}
+                          "prev": float(o.get("close") or q["last_price"]),
+                          "volume": float(q.get("volume") or 0),
+                          "value_cr": float(q.get("volume") or 0) * float(q["last_price"]) / 1e7 if q.get("volume") else None}
     except Exception as e:
         log.warning("Kite quotes failed (%s) - using Yahoo", type(e).__name__)
         return {}

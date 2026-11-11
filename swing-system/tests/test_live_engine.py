@@ -94,3 +94,17 @@ def test_quality_gates():
     assert le.gates(dict(c, rel_vol=1.0), CTX, None, {})[0] is False                        # no volume
     assert le.gates(c, CTX, {"target": 30, "stop": 50}, {})[0] is False                     # stop comes first
     assert le.gates(c, CTX, None, {"ORB": {"allowed": False}})[0] == "strict"               # failed history test
+
+
+def test_tips_carry_tradingview_link_and_all_setups_exist():
+    c = {"symbol": "RSYSTEMS", "side": "buy", "entry": 274, "stop": 272, "targets": [278, 282, 285], "setup": "RANGE"}
+    assert "tradingview.com/chart/?symbol=NSE:RSYSTEMS&interval=5" in le.fmt_intraday(c, 8, 10)
+    assert "symbol=NSE:NIFTY&" in le.tv_link("NIFTY50")
+    from swing import setups
+    rows = [(100, 100.5, 99.5, 100.2, 1000)] * 14 + [(100.2, 102.5, 100.1, 102.4, 6000)]
+    idx = pd.date_range("2026-11-12 09:15", periods=len(rows), freq="5min")
+    b = pd.DataFrame([dict(open=o, high=h, low=l, close=c_, volume=v) for o, h, l, c_, v in rows], index=idx)
+    got = {(x["setup"], x["side"]) for x in setups.all_signals(b, 99.0)}
+    assert ("RANGE", "buy") in got
+    for x in setups.all_signals(b, 99.0):                    # never a trigger from a future bar
+        assert x["entry_time"] <= b.index[-1]

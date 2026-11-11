@@ -36,8 +36,7 @@ log = get_logger()
 TIPS_F = JOURNAL / "live_tips.csv"
 NFO_F = DATA / "kite_instruments_nfo.csv"
 CB75 = [(10, 30), (11, 45), (13, 0), (14, 15), (15, 30)]        # 75-minute candle closes (IST)
-WORD = {"ORB": "opening-range breakout", "FLAG": "flag breakout", "BOUNCE": "oversold bounce",
-        "VWAP": "VWAP reclaim", "SWING": "swing setup"}
+from .setups import WORDS as WORD   # noqa: E402
 
 
 def now_ist():
@@ -45,16 +44,26 @@ def now_ist():
 
 
 # ----------------------------------------------------------------------------- universe and instruments
-def universe(n=400):
-    """Most-traded stocks (latest liquidity ranking) + F&O underlyings + the two big indices."""
+def universe(n=None):
+    """EVERY NSE equity (series EQ) - owner: 'cover all stocks' - most-traded first, + F&O underlyings + indices."""
     syms = []
     try:
         u = pd.read_csv(DATA / "universe_history.csv")
         last = u[u["asof"] == u["asof"].max()].sort_values("rank")
-        syms = [str(s) for s in last["symbol"].head(n)]
+        syms = [str(s) for s in last["symbol"]]
+    except Exception:
+        pass
+    try:
+        from .tipcheck import equity_list
+        eq = equity_list()
+        ser = "SERIES" if "SERIES" in eq.columns else " SERIES"
+        syms += [str(s) for s in eq.loc[eq[ser].astype(str).str.strip().isin(["EQ", "BE"]), "SYMBOL"]]
     except Exception:
         from .archive import intraday_universe
-        syms = intraday_universe()
+        syms += intraday_universe()
+    syms = list(dict.fromkeys(syms))
+    if n:
+        syms = syms[:n]
     fno = sorted(fno_underlyings())
     return list(dict.fromkeys(["NIFTY50", "BANKNIFTY"] + syms + [s for s in fno if s not in ("NIFTY", "BANKNIFTY")]))
 
@@ -187,14 +196,14 @@ def vwap_signal(b):
 
 def intraday_candidates(sym, bars, prev_close, now):
     """Setups that triggered on the bar that JUST closed (completed bars only)."""
-    from .intraday_paper import signals
+    from .setups import all_signals
     today = bars[bars.index.normalize() == now.normalize()]
     today = today[today.index + pd.Timedelta(minutes=5) <= now]
     if len(today) < 4:
         return []
     out = []
     last_ts = today.index[-1]
-    for sg in signals(today, prev_close) + vwap_signal(today):
+    for sg in all_signals(today, prev_close):
         if pd.Timestamp(sg["entry_time"]) != last_ts:
             continue
         r = abs(sg["entry"] - sg["stop"])
@@ -278,6 +287,12 @@ def _n(x):
     return f"{x:,.0f}" if abs(x) >= 100 else f"{x:,.1f}".rstrip("0").rstrip(".") if abs(x) >= 10 else f"{x:,.2f}"
 
 
+def tv_link(sym, daily=False):
+    """One tap opens the stock on TradingView, where the Swing System Setups indicator draws the same setup."""
+    tv = {"NIFTY50": "NIFTY", "BANKNIFTY": "BANKNIFTY"}.get(sym, sym)
+    return f"📊 Chart: https://www.tradingview.com/chart/?symbol=NSE:{tv}&interval={'D' if daily else '5'}"
+
+
 def fmt_fno(c, opt, r):
     up = opt["kind"] == "CE"
     mon = pd.Timestamp(opt["expiry"]).strftime("%b").upper()
@@ -287,7 +302,8 @@ def fmt_fno(c, opt, r):
             f"✅ Target-{tg}\n\n"
             f"⛔️ Stoploss-{_n(opt['spot_sl'])} SPOT (75 Min CB)\n\n"
             f"✨ Lot Size- {opt['lot']}\n\n"
-            f"⭐ RANK - {r}/10 · Loss at SL ≈ ₹{opt['loss']:,.0f}/lot · {c.get('why', '')}")
+            f"⭐ RANK - {r}/10 · Loss at SL ≈ ₹{opt['loss']:,.0f}/lot · {c.get('why', '')}\n\n"
+            f"{tv_link(c['symbol'], daily=c.get('setup') == 'SWING')}")
 
 
 def fmt_intraday(c, r, qty):
@@ -296,7 +312,7 @@ def fmt_intraday(c, r, qty):
             f"STRICT STOPLOSS {_n(c['stop'])} ❗️❗️\n\n"
             f"Target {'/'.join(_n(x) for x in c['targets'])}\n\n"
             f"INTRADAY TRADE ONLYYY 📊\n\n"
-            f"⭐ RANK - {r}/10 · Qty {qty} · {WORD.get(c['setup'], c['setup'])}")
+            f"⭐ RANK - {r}/10 · Qty {qty} · {WORD.get(c['setup'], c['setup'])}\n\n{tv_link(c['symbol'])}")
 
 
 def fmt_normal(c, r, qty, rp, tomorrow=False):
@@ -305,7 +321,7 @@ def fmt_normal(c, r, qty, rp, tomorrow=False):
             f"SL at {_n(c['stop'])} ❗️\n\n"
             f"Target {'/'.join(_n(x) for x in c['targets'])}\n\n"
             f"{rp:g}% Risk\n\n"
-            f"⭐ RANK - {r}/10 · Qty {qty}")
+            f"⭐ RANK - {r}/10 · Qty {qty}\n\n{tv_link(c['symbol'], daily=True)}")
 
 
 # ----------------------------------------------------------------------------- tip store + exits
@@ -442,6 +458,9 @@ class Engine:
         r, parts = rank(c, self._ctx(c["symbol"]), tm)
         if r < (9 if ok == "strict" else int(settings.get("min_rank", 8))):
             return
+        q = self.quotes.get(c["symbol"]) or {}
+        if c["symbol"] not in ("NIFTY50", "BANKNIFTY") and q.get("value_cr") is not None and q["value_cr"] < 1.0:
+            return            # under Rs 1 crore traded today: too thin to trade safely (slippage, circuit risk)
         c["why"] = WORD.get(c["setup"], c["setup"])
         if c["symbol"] not in ("NIFTY50", "BANKNIFTY") and not already(c["symbol"], "INTRADAY", day) \
                 and now.hour * 60 + now.minute <= 14 * 60 + 30:
@@ -517,6 +536,19 @@ class Engine:
                 c["why"] = "swing setup"
                 self.consider_fno(c, r, now, settings, hold_days=5)
 
+    def hot(self, k=80):
+        """Stocks moving NOW (big % move, at the day's high/low, most traded today) - their candles are fetched first."""
+        sc = []
+        for s, v in self.quotes.items():
+            try:
+                chg = abs(v["last"] / v["prev"] - 1) * 100 if v.get("prev") else 0
+                edge = 2.0 if v["last"] >= v["high"] * 0.998 or v["last"] <= v["low"] * 1.002 else 0
+                val = min(3.0, (v.get("value_cr") or 0) / 20)
+                sc.append((chg + edge + val, s))
+            except Exception:
+                continue
+        return [s for _, s in sorted(sc, reverse=True)[:k]]
+
     def refresh_quotes(self):
         from . import kite
         q = kite.quotes(self.uni)
@@ -548,7 +580,7 @@ class Engine:
         self.fno = fno_underlyings()
         log.info("Live engine: %d stocks in the universe, %d F&O underlyings, prices: %s", len(self.uni),
                  len(self.fno), "Zerodha" if kite.logged_in() else "Yahoo (not logged in)")
-        i, last_q = 0, 0.0
+        i, j, last_q, hot_q = 0, 0, 0.0, []
         while not self.stop_flag:
             now = now_ist()
             if until is not None and now >= until:
@@ -569,8 +601,14 @@ class Engine:
             if not kite.logged_in():
                 time.sleep(20)
                 continue
-            sym = self.uni[i % len(self.uni)]
+            if i % 3 != 2 and hot_q:          # 2 of every 3 candle downloads go to the stocks moving right now
+                sym = hot_q.pop(0)
+            else:
+                sym = self.uni[j % len(self.uni)]
+                j += 1
             i += 1
+            if not hot_q:
+                hot_q = self.hot()
             try:
                 h = kite.historical(sym, "5minute", days=4)
                 if h is not None and len(h):

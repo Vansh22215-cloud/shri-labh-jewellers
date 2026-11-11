@@ -1,0 +1,234 @@
+// Swing System Setups - draws the SAME setups the Telegram engine sends (DECISIONS D96).
+// Add once: TradingView -> Pine Editor -> paste all of this -> Save -> Add to chart.
+// Then open any NSE stock: 5-minute chart = intraday setups, Daily chart = swing setup.
+// Green box = profit zone (entry -> target), red box = loss zone (entry -> stop-loss).
+// Research, not advice. You decide and place every order yourself.
+//@version=5
+indicator("Swing System Setups", shorttitle="SSS", overlay=true, max_boxes_count=60, max_lines_count=200, max_labels_count=120)
+
+// ---------------------------------------------------------------- settings (defaults = the engine's rules)
+showMA     = input.bool(true, "Show moving averages")
+useTrend   = input.bool(true, "Only trades with the daily trend")
+minVolX    = input.float(1.5, "Minimum volume (x the 20-bar average)", step=0.1)
+keepLast   = input.int(4, "How many recent setups to keep on the chart", minval=1, maxval=10)
+boxBars    = input.int(24, "Box length (bars)", minval=5)
+
+// ---------------------------------------------------------------- moving averages (like the reference chart)
+ema9  = ta.ema(close, 9)
+ema21 = ta.ema(close, 21)
+ema50 = ta.ema(close, 50)
+plot(showMA ? ema21 : na, "EMA 21", color=color.black, linewidth=2)
+plot(showMA ? ema50 : na, "EMA 50", color=color.black, linewidth=2)
+plot(showMA ? ema9 : na, "EMA 9", color=ema9 > ema21 ? color.orange : color.blue, linewidth=2)
+
+// ---------------------------------------------------------------- daily trend (yesterday's values: no look-ahead)
+dClose = request.security(syminfo.tickerid, "D", close[1], lookahead=barmerge.lookahead_on)
+d50    = request.security(syminfo.tickerid, "D", ta.sma(close, 50)[1], lookahead=barmerge.lookahead_on)
+d200   = request.security(syminfo.tickerid, "D", ta.sma(close, 200)[1], lookahead=barmerge.lookahead_on)
+trendUpOK = not useTrend or (not na(d200) and dClose > d200)
+trendDnOK = not useTrend or (not na(d200) and dClose < d200)
+
+// ---------------------------------------------------------------- drawing: green / red position boxes
+var box[]   boxes  = array.new_box()
+var line[]  lines  = array.new_line()
+var label[] labels = array.new_label()
+
+f_trim() =>
+    while array.size(boxes) > keepLast * 2
+        box.delete(array.shift(boxes))
+    while array.size(lines) > keepLast * 4
+        line.delete(array.shift(lines))
+    while array.size(labels) > keepLast
+        label.delete(array.shift(labels))
+
+f_draw(isLong, entry, stop, name, bars) =>
+    risk = math.abs(entry - stop)
+    sgn  = isLong ? 1.0 : -1.0
+    t1 = entry + sgn * risk
+    t2 = entry + sgn * 2 * risk
+    t3 = entry + sgn * 3 * risk
+    r  = bar_index + bars
+    array.push(boxes, box.new(bar_index, isLong ? t3 : entry, r, isLong ? entry : t3, border_color=color.new(color.green, 60), bgcolor=color.new(color.green, 82)))
+    array.push(boxes, box.new(bar_index, isLong ? entry : stop, r, isLong ? stop : entry, border_color=color.new(color.red, 60), bgcolor=color.new(color.red, 82)))
+    array.push(lines, line.new(bar_index, entry, r, entry, color=color.gray, width=2))
+    array.push(lines, line.new(bar_index, t1, r, t1, color=color.new(color.green, 30), style=line.style_dotted))
+    array.push(lines, line.new(bar_index, t2, r, t2, color=color.new(color.green, 30), style=line.style_dotted))
+    array.push(lines, line.new(bar_index, stop, r, stop, color=color.red, width=1))
+    txt = (isLong ? "BUY " : "SELL ") + str.tostring(entry, format.mintick) + "  |  SL " + str.tostring(stop, format.mintick) + "\nT " + str.tostring(t1, format.mintick) + " / " + str.tostring(t2, format.mintick) + " / " + str.tostring(t3, format.mintick) + "\n" + name
+    array.push(labels, label.new(r, isLong ? t3 : t3, txt, style=isLong ? label.style_label_lower_left : label.style_label_upper_left, color=isLong ? color.new(color.green, 10) : color.new(color.red, 10), textcolor=color.white, size=size.small))
+    f_trim()
+
+// ---------------------------------------------------------------- INTRADAY setups (5-minute chart)
+isIntra = timeframe.isintraday
+hr  = hour(time, "Asia/Kolkata")
+mn  = minute(time, "Asia/Kolkata")
+tmin = hr * 60 + mn
+newDay = ta.change(time("D")) != 0
+vw   = ta.vwap(hlc3)
+avgV = ta.sma(volume, 20)[1]
+volOK = volume >= minVolX * avgV
+prevDayClose = request.security(syminfo.tickerid, "D", close[1], lookahead=barmerge.lookahead_on)
+rsi14 = ta.rsi(close, 14)
+
+var float orbH = na
+var float orbL = na
+var float dayLow = na
+var float firstO = na
+var float firstH = na
+var float firstL = na
+var float firstC = na
+var int   barOfDay = 0
+var bool doneORBl = false
+var bool doneORBs = false
+var bool doneVWl = false
+var bool doneVWs = false
+var bool doneRGl = false
+var bool doneRGs = false
+var bool doneEPl = false
+var bool doneEPs = false
+var bool doneIBl = false
+var bool doneIBs = false
+var bool doneGGl = false
+var bool doneGGs = false
+var bool doneBO = false
+var string lastTxt = ""
+
+if newDay
+    orbH := high
+    orbL := low
+    dayLow := low
+    firstO := open
+    firstH := high
+    firstL := low
+    firstC := close
+    barOfDay := 0
+    doneORBl := false
+    doneORBs := false
+    doneVWl := false
+    doneVWs := false
+    doneRGl := false
+    doneRGs := false
+    doneEPl := false
+    doneEPs := false
+    doneIBl := false
+    doneIBs := false
+    doneGGl := false
+    doneGGs := false
+    doneBO := false
+else
+    barOfDay += 1
+    dayLow := math.min(dayLow, low)
+    if tmin < 9 * 60 + 30
+        orbH := math.max(orbH, high)
+        orbL := math.min(orbL, low)
+
+tradeTime = tmin >= 9 * 60 + 30 and tmin <= 14 * 60 + 30
+longOK  = isIntra and tradeTime and volOK and trendUpOK and barstate.isconfirmed
+shortOK = isIntra and tradeTime and volOK and trendDnOK and barstate.isconfirmed
+
+// ORB: first close beyond the 09:15-09:30 range before 11:30, stop = range middle
+orbMid = (orbH + orbL) / 2
+if longOK and not doneORBl and not doneORBs and tmin < 11 * 60 + 30 and close > orbH
+    doneORBl := true
+    f_draw(true, close, orbMid, "Opening-range breakout", boxBars)
+    lastTxt := "ORB BUY " + str.tostring(close, format.mintick)
+if shortOK and not doneORBs and not doneORBl and tmin < 11 * 60 + 30 and close < orbL
+    doneORBs := true
+    f_draw(false, close, orbMid, "Opening-range breakdown", boxBars)
+    lastTxt := "ORB SELL " + str.tostring(close, format.mintick)
+
+// VWAP reclaim / rejection: >= 6 of the last 7 bars on the other side, volume above average
+below7 = math.sum(close < vw ? 1 : 0, 7)[1]
+lo6 = ta.lowest(low, 6)
+hi6 = ta.highest(high, 6)
+above7 = math.sum(close > vw ? 1 : 0, 7)[1]
+if longOK and not doneVWl and barOfDay >= 8 and below7 >= 6 and close[1] < vw[1] and close > vw
+    doneVWl := true
+    f_draw(true, close, lo6, "VWAP reclaim", boxBars)
+    lastTxt := "VWAP BUY " + str.tostring(close, format.mintick)
+if shortOK and not doneVWs and barOfDay >= 8 and above7 >= 6 and close[1] > vw[1] and close < vw
+    doneVWs := true
+    f_draw(false, close, hi6, "VWAP rejection", boxBars)
+    lastTxt := "VWAP SELL " + str.tostring(close, format.mintick)
+
+// RANGE breakout: close beyond the last 12 bars' high / low after 10:00, stop = range middle
+hi12 = ta.highest(high, 12)[1]
+lo12 = ta.lowest(low, 12)[1]
+if longOK and not doneRGl and tmin >= 10 * 60 and barOfDay >= 12 and close > hi12
+    doneRGl := true
+    f_draw(true, close, (hi12 + lo12) / 2, "Range breakout", boxBars)
+    lastTxt := "RANGE BUY " + str.tostring(close, format.mintick)
+if shortOK and not doneRGs and tmin >= 10 * 60 and barOfDay >= 12 and close < lo12
+    doneRGs := true
+    f_draw(false, close, (hi12 + lo12) / 2, "Range breakdown", boxBars)
+    lastTxt := "RANGE SELL " + str.tostring(close, format.mintick)
+
+// EMA pullback in a trend: dip to EMA21 and close back beyond it, with VWAP on our side
+if longOK and not doneEPl and barOfDay >= 22 and ema9 > ema21 and close > vw and low <= ema21 and close > ema21 and close > open
+    doneEPl := true
+    f_draw(true, close, low, "Trend pullback to EMA", boxBars)
+    lastTxt := "EMA-PB BUY " + str.tostring(close, format.mintick)
+if shortOK and not doneEPs and barOfDay >= 22 and ema9 < ema21 and close < vw and high >= ema21 and close < ema21 and close < open
+    doneEPs := true
+    f_draw(false, close, high, "Trend pullback to EMA", boxBars)
+    lastTxt := "EMA-PB SELL " + str.tostring(close, format.mintick)
+
+// INSIDE bar breakout: bar[1] inside bar[2], close beyond bar[2]
+inside1 = high[1] < high[2] and low[1] > low[2]
+if longOK and not doneIBl and barOfDay >= 3 and inside1 and close > high[2]
+    doneIBl := true
+    f_draw(true, close, low[2], "Inside-bar breakout", boxBars)
+    lastTxt := "INSIDE BUY " + str.tostring(close, format.mintick)
+if shortOK and not doneIBs and barOfDay >= 3 and inside1 and close < low[2]
+    doneIBs := true
+    f_draw(false, close, high[2], "Inside-bar breakdown", boxBars)
+    lastTxt := "INSIDE SELL " + str.tostring(close, format.mintick)
+
+// GAP and GO: 1%+ gap, first bar in the gap's direction, close beyond the first bar within 12 bars
+gap = (firstO / prevDayClose) - 1
+if longOK and not doneGGl and barOfDay >= 1 and barOfDay < 12 and gap >= 0.01 and firstC > firstO and close > firstH
+    doneGGl := true
+    f_draw(true, close, firstL, "Gap and go", boxBars)
+    lastTxt := "GAP BUY " + str.tostring(close, format.mintick)
+if shortOK and not doneGGs and barOfDay >= 1 and barOfDay < 12 and gap <= -0.01 and firstC < firstO and close < firstL
+    doneGGs := true
+    f_draw(false, close, firstH, "Gap and go (down)", boxBars)
+    lastTxt := "GAP SELL " + str.tostring(close, format.mintick)
+
+// Oversold BOUNCE: 2.5% below yesterday's close, RSI < 25 recently, first close above the previous high
+osBars = ta.barssince(close <= prevDayClose * 0.975 and rsi14 < 25)
+wasOversold = not na(osBars) and osBars <= 6
+if longOK and not doneBO and wasOversold and close > high[1]
+    doneBO := true
+    f_draw(true, close, dayLow, "Oversold bounce", boxBars)
+    lastTxt := "BOUNCE BUY " + str.tostring(close, format.mintick)
+
+// ---------------------------------------------------------------- SWING setup (Daily chart) = the system's a3 rule
+// Stochastic %K crosses above %D from below 20, in a long-term uptrend; stop 3 x ATR(14); targets 2R / 4R.
+isDaily = timeframe.isdaily
+k = ta.sma(ta.stoch(close, high, low, 14), 3)
+d = ta.sma(k, 3)
+s50  = ta.sma(close, 50)
+s200 = ta.sma(close, 200)
+atr14 = ta.atr(14)
+kUp = ta.crossover(k, d)
+swingSig = isDaily and barstate.isconfirmed and kUp and k[1] < 20 and close > s200 and s50 > s200
+if swingSig
+    stopS = close - 3 * atr14
+    risk = close - stopS
+    rS = bar_index + 25
+    array.push(boxes, box.new(bar_index, close + 4 * risk, rS, close, border_color=color.new(color.green, 60), bgcolor=color.new(color.green, 82)))
+    array.push(boxes, box.new(bar_index, close, rS, stopS, border_color=color.new(color.red, 60), bgcolor=color.new(color.red, 82)))
+    array.push(lines, line.new(bar_index, close + 2 * risk, rS, close + 2 * risk, color=color.new(color.green, 30), style=line.style_dotted))
+    array.push(labels, label.new(rS, close + 4 * risk, "BUY " + str.tostring(close, format.mintick) + "  |  SL " + str.tostring(stopS, format.mintick) + "\nT " + str.tostring(close + 2 * risk, format.mintick) + " / " + str.tostring(close + 4 * risk, format.mintick) + "\nSwing setup (a3)", style=label.style_label_lower_left, color=color.new(color.green, 10), textcolor=color.white, size=size.small))
+    f_trim()
+    lastTxt := "SWING BUY " + str.tostring(close, format.mintick)
+
+// ---------------------------------------------------------------- latest setup in a corner table + alerts
+var table tb = table.new(position.top_right, 1, 1, bgcolor=color.new(color.white, 10), border_color=color.gray, border_width=1)
+if barstate.islast
+    table.cell(tb, 0, 0, lastTxt == "" ? "Swing System: no setup yet" : "Latest: " + lastTxt, text_color=color.black, text_size=size.small)
+
+alertcondition(swingSig, "Swing setup", "Swing System: swing BUY setup on {{ticker}} at {{close}}")
+orbAlert = longOK and close > orbH and tmin < 11 * 60 + 30
+alertcondition(orbAlert, "ORB breakout", "Swing System: ORB breakout on {{ticker}} at {{close}}")

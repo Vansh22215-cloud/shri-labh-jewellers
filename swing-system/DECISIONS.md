@@ -554,3 +554,18 @@ Kite data, back-tested, risk-evaluated, ranked x/10, in the owner's sample forma
   lot costs more than half the capital (so few stock options fit Rs 45,000 - honest consequence of the limits).
 - Every tip is stored in journal/live_tips.csv; exit alerts once each: target 1..n, stop-loss, 3:15 pm intraday
   square-off. Option targets are not back-tested (expired contracts have no free history); the stock setup is.
+
+## D96 (2026-11-12) Whole market, more setups, TradingView chart setups
+- Universe = every NSE equity (EQ/BE, ~2,600) + F&O underlyings + indices. Live quotes for all every 30 s (full
+  quotes incl. volume, 500 per request); 5-minute candles fetched 2-of-3 for the stocks moving NOW (largest % move,
+  at the day's high/low, most traded) and 1-of-3 in a rotation through the rest. Hard floor: < Rs 1 crore traded
+  today is not tipped (slippage / circuit risk).
+- Setup library swing/setups.py (one code for live + weekly Kite-history test): ORB, FLAG, BOUNCE, VWAP, RANGE,
+  EMAPB, INSIDE, GAPGO (+ swing a3). Every setup goes through the same gates, rank and weekly test.
+- TradingView: no API lets an outside system draw on a user's chart (checked). Built instead: Pine Script indicator
+  tradingview/swing_system_setups.pine with the SAME rules and gates (daily trend, 1.5x volume, 09:30-14:30),
+  drawing green profit / red loss boxes, entry / SL / T1-T3 lines, EMA 9/21/50 and VWAP-based setups on 5-minute
+  charts and the a3 swing setup on daily charts; corner table with the latest setup; alert conditions. The owner adds
+  it once; it then works on every NSE chart and updates by itself. Every Telegram tip links straight to the chart.
+  Differences are possible where TradingView's and Zerodha's candles differ slightly, and the indicator cannot apply
+  the rank (Time Machine / back-test) - the Telegram tip is the ranked one.
