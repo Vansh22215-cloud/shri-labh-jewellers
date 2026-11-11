@@ -205,6 +205,26 @@ def claim_once(name, t=None):
 
 _last_filings = 0.0
 _last_intraday = 0.0
+_intraday_thread = None
+_bt_thread = None
+
+
+def _run_backtest():
+    try:
+        from .intraday_backtest import run
+        txt = run()
+        if txt:
+            _send(txt)
+            log.info("Intraday setups tested on Kite history")
+    except Exception as e:
+        log.warning("Daemon: intraday backtest failed: %s", type(e).__name__)
+
+
+def _safe_intraday(fn):
+    try:
+        fn()
+    except Exception as e:
+        log.warning("Daemon: intraday scan failed: %s", type(e).__name__)
 
 
 def minute_tasks(t=None):
@@ -254,10 +274,26 @@ def minute_tasks(t=None):
         m = t.hour * 60 + t.minute
         if wd and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
             _last_intraday = time.time()
-            from . import intraday_paper
-            intraday_paper.step()
+            global _intraday_thread
+            if _intraday_thread is None or not _intraday_thread.is_alive():   # runs beside the bot, never blocks it
+                import threading
+                from . import intraday_paper
+                _intraday_thread = threading.Thread(target=_safe_intraday, args=(intraday_paper.step,), daemon=True)
+                _intraday_thread.start()
     except Exception as e:
         log.warning("Daemon: intraday paper failed: %s", type(e).__name__)
+    try:   # weekly test of the intraday setups on Kite history, after the close (needs today's Kite login)
+        global _bt_thread
+        from . import kite
+        from .intraday_paper import SETUPS_F
+        age = (time.time() - SETUPS_F.stat().st_mtime) / 86400 if SETUPS_F.exists() else 99
+        if wd and t.hour * 60 + t.minute >= 15 * 60 + 45 and t.hour < 23 and age >= 6.5 and kite.logged_in() \
+                and (_bt_thread is None or not _bt_thread.is_alive()) and claim_once("intraday backtest", t):
+            import threading
+            _bt_thread = threading.Thread(target=_run_backtest, daemon=True)
+            _bt_thread.start()
+    except Exception as e:
+        log.warning("Daemon: intraday backtest start failed: %s", type(e).__name__)
     try:
         from . import alerts
         if alerts.market_open(pd_now(t)):

@@ -516,3 +516,18 @@ history is in CHANGELOG/DECISIONS), and 4 of the 5 fixed GitHub schedules (the a
 hourly schedule stays as a safety net). README and ARCHITECTURE rewritten for the GitHub-only setup. Kept:
 first-time setup scripts (emergency rebuild), strategies a1/a2 (rollback history). Owner deletes the 2 public
 backup artifacts of 3 Nov and the cron-job.org job + its GitHub key.
+
+## D94 (2026-11-11) Live intraday tips (owner's choice), using Kite
+Owner: "I want intraday too ... use the most of the new GitHub system". Changed from paper-only to LIVE tips:
+- Scanner uses Kite's live 5-minute candles for the ~150 most-traded stocks (Yahoo fallback), every 5 minutes
+  09:35-15:25, in a background thread so the bot never waits. Setups unchanged: ORB, bull flag, oversold bounce.
+- A fresh trigger becomes a Telegram INTRADAY TIP (09:35-14:30 only, at most 2 a day, settings intraday_tips /
+  intraday_max_tips) with Time Machine odds from the stock's last 30 days of 5-minute bars, plus a risk-checked MIS
+  ticket (✅ records it, incl. side and product). Alerts follow it every minute; your MIS trades get a 15:10
+  "square off now" reminder. Shorts are allowed only as intraday (MIS).
+- FIXED RULE, written before any result: weekly (weekday after the close, needs that day's Kite login) the setups
+  are tested on ~200 days of Kite 5-minute history for ~100 stocks with the live code, stop-first, 15:20 exit,
+  Zerodha charges; a setup keeps sending tips only with >= 40 trades and profit after charges in BOTH halves.
+  Until the first test, all three send, labelled "AGGRESSIVE - not yet validated". Paper tracking of all setups
+  continues regardless. Earlier free-data search (D5x): intraday lost money after charges - so expect few or no
+  setups to pass; the rule decides, not hope.

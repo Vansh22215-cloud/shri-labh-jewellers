@@ -159,12 +159,15 @@ def on_button(data):
         ok, why, _ = check(t["side"], int(t["qty"]), float(t["entry"]), float(t["stop"]))
         my = journal.load_my_trades()
         row = pd.DataFrame([{"symbol": t["symbol"], "buy_date": _today(), "buy_price": float(t["entry"]),
-                             "qty": int(t["qty"]), "stop": float(t["stop"])}])
+                             "qty": int(t["qty"]), "stop": float(t["stop"]), "side": t["side"],
+                             "product": t.get("product", "CNC"),
+                             "target": float(t["target"]) if pd.notna(t.get("target")) else None}])
         pd.concat([my[my["symbol"] != t["symbol"]], row], ignore_index=True).to_csv(journal.MY_TRADES, index=False)
         df.loc[m, "status"] = "PLACED"
         df.to_csv(TICKETS_F, index=False)
         warn = ("\n⚠️ Note: " + " ".join(why)) if not ok else ""
-        return (f"✅ Recorded: bought {int(t['qty'])} {t['symbol']} @ {float(t['entry']):,.2f}, stop "
+        verb = "sold short" if t["side"] == "sell" else "bought"
+        return (f"✅ Recorded: {verb} {int(t['qty'])} {t['symbol']} @ {float(t['entry']):,.2f}, stop "
                 f"{float(t['stop']):,.2f}. I'll alert you the minute it hits the stop or target.{warn}")
     return "Unknown button."
 

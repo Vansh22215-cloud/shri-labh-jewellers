@@ -15,6 +15,10 @@ kill_switch: false
 # Owner's reset on 2026-11-11: system tips before this day are retired (archived in journal/tips_retired.csv).
 tips_start_date: "2026-11-11"
 tips_mode: aggressive
+# Owner's choice 2026-11-11: live intraday tips (aggressive). Only setups passing the Kite-history test keep
+# sending (DECISIONS D94). Max tips a day, none after 2:30 pm.
+intraday_tips: true
+intraday_max_tips: 2
 aggressive_strategy: a3
 # Stop ALL aggressive tips if their total result reaches this loss (% of capital).
 aggressive_hard_stop_pct: 20

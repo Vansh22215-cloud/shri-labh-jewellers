@@ -184,3 +184,12 @@ def test_second_copy_of_code_when_connected(monkeypatch, tmp_path):
     monkeypatch.setattr(kite, "logged_in", lambda now=None: True)
     bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 1, "text": "kite_abc12345"}, 45000)
     assert "Already connected" in calls[-1]
+
+
+def test_square_off_reminder_for_todays_intraday_trade():
+    now = pd.Timestamp("2026-11-12 15:12", tz="Asia/Kolkata")
+    it = {"key": "my|X|d", "name": "X", "label": "your intraday trade", "side": "buy", "entry_lo": None,
+          "entry_hi": None, "entry": 100.0, "stop": 95.0, "target": 110.0, "qty": 1, "kind": "mine", "ticker": None,
+          "offset": 0.0, "mis": True, "day": "2026-11-12", "now": now}
+    assert "squareoff" in [c for c, _ in alerts.events(it, {"last": 101.0, "high": 102, "low": 100})]
+    assert "squareoff" not in [c for c, _ in alerts.events(dict(it, day="2026-11-11"), {"last": 101.0, "high": 102, "low": 100})]

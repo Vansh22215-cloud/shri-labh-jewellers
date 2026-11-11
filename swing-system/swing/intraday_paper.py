@@ -142,14 +142,19 @@ def bars_today(symbols, now):
     out = {}
     try:
         from . import kite
-        if kite.logged_in() and len(symbols) <= 60:
+        if kite.logged_in():
+            import time as _t
             for s in symbols:
                 h = kite.historical(s, "5minute", days=1)
+                _t.sleep(0.35)                       # Kite allows ~3 history requests a second
                 if h is not None and len(h):
                     h.index = pd.to_datetime(h.index).tz_localize(None) if h.index.tz is not None else h.index
                     out[s] = h[h.index.normalize() == now.normalize()]
-            if out:
-                return {s: b[b.index + pd.Timedelta(minutes=5) <= now] for s, b in out.items()}
+            if len(out) >= len(symbols) // 2:
+                res = {s: b[b.index + pd.Timedelta(minutes=5) <= now] for s, b in out.items()}
+                res["_prev"] = {s: v["prev"] for s, v in kite.quotes(list(out)).items() if v.get("prev")}
+                res["_source"] = "Zerodha"
+                return res
     except Exception:
         out = {}
     import yfinance as yf
@@ -171,6 +176,7 @@ def bars_today(symbols, now):
             prev[s] = float(before["close"].iloc[-1])
         out[s] = today[today.index + pd.Timedelta(minutes=5) <= now]          # completed bars only
     out["_prev"] = prev
+    out["_source"] = "Yahoo"
     return out
 
 
@@ -182,6 +188,7 @@ def step(now=None, symbols=None, bars=None):
         symbols = intraday_universe()[:150]
     bars = bars if bars is not None else bars_today(symbols, now)
     prev = bars.pop("_prev", {}) if isinstance(bars, dict) else {}
+    source = bars.pop("_source", "Yahoo") if isinstance(bars, dict) else "Yahoo"
     tr = load()
     tr = manage(tr, bars, now)
     today = str(now.date())
@@ -206,8 +213,14 @@ def step(now=None, symbols=None, bars=None):
                 done.add((s, sg["setup"]))
                 n_open += 1
         if new:
+            try:
+                sent = send_tips(new, now, source)
+                for n_ in new:
+                    n_["tipped"] = n_["symbol"] + n_["setup"] in sent
+            except Exception as e:
+                log.warning("intraday tips failed: %s", type(e).__name__)
             tr = pd.concat([tr, pd.DataFrame(new)], ignore_index=True)
-            log.info("Intraday paper: %d new trade(s)", len(new))
+            log.info("Intraday: %d new setup(s), %d sent as tips", len(new), sum(bool(n_.get("tipped")) for n_ in new))
     tr.to_csv(TRADES_F, index=False)
     try:
         if now.hour * 60 + now.minute >= 15 * 60 + 20:
@@ -216,6 +229,72 @@ def step(now=None, symbols=None, bars=None):
     except Exception:
         pass
     return tr
+
+
+SETUPS_F = DATA / "intraday_setups.json"
+SETUP_WORDS = {"ORB": "opening-range breakout", "FLAG": "bull flag breakout", "BOUNCE": "oversold bounce"}
+
+
+def allowed_setups():
+    """-> (set of setups allowed to send tips, validated?) from the Kite-history test; all three until it has run."""
+    import json
+    try:
+        d = json.loads(SETUPS_F.read_text())
+        return set(d.get("allowed", [])), True
+    except Exception:
+        return set(SETUP_WORDS), False
+
+
+def send_tips(new, now, source="Yahoo", settings=None):
+    """Owner's choice (D94): live intraday tips in aggressive mode. Returns {symbol+setup} that were sent."""
+    from .config import load_settings
+    s = settings or load_settings()
+    if not s.get("intraday_tips", False) or s.get("kill_switch"):
+        return set()
+    m = now.hour * 60 + now.minute
+    if not (9 * 60 + 35 <= m <= 14 * 60 + 30):          # no new intraday tips after 2:30 pm
+        return set()
+    allowed, validated = allowed_setups()
+    tr = load()
+    sent_today = int(tr.loc[tr["date"] == str(now.date()), "tipped"].fillna(False).astype(bool).sum()) \
+        if "tipped" in tr else 0
+    cap = int(s.get("intraday_max_tips", 2))
+    from . import risk, telegram
+    from .bot import send_ticket
+    tok, chat = (s.get("telegram_bot_token") or "").strip(), str(s.get("telegram_chat_id") or "").strip()
+    out = set()
+    for n in sorted(new, key=lambda x: x["setup"] != "ORB"):
+        if sent_today >= cap or n["setup"] not in allowed:
+            continue
+        tm_line = None
+        try:
+            from . import kite, timemachine
+            hist = kite.historical(n["symbol"], "5minute", days=30)
+            left = max(1, int(((now.normalize() + pd.Timedelta(hours=15, minutes=15)) - now).total_seconds() // 300))
+            tm = timemachine.simulate(hist, n["side"], n["entry"], n["stop"], n["target"], left, lookback=1500) \
+                if hist is not None else None
+            tm_line = timemachine.line(tm, "5-min bars", f"{n['symbol']}'s last 30 days of 5-minute bars, until 3:15 pm")
+        except Exception:
+            pass
+        act = "BUY" if n["side"] == "buy" else "SELL (short, intraday only)"
+        lab = ("validated on Kite history" if validated else "AGGRESSIVE - not yet validated (test runs tonight)")
+        msg = (f"⚡ <b>INTRADAY TIP</b> · {now:%I:%M %p} · {lab}\n"
+               f"<b>{act} {n['symbol']}</b> now near {n['entry']:,.2f} - {SETUP_WORDS[n['setup']]}\n"
+               f"<code>Stop {n['stop']:,.2f} · Target {n['target']:,.2f} · exit by 3:15 pm at the latest</code>\n"
+               f"👉 Only if the price is still within 0.3% of {n['entry']:,.2f}; skip it if it ran away. Intraday "
+               f"(MIS) - Zerodha squares off at 3:20 pm.\n" + (f"🎰 {tm_line}\n" if tm_line else "") +
+               f"<i>Prices: {source}. Most intraday traders lose money - small size only. Research, not advice.</i>")
+        if telegram.send(s, msg, html=True, label="intraday tip").startswith("Telegram message sent"):
+            sent_today += 1
+            out.add(n["symbol"] + n["setup"])
+            try:
+                t = risk.new_ticket(n["symbol"], n["side"], n["entry"], n["stop"], n["target"],
+                                    f"intraday {n['setup']} {now:%d %b}", product="MIS", settings=s)
+                if tok and chat:
+                    send_ticket(tok, chat, t)
+            except Exception as e:
+                log.warning("intraday ticket failed: %s", type(e).__name__)
+    return out
 
 
 def week_line(today=None):
