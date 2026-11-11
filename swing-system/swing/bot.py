@@ -9,6 +9,8 @@ import json
 import os
 import time
 
+import re
+
 import requests
 
 from . import tipcheck
@@ -27,7 +29,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
-        "/status - is Kite connected, live test price, last alert check\n"
+        "/status - is Kite connected, live test price, last alert check\n/kite - get a Kite login link now\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
 
@@ -205,9 +207,15 @@ def handle(token, owner, msg, capital):
     elif not text:
         reply = ("I couldn't read any words or prices on that picture. Forward it with its caption, or type the "
                  "name and level, e.g. 'Nifty weakness below 24290'.")
-    elif text.startswith("/start kite_"):
+    elif re.search(r"(?:kite_|request_token=)([A-Za-z0-9]{8,64})", text):
+        # the login hand-back: "/start kite_XXXX", "kite_XXXX", or the whole login page address pasted in
         from . import kite
-        ok, reply = kite.exchange(text.split("kite_", 1)[1].strip())
+        ok, reply = kite.exchange(re.search(r"(?:kite_|request_token=)([A-Za-z0-9]{8,64})", text).group(1))
+    elif text.lower().startswith(("/kite", "/login")):
+        from . import kite
+        reply = (f"🔑 Log in to Kite: {kite.login_url()}\nAfter logging in, tap Start in Telegram - or, if nothing "
+                 "happens, copy the message the page shows and send it here.") if kite.configured() else \
+            "Kite is not set up (the API key/secret are missing in GitHub Secrets)."
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
     elif text.startswith("/status"):

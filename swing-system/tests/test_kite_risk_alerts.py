@@ -105,8 +105,8 @@ def test_bot_login_and_button(monkeypatch, tmp_path):
     calls = []
     monkeypatch.setattr(bot, "_api", lambda tok, method, **p: calls.append((method, p)) or {"ok": True})
     monkeypatch.setattr(kite, "exchange", lambda rt: (True, f"✅ Kite connected ({rt})"))
-    bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 3, "text": "/start kite_abc123"}, 45000)
-    assert any("Kite connected (abc123)" in p.get("text", "") for m, p in calls)
+    bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 3, "text": "/start kite_abc12345"}, 45000)
+    assert any("Kite connected (abc12345)" in p.get("text", "") for m, p in calls)
     calls.clear()
     monkeypatch.setattr("swing.risk.on_button", lambda data: "✅ Recorded: " + data)
     bot.handle_button("T", "1", {"id": "q1", "data": "placed:1234", "message": {"chat": {"id": 1}}})
@@ -124,3 +124,19 @@ def test_status_command(monkeypatch, tmp_path):
     monkeypatch.setattr(kite, "quotes", lambda syms: {"NIFTY50": {"last": 25367.6, "high": 1, "low": 1}})
     t = bot.status_text()
     assert "✅ connected" in t and "NIFTY50 25,367.60 (Zerodha, live)" in t
+
+
+def test_login_handback_in_any_form(monkeypatch, tmp_path):
+    from swing import bot
+    calls = []
+    monkeypatch.setattr(bot, "_api", lambda tok, method, **p: calls.append(p.get("text", "")) or {"ok": True})
+    monkeypatch.setattr(kite, "exchange", lambda rt: (True, f"ok {rt}"))
+    for text in ("/start kite_abc12345", "kite_abc12345",
+                 "https://vansh22215-cloud.github.io/x/kite-login.html?action=login&status=success&request_token=abc12345"):
+        calls.clear()
+        bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 1, "text": text}, 45000)
+        assert "ok abc12345" in calls[-1], text
+    _keys(monkeypatch, tmp_path)
+    calls.clear()
+    bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 1, "text": "/kite"}, 45000)
+    assert "kite.zerodha.com/connect/login" in calls[-1]

@@ -22,6 +22,11 @@
   <h1 id="t">Connecting…</h1>
   <p id="m">Taking you back to your Telegram bot.</p>
   <a class="btn" id="b" href="#" style="display:none">Open Telegram and tap Start</a>
+  <div id="fb" style="display:none; margin-top:18px">
+    <p style="margin:0 0 8px">If Telegram opens but nothing happens, copy this and send it to the bot (within 5 minutes):</p>
+    <code id="c" style="display:block; padding:12px; border-radius:8px; background:rgba(127,127,127,.15); word-break:break-all"></code>
+    <a class="btn" id="cp" href="#" style="margin-top:10px">Copy</a>
+  </div>
 </div></main>
 <script>
   // Zerodha sends you here after login with a one-time request token (useless without the secret,
@@ -34,9 +39,17 @@
   if (ok) {
     var url = "https://t.me/" + BOT + "?start=kite_" + tok;
     b.href = url; b.style.display = "block";
+    var msg = "kite_" + tok;
+    document.getElementById("c").textContent = msg;
+    document.getElementById("fb").style.display = "block";
+    document.getElementById("cp").onclick = function (e) {
+      e.preventDefault();
+      var done = function () { document.getElementById("cp").textContent = "Copied - now paste it in the bot chat"; };
+      if (navigator.clipboard) { navigator.clipboard.writeText(msg).then(done, done); } else { done(); }
+    };
     t.textContent = "Logged in to Zerodha";
     m.textContent = "One last tap: open Telegram and press Start, so your system can use today's live prices.";
-    setTimeout(function () { location.href = url; }, 600);
+    setTimeout(function () { location.href = url; }, 1500);
   } else {
     t.textContent = "Login not completed";
     m.textContent = "Zerodha did not confirm the login. Go back to Telegram and tap the login link again.";
