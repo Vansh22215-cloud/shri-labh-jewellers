@@ -18,6 +18,7 @@ def test_forwarded_picture_is_read_and_checked(monkeypatch, tmp_path):
         def raise_for_status(self):
             pass
     monkeypatch.setattr(bot, "_api", fake_api)
+    monkeypatch.setattr(bot, "load_settings", lambda: {"reply_to_forwarded": True, "capital": 45000})
     real_get = bot.requests.get
     monkeypatch.setattr(bot.requests, "get", lambda url, **k: R() if "/file/bot" in url else real_get(url, **k))
     monkeypatch.setattr(chart_reader, "read_image", lambda p: {"text": "Weakness Only Sustaining Below 24290",

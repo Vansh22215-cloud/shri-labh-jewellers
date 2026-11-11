@@ -190,6 +190,7 @@ def handle(token, owner, msg, capital):
     text = (msg.get("text") or msg.get("caption") or "").strip()
     doc = msg.get("document") or {}
     image = None
+    forwarded_tip = False
     if not str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
         image = _read_picture(token, msg)
         if image and image.get("text"):
@@ -229,6 +230,7 @@ def handle(token, owner, msg, capital):
     elif text.lower().startswith(("/bought", "/sold", "/trades")):
         reply = trade_command(text)
     else:
+        forwarded_tip = True
         tipcheck.LAST_TICKET = None
         try:
             reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
@@ -238,14 +240,13 @@ def handle(token, owner, msg, capital):
         except Exception as e:
             log.error("tip check failed: %s", e)
             reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."
-    _send_reply(token, chat, reply, msg["message_id"])
-    t = getattr(tipcheck, "LAST_TICKET", None)
-    if t:
+    if forwarded_tip and not load_settings().get("reply_to_forwarded", False):
+        # owner's choice (D95): no replies to forwarded tips/pictures - they are still checked and tracked silently
         tipcheck.LAST_TICKET = None
-        try:
-            send_ticket(token, chat, t)
-        except Exception as e:
-            log.warning("sending ticket failed: %s", type(e).__name__)
+        log.info("Forwarded tip checked and tracked silently (no reply - owner's choice)")
+        return owner
+    _send_reply(token, chat, reply, msg["message_id"])
+    tipcheck.LAST_TICKET = None
     return owner
 
 

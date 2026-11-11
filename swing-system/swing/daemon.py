@@ -238,10 +238,10 @@ def minute_tasks(t=None):
             if t >= t.replace(hour=8, minute=45, second=0) and t.hour < 15 and claim_once("kite login prompt", t):
                 _send(f"🔑 <b>Log in to Kite for today</b>\n<a href=\"{_html.escape(kite.login_url())}\">Tap here to log in</a> - "
                       "then tap <b>Start</b> when Telegram opens. Live Zerodha prices for alerts and updates until 6 am "
-                      "tomorrow. (Until then I use Yahoo prices.)")
+                      "tomorrow. (Until then I use Yahoo prices.)", label="kite login")
             elif t >= t.replace(hour=9, minute=30, second=0) and t.hour < 15 and claim_once("kite login reminder", t):
                 _send(f"⏰ Reminder: not logged in to Kite yet - alerts are using slower Yahoo prices. "
-                      f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>")
+                      f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>", label="kite login")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
     try:   # 9:00 am morning brief: filings, results due, insider trades for the followed stocks
@@ -330,10 +330,10 @@ def pd_now(t):
     return pd.Timestamp(t)
 
 
-def _send(text):
+def _send(text, label="system notice"):
     from . import telegram
     from .config import load_settings
-    telegram.send(load_settings(), text, html=True, label="system notice")
+    telegram.send(load_settings(), text, html=True, label=label)
 
 
 def run():
