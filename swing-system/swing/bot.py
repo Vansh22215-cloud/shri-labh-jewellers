@@ -211,6 +211,8 @@ def handle(token, owner, msg, capital):
         # the login hand-back: "/start kite_XXXX", "kite_XXXX", or the whole login page address pasted in
         from . import kite
         ok, reply = kite.exchange(re.search(r"(?:kite_|request_token=)([A-Za-z0-9]{8,64})", text).group(1))
+        if not ok and kite.logged_in():
+            reply = "✅ Already connected to Kite for today - this code was used already, nothing more to do."
     elif text.lower().startswith(("/kite", "/login")):
         from . import kite
         reply = (f"🔑 Log in to Kite: {kite.login_url()}\nAfter logging in, tap Start in Telegram - or, if nothing "

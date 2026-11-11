@@ -174,3 +174,13 @@ def test_login_refusal_explains_why(monkeypatch, tmp_path):
     monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
                                                                        "message": "Token is invalid or has expired."}))
     assert "expired" in kite.exchange("reqtok99")[1]
+
+
+def test_second_copy_of_code_when_connected(monkeypatch, tmp_path):
+    from swing import bot
+    calls = []
+    monkeypatch.setattr(bot, "_api", lambda tok, method, **p: calls.append(p.get("text", "")) or {"ok": True})
+    monkeypatch.setattr(kite, "exchange", lambda rt: (False, "❌ expired"))
+    monkeypatch.setattr(kite, "logged_in", lambda now=None: True)
+    bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 1, "text": "kite_abc12345"}, 45000)
+    assert "Already connected" in calls[-1]
