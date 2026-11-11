@@ -203,6 +203,9 @@ def claim_once(name, t=None):
     return True
 
 
+_last_filings = 0.0
+
+
 def minute_tasks(t=None):
     """Small things checked every minute: Kite login prompt/reminder, instant alerts, the 2-week paper review."""
     import html as _html
@@ -220,6 +223,31 @@ def minute_tasks(t=None):
                       f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
+    try:   # 9:00 am morning brief: filings, results due, insider trades for the followed stocks
+        if wd and t >= t.replace(hour=9, minute=0, second=0) and t.hour < 12 and claim_once("morning brief", t):
+            from . import nse_filings
+            seen_f = DATA / "filings_seen.json"
+            msg = nse_filings.morning_brief()
+            _, seen = nse_filings.new_filings(set())          # everything up to now counts as seen
+            seen_f.write_text(json.dumps(sorted(seen)[-3000:]))
+            if msg:
+                _send(msg)
+    except Exception as e:
+        log.warning("Daemon: morning brief failed: %s", type(e).__name__)
+    try:   # new important filings of followed stocks, 9:00-18:00, checked every 15 minutes
+        global _last_filings
+        if wd and 9 <= t.hour < 18 and time.time() - _last_filings > 900 and _load().get(f"morning brief {t:%Y-%m-%d}"):
+            _last_filings = time.time()
+            from . import nse_filings
+            seen_f = DATA / "filings_seen.json"
+            seen = set(json.loads(seen_f.read_text())) if seen_f.exists() else set()
+            lines, seen = nse_filings.new_filings(seen)
+            seen_f.write_text(json.dumps(sorted(seen)[-3000:]))
+            if lines:
+                _send("📢 <b>NEW FILING</b> for a stock you follow\n\n" + "\n".join(lines[:8]) +
+                      "\n\n<i>Research, not advice.</i>")
+    except Exception as e:
+        log.warning("Daemon: filings check failed: %s", type(e).__name__)
     try:
         from . import alerts
         if alerts.market_open(pd_now(t)):
