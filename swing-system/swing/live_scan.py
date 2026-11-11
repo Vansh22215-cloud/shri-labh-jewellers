@@ -108,6 +108,15 @@ def run(send=True):
     except Exception as e:
         log.warning("news fetch failed: %s", e)
     snap, last_ts = snapshot(syms + ["NIFTY50"])
+    try:   # live Zerodha prices for every tip / trade symbol when logged in (Yahoo stays the fallback)
+        from . import kite
+        kq = kite.quotes(sorted(set(tip_status.symbols_needed()) | set(my["symbol"]) | set(recent_tips["symbol"])))
+        for s_, v_ in kq.items():
+            snap["close"][s_], snap["high"][s_], snap["low"][s_] = v_["last"], v_["high"], v_["low"]
+        if kq:
+            log.info("Hourly scan: %d tip prices from Zerodha", len(kq))
+    except Exception as e:
+        log.warning("Zerodha prices for tips failed: %s", type(e).__name__)
     if last_ts is None or "NIFTY50" not in snap["close"]:
         msg = "Market closed today (no live prices). Next scan on the next trading day."
         log.info(msg)

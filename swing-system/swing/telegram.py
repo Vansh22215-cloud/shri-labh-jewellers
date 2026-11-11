@@ -17,22 +17,6 @@ def _chat_id(token):
     return None
 
 
-def _remember_chat(chat):
-    """Telegram forgets messages after ~24h, so store the chat id permanently in my_secrets.yaml."""
-    import os
-    import re
-    if os.environ.get("GITHUB_ACTIONS"):
-        return   # on GitHub the chat id comes from a secret; never write private values to files there
-    from .config import ROOT
-    f = ROOT / "my_secrets.yaml"
-    txt = f.read_text(encoding="utf-8") if f.exists() else ""
-    if re.search(r"(?m)^telegram_chat_id:", txt):
-        txt = re.sub(r"(?m)^telegram_chat_id:.*$", f'telegram_chat_id: "{chat}"', txt)
-    else:
-        txt += f'\ntelegram_chat_id: "{chat}"\n'
-    f.write_text(txt, encoding="utf-8")
-
-
 def _post(token, data, tries=4):
     """POST one message; retries network errors / Telegram rate limits (429) / server errors with backoff."""
     import time
@@ -105,7 +89,6 @@ def send(settings, text, html=False, label="message"):
             if not chat:
                 log.warning("Telegram %s NOT sent: no chat id", label)
                 return "Telegram: open your bot in Telegram and send it any message (e.g. hi), so it knows where to reply"
-            _remember_chat(chat)
         if html:   # html messages may be pre-split into cards with a marker; keep cards whole when possible
             text = text.replace("\n\n\u2063", "\n\n")
         parts = _split(text)

@@ -13,11 +13,9 @@ import requests
 
 from . import tipcheck
 from .config import DATA, PRIVATE, DISCLAIMER, REPORTS, get_logger, load_settings, load_state
-from .telegram import _remember_chat
 
 log = get_logger()
 OFFSET = DATA / "bot_offset.txt"
-LOCK = DATA / "bot.lock"
 HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll check it against real prices:\n"
         "• GOOD / RISKY / AVOID with reasons\n• the odds from that stock's own 5-year history vs what you need "
         "after Zerodha charges\n• red flags: no stop-loss, pump-and-dump stocks, results, trend\n\n"
@@ -29,6 +27,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
+        "/status - is Kite connected, live test price, last alert check\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
 
@@ -186,7 +185,6 @@ def handle(token, owner, msg, capital):
         return owner
     if not owner and msg["chat"].get("type") == "private":
         owner = chat
-        _remember_chat(chat)
     text = (msg.get("text") or msg.get("caption") or "").strip()
     doc = msg.get("document") or {}
     image = None
@@ -212,6 +210,8 @@ def handle(token, owner, msg, capital):
         ok, reply = kite.exchange(text.split("kite_", 1)[1].strip())
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
+    elif text.startswith("/status"):
+        reply = status_text()
     elif text.startswith("/report"):
         reply = _report_summary()
     elif text.startswith("/score"):
@@ -237,6 +237,32 @@ def handle(token, owner, msg, capital):
         except Exception as e:
             log.warning("sending ticket failed: %s", type(e).__name__)
     return owner
+
+
+def status_text():
+    """/status: is Kite connected, a live test price and where it came from, the alerts' last check."""
+    import json as _j
+    from . import kite
+    from .config import DATA
+    L = ["🩺 System status"]
+    if not kite.configured():
+        L.append("Kite: not set up (keys missing in GitHub Secrets) - using Yahoo prices.")
+    elif kite.logged_in():
+        q = kite.quotes(["NIFTY50", "RELIANCE"])
+        if q:
+            L.append("Kite: ✅ connected until 6 am - live prices from Zerodha.")
+            L += [f"Test: {k} {v['last']:,.2f} (Zerodha, live)" for k, v in q.items()]
+        else:
+            L.append("Kite: logged in, but Zerodha did not answer the price test just now - using Yahoo meanwhile.")
+    else:
+        L.append(f"Kite: not logged in today - using Yahoo prices. Log in: {kite.login_url()}")
+    try:
+        a = _j.loads((DATA / "alerts_last.json").read_text())
+        L.append(f"Alerts: last check {a['at'][11:16]} on {a['source']} prices, {a['priced']} of {a['items']} "
+                 "trades/tips priced (checked every minute 9:15-3:30 on market days).")
+    except Exception:
+        L.append("Alerts: no check yet (they run every minute 9:15-3:30 on market days).")
+    return "\n".join(L)
 
 
 def handle_button(token, owner, cq):
@@ -277,40 +303,6 @@ def _send_reply(token, chat, reply, reply_to):
             return
         reply = _h.unescape(_re.sub(r"</?(b|i|pre|code)>", "", reply))
     _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=reply_to)
-
-
-def run_forever():
-    if LOCK.exists():
-        try:
-            pid = int(LOCK.read_text())
-            os.kill(pid, 0)
-            log.info("Bot already running (pid %s)", pid)
-            return
-        except Exception:
-            pass
-    LOCK.write_text(str(os.getpid()))
-    backoff = 5
-    log.info("Telegram tip-check bot started")
-    while True:
-        try:
-            s = load_settings()
-            token = (s.get("telegram_bot_token") or "").strip()
-            if not token:
-                time.sleep(300)
-                continue
-            owner = str(s.get("telegram_chat_id") or "").strip()
-            offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
-            res = _api(token, "getUpdates", offset=offset, timeout=50)
-            for u in res.get("result", []):
-                OFFSET.write_text(str(u["update_id"] + 1))
-                msg = u.get("message")
-                if msg:
-                    owner = handle(token, owner, msg, float(s.get("capital", 45000)))
-            backoff = 5
-        except Exception as e:
-            log.warning("bot loop error: %s (retrying in %ss)", type(e).__name__, backoff)   # never log the token
-            time.sleep(backoff)
-            backoff = min(backoff * 2, 300)
 
 
 def poll_once():

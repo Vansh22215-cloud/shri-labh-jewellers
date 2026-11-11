@@ -144,6 +144,11 @@ def check(send=True, now=None, quote_fn=None):
                 q[tk] = {"last": float(h["close"].iloc[-1]), "high": float(h["high"].max()), "low": float(h["low"].min())}
         except Exception:
             continue
+    try:   # for /status: when the last pass ran, on which prices, how many items
+        (DATA / "alerts_last.json").write_text(json.dumps({"at": str(now)[:16], "source": src, "items": len(its),
+                                                          "priced": sum(1 for i in its if (i["ticker"] or i["name"]) in q)}))
+    except Exception:
+        pass
     fired = _fired()
     msgs = []
     for it in its:
