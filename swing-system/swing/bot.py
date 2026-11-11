@@ -27,7 +27,10 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "I track every one and message you when it is right, wrong or runs out of time.\n"
         "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
-        "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n\n" + DISCLAIMER)
+        "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
+        "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
+        "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
+        + DISCLAIMER)
 
 
 def _api(token, method, **params):

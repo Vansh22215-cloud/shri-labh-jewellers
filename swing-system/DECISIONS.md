@@ -481,3 +481,30 @@ reached today ...) and one "what to do". Finished forwarded calls are shown once
   proposal step), the Claude-fed dashboard (dashboard_export.py, dashboard_page.html, the stale dashboard page),
   and the 8 switched-off Claude scheduled tasks. Kept: validated-mode fallback (v1) and feed-ready library items.
 - cron-job.org: no longer needed (runs restart themselves); the owner deletes the job and its GitHub key.
+
+## D92 (2026-11-11) Owner's "day-trader-skill" request, rebuilt for NSE without Claude
+Source: github.com/Jakeschincariol/day-trader-skill (MIT, 11 US day-trading Claude skills). Rebuilt as automatic
+GitHub + Telegram parts for NSE; nothing needs a Claude session.
+- PAID, APPROVED BY THE OWNER: Kite Connect "Connect" app, Rs 500/month, for live quotes and historical candles
+  (market data only). Why: faster, more reliable prices for the 1-minute alerts and intraday scanner than Yahoo.
+  If the credit runs out or the owner does not log in, everything falls back to free Yahoo prices.
+- NOT BUILT (owner's choice): order placement. SEBI/NSE require API orders to come from a registered static IP since
+  April 2026; GitHub runners have changing IPs, and the owner declined the paid static-IP service. Instead every tip
+  gets a risk-checked ORDER TICKET the owner places in the Kite app; "✅ I placed it" records the trade.
+- Daily login: Zerodha requires a human login each day. 08:45 IST link -> Zerodha -> GitHub Pages kite-login.html ->
+  Telegram /start kite_<request_token> -> token exchange with the secret (GitHub Secrets only). The access token is
+  stored encrypted (Fernet, key from the API secret) in data/private and expires 06:00 IST.
+- Risk check (owner: standard limits): 1% loss per trade, 2% daily loss stop, 3 new trades a day, 25% max order,
+  stop required, free cash. On tickets and on /bought (warning).
+- Instant alerts every minute 09:15-15:30 (entry / near stop / stop / target / 4% day move), once per event per day.
+- Time Machine: 10,000 seeded bootstrap replays from the instrument's own bars, stop-first on ties; on every reply and
+  evening tip. A simulation, not a prediction.
+- NSE filings: important announcements, results calendar, insider/promoter trades (PIT feed; takeover-disclosure
+  fallback), quarterly results summary; 09:00 morning brief and 15-minute filing alerts for followed stocks. Insider
+  records are archived daily; "buy after promoter buying" will be tested once enough history exists (the free feed
+  has no long history - it cannot be honestly back-tested today).
+- Intraday PAPER trading only (owner's choice): ORB / flag / oversold bounce on completed 5-minute bars, sized to lose
+  Rs 450 at the stop, closed 15:20, after charges. No tips; it may only tip after passing walk-forward tests and the
+  owner's yes. 2-week paper review of tickets + intraday sent automatically.
+- Not adapted: US Congress (Pelosi) tracker -> replaced by Indian insider/promoter disclosures; US pattern-day-trader
+  rules (not applicable in India).

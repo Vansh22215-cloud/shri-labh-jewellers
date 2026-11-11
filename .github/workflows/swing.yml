@@ -74,6 +74,8 @@ jobs:
         env:   # private values are passed in memory only, never written to a file
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          KITE_API_KEY: ${{ secrets.KITE_API_KEY }}         # Zerodha market data only (no order placing)
+          KITE_API_SECRET: ${{ secrets.KITE_API_SECRET }}
         run: |
           case "${{ steps.task.outputs.task }}" in
             scan)     python scripts/bot_poll.py || true; python scripts/run_scan.py ;;

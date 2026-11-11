@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-11-11 (day-trader-skill, rebuilt for NSE)
+- Kite Connect live data with one-tap daily login; risk-checked order tickets with buttons; 1-minute alerts (D92).
+- Time Machine odds on every tip; NSE filings, insider trades, results summary, 9 am morning brief.
+- Intraday paper trading (ORB, flag, bounce) - no tips; 2-week paper review.
+
 ## Clean-up (fully automated)
 - Less noise: research only on upgrades, report file weekly, no smart-money lines; Saturday = scorecards + week's tips (D91).
 - Removed laptop scripts, paid Claude review, Claude dashboard and old Claude scheduled tasks.
