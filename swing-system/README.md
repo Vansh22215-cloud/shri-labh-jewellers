@@ -23,9 +23,7 @@ New repository secret: `TELEGRAM_BOT_TOKEN` = your bot token, and `TELEGRAM_CHAT
 **Record your trades** by messaging the bot: `/bought ICICIBANK 5 1425 1340` (symbol, qty, price, stop) and
 `/sold ICICIBANK 1500`. These stay private (not in the public repository).
 
-**Optional - run it on a laptop any time:** install Python, download this folder from GitHub (Code -> Download
-ZIP), double-click `windows/SETUP.bat` once, then `windows/run_nightly.bat` whenever you want a fresh report.
-The laptop never sends Telegram messages (only GitHub does), so nothing is sent twice.
+Everything runs on GitHub on its own (each run starts the next); no laptop and no Claude session is needed.
 
 ## Check any tip on Telegram
 Forward any stock tip (from a channel, group or friend) to your bot **@Vsjshsjsbaksnsjsh_bot**. Within seconds it

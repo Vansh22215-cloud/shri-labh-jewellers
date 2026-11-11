@@ -14,7 +14,7 @@ from datetime import date, datetime
 import numpy as np
 import pandas as pd
 
-from . import data_nse, data_prices, engine, fundamentals, health, journal, report, review, telegram, update
+from . import data_nse, data_prices, engine, fundamentals, health, journal, report, telegram, update
 from .config import (DISCLAIMER, LOGS, ROOT, get_logger, load_settings, load_state, load_strategy, save_state)
 from .strategy import position_size, trade_plan
 from .validate import GATE
@@ -24,9 +24,15 @@ log = get_logger()
 
 def run_tests():
     try:
-        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", str(ROOT / "tests")],
-                           capture_output=True, text=True, timeout=900, cwd=ROOT)
-        tail = (r.stdout or "").strip().splitlines()[-1:] or [""]
+        import os   # run the tests in a clean environment (no job settings, no private keys)
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("SWING_", "TELEGRAM_", "GH_"))}
+        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", "-p", "no:cacheprovider", str(ROOT / "tests")],
+                           capture_output=True, text=True, timeout=900, cwd=ROOT, env=env)
+        out = (r.stdout or "").strip().splitlines()
+        tail = out[-1:] or [""]
+        if r.returncode != 0:   # name the failing test in the log, so it can be fixed (no private data in tests)
+            failed = [l for l in out if l.startswith("FAILED")][:3]
+            log.warning("Self-tests failed: %s", "; ".join(failed) or tail[0])
         return r.returncode == 0, tail[0]
     except Exception as e:
         return False, str(e)
@@ -358,11 +364,6 @@ def run():
                             f"4-week pause (capital protection)")
     slots = max(0, p["max_open_positions"] - open_paper)
 
-    # Claude review (optional explainer)
-    if settings.get("claude_review") and plans:
-        msg = review.review(plans, int(settings.get("claude_review_max_stocks", 6)))
-        health_items.append(("good", msg))
-
     tips = plans if not blockers else []
     day = str(d.date())
     if tips:
@@ -425,32 +426,23 @@ def run():
            "gate_html": search_html() + gate_html(g),
            "paper_text": f"started {paper_start.date()}, {max(0, weeks):.1f} weeks so far; paper drawdown {paper_dd:.1f}%"}
     f = report.daily_html(ctx)
-    try:
-        from .dashboard_export import save_ideas
-        save_ideas([{k: v for k, v in pl.items() if k not in ("chart",)} for pl in (tips or [])],
-                   my_status, "evening run")
-    except Exception as e:
-        log.warning("dashboard ideas save failed: %s", e)
 
     if tips:
         lines = [f"📋 Trades for tomorrow ({day}) - buy only inside the price range, set the stop-loss straight away:"]
         for i, pl in enumerate(tips[:3], 1):
             lines.append(f"{i}. BUY {pl['symbol']} {pl['entry_low']:,.0f}-{pl['entry_high']:,.0f} | stop {pl['stop']:,.0f} | "
                          f"target {pl['target1']:,.0f} | qty {pl['qty']} (max loss ~Rs {pl['risk_rupees']:,.0f})")
+            try:
+                from . import timemachine
+                tm = timemachine.simulate(data_prices.load(pl["symbol"]), "buy", (pl["entry_low"] + pl["entry_high"]) / 2,
+                                          pl["stop"], pl["target1"], int(p.get("max_hold_days", 25)))
+                if tm:
+                    lines.append(f"   🎰 Time Machine: {tm['target']:.0f} in 100 replays hit the target first, "
+                                 f"{tm['stop']:.0f} the stop, {tm['neither']:.0f} neither (within {p.get('max_hold_days', 25)} days)")
+            except Exception as e:
+                log.warning("time machine failed: %s", type(e).__name__)
     else:
         lines = [f"📋 No trade for tomorrow ({day}). Reason: {why[0] if why else 'nothing met the rules'}"]
-    try:   # follow the smart money (bulk/block deals by funds / well-known investors in liquid, uptrending stocks)
-        from .smart_money import todays_buys
-        sm = todays_buys(deals, set(sig["member"].loc[d][sig["member"].loc[d]].index))
-        sm = sm[sm["trend_ok"]] if len(sm) else sm
-        for _, r in sm.head(3).iterrows():
-            a_ = float(sig["atr"].at[d, r["symbol"]]) if r["symbol"] in sig["atr"].columns else None
-            stop_ = round(r["close"] - p["stop_atr_mult"] * a_, 0) if a_ else None
-            lines.append(f"💼 Smart money: {r['buyer'][:40]} bought Rs {r['net_buy_cr']:.0f} cr of {r['symbol']} at "
-                         f"{r['deal_price']:,.0f} (now {r['close']:,.0f}, uptrend)" + (f" | idea stop {stop_:,.0f}" if stop_ else "")
-                         + " - untested idea, small size only")
-    except Exception as e:
-        log.warning("smart-money check failed: %s", e)
     for s_ in my_status:
         if "Hold." not in s_["status"]:
             lines.append(f"⚠️ {s_['symbol']}: {s_['status']}")
@@ -464,8 +456,19 @@ def run():
         lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines), label="evening trades")
-    if settings.get("send_report_file", True):
-        telegram.send_document(settings, f, "Full report (open in your browser)")
+    try:   # an order ticket per tip, risk-checked, with ✅ / ⏭ buttons (owner places it in the Kite app)
+        from . import risk
+        from .bot import send_ticket
+        tok, chat = (settings.get("telegram_bot_token") or "").strip(), str(settings.get("telegram_chat_id") or "").strip()
+        for pl in (tips or [])[:3]:
+            entry = round((pl["entry_low"] + pl["entry_high"]) / 2, 2)
+            q = min(int(pl["qty"]), risk.size(entry, pl["stop"])) or int(pl["qty"])
+            t = risk.new_ticket(pl["symbol"], "buy", entry, pl["stop"], pl["target1"], f"system tip {day}", qty=q)
+            if tok and chat:
+                send_ticket(tok, chat, t)
+    except Exception as e:
+        log.warning("tickets failed: %s", type(e).__name__)
+    # the full HTML report file is sent once a week (Saturday summary), not every evening (owner's choice)
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,
                   "telegram": tg})

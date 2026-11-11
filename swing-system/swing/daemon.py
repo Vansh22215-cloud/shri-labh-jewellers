@@ -146,16 +146,188 @@ def run_job(job, minutes_left):
         log.warning("Daemon: %s failed: %s", job, type(e).__name__)
 
 
+CODE_PATHS = ["swing-system/swing", "swing-system/scripts", "swing-system/requirements.txt",
+              "swing-system/strategies", "swing-system/settings.yaml"]
+
+
+def code_version(ref="HEAD"):
+    """Fingerprint of the program files at a git ref (data/results commits do not change it)."""
+    out = []
+    for p in CODE_PATHS:
+        r = subprocess.run(["git", "rev-parse", f"{ref}:{p}"], cwd=ROOT.parent, capture_output=True, text=True)
+        out.append(r.stdout.strip())
+    return "|".join(out)
+
+
+def update_waiting(start_version):
+    """True if newer program code was pushed to the branch since this run started (then the run ends early and
+    the next one - started automatically by keep_alive - uses the new code within minutes)."""
+    branch = os.environ.get("SWING_BRANCH")
+    if not branch or not os.environ.get("GITHUB_ACTIONS"):
+        return False
+    try:
+        subprocess.run(["git", "fetch", "-q", "origin", branch], cwd=ROOT.parent, timeout=60, check=True)
+        new = code_version("FETCH_HEAD")
+        return bool(new.replace("|", "")) and new != start_version
+    except Exception:
+        return False
+
+
+def self_check():
+    """At start: is the picture reader working on this computer? Warn the owner once a day if not."""
+    try:
+        import numpy as np
+        from .chart_reader import _ocr
+        _ocr()(np.full((60, 200, 3), 255, dtype=np.uint8))
+        log.info("Self-check: chart picture reader ready")
+        return True
+    except Exception as e:
+        log.warning("Self-check: chart picture reader NOT working: %s %s", type(e).__name__, str(e)[:120])
+        if claim_once("picture reader warning"):
+            from . import telegram
+            from .config import load_settings
+            telegram.send(load_settings(), "⚠️ System check: the chart-picture reader could not start on GitHub "
+                                           f"today ({type(e).__name__}). Text tips still work. Open a Claude "
+                                           "session to fix it.", label="self-check warning")
+        return False
+
+
+def claim_once(name, t=None):
+    t = t or now()
+    st = _load()
+    k = f"{name} {t:%Y-%m-%d}"
+    if st.get(k):
+        return False
+    st[k] = now().isoformat(timespec="minutes")
+    STATE.write_text(json.dumps(st, indent=1))
+    return True
+
+
+_last_filings = 0.0
+_last_intraday = 0.0
+
+
+def minute_tasks(t=None):
+    """Small things checked every minute: Kite login prompt/reminder, instant alerts, the 2-week paper review."""
+    import html as _html
+    t = t or now()
+    wd = t.weekday() < 5
+    try:
+        from . import kite
+        if wd and kite.configured() and not kite.logged_in():
+            if t >= t.replace(hour=8, minute=45, second=0) and t.hour < 15 and claim_once("kite login prompt", t):
+                _send(f"🔑 <b>Log in to Kite for today</b>\n<a href=\"{_html.escape(kite.login_url())}\">Tap here to log in</a> - "
+                      "then tap <b>Start</b> when Telegram opens. Live Zerodha prices for alerts and updates until 6 am "
+                      "tomorrow. (Until then I use Yahoo prices.)")
+            elif t >= t.replace(hour=9, minute=30, second=0) and t.hour < 15 and claim_once("kite login reminder", t):
+                _send(f"⏰ Reminder: not logged in to Kite yet - alerts are using slower Yahoo prices. "
+                      f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>")
+    except Exception as e:
+        log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
+    try:   # 9:00 am morning brief: filings, results due, insider trades for the followed stocks
+        if wd and t >= t.replace(hour=9, minute=0, second=0) and t.hour < 12 and claim_once("morning brief", t):
+            from . import nse_filings
+            seen_f = DATA / "filings_seen.json"
+            msg = nse_filings.morning_brief()
+            _, seen = nse_filings.new_filings(set())          # everything up to now counts as seen
+            seen_f.write_text(json.dumps(sorted(seen)[-3000:]))
+            if msg:
+                _send(msg)
+    except Exception as e:
+        log.warning("Daemon: morning brief failed: %s", type(e).__name__)
+    try:   # new important filings of followed stocks, 9:00-18:00, checked every 15 minutes
+        global _last_filings
+        if wd and 9 <= t.hour < 18 and time.time() - _last_filings > 900 and _load().get(f"morning brief {t:%Y-%m-%d}"):
+            _last_filings = time.time()
+            from . import nse_filings
+            seen_f = DATA / "filings_seen.json"
+            seen = set(json.loads(seen_f.read_text())) if seen_f.exists() else set()
+            lines, seen = nse_filings.new_filings(seen)
+            seen_f.write_text(json.dumps(sorted(seen)[-3000:]))
+            if lines:
+                _send("📢 <b>NEW FILING</b> for a stock you follow\n\n" + "\n".join(lines[:8]) +
+                      "\n\n<i>Research, not advice.</i>")
+    except Exception as e:
+        log.warning("Daemon: filings check failed: %s", type(e).__name__)
+    try:   # intraday PAPER trading (no tips): every 5 minutes 09:35-15:25
+        global _last_intraday
+        m = t.hour * 60 + t.minute
+        if wd and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
+            _last_intraday = time.time()
+            from . import intraday_paper
+            intraday_paper.step()
+    except Exception as e:
+        log.warning("Daemon: intraday paper failed: %s", type(e).__name__)
+    try:
+        from . import alerts
+        if alerts.market_open(pd_now(t)):
+            alerts.check()
+    except Exception as e:
+        log.warning("Daemon: alerts failed: %s", type(e).__name__)
+    try:
+        from . import risk
+        start = _load().get("tickets_start")
+        if not start and risk.TICKETS_F.exists():
+            st = _load()
+            st["tickets_start"] = f"{t:%Y-%m-%d}"
+            STATE.write_text(json.dumps(st, indent=1))
+        elif start and (t.date() - datetime.fromisoformat(start).date()).days >= 14 and t.hour >= 19 \
+                and not _load().get("paper review sent"):
+            txt = risk.paper_review(start)
+            try:
+                from .intraday_paper import week_line
+                txt = (txt or "") + "\n\n" + week_line()
+            except Exception:
+                pass
+            if txt:
+                _send(txt + "\n\nReply here if you want live orders later (needs a static IP, see DECISIONS). "
+                            "<i>Research, not advice.</i>")
+            st = _load()
+            st["paper review sent"] = f"{t:%Y-%m-%d}"
+            STATE.write_text(json.dumps(st, indent=1))
+    except Exception as e:
+        log.warning("Daemon: paper review failed: %s", type(e).__name__)
+
+
+def pd_now(t):
+    import pandas as pd
+    return pd.Timestamp(t)
+
+
+def _send(text):
+    from . import telegram
+    from .config import load_settings
+    telegram.send(load_settings(), text, html=True, label="system notice")
+
+
 def run():
     from .bot import poll_once
     start = time.time()
     left = lambda: MAX_MIN - (time.time() - start) / 60
     answered = 0
+    last_track = 0.0
+    start_version = code_version()
+    last_update_check = time.time()
+    self_check()
     while left() > 2:
+        if time.time() - last_update_check > 600:     # new program code pushed? hand over to a fresh run
+            last_update_check = time.time()
+            if update_waiting(start_version):
+                log.info("Daemon: newer program code found - ending this run so the next one uses it")
+                break
+        if time.time() - last_track > 1800:    # forwarded calls: alert the owner when one is right / wrong
+            last_track = time.time()
+            for name, fn in (("views", "swing.market_views:track"), ("stock tips", "swing.tipcheck:update_and_notify")):
+                try:
+                    mod, f = fn.split(":")
+                    getattr(__import__(mod, fromlist=[f]), f)()
+                except Exception as e:
+                    log.warning("Daemon: tracking %s failed: %s", name, type(e).__name__)
         try:
             answered += poll_once()
         except Exception as e:
             log.warning("Daemon: bot poll failed: %s", type(e).__name__)
+        minute_tasks()
         for job in due():
             if job == "research" and left() < 30:
                 continue                       # not enough time left: the next run does it

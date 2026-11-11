@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from swing import research, telegram, weekly
+from swing import research, telegram, weekly  # noqa: E402
 from swing.config import load_settings
 
 if __name__ == "__main__":
@@ -63,7 +63,23 @@ if __name__ == "__main__":
            f"\n{queued} ideas queued; {total} candidate ideas in the library in all.")[:3900]
     from swing.config import public_print
     public_print(msg, "research message")
-    print(telegram.send(load_settings(), msg, label="daily research"))   # owner wants every result on Telegram
+    adopted = [r for r in results if r.startswith("PROMOTED")]
+    try:   # remember the day's numbers for the Saturday summary
+        import json
+        from swing.config import DATA
+        f = DATA / "research_week.json"
+        log_ = json.loads(f.read_text()) if f.exists() else {}
+        log_[str(__import__("datetime").date.today())] = {"tested": tested, "adopted": len(adopted),
+                                                            "adopted_lines": adopted[:2]}
+        f.write_text(json.dumps(dict(sorted(log_.items())[-30:]), indent=1))
+    except Exception as e:
+        print("research log failed:", e)
+    if adopted:   # owner: research is messaged only when it actually changes the tips
+        print(telegram.send(load_settings(), "🎉 Strategy upgrade adopted tonight\n" + "\n".join(adopted[:2]) +
+                            "\nFrom tomorrow, the tips use the improved rules (tested on 13 years, holdout untouched)."
+                            "\nResearch, not advice.", label="research upgrade"))
+    else:
+        print("research: nothing adopted - no Telegram message (summary goes in Saturday's weekly)")
     try:   # on GitHub: keep the results for the next run (no Claude needed)
         from swing.ci_save import save
         print("save:", save("research run"))

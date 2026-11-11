@@ -30,7 +30,8 @@ from .config import ARCHIVE, DATA, FUND, PRIVATE, get_logger
 
 log = get_logger()
 DAILY = ("eod", "hourly", "m5", "news")
-KEYS = {"eod": ["symbol"], "hourly": ["symbol", "ts"], "m5": ["symbol", "ts"], "news": ["title"]}
+KEYS = {"eod": ["symbol"], "hourly": ["symbol", "ts"], "m5": ["symbol", "ts"], "news": ["title"],
+        "insider": ["symbol", "who", "date", "action", "shares"], "intraday_paper": ["symbol", "setup", "entry_time"]}
 
 
 # ----------------------------------------------------------------------------- low-level append-only store

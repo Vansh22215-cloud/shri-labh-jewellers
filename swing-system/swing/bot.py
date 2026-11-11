@@ -22,9 +22,15 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "• GOOD / RISKY / AVOID with reasons\n• the odds from that stock's own 5-year history vs what you need "
         "after Zerodha charges\n• red flags: no stop-loss, pump-and-dump stocks, results, trend\n\n"
         "You can also type a tip, e.g.  BUY TATASTEEL 175 SL 170 TGT 185\n"
+        "Index, forex, gold, crude and crypto views/setups work too (Nifty, Bank Nifty, Sensex, EURUSD, USDINR, "
+        "XAUUSD, BTC ...), e.g. 'Nifty weakness only below 24290' or 'XAUUSD BUY 2650 SL 2640 TP 2670'. "
+        "I track every one and message you when it is right, wrong or runs out of time.\n"
         "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
-        "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n\n" + DISCLAIMER)
+        "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
+        "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
+        "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
+        + DISCLAIMER)
 
 
 def _api(token, method, **params):
@@ -102,11 +108,16 @@ def trade_command(text):
             if df is not None and len(df) > 20:
                 tr = (df["high"] - df["low"]).tail(14).mean()
                 stop = round(price - p["stop_atr_mult"] * tr, 2)
+        from .risk import check as risk_check
+        ok, why, _n = risk_check("buy", qty, price, stop) if stop else (False, ["No stop-loss could be set."], {})
         row = pd.DataFrame([{"symbol": sym, "buy_date": str(pd.Timestamp.today().date()), "buy_price": price,
                              "qty": qty, "stop": stop}])
         out = pd.concat([my[my["symbol"] != sym], row], ignore_index=True)
         out.to_csv(journal.MY_TRADES, index=False)
-        return f"Recorded: bought {qty} {sym} @ {price}" + (f", stop {stop}. Set this stop as a GTT in Kite now." if stop else ".")
+        risk_line = ("\n🛡 Risk check: PASS." if ok else "\n🛡 Risk check: WARNING - " + " ".join(why) +
+                     " (recorded anyway - it's your trade).")
+        return (f"Recorded: bought {qty} {sym} @ {price}" + (f", stop {stop}. Set this stop as a GTT in Kite now." if stop
+                                                             else ".") + risk_line)
     if cmd == "/sold":
         if sym not in set(my["symbol"]):
             return f"{sym} is not in your open trades."
@@ -143,6 +154,31 @@ def _restore_backup(token, doc):
         return f"Restore failed ({type(e).__name__}). The file must be one the system sent you."
 
 
+def _read_picture(token, msg):
+    """A forwarded chart picture -> what chart_reader found on it (None if no picture / it failed).
+    The picture is kept only in memory/temp and deleted at once (it can be personal)."""
+    import tempfile
+    photo = (msg.get("photo") or [None])[-1]
+    doc = msg.get("document") or {}
+    fid = photo["file_id"] if photo else (doc.get("file_id") if str(doc.get("mime_type", "")).startswith("image/") else None)
+    if not fid:
+        return None
+    try:
+        info = _api(token, "getFile", file_id=fid).get("result") or {}
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{info['file_path']}", timeout=60)
+        r.raise_for_status()
+        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=True) as f:
+            f.write(r.content); f.flush()
+            from .chart_reader import read_image
+            out = read_image(f.name)
+        log.info("Chart picture read: %d words, %d lines, %d pattern names", len(out["text"].split()),
+                 len(out["levels"]), len(out["patterns"]))
+        return out
+    except Exception as e:
+        log.warning("Chart picture could not be read: %s", type(e).__name__)
+        return {"text": "", "levels": [], "patterns": [], "axis": False, "failed": True}
+
+
 def handle(token, owner, msg, capital):
     chat = str(msg["chat"]["id"])
     if owner and chat != owner:
@@ -153,10 +189,27 @@ def handle(token, owner, msg, capital):
         _remember_chat(chat)
     text = (msg.get("text") or msg.get("caption") or "").strip()
     doc = msg.get("document") or {}
+    image = None
+    if not str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
+        image = _read_picture(token, msg)
+        if image and image.get("text"):
+            text = (text + "\n" + image["text"]).strip()     # caption first, then what is written on the chart
+        if image and image.get("range"):
+            from . import market_views
+            if not market_views.find_instrument(text) and not tipcheck.parse(text).get("symbol"):
+                from .chart_reader import guess_instrument
+                g = guess_instrument(image["range"])
+                if g:
+                    image["guessed"] = g
+                    text = g + " " + text
     if str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
         reply = _restore_backup(token, doc)
     elif not text:
-        reply = "Send or forward the tip as text (I can't read pictures of tips yet)."
+        reply = ("I couldn't read any words or prices on that picture. Forward it with its caption, or type the "
+                 "name and level, e.g. 'Nifty weakness below 24290'.")
+    elif text.startswith("/start kite_"):
+        from . import kite
+        ok, reply = kite.exchange(text.split("kite_", 1)[1].strip())
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
     elif text.startswith("/report"):
@@ -166,13 +219,64 @@ def handle(token, owner, msg, capital):
     elif text.lower().startswith(("/bought", "/sold", "/trades")):
         reply = trade_command(text)
     else:
+        tipcheck.LAST_TICKET = None
         try:
-            reply = tipcheck.check_text(text, source=_source(msg), capital=capital)
+            reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
+            if image and "What I read on the picture" not in reply:
+                reply = ("🖼 I read your chart picture" + (" (it was hard to read - blurry or small)" if not image.get("axis")
+                         else "") + ".\n\n" + reply)
         except Exception as e:
             log.error("tip check failed: %s", e)
             reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."
-    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=msg["message_id"])
+    _send_reply(token, chat, reply, msg["message_id"])
+    t = getattr(tipcheck, "LAST_TICKET", None)
+    if t:
+        tipcheck.LAST_TICKET = None
+        try:
+            send_ticket(token, chat, t)
+        except Exception as e:
+            log.warning("sending ticket failed: %s", type(e).__name__)
     return owner
+
+
+def handle_button(token, owner, cq):
+    """A tap on a ticket button (✅ I placed it / ⏭ Skip). Only the owner's taps count."""
+    chat = str(((cq.get("message") or {}).get("chat") or {}).get("id", ""))
+    if owner and chat != owner:
+        _api(token, "answerCallbackQuery", callback_query_id=cq["id"], text="Not your ticket.")
+        return
+    from .risk import on_button
+    try:
+        reply = on_button(cq.get("data", ""))
+    except Exception as e:
+        log.error("ticket button failed: %s", type(e).__name__)
+        reply = "Sorry, that button failed (logged). You can type /bought SYMBOL QTY PRICE STOP instead."
+    _api(token, "answerCallbackQuery", callback_query_id=cq["id"], text=reply[:190])
+    _api(token, "sendMessage", chat_id=chat, text=reply[:4000])
+
+
+def send_ticket(token, chat, t):
+    """Send an order ticket with its two buttons."""
+    import json as _j
+    from .risk import buttons, ticket_text
+    b = buttons(t)
+    params = dict(chat_id=chat, text=ticket_text(t), parse_mode="HTML")
+    if b:
+        params["reply_markup"] = _j.dumps(b)
+    return _api(token, "sendMessage", **params)
+
+
+def _send_reply(token, chat, reply, reply_to):
+    """Cards are formatted (bold headings); if Telegram rejects the formatting, the same words go as plain text."""
+    import html as _h
+    import re as _re
+    if "<b>" in reply:
+        r = _api(token, "sendMessage", chat_id=chat, text=reply[:4000], parse_mode="HTML",
+                 disable_web_page_preview="true", reply_to_message_id=reply_to)
+        if not isinstance(r, dict) or r.get("ok", True) is not False:
+            return
+        reply = _h.unescape(_re.sub(r"</?(b|i|pre|code)>", "", reply))
+    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=reply_to)
 
 
 def run_forever():
@@ -224,5 +328,9 @@ def poll_once():
         msg = u.get("message")
         if msg:
             owner = handle(token, owner, msg, float(s.get("capital", 45000)))
+            n += 1
+        cq = u.get("callback_query")
+        if cq:
+            handle_button(token, owner, cq)
             n += 1
     return n

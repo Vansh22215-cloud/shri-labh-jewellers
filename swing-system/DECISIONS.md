@@ -381,3 +381,130 @@ written to the log, so a missing message (company of the day) could not be trace
 - In aggressive mode the no-tips headline names the real blocker (was "strategy not validated").
 - 5-minute store: the intraday list is rebuilt from the liquidity history when its file is missing (was failing on GitHub).
 - Removed the public artifact upload step (backups go to the owner's Telegram, D81).
+- (5 Nov evening) Found: the nightly self-tests always failed on GitHub because the test run inherited the job's
+  own setting (SWING_CLAIMED=nightly), which changes one daemon test - so the evening blocked all tips. Fixed: tests
+  run in a clean environment (conftest + run_tests strips SWING_/TELEGRAM_/GH_ variables) and a failure now names
+  the failing test in the log.
+
+## D85 (2026-11-06) Forwarded index / forex / gold / crypto views and setups are understood and tracked
+Owner forwarded a Nifty view ("trend continuation on 60 min, weakness only below 24290") and got "could not find an
+NSE stock". Now (swing/market_views.py):
+- Understands indices (Nifty, Bank Nifty, Fin Nifty, Midcap, Sensex), forex pairs (any of EUR GBP USD JPY AUD NZD
+  CAD CHF INR), gold, silver, crude, Bitcoin, Ethereum; SETUPS (entry/SL/TP) and VIEWS with a "wrong if" level.
+- A view with no target is tested as a 1:1 move (as far the other way as the "wrong if" level) - the fairest yes/no
+  test; time allowed follows the chart timeframe (60 min -> ~3 days, daily -> 2 weeks, ...).
+- Reply: live price, distance to the level, hourly/daily trend, base rate from ~2 years of hourly bars (same-bar tie
+  = loss), break-even rate, the channel's track record so far.
+- Tracking every 30 minutes by the always-on run on hourly bars; the owner gets a Telegram message when a call is
+  right, wrong, expired, or (setups) reaches its entry. Stock tips now also get a "right/wrong" message.
+- Messages the old checker could not read in the last 7 days are re-read once, judged at the price of the hour
+  they were forwarded.
+- Forex replies carry the legal note: in India only rupee pairs on NSE/BSE are legal for residents (RBI alert list).
+- Pictures are not read (no free OCR on GitHub); the caption text is used.
+
+## D86 (2026-11-06) The bot reads forwarded chart pictures (free)
+- Free OCR (rapidocr-onnxruntime, runs on GitHub's computer, no key, no cost) reads the words on the picture:
+  title/symbol, timeframe, written levels, entry/SL/TP boxes and pattern names (head and shoulders, double
+  bottom, flag, wedge, triangle, cup and handle, order block, FVG, BOS/CHoCH, support/resistance ...).
+- The price scale on the right is fitted (robust line through the axis numbers, misreads dropped), so long
+  horizontal lines drawn on the chart are converted to prices. Tested on the owner's (blurry, re-screenshotted)
+  Dark Horse chart: lines read at 23,961 / 24,313 / 24,458 vs labels 23,947 / 24,296 / 24,442 (within ~0.07%).
+- No name readable: the instrument is guessed from the price scale only if exactly one index/commodity/crypto/major
+  pair trades inside it (said in the reply). No stop written: the nearest drawn line on the other side of the
+  price is used as the "wrong if" level (said in the reply).
+- Every tip/view reply (picture or text) also carries the system's OWN pattern check on real daily prices: which of
+  the library's chart-pattern / market-structure entries fired in the last 3 days, and TA-Lib candles on the last
+  bar - labelled as clues, not tested edges.
+- The picture is held only in a temporary file and deleted at once (can be personal); only the words read are kept
+  in the private journal.
+- Optional paid upgrade NOT enabled (needs the owner's approval): an AI vision model could describe the drawing
+  itself (trendlines, zones, arrows) at roughly Rs 1-3 per picture. Free OCR + real-price detectors cover the
+  useful part; revisit only if many forwarded charts carry no readable text.
+
+## D87 (2026-11-06) New program code reaches the running system within ~10 minutes
+A forwarded chart picture was answered by the old code because the always-on run had started before the update
+(runs keep the code they started with, up to ~5 hours). Now every 10 minutes the run compares the program files
+(swing/, scripts/, requirements, strategies, settings) on the branch with the ones it started with; if they changed
+it ends cleanly and keep_alive starts a fresh run with the new code (data-only commits do not trigger this). The
+crash-loop guard only counts runs that ended within 8 minutes. At start each run self-checks the picture reader and
+warns the owner on Telegram (once a day) if it cannot start.
+
+## D88 (2026-11-06) One clear reply card for everything forwarded to the bot
+Owner: replies must be structured, answer WHY, and be quick to understand. Every reply (stock tip, option tip,
+index/forex/gold/crypto view or setup, chart picture) now uses swing/reply_card.py:
+answer first in plain words (WORTH CONSIDERING / COIN FLIP / RISKY / SKIP IT / CAN'T JUDGE YET) -> what I read on
+the picture -> what the tip says -> where the price is now -> why it could work -> why it could fail (deal-breakers
+first) -> the odds as a bar ("48 out of 100, need 50") -> good to know -> the plan (hidden when the answer is skip)
+-> bottom line (what to do and why; skipping costs nothing) -> the channel's scoreboard -> tracking note.
+Hype words ("sure shot", "jackpot", "100%", "guaranteed" ...) are flagged with why they matter. Right/wrong alerts
+say what they said, what happened (with time) and what it means. Fixed: option odds used per-share charges when
+the lot size was unknown (showed "need 229%"); now an Rs 5 lakh lot is assumed.
+
+## D89 (2026-11-06) Wrong-instrument bug fixed; picture title, timeframe and position tool are read
+Owner forwarded a 15-minute XAU/USD chart with a long position tool; the bot analysed the NSE stock DOLLAR
+(Rs 265) because the title "Gold Spot / U.S. Dollar" contains that word and stock symbols were tried first.
+- An index/forex/gold/crypto name now beats a stock symbol that is only an ordinary word in the text (a stock still
+  wins when clearly named: #SYMBOL or right after BUY/SELL).
+- SAFETY RULE: if the chart's own price (title line "O.. H.. L.. C..") differs from the data for the chosen
+  instrument by more than 3% (markets) / 5% (stocks), the bot answers CAN'T JUDGE YET and asks for the name - it
+  never analyses an instrument that does not match the picture. Small gaps (futures vs spot, e.g. GC=F vs XAU/USD
+  ~0.3%) are measured and the data is shifted to the chart's price; tracking uses the same shift.
+- Title line also gives the timeframe (e.g. "· 15 · OANDA"); 15-minute-or-less charts are judged on real 15-minute
+  bars (last 60 days) instead of hourly bars, and the reply names the data used.
+- TradingView long/short position tool: the pale green (target) and red (stop) boxes are found (bridging candles
+  drawn on top, solid candles ignored) and their edges priced through the axis -> entry, stop, target, side.
+Rehearsal on a mock XAU/USD 15-min long chart: read entry 4,046.49 / stop 4,034.93 / target 4,057.44, 0.30% futures
+gap adjusted, verdict RISKY (against the 15-min downtrend, stop only 0.3% away, 47 vs 51 needed).
+
+## D90 (2026-11-06) Hourly message = TIPS UPDATE for every tip (Nifty pulse removed)
+Owner: every hourly update must show each tip given so far and from now on; no Nifty line. The hourly scan now
+sends (swing/tip_status.py): new signals / actions first, the owner's recorded trades, then every tip -
+system tips (pending: vs buy zone; open: gain, Rs P&L on the tip quantity, distance to stop and target),
+the hourly-scan "BUY ... tomorrow" signals (journal/scan_signals.csv) until the 6:40 pm list confirms or drops them,
+and every forwarded tip (stocks and index/forex/gold/crypto calls) grouped by channel, with my verdict at the
+time and "if you took it: ..." advice. Each line: icon, plain status (in profit / close to stop / target
+reached today ...) and one "what to do". Finished forwarded calls are shown once on the day they finish.
+- (6 Nov, after the 2:20 pm update) Owner: only a few tips were shown. The update listed only tips still being
+  tracked with entry+stop+target. Now EVERY tip of the last 60 days is listed every hour: system tips (finished ones
+  with their result), and every forwarded tip - tracked ones in full, finished ones with right/wrong, option tips /
+  "skip" tips / tips without levels with the price change since forwarding, and unreadable messages so nothing
+  disappears. The same tip forwarded twice shows once. Tips forwarded since the previous update are marked 🆕.
+
+## D91 Clean-up: fully automated, no Claude, less noise (owner's choices)
+- Daily research message: sent only when an idea is ADOPTED (tips change); otherwise counts go to the Saturday summary.
+- Evening HTML report file: sent once a week with the Saturday summary instead of every evening.
+- "Smart money" lines removed from the evening message (never tested).
+- Saturday message is now: channel scorecards (all time) + every tip of the week (closed right/wrong, open in
+  profit/loss, waiting, not tracked) + research count + how many hourly updates ran. Technical self-check notes stay
+  in the log.
+- Removed: windows/ laptop scripts, the paid Claude review option (review.py, claude_review settings, weekly Claude
+  proposal step), the Claude-fed dashboard (dashboard_export.py, dashboard_page.html, the stale dashboard page),
+  and the 8 switched-off Claude scheduled tasks. Kept: validated-mode fallback (v1) and feed-ready library items.
+- cron-job.org: no longer needed (runs restart themselves); the owner deletes the job and its GitHub key.
+
+## D92 (2026-11-11) Owner's "day-trader-skill" request, rebuilt for NSE without Claude
+Source: github.com/Jakeschincariol/day-trader-skill (MIT, 11 US day-trading Claude skills). Rebuilt as automatic
+GitHub + Telegram parts for NSE; nothing needs a Claude session.
+- PAID, APPROVED BY THE OWNER: Kite Connect "Connect" app, Rs 500/month, for live quotes and historical candles
+  (market data only). Why: faster, more reliable prices for the 1-minute alerts and intraday scanner than Yahoo.
+  If the credit runs out or the owner does not log in, everything falls back to free Yahoo prices.
+- NOT BUILT (owner's choice): order placement. SEBI/NSE require API orders to come from a registered static IP since
+  April 2026; GitHub runners have changing IPs, and the owner declined the paid static-IP service. Instead every tip
+  gets a risk-checked ORDER TICKET the owner places in the Kite app; "✅ I placed it" records the trade.
+- Daily login: Zerodha requires a human login each day. 08:45 IST link -> Zerodha -> GitHub Pages kite-login.html ->
+  Telegram /start kite_<request_token> -> token exchange with the secret (GitHub Secrets only). The access token is
+  stored encrypted (Fernet, key from the API secret) in data/private and expires 06:00 IST.
+- Risk check (owner: standard limits): 1% loss per trade, 2% daily loss stop, 3 new trades a day, 25% max order,
+  stop required, free cash. On tickets and on /bought (warning).
+- Instant alerts every minute 09:15-15:30 (entry / near stop / stop / target / 4% day move), once per event per day.
+- Time Machine: 10,000 seeded bootstrap replays from the instrument's own bars, stop-first on ties; on every reply and
+  evening tip. A simulation, not a prediction.
+- NSE filings: important announcements, results calendar, insider/promoter trades (PIT feed; takeover-disclosure
+  fallback), quarterly results summary; 09:00 morning brief and 15-minute filing alerts for followed stocks. Insider
+  records are archived daily; "buy after promoter buying" will be tested once enough history exists (the free feed
+  has no long history - it cannot be honestly back-tested today).
+- Intraday PAPER trading only (owner's choice): ORB / flag / oversold bounce on completed 5-minute bars, sized to lose
+  Rs 450 at the stop, closed 15:20, after charges. No tips; it may only tip after passing walk-forward tests and the
+  owner's yes. 2-week paper review of tickets + intraday sent automatically.
+- Not adapted: US Congress (Pelosi) tracker -> replaced by Indian insider/promoter disclosures; US pattern-day-trader
+  rules (not applicable in India).

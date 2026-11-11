@@ -110,20 +110,6 @@ def rollback_check(settings, bt):
     return msg + " - within tolerance."
 
 
-def claude_effect():
-    t = journal.load_tips()
-    t = t[(t["status"] == "closed") & t["claude_verdict"].notna() & (t["claude_verdict"].astype(str) != "")]
-    if len(t) < 20:
-        return f"Claude review: {len(t)} reviewed trades closed - too few to judge; it remains an explainer only."
-    g = t.groupby("claude_verdict")["r_multiple"].agg(["count", "mean"]).round(2)
-    ok = g["mean"].get("OK")
-    caut = g.drop(index="OK", errors="ignore")
-    helped = ok is not None and len(caut) and (caut["mean"] < ok).all()
-    return (f"Claude review by verdict (count, avg R): {g.to_dict('index')}. "
-            + ("Trades Claude flagged did worse - review appears useful (still advisory only)."
-               if helped else "No evidence the review improves results - kept as an explainer only."))
-
-
 def tip_checker_review(min_tips=30):
     """Is the Telegram tip-checker's verdict actually useful? (GOOD tips should beat AVOID tips.)"""
     from . import tipcheck
@@ -137,7 +123,7 @@ def tip_checker_review(min_tips=30):
         msg = (f"Tip checker WARNING: GOOD tips hit target {good['target_hit_pct']}% vs AVOID {avoid['target_hit_pct']}% "
                f"- its verdicts are not helping; flagged in IMPROVEMENTS.md for review.")
         with open(IMPROVEMENTS, "a", encoding="utf-8") as f:
-            f.write(f"\n- {date.today()}: {msg} (needs a human/Claude review of tipcheck.py rules)\n")
+            f.write(f"\n- {date.today()}: {msg} (tip-checker rules need review)\n")
         return msg
     return f"Tip checker verdicts by outcome: {bv}"
 
@@ -153,28 +139,6 @@ def rotate_holdout(data_end):
         changelog(f"- Holdout rotated: {hs.date()} -> {new} (older data joins walk-forward).")
         return f"Holdout rotated to start {new}"
     return f"Holdout unchanged (starts {hs.date()})"
-
-
-def ask_claude_for_proposals(summary):
-    exe = shutil.which("claude")
-    if not exe:
-        return "Claude CLI not found; no new proposals drafted."
-    prompt = ("You help maintain a swing-trading research system. Based on this weekly summary, propose AT MOST 2 "
-              "simple, economically-motivated parameter changes (not curve fitting). Output ONLY blocks like:\n"
-              "```proposal\nid: Cx\nstatus: proposed\nwritten: " + str(date.today()) +
-              "\nreason: <one sentence why this should work, written before testing>\n"
-              "overrides: {\"param\": value}\n```\nAllowed params: " + ", ".join(load_strategy("v1").keys()) +
-              "\n\nSUMMARY:\n" + summary)
-    try:
-        r = subprocess.run([exe, "-p", prompt], capture_output=True, text=True, timeout=300, encoding="utf-8")
-        blocks = BLOCK.findall(r.stdout or "")
-        if blocks:
-            with open(IMPROVEMENTS, "a", encoding="utf-8") as f:
-                for b in blocks[:2]:
-                    f.write("\n```proposal\n" + b.strip() + "\n```\n")
-        return f"Claude drafted {len(blocks[:2])} proposal(s) for NEXT week's test."
-    except Exception as e:
-        return f"Claude proposal step failed: {e}"
 
 
 def refresh_aggressive(out, settings):
@@ -392,10 +356,7 @@ def run():
 
     notes.append(strategy_search(live, live_table))
     notes.append(tip_checker_review())
-    notes.append(claude_effect())
     notes.append(rotate_holdout(live_res["data_end"]))
-    if settings.get("claude_review"):
-        notes.append(ask_claude_for_proposals("\n".join(notes)))
     notes.append(f"Variants tried so far: {validate.n_variants()}")
     try:   # lifelong data store status + backups to your own Telegram (trades/tips weekly, data archive monthly)
         from . import archive

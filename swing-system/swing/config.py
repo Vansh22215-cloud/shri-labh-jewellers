@@ -55,7 +55,7 @@ def load_settings(path=None):
     defaults = {
         "capital": 45000, "kill_switch": False, "mode": "paper",
         "paper_start_date": "2026-11-02", "paper_weeks": 8,
-        "claude_review": False, "claude_review_max_stocks": 6,
+
         "telegram_bot_token": "", "telegram_chat_id": "", "live_strategy": "v1",
         "tips_mode": "validated", "aggressive_strategy": "a1", "aggressive_hard_stop_pct": 20,
     }

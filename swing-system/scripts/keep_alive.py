@@ -41,12 +41,23 @@ def main():
                 return f"another run is already {status}"
         except Exception:
             pass
-    # 2) crash-loop guard: count recent hand-overs
+    # 2) crash-loop guard: count recent hand-overs from runs that ended within minutes (a healthy run that ends
+    #    early on purpose - e.g. to pick up new program code - is not counted)
     now = time.time()
     try:
         hist = [t for t in json.loads(LOG.read_text()) if now - t < 3600]
     except Exception:
         hist = []
+    lasted_min = None
+    try:
+        info = requests.get(f"{API}/repos/{repo}/actions/runs/{run_id}", headers=h, timeout=20).json()
+        from datetime import datetime
+        started = datetime.fromisoformat(info["run_started_at"].replace("Z", "+00:00")).timestamp()
+        lasted_min = (now - started) / 60
+    except Exception:
+        pass
+    if lasted_min is not None and lasted_min >= 8:
+        hist = []                                    # this run was healthy: reset the counter
     if len(hist) >= 4:
         try:
             from swing import telegram
