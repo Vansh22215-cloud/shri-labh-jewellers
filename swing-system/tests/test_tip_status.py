@@ -29,6 +29,8 @@ def test_update_lists_every_tip_and_no_nifty_pulse(monkeypatch, tmp_path):
                  "Forwarded from Dark Horse", "TATASTEEL", "If you took it", "3 tip(s) listed"):
         assert part in t, part
     assert "Nifty" not in t
+    ts.record_signals(str(pd.Timestamp.today().date()), [{"symbol": "AJANTPHARM", "entry_low": 3240, "entry_high": 3290,
+                                                           "stop": 3020, "target1": 3600, "qty": 1}])
     assert set(ts.symbols_needed()) >= {"TATASTEEL", "AJANTPHARM"}
 
 
