@@ -133,6 +133,9 @@ def scan_signals(snap, tips, today):
         return []
     sg = pd.read_csv(SIGNALS_F)
     sg = sg[pd.to_datetime(sg["date"]) >= pd.Timestamp(today) - pd.Timedelta(days=1)]
+    from .journal import tips_start
+    if tips_start():
+        sg = sg[sg["date"].astype(str) >= tips_start()]
     confirmed = set(tips.loc[tips["kind"] == "tip", "symbol"] + " " + tips.loc[tips["kind"] == "tip", "date"].astype(str))
     out = []
     for _, r in sg.drop_duplicates("symbol", keep="last").iterrows():

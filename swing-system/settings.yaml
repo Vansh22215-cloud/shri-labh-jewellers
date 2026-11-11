@@ -12,6 +12,8 @@ kill_switch: false
 #   validated  = tips only when a strategy passes the strict validation gate (safest; currently none passes)
 #   aggressive = you asked for daily ideas anyway: uses the best strategy the system can find today,
 #                clearly labelled NOT validated, with hard safety brakes (see DECISIONS.md D52-D55)
+# Owner's reset on 2026-11-11: system tips before this day are retired (archived in journal/tips_retired.csv).
+tips_start_date: "2026-11-11"
 tips_mode: aggressive
 aggressive_strategy: a3
 # Stop ALL aggressive tips if their total result reaches this loss (% of capital).

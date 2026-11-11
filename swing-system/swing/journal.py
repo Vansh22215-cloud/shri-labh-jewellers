@@ -20,13 +20,35 @@ COLUMNS = ["date", "symbol", "kind", "strategy", "setup", "score", "signal_close
            "exit_date", "exit_price", "exit_reason", "pnl", "r_multiple", "days"]
 
 
+RETIRED = JOURNAL / "tips_retired.csv"
+
+
+def tips_start():
+    """Owner's reset: tips dated before this day are retired (kept in tips_retired.csv, never shown or followed)."""
+    try:
+        from .config import load_settings
+        return str(load_settings().get("tips_start_date") or "")
+    except Exception:
+        return ""
+
+
 def load_tips():
     if TIPS.exists():
         df = pd.read_csv(TIPS, dtype={"claude_verdict": str})
         for c in COLUMNS:
             if c not in df.columns:
                 df[c] = np.nan
-        return df[COLUMNS]
+        df = df[COLUMNS]
+        cut = tips_start()
+        if cut:
+            old = df["date"].astype(str) < cut
+            if old.any():   # move them to the archive once (the honest record is kept, just not used)
+                prev = pd.read_csv(RETIRED, dtype=str) if RETIRED.exists() else pd.DataFrame(columns=COLUMNS)
+                arch = pd.concat([prev, df[old].astype(str)], ignore_index=True).drop_duplicates(["date", "symbol", "kind"])
+                arch.to_csv(RETIRED, index=False)
+                df = df[~old].reset_index(drop=True)
+                df.to_csv(TIPS, index=False)
+        return df
     return pd.DataFrame(columns=COLUMNS)
 
 
