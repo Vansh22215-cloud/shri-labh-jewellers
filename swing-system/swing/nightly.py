@@ -456,18 +456,12 @@ def run():
         lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines), label="evening trades")
-    try:   # an order ticket per tip, risk-checked, with ✅ / ⏭ buttons (owner places it in the Kite app)
-        from . import risk
-        from .bot import send_ticket
-        tok, chat = (settings.get("telegram_bot_token") or "").strip(), str(settings.get("telegram_chat_id") or "").strip()
-        for pl in (tips or [])[:3]:
-            entry = round((pl["entry_low"] + pl["entry_high"]) / 2, 2)
-            q = min(int(pl["qty"]), risk.size(entry, pl["stop"])) or int(pl["qty"])
-            t = risk.new_ticket(pl["symbol"], "buy", entry, pl["stop"], pl["target1"], f"system tip {day}", qty=q)
-            if tok and chat:
-                send_ticket(tok, chat, t)
+    try:   # owner's format (D95): each confirmed tip as a ranked "Normal trade" message
+        from .live_engine import evening_tips
+        n_sent = evening_tips(tips or [], day, settings)
+        log.info("Evening: %d normal trade tip(s) sent", n_sent)
     except Exception as e:
-        log.warning("tickets failed: %s", type(e).__name__)
+        log.warning("evening tips failed: %s", type(e).__name__)
     # the full HTML report file is sent once a week (Saturday summary), not every evening (owner's choice)
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,

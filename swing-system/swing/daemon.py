@@ -269,10 +269,16 @@ def minute_tasks(t=None):
                       "\n\n<i>Research, not advice.</i>")
     except Exception as e:
         log.warning("Daemon: filings check failed: %s", type(e).__name__)
+    engine_on = False
+    try:   # the LIVE MARKET ENGINE: whole-market scanning 09:14-15:30 in a background thread (D95)
+        from . import live_engine
+        engine_on = live_engine.ensure_running(pd_now(t).tz_localize(None) if pd_now(t).tzinfo else pd_now(t))
+    except Exception as e:
+        log.warning("Daemon: live engine failed to start: %s", type(e).__name__)
     try:   # intraday PAPER trading (no tips): every 5 minutes 09:35-15:25
         global _last_intraday
         m = t.hour * 60 + t.minute
-        if wd and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
+        if wd and not engine_on and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
             _last_intraday = time.time()
             global _intraday_thread
             if _intraday_thread is None or not _intraday_thread.is_alive():   # runs beside the bot, never blocks it

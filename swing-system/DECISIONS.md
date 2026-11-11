@@ -531,3 +531,26 @@ Owner: "I want intraday too ... use the most of the new GitHub system". Changed 
   Until the first test, all three send, labelled "AGGRESSIVE - not yet validated". Paper tracking of all setups
   continues regardless. Earlier free-data search (D5x): intraday lost money after charges - so expect few or no
   setups to pass; the rule decides, not hope.
+
+## D95 (2026-11-11) Live market engine; Telegram carries only tips, exit alerts, Kite login, company of the day
+Owner: too many messages; wants F&O + intraday + normal trades found continuously across the whole market on
+Kite data, back-tested, risk-evaluated, ranked x/10, in the owner's sample formats; no daily cap; risk by quality.
+- Telegram gate (telegram.ALLOWED): trade tip, exit alert, kite login, company of the day. Everything else (hourly
+  update, morning brief, filings, weekly summary, research notices, tickets, replies to forwarded tips) is log-only.
+  Forwarded tips are still checked and tracked silently. Commands (/status, /kite, /bought ...) still answer.
+- swing/live_engine.py runs 09:14-15:31 in a background thread: ~400 most-traded stocks + all F&O underlyings +
+  Nifty/Bank Nifty; Kite 5-minute candles in a rotation (~2.5 requests/s), quotes every 30 s; intraday setups
+  (ORB, flag, bounce, VWAP reclaim/rejection) on the bar that just closed; swing strategy (a3) on live prices every
+  15 minutes; evening confirmed tips in the same format.
+- Quality gates before ranking: with the daily trend, trigger-bar volume >= 1.5x, Time Machine target-first >=
+  stop-first, setups that failed the Kite-history test need rank 9. RANK 1-10 = 20% back-tested edge, 20% Time
+  Machine, 15% daily trend, 15% relative volume, 10% pattern-library confluence, 10% reward:risk, 10% liquidity
+  (weights fixed, not fitted). Sent only at rank >= 8 (settings min_rank). Replay of 11 Nov, 60 stocks: 103 setups,
+  13 passed the gates.
+- Risk by rank: stocks 1% / 1.5% / 2% of capital (rank 6 / 7-8 / 9-10); options 2% / 3% / 5%.
+- F&O = option BUYING only (owner): nearest expiry with >= 3 days left, slightly-ITM strike first, live premium,
+  OI and spread <= 3% checks, targets = the stock's targets repriced with the option's implied volatility, stop-loss
+  on the SPOT on 75-minute candle closes, lot size; skipped if the loss at the stop exceeds the rank's limit or one
+  lot costs more than half the capital (so few stock options fit Rs 45,000 - honest consequence of the limits).
+- Every tip is stored in journal/live_tips.csv; exit alerts once each: target 1..n, stop-loss, 3:15 pm intraday
+  square-off. Option targets are not back-tested (expired contracts have no free history); the stock setup is.
