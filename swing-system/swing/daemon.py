@@ -215,7 +215,10 @@ def _run_backtest():
         txt = run()
         if txt:
             _send(txt)
-            log.info("Intraday setups tested on Kite history")
+            from .intraday_paper import SETUPS_F
+            d = json.loads(SETUPS_F.read_text())
+            log.info("Intraday setups tested on Kite history: allowed %s; %s", d.get("allowed"),
+                     {k: (v.get("trades"), v.get("avg_net")) for k, v in d.get("stats", {}).items()})
     except Exception as e:
         log.warning("Daemon: intraday backtest failed: %s", type(e).__name__)
 
