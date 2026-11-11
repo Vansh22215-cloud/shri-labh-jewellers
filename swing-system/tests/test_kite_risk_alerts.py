@@ -170,7 +170,7 @@ def test_login_refusal_explains_why(monkeypatch, tmp_path):
     monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
                                                                        "message": "Invalid `checksum`."}))
     ok, msg = kite.exchange("reqtok99")
-    assert not ok and "API SECRET" in msg and "Invalid `checksum`" in msg
+    assert not ok and "API SECRET" in msg and "Invalid `checksum`" in msg and "6 characters" in msg
     monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
                                                                        "message": "Token is invalid or has expired."}))
     assert "expired" in kite.exchange("reqtok99")[1]

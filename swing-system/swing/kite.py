@@ -78,8 +78,12 @@ def exchange(request_token):
         log.warning("Kite login refused by Zerodha: HTTP %s %s %s", r.status_code, etype, emsg)   # no secrets in these
         low = (etype + " " + emsg).lower()
         if "checksum" in low or "api_secret" in low or "api secret" in low:
-            why = ("the API SECRET in GitHub does not match your Kite app. In GitHub -> Settings -> Secrets and "
-                   "variables -> Actions, tap KITE_API_SECRET -> Update, paste the API secret again (not the key).")
+            k_, s_ = keys()
+            same = " It is IDENTICAL to the API key - the key was pasted into the secret." if s_ == k_ else ""
+            why = ("the API SECRET in GitHub does not match your Kite app. The stored secret has "
+                   f"{len(s_)} characters (Kite secrets usually have 32).{same} In GitHub -> Settings -> Secrets and "
+                   "variables -> Actions, tap KITE_API_SECRET -> Update, paste the API secret (tap 'Show API secret' "
+                   "on the Kite app page first; not the key), then tell me so I restart the system.")
         elif "api_key" in low or "api key" in low:
             why = "the API KEY in GitHub does not match your Kite app - update KITE_API_KEY in GitHub Secrets."
         elif "expired" in low or "invalid" in low or "token" in low:
