@@ -1,1 +1,8 @@
-date,symbol,kind,strategy,setup,score,signal_close,entry_low,entry_high,stop,target1,target2,qty,claude_verdict,status,entry_date,entry_price,exit_date,exit_price,exit_reason,pnl,r_multiple,days
+date,symbol,kind,strategy,setup,score,signal_close,entry_low,entry_high,stop,target1,target2,qty,claude_verdict,status
+2026-11-11,WELCORP,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,77.5,2212.4,2138.77,2286.03,1770.61,3095.99,3979.57,1,,pending
+2026-11-11,CYIENT,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,75.0,1100.0,1073.45,1126.55,940.7,1418.61,1737.21,2,,pending
+2026-11-11,AVALON,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,68.0,2039.9,1970.2,2109.6,1621.7,2876.3,3712.7,1,,pending
+2026-11-11,TDPOWERSYS,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,67.5,609.9,586.75,633.05,470.98,887.74,1165.59,3,,pending
+2026-11-11,GESHIP,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,59.1,1435.3,1404.3,1466.3,1249.28,1807.34,2179.39,2,,pending
+2026-11-11,RPTECH,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,55.3,691.15,667.89,714.41,551.61,970.24,1249.32,3,,pending
+2026-11-11,EMIL,tip,a3,Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend,54.2,145.52,140.98,150.06,118.29,199.98,254.45,16,,pending
