@@ -114,3 +114,13 @@ def test_bot_login_and_button(monkeypatch, tmp_path):
     calls.clear()
     bot.handle_button("T", "1", {"id": "q2", "data": "placed:1234", "message": {"chat": {"id": 999}}})
     assert len(calls) == 1 and "Not your ticket" in calls[0][1]["text"]      # strangers can't press it
+
+
+def test_status_command(monkeypatch, tmp_path):
+    from swing import bot
+    _keys(monkeypatch, tmp_path)
+    assert "not logged in" in bot.status_text()
+    kite.save_token("T")
+    monkeypatch.setattr(kite, "quotes", lambda syms: {"NIFTY50": {"last": 25367.6, "high": 1, "low": 1}})
+    t = bot.status_text()
+    assert "✅ connected" in t and "NIFTY50 25,367.60 (Zerodha, live)" in t

@@ -29,6 +29,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
+        "/status - is Kite connected, live test price, last alert check\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
 
@@ -212,6 +213,8 @@ def handle(token, owner, msg, capital):
         ok, reply = kite.exchange(text.split("kite_", 1)[1].strip())
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
+    elif text.startswith("/status"):
+        reply = status_text()
     elif text.startswith("/report"):
         reply = _report_summary()
     elif text.startswith("/score"):
@@ -237,6 +240,32 @@ def handle(token, owner, msg, capital):
         except Exception as e:
             log.warning("sending ticket failed: %s", type(e).__name__)
     return owner
+
+
+def status_text():
+    """/status: is Kite connected, a live test price and where it came from, the alerts' last check."""
+    import json as _j
+    from . import kite
+    from .config import DATA
+    L = ["🩺 System status"]
+    if not kite.configured():
+        L.append("Kite: not set up (keys missing in GitHub Secrets) - using Yahoo prices.")
+    elif kite.logged_in():
+        q = kite.quotes(["NIFTY50", "RELIANCE"])
+        if q:
+            L.append("Kite: ✅ connected until 6 am - live prices from Zerodha.")
+            L += [f"Test: {k} {v['last']:,.2f} (Zerodha, live)" for k, v in q.items()]
+        else:
+            L.append("Kite: logged in, but Zerodha did not answer the price test just now - using Yahoo meanwhile.")
+    else:
+        L.append(f"Kite: not logged in today - using Yahoo prices. Log in: {kite.login_url()}")
+    try:
+        a = _j.loads((DATA / "alerts_last.json").read_text())
+        L.append(f"Alerts: last check {a['at'][11:16]} on {a['source']} prices, {a['priced']} of {a['items']} "
+                 "trades/tips priced (checked every minute 9:15-3:30 on market days).")
+    except Exception:
+        L.append("Alerts: no check yet (they run every minute 9:15-3:30 on market days).")
+    return "\n".join(L)
 
 
 def handle_button(token, owner, cq):
