@@ -569,3 +569,19 @@ Kite data, back-tested, risk-evaluated, ranked x/10, in the owner's sample forma
   it once; it then works on every NSE chart and updates by itself. Every Telegram tip links straight to the chart.
   Differences are possible where TradingView's and Zerodha's candles differ slightly, and the indicator cannot apply
   the rank (Time Machine / back-test) - the Telegram tip is the ranked one.
+
+## D97 (2026-11-12) Owner: intraday tips hit the stop within minutes - fixes and a learning loop
+- BUG (main cause of "instant" SL alerts): exit checks used the stock's WHOLE-DAY high/low, so a dip from before the
+  tip counted as a stop-loss hit (and an earlier high as a target hit). Now only candles that began after the tip,
+  the live price and the running high/low since the tip count. Same fix for the owner's own trades bought today.
+- Noise-proof stops: at least 1 x ATR(14, 5-min) from the entry (widened), at most 3 x (else skipped); targets reset
+  to 1R/2R/3R. Same function in the live engine and the weekly Kite-history test.
+- Follow-through at send time: price must still hold the trigger and be at most 0.3R past it; the tip uses the live
+  price. Market direction: longs only with Nifty at/above its open, shorts only at/below.
+- Evidence (replay, 60 days x 80 liquid stocks, free 5-min data): old rules 11,387 trades, avg +0.03R, stop first
+  43%; new rules 1,266 trades, avg +0.10R, stop first 40% (before ~0.10R charges). By setup at a 2R target, positive
+  in BOTH months: EMA pullback, VWAP, ORB, RANGE -> on; INSIDE, FLAG -> off; GAPGO, BOUNCE too few -> off
+  (REPLAY_SEED until the Kite-history test of these rules, which re-runs tonight because the rules version changed).
+- Learning loop: every setup that passes the gates (sent or not) is followed to its result (data/engine_shadow.csv);
+  per setup the last 40 results blend into the rank's edge (live weight grows to 100% at 40 results) and a setup with
+  >= 12 results and a negative average is paused automatically (rank 10 only). It switches back on when it recovers.

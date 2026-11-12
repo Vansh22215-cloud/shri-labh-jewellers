@@ -296,6 +296,12 @@ def minute_tasks(t=None):
         from . import kite
         from .intraday_paper import SETUPS_F
         age = (time.time() - SETUPS_F.stat().st_mtime) / 86400 if SETUPS_F.exists() else 99
+        try:
+            from .setups import RULES_VERSION
+            if json.loads(SETUPS_F.read_text()).get("rules_version") != RULES_VERSION:
+                age = 99                     # the rules changed: test them again tonight
+        except Exception:
+            age = 99
         if wd and t.hour * 60 + t.minute >= 15 * 60 + 45 and t.hour < 23 and age >= 6.5 and kite.logged_in() \
                 and (_bt_thread is None or not _bt_thread.is_alive()) and claim_once("intraday backtest", t):
             import threading

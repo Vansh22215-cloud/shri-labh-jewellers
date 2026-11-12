@@ -107,6 +107,8 @@ def items(today):
 def events(it, q):
     """-> list of (event code, message) for one item given its live quote {'last','high','low'}."""
     px, hi, lo = q["last"], q.get("high", q["last"]), q.get("low", q["last"])
+    if it.get("day") and it.get("now") is not None and it["day"] == str(it["now"].date()):
+        hi = lo = px          # bought today: the day's earlier high/low happened before the trade (bug fixed 12 Nov)
     buy = it["side"] != "sell"
     nm, lab = f"<b>{E(it['name'])}</b>", E(it["label"])
     out = []

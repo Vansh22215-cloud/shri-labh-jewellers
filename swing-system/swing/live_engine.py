@@ -91,10 +91,16 @@ def fno_underlyings():
 
 # ----------------------------------------------------------------------------- ranking
 def _setup_stats():
+    """Kite-history test results for the CURRENT rules; until that test has run, the documented replay seed."""
+    from .setups import REPLAY_SEED, RULES_VERSION
     try:
-        return json.loads((DATA / "intraday_setups.json").read_text()).get("stats", {})
+        d = json.loads((DATA / "intraday_setups.json").read_text())
+        if d.get("rules_version") == RULES_VERSION:
+            return d.get("stats", {})
     except Exception:
-        return {}
+        pass
+    return {k: {"avg_net": round(min(v["older_r"], v["newer_r"]) * 450 - 45, 1), "allowed": v["allowed"]}
+            for k, v in REPLAY_SEED.items()}
 
 
 def daily_context(sym):
@@ -157,8 +163,101 @@ def gates(c, ctx, tm, stats=None):
         return False, "Time Machine: the stop comes first more often"
     st = stats.get(c["setup"])
     if st and not st.get("allowed") and c["setup"] != "SWING":
-        return "strict", "setup failed the Kite-history test"
+        return False, "setup does not make money after charges in both test halves"
     return True, ""
+
+
+def follow_through(c, q, max_chase_r=0.3):
+    """At the moment of sending: the price must still hold the trigger and not have run more than 0.3R past it."""
+    px = (q or {}).get("last")
+    if not px:
+        return True, None
+    risk = abs(c["entry"] - c["stop"])
+    move = (px - c["entry"]) * (1 if c["side"] == "buy" else -1)
+    return (-0.1 * risk <= move <= max_chase_r * risk), px
+
+
+def market_agrees(c, nq):
+    """Longs only while Nifty is at/above today's open, shorts only while at/below it."""
+    if not nq or not nq.get("open"):
+        return True
+    return nq["last"] >= nq["open"] if c["side"] == "buy" else nq["last"] <= nq["open"]
+
+
+SHADOW_F = DATA / "engine_shadow.csv"
+
+
+def record_shadow(c, r, now):
+    """Every setup that passed the gates (sent or not) is followed to its result - the learning sample."""
+    try:
+        with _LOCK:
+            old = pd.read_csv(SHADOW_F) if SHADOW_F.exists() else pd.DataFrame()
+            day = str(now.date())
+            if len(old) and ((old["symbol"] == c["symbol"]) & (old["setup"] == c["setup"]) & (old["day"] == day)).any():
+                return
+            row = {"day": day, "time": str(now)[:16], "symbol": c["symbol"], "setup": c["setup"], "side": c["side"],
+                   "entry": c["entry"], "stop": c["stop"], "t1": c["targets"][0], "rank": r, "status": "open",
+                   "result_r": None}
+            pd.concat([old, pd.DataFrame([row])], ignore_index=True).tail(20000).to_csv(SHADOW_F, index=False)
+    except Exception as e:
+        log.warning("shadow record failed: %s", type(e).__name__)
+
+
+def update_shadows(candles, now):
+    """Result of each followed setup: +1R at target 1, -1R at the stop, the R at 15:20 otherwise (stop first)."""
+    if not SHADOW_F.exists():
+        return
+    with _LOCK:
+        sh = pd.read_csv(SHADOW_F)
+        sh["status"] = sh["status"].astype(object)
+        for i, r in sh[sh["status"] == "open"].iterrows():
+            b = (candles or {}).get(r["symbol"])
+            if b is None:
+                continue
+            t0 = pd.Timestamp(str(r["time"])).floor("5min") + pd.Timedelta(minutes=5)
+            day_end = pd.Timestamp(r["day"]) + pd.Timedelta(hours=15, minutes=20)
+            after = b[(b.index >= t0) & (b.index < day_end)]
+            buy = r["side"] == "buy"
+            risk = abs(r["entry"] - r["stop"])
+            res = None
+            for _, x in after.iterrows():
+                if (x["low"] <= r["stop"]) if buy else (x["high"] >= r["stop"]):
+                    res = -1.0; break
+                if (x["high"] >= r["t1"]) if buy else (x["low"] <= r["t1"]):
+                    res = 1.0; break
+            if res is None and now >= day_end and len(after):
+                res = ((float(after["close"].iloc[-1]) - r["entry"]) * (1 if buy else -1)) / risk if risk else 0.0
+            if res is not None:
+                sh.loc[i, "status"], sh.loc[i, "result_r"] = "closed", round(res, 2)
+        sh.to_csv(SHADOW_F, index=False)
+
+
+def live_record(last_n=40, min_n=12):
+    """Per setup, from the followed live setups: win rate, average R, and 'paused' when it keeps losing."""
+    if not SHADOW_F.exists():
+        return {}
+    sh = pd.read_csv(SHADOW_F)
+    sh = sh[sh["status"] == "closed"]
+    out = {}
+    for st, g in sh.groupby("setup"):
+        g = g.tail(last_n)
+        avg = float(g["result_r"].mean())
+        out[st] = {"n": int(len(g)), "win_pct": round((g["result_r"] > 0).mean() * 100, 1), "avg_r": round(avg, 2),
+                   "paused": bool(len(g) >= min_n and avg < 0)}
+    return out
+
+
+def learned_stats():
+    """Back-test stats blended with the live record (live weight grows with the number of live results)."""
+    st = {k: dict(v) for k, v in _setup_stats().items()}
+    for k, v in live_record().items():
+        w = min(1.0, v["n"] / 40)
+        base = st.get(k, {"avg_net": 0.0, "allowed": True})
+        live_net = v["avg_r"] * 450                         # 1R = Rs 450 (1% of capital)
+        base["avg_net"] = (1 - w) * (base.get("avg_net") or 0) + w * live_net
+        base["allowed"] = bool(base.get("allowed", True)) and not v["paused"]
+        st[k] = base
+    return st
 
 
 def risk_pct(r, kind):
@@ -201,16 +300,16 @@ def intraday_candidates(sym, bars, prev_close, now):
     today = today[today.index + pd.Timedelta(minutes=5) <= now]
     if len(today) < 4:
         return []
+    from .setups import atr, noise_proof
     out = []
     last_ts = today.index[-1]
+    a_now = float(atr(bars[bars.index <= last_ts]).iloc[-1]) if len(bars) > 5 else None
     for sg in all_signals(today, prev_close):
         if pd.Timestamp(sg["entry_time"]) != last_ts:
             continue
-        r = abs(sg["entry"] - sg["stop"])
-        if r <= 0 or r / sg["entry"] < 0.002:
+        sg = noise_proof(sg, a_now)
+        if sg is None:
             continue
-        sgn = 1 if sg["side"] == "buy" else -1
-        sg["targets"] = [round(sg["entry"] + sgn * k * r, 2) for k in (1.0, 2.0, 3.0)]
         av = today["volume"].iloc[-21:-1].mean()
         sg["rel_vol"] = float(today["volume"].iloc[-1] / av) if av else 1.0
         sg["symbol"] = sym
@@ -326,7 +425,8 @@ def fmt_normal(c, r, qty, rp, tomorrow=False):
 
 # ----------------------------------------------------------------------------- tip store + exits
 COLS = ["id", "time", "type", "symbol", "side", "entry", "stop", "targets", "rank", "qty", "contract", "lot",
-        "premium", "opt_targets", "spot_sl", "status", "hit", "day"]
+        "premium", "opt_targets", "spot_sl", "status", "hit", "day", "setup", "hi_since", "lo_since", "closed_at",
+        "result_r"]
 
 
 _LOCK = threading.RLock()       # the scan loop and the swing pass both write the tip file
@@ -399,7 +499,24 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
             q = quotes.get(sym)
             if not q:
                 continue
-            px, hi, lo = q["last"], q.get("high", q["last"]), q.get("low", q["last"])
+            # ONLY prices AFTER the tip was sent count (bug fixed 12 Nov: the whole day's high/low was used, so a
+            # dip from before the tip looked like a stop-loss hit). Candles after the tip time + the live price.
+            px = q["last"]
+            hi = lo = px
+            try:
+                sent_at = pd.Timestamp(str(r["time"]))
+            except Exception:
+                sent_at = now
+            if candles is not None and sym in candles:
+                b = candles[sym]
+                after = b[b.index >= sent_at.floor("5min") + pd.Timedelta(minutes=5)]   # bars that began after the tip
+                if len(after):
+                    hi, lo = max(hi, float(after["high"].max())), min(lo, float(after["low"].min()))
+            if pd.notna(r.get("hi_since")):
+                hi = max(hi, float(r["hi_since"]))
+            if pd.notna(r.get("lo_since")):
+                lo = min(lo, float(r["lo_since"]))
+            t.loc[i, "hi_since"], t.loc[i, "lo_since"] = hi, lo
             buy = r["side"] == "buy"
             tg = [float(x) for x in str(r["targets"]).split("/") if x]
             if (lo <= float(r["stop"])) if buy else (hi >= float(r["stop"])):
@@ -407,7 +524,7 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                 msgs.append(f"⛔️ #{sym} - stop-loss {_n(r['stop'])} hit. Exit." +
                             (" (intraday)" if r["type"] == "INTRADAY" else ""))
                 continue
-            while hit < len(tg) and ((px >= tg[hit]) if buy else (px <= tg[hit])):
+            while hit < len(tg) and ((hi >= tg[hit]) if buy else (lo <= tg[hit])):
                 hit += 1
                 msgs.append(f"✅ #{sym} - Target {hit} hit ({_n(tg[hit - 1])})" +
                             (" - all targets done, book profit" if hit == len(tg) else " - book part, move SL to cost"))
@@ -455,12 +572,28 @@ class Engine:
         ok, why = gates(c, self._ctx(c["symbol"]), tm)
         if not ok:
             return
-        r, parts = rank(c, self._ctx(c["symbol"]), tm)
-        if r < (9 if ok == "strict" else int(settings.get("min_rank", 8))):
+        r, parts = rank(c, self._ctx(c["symbol"]), tm, stats=learned_stats())
+        record_shadow(c, r, now)           # every qualified setup is followed, sent or not - the model learns from all
+        lv = live_record().get(c["setup"], {})
+        need = int(settings.get("min_rank", 8))
+        if ok == "strict" or lv.get("paused"):
+            need = 10 if lv.get("paused") else 9
+        if r < need:
             return
         q = self.quotes.get(c["symbol"]) or {}
         if c["symbol"] not in ("NIFTY50", "BANKNIFTY") and q.get("value_cr") is not None and q["value_cr"] < 1.0:
             return            # under Rs 1 crore traded today: too thin to trade safely (slippage, circuit risk)
+        ok_ft, px = follow_through(c, q)
+        if not ok_ft:
+            return            # the breakout already failed, or the price ran away - not a good entry any more
+        if not market_agrees(c, self.quotes.get("NIFTY50")):
+            return            # buying while Nifty falls (or shorting while it rises) loses more often
+        if px:
+            sgn = 1 if c["side"] == "buy" else -1
+            risk = abs(c["entry"] - c["stop"])
+            c["entry"] = round(px, 2)
+            c["stop"] = round(px - sgn * risk, 2)
+            c["targets"] = [round(px + sgn * k * risk, 2) for k in (1.0, 2.0, 3.0)]
         c["why"] = WORD.get(c["setup"], c["setup"])
         if c["symbol"] not in ("NIFTY50", "BANKNIFTY") and not already(c["symbol"], "INTRADAY", day) \
                 and now.hour * 60 + now.minute <= 14 * 60 + 30:
@@ -593,6 +726,7 @@ class Engine:
                 try:
                     oq = self.refresh_quotes()
                     exits(self.quotes, now, oq, self.candles)
+                    update_shadows(self.candles, now)
                 except Exception as e:
                     log.warning("engine quotes/exits: %s", type(e).__name__)
             if m >= 9 * 60 + 20 and time.time() - self.last_swing >= 900:

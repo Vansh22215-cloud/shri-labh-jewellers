@@ -51,7 +51,8 @@ def test_live_tips_respect_settings_time_cap_and_allowed(monkeypatch, tmp_path):
     out = ip.send_tips(new, now, settings=s)
     assert len(out) == 2 and "INTRADAY TIP" in sent[0] and "not yet validated" in sent[0]  # cap 2, labelled
     import json
-    ip.SETUPS_F.write_text(json.dumps({"allowed": ["FLAG"]}))
+    from swing.setups import RULES_VERSION
+    ip.SETUPS_F.write_text(json.dumps({"allowed": ["FLAG"], "rules_version": RULES_VERSION}))
     sent.clear()
     assert ip.send_tips(new, now, settings=s) == set()                                     # ORB failed the test
 

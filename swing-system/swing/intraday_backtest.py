@@ -55,11 +55,31 @@ def history(sym, days=200):
     return pd.concat(parts).sort_index().loc[lambda d: ~d.index.duplicated()]
 
 
-def simulate_day(day_bars, prev_close):
-    """All setup trades of one stock-day, with exits, after charges. -> list of dicts."""
+def simulate_day(day_bars, prev_close, atr_series=None, nifty_day=None, trend_up=None):
+    """All setup trades of one stock-day, with exits, after charges - with the SAME rules as the live engine:
+    noise-proof stop (>= 1 ATR), trigger bar volume >= 1.5x, with the daily trend, Nifty on the trade's side of its
+    open. -> list of dicts."""
     out = []
-    from .setups import all_signals
+    from .setups import all_signals, noise_proof
+    vol_avg = day_bars["volume"].rolling(20, min_periods=5).mean().shift(1)
     for sg in all_signals(day_bars, prev_close):
+        ts = sg["entry_time"]
+        if atr_series is not None:
+            a = atr_series.get(ts) if hasattr(atr_series, "get") else None
+            sg = noise_proof(sg, float(a) if a is not None else None)
+            if sg is None:
+                continue
+        v_ok = day_bars.at[ts, "volume"] >= 1.5 * (vol_avg.get(ts) or float("inf"))
+        if atr_series is not None and not v_ok:
+            continue
+        if trend_up is not None and (sg["side"] == "buy") != bool(trend_up):
+            continue
+        if nifty_day is not None and len(nifty_day):
+            nb = nifty_day[nifty_day.index <= ts]
+            if len(nb):
+                up = float(nb["close"].iloc[-1]) >= float(nifty_day["open"].iloc[0])
+                if (sg["side"] == "buy") != up:
+                    continue
         risk_ps = abs(sg["entry"] - sg["stop"])
         if risk_ps <= 0:
             continue
@@ -95,17 +115,29 @@ def run(symbols=None, days=200, max_symbols=100):
     if symbols is None:
         from .archive import intraday_universe
         symbols = intraday_universe()[:max_symbols]
+    from .setups import atr
+    from . import data_prices
     trades = []
+    nifty = history("NIFTY 50", days)
+    nifty_by_day = {d: g for d, g in nifty.groupby(nifty.index.date)} if nifty is not None else {}
     for s in symbols:
         h = history(s, days)
         if h is None or not len(h):
             continue
+        a_all = atr(h)
         closes = h.groupby(h.index.date)["close"].last()
         prev = closes.shift(1)
+        dly = data_prices.load(s)
+        s200 = dly["close"].rolling(200).mean() if dly is not None and len(dly) > 200 else None
         for d, g in h.groupby(h.index.date):
             if len(g) < 20:
                 continue
-            for t in simulate_day(g, prev.get(d)):
+            trend = None
+            if s200 is not None:
+                past = dly.index[dly.index < pd.Timestamp(d)]
+                if len(past) and pd.notna(s200.loc[past[-1]]):
+                    trend = bool(dly["close"].loc[past[-1]] > s200.loc[past[-1]])
+            for t in simulate_day(g, prev.get(d), a_all, nifty_by_day.get(d), trend):
                 t["symbol"] = s
                 trades.append(t)
     return decide(pd.DataFrame(trades), len(symbols))
@@ -128,7 +160,9 @@ def decide(tr, n_symbols=0):
             lines.append(f"{'✅' if ok else '❌'} {SETUP_WORDS.get(st, st)}: {len(g)} trades, {stats[st]['win_pct']:.0f}% "
                          f"won, average ₹{stats[st]['avg_net']:+,.0f} per trade after charges (older half "
                          f"₹{stats[st]['older_avg'] or 0:+,.0f}, newer half ₹{stats[st]['newer_avg'] or 0:+,.0f})")
+    from .setups import RULES_VERSION
     ip.SETUPS_F.write_text(json.dumps({"allowed": allowed, "stats": stats, "tested": str(pd.Timestamp.now().date()),
+                                       "rules_version": RULES_VERSION,
                                        "symbols": n_symbols, "rule": f">= {MIN_TRADES} trades and profit after charges "
                                                                      "in both halves"}, indent=1))
     head = (f"🧪 <b>Intraday setups tested on Kite history</b> ({n_symbols} stocks, last ~200 days of 5-minute bars, "

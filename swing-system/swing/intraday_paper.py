@@ -236,13 +236,16 @@ SETUP_WORDS = {"ORB": "opening-range breakout", "FLAG": "bull flag breakout", "B
 
 
 def allowed_setups():
-    """-> (set of setups allowed to send tips, validated?) from the Kite-history test; all three until it has run."""
+    """-> (set of setups allowed to send tips, validated?) from the Kite-history test of the current rules."""
     import json
+    from .setups import REPLAY_SEED, RULES_VERSION
     try:
         d = json.loads(SETUPS_F.read_text())
-        return set(d.get("allowed", [])), True
+        if d.get("rules_version") == RULES_VERSION:
+            return set(d.get("allowed", [])), True
     except Exception:
-        return set(SETUP_WORDS), False
+        pass
+    return {k for k, v in REPLAY_SEED.items() if v["allowed"]}, False
 
 
 def send_tips(new, now, source="Yahoo", settings=None):

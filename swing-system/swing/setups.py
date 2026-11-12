@@ -143,3 +143,50 @@ def all_signals(b, prev_close=None):
 WORDS = {"ORB": "opening-range breakout", "FLAG": "flag breakout", "BOUNCE": "oversold bounce",
          "VWAP": "VWAP reclaim", "RANGE": "range breakout", "EMAPB": "trend pullback to EMA",
          "INSIDE": "inside-bar breakout", "GAPGO": "gap and go", "SWING": "swing setup"}
+
+
+def atr(b, n=14):
+    """Average true range of 5-minute bars (uses the previous days' bars too, so it exists from the first bar)."""
+    pc = b["close"].shift(1)
+    tr = pd.concat([b["high"] - b["low"], (b["high"] - pc).abs(), (b["low"] - pc).abs()], axis=1).max(axis=1)
+    return tr.rolling(n, min_periods=5).mean()
+
+
+def noise_proof(sg, a, min_atr=1.0, max_atr=3.0):
+    """Stops inside normal 5-minute noise get hit by noise, not by the idea being wrong (owner's 12 Nov finding).
+    Stop at least min_atr x ATR away (widened if closer), at most max_atr x ATR (else the trade is skipped).
+    Targets are re-set at 1R / 2R / 3R from the final risk. Returns the adjusted setup or None. Used live AND in the
+    weekly back-test."""
+    if a is None or not np.isfinite(a) or a <= 0:
+        return None
+    sgn = 1 if sg["side"] == "buy" else -1
+    risk = (sg["entry"] - sg["stop"]) * sgn
+    if risk <= 0:
+        return None
+    if risk < min_atr * a:
+        risk = min_atr * a
+    if risk > max_atr * a:
+        return None
+    out = dict(sg)
+    out["stop"] = sg["entry"] - sgn * risk
+    out["target"] = sg["entry"] + sgn * risk
+    out["targets"] = [round(sg["entry"] + sgn * k * risk, 2) for k in (1.0, 2.0, 3.0)]
+    return out
+
+
+# Rules version: the weekly Kite-history test re-runs as soon as the rules change.
+RULES_VERSION = "2026-11-12-noiseproof"
+# Seed until the Kite-history test has run with these rules: replay of 60 days x 80 liquid stocks (free 5-minute data,
+# 12 Nov 2026) with the live rules (noise-proof stop, 1.5x volume, daily trend, Nifty side). Average R per trade at a
+# 2R target, older month / newer month, before ~0.10R charges. A setup is on only if positive in BOTH months after
+# charges (the same fixed rule as the weekly test; ORB/RANGE/VWAP/EMAPB pass, INSIDE/FLAG fail, GAPGO/BOUNCE too few).
+REPLAY_SEED = {
+    "EMAPB": {"trades": 304, "older_r": 0.12, "newer_r": 0.39, "allowed": True},
+    "VWAP": {"trades": 271, "older_r": 0.12, "newer_r": 0.25, "allowed": True},
+    "ORB": {"trades": 284, "older_r": 0.20, "newer_r": 0.15, "allowed": True},
+    "RANGE": {"trades": 1251, "older_r": 0.10, "newer_r": 0.19, "allowed": True},
+    "INSIDE": {"trades": 295, "older_r": -0.00, "newer_r": 0.13, "allowed": False},
+    "FLAG": {"trades": 19, "older_r": -0.42, "newer_r": 0.01, "allowed": False},
+    "GAPGO": {"trades": 20, "older_r": 0.71, "newer_r": 0.09, "allowed": False},
+    "BOUNCE": {"trades": 19, "older_r": -0.25, "newer_r": 0.32, "allowed": False},
+}
