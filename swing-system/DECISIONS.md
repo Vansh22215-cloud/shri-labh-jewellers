@@ -585,3 +585,21 @@ Kite data, back-tested, risk-evaluated, ranked x/10, in the owner's sample forma
 - Learning loop: every setup that passes the gates (sent or not) is followed to its result (data/engine_shadow.csv);
   per setup the last 40 results blend into the rank's edge (live weight grows to 100% at 40 results) and a setup with
   >= 12 results and a negative average is paused automatically (rank 10 only). It switches back on when it recovers.
+
+## D98 (2026-11-12) Owner: "7-8 of 10 trades must be in profit" - high-probability dip buy becomes the main tip
+Searched the documented high-win-rate strategies (Connors RSI-2 and relatives: Double 7s, IBS, cumulative RSI,
+3-day pullback - commonly reported at 70-80% winners on US indices). Tested on 13 years of NSE data
+(validation/high_prob_research.py: point-in-time top-300 liquidity universe, next-open entries/exits, 0.35% charges
++ slippage per trade; filters chosen on 2013-2023-10, holdout 2023-11..2026-11 only checked). ~21 variants tried.
+- Plain versions on NSE stocks: 56-63% winners (lower than the US claims - individual stocks + real charges).
+- Chosen (best on the development years, confirmed on the holdout): RSI(2) < 2, stock >= 10% above its 200-day
+  average, Nifty above its 200-day average with Nifty RSI(2) < 20; sell at the next open after the first close
+  above the 5-day average; safety stop 4 x ATR; 10-day time limit. 1,660 trades: 71.9% winners, +1.74% per trade
+  after charges (avg win +3.9%, avg loss -3.9%); holdout 70.1% winners, +2.06%. Worst year 38.5% winners.
+- It trades only when the market dips inside an uptrend: 19 such days in 2024, 36 in 2025, 8 in 2026 (Nifty was
+  below its 200-day average for 170 of 212 days in 2026 and crossed back above on 12 Nov). It waits rather than
+  forcing trades.
+- Telegram: evening "Buy tomorrow at open" in the Normal-trade format (RANK 9-10, 2% risk), sell alert when it
+  closes above the 5-day average, time-limit alert, safety stop watched live.
+- Switched OFF: a3 swing tips (~53% winners; settings normal_a3_tips) and intraday tips until a setup proves >= 65%
+  winners over >= 40 live results (settings intraday_mode: auto). Intraday setups keep being followed silently.

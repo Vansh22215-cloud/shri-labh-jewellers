@@ -456,10 +456,14 @@ def run():
         lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines), label="evening trades")
-    try:   # owner's format (D95): each confirmed tip as a ranked "Normal trade" message
-        from .live_engine import evening_tips
-        n_sent = evening_tips(tips or [], day, settings)
-        log.info("Evening: %d normal trade tip(s) sent", n_sent)
+    try:   # D98: the high-probability dip buy is the main Normal-trade strategy (~70% of tested trades in profit)
+        from . import high_prob
+        high_prob.evening_exits(day)
+        n_hp = high_prob.send_evening(day, settings)
+        log.info("Evening: %d high-probability tip(s) sent", n_hp)
+        if settings.get("normal_a3_tips", False):      # the older a3 swing tips (53% winners) only if switched on
+            from .live_engine import evening_tips
+            evening_tips(tips or [], day, settings)
     except Exception as e:
         log.warning("evening tips failed: %s", type(e).__name__)
     # the full HTML report file is sent once a week (Saturday summary), not every evening (owner's choice)

@@ -528,7 +528,7 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                 hit += 1
                 msgs.append(f"✅ #{sym} - Target {hit} hit ({_n(tg[hit - 1])})" +
                             (" - all targets done, book profit" if hit == len(tg) else " - book part, move SL to cost"))
-            if hit >= len(tg):
+            if tg and hit >= len(tg):
                 t.loc[i, "status"] = "done"
             elif r["type"] == "INTRADAY" and now.hour * 60 + now.minute >= 15 * 60 + 15:
                 t.loc[i, "status"] = "squared"
@@ -575,6 +575,9 @@ class Engine:
         r, parts = rank(c, self._ctx(c["symbol"]), tm, stats=learned_stats())
         record_shadow(c, r, now)           # every qualified setup is followed, sent or not - the model learns from all
         lv = live_record().get(c["setup"], {})
+        if settings.get("intraday_mode", "auto") == "auto" and not (
+                lv.get("n", 0) >= 40 and lv.get("win_pct", 0) >= 65 and lv.get("avg_r", 0) > 0):
+            return            # D98: intraday tips only once a setup PROVES >= 65% winners over >= 40 live results
         need = int(settings.get("min_rank", 8))
         if ok == "strict" or lv.get("paused"):
             need = 10 if lv.get("paused") else 9
@@ -729,7 +732,7 @@ class Engine:
                     update_shadows(self.candles, now)
                 except Exception as e:
                     log.warning("engine quotes/exits: %s", type(e).__name__)
-            if m >= 9 * 60 + 20 and time.time() - self.last_swing >= 900:
+            if settings.get("normal_a3_tips", False) and m >= 9 * 60 + 20 and time.time() - self.last_swing >= 900:
                 self.last_swing = time.time()
                 threading.Thread(target=self.swing_pass, args=(now, settings), daemon=True).start()
             if not kite.logged_in():
