@@ -618,3 +618,19 @@ Searched the documented high-win-rate strategies (Connors RSI-2 and relatives: D
   above the rank's limit (5% at rank 9-10) or a lot costs > half the capital.
 - Market on 13 Nov: Nifty 25,299, above its 200-day average (23,992), 2-day RSI 100 - not a dip day. Tips (stock +
   option) come on the next market dip inside this uptrend.
+
+## D100 (2026-11-13) Forwarded F&O tips: probability out of 10, reasons, take the good ones; notes for other messages
+- Bot replies to forwarded messages again (owner's request; settings reply_to_forwarded).
+- F&O tips (e.g. "VOLTAS NOV 1120 PE 25-26 / Target-35-42-50-58+ / Stoploss-1150 SPOT (75 Min CB) / Lot 375"):
+  parser now reads the premium range right after the strike, a stop-loss on SPOT and the candle basis.
+  swing/fno_analyst.py: live spot + option premium/OI/spread (Kite), exact expiry and lot; implied volatility from
+  the premium; premium targets/stop -> spot levels (Black-Scholes, some time decay allowed); PROBABILITY of target 1
+  before the stop = mean of the Time Machine on the stock's 5-minute bars (to expiry, max 5 days) and the stock's
+  daily history; adjusted for daily trend, option price vs real volatility (IV/HV), days to expiry, chasing,
+  spread, and the channel's record (30% weight once it has 10+ finished calls). Reply: PROBABILITY x/10, why it can
+  work / fail, plan, per-lot gain/loss, a better version (next expiry, fairer stop).
+- TAKEN when probability >= 7/10, target 1 pays at least what the stop costs, and the loss per lot fits the limit
+  for that quality (5% / 3% of capital): tracked with exit alerts like the system's own F&O tips. Every forwarded
+  call is also followed to its result, so each channel's record (and its weight) improves with time.
+- Other forwarded messages (views, news, commentary): mood, stocks and levels are read and kept privately with
+  that channel (data/private/channel_notes.csv); two-line "noted" reply.

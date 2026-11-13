@@ -18,6 +18,8 @@ tips_mode: aggressive
 # Live engine (D95): only trades ranked at least this (1-10) are sent; no daily cap (owner's choice).
 # D98 (owner wants 7-8 of 10 tips in profit): main tips = high-probability dip buy (about 70% winners in tests).
 # Intraday tips only once a setup PROVES >= 65% winners over >= 40 live results ("auto"); "off" = never.
+# D100: the bot replies to forwarded tips/messages (F&O: probability /10 + reasons; others: short note)
+reply_to_forwarded: true
 intraday_mode: auto
 normal_a3_tips: false   # the older a3 swing tips won only ~53% of trades
 min_rank: 8   # raise to 9 for even fewer, stronger tips
