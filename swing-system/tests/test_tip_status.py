@@ -29,6 +29,8 @@ def test_update_lists_every_tip_and_no_nifty_pulse(monkeypatch, tmp_path):
                  "Forwarded from Dark Horse", "TATASTEEL", "If you took it", "3 tip(s) listed"):
         assert part in t, part
     assert "Nifty" not in t
+    ts.record_signals(str(pd.Timestamp.today().date()), [{"symbol": "AJANTPHARM", "entry_low": 3240, "entry_high": 3290,
+                                                           "stop": 3020, "target1": 3600, "qty": 1}])
     assert set(ts.symbols_needed()) >= {"TATASTEEL", "AJANTPHARM"}
 
 
@@ -80,3 +82,16 @@ def test_weekly_summary_scorecards_and_every_tip(monkeypatch, tmp_path):
                  "Channel scorecards", "SG: 1 of 2 finished calls were right", "ICICIBANK", "₹+250 on 5",
                  "closed - target reached", "closed - stop hit"):
         assert part in t, part
+
+
+def test_owner_reset_retires_old_tips(monkeypatch, tmp_path):
+    from swing import journal
+    monkeypatch.setattr(journal, "TIPS", tmp_path / "tips.csv")
+    monkeypatch.setattr(journal, "RETIRED", tmp_path / "retired.csv")
+    pd.DataFrame([{"date": "2026-11-03", "symbol": "OLD", "kind": "tip"},
+                  {"date": "2026-11-11", "symbol": "NEW", "kind": "tip"}]).to_csv(journal.TIPS, index=False)
+    monkeypatch.setattr(journal, "tips_start", lambda: "2026-11-11")
+    t = journal.load_tips()
+    assert list(t["symbol"]) == ["NEW"]
+    assert list(pd.read_csv(journal.RETIRED)["symbol"]) == ["OLD"]                 # kept, not destroyed
+    assert list(pd.read_csv(journal.TIPS)["symbol"]) == ["NEW"]

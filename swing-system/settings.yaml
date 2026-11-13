@@ -12,7 +12,21 @@ kill_switch: false
 #   validated  = tips only when a strategy passes the strict validation gate (safest; currently none passes)
 #   aggressive = you asked for daily ideas anyway: uses the best strategy the system can find today,
 #                clearly labelled NOT validated, with hard safety brakes (see DECISIONS.md D52-D55)
+# Owner's reset on 2026-11-11: system tips before this day are retired (archived in journal/tips_retired.csv).
+tips_start_date: "2026-11-11"
 tips_mode: aggressive
+# Live engine (D95): only trades ranked at least this (1-10) are sent; no daily cap (owner's choice).
+# D98 (owner wants 7-8 of 10 tips in profit): main tips = high-probability dip buy (about 70% winners in tests).
+# Intraday tips only once a setup PROVES >= 65% winners over >= 40 live results ("auto"); "off" = never.
+# D100: the bot replies to forwarded tips/messages (F&O: probability /10 + reasons; others: short note)
+reply_to_forwarded: true
+intraday_mode: auto
+normal_a3_tips: false   # the older a3 swing tips won only ~53% of trades
+min_rank: 8   # raise to 9 for even fewer, stronger tips
+# Owner's choice 2026-11-11: live intraday tips (aggressive). Only setups passing the Kite-history test keep
+# sending (DECISIONS D94). Max tips a day, none after 2:30 pm.
+intraday_tips: false   # the live engine sends intraday tips now (D95)
+intraday_max_tips: 2
 aggressive_strategy: a3
 # Stop ALL aggressive tips if their total result reaches this loss (% of capital).
 aggressive_hard_stop_pct: 20

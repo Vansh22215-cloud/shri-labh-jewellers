@@ -88,17 +88,23 @@ def parse_option(text, eq=None):
     after = t[m.end():]
     em = re.search(r"\b(?:AT|ABOVE|NEAR|AROUND|BUY|@|CMP|RANGE)\b[^0-9]{0,10}(\d[\d,]*(?:\.\d+)?)(?:\s*(?:-|TO|–)\s*(\d[\d,]*(?:\.\d+)?))?", after)
     e_lo = e_hi = None
+    direct = re.match(r"\s*[-:@]?\s*(\d[\d,]*(?:\.\d+)?)(?:\s*(?:-|TO|–)\s*(\d[\d,]*(?:\.\d+)?))?", after)
+    if not em and direct and not re.match(r"\s*\d+\s*(?:LOT|QTY)", after):   # "1120 PE 25-26": premium right after
+        em = direct
     if em:
         a = float(em.group(1).replace(",", ""))
         b = float(em.group(2).replace(",", "")) if em.group(2) else a
         e_lo, e_hi = min(a, b), max(a, b)
     sl = re.search(r"\b(?:SL|STOP ?LOSS|STOPLOSS|STOP)\b[^0-9]{0,6}(\d[\d,]*(?:\.\d+)?)", t)
+    sl_spot = bool(sl and re.match(r"\s*(?:SPOT|ON SPOT|UNDERLYING|CASH)", t[sl.end():]))
+    cb = re.search(r"(\d+)\s*MIN(?:UTE)?S?\s*(?:CB|CLOSING|CANDLE)", t)
     tg = re.search(r"\b(?:TGT|TARGETS?|TG)\b[^0-9]{0,6}((?:\d[\d,]*(?:\.\d+)?\s*[-/,&\s]\s*)*\d[\d,]*(?:\.\d+)?)", t)
     lot = re.search(r"\bLOT(?:\s*SIZE)?\b[^0-9]{0,6}(\d+)", t)
     return {"symbol": base["symbol"], "kind": kind, "strike": strike,
             "month": MONTHS[mon.group(1)[:3]] if mon else None,
             "entry_low": e_lo, "entry_high": e_hi, "stop": float(sl.group(1).replace(",", "")) if sl else None,
             "targets": nums(tg.group(1)) if tg else [], "lot": int(lot.group(1)) if lot else None,
+            "stop_on_spot": sl_spot, "stop_candle_min": int(cb.group(1)) if cb else None,
             "raw": text.strip()[:500]}
 
 

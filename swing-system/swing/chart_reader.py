@@ -228,6 +228,25 @@ def position_tool(img, axis):
     return None
 
 
+def _arrow_colour(arr, x0, y0, y1, width=110):
+    """Green or red mark just LEFT of a text line (watchlist arrows) -> 'up' / 'down' / None."""
+    try:
+        reg = arr[max(0, y0 - 4):y1 + 4, max(0, x0 - width):max(0, x0 - 4)]
+        if reg.size == 0:
+            return None
+        R, G, B = reg[..., 0], reg[..., 1], reg[..., 2]
+        green = ((G > 120) & (G - R > 50) & (G - B > 30)).sum()
+        red = ((R > 150) & (R - G > 70) & (R - B > 50)).sum()
+        n = reg.shape[0] * reg.shape[1]
+        if green > 0.04 * n and green > 2 * red:
+            return "up"
+        if red > 0.04 * n and red > 2 * green:
+            return "down"
+    except Exception:
+        pass
+    return None
+
+
 def read_image(path):
     """-> {'text': all words read, 'levels': prices of drawn lines, 'patterns': [(name, side)], 'axis': bool}"""
     from PIL import Image
@@ -238,12 +257,16 @@ def read_image(path):
         img = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
     res, _ = _ocr()(np.asarray(img.convert("RGB")))
     res = res or []
-    words, tokens = [], []
+    words, tokens, boxes = [], [], []
+    arr = np.asarray(img.convert("RGB")).astype(int)
     for box, txt, conf in res:
         xs, ys = [p[0] for p in box], [p[1] for p in box]
         tokens.append((min(xs), (min(ys) + max(ys)) / 2, _price_token(txt)))
         if float(conf) >= 0.5:
             words.append(_spaced(txt))
+            x0, y0, x1, y1 = int(min(xs)), int(min(ys)), int(max(xs)), int(max(ys))
+            boxes.append({"x0": x0, "y0": y0, "x1": x1, "y1": y1, "h": y1 - y0, "text": _spaced(txt),
+                          "conf": float(conf), "arrow": _arrow_colour(arr, x0, y0, y1)})
     text = " ".join(words)
     axis = fit_axis(tokens, img.width)
     levels, rng = [], None
@@ -261,7 +284,8 @@ def read_image(path):
             if name in ("head and shoulders",) and "inverse head and shoulders" in [p[0] for p in pats]:
                 continue
             pats.append((name, side))
-    out = {"text": text, "levels": sorted(set(levels)), "patterns": pats, "axis": bool(axis), "range": rng}
+    out = {"text": text, "levels": sorted(set(levels)), "patterns": pats, "axis": bool(axis), "range": rng,
+           "boxes": boxes}
     out.update(header_info(text))
     try:
         pos = position_tool(img, axis)

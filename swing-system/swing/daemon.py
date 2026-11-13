@@ -205,6 +205,29 @@ def claim_once(name, t=None):
 
 _last_filings = 0.0
 _last_intraday = 0.0
+_intraday_thread = None
+_bt_thread = None
+
+
+def _run_backtest():
+    try:
+        from .intraday_backtest import run
+        txt = run()
+        if txt:
+            _send(txt)
+            from .intraday_paper import SETUPS_F
+            d = json.loads(SETUPS_F.read_text())
+            log.info("Intraday setups tested on Kite history: allowed %s; %s", d.get("allowed"),
+                     {k: (v.get("trades"), v.get("avg_net")) for k, v in d.get("stats", {}).items()})
+    except Exception as e:
+        log.warning("Daemon: intraday backtest failed: %s", type(e).__name__)
+
+
+def _safe_intraday(fn):
+    try:
+        fn()
+    except Exception as e:
+        log.warning("Daemon: intraday scan failed: %s", type(e).__name__)
 
 
 def minute_tasks(t=None):
@@ -218,10 +241,10 @@ def minute_tasks(t=None):
             if t >= t.replace(hour=8, minute=45, second=0) and t.hour < 15 and claim_once("kite login prompt", t):
                 _send(f"🔑 <b>Log in to Kite for today</b>\n<a href=\"{_html.escape(kite.login_url())}\">Tap here to log in</a> - "
                       "then tap <b>Start</b> when Telegram opens. Live Zerodha prices for alerts and updates until 6 am "
-                      "tomorrow. (Until then I use Yahoo prices.)")
+                      "tomorrow. (Until then I use Yahoo prices.)", label="kite login")
             elif t >= t.replace(hour=9, minute=30, second=0) and t.hour < 15 and claim_once("kite login reminder", t):
                 _send(f"⏰ Reminder: not logged in to Kite yet - alerts are using slower Yahoo prices. "
-                      f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>")
+                      f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>", label="kite login")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
     try:   # 9:00 am morning brief: filings, results due, insider trades for the followed stocks
@@ -249,15 +272,43 @@ def minute_tasks(t=None):
                       "\n\n<i>Research, not advice.</i>")
     except Exception as e:
         log.warning("Daemon: filings check failed: %s", type(e).__name__)
+    engine_on = False
+    try:   # the LIVE MARKET ENGINE: whole-market scanning 09:14-15:30 in a background thread (D95)
+        from . import live_engine
+        engine_on = live_engine.ensure_running(pd_now(t).tz_localize(None) if pd_now(t).tzinfo else pd_now(t))
+    except Exception as e:
+        log.warning("Daemon: live engine failed to start: %s", type(e).__name__)
     try:   # intraday PAPER trading (no tips): every 5 minutes 09:35-15:25
         global _last_intraday
         m = t.hour * 60 + t.minute
-        if wd and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
+        if wd and not engine_on and 9 * 60 + 35 <= m <= 15 * 60 + 25 and time.time() - _last_intraday > 290:
             _last_intraday = time.time()
-            from . import intraday_paper
-            intraday_paper.step()
+            global _intraday_thread
+            if _intraday_thread is None or not _intraday_thread.is_alive():   # runs beside the bot, never blocks it
+                import threading
+                from . import intraday_paper
+                _intraday_thread = threading.Thread(target=_safe_intraday, args=(intraday_paper.step,), daemon=True)
+                _intraday_thread.start()
     except Exception as e:
         log.warning("Daemon: intraday paper failed: %s", type(e).__name__)
+    try:   # weekly test of the intraday setups on Kite history, after the close (needs today's Kite login)
+        global _bt_thread
+        from . import kite
+        from .intraday_paper import SETUPS_F
+        age = (time.time() - SETUPS_F.stat().st_mtime) / 86400 if SETUPS_F.exists() else 99
+        try:
+            from .setups import RULES_VERSION
+            if json.loads(SETUPS_F.read_text()).get("rules_version") != RULES_VERSION:
+                age = 99                     # the rules changed: test them again tonight
+        except Exception:
+            age = 99
+        if wd and t.hour * 60 + t.minute >= 15 * 60 + 45 and t.hour < 23 and age >= 6.5 and kite.logged_in() \
+                and (_bt_thread is None or not _bt_thread.is_alive()) and claim_once("intraday backtest", t):
+            import threading
+            _bt_thread = threading.Thread(target=_run_backtest, daemon=True)
+            _bt_thread.start()
+    except Exception as e:
+        log.warning("Daemon: intraday backtest start failed: %s", type(e).__name__)
     try:
         from . import alerts
         if alerts.market_open(pd_now(t)):
@@ -294,10 +345,10 @@ def pd_now(t):
     return pd.Timestamp(t)
 
 
-def _send(text):
+def _send(text, label="system notice"):
     from . import telegram
     from .config import load_settings
-    telegram.send(load_settings(), text, html=True, label="system notice")
+    telegram.send(load_settings(), text, html=True, label=label)
 
 
 def run():

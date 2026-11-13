@@ -78,8 +78,12 @@ def exchange(request_token):
         log.warning("Kite login refused by Zerodha: HTTP %s %s %s", r.status_code, etype, emsg)   # no secrets in these
         low = (etype + " " + emsg).lower()
         if "checksum" in low or "api_secret" in low or "api secret" in low:
-            why = ("the API SECRET in GitHub does not match your Kite app. In GitHub -> Settings -> Secrets and "
-                   "variables -> Actions, tap KITE_API_SECRET -> Update, paste the API secret again (not the key).")
+            k_, s_ = keys()
+            same = " It is IDENTICAL to the API key - the key was pasted into the secret." if s_ == k_ else ""
+            why = ("the API SECRET in GitHub does not match your Kite app. The stored secret has "
+                   f"{len(s_)} characters (Kite secrets usually have 32).{same} In GitHub -> Settings -> Secrets and "
+                   "variables -> Actions, tap KITE_API_SECRET -> Update, paste the API secret (tap 'Show API secret' "
+                   "on the Kite app page first; not the key), then tell me so I restart the system.")
         elif "api_key" in low or "api key" in low:
             why = "the API KEY in GitHub does not match your Kite app - update KITE_API_KEY in GitHub Secrets."
         elif "expired" in low or "invalid" in low or "token" in low:
@@ -147,7 +151,7 @@ def quotes(symbols):
     try:
         for i in range(0, len(syms), 500):
             chunk = syms[i:i + 500]
-            r = _get("/quote/ohlc", params=[("i", _instrument(s)) for s in chunk])
+            r = _get("/quote", params=[("i", _instrument(s)) for s in chunk])   # full quote: incl. volume
             data = r.json().get("data", {})
             for s in chunk:
                 q = data.get(_instrument(s))
@@ -156,7 +160,9 @@ def quotes(symbols):
                 o = q.get("ohlc", {})
                 out[s] = {"last": float(q["last_price"]), "open": float(o.get("open") or q["last_price"]),
                           "high": float(o.get("high") or q["last_price"]), "low": float(o.get("low") or q["last_price"]),
-                          "prev": float(o.get("close") or q["last_price"])}
+                          "prev": float(o.get("close") or q["last_price"]),
+                          "volume": float(q.get("volume") or 0),
+                          "value_cr": float(q.get("volume") or 0) * float(q["last_price"]) / 1e7 if q.get("volume") else None}
     except Exception as e:
         log.warning("Kite quotes failed (%s) - using Yahoo", type(e).__name__)
         return {}

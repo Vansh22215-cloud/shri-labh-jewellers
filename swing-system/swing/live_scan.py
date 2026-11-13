@@ -80,6 +80,9 @@ def _card(i, pl):
     return "\n".join(lines)
 
 
+LAST_FORMING = []
+
+
 def run(send=True):
     settings = load_settings()
     capital = float(settings["capital"])
@@ -285,6 +288,8 @@ def run(send=True):
     text = "\n\n⁣".join(blocks)
     st.setdefault("scan_sent", {})[str(d.date())] = sorted(sent | {pl["symbol"] for pl in forming})
     st["scan_sent"] = {k: v for k, v in st["scan_sent"].items() if k >= str((d - pd.Timedelta(days=7)).date())}
+    global LAST_FORMING
+    LAST_FORMING = [dict(pl, close_ts=str(last_ts)) for pl in forming]   # read by the live engine (normal trades)
     st["last_scan"] = str(datetime.now())
     save_state(st)
     new_sigs = [pl for pl in forming if pl.get("new")]

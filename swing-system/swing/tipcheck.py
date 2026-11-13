@@ -371,8 +371,31 @@ LAST_TICKET = None   # the ticket made for the last forwarded stock tip (the bot
 
 def check_text(text, source="", capital=45000.0, image=None):
     from . import options_check
+    try:   # D101: a watchlist (3+ stocks named) - rate each stock, send trades that exist now, keep watching them
+        from . import watchlist
+        if watchlist.looks_like_watchlist(text):
+            r = watchlist.handle(text, source)
+            if r:
+                return r
+    except Exception as e:
+        log.warning("watchlist failed: %s", type(e).__name__)
     o = options_check.parse_option(text)
     if o and o.get("symbol"):
+        try:   # D100: deep F&O analysis - probability out of 10, reasons, improved plan; good ones are TAKEN
+            from . import fno_analyst
+            a = fno_analyst.analyse(o, source)
+            if a.get("take"):
+                fno_analyst.take(o, a, source)
+            save({"symbol": o["symbol"], "side": f"{o['strike']:g} {o['kind']}", "horizon": "option", "raw": o["raw"]},
+                 {10: "GOOD", 9: "GOOD", 8: "GOOD", 7: "GOOD", 6: "NEUTRAL", 5: "NEUTRAL"}.get(a.get("score"), "RISKY")
+                 if a.get("score") else "UNKNOWN",
+                 {"entry": a.get("spot"), "stop": a.get("spot_sl"), "target": a.get("spot_t1"), "ltp": a.get("spot"),
+                  "hist_target_first_pct": round(a["p"] * 100, 1) if a.get("p") else None},
+                 source, outcome="open" if a.get("spot_t1") else "n/a",
+                 extra={"kind": "option", "option_score": a.get("score")})
+            return fno_analyst.reply(o, a, source)
+        except Exception as e:
+            log.warning("F&O analyst failed: %s %s", type(e).__name__, e)
         verdict, reasons, d = options_check.evaluate_option(o, capital)
         save({"symbol": o["symbol"], "side": f"{o['strike']:g} {o['kind']}", "horizon": "option",
               "raw": o["raw"]}, verdict, {"entry": d.get("premium"), "stop": o.get("stop"),
@@ -396,6 +419,9 @@ def check_text(text, source="", capital=45000.0, image=None):
                 return r
         except Exception as e:
             log.warning("market view check failed: %s", type(e).__name__)
+    if not tip.get("symbol") and not inst:
+        from . import fno_analyst
+        return fno_analyst.note(text, source)
     verdict, reasons, d = evaluate(tip, capital)
     if image and image.get("chart_price") and d.get("ltp") and abs(image["chart_price"] / d["ltp"] - 1) > 0.05:
         # safety rule: never analyse an instrument whose price does not match the chart

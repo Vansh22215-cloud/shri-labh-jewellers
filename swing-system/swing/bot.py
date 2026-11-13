@@ -172,12 +172,54 @@ def _read_picture(token, msg):
             f.write(r.content); f.flush()
             from .chart_reader import read_image
             out = read_image(f.name)
+        try:
+            from .watchlist import extract_symbols
+            log.info("Picture: %d NSE stock name(s) recognised", len(extract_symbols(out["text"])))
+        except Exception:
+            pass
         log.info("Chart picture read: %d words, %d lines, %d pattern names", len(out["text"].split()),
                  len(out["levels"]), len(out["patterns"]))
         return out
     except Exception as e:
         log.warning("Chart picture could not be read: %s", type(e).__name__)
         return {"text": "", "levels": [], "patterns": [], "axis": False, "failed": True}
+
+
+ALBUMS = {}   # D102: watchlist pictures sent together (one Telegram album) -> one combined list
+
+
+def _watchlist_picture(token, chat, msg, image):
+    """A watchlist picture: True if handled (answered now, or held until the rest of its album is read)."""
+    from . import watchlist
+    try:
+        entries = watchlist.read_entries(image.get("boxes") or [])
+    except Exception as e:
+        log.warning("watchlist picture reading failed: %s", type(e).__name__)
+        return False
+    if len(entries) < 3:
+        return False
+    log.info("Watchlist picture: %d stock line(s) read", len(entries))
+    gid = msg.get("media_group_id")
+    if gid:
+        a = ALBUMS.setdefault(str(gid), {"chat": chat, "reply_to": msg["message_id"], "entries": [], "n": 0,
+                                         "source": _source(msg)})
+        a["entries"] += entries
+        a["n"] += 1
+        return True
+    _send_reply(token, chat, watchlist.handle_entries(entries, _source(msg), 1), msg["message_id"])
+    return True
+
+
+def flush_albums(token):
+    from . import watchlist
+    for gid in list(ALBUMS):
+        a = ALBUMS.pop(gid)
+        try:
+            reply = watchlist.handle_entries(a["entries"], a["source"], a["n"])
+        except Exception as e:
+            log.error("watchlist album failed: %s", type(e).__name__)
+            reply = "Sorry, I hit an error reading those watchlist pictures. It has been logged."
+        _send_reply(token, a["chat"], reply, a["reply_to"])
 
 
 def handle(token, owner, msg, capital):
@@ -190,8 +232,11 @@ def handle(token, owner, msg, capital):
     text = (msg.get("text") or msg.get("caption") or "").strip()
     doc = msg.get("document") or {}
     image = None
+    forwarded_tip = False
     if not str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
         image = _read_picture(token, msg)
+        if image and image.get("boxes") and _watchlist_picture(token, chat, msg, image):
+            return owner
         if image and image.get("text"):
             text = (text + "\n" + image["text"]).strip()     # caption first, then what is written on the chart
         if image and image.get("range"):
@@ -211,6 +256,8 @@ def handle(token, owner, msg, capital):
         # the login hand-back: "/start kite_XXXX", "kite_XXXX", or the whole login page address pasted in
         from . import kite
         ok, reply = kite.exchange(re.search(r"(?:kite_|request_token=)([A-Za-z0-9]{8,64})", text).group(1))
+        if not ok and kite.logged_in():
+            reply = "✅ Already connected to Kite for today - this code was used already, nothing more to do."
     elif text.lower().startswith(("/kite", "/login")):
         from . import kite
         reply = (f"🔑 Log in to Kite: {kite.login_url()}\nAfter logging in, tap Start in Telegram - or, if nothing "
@@ -227,6 +274,7 @@ def handle(token, owner, msg, capital):
     elif text.lower().startswith(("/bought", "/sold", "/trades")):
         reply = trade_command(text)
     else:
+        forwarded_tip = True
         tipcheck.LAST_TICKET = None
         try:
             reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
@@ -236,14 +284,13 @@ def handle(token, owner, msg, capital):
         except Exception as e:
             log.error("tip check failed: %s", e)
             reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."
-    _send_reply(token, chat, reply, msg["message_id"])
-    t = getattr(tipcheck, "LAST_TICKET", None)
-    if t:
+    if forwarded_tip and not load_settings().get("reply_to_forwarded", False):
+        # owner's choice (D95): no replies to forwarded tips/pictures - they are still checked and tracked silently
         tipcheck.LAST_TICKET = None
-        try:
-            send_ticket(token, chat, t)
-        except Exception as e:
-            log.warning("sending ticket failed: %s", type(e).__name__)
+        log.info("Forwarded tip checked and tracked silently (no reply - owner's choice)")
+        return owner
+    _send_reply(token, chat, reply, msg["message_id"])
+    tipcheck.LAST_TICKET = None
     return owner
 
 
@@ -300,17 +347,41 @@ def send_ticket(token, chat, t):
     return _api(token, "sendMessage", **params)
 
 
+def _chunks(text, limit=3900):
+    """Telegram takes 4096 characters a message: split long replies at blank lines (then at line ends)."""
+    out, cur = [], ""
+    for para in text.split("\n\n"):
+        for piece in ([para] if len(para) <= limit else para.split("\n")):
+            add = (("\n\n" if piece is para else "\n") if cur else "") + piece
+            if len(cur) + len(add) > limit and cur:
+                out.append(cur); cur = piece[:limit]
+            else:
+                cur += add
+    if cur:
+        out.append(cur)
+    return out or [""]
+
+
 def _send_reply(token, chat, reply, reply_to):
+    """Long replies go as several messages (first one answers the forwarded message)."""
+    parts = _chunks(reply)
+    for i, p in enumerate(parts):
+        _send_one(token, chat, p, reply_to if i == 0 else None)
+
+
+def _send_one(token, chat, reply, reply_to):
     """Cards are formatted (bold headings); if Telegram rejects the formatting, the same words go as plain text."""
     import html as _h
     import re as _re
     if "<b>" in reply:
+        extra = {"reply_to_message_id": reply_to} if reply_to else {}
         r = _api(token, "sendMessage", chat_id=chat, text=reply[:4000], parse_mode="HTML",
-                 disable_web_page_preview="true", reply_to_message_id=reply_to)
+                 disable_web_page_preview="true", **extra)
         if not isinstance(r, dict) or r.get("ok", True) is not False:
             return
         reply = _h.unescape(_re.sub(r"</?(b|i|pre|code)>", "", reply))
-    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], reply_to_message_id=reply_to)
+    extra = {"reply_to_message_id": reply_to} if reply_to else {}
+    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], **extra)
 
 
 def _updates_problem(token, owner, res, offset):
@@ -350,16 +421,26 @@ def poll_once():
     if not res.get("ok", False):
         res = _updates_problem(token, owner, res, offset)
     n = 0
-    for u in res.get("result", []):
-        OFFSET.write_text(str(u["update_id"] + 1))
-        msg = u.get("message")
-        if msg:
-            owner = handle(token, owner, msg, float(s.get("capital", 45000)))
-            n += 1
-        cq = u.get("callback_query")
-        if cq:
-            handle_button(token, owner, cq)
-            n += 1
+    for _ in range(4):        # an album's pictures can arrive a few seconds apart: wait for the rest, then answer
+        for u in res.get("result", []):
+            OFFSET.write_text(str(u["update_id"] + 1))
+            msg = u.get("message")
+            if msg:
+                owner = handle(token, owner, msg, float(s.get("capital", 45000)))
+                n += 1
+            cq = u.get("callback_query")
+            if cq:
+                handle_button(token, owner, cq)
+                n += 1
+        if not ALBUMS:
+            break
+        import time as _t
+        _t.sleep(3)
+        offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
+        res = _api(token, "getUpdates", offset=offset, timeout=0)
+        if not res.get("ok", False) or not res.get("result"):
+            break
+    flush_albums(token)
     if n:
         log.info("Bot: answered %d message(s)", n)
     return n

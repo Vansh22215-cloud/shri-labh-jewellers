@@ -43,10 +43,14 @@ def items(today):
     try:
         my = journal.load_my_trades()
         for _, r in my.iterrows():
-            out.append({"key": f"my|{r['symbol']}|{r['buy_date']}", "name": r["symbol"], "label": "your trade",
-                        "side": "buy", "entry_lo": None, "entry_hi": None, "entry": float(r["buy_price"]),
-                        "stop": float(r["stop"]) if pd.notna(r.get("stop")) else None, "target": None,
-                        "qty": int(r["qty"]), "kind": "mine", "ticker": None, "offset": 0.0})
+            mis = str(r.get("product", "")) == "MIS"
+            out.append({"key": f"my|{r['symbol']}|{r['buy_date']}", "name": r["symbol"],
+                        "label": "your intraday trade" if mis else "your trade",
+                        "side": "sell" if str(r.get("side", "buy")) == "sell" else "buy", "entry_lo": None, "entry_hi": None,
+                        "entry": float(r["buy_price"]), "stop": float(r["stop"]) if pd.notna(r.get("stop")) else None,
+                        "target": float(r["target"]) if pd.notna(r.get("target")) else None,
+                        "qty": int(r["qty"]), "kind": "mine", "ticker": None, "offset": 0.0, "mis": mis,
+                        "day": str(r["buy_date"])})
     except Exception as e:
         log.warning("alerts: my trades: %s", e)
     try:
@@ -61,6 +65,19 @@ def items(today):
                         "kind": "pending" if r["status"] == "pending" else "open", "ticker": None, "offset": 0.0})
     except Exception as e:
         log.warning("alerts: system tips: %s", e)
+    try:   # today's intraday tips that were sent
+        from .intraday_paper import load as load_intraday
+        it = load_intraday()
+        if "tipped" in it:
+            it = it[(it["date"] == str(today)) & (it["status"] == "open") & it["tipped"].fillna(False).astype(bool)]
+            for _, r in it.iterrows():
+                out.append({"key": f"itd|{r['symbol']}|{r['setup']}|{today}", "name": r["symbol"],
+                            "label": f"intraday tip ({r['setup']})", "side": r["side"], "entry_lo": None,
+                            "entry_hi": None, "entry": float(r["entry"]), "stop": float(r["stop"]),
+                            "target": float(r["target"]), "qty": r.get("qty"), "kind": "open", "ticker": None,
+                            "offset": 0.0})
+    except Exception as e:
+        log.warning("alerts: intraday tips: %s", e)
     if SIGNALS_F.exists():
         sg = pd.read_csv(SIGNALS_F)
         for _, r in sg[sg["date"].astype(str) == str(today)].iterrows():
@@ -90,6 +107,8 @@ def items(today):
 def events(it, q):
     """-> list of (event code, message) for one item given its live quote {'last','high','low'}."""
     px, hi, lo = q["last"], q.get("high", q["last"]), q.get("low", q["last"])
+    if it.get("day") and it.get("now") is not None and it["day"] == str(it["now"].date()):
+        hi = lo = px          # bought today: the day's earlier high/low happened before the trade (bug fixed 12 Nov)
     buy = it["side"] != "sell"
     nm, lab = f"<b>{E(it['name'])}</b>", E(it["label"])
     out = []
@@ -102,7 +121,7 @@ def events(it, q):
     if it.get("stop"):
         hit_s = (lo <= it["stop"]) if buy else (hi >= it["stop"])
         if hit_s:
-            loss = f" (about ₹{(it['stop'] - it['entry']) * it['qty']:+,.0f} on {it['qty']})" \
+            loss = f" (about ₹{(it['stop'] - it['entry']) * it['qty'] * (1 if buy else -1):+,.0f} on {it['qty']})" \
                 if it.get("qty") and it.get("entry") and it["kind"] == "mine" else ""
             out.append(("stop", f"❌ {nm} ({lab}) hit the stop {_f(it['stop'])}{loss} - now {_f(px)}.\n"
                                 "Exit if you hold it and your stop order did not trigger. This is the planned, limited loss."))
@@ -116,6 +135,10 @@ def events(it, q):
         if hit_t:
             out.append(("target", f"🎯 {nm} ({lab}) hit the target {_f(it['target'])} - now {_f(px)}.\n"
                                   "Book profit (at least part), or move your stop up to protect it."))
+    if it.get("mis") and it.get("now") is not None and it.get("day") == str(it["now"].date()) \
+            and it["now"].hour * 60 + it["now"].minute >= 15 * 60 + 10:
+        out.append(("squareoff", f"⏰ {nm} (your intraday trade) - square off NOW: Zerodha closes intraday (MIS) "
+                                 f"positions at 3:20 pm automatically (with a charge). Price now {_f(px)}."))
     if it["kind"] == "mine" and q.get("prev"):
         mv = (px / q["prev"] - 1) * 100
         if abs(mv) >= BIG_MOVE:
@@ -158,6 +181,7 @@ def check(send=True, now=None, quote_fn=None):
         qq = dict(q[k])
         if it["offset"]:
             qq = {kk: (v + it["offset"] if isinstance(v, float) else v) for kk, v in qq.items()}
+        it["now"] = now
         for code, text in events(it, qq):
             fk = f"{it['key']}|{code}|{today}"
             if fk in fired:

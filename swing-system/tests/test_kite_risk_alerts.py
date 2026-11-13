@@ -170,7 +170,26 @@ def test_login_refusal_explains_why(monkeypatch, tmp_path):
     monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
                                                                        "message": "Invalid `checksum`."}))
     ok, msg = kite.exchange("reqtok99")
-    assert not ok and "API SECRET" in msg and "Invalid `checksum`" in msg
+    assert not ok and "API SECRET" in msg and "Invalid `checksum`" in msg and "6 characters" in msg
     monkeypatch.setattr(kite.requests, "post", lambda *a, **k: R(403, {"status": "error", "error_type": "TokenException",
                                                                        "message": "Token is invalid or has expired."}))
     assert "expired" in kite.exchange("reqtok99")[1]
+
+
+def test_second_copy_of_code_when_connected(monkeypatch, tmp_path):
+    from swing import bot
+    calls = []
+    monkeypatch.setattr(bot, "_api", lambda tok, method, **p: calls.append(p.get("text", "")) or {"ok": True})
+    monkeypatch.setattr(kite, "exchange", lambda rt: (False, "❌ expired"))
+    monkeypatch.setattr(kite, "logged_in", lambda now=None: True)
+    bot.handle("T", "1", {"chat": {"id": 1, "type": "private"}, "message_id": 1, "text": "kite_abc12345"}, 45000)
+    assert "Already connected" in calls[-1]
+
+
+def test_square_off_reminder_for_todays_intraday_trade():
+    now = pd.Timestamp("2026-11-12 15:12", tz="Asia/Kolkata")
+    it = {"key": "my|X|d", "name": "X", "label": "your intraday trade", "side": "buy", "entry_lo": None,
+          "entry_hi": None, "entry": 100.0, "stop": 95.0, "target": 110.0, "qty": 1, "kind": "mine", "ticker": None,
+          "offset": 0.0, "mis": True, "day": "2026-11-12", "now": now}
+    assert "squareoff" in [c for c, _ in alerts.events(it, {"last": 101.0, "high": 102, "low": 100})]
+    assert "squareoff" not in [c for c, _ in alerts.events(dict(it, day="2026-11-11"), {"last": 101.0, "high": 102, "low": 100})]

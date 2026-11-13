@@ -516,3 +516,142 @@ history is in CHANGELOG/DECISIONS), and 4 of the 5 fixed GitHub schedules (the a
 hourly schedule stays as a safety net). README and ARCHITECTURE rewritten for the GitHub-only setup. Kept:
 first-time setup scripts (emergency rebuild), strategies a1/a2 (rollback history). Owner deletes the 2 public
 backup artifacts of 3 Nov and the cron-job.org job + its GitHub key.
+
+## D94 (2026-11-11) Live intraday tips (owner's choice), using Kite
+Owner: "I want intraday too ... use the most of the new GitHub system". Changed from paper-only to LIVE tips:
+- Scanner uses Kite's live 5-minute candles for the ~150 most-traded stocks (Yahoo fallback), every 5 minutes
+  09:35-15:25, in a background thread so the bot never waits. Setups unchanged: ORB, bull flag, oversold bounce.
+- A fresh trigger becomes a Telegram INTRADAY TIP (09:35-14:30 only, at most 2 a day, settings intraday_tips /
+  intraday_max_tips) with Time Machine odds from the stock's last 30 days of 5-minute bars, plus a risk-checked MIS
+  ticket (✅ records it, incl. side and product). Alerts follow it every minute; your MIS trades get a 15:10
+  "square off now" reminder. Shorts are allowed only as intraday (MIS).
+- FIXED RULE, written before any result: weekly (weekday after the close, needs that day's Kite login) the setups
+  are tested on ~200 days of Kite 5-minute history for ~100 stocks with the live code, stop-first, 15:20 exit,
+  Zerodha charges; a setup keeps sending tips only with >= 40 trades and profit after charges in BOTH halves.
+  Until the first test, all three send, labelled "AGGRESSIVE - not yet validated". Paper tracking of all setups
+  continues regardless. Earlier free-data search (D5x): intraday lost money after charges - so expect few or no
+  setups to pass; the rule decides, not hope.
+
+## D95 (2026-11-11) Live market engine; Telegram carries only tips, exit alerts, Kite login, company of the day
+Owner: too many messages; wants F&O + intraday + normal trades found continuously across the whole market on
+Kite data, back-tested, risk-evaluated, ranked x/10, in the owner's sample formats; no daily cap; risk by quality.
+- Telegram gate (telegram.ALLOWED): trade tip, exit alert, kite login, company of the day. Everything else (hourly
+  update, morning brief, filings, weekly summary, research notices, tickets, replies to forwarded tips) is log-only.
+  Forwarded tips are still checked and tracked silently. Commands (/status, /kite, /bought ...) still answer.
+- swing/live_engine.py runs 09:14-15:31 in a background thread: ~400 most-traded stocks + all F&O underlyings +
+  Nifty/Bank Nifty; Kite 5-minute candles in a rotation (~2.5 requests/s), quotes every 30 s; intraday setups
+  (ORB, flag, bounce, VWAP reclaim/rejection) on the bar that just closed; swing strategy (a3) on live prices every
+  15 minutes; evening confirmed tips in the same format.
+- Quality gates before ranking: with the daily trend, trigger-bar volume >= 1.5x, Time Machine target-first >=
+  stop-first, setups that failed the Kite-history test need rank 9. RANK 1-10 = 20% back-tested edge, 20% Time
+  Machine, 15% daily trend, 15% relative volume, 10% pattern-library confluence, 10% reward:risk, 10% liquidity
+  (weights fixed, not fitted). Sent only at rank >= 8 (settings min_rank). Replay of 11 Nov, 60 stocks: 103 setups,
+  13 passed the gates.
+- Risk by rank: stocks 1% / 1.5% / 2% of capital (rank 6 / 7-8 / 9-10); options 2% / 3% / 5%.
+- F&O = option BUYING only (owner): nearest expiry with >= 3 days left, slightly-ITM strike first, live premium,
+  OI and spread <= 3% checks, targets = the stock's targets repriced with the option's implied volatility, stop-loss
+  on the SPOT on 75-minute candle closes, lot size; skipped if the loss at the stop exceeds the rank's limit or one
+  lot costs more than half the capital (so few stock options fit Rs 45,000 - honest consequence of the limits).
+- Every tip is stored in journal/live_tips.csv; exit alerts once each: target 1..n, stop-loss, 3:15 pm intraday
+  square-off. Option targets are not back-tested (expired contracts have no free history); the stock setup is.
+
+## D96 (2026-11-12) Whole market, more setups, TradingView chart setups
+- Universe = every NSE equity (EQ/BE, ~2,600) + F&O underlyings + indices. Live quotes for all every 30 s (full
+  quotes incl. volume, 500 per request); 5-minute candles fetched 2-of-3 for the stocks moving NOW (largest % move,
+  at the day's high/low, most traded) and 1-of-3 in a rotation through the rest. Hard floor: < Rs 1 crore traded
+  today is not tipped (slippage / circuit risk).
+- Setup library swing/setups.py (one code for live + weekly Kite-history test): ORB, FLAG, BOUNCE, VWAP, RANGE,
+  EMAPB, INSIDE, GAPGO (+ swing a3). Every setup goes through the same gates, rank and weekly test.
+- TradingView: no API lets an outside system draw on a user's chart (checked). Built instead: Pine Script indicator
+  tradingview/swing_system_setups.pine with the SAME rules and gates (daily trend, 1.5x volume, 09:30-14:30),
+  drawing green profit / red loss boxes, entry / SL / T1-T3 lines, EMA 9/21/50 and VWAP-based setups on 5-minute
+  charts and the a3 swing setup on daily charts; corner table with the latest setup; alert conditions. The owner adds
+  it once; it then works on every NSE chart and updates by itself. Every Telegram tip links straight to the chart.
+  Differences are possible where TradingView's and Zerodha's candles differ slightly, and the indicator cannot apply
+  the rank (Time Machine / back-test) - the Telegram tip is the ranked one.
+
+## D97 (2026-11-12) Owner: intraday tips hit the stop within minutes - fixes and a learning loop
+- BUG (main cause of "instant" SL alerts): exit checks used the stock's WHOLE-DAY high/low, so a dip from before the
+  tip counted as a stop-loss hit (and an earlier high as a target hit). Now only candles that began after the tip,
+  the live price and the running high/low since the tip count. Same fix for the owner's own trades bought today.
+- Noise-proof stops: at least 1 x ATR(14, 5-min) from the entry (widened), at most 3 x (else skipped); targets reset
+  to 1R/2R/3R. Same function in the live engine and the weekly Kite-history test.
+- Follow-through at send time: price must still hold the trigger and be at most 0.3R past it; the tip uses the live
+  price. Market direction: longs only with Nifty at/above its open, shorts only at/below.
+- Evidence (replay, 60 days x 80 liquid stocks, free 5-min data): old rules 11,387 trades, avg +0.03R, stop first
+  43%; new rules 1,266 trades, avg +0.10R, stop first 40% (before ~0.10R charges). By setup at a 2R target, positive
+  in BOTH months: EMA pullback, VWAP, ORB, RANGE -> on; INSIDE, FLAG -> off; GAPGO, BOUNCE too few -> off
+  (REPLAY_SEED until the Kite-history test of these rules, which re-runs tonight because the rules version changed).
+- Learning loop: every setup that passes the gates (sent or not) is followed to its result (data/engine_shadow.csv);
+  per setup the last 40 results blend into the rank's edge (live weight grows to 100% at 40 results) and a setup with
+  >= 12 results and a negative average is paused automatically (rank 10 only). It switches back on when it recovers.
+
+## D98 (2026-11-12) Owner: "7-8 of 10 trades must be in profit" - high-probability dip buy becomes the main tip
+Searched the documented high-win-rate strategies (Connors RSI-2 and relatives: Double 7s, IBS, cumulative RSI,
+3-day pullback - commonly reported at 70-80% winners on US indices). Tested on 13 years of NSE data
+(validation/high_prob_research.py: point-in-time top-300 liquidity universe, next-open entries/exits, 0.35% charges
++ slippage per trade; filters chosen on 2013-2023-10, holdout 2023-11..2026-11 only checked). ~21 variants tried.
+- Plain versions on NSE stocks: 56-63% winners (lower than the US claims - individual stocks + real charges).
+- Chosen (best on the development years, confirmed on the holdout): RSI(2) < 2, stock >= 10% above its 200-day
+  average, Nifty above its 200-day average with Nifty RSI(2) < 20; sell at the next open after the first close
+  above the 5-day average; safety stop 4 x ATR; 10-day time limit. 1,660 trades: 71.9% winners, +1.74% per trade
+  after charges (avg win +3.9%, avg loss -3.9%); holdout 70.1% winners, +2.06%. Worst year 38.5% winners.
+- It trades only when the market dips inside an uptrend: 19 such days in 2024, 36 in 2025, 8 in 2026 (Nifty was
+  below its 200-day average for 170 of 212 days in 2026 and crossed back above on 12 Nov). It waits rather than
+  forcing trades.
+- Telegram: evening "Buy tomorrow at open" in the Normal-trade format (RANK 9-10, 2% risk), sell alert when it
+  closes above the 5-day average, time-limit alert, safety stop watched live.
+- Switched OFF: a3 swing tips (~53% winners; settings normal_a3_tips) and intraday tips until a setup proves >= 65%
+  winners over >= 40 live results (settings intraday_mode: auto). Intraday setups keep being followed silently.
+
+## D99 (2026-11-13) Owner: best trades from all - intraday, F&O. Tested; what passed is switched on
+- Intraday, high-hit-rate attempt (60 days x 100 liquid stocks, live rules, 1.5 ATR minimum stop, targets 0.4R-1R,
+  0.06% charges): win rates 55-66% at small targets but the average after charges is NEGATIVE for every setup in at
+  least one half. No intraday tips (intraday_mode auto: only after >= 65% winners over >= 40 live results).
+- Index dip-buy (Nifty / Bank Nifty RSI2, 13 years): 60-69% winners but average moves only +0.1-0.4% in ~4 days -
+  option buying on that loses to time decay; not used.
+- F&O ON: the high-probability dip buy on F&O stocks, as a ~2% in-the-money CALL, monthly expiry >= 15 days away.
+  Modelled (validation/high_prob_options_research.py: Black-Scholes on each trade's real stock path, IV = 20-day
+  realised vol x 1.15, 1.5% option costs, top-150 stocks): 811 trades, 69.7% in profit, +16.9% of premium on
+  average (win +37%, loss -30%); holdout 70.3%, +18.8%. Modelled, not real option history (none exists free for
+  expired contracts); live premium, OI and spread are checked when sent; skipped if the loss at the stock's stop is
+  above the rank's limit (5% at rank 9-10) or a lot costs > half the capital.
+- Market on 13 Nov: Nifty 25,299, above its 200-day average (23,992), 2-day RSI 100 - not a dip day. Tips (stock +
+  option) come on the next market dip inside this uptrend.
+
+## D100 (2026-11-13) Forwarded F&O tips: probability out of 10, reasons, take the good ones; notes for other messages
+- Bot replies to forwarded messages again (owner's request; settings reply_to_forwarded).
+- F&O tips (e.g. "VOLTAS NOV 1120 PE 25-26 / Target-35-42-50-58+ / Stoploss-1150 SPOT (75 Min CB) / Lot 375"):
+  parser now reads the premium range right after the strike, a stop-loss on SPOT and the candle basis.
+  swing/fno_analyst.py: live spot + option premium/OI/spread (Kite), exact expiry and lot; implied volatility from
+  the premium; premium targets/stop -> spot levels (Black-Scholes, some time decay allowed); PROBABILITY of target 1
+  before the stop = mean of the Time Machine on the stock's 5-minute bars (to expiry, max 5 days) and the stock's
+  daily history; adjusted for daily trend, option price vs real volatility (IV/HV), days to expiry, chasing,
+  spread, and the channel's record (30% weight once it has 10+ finished calls). Reply: PROBABILITY x/10, why it can
+  work / fail, plan, per-lot gain/loss, a better version (next expiry, fairer stop).
+- TAKEN when probability >= 7/10, target 1 pays at least what the stop costs, and the loss per lot fits the limit
+  for that quality (5% / 3% of capital): tracked with exit alerts like the system's own F&O tips. Every forwarded
+  call is also followed to its result, so each channel's record (and its weight) improves with time.
+- Other forwarded messages (views, news, commentary): mood, stocks and levels are read and kept privately with
+  that channel (data/private/channel_notes.csv); two-line "noted" reply.
+
+## D101 (2026-11-13) Forwarded watchlists (pictures or text)
+3+ NSE stocks named (symbols or company names; OCR for pictures) -> swing/watchlist.py: each stock rated /10 by
+the system's own read (trend, 2-day RSI, the D98 dip-buy rule incl. the market filter, pattern library, distance
+from the 52-week high, liquidity), best first, one line of reasons each. A dip-buy signal that exists now is sent as
+a Normal-trade tip (and F&O when it fits). All stocks stay watched for 45 days (data/private/watchlist.csv) and are
+added to the evening dip-buy scan; stocks outside the tested top-300 are labelled as such.
+
+## D102 - 2026-11-13 - Watchlist pictures read line by line, one combined list (free)
+Real NDTV Profit / CNBC-TV18 "stocks to watch" pictures broke the plain text match: merged words (HITACHIENERGY,
+TDPower), channel short names (Voda Idea, Zee Ent, Godrej Props, NMDC Steel), misspellings (Mannapuram) and false hits
+(NDTV, STAR, TAKE, CLEAN, GLOBAL). Now:
+- OCR keeps each line's position and the colour of the arrow printed next to it.
+- Each line is matched as a name: channel alias list -> symbol -> company name (also shortened, run together, OCR
+  l/I mix-up) -> close spelling. Picture words (NDTV, CNBC, RED, Consolidated...) are never stocks.
+- Direction: the RED / GREEN heading above the stock in its column, else the green / red arrow. The channel's reason
+  is the line under the name.
+- Pictures sent together (one Telegram album) give ONE list: bullish then bearish, each stock once (×2 = named in
+  2 lists), with my chart score /10. Bullish names are watched 45 days for the tested dip-buy (D98); bearish names
+  are not (the system does not short). Long replies are split into several messages (Telegram's 4,096 limit).
+Tested on the owner's 5 pictures of 13 Nov 2026: 50 of 50 stocks read with the right direction, no false names.

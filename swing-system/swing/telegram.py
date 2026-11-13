@@ -75,9 +75,21 @@ def _balanced(part):
     return out
 
 
+# Owner's choice (D95): Telegram carries ONLY these. Everything else is written to the log, not sent.
+ALLOWED = ("trade tip", "exit alert", "kite login", "company of the day")
+
+
+def allowed(settings, label):
+    return label in (settings.get("telegram_allowed") or ALLOWED)
+
+
 def send(settings, text, html=False, label="message"):
     """Send a message to the owner. Never raises. Every result is logged in one public-safe line
     (length only, never contents), so a missing message can always be traced in the GitHub log."""
+    if not allowed(settings, label):
+        log.info("Telegram %s not sent - muted (owner's choice: only tips, exit alerts, Kite login, company "
+                 "of the day)", label)
+        return "muted"
     token = (settings.get("telegram_bot_token") or "").strip()
     if not token:
         log.warning("Telegram %s NOT sent: no bot token", label)
@@ -111,8 +123,11 @@ def send(settings, text, html=False, label="message"):
         return f"Telegram failed: {e}"
 
 
-def send_document(settings, path, caption="", mime="text/html"):
+def send_document(settings, path, caption="", mime="text/html", label="file"):
     """Send a file (e.g. the evening HTML report) to the owner's chat."""
+    if not allowed(settings, label):
+        log.info("Telegram %s not sent - muted (owner's choice)", label)
+        return "muted"
     token = (settings.get("telegram_bot_token") or "").strip()
     chat = str(settings.get("telegram_chat_id") or "").strip()
     if not token or not chat:
