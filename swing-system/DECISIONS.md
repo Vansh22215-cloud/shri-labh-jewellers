@@ -634,3 +634,10 @@ Searched the documented high-win-rate strategies (Connors RSI-2 and relatives: D
   call is also followed to its result, so each channel's record (and its weight) improves with time.
 - Other forwarded messages (views, news, commentary): mood, stocks and levels are read and kept privately with
   that channel (data/private/channel_notes.csv); two-line "noted" reply.
+
+## D101 (2026-11-13) Forwarded watchlists (pictures or text)
+3+ NSE stocks named (symbols or company names; OCR for pictures) -> swing/watchlist.py: each stock rated /10 by
+the system's own read (trend, 2-day RSI, the D98 dip-buy rule incl. the market filter, pattern library, distance
+from the 52-week high, liquidity), best first, one line of reasons each. A dip-buy signal that exists now is sent as
+a Normal-trade tip (and F&O when it fits). All stocks stay watched for 45 days (data/private/watchlist.csv) and are
+added to the evening dip-buy scan; stocks outside the tested top-300 are labelled as such.

@@ -76,7 +76,12 @@ def scan(day=None):
         return [], (f"market filter: Nifty {'above' if up else 'BELOW'} its 200-day average, 2-day RSI {r:.0f} "
                     "(needs < 20)")
     out = []
-    for s in universe():
+    try:   # D101: stocks from forwarded watchlists are scanned too
+        from .watchlist import watched
+        extra = [x for x in watched() if x not in set(universe())]
+    except Exception:
+        extra = []
+    for s in universe() + extra:
         try:
             d = data_prices.load(s)
             if d is None or len(d) < 210:
@@ -95,13 +100,14 @@ def rank(sg):
     return 10 if sg["rsi2"] < 0.5 else 9
 
 
-def send_evening(day, settings=None):
+def send_evening(day, settings=None, sigs=None):
     """6:40 pm: send each signal as a Normal trade ('Buy tomorrow at open ...'). Returns how many were sent."""
     from .live_engine import already, save_tip, send, tv_link
     s = settings or load_settings()
     cap = float(s.get("capital", 45000))
-    sigs, why = scan(day)
-    log.info("High-probability scan: %d signal(s) - %s", len(sigs), why)
+    if sigs is None:
+        sigs, why = scan(day)
+        log.info("High-probability scan: %d signal(s) - %s", len(sigs), why)
     n = 0
     for sg in sigs:
         sym = sg["symbol"]

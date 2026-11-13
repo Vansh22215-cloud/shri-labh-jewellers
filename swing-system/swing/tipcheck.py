@@ -371,6 +371,14 @@ LAST_TICKET = None   # the ticket made for the last forwarded stock tip (the bot
 
 def check_text(text, source="", capital=45000.0, image=None):
     from . import options_check
+    try:   # D101: a watchlist (3+ stocks named) - rate each stock, send trades that exist now, keep watching them
+        from . import watchlist
+        if watchlist.looks_like_watchlist(text):
+            r = watchlist.handle(text, source)
+            if r:
+                return r
+    except Exception as e:
+        log.warning("watchlist failed: %s", type(e).__name__)
     o = options_check.parse_option(text)
     if o and o.get("symbol"):
         try:   # D100: deep F&O analysis - probability out of 10, reasons, improved plan; good ones are TAKEN
