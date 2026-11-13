@@ -41,6 +41,143 @@ def extract_symbols(text, eq=None):
     return found
 
 
+# ---- D102: line-by-line reading of watchlist PICTURES (NDTV Profit / CNBC-TV18 'stocks to watch' style) ----------
+# names as the channels write them -> NSE symbol (short brand names a plain name match cannot find)
+ALIASES = {"ZEE": "ZEEL", "ZEEENT": "ZEEL", "ZEEENTERTAINMENT": "ZEEL", "VODAIDEA": "IDEA", "VODAFONEIDEA": "IDEA",
+           "VI": "IDEA", "HITACHIENERGY": "POWERINDIA", "TDPOWER": "TDPOWERSYS", "MANAPPURAMFIN": "MANAPPURAM",
+           "MANAPPURAM": "MANAPPURAM", "OILINDIA": "OIL", "GODREJPROPS": "GODREJPROP", "GODREJPROP": "GODREJPROP",
+           "NMDCSTEEL": "NSLNISP", "EIH": "EIHOTEL", "ETHOS": "ETHOSLTD", "EMS": "EMSLIMITED", "OLA": "OLAELEC",
+           "OLAELECTRIC": "OLAELEC", "STARHEALTH": "STARHEALTH", "GODIGIT": "GODIGIT", "NETWEBTECH": "NETWEB",
+           "E2E": "E2E", "E2ENETWORKS": "E2E", "AGIINFRA": "AGIIL", "MAHINDRAHOLIDAYS": "MHRIL", "NEWINDIA": "NIACL",
+           "NEWINDIAASSURANCE": "NIACL", "DILIPBUILDCON": "DBL", "ORIENTCABLES": "ORIENTCABL", "ACE": "ACE",
+           "KAYNES": "KAYNES", "KAYNESTECH": "KAYNES", "FINOBANK": "FINOPB", "SPAPPARELS": "SPAL", "RIL": "RELIANCE",
+           "RELIANCEIND": "RELIANCE", "SBI": "SBIN", "L&T": "LT", "LANDT": "LT", "M&M": "M&M", "MANDM": "M&M",
+           "HUL": "HINDUNILVR", "BAJAJFINANCE": "BAJFINANCE", "BAJAJFINSERV": "BAJAJFINSV", "AIRTEL": "BHARTIARTL",
+           "BHARTIAIRTEL": "BHARTIARTL", "TATAMOTORS": "TATAMOTORS", "INFY": "INFY", "PAYTM": "PAYTM", "ZOMATO": "ETERNAL",
+           "NYKAA": "NYKAA", "POLICYBAZAAR": "POLICYBZR", "IEX": "IEX", "MCX": "MCX", "BEL": "BEL", "HAL": "HAL",
+           "BHEL": "BHEL", "IRFC": "IRFC", "RVNL": "RVNL", "LIC": "LICI", "SAIL": "SAIL", "ONGC": "ONGC", "IOC": "IOC",
+           "BPCL": "BPCL", "HPCL": "HINDPETRO", "GAIL": "GAIL", "NTPC": "NTPC", "TCS": "TCS", "ITC": "ITC"}
+# words on these pictures that are also NSE symbols or company-name starts - never stocks on their own
+PICTURE_WORDS = {"NDTV", "PROFIT", "CNBC", "TV18", "CNBCTV18", "WATCHLIST", "STOCKS", "STOCKSTO", "WATCH", "RED", "GREEN",
+                 "STAR", "TAKE", "CLEAN", "GLOBAL", "LIVE", "YOY", "QOQ", "PAT", "EBITDA", "MARGIN", "REVENUE", "CR",
+                 "BLOCK", "DEAL", "DEALS", "PROVISION", "OFFER", "STRONG", "BUYBACK", "GUIDANCE", "ORDER", "ORDERS",
+                 "FRIDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "SATURDAY", "SUNDAY", "DISCLAIMER", "Q2", "Q3",
+                 "Q4", "Q1", "FY", "NET", "LOSS", "UP", "DOWN", "BOARD", "APPROVES", "SIGNS", "GOLD", "LAUNCHES", "CONSOLIDATED", "STANDALONE", "CONS", "PROMOTER", "BUYING", "MIXED"} | COMMON
+BULL_HEAD = {"GREEN", "BULLISH", "POSITIVE", "GAINERS", "BUZZING", "UPBEAT", "BUY"}
+BEAR_HEAD = {"RED", "BEARISH", "NEGATIVE", "LOSERS", "SELL"}
+_TAILS = re.compile(r"(LIMITED|LTD|THE|COMPANY|CORPORATION|INDIA|\(INDIA\))")
+
+
+def _condense(t):
+    return re.sub(r"[^A-Z0-9&]", "", t.upper())
+
+
+def _name_index(eq):
+    """[(condensed company name without Limited/The/India, symbol)] - built once per equity list."""
+    key = id(eq)
+    if _name_index.cache.get("k") != key:
+        idx = []
+        for sym, nm in zip(eq["SYMBOL"].astype(str), eq["NAME OF COMPANY"].astype(str)):
+            full = _condense(re.sub(r"(?i)\b(limited|ltd\.?|the)\b", " ", nm))
+            idx.append((full, sym))
+        _name_index.cache = {"k": key, "idx": idx, "syms": set(eq["SYMBOL"].astype(str))}
+    return _name_index.cache
+
+
+_name_index.cache = {}
+
+
+def match_name(part, eq):
+    """One name as written on a picture ('Hitachi Energy', 'TDPOWER', 'Mannapuram Finance') -> NSE symbol or None."""
+    import difflib
+    if not part or len(part) > 45:
+        return None
+    ix = _name_index(eq)
+    tries = [part]
+    if "l" in part:                      # OCR reads a capital I as a small l ('Vodafone ldea', 'AGlinfra')
+        tries.append(re.sub(r"(?<![a-z])l|l(?=[A-Z])|(?<=[A-Z])l(?=[a-z])", "I", part))
+    for t in tries:
+        c = _condense(t)
+        if len(c) < 2 or c in PICTURE_WORDS and c not in ALIASES:
+            continue
+        if c in ALIASES and ALIASES[c] in ix["syms"]:
+            return ALIASES[c]
+        if len(c) >= 3 and c in ix["syms"] and c not in PICTURE_WORDS:
+            return c
+        exact = [s for n, s in ix["idx"] if n == c]
+        if exact and len(c) >= 3:
+            return exact[0]
+        if len(c) >= 6:
+            pre = sorted(((n, s) for n, s in ix["idx"] if n.startswith(c) or (len(n) >= 6 and c.startswith(n)
+                                                                               and len(c) - len(n) <= 4)),
+                         key=lambda x: len(x[0]))
+            if pre:
+                return pre[0][1]
+        if len(c) >= 8:                  # misspelt names ('Mannapuram Finance')
+            names = [n for n, _ in ix["idx"]]
+            m = difflib.get_close_matches(c, names, n=1, cutoff=0.88)
+            if not m:
+                m = difflib.get_close_matches(c, [n[:len(c)] for n in names], n=1, cutoff=0.9)
+                if m:
+                    return next(s for n, s in ix["idx"] if n[:len(c)] == m[0])
+            if m:
+                return next(s for n, s in ix["idx"] if n == m[0])
+            sm = difflib.get_close_matches(c, list(ix["syms"]), n=1, cutoff=0.9)
+            if sm:
+                return sm[0]
+    return None
+
+
+def _line_stocks(text, eq):
+    parts = [p.strip() for p in re.split(r",|&(?!\w)| and ", text) if p.strip()]
+    hits = [s for s in (match_name(p, eq) for p in parts) if s]
+    return hits if hits and len(hits) == len(parts) else []
+
+
+def read_entries(boxes, eq=None):
+    """OCR lines of a watchlist picture -> [{symbol, dir ('up'/'down'/None), note}] in reading order.
+    Direction: a RED / GREEN (bullish / bearish) heading above the stock in the same column, else the green/red
+    arrow printed next to the name. Note: the line written just under the name (the reason the channel gives)."""
+    from .tipcheck import equity_list
+    eq = equity_list() if eq is None else eq
+    heads = []
+    for b in boxes:
+        c = _condense(b["text"])
+        if c in BULL_HEAD or c in BEAR_HEAD:
+            heads.append((b["x0"], b["y0"], "up" if c in BULL_HEAD else "down"))
+    if heads:
+        width = max(b["x1"] for b in boxes) or 1
+        col = lambda b: 0 if (b["x0"] + 40) < width * 0.45 else 1
+    else:
+        width, col = 1, (lambda b: round(b["x0"] / 300))
+    rows, used = [], set()
+    for i, b in enumerate(boxes):
+        hits = _line_stocks(b["text"], eq)
+        if not hits:
+            continue
+        d = None
+        if heads:
+            above = [h for h in heads if h[1] < b["y0"] and (col({"x0": h[0]}) == col(b))]
+            if above:
+                d = max(above, key=lambda h: h[1])[2]
+        else:
+            d = b.get("arrow")
+        note, last = [], b["y0"]
+        for nb in boxes[i + 1:i + 8]:      # the lines just below it in the same column = the channel's reason
+            if col(nb) != col(b) or not 0 < nb["y0"] - last < 90:
+                continue
+            if _line_stocks(nb["text"], eq) or len(note) == 2:
+                break
+            note.append(nb["text"]); last = nb["y0"]
+        note = re.sub(r"\bQ (\d)\b", r"Q\1", " ".join(note))
+        note = re.sub(r"\bYo Y\b", "YoY", re.sub(r"\bQ 0 Q\b", "QoQ", note))[:80]
+        for s in hits:
+            if s not in used:
+                used.add(s)
+                rows.append({"symbol": s, "dir": d, "note": note})
+    return rows
+
+
 def looks_like_watchlist(text, eq=None):
     return len(extract_symbols(text, eq)) >= 3
 
@@ -65,6 +202,18 @@ def assess(sym, top300=None):
     """-> dict(symbol, price, score, reasons, signal) - the system's own read of one stock."""
     from . import high_prob
     d = _daily(sym)
+    if d is not None and 20 <= len(d) < 210:          # recent listing / short history: a lighter check
+        a = high_prob.adjusted(d)
+        c = a["close"]
+        n = min(50, len(c))
+        avg = c.tail(n).mean()
+        hi = c.max()
+        pts = (2 if c.iloc[-1] > avg else 0) + (1 if c.iloc[-1] > c.tail(20).mean() else 0) + \
+              (1 if c.iloc[-1] >= 0.95 * hi else 0)
+        why = [("above" if c.iloc[-1] > avg else "below") + f" its {n}-day average (short history: "
+               f"{len(c)} days - lighter check)"]
+        return {"symbol": sym, "price": float(a["raw_close"].iloc[-1]), "score": int(min(6, 1 + pts * 1.3)),
+                "reasons": why, "signal": None, "rsi2": float(high_prob.rsi(c).iloc[-1])}
     if d is None or len(d) < 210:
         return {"symbol": sym, "score": None, "reasons": ["not enough price history"], "signal": None}
     a = high_prob.adjusted(d)
@@ -140,6 +289,80 @@ def watched():
         return list(pd.read_csv(WL_F)["symbol"].astype(str))
     except Exception:
         return []
+
+
+def handle_entries(entries, source="", lists=1):
+    """D102: one simple list from watchlist pictures (an album = several pictures) - bullish first, then bearish,
+    each stock once with the channel's reason, how many lists named it, and the system's own score."""
+    from . import high_prob
+    merged = {}
+    for e in entries:
+        m = merged.setdefault(e["symbol"], {"symbol": e["symbol"], "up": 0, "down": 0, "notes": [], "n": 0})
+        m["n"] += 1
+        if e.get("dir") in ("up", "down"):
+            m[e["dir"]] += 1
+        if e.get("note") and e["note"] not in m["notes"]:
+            m["notes"].append(e["note"])
+    try:
+        top = set(high_prob.universe())
+    except Exception:
+        top = None
+    for m in merged.values():
+        m["dir"] = "up" if m["up"] > m["down"] else "down" if m["down"] > m["up"] else ("mixed" if m["up"] else None)
+        m.update({k: v for k, v in assess(m["symbol"], top).items() if k != "symbol"})
+    rows = list(merged.values())
+    log.info("Watchlist pictures: %d list(s), %d stock(s), %d rated, %d with a trade now", lists, len(rows),
+             sum(1 for r in rows if r.get("score")), sum(1 for r in rows if r.get("signal")))
+    n_watch = save([r["symbol"] for r in rows if r["dir"] != "down"], source)
+    day = pd.Timestamp.now(tz="Asia/Kolkata")
+
+    def chart(r):
+        t = (r.get("reasons") or [""])[0]
+        return ("strong uptrend" if t.startswith("strong uptrend") else "uptrend" if t.startswith("above") else
+                "downtrend" if t.startswith("below") else "dip-buy signal" if t.startswith("DIP") else "no data") + \
+            (" (new listing)" if "short history" in t else "")
+
+    def line(k, r):
+        sc = f"{r['score']}/10" if r.get("score") else "-"
+        rep = f" ×{r['n']}" if r["n"] > 1 else ""
+        why = r["notes"][0] if r["notes"] else ""
+        return f"{k}. #{r['symbol']}{rep} · {sc} {chart(r)}\n    {why}"
+
+    key = lambda r: (-r["n"], -(r.get("score") or 0))
+    L = [f"📋 WATCHLIST · {day:%d %b} · {lists} picture(s) → {len(rows)} stocks", "",
+         "How to read: ×2 = named in 2 lists · x/10 = my chart score (trend, momentum, liquidity) · "
+         "then the channel's reason", ""]
+    for title, want, icon in (("🟢 BULLISH - good news / in the green list", ("up",), ""),
+                              ("🔴 BEARISH - bad news / in the red list", ("down",), ""),
+                              ("⚪ MIXED / NO DIRECTION", ("mixed", None), "")):
+        grp = sorted([r for r in rows if r["dir"] in want], key=key)
+        if not grp:
+            continue
+        L.append(f"{title} ({len(grp)})")
+        L += [line(i, r) for i, r in enumerate(grp, 1)]
+        L.append("")
+    best = sorted([r for r in rows if r["dir"] == "up" and (r.get("score") or 0) >= 7], key=key)[:5]
+    L.append("🧠 WHAT IT MEANS")
+    if best:
+        L.append("• Strongest bullish names (good news + healthy chart): " + ", ".join(f"#{r['symbol']}" for r in best))
+    L.append("• Good news is often priced in at the open - don't chase a big gap-up; my tips come only when a "
+             "tested setup appears.")
+    L.append("• Bearish names: avoid buying them for now (I don't short).")
+    trades = [r for r in rows if r.get("signal") and r["dir"] != "down"]
+    if trades:
+        L.append(f"⚡ {len(trades)} trade(s) right now - sent as tips: " + ", ".join(f"#{r['symbol']}" for r in trades))
+        try:
+            from .live_engine import already
+            sigs = [dict(r["signal"], symbol=r["symbol"]) for r in trades
+                    if not already(r["symbol"], "NORMAL", str(day.date()))]
+            high_prob.send_evening(str(day.date()), sigs=sigs)
+        except Exception as e:
+            log.warning("watchlist trades failed: %s", type(e).__name__)
+    else:
+        L.append("⏳ No trade right now. I watch the bullish ones for 45 days and send a tip when one gives a "
+                 "tested dip-buy signal.")
+    L.append(f"👀 Watching {n_watch} stocks in total. Research, not advice.")
+    return "\n".join(L)
 
 
 def handle(text, source=""):

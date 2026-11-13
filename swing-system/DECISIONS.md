@@ -641,3 +641,17 @@ the system's own read (trend, 2-day RSI, the D98 dip-buy rule incl. the market f
 from the 52-week high, liquidity), best first, one line of reasons each. A dip-buy signal that exists now is sent as
 a Normal-trade tip (and F&O when it fits). All stocks stay watched for 45 days (data/private/watchlist.csv) and are
 added to the evening dip-buy scan; stocks outside the tested top-300 are labelled as such.
+
+## D102 - 2026-11-13 - Watchlist pictures read line by line, one combined list (free)
+Real NDTV Profit / CNBC-TV18 "stocks to watch" pictures broke the plain text match: merged words (HITACHIENERGY,
+TDPower), channel short names (Voda Idea, Zee Ent, Godrej Props, NMDC Steel), misspellings (Mannapuram) and false hits
+(NDTV, STAR, TAKE, CLEAN, GLOBAL). Now:
+- OCR keeps each line's position and the colour of the arrow printed next to it.
+- Each line is matched as a name: channel alias list -> symbol -> company name (also shortened, run together, OCR
+  l/I mix-up) -> close spelling. Picture words (NDTV, CNBC, RED, Consolidated...) are never stocks.
+- Direction: the RED / GREEN heading above the stock in its column, else the green / red arrow. The channel's reason
+  is the line under the name.
+- Pictures sent together (one Telegram album) give ONE list: bullish then bearish, each stock once (×2 = named in
+  2 lists), with my chart score /10. Bullish names are watched 45 days for the tested dip-buy (D98); bearish names
+  are not (the system does not short). Long replies are split into several messages (Telegram's 4,096 limit).
+Tested on the owner's 5 pictures of 13 Nov 2026: 50 of 50 stocks read with the right direction, no false names.
