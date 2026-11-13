@@ -322,7 +322,7 @@ def _days_to(expiry, now):
     return max(0.25, (pd.Timestamp(expiry) + pd.Timedelta(hours=15, minutes=30) - now).total_seconds() / 86400)
 
 
-def option_trade(c, r, spot, now, capital, hold_days=1):
+def option_trade(c, r, spot, now, capital, hold_days=1, min_days=3, itm=0.0):
     """Best option to BUY for a stock/index setup c, within the rank's risk. -> dict or None."""
     from . import kite
     from .options_check import bs, implied_vol
@@ -330,7 +330,7 @@ def option_trade(c, r, spot, now, capital, hold_days=1):
     ins = nfo()
     kind = "CE" if c["side"] == "buy" else "PE"
     o = ins[(ins["name"] == name) & (ins["instrument_type"] == kind)]
-    o = o[o["expiry"] >= now.normalize() + pd.Timedelta(days=3)]
+    o = o[o["expiry"] >= now.normalize() + pd.Timedelta(days=min_days)]
     if not len(o):
         return None
     exp = o["expiry"].min()
@@ -338,8 +338,10 @@ def option_trade(c, r, spot, now, capital, hold_days=1):
     strikes = o["strike"].values
     if not len(strikes):
         return None
-    i0 = int(np.argmin(np.abs(strikes - spot)))
-    order = [i0 - 1, i0, i0 + 1, i0 + 2] if kind == "CE" else [i0 + 1, i0, i0 - 1, i0 - 2]   # slightly ITM first
+    ref = spot * (1 - itm) if kind == "CE" else spot * (1 + itm)          # itm=0.02: a strike ~2% in the money
+    i0 = int(np.argmin(np.abs(strikes - ref)))
+    order = ([i0, i0 + 1, i0 - 1, i0 + 2] if itm else [i0 - 1, i0, i0 + 1, i0 + 2]) if kind == "CE" else \
+        ([i0, i0 - 1, i0 + 1, i0 - 2] if itm else [i0 + 1, i0, i0 - 1, i0 - 2])             # slightly ITM first
     limit = capital * risk_pct(r, "FNO") / 100
     for i in order:
         if i < 0 or i >= len(strikes):
@@ -399,7 +401,7 @@ def fmt_fno(c, opt, r):
     return (f"• F&O\n\n{'📈' if up else '📉'} {c['symbol'].replace('NIFTY50', 'NIFTY')}\n\n"
             f"🖲 {mon} {_n(opt['strike'])} {opt['kind']} {_n(opt['premium'])}-{_n(opt['premium_hi'])}\n\n"
             f"✅ Target-{tg}\n\n"
-            f"⛔️ Stoploss-{_n(opt['spot_sl'])} SPOT (75 Min CB)\n\n"
+            f"⛔️ Stoploss-{_n(opt['spot_sl'])} SPOT ({c.get('sl_basis', '75 Min CB')})\n\n"
             f"✨ Lot Size- {opt['lot']}\n\n"
             f"⭐ RANK - {r}/10 · Loss at SL ≈ ₹{opt['loss']:,.0f}/lot · {c.get('why', '')}\n\n"
             f"{tv_link(c['symbol'], daily=c.get('setup') == 'SWING')}")

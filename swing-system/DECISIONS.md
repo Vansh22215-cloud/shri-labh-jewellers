@@ -603,3 +603,18 @@ Searched the documented high-win-rate strategies (Connors RSI-2 and relatives: D
   closes above the 5-day average, time-limit alert, safety stop watched live.
 - Switched OFF: a3 swing tips (~53% winners; settings normal_a3_tips) and intraday tips until a setup proves >= 65%
   winners over >= 40 live results (settings intraday_mode: auto). Intraday setups keep being followed silently.
+
+## D99 (2026-11-13) Owner: best trades from all - intraday, F&O. Tested; what passed is switched on
+- Intraday, high-hit-rate attempt (60 days x 100 liquid stocks, live rules, 1.5 ATR minimum stop, targets 0.4R-1R,
+  0.06% charges): win rates 55-66% at small targets but the average after charges is NEGATIVE for every setup in at
+  least one half. No intraday tips (intraday_mode auto: only after >= 65% winners over >= 40 live results).
+- Index dip-buy (Nifty / Bank Nifty RSI2, 13 years): 60-69% winners but average moves only +0.1-0.4% in ~4 days -
+  option buying on that loses to time decay; not used.
+- F&O ON: the high-probability dip buy on F&O stocks, as a ~2% in-the-money CALL, monthly expiry >= 15 days away.
+  Modelled (validation/high_prob_options_research.py: Black-Scholes on each trade's real stock path, IV = 20-day
+  realised vol x 1.15, 1.5% option costs, top-150 stocks): 811 trades, 69.7% in profit, +16.9% of premium on
+  average (win +37%, loss -30%); holdout 70.3%, +18.8%. Modelled, not real option history (none exists free for
+  expired contracts); live premium, OI and spread are checked when sent; skipped if the loss at the stock's stop is
+  above the rank's limit (5% at rank 9-10) or a lot costs > half the capital.
+- Market on 13 Nov: Nifty 25,299, above its 200-day average (23,992), 2-day RSI 100 - not a dip day. Tips (stock +
+  option) come on the next market dip inside this uptrend.

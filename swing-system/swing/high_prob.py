@@ -122,11 +122,45 @@ def send_evening(day, settings=None):
                f"avg {STATS['avg_win_pct']:+.1f}% win / {STATS['avg_loss_pct']:+.1f}% loss, ~4 days\n\n"
                f"{tv_link(sym, daily=True)}")
         send(msg)
+        try:
+            n += send_option(sg, r, day, s)
+        except Exception as e:
+            log.warning("high-probability option %s failed: %s", sym, type(e).__name__)
         save_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
                   "symbol": sym, "side": "buy", "entry": sg["close"], "stop": sg["stop"], "targets": "", "rank": r,
                   "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "HP"})
         n += 1
     return n
+
+
+OPT_STATS = {"trades": 811, "win_pct": 69.7, "avg_pct": 16.9, "holdout_win_pct": 70.3, "holdout_avg_pct": 18.8}
+
+
+def send_option(sg, r, day, s):
+    """F&O version of a signal on an F&O stock: buy a ~2%-in-the-money CALL, monthly expiry >= 15 days away.
+    Modelled on 13 years (Black-Scholes on the stock's real path, 1.5% option costs): 70% of trades in profit,
+    +17% of the premium on average (holdout 70%, +19%). Only if the loss at the stop fits the rank's risk."""
+    from .live_engine import already, fno_underlyings, fmt_fno, option_trade, save_tip, send
+    sym = sg["symbol"]
+    if sym not in fno_underlyings() or already(sym, "FNO", str(day)):
+        return 0
+    e = sg["close"]
+    c = {"symbol": sym, "side": "buy", "setup": "HP", "entry": e, "stop": sg["stop"],
+         "targets": [round(e * 1.02, 2), round(e * 1.04, 2), round(e * 1.06, 2)],
+         "why": "high-probability dip buy (sell when the stock closes above its 5-day average)",
+         "sl_basis": "daily close"}
+    opt = option_trade(c, r, e, pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None),
+                       float(s.get("capital", 45000)), hold_days=4, min_days=15, itm=0.02)
+    if not opt:
+        return 0
+    send(fmt_fno(c, opt, r) + f"\n\n🧪 Tested (modelled): {OPT_STATS['win_pct']:.0f}% of trades in profit, "
+                              f"avg {OPT_STATS['avg_pct']:+.0f}% of premium. Buy at tomorrow's open.")
+    save_tip({"time": str(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))[:16], "type": "FNO", "symbol": sym,
+              "side": "buy", "entry": e, "stop": sg["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]),
+              "rank": r, "qty": 1, "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
+              "opt_targets": "/".join(f"{x:.2f}" for x in opt["targets"]), "spot_sl": opt["spot_sl"],
+              "status": "open", "hit": 0, "day": str(day), "setup": "HP"})
+    return 1
 
 
 def evening_exits(day):
@@ -140,6 +174,7 @@ def evening_exits(day):
         if not len(t) or "setup" not in t:
             return msgs
         for i, r in t[(t["status"] == "open") & (t["setup"] == "HP")].iterrows():
+            what = f"#{r['symbol']}" if r["type"] != "FNO" else f"{r['symbol']} {r.get('contract', '')} (option)"
             d = data_prices.load(r["symbol"])
             if d is None or not len(d):
                 continue
@@ -152,11 +187,11 @@ def evening_exits(day):
             chg = (raw / float(r["entry"]) - 1) * 100
             if c.iloc[-1] > s5.iloc[-1]:
                 t.loc[i, "status"] = "done"
-                msgs.append(f"✅ #{r['symbol']} - closed above its 5-day average: SELL at tomorrow's open "
+                msgs.append(f"✅ {what} - the stock closed above its 5-day average: SELL at tomorrow's open "
                             f"(now {raw:,.2f}, {chg:+.1f}% from the tip).")
             elif len(since) >= MAX_DAYS:
                 t.loc[i, "status"] = "time"
-                msgs.append(f"⌛ #{r['symbol']} - 10 trading days without the bounce: sell at tomorrow's open "
+                msgs.append(f"⌛ {what} - 10 trading days without the bounce: sell at tomorrow's open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
         t.to_csv(TIPS_F, index=False)
     for m in msgs:
