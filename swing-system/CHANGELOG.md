@@ -1858,3 +1858,243 @@
 
 ## 2026-11-12 (automatic)
 - Tested proposal A560: rejected. A560 vs a3: beat it in 5/13 walk-forward years, CAGR 7.58% vs 12.55% (needs +0.63), worst fall -18.97% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A561: rejected. A561 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.63), worst fall -0.24% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A562: rejected. A562 vs a3: beat it in 5/13 walk-forward years, CAGR 5.81% vs 12.55% (needs +0.63), worst fall -22.38% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A563: rejected. A563 vs a3: beat it in 6/13 walk-forward years, CAGR 8.43% vs 12.55% (needs +0.63), worst fall -15.95% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A564: rejected. A564 vs a3: beat it in 2/13 walk-forward years, CAGR 1.8% vs 12.55% (needs +0.63), worst fall -26.55% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A565: rejected. A565 vs a3: beat it in 8/13 walk-forward years, CAGR 9.55% vs 12.55% (needs +0.63), worst fall -11.19% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A566: rejected. A566 vs a3: beat it in 6/13 walk-forward years, CAGR 8.4% vs 12.55% (needs +0.63), worst fall -16.64% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A567: rejected. A567 vs a3: beat it in 6/13 walk-forward years, CAGR 8.18% vs 12.55% (needs +0.63), worst fall -13.52% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A568: rejected. A568 vs a3: beat it in 6/13 walk-forward years, CAGR 3.41% vs 12.55% (needs +0.63), worst fall -20.6% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A569: rejected. A569 vs a3: beat it in 5/13 walk-forward years, CAGR 10.03% vs 12.55% (needs +0.63), worst fall -14.07% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A570: rejected. A570 vs a3: beat it in 6/13 walk-forward years, CAGR 10.3% vs 12.55% (needs +0.63), worst fall -11.98% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A571: rejected. A571 vs a3: beat it in 6/13 walk-forward years, CAGR 7.92% vs 12.55% (needs +0.63), worst fall -13.44% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A572: rejected. A572 vs a3: beat it in 7/13 walk-forward years, CAGR 8.46% vs 12.55% (needs +0.63), worst fall -11.71% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A573: rejected. A573 vs a3: beat it in 5/13 walk-forward years, CAGR 9.59% vs 12.55% (needs +0.63), worst fall -11.76% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A574: rejected. A574 vs a3: beat it in 4/13 walk-forward years, CAGR 9.46% vs 12.55% (needs +0.63), worst fall -11.47% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A575: rejected. A575 vs a3: beat it in 5/13 walk-forward years, CAGR 9.31% vs 12.55% (needs +0.63), worst fall -19.01% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A576: rejected. A576 vs a3: beat it in 6/13 walk-forward years, CAGR 8.65% vs 12.55% (needs +0.63), worst fall -13.75% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A577: rejected. A577 vs a3: beat it in 6/13 walk-forward years, CAGR 7.11% vs 12.55% (needs +0.63), worst fall -14.22% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A578: rejected. A578 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.63), worst fall -0.24% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A579: rejected. A579 vs a3: beat it in 7/13 walk-forward years, CAGR 6.99% vs 12.55% (needs +0.63), worst fall -15.64% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A580: rejected. A580 vs a3: beat it in 8/13 walk-forward years, CAGR 9.43% vs 12.55% (needs +0.63), worst fall -9.39% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A581: rejected. A581 vs a3: beat it in 7/13 walk-forward years, CAGR 7.5% vs 12.55% (needs +0.63), worst fall -11.35% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A582: rejected. A582 vs a3: beat it in 5/13 walk-forward years, CAGR 10.44% vs 12.55% (needs +0.63), worst fall -12.58% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A583: rejected. A583 vs a3: beat it in 5/13 walk-forward years, CAGR 9.16% vs 12.55% (needs +0.63), worst fall -8.61% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A584: rejected. A584 vs a3: beat it in 4/13 walk-forward years, CAGR 8.15% vs 12.55% (needs +0.63), worst fall -12.73% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A585: rejected. A585 vs a3: beat it in 4/13 walk-forward years, CAGR 6.61% vs 12.55% (needs +0.63), worst fall -12.49% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A586: rejected. A586 vs a3: beat it in 5/13 walk-forward years, CAGR 8.17% vs 12.55% (needs +0.63), worst fall -10.52% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A587: rejected. A587 vs a3: beat it in 6/13 walk-forward years, CAGR 8.17% vs 12.55% (needs +0.63), worst fall -10.3% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A588: rejected. A588 vs a3: beat it in 7/13 walk-forward years, CAGR 8.33% vs 12.55% (needs +0.63), worst fall -10.73% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A589: rejected. A589 vs a3: beat it in 6/13 walk-forward years, CAGR 7.23% vs 12.55% (needs +0.63), worst fall -8.26% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A590: rejected. A590 vs a3: beat it in 6/13 walk-forward years, CAGR 10.17% vs 12.55% (needs +0.63), worst fall -6.15% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A591: rejected. A591 vs a3: beat it in 7/13 walk-forward years, CAGR 8.46% vs 12.55% (needs +0.63), worst fall -9.58% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A592: rejected. A592 vs a3: beat it in 5/13 walk-forward years, CAGR 10.5% vs 12.55% (needs +0.63), worst fall -10.83% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A593: rejected. A593 vs a3: beat it in 6/13 walk-forward years, CAGR 9.2% vs 12.55% (needs +0.63), worst fall -12.96% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A594: rejected. A594 vs a3: beat it in 6/13 walk-forward years, CAGR 9.17% vs 12.55% (needs +0.63), worst fall -10.27% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A595: rejected. A595 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.63), worst fall -0.24% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A596: rejected. A596 vs a3: beat it in 5/13 walk-forward years, CAGR 8.85% vs 12.55% (needs +0.63), worst fall -17.44% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A597: rejected. A597 vs a3: beat it in 7/13 walk-forward years, CAGR 6.62% vs 12.55% (needs +0.63), worst fall -10.87% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A598: rejected. A598 vs a3: beat it in 4/13 walk-forward years, CAGR 7.47% vs 12.55% (needs +0.63), worst fall -13.65% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A599: rejected. A599 vs a3: beat it in 7/13 walk-forward years, CAGR 9.61% vs 12.55% (needs +0.63), worst fall -12.64% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A600: rejected. A600 vs a3: beat it in 4/13 walk-forward years, CAGR 6.0% vs 12.55% (needs +0.63), worst fall -12.24% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A601: rejected. A601 vs a3: beat it in 5/13 walk-forward years, CAGR 5.48% vs 12.55% (needs +0.63), worst fall -12.0% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A602: rejected. A602 vs a3: beat it in 4/13 walk-forward years, CAGR 6.5% vs 12.55% (needs +0.63), worst fall -14.83% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A603: rejected. A603 vs a3: beat it in 4/13 walk-forward years, CAGR 6.17% vs 12.55% (needs +0.63), worst fall -12.63% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A604: rejected. A604 vs a3: beat it in 3/13 walk-forward years, CAGR 6.2% vs 12.55% (needs +0.63), worst fall -16.11% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A605: rejected. A605 vs a3: beat it in 5/13 walk-forward years, CAGR 5.9% vs 12.55% (needs +0.63), worst fall -15.07% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A606: rejected. A606 vs a3: beat it in 3/13 walk-forward years, CAGR 6.23% vs 12.55% (needs +0.63), worst fall -12.1% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A607: rejected. A607 vs a3: beat it in 9/13 walk-forward years, CAGR 8.15% vs 12.55% (needs +0.63), worst fall -7.61% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A608: rejected. A608 vs a3: beat it in 5/13 walk-forward years, CAGR 4.8% vs 12.55% (needs +0.63), worst fall -14.07% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A609: rejected. A609 vs a3: beat it in 4/13 walk-forward years, CAGR 6.16% vs 12.55% (needs +0.63), worst fall -17.1% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A610: rejected. A610 vs a3: beat it in 5/13 walk-forward years, CAGR 6.43% vs 12.55% (needs +0.63), worst fall -12.0% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A611: rejected. A611 vs a3: beat it in 5/13 walk-forward years, CAGR 5.83% vs 12.55% (needs +0.63), worst fall -12.0% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A612: rejected. A612 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.63), worst fall -0.24% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A613: rejected. A613 vs a3: beat it in 7/13 walk-forward years, CAGR 6.48% vs 12.55% (needs +0.63), worst fall -15.59% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A614: rejected. A614 vs a3: beat it in 3/13 walk-forward years, CAGR 6.65% vs 12.55% (needs +0.63), worst fall -11.91% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A615: rejected. A615 vs a3: beat it in 7/13 walk-forward years, CAGR 7.37% vs 12.55% (needs +0.63), worst fall -14.94% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A616: rejected. A616 vs a3: beat it in 6/13 walk-forward years, CAGR 8.61% vs 12.55% (needs +0.63), worst fall -10.16% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A617: rejected. A617 vs a3: beat it in 7/13 walk-forward years, CAGR 4.56% vs 12.55% (needs +0.63), worst fall -17.21% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A618: rejected. A618 vs a3: beat it in 4/13 walk-forward years, CAGR 5.47% vs 12.55% (needs +0.64), worst fall -16.1% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A619: rejected. A619 vs a3: beat it in 5/13 walk-forward years, CAGR 2.56% vs 12.55% (needs +0.64), worst fall -21.9% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A620: rejected. A620 vs a3: beat it in 5/13 walk-forward years, CAGR 7.49% vs 12.55% (needs +0.64), worst fall -18.0% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A621: rejected. A621 vs a3: beat it in 6/13 walk-forward years, CAGR 5.92% vs 12.55% (needs +0.64), worst fall -15.49% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A622: rejected. A622 vs a3: beat it in 6/13 walk-forward years, CAGR 5.33% vs 12.55% (needs +0.64), worst fall -14.1% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A623: rejected. A623 vs a3: beat it in 1/13 walk-forward years, CAGR 3.29% vs 12.55% (needs +0.64), worst fall -15.18% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A624: rejected. A624 vs a3: beat it in 5/13 walk-forward years, CAGR 7.11% vs 12.55% (needs +0.64), worst fall -15.19% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A625: rejected. A625 vs a3: beat it in 7/13 walk-forward years, CAGR 4.87% vs 12.55% (needs +0.64), worst fall -12.48% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A626: rejected. A626 vs a3: beat it in 6/13 walk-forward years, CAGR 7.67% vs 12.55% (needs +0.64), worst fall -13.93% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A627: rejected. A627 vs a3: beat it in 6/13 walk-forward years, CAGR 5.31% vs 12.55% (needs +0.64), worst fall -13.39% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A628: rejected. A628 vs a3: beat it in 6/13 walk-forward years, CAGR 5.53% vs 12.55% (needs +0.64), worst fall -13.49% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A629: rejected. A629 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.64), worst fall -0.24% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A630: rejected. A630 vs a3: beat it in 4/13 walk-forward years, CAGR 3.41% vs 12.55% (needs +0.64), worst fall -24.68% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A631: rejected. A631 vs a3: beat it in 4/13 walk-forward years, CAGR 6.69% vs 12.55% (needs +0.64), worst fall -16.29% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A632: rejected. A632 vs a3: beat it in 4/13 walk-forward years, CAGR 3.42% vs 12.55% (needs +0.64), worst fall -14.95% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A633: rejected. A633 vs a3: beat it in 6/13 walk-forward years, CAGR 5.47% vs 12.55% (needs +0.64), worst fall -20.46% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A634: rejected. A634 vs a3: beat it in 4/13 walk-forward years, CAGR 5.8% vs 12.55% (needs +0.64), worst fall -19.35% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A635: rejected. A635 vs a3: beat it in 5/13 walk-forward years, CAGR 4.43% vs 12.55% (needs +0.64), worst fall -20.0% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A636: rejected. A636 vs a3: beat it in 3/13 walk-forward years, CAGR 3.63% vs 12.55% (needs +0.64), worst fall -23.07% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A637: rejected. A637 vs a3: beat it in 6/13 walk-forward years, CAGR 10.52% vs 12.55% (needs +0.64), worst fall -15.95% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A638: rejected. A638 vs a3: beat it in 4/13 walk-forward years, CAGR 7.99% vs 12.55% (needs +0.64), worst fall -25.26% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A639: rejected. A639 vs a3: beat it in 3/13 walk-forward years, CAGR 3.8% vs 12.55% (needs +0.64), worst fall -20.02% vs -10.71%, gate FAIL
+
+## 2026-11-13 (automatic)
+- Tested proposal A640: rejected. A640 vs a3: beat it in 2/13 walk-forward years, CAGR 5.36% vs 12.55% (needs +0.64), worst fall -19.13% vs -10.71%, gate FAIL
