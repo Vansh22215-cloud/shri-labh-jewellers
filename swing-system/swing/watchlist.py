@@ -153,6 +153,8 @@ def handle(text, source=""):
     except Exception:
         top = None
     rows = [assess(s, top) for s in syms[:40]]
+    log.info("Watchlist: %d stock(s) read, %d rated, %d with a trade now", len(syms),
+             sum(1 for r in rows if r.get("score")), sum(1 for r in rows if r.get("signal")))
     rows.sort(key=lambda r: -(r["score"] or 0))
     n_watch = save(syms, source)
     L = [f"📋 WATCHLIST from {source or 'forwarded'} · {len(syms)} stocks read", ""]

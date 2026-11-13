@@ -172,6 +172,11 @@ def _read_picture(token, msg):
             f.write(r.content); f.flush()
             from .chart_reader import read_image
             out = read_image(f.name)
+        try:
+            from .watchlist import extract_symbols
+            log.info("Picture: %d NSE stock name(s) recognised", len(extract_symbols(out["text"])))
+        except Exception:
+            pass
         log.info("Chart picture read: %d words, %d lines, %d pattern names", len(out["text"].split()),
                  len(out["levels"]), len(out["patterns"]))
         return out
