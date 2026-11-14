@@ -76,8 +76,14 @@ def signal(d):
             ob = (round(float(zl[k[-1]]) * f, 2), round(float(zh[k[-1]]) * f, 2))
     except Exception:
         pass
+    tier, conf = None, []
+    try:   # D105: confirmations from the owner's TradingView indicators decide whether / how strongly to send
+        from .confirmations import assess
+        tier, conf = assess(a.tail(400), at_order_block=bool(ob))
+    except Exception:
+        tier, conf = "B", []
     return {"close": raw, "stop": round(raw - STOP_ATR * atr * f, 2), "sma5": round(float(s5.iloc[-1]) * f, 2),
-            "rsi2": round(float(r2.iloc[-1]), 2), "atr": atr * f, "ob": ob}
+            "rsi2": round(float(r2.iloc[-1]), 2), "atr": atr * f, "ob": ob, "tier": tier, "conf": conf}
 
 
 def scan(day=None):
@@ -102,16 +108,20 @@ def scan(day=None):
             if d is None or len(d) < 210:
                 continue
             sg = signal(d)
-            if sg:
+            if sg and sg.get("tier"):              # D105: weak dips (no fear spike / squeeze on) are not sent
                 sg["symbol"] = s
                 out.append(sg)
         except Exception:
             continue
-    return sorted(out, key=lambda x: (not x.get("ob"), x["rsi2"])), "market dipped inside an uptrend - dip-buy day"
+    return sorted(out, key=lambda x: (-rank(x), x["rsi2"])), "market dipped inside an uptrend - dip-buy day"
 
 
 def rank(sg):
-    """10 when the dip lands on a bullish order block (tested ~81% in profit, D103); 9 otherwise (~70%)."""
+    """D105 tiers: A (fear spike + support zone, 79% tested) 10, B (fear spike, 72%) 9, C (zone only, 74%, small
+    sample) 8. Signals without a tier are not sent. Older signals without a tier: order block 10, else 9."""
+    from .confirmations import TIERS
+    if "tier" in sg:
+        return TIERS[sg["tier"]]["rank"] if sg["tier"] in TIERS else 0
     return 10 if sg.get("ob") else 9
 
 
@@ -129,6 +139,8 @@ def send_evening(day, settings=None, sigs=None):
         if already(sym, "NORMAL", str(day)):
             continue
         r = rank(sg)
+        if r < 1:                                   # D105: untiered (weak) dip - not sent
+            continue
         rp = 2.0
         per = max(1e-9, sg["close"] - sg["stop"])
         qty = int(min(cap * rp / 100 / per, cap * 0.25 / sg["close"]))
@@ -140,10 +152,9 @@ def send_evening(day, settings=None, sigs=None):
                f"Target: sell when it closes above its 5-day average (now ≈ {sg['sma5']:,.2f}) - I'll alert you\n\n"
                f"{rp:g}% Risk\n\n"
                + (f"🧱 At a demand zone (order block {sg['ob'][0]:,.2f}-{sg['ob'][1]:,.2f}): big buyers stepped in "
-                  f"here before. Tested: {OB_STATS['win_pct']:.0f}% of such trades ended in profit, avg "
-                  f"{OB_STATS['avg_pct']:+.1f}%\n\n" if sg.get("ob") else "") +
-               f"⭐ RANK - {r}/10 · Qty {qty} · tested: {STATS['win_pct']:.0f}% of past trades ended in profit, "
-               f"avg {STATS['avg_win_pct']:+.1f}% win / {STATS['avg_loss_pct']:+.1f}% loss, ~4 days\n\n"
+                  f"here before.\n\n" if sg.get("ob") else "")
+               + (f"✅ Confirmed by: {', '.join(sg['conf'])}\n\n" if sg.get("conf") else "") +
+               f"⭐ RANK - {r}/10 · Qty {qty} · tested: {_tier_line(sg)}, ~4 days\n\n"
                f"{tv_link(sym, daily=True)}")
         send(msg)
         try:
@@ -155,6 +166,15 @@ def send_evening(day, settings=None, sigs=None):
                   "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "HP"})
         n += 1
     return n
+
+
+def _tier_line(sg):
+    from .confirmations import TIERS
+    t = TIERS.get(sg.get("tier"))
+    if t:
+        return f"{t['win']}% of such trades ended in profit, avg {t['avg']:+.1f}% (last 3 years {t['holdout']}%)"
+    return (f"{STATS['win_pct']:.0f}% of past trades ended in profit, avg {STATS['avg_win_pct']:+.1f}% win / "
+            f"{STATS['avg_loss_pct']:+.1f}% loss")
 
 
 OPT_STATS = {"trades": 811, "win_pct": 69.7, "avg_pct": 16.9, "holdout_win_pct": 70.3, "holdout_avg_pct": 18.8}

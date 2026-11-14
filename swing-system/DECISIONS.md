@@ -700,3 +700,23 @@ long side, all 6 profiles, 1/3 sold at each target, break-even after TP1, next-o
 - Its dashboard counts a trade as a win once TP1 is touched, and 'Auto-Optimize' picks the profile with the best
   win rate on the same chart it reports on (in-sample) - both make its on-chart statistics look better than real.
 Decision: not used.
+
+## D105 - 2026-11-14 - 20 TradingView indicators tested; 5 become dip-buy confirmations (free)
+Rebuilt in `validation/indicator_lab.py` (from each script's published rules and standard defaults): SuperTrend,
+UT Bot, Squeeze Momentum, CM Williams Vix Fix, WaveTrend, Trend Magic, MACD (ChrisMoody), LuxAlgo S/R Levels with
+Breaks, LuxAlgo Trendlines with Breaks, LuxAlgo SMC (internal/swing BOS & CHoCH, FVG), S/R Channels
+(LonesomeTheBlue), swing high/low S/R, ChartPrime high-volume boxes, RedK VA-CCI, EmreKb Market Structure Break &
+Order Block, WillyAlgoTrader HTF Sweep + CISD, ICT killzones (adapted to the NSE first hour), BigBeluga trend volume
+profile, plus Rolling Candle Profile. Not testable: JMX v3 (protected source, no rules), HTF Trend Frontier
+(formulas not published).
+1. STAND-ALONE (swing daily 13y top-300, intraday hourly squared off, F&O hourly 2 days both sides; costs 0.35 /
+   0.12 / 0.30%): no indicator beats random holding after costs except Rolling Candle Profile on daily (+1.1% edge,
+   holdout ~0 with a 30-day cap; positional version D104). Intraday and F&O: every one negative after costs.
+2. AS CONFIRMATION of the dip-buy (`validation/indicator_confluence.py`, `hp_tiers.py`):
+   fear spike (Vix Fix) + strong zone (order block / WaveTrend oversold / EmreKb MSB order block / swing-low hold):
+   454 trades 79% in profit +2.7% (holdout 81%); fear spike alone 811, 72%, +1.9%; zone without spike 49, 74%;
+   NO spike and no zone 391, 64%, +0.4%; Squeeze ON 396, 65%, +0.4% (holdout 51%). SuperTrend / BigBeluga
+   bullish made dip-buys worse. Positional: no confirmation helped reliably.
+Decision: dip-buy tips now need a tier - A (rank 10), B (9), C (8); weak dips (no spike & no zone, or Squeeze ON)
+are not sent. Kept trades: 1,040, 76% in profit, +2.5% avg (holdout 75%, +2.8%) vs 72% / +1.7% before.
+Intraday stays paused (D97 gate) - none of the 20 indicators gave an intraday edge after costs.

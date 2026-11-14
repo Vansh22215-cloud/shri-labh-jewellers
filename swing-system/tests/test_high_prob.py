@@ -56,3 +56,23 @@ def test_rank_10_only_at_an_order_block():
     from swing import high_prob as hp
     assert hp.rank({"rsi2": 0.1, "ob": None}) == 9
     assert hp.rank({"rsi2": 1.5, "ob": (95.0, 99.0)}) == 10
+
+
+def test_d105_tiers_rank_and_skip():
+    from swing import high_prob as hp
+    assert hp.rank({"rsi2": 1, "tier": "A"}) == 10 and hp.rank({"rsi2": 1, "tier": "B"}) == 9
+    assert hp.rank({"rsi2": 1, "tier": "C"}) == 8 and hp.rank({"rsi2": 1, "tier": None}) == 0
+
+
+def test_confirmations_assess_runs_on_real_shape():
+    import numpy as np
+    import pandas as pd
+    from swing.confirmations import assess
+    rng = np.random.default_rng(3)
+    c = 100 * np.exp(np.cumsum(0.01 * rng.standard_normal(300)))
+    c[-3:] = c[-4] * np.array([0.95, 0.91, 0.88])           # a sharp 3-day dip
+    o = np.r_[c[0], c[:-1]]
+    a = pd.DataFrame({"open": o, "high": np.maximum(o, c) * 1.01, "low": np.minimum(o, c) * 0.99, "close": c})
+    tier, why = assess(a)
+    assert tier in ("A", "B", "C", None) and isinstance(why, list)
+    assert any("fear spike" in w for w in why)               # a sharp dip shows up as a Vix Fix fear spike

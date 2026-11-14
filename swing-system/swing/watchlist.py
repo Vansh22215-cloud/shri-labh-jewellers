@@ -257,6 +257,8 @@ def assess(sym, top300=None):
         elif val > 50:
             pts += 0.5
     sig = high_prob.signal(d)
+    if sig and "tier" in sig and not sig["tier"]:
+        sig = None                                  # D105: a weak dip (no fear spike / squeeze on) is not a trade
     mkt_ok = None
     try:
         from . import data_prices
