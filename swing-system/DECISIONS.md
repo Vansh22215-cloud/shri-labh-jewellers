@@ -678,3 +678,25 @@ Decision: a dip-buy signal at an order block is ranked 10/10 and the tip says so
 calls on their own, money flow and breadth are NOT used (no edge). Sector flow could not be tested (sector known
 for too few stocks). Live bid/ask pressure has no history: recorded every 30 min for liquid stocks
 (`data/orderflow_shadow.csv`, market data only) and judged by `orderflow.evaluate()` before it may ever count.
+
+## D104 - 2026-11-14 - Positional trades: Rolling Candle Profile (Zeiierman) - and AVPT (PhenLabs) rejected (free)
+Exact Python port of the owner-supplied Pine source (`swing/rolling_profile.py`, CC BY-NC-SA, attributed; the
+paste ended inside the SELL rule, the last step follows the author's description). Tests, next-open entry, 0.35%:
+- Daily, 13 years, top-300, exit on its own SELL signal: 9,552 trades, 44% in profit, +4.4% avg (wins +21%, losses
+  -9%), ~43 days. Random top-300 stock held as long: +2.7%. Hourly (3 years): ~0 after costs in every variant.
+  Exiting at the anchor or fixed ATR targets removes the edge. Hybrid mode is worse than Price mode.
+- Positional filter search (`validation/rolling_profile_positional.py`, chosen on development, checked on holdout):
+  BUY only when the stock is within 10% of its 52-week high, 5 x ATR safety stop: 6,340 trades, 45% in profit,
+  +5.4% avg (development +6.1%, holdout 43% / +3.2% vs random +2.1%).
+Decision: new 'Positional trade' tips in the evening (rank 6/10, 1% risk, at most 2 new a day and 4 open, stocks
+only), exit alert on the indicator's SELL signal or after 60 trading days; the safety stop is watched live.
+Settings: positional_tips, positional_max_new, positional_max_open.
+
+AVPT - Anchored VWAP Pullback & Target Zones (PhenLabs, MPL-2.0): the paste ended inside trade management, so the
+pullback / reclaim / target rules were rebuilt from the code shown + the author's page (`validation/avpt_research.py`,
+long side, all 6 profiles, 1/3 sold at each target, break-even after TP1, next-open entry, 0.35%):
+- Daily: +2.0 to +2.9% a trade over ~37 days, 57% in profit - about the same as holding a random top-300 stock as
+  long (+2.3%); holdout +0.4 to +1.3% (random ~+1.8%). Hourly: -0.1 to +0.1% (holdout about -0.2%).
+- Its dashboard counts a trade as a win once TP1 is touched, and 'Auto-Optimize' picks the profile with the best
+  win rate on the same chart it reports on (in-sample) - both make its on-chart statistics look better than real.
+Decision: not used.

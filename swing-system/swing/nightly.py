@@ -461,6 +461,12 @@ def run():
         high_prob.evening_exits(day)
         n_hp = high_prob.send_evening(day, settings)
         log.info("Evening: %d high-probability tip(s) sent", n_hp)
+        try:   # D104: positional trades (Rolling Candle Profile near the 52-week high)
+            from . import positional
+            positional.evening_exits(day)
+            log.info("Evening: %d positional tip(s) sent", positional.send_evening(day, settings))
+        except Exception as e:
+            log.warning("positional tips failed: %s", type(e).__name__)
         if settings.get("normal_a3_tips", False):      # the older a3 swing tips (53% winners) only if switched on
             from .live_engine import evening_tips
             evening_tips(tips or [], day, settings)

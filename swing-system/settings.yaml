@@ -50,3 +50,8 @@ risk_limits:
   daily_loss_pct: 2          # no new trades after losing this much in a day
   max_trades_per_day: 3
   max_order_pct: 25          # no single order above this share of capital
+
+# D104 positional trades (Rolling Candle Profile BUY near the 52-week high; exit on its SELL signal)
+positional_tips: true
+positional_max_new: 2        # new positional tips a day at most
+positional_max_open: 4       # open positional tips at once at most (small capital)
