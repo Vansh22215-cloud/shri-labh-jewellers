@@ -73,7 +73,7 @@ def check(side, qty, entry, stop, capital=None, state=None, settings=None):
                    f"({L['max_order_pct']:g}% of capital).")
     if value > n["cash"] + 1:
         why.append(f"Not enough free cash: ₹{n['cash']:,.0f} left after your open trades, order needs ₹{value:,.0f}.")
-    if st["new_today"] >= L["max_trades_per_day"]:
+    if L["max_trades_per_day"] and st["new_today"] >= L["max_trades_per_day"]:   # 0 = no limit
         why.append(f"You already took {st['new_today']} new trade(s) today (limit {L['max_trades_per_day']}).")
     if st["realised_today"] <= -cap * L["daily_loss_pct"] / 100:
         why.append(f"Daily loss stop reached: ₹{-st['realised_today']:,.0f} lost today (limit "

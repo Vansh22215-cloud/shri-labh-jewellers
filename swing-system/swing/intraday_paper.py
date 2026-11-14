@@ -267,7 +267,7 @@ def send_tips(new, now, source="Yahoo", settings=None):
     tok, chat = (s.get("telegram_bot_token") or "").strip(), str(s.get("telegram_chat_id") or "").strip()
     out = set()
     for n in sorted(new, key=lambda x: x["setup"] != "ORB"):
-        if sent_today >= cap or n["setup"] not in allowed:
+        if (cap and sent_today >= cap) or n["setup"] not in allowed:      # cap 0 = no daily limit (D106)
             continue
         tm_line = None
         try:

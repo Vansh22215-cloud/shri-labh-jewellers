@@ -20,13 +20,13 @@ tips_mode: aggressive
 # Intraday tips only once a setup PROVES >= 65% winners over >= 40 live results ("auto"); "off" = never.
 # D100: the bot replies to forwarded tips/messages (F&O: probability /10 + reasons; others: short note)
 reply_to_forwarded: true
-intraday_mode: auto
+intraday_mode: on   # owner's choice 2026-11-14 (D106): intraday tips ON now, no live-proof gate
 normal_a3_tips: false   # the older a3 swing tips won only ~53% of trades
 min_rank: 8   # raise to 9 for even fewer, stronger tips
 # Owner's choice 2026-11-11: live intraday tips (aggressive). Only setups passing the Kite-history test keep
 # sending (DECISIONS D94). Max tips a day, none after 2:30 pm.
-intraday_tips: false   # the live engine sends intraday tips now (D95)
-intraday_max_tips: 2
+intraday_tips: true    # owner's choice 2026-11-14 (D106)
+intraday_max_tips: 0    # 0 = no daily limit
 aggressive_strategy: a3
 # Stop ALL aggressive tips if their total result reaches this loss (% of capital).
 aggressive_hard_stop_pct: 20
@@ -48,10 +48,10 @@ live_strategy: v1
 risk_limits:
   risk_per_trade_pct: 1      # max loss at the stop per trade (% of capital)
   daily_loss_pct: 2          # no new trades after losing this much in a day
-  max_trades_per_day: 3
+  max_trades_per_day: 0      # 0 = no limit on the number of trades (owner's choice D106)
   max_order_pct: 25          # no single order above this share of capital
 
 # D104 positional trades (Rolling Candle Profile BUY near the 52-week high; exit on its SELL signal)
 positional_tips: true
-positional_max_new: 2        # new positional tips a day at most
-positional_max_open: 4       # open positional tips at once at most (small capital)
+positional_max_new: 0        # 0 = no limit (owner's choice D106)
+positional_max_open: 0       # 0 = no limit

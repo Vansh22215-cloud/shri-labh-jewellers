@@ -720,3 +720,16 @@ profile, plus Rolling Candle Profile. Not testable: JMX v3 (protected source, no
 Decision: dip-buy tips now need a tier - A (rank 10), B (9), C (8); weak dips (no spike & no zone, or Squeeze ON)
 are not sent. Kept trades: 1,040, 76% in profit, +2.5% avg (holdout 75%, +2.8%) vs 72% / +1.7% before.
 Intraday stays paused (D97 gate) - none of the 20 indicators gave an intraday edge after costs.
+
+## D106 - 2026-11-14 - Owner's decision: intraday ON now, no count limits
+Owner: "Start intraday, no limits like 2 new tips... if there is a good one send it instantly... dip buy is not
+always possible, that does not mean no trade."
+- intraday_mode: on (the D97/D98 gate - 40 live results with >= 65% winners first - is removed); intraday_tips on;
+  intraday_max_tips 0 (no daily cap); positional_max_new / max_open 0 (no cap); risk_limits.max_trades_per_day 0.
+- Kept (quality and money safety, not counts): rank >= 8 to send, liquidity (>= Rs 1 cr traded), the breakout must
+  still be holding and Nifty must agree, no new intraday tip after 2:30 pm, square-off alert at 3:15 pm, stop-loss
+  on every tip, quantity from 1% risk (risk by rank), 25% max per order, 2% daily-loss stop on order tickets.
+- The engine keeps learning: every qualified setup is followed (shadow), and a setup whose live results turn
+  negative is paused automatically (needs rank 10 until it recovers).
+Evidence stated to the owner: in testing (D97, D105) no intraday setup or indicator was profitable after costs;
+intraday tips are therefore higher risk than the dip-buy / positional tips.

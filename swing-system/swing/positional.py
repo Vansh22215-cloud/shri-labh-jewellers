@@ -87,10 +87,11 @@ def send_evening(day, settings=None, sigs=None):
     sigs = scan() if sigs is None else sigs
     t = load_tips()
     open_n = int(((t["status"] == "open") & (t.get("setup", "") == "RCP")).sum()) if len(t) and "setup" in t else 0
-    room = max(0, int(s.get("positional_max_open", 4)) - open_n)
+    mo, mn = int(s.get("positional_max_open", 0) or 0), int(s.get("positional_max_new", 0) or 0)   # 0 = no limit
+    room = max(0, mo - open_n) if mo else len(sigs)
     log.info("Positional scan: %d signal(s), room for %d", len(sigs), room)
     n = 0
-    for sg in sigs[:min(room, int(s.get("positional_max_new", 2)))]:
+    for sg in sigs[:min(room, mn) if mn else room]:
         sym = sg["symbol"]
         if already(sym, "NORMAL", str(day)):
             continue
