@@ -134,9 +134,8 @@ def tests(d, s, nifty_up=None, R=None, mask=None):
         R.setdefault(f"{name} + Nifty uptrend | exit close below anchor", []).extend(run_trades(d, e & nu, below))
 
 
-if __name__ == "__main__":
-    which = sys.argv[1] if len(sys.argv) > 1 else "daily"
-    mode = sys.argv[2] if len(sys.argv) > 2 else "price"
+def main(which="daily", mode="price", sig=None, tag=""):
+    sig = sig or signals
     R = {}
     if which == "daily":
         u = pd.read_csv(f"{ROOT}/data/universe_history.csv")
@@ -161,7 +160,7 @@ if __name__ == "__main__":
                 b = months[i + 1] if i + 1 < len(months) else pd.Timestamp("2100-01-01")
                 if sym in members[a]:
                     mm |= (d.index >= a) & (d.index < b)
-            tests(d, signals(d, mode), NUP.reindex(d.index).fillna(False).values, R, mm)
+            tests(d, sig(d, mode), NUP.reindex(d.index).fillna(False).values, R, mm)
         split = "2023-11-01"
     else:
         import glob
@@ -173,9 +172,13 @@ if __name__ == "__main__":
             if len(d) < 500:
                 continue
             nu = NUP.reindex(d.index.normalize()).ffill().fillna(False).values
-            tests(d, signals(d, mode), nu, R)
+            tests(d, sig(d, mode), nu, R)
         split = "2025-06-01"
     out = summary(R, split)
     print(f"== {which} / {mode} ==")
     print(out.to_string(index=False))
-    out.to_csv(f"{ROOT}/validation/rolling_profile_{which}_{mode}.csv", index=False)
+    out.to_csv(f"{ROOT}/validation/rolling_profile_{tag}{which}_{mode}.csv", index=False)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else "daily", sys.argv[2] if len(sys.argv) > 2 else "price")
