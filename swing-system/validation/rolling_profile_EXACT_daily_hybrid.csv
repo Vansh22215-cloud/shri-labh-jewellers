@@ -1,0 +1,9 @@
+test,trades,win%,avg%,avg_win%,avg_loss%,dev_win%,HOLD_win%,HOLD_avg%,bars_held
+BUY signal | exit on SELL signal,12243,41.1,2.85,18.1,-7.8,42.1,38.2,2.13,37.3
+BUY signal | exit close below anchor,18749,32.6,0.74,10.85,-4.17,33.3,30.8,0.29,14.6
+"BUY signal | stop 1.5 ATR, target 3 ATR",22647,39.1,-0.02,7.95,-5.12,40.0,36.3,-0.28,9.4
+BUY signal + Nifty uptrend | exit close below anchor,15292,32.5,0.69,10.69,-4.12,32.8,31.3,0.47,14.6
+plain EMA21 cross-up (no bands) - comparison | exit on SELL signal,19514,36.1,1.93,17.16,-6.68,37.1,32.9,1.12,31.6
+plain EMA21 cross-up (no bands) - comparison | exit close below anchor,53858,26.6,0.37,8.52,-2.59,27.1,25.1,0.01,8.4
+"plain EMA21 cross-up (no bands) - comparison | stop 1.5 ATR, target 3 ATR",33213,40.0,0.14,8.13,-5.19,41.0,37.1,-0.19,10.0
+plain EMA21 cross-up (no bands) - comparison + Nifty uptrend | exit close below anchor,40453,25.8,0.3,8.44,-2.53,25.8,25.7,0.15,8.2
