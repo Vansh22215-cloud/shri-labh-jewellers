@@ -50,3 +50,9 @@ def test_evening_sends_format_and_exits(monkeypatch, tmp_path):
     monkeypatch.setattr("swing.data_prices.load", lambda s: up)
     msgs = hp.evening_exits(str(nxt.date()))
     assert msgs and "SELL at tomorrow's open" in msgs[0] and le.load_tips()["status"].iloc[0] == "done"
+
+
+def test_rank_10_only_at_an_order_block():
+    from swing import high_prob as hp
+    assert hp.rank({"rsi2": 0.1, "ob": None}) == 9
+    assert hp.rank({"rsi2": 1.5, "ob": (95.0, 99.0)}) == 10

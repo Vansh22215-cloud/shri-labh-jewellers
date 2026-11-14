@@ -655,3 +655,26 @@ TDPower), channel short names (Voda Idea, Zee Ent, Godrej Props, NMDC Steel), mi
   2 lists), with my chart score /10. Bullish names are watched 45 days for the tested dip-buy (D98); bearish names
   are not (the system does not short). Long replies are split into several messages (Telegram's 4,096 limit).
 Tested on the owner's 5 pictures of 13 Nov 2026: 50 of 50 stocks read with the right direction, no false names.
+
+## D103 - 2026-11-14 - Order flow (Tredye 'Market Pulse' ideas) built from Kite data and tested (free)
+Built `swing/orderflow.py`: Kite order-book buy/sell pressure, market mood (advancers/decliners, VIX), sector money
+flow, Chaikin money flow, and bullish ORDER BLOCKS (last down candle before a >=1.5 ATR up move that breaks the
+10-day high; first return into the zone = the 'call'). 13-year test, top-300, next-open entry, 0.35% costs,
+holdout from 2023-11 (`validation/orderflow_research.py`, `orderflow_robust.py`):
+
+| idea | trades | in profit | avg | holdout in profit |
+|---|---|---|---|---|
+| dip-buy D98 (baseline) | 1,660 | 71.9% | +1.74% | 70.1% |
+| **dip-buy at an order block** | **347** | **80.7%** | **+3.03%** | **82.1%** |
+| dip-buy NOT at an order block | 1,372 | 70.3% | +1.49% | 67.1% |
+| + stock money flow positive | 459 | 69.9% | +1.82% | 68.5% |
+| + breadth risk-on | 788 | 72.2% | +1.74% | 70.8% |
+| order-block call ALONE, 2R target | 5,081 | 42.6% | +0.15% | 42.2% |
+| order-block call ALONE, exit >SMA5 | 5,193 | 49.2% | -0.09% | 48.1% |
+
+All 27 nearby settings (impulse 1-2 ATR, zone life 30-120 days, touch within 1-5 days) give 76-86%; the middle
+setting is used, not the best one. Weak years: 2016 60%, 2019 57%, 2026 so far 57% (7 trades).
+Decision: a dip-buy signal at an order block is ranked 10/10 and the tip says so; others stay 9/10. Order-block
+calls on their own, money flow and breadth are NOT used (no edge). Sector flow could not be tested (sector known
+for too few stocks). Live bid/ask pressure has no history: recorded every 30 min for liquid stocks
+(`data/orderflow_shadow.csv`, market data only) and judged by `orderflow.evaluate()` before it may ever count.

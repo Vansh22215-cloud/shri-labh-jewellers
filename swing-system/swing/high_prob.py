@@ -21,6 +21,12 @@ STATS = {"trades": 1660, "win_pct": 71.9, "avg_pct": 1.74, "holdout_win_pct": 70
          "avg_win_pct": 3.92, "avg_loss_pct": -3.85, "avg_days": 3.6}
 
 
+# D103: the signal while price is at a fresh bullish ORDER BLOCK (demand zone, touched in the last 3 days)
+# 13 years: 347 trades, 80.7% in profit, +3.03% avg (development 80.2%, untouched holdout 82.1%, +3.37%); all 27
+# nearby settings 76-86%. The same signal NOT at an order block: 70.3%, +1.49%.
+OB_STATS = {"trades": 347, "win_pct": 80.7, "avg_pct": 3.03, "holdout_win_pct": 82.1}
+
+
 def rsi(c, n=2):
     d = c.diff()
     up = d.clip(lower=0).ewm(alpha=1 / n, adjust=False).mean()
@@ -61,8 +67,17 @@ def signal(d):
     atr = float(tr.rolling(14).mean().iloc[-1])
     raw = float(a["raw_close"].iloc[-1])
     f = raw / float(c.iloc[-1])                          # back to today's (unadjusted) rupee prices
+    ob = None
+    try:
+        from .orderflow import order_block_touches
+        t, zl, zh = order_block_touches(a.tail(400))
+        k = [i for i in range(len(t) - 3, len(t)) if t[i]]
+        if k:
+            ob = (round(float(zl[k[-1]]) * f, 2), round(float(zh[k[-1]]) * f, 2))
+    except Exception:
+        pass
     return {"close": raw, "stop": round(raw - STOP_ATR * atr * f, 2), "sma5": round(float(s5.iloc[-1]) * f, 2),
-            "rsi2": round(float(r2.iloc[-1]), 2), "atr": atr * f}
+            "rsi2": round(float(r2.iloc[-1]), 2), "atr": atr * f, "ob": ob}
 
 
 def scan(day=None):
@@ -92,12 +107,12 @@ def scan(day=None):
                 out.append(sg)
         except Exception:
             continue
-    return sorted(out, key=lambda x: x["rsi2"]), "market dipped inside an uptrend - dip-buy day"
+    return sorted(out, key=lambda x: (not x.get("ob"), x["rsi2"])), "market dipped inside an uptrend - dip-buy day"
 
 
 def rank(sg):
-    """9 for every signal (the strategy's tested ~70% hit rate); 10 when the dip is extreme (RSI2 < 0.5)."""
-    return 10 if sg["rsi2"] < 0.5 else 9
+    """10 when the dip lands on a bullish order block (tested ~81% in profit, D103); 9 otherwise (~70%)."""
+    return 10 if sg.get("ob") else 9
 
 
 def send_evening(day, settings=None, sigs=None):
@@ -124,6 +139,9 @@ def send_evening(day, settings=None, sigs=None):
                f"SL at {sg['stop']:,.2f} ❗️\n\n"
                f"Target: sell when it closes above its 5-day average (now ≈ {sg['sma5']:,.2f}) - I'll alert you\n\n"
                f"{rp:g}% Risk\n\n"
+               + (f"🧱 At a demand zone (order block {sg['ob'][0]:,.2f}-{sg['ob'][1]:,.2f}): big buyers stepped in "
+                  f"here before. Tested: {OB_STATS['win_pct']:.0f}% of such trades ended in profit, avg "
+                  f"{OB_STATS['avg_pct']:+.1f}%\n\n" if sg.get("ob") else "") +
                f"⭐ RANK - {r}/10 · Qty {qty} · tested: {STATS['win_pct']:.0f}% of past trades ended in profit, "
                f"avg {STATS['avg_win_pct']:+.1f}% win / {STATS['avg_loss_pct']:+.1f}% loss, ~4 days\n\n"
                f"{tv_link(sym, daily=True)}")

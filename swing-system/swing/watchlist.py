@@ -263,8 +263,16 @@ def assess(sym, top300=None):
         mkt_ok = high_prob.market_ok(data_prices.load("NIFTY50"))[0]
     except Exception:
         pass
+    try:   # D103: a fresh demand zone (order block) just touched
+        from .orderflow import order_block_touches
+        t, _, _ = order_block_touches(a.tail(400))
+        if t[-3:].any():
+            pts += 0.5; why.append("at a demand zone (order block)")
+    except Exception:
+        pass
     if sig and mkt_ok:
-        pts += 2; why.insert(0, "DIP-BUY SIGNAL NOW (the 72%-tested rule)")
+        pts += 2; why.insert(0, "DIP-BUY SIGNAL NOW (the 72%-tested rule" + (", at an order block: 81%)" if sig.get("ob")
+                                                                             else ")"))
     elif sig:
         why.insert(0, "dip-buy conditions on the stock, but the market filter is not open today")
     if top300 is not None and sym not in top300:
