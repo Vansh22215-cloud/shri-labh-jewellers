@@ -162,7 +162,11 @@ def quotes(symbols):
                           "high": float(o.get("high") or q["last_price"]), "low": float(o.get("low") or q["last_price"]),
                           "prev": float(o.get("close") or q["last_price"]),
                           "volume": float(q.get("volume") or 0),
-                          "value_cr": float(q.get("volume") or 0) * float(q["last_price"]) / 1e7 if q.get("volume") else None}
+                          "value_cr": float(q.get("volume") or 0) * float(q["last_price"]) / 1e7 if q.get("volume") else None,
+                          # D103 order flow: total pending buy / sell quantity and the top-5 bid/ask book
+                          "buy_qty": float(q.get("buy_quantity") or 0), "sell_qty": float(q.get("sell_quantity") or 0),
+                          "bid5": sum(float(x.get("quantity") or 0) for x in (q.get("depth") or {}).get("buy", [])),
+                          "ask5": sum(float(x.get("quantity") or 0) for x in (q.get("depth") or {}).get("sell", []))}
     except Exception as e:
         log.warning("Kite quotes failed (%s) - using Yahoo", type(e).__name__)
         return {}

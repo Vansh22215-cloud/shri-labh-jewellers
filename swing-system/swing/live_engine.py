@@ -692,6 +692,14 @@ class Engine:
         q = kite.quotes(self.uni)
         if q:
             self.quotes.update(q)
+            try:   # D103: order-book pressure shadow record every 30 min (judged later by orderflow.evaluate)
+                import time as _t
+                from . import orderflow
+                if _t.time() - getattr(self, "_of_last", 0) > 1800:
+                    self._of_last = _t.time()
+                    log.info("Order flow: %d stocks recorded", orderflow.record(q))
+            except Exception as e:
+                log.warning("order flow record failed: %s", type(e).__name__)
             for s, v in q.items():
                 if v.get("prev"):
                     self.prev.setdefault(s, v["prev"])
