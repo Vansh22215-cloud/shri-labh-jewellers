@@ -2098,3 +2098,6 @@
 
 ## 2026-11-13 (automatic)
 - Tested proposal A640: rejected. A640 vs a3: beat it in 2/13 walk-forward years, CAGR 5.36% vs 12.55% (needs +0.64), worst fall -19.13% vs -10.71%, gate FAIL
+
+## 2026-11-14 (automatic)
+- Weekly session aborted: sandbox tests failed. Live system untouched.
