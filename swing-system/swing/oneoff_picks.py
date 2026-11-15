@@ -1,4 +1,4 @@
-"""ONE-OFF request (owner, 2026-11-15): 5 NSE stocks for a 15-day hold, overall stop-loss 10%, using Kite data.
+"""ONE-OFF request (owner, 2026-11-15; done - the request file was removed): 5 NSE stocks for a 15-day hold, overall stop-loss 10%, using Kite data.
 Not part of the regular system. Runs once inside the daemon (the only place the Kite keys exist):
   1. not logged in to Kite -> sends the Kite login link once (Telegram), waits for the login
   2. logged in -> Kite DAILY history (~2 years) + Kite live/last quotes for the 300 most-traded stocks,
