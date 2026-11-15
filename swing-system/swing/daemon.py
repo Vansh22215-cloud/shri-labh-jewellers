@@ -247,6 +247,11 @@ def minute_tasks(t=None):
                       f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>", label="kite login")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
+    try:   # one-off owner request (picks with Kite data) - does nothing once done
+        from . import oneoff_picks
+        oneoff_picks.maybe_run(t)
+    except Exception as e:
+        log.warning("Daemon: one-off request failed: %s", type(e).__name__)
     try:   # 9:00 am morning brief: filings, results due, insider trades for the followed stocks
         if wd and t >= t.replace(hour=9, minute=0, second=0) and t.hour < 12 and claim_once("morning brief", t):
             from . import nse_filings
