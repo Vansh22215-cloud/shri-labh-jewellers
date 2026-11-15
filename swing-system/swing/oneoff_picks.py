@@ -128,6 +128,9 @@ def maybe_run(now=None):
     st = _done()
     if st.get(rid) == "done":
         return
+    if not getattr(maybe_run, "_said", False):
+        maybe_run._said = True
+        log.info("One-off picks: pending (%s)", st.get(rid, "new"))
     from . import kite, telegram
     s = load_settings()
     if not kite.configured():
