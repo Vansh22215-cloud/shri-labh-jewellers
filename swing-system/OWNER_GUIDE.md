@@ -15,6 +15,8 @@ the system never touches your money or your Zerodha account.
 | **Normal trade (dip-buy)** in the evening, rank 8-10/10 | Buy at next morning's open; sell on the exit alert (~4 days) |
 | **Positional trade** in the evening, rank 6/10 | Buy at next open; hold until the SELL alert (weeks); expect several small losses before a big win |
 | **AI pick** in the evening, rank 6/10 | Buy at next open; sell after 10 trading days (alert). ~half win, but winners beat the market on average |
+| **Discovered strategy Sx** in the evening, rank 7/10 | A rule the system invented, tested on 13 years AND proved on live data itself. Buy at next open, sell on the alert |
+| **🧪 New strategy promoted / retired** | Information only - the system found (or dropped) a strategy by itself |
 | **Exit alert** (✅ ⛔️ ⏰ 🔻 ⌛) | Do what it says |
 | **Company of the day** | Read if you like |
 | **⚠️ System problem / 🤖 Autopilot** | Usually nothing to do - it explains itself. Repeating every day for a week? see "When to get help" |
@@ -28,6 +30,11 @@ Forward any tip, chart picture or watchlist album to the bot - it answers with a
 - Intraday becomes a little less strict (rank 7) for setups whose followed results are clearly good.
 - If a GitHub run fails, prices are stale, self-tests fail or Zerodha stops sending prices: one "System problem"
   message (at most once a day / 6 hours). It retries by itself.
+
+## It invents new strategies by itself
+Every week it combines market building blocks into hundreds of new rules, keeps only those that won in 3 separate
+periods of 13 years, follows them silently on live data, and lets them send tips only after ~20 live trades prove
+them. Losing ones are retired automatically.
 
 ## Changing settings (no code needed)
 On github.com open the repository → branch `claude/nse-swing-trading-system-sqncpt` → `swing-system/settings.yaml`

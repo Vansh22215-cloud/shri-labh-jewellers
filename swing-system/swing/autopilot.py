@@ -23,7 +23,7 @@ from .config import DATA, get_logger, load_settings
 
 log = get_logger()
 STATE_F = DATA / "autopilot.json"
-EXPECT = {"DIP": 72.0, "POS": 45.0, "INTRA": 50.0, "FNO": 50.0, "AI": 52.0}      # tested win rates (D98/D104/D105)
+EXPECT = {"DIP": 72.0, "POS": 45.0, "INTRA": 50.0, "FNO": 50.0, "AI": 52.0, "DISC": 53.0}      # tested win rates (D98/D104/D105)
 
 
 def _state():
@@ -47,6 +47,8 @@ def family(row):
         return "POS"
     if st == "AI":
         return "AI"
+    if st.startswith("DS"):
+        return "DISC"
     return "DIP"
 
 
@@ -92,7 +94,7 @@ def strategy_health(n=30):
 def _notify(text):
     try:
         from . import telegram
-        telegram.send(load_settings(), text, label="system problem")
+        telegram.send(load_settings(), text, label="autopilot" if text.startswith("🤖") else "system problem")
     except Exception:
         pass
 

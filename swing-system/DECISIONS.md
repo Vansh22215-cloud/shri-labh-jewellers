@@ -770,3 +770,17 @@ days), retrained weekly on the runner; autopilot pauses it 60 days if its live r
 Before the owner logs in, open tips' stops/targets are watched with Yahoo prices (every 2 min); a third login
 reminder at 11:00; on a login after 9:25 a 'Kite connected at HH:MM - live scanning started, N open tips watched'
 message. Scanning, the F&O list (D107) and all tip types start the moment the login arrives.
+
+## D112 - 2026-11-16 - Strategy discovery engine: the system invents new strategies itself
+`swing/discovery.py`. Weekly: ~400 NEW combinations (first run 1,500) of 2-3 of ~50 building blocks (cross-sectional
+extremes of momentum, RSI, distance from averages, 52-week position, volume surge, volatility, Vix Fix, WaveTrend,
+closing strength, gap, strength vs market; squeeze; market trend / dip / breadth) x hold 5 / 10 / 20 days, never
+retesting a combination. Gates (fresh signals, 0.35% costs, point-in-time top-300): EVERY one of 2013-2019,
+2020-2022 and the last 3 years: enough trades, >= 53% in profit, avg >= +1.0 / +0.8 / +0.5%, beating the average
+stock on the same days by >= 0.7%; positive in >= 70% of years. Survivors (max 5) are followed silently live;
+>= 20 live results with >= 55% in profit and positive avg -> promoted (max 3, rank 7, 1% risk, 4 ATR safety stop,
+exit after the hold); a promoted strategy whose live avg turns negative over 20 tips is retired. Owner told on
+promotion / retirement ('autopilot' Telegram label; autopilot messages moved to it too).
+First sweep (local, 1,500 combinations): 1 survivor - S1 "far above its 200-day average + strong 14-day RSI +
+closed near the day's low, hold 20 days": 2013-19 55% / +1.85% (excess +0.95), 2020-22 53% / +2.05% (+1.03),
+last 3 years 55% / +2.13% (+1.18), 12 of 14 years positive. (The live system runs its own first sweep.)

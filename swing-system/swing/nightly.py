@@ -474,6 +474,13 @@ def run():
             log.info("Evening: %d AI pick(s) sent", ml_ranker.send_evening(day, settings))
         except Exception as e:
             log.warning("AI picks failed: %s", type(e).__name__)
+        try:   # D112: strategy discovery - weekly search; nightly shadow / promote / retire / tips / exits
+            from . import discovery
+            discovery.maybe_search()
+            discovery.evening_exits(day)
+            log.info("Evening: %d discovered-strategy tip(s) sent", discovery.evening(day, settings))
+        except Exception as e:
+            log.warning("discovery failed: %s", type(e).__name__)
         try:   # D109 autopilot: live record -> throttles; system problems -> one Telegram alert
             from . import autopilot
             autopilot.health_alert(sys_problems)

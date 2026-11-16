@@ -74,6 +74,8 @@ def features(d):
             "atr": atr,
         }, index=d.index)
     f["fwd"] = np.r_[o[1 + H:] / o[1:-H] - 1, np.full(H + 1, np.nan)][:len(c)] if len(c) > H + 1 else np.nan
+    for k in (5, 20):                        # D112: other holding periods for the strategy discovery engine
+        f[f"fwd{k}"] = np.r_[o[1 + k:] / o[1:-k] - 1, np.full(k + 1, np.nan)][:len(c)] if len(c) > k + 1 else np.nan
     return f
 
 
