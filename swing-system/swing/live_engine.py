@@ -438,14 +438,94 @@ def fmt_normal(c, r, qty, rp, tomorrow=False):
 # ----------------------------------------------------------------------------- tip store + exits
 COLS = ["id", "time", "type", "symbol", "side", "entry", "stop", "targets", "rank", "qty", "contract", "lot",
         "premium", "opt_targets", "spot_sl", "status", "hit", "day", "setup", "hi_since", "lo_since", "closed_at",
-        "result_r", "result_pct"]
+        "result_r", "result_pct", "sid"]
 
 
-_LOCK = threading.RLock()       # the scan loop and the swing pass both write the tip file
+class _TipsLock:
+    """Thread lock + an OS file lock (the evening job runs in a separate process from the live engine): one writer at
+    a time across threads AND processes. Re-entrant within a thread."""
+
+    def __init__(self):
+        self._r = threading.RLock()
+        self._depth = 0
+        self._fh = None
+
+    def __enter__(self):
+        self._r.acquire()
+        self._depth += 1
+        if self._depth == 1:
+            try:
+                import fcntl
+                TIPS_F.parent.mkdir(parents=True, exist_ok=True)
+                self._fh = open(TIPS_F.with_suffix(".lock"), "w")
+                fcntl.flock(self._fh, fcntl.LOCK_EX)
+            except Exception:
+                self._fh = None
+        return self
+
+    def __exit__(self, *a):
+        self._depth -= 1
+        if self._depth == 0 and self._fh is not None:
+            try:
+                import fcntl
+                fcntl.flock(self._fh, fcntl.LOCK_UN)
+                self._fh.close()
+            except Exception:
+                pass
+            self._fh = None
+        self._r.release()
+        return False
+
+
+_LOCK = _TipsLock()       # the scan loop, the swing pass and the evening job all write the tip file
+
+
+BACKUP_F = TIPS_F.with_suffix(".bak")
 
 
 def load_tips():
-    return pd.read_csv(TIPS_F, dtype={"id": str}) if TIPS_F.exists() else pd.DataFrame(columns=COLS)
+    """The tip store. A damaged file is never used: the last good copy is restored and new tips are stopped
+    until the integrity check passes (exits keep working on the restored copy)."""
+    if not TIPS_F.exists():
+        return pd.DataFrame(columns=COLS)
+    try:
+        t = pd.read_csv(TIPS_F, dtype={"id": str})
+        if len(t) and not {"symbol", "status", "type"} <= set(t.columns):
+            raise ValueError("columns missing")
+        return t
+    except Exception as e:
+        log.error("Tip store damaged (%s) - restoring the last good copy", type(e).__name__)
+        try:
+            from . import safety
+            if BACKUP_F.exists():
+                t = pd.read_csv(BACKUP_F, dtype={"id": str})
+                import shutil
+                shutil.copyfile(TIPS_F, TIPS_F.with_suffix(".damaged"))
+                shutil.copyfile(BACKUP_F, TIPS_F)
+                safety.emergency("the tip store file was damaged; the last good copy was restored "
+                                 "(check /tips - tips sent after that copy may be missing)")
+                return t
+            safety.emergency("the tip store file is damaged and there is no backup copy")
+        except Exception:
+            pass
+        raise
+
+
+def write_tips(t):
+    """Atomic write (temp file + rename, so a crash can never leave half a file) and keep the previous good copy."""
+    with _LOCK:
+        TIPS_F.parent.mkdir(parents=True, exist_ok=True)
+        tmp = TIPS_F.with_suffix(".tmp")
+        t.to_csv(tmp, index=False)
+        pd.read_csv(tmp, dtype={"id": str})                  # the new file must read back before it replaces the old
+        if TIPS_F.exists():
+            try:
+                pd.read_csv(TIPS_F, dtype={"id": str})       # only a HEALTHY file becomes the backup
+                import shutil
+                shutil.copyfile(TIPS_F, BACKUP_F)
+            except Exception:
+                pass
+        tmp.replace(TIPS_F)
 
 
 def already(sym, typ, day):
@@ -483,7 +563,7 @@ def expire_old_intraday(today):
             close_tip(t, i, "squared", px)
             n += 1
         if n:
-            t.to_csv(TIPS_F, index=False)
+            write_tips(t)
         return n
 
 
@@ -495,12 +575,67 @@ def save_tip(row):
 def _save_tip(row):
     t = load_tips()
     row["id"] = f"{len(t) + 1:05d}"
-    pd.concat([t, pd.DataFrame([row])], ignore_index=True).to_csv(TIPS_F, index=False)
+    write_tips(pd.concat([t, pd.DataFrame([row])], ignore_index=True))
 
 
 def send(text, label="trade tip"):
     from . import telegram
-    return telegram.send(load_settings(), text, label=label)
+    return telegram.send_reliable(load_settings(), text, label=label)
+
+
+EXPERIMENTAL = {"INTRADAY": "EXPERIMENTAL - not proven profitable after costs; paper-trade or use a small size.",
+                "FNO": "EXPERIMENTAL / modelled - option results are modelled, not observed; you can lose the premium."}
+
+
+def signal_id(row):
+    import hashlib
+    key = f"{row.get('type')}|{row.get('setup', '')}|{row.get('symbol')}|{str(row.get('day', ''))[:10]}|{row.get('side')}"
+    return hashlib.sha1(key.encode()).hexdigest()[:10]
+
+
+def issue_tip(row, msg, settings=None):
+    """THE way every new trade recommendation leaves the system (audit 17 Nov):
+    1) safety gate (kill switch, safety stop, configured capital/risk, valid numbers, portfolio limits)
+    2) duplicate check by a persistent signal id
+    3) RECORD the tip first (atomic, locked store)
+    4) then send it - a failed send is kept in the outbox and retried, never lost.
+    Returns True when the tip was recorded."""
+    from . import safety
+    s = settings or load_settings()
+    row = dict(row)
+    row.setdefault("time", str(now_ist())[:16])
+    row["sid"] = signal_id(row)
+    ok, why = safety.check_new_entry(row, s)
+    if not ok:
+        safety.record_skip(row, why)
+        log.info("Tip skipped (%s %s): %s", row.get("type"), row.get("symbol"), why)
+        return False
+    with _LOCK:
+        t = load_tips()
+        if len(t) and "sid" in t and (t["sid"].astype(str) == row["sid"]).any():
+            log.info("Tip %s already recorded - not sent again", row["sid"])
+            return False
+        _save_tip(row)
+    cap = float(s["capital"])
+    try:
+        if row.get("type") == "FNO":
+            at_risk = float(row.get("premium") or 0) * float(row.get("lot") or 0) * float(row.get("qty") or 1)
+            risk_line = f"max loss if the option goes to zero ₹{at_risk:,.0f}"
+        else:
+            at_risk = float(row["qty"]) * abs(float(row["entry"]) - float(row["stop"]))
+            risk_line = f"at risk ₹{at_risk:,.0f} ({at_risk / cap * 100:.1f}% of ₹{cap:,.0f})"
+            tg = [float(x) for x in str(row.get("targets", "") or "").split("/") if x and x != "nan"]
+            if tg:
+                rr = abs(tg[0] - float(row["entry"])) / max(1e-9, abs(float(row["entry"]) - float(row["stop"])))
+                risk_line += f" · reward:risk to T1 {rr:.1f}"
+    except Exception:
+        risk_line = ""
+    footer = (f"\n\n🧾 Signal {row['sid']} · {row['time']} IST · {risk_line}\n"
+              "⚠️ A stop-loss is not a guaranteed price: gaps and thin trading can cause a bigger loss.")
+    if row.get("type") in EXPERIMENTAL:
+        footer += "\n🧪 " + EXPERIMENTAL[row["type"]]
+    send(msg + footer)
+    return True
 
 
 def _close(t, i, status, px, now):
@@ -585,7 +720,7 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                 _close(t, i, "squared", px, now)
                 msgs.append(f"⏰ #{sym} - 3:15 pm: square off the intraday trade now (now {_n(px)}).")
         t.loc[i, "hit"] = hit
-    t.to_csv(TIPS_F, index=False)
+    write_tips(t)
     for m in msgs:
         send(m, label="exit alert")
     return msgs
@@ -644,8 +779,7 @@ class Engine:
                 f["autopilot: intraday paused (live record negative)"] += 1
                 record_shadow(c, r, now)
                 return
-            if c["setup"] in ap.get("intra_rank7_setups", []):
-                need = min(need, 7)
+            # audit 17 Nov: the autopilot may only TIGHTEN - it never lowers the bar on its own
         except Exception:
             pass
         if ok == "strict" or lv.get("paused"):
@@ -673,14 +807,14 @@ class Engine:
         c["why"] = WORD.get(c["setup"], c["setup"])
         if c["symbol"] not in ("NIFTY50", "BANKNIFTY") and not already(c["symbol"], "INTRADAY", day) \
                 and now.hour * 60 + now.minute <= 14 * 60 + 30:
-            per = abs(c["entry"] - c["stop"])
-            qty = int(min(cap * risk_pct(r, "EQ") / 100 / per, cap / c["entry"]))
-            if qty >= 1:
-                send(fmt_intraday(c, r, qty))
+            from . import safety
+            qty = safety.size(c["entry"], c["stop"], settings, risk_pct(r, "EQ"))   # audit: was up to 100% of capital
+            if qty >= 1 and issue_tip({"time": str(now)[:16], "type": "INTRADAY", "symbol": c["symbol"], "side": c["side"],
+                                       "entry": c["entry"], "stop": c["stop"],
+                                       "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": qty,
+                                       "status": "open", "hit": 0, "day": day, "setup": c.get("setup")},
+                                      fmt_intraday(c, r, qty), settings):
                 f["SENT intraday"] += 1
-                save_tip({"time": str(now)[:16], "type": "INTRADAY", "symbol": c["symbol"], "side": c["side"],
-                          "entry": c["entry"], "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]),
-                          "rank": r, "qty": qty, "status": "open", "hit": 0, "day": day})
                 self.sent += 1
         if (c["symbol"] in self.fno or c["symbol"] in ("NIFTY50", "BANKNIFTY")) and not already(c["symbol"], "FNO", day):
             self.consider_fno(c, r, now, settings, hold_days=1)
@@ -696,14 +830,13 @@ class Engine:
         if not opt:
             self.funnel["F&O: no option fits the risk"] += 1
             return
-        send(fmt_fno(c, opt, r))
-        self.funnel["SENT F&O"] += 1
-        save_tip({"time": str(now)[:16], "type": "FNO", "symbol": c["symbol"], "side": c["side"], "entry": c["entry"],
-                  "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": 1,
-                  "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
-                  "opt_targets": "/".join(f"{x:.2f}" for x in opt["targets"]), "spot_sl": opt["spot_sl"],
-                  "status": "open", "hit": 0, "day": day})
-        self.sent += 1
+        if issue_tip({"time": str(now)[:16], "type": "FNO", "symbol": c["symbol"], "side": c["side"], "entry": c["entry"],
+                      "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": 1,
+                      "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
+                      "opt_targets": "/".join(f"{x:.2f}" for x in opt["targets"]), "spot_sl": opt["spot_sl"],
+                      "status": "open", "hit": 0, "day": day, "setup": c.get("setup")}, fmt_fno(c, opt, r), settings):
+            self.funnel["SENT F&O"] += 1
+            self.sent += 1
 
     def swing_pass(self, now, settings):
         """The system's own swing strategy on live prices (provisional), as Normal trades."""
@@ -735,14 +868,15 @@ class Engine:
             r, _ = rank(c, self._ctx(sym), tm)
             if r < int(settings.get("min_rank", 8)):
                 continue
-            rp = risk_pct(r, "EQ")
-            qty = int(min(cap * rp / 100 / max(1e-9, c["entry"] - c["stop"]), cap * 0.25 / c["entry"]))
-            if qty < 1:
+            from . import safety
+            rp = min(risk_pct(r, "EQ"), float((settings.get("risk_limits") or {}).get("risk_per_trade_pct", 1)))
+            qty = safety.size(c["entry"], c["stop"], settings, rp)
+            if qty < 1 or not issue_tip({"time": str(now)[:16], "type": "NORMAL", "symbol": sym, "side": "buy",
+                                         "entry": c["entry"], "stop": c["stop"],
+                                         "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": qty,
+                                         "status": "open", "hit": 0, "day": day, "setup": "SWING"},
+                                        fmt_normal(c, r, qty, rp), settings):
                 continue
-            send(fmt_normal(c, r, qty, rp))
-            save_tip({"time": str(now)[:16], "type": "NORMAL", "symbol": sym, "side": "buy", "entry": c["entry"],
-                      "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": qty,
-                      "status": "open", "hit": 0, "day": day})
             self.sent += 1
             if sym in self.fno and r >= 7 and not already(sym, "FNO", day):
                 c["why"] = "swing setup"
@@ -868,6 +1002,11 @@ class Engine:
                 hot_q = self.hot()
             try:
                 h = kite.historical(sym, "5minute", days=4)
+                self._downloads = getattr(self, "_downloads", 0) + 1
+                if time.time() - getattr(self, "_status_t", 0) >= 180:
+                    self._status_t = time.time()
+                    from .monitor import engine_status
+                    engine_status(self, now, kite.logged_in())
                 if h is not None and len(h):
                     h.index = pd.to_datetime(h.index)
                     h.index = h.index.tz_localize(None) if h.index.tz is not None else h.index
@@ -929,13 +1068,14 @@ def evening_tips(plans, day, settings=None):
         r, _ = rank(c, ctx, tm)
         if r < int(s.get("min_rank", 8)):
             continue
-        rp = risk_pct(r, "EQ")
-        qty = int(min(cap * rp / 100 / max(1e-9, entry - c["stop"]), cap * 0.25 / entry))
-        if qty < 1:
+        from . import safety
+        rp = min(risk_pct(r, "EQ"), float((s.get("risk_limits") or {}).get("risk_per_trade_pct", 1)))
+        qty = safety.size(entry, c["stop"], s, rp)
+        if qty < 1 or not issue_tip({"time": str(now_ist())[:16], "type": "NORMAL", "symbol": sym, "side": "buy",
+                                     "entry": entry, "stop": c["stop"],
+                                     "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": qty,
+                                     "status": "open", "hit": 0, "day": str(day), "setup": "A3"},
+                                    fmt_normal(c, r, qty, rp, tomorrow=True), s):
             continue
-        send(fmt_normal(c, r, qty, rp, tomorrow=True))
-        save_tip({"time": str(now_ist())[:16], "type": "NORMAL", "symbol": sym, "side": "buy", "entry": entry,
-                  "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": qty,
-                  "status": "open", "hit": 0, "day": str(day)})
         out += 1
     return out

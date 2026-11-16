@@ -20,7 +20,9 @@ tips_mode: aggressive
 # Intraday tips only once a setup PROVES >= 65% winners over >= 40 live results ("auto"); "off" = never.
 # D100: the bot replies to forwarded tips/messages (F&O: probability /10 + reasons; others: short note)
 reply_to_forwarded: true
-intraday_mode: on   # owner's choice 2026-11-14 (D106): intraday tips ON now, no live-proof gate
+intraday_mode: auto   # audit 17 Nov (owner's mission: experimental strategies stay in shadow until proven): a setup
+                      # sends intraday/F&O tips only after >= 40 live followed results with >= 65% winners and a
+                      # positive average. Set 'on' to receive them anyway (EXPERIMENTAL, unproven after costs).
 normal_a3_tips: false   # the older a3 swing tips won only ~53% of trades
 min_rank: 8   # raise to 9 for even fewer, stronger tips
 # Owner's choice 2026-11-11: live intraday tips (aggressive). Only setups passing the Kite-history test keep
@@ -55,6 +57,9 @@ risk_limits:
 positional_tips: true
 positional_max_new: 0        # 0 = no limit (owner's choice D106)
 positional_max_open: 0       # 0 = no limit
+
+# Audit 17 Nov: the learning loops may only PROPOSE strategy switches; true = apply them automatically.
+allow_auto_promotion: false
 
 # D110 AI picks (market-wide machine-learning ranker, 10-day hold; retrained weekly)
 ai_picks: true

@@ -39,7 +39,7 @@ def test_evening_sends_format_and_exits(monkeypatch, tmp_path):
     day0 = str(_stock().index[-1].date())
     assert hp.send_evening(day0, {"capital": 45000}) == 1
     lab, txt = sent[0]
-    for part in ("Buy #TEMPSENS at the next market open", "SL at", "2% Risk", "RANK - ", "5-day average", "tradingview.com"):
+    for part in ("Buy #TEMPSENS at the next market open", "SL at", "1% Risk", "RANK - ", "5-day average", "tradingview.com"):
         assert part in txt, part
     t = le.load_tips()
     assert t["setup"].iloc[0] == "HP" and t["status"].iloc[0] == "open"

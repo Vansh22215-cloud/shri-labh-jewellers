@@ -77,7 +77,7 @@ def _balanced(part):
 
 # Owner's choice (D95): Telegram carries ONLY these. Everything else is written to the log, not sent.
 ALLOWED = ("trade tip", "exit alert", "kite login", "company of the day",
-           "system problem", "autopilot")   # D108: only when the system itself is broken (rare) - so it never fails silently
+           "system problem", "autopilot", "system status")   # D108: only when the system itself is broken (rare) - so it never fails silently
 
 
 def allowed(settings, label):
@@ -142,3 +142,58 @@ def send_document(settings, path, caption="", mime="text/html", label="file"):
     except Exception as e:
         log.warning("Telegram document failed: %s", e)
         return f"Telegram document failed: {e}"
+
+
+# ----------------------------------------------------------------------------- reliable delivery (audit 17 Nov)
+CRITICAL = ("trade tip", "exit alert", "system problem", "autopilot", "kite login", "system status")
+
+
+def _outbox():
+    from .config import PRIVATE
+    return PRIVATE / "outbox.jsonl"
+
+
+def send_reliable(settings, text, html=False, label="message"):
+    """send(), and if Telegram does not take a CRITICAL message, keep it in data/private/outbox.jsonl; the daemon
+    retries every minute (flush_outbox) until it is delivered. Returns True when delivered now."""
+    import json as _j
+    r = send(settings, text, html=html, label=label)
+    if r == "Telegram message sent" or r == "muted":
+        return r == "Telegram message sent"
+    if label in CRITICAL:
+        try:
+            with open(_outbox(), "a", encoding="utf-8") as f:
+                f.write(_j.dumps({"text": text, "html": html, "label": label}) + "\n")
+            log.warning("Telegram %s kept in the outbox for retry", label)
+        except Exception:
+            pass
+    return False
+
+
+def flush_outbox(settings, max_n=20):
+    """Retry undelivered critical messages, oldest first; stops at the first failure (Telegram still down)."""
+    import json as _j
+    f = _outbox()
+    if not f.exists():
+        return 0
+    lines = [l for l in f.read_text(encoding="utf-8").splitlines() if l.strip()]
+    sent, keep = 0, []
+    for i, l in enumerate(lines):
+        if sent >= max_n:
+            keep += lines[i:]
+            break
+        try:
+            m = _j.loads(l)
+        except Exception:
+            continue
+        if send(settings, m["text"], html=m.get("html", False), label=m.get("label", "message")) == "Telegram message sent":
+            sent += 1
+        else:
+            keep += lines[i:]
+            break
+    tmp = f.with_suffix(".tmp")
+    tmp.write_text("\n".join(keep) + ("\n" if keep else ""), encoding="utf-8")
+    tmp.replace(f)
+    if sent:
+        log.info("Outbox: %d delayed message(s) delivered, %d still waiting", sent, len(keep))
+    return sent

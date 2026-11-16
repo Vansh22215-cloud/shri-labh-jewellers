@@ -140,28 +140,78 @@ def panel():
     return _finish(P.reset_index(), _market())
 
 
-def train():
+MODELS_DIR = DATA / "ml_models"
+MIN_VAL_IC = 0.02           # the walk-forward test averaged 0.053; below 0.02 the model is not trusted
+
+
+def _fit(X, y):
     from sklearn.ensemble import HistGradientBoostingRegressor
-    t0 = time.time()
-    P, X = panel()
-    y = P.groupby("date")["fwd"].rank(pct=True)
-    ok = y.notna() & (P["date"].dt.dayofyear % 2 == 0)
     mdl = HistGradientBoostingRegressor(max_iter=300, learning_rate=0.05, max_leaf_nodes=31, min_samples_leaf=800,
                                         l2_regularization=1.0, random_state=0)
-    mdl.fit(X[ok], y[ok])
-    MODEL_F.write_bytes(pickle.dumps({"model": mdl, "trained": str(pd.Timestamp.now().date()),
-                                      "rows": int(ok.sum())}))
-    log.info("AI picks: model retrained on %d rows in %.0fs", int(ok.sum()), time.time() - t0)
+    mdl.fit(X, y)
     return mdl
 
 
-def model(max_age_days=7):
+def train():
+    """Weekly retrain WITH A GATE (audit 17 Nov): first a check model is trained on data that ends 15 trading days
+    before the last ~12 months and must still rank stocks usefully on those unseen months (mean daily rank
+    correlation >= MIN_VAL_IC). Only then the production model (all data) replaces the current one; the previous
+    versions are kept for rollback. A failed gate keeps the current model and tells the owner."""
+    t0 = time.time()
+    P, X = panel()
+    y = P.groupby("date")["fwd"].rank(pct=True)
+    dates = pd.Series(sorted(P["date"].unique()))
+    labelled = dates[dates <= P.loc[y.notna(), "date"].max()]
+    val_start = labelled.iloc[max(0, len(labelled) - 250)]
+    cut = dates.iloc[max(0, dates.searchsorted(val_start) - 15)]
+    tr = y.notna() & (P["date"] < cut) & (P["date"].dt.dayofyear % 2 == 0)
+    va = y.notna() & (P["date"] >= val_start)
+    chk = _fit(X[tr], y[tr])
+    pv = pd.Series(chk.predict(X[va]), index=P.index[va])
+    ic = P.loc[va].assign(p=pv).groupby("date").apply(lambda g: g["p"].corr(g["fwd"], method="spearman")).mean()
+    ok_rows = y.notna() & (P["date"].dt.dayofyear % 2 == 0)
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+    meta = {"trained": str(pd.Timestamp.now().date()), "rows": int(ok_rows.sum()), "val_ic": round(float(ic), 4),
+            "val_from": str(pd.Timestamp(val_start).date())}
+    if not (ic == ic) or ic < MIN_VAL_IC:
+        log.warning("AI picks: new model REJECTED (validation rank-correlation %.3f < %.2f) - current model kept",
+                    ic, MIN_VAL_IC)
+        try:
+            from . import telegram
+            telegram.send(load_settings(), f"⚠️ AI picks: this week's retrained model failed its validation "
+                                           f"(rank-correlation {ic:.3f} on the last 12 unseen months, needs "
+                                           f"{MIN_VAL_IC}). The previous model stays in use.", label="autopilot")
+        except Exception:
+            pass
+        cur = _load_model_file()
+        if cur:
+            cur["trained"] = meta["trained"]          # do not retry every evening; the next try is next week
+            cur.setdefault("history", []).append(dict(meta, accepted=False))
+            MODEL_F.write_bytes(pickle.dumps(cur))
+            return cur["model"]
+        return None
+    mdl = _fit(X[ok_rows], y[ok_rows])
+    rec = dict(meta, model=mdl, accepted=True)
+    MODEL_F.write_bytes(pickle.dumps(rec))
+    (MODELS_DIR / f"model_{meta['trained']}.pkl").write_bytes(pickle.dumps(rec))
+    for old in sorted(MODELS_DIR.glob("model_*.pkl"))[:-4]:      # keep the last 4 versions for rollback
+        old.unlink()
+    log.info("AI picks: model retrained on %d rows, validation rank-correlation %.3f, in %.0fs",
+             meta["rows"], ic, time.time() - t0)
+    return mdl
+
+
+def _load_model_file():
     try:
-        m = pickle.loads(MODEL_F.read_bytes())
-        if (pd.Timestamp.now() - pd.Timestamp(m["trained"])).days <= max_age_days:
-            return m["model"]
+        return pickle.loads(MODEL_F.read_bytes())
     except Exception:
-        pass
+        return None
+
+
+def model(max_age_days=7):
+    m = _load_model_file()
+    if m and (pd.Timestamp.now() - pd.Timestamp(m["trained"])).days <= max_age_days:
+        return m["model"]
     return train()
 
 
@@ -191,12 +241,16 @@ def score_today():
     P = P.reset_index()
     P["date"] = P["date"].max()                       # one cross-section (stocks with a stale last bar included)
     P, X = _finish(P, _market())
-    P["score"] = model().predict(X)
+    mdl = model()
+    if mdl is None:
+        log.warning("AI picks: no validated model - no AI picks today")
+        return pd.DataFrame()
+    P["score"] = mdl.predict(X)
     return P.sort_values("score", ascending=False)[["sym", "score", "close", "atr"]].rename(columns={"sym": "symbol"})
 
 
 def send_evening(day, settings=None, scored=None):
-    from .live_engine import already, load_tips, save_tip, send, tv_link
+    from .live_engine import already, issue_tip, load_tips, send, tv_link
     s = settings or load_settings()
     if not s.get("ai_picks", True):
         return 0
@@ -222,11 +276,12 @@ def send_evening(day, settings=None, scored=None):
         sym = r["symbol"]
         if sym in open_syms or already(sym, "NORMAL", str(day)):
             continue
+        from . import safety
         stop = round(r["close"] - STOP_ATR * r["atr"], 2)
-        qty = int(min(cap * RISK_PCT / 100 / max(1e-9, r["close"] - stop), cap * 0.25 / r["close"]))
+        qty = safety.size(r["close"], stop, s, RISK_PCT)
         if qty < 1:
             continue
-        send(f"• AI pick (machine-learning ranker, 10-day hold)\n\n"
+        msg = (f"• AI pick (machine-learning ranker, 10-day hold)\n\n"
              f"Buy #{sym} at the next market open ≈ {r['close']:,.2f} 📊\n\n"
              f"SL at {stop:,.2f} ❗️ (wide safety stop)\n\n"
              f"Exit: sell after 10 trading days - I'll alert you\n\n"
@@ -235,17 +290,17 @@ def send_evening(day, settings=None, scored=None):
              f"top picks made {STATS['pick_avg']:+.2f}% per 10 days vs {STATS['market_avg']:+.2f}% for the average "
              f"stock, better in {STATS['years_better']} years; only ~{STATS['win']:.0f}% of picks win - the edge is "
              f"in the average.\n\n{tv_link(sym, daily=True)}")
-        save_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
-                  "symbol": sym, "side": "buy", "entry": r["close"], "stop": stop, "targets": "", "rank": RANK,
-                  "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "AI"})
-        n += 1
+        if issue_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
+                      "symbol": sym, "side": "buy", "entry": r["close"], "stop": stop, "targets": "", "rank": RANK,
+                      "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "AI"}, msg, s):
+            n += 1
     log.info("AI picks: %d sent (room %d)", n, room)
     return n
 
 
 def evening_exits(day):
     from .autopilot import close_tip
-    from .live_engine import _LOCK, TIPS_F, load_tips, send
+    from .live_engine import _LOCK, TIPS_F, load_tips, write_tips, send
     msgs = []
     with _LOCK:
         t = load_tips()
@@ -261,7 +316,7 @@ def evening_exits(day):
                 close_tip(t, i, "time", raw)
                 msgs.append(f"⌛ #{r['symbol']} (AI pick) - 10 trading days done: sell at the next market open "
                             f"(now {raw:,.2f}, {(raw / float(r['entry']) - 1) * 100:+.1f}% from the tip).")
-        t.to_csv(TIPS_F, index=False)
+        write_tips(t)
     for m in msgs:
         send(m, label="exit alert")
     return msgs

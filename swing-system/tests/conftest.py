@@ -53,3 +53,16 @@ def _clean_job_environment(monkeypatch):
         monkeypatch.delenv(k, raising=False)
     from swing import journal
     monkeypatch.setattr(journal, "tips_start", lambda: "")      # the owner's tip reset date never affects tests
+
+
+@pytest.fixture(autouse=True)
+def _isolate_runtime_state(tmp_path, monkeypatch):
+    """Audit 17 Nov: no test may touch the real tip store, safety state, outbox or skipped-signal log."""
+    from swing import live_engine, safety, telegram, autopilot
+    monkeypatch.setattr(live_engine, "TIPS_F", tmp_path / "live_tips.csv")
+    monkeypatch.setattr(live_engine, "BACKUP_F", tmp_path / "live_tips.bak")
+    monkeypatch.setattr(safety, "STATE_F", tmp_path / "safety.json")
+    monkeypatch.setattr(safety, "SKIPPED_F", tmp_path / "skipped.csv")
+    monkeypatch.setattr(telegram, "_outbox", lambda: tmp_path / "outbox.jsonl")
+    monkeypatch.setattr(autopilot, "STATE_F", tmp_path / "autopilot.json")
+    yield

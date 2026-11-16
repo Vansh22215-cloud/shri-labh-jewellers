@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 from . import data_nse, data_prices, engine, fundamentals, health, journal, report, telegram, update
-from .config import (DISCLAIMER, LOGS, ROOT, get_logger, load_settings, load_state, load_strategy, save_state)
+from .config import (DATA, DISCLAIMER, LOGS, ROOT, get_logger, load_settings, load_state, load_strategy, save_state)
 from .strategy import position_size, trade_plan
 from .validate import GATE
 
@@ -469,10 +469,17 @@ def run():
         log.warning("Evening: prices are not fresh (%s vs %s) - exits only, no new tips today",
                     last_bar.date(), expected.date())
 
+    ev = {"date": str(pd.Timestamp.now().date()), "fresh": new_ok, "last_bar": str(last_bar.date()),
+          "expected": str(expected.date()), "counts": {}, "failed": []}
+
     def _job(name, fn):
         try:
-            return fn()
+            r = fn()
+            if isinstance(r, (int, float)) and r is not None:
+                ev["counts"][name] = int(r)
+            return r
         except Exception as e:
+            ev["failed"].append(name)
             log.warning("evening job '%s' failed: %s: %s", name, type(e).__name__, str(e)[:200])
             return None
 
@@ -498,6 +505,11 @@ def run():
             _job("a3 tips", lambda: evening_tips(tips or [], day, settings))
     _job("autopilot alert", lambda: autopilot.health_alert(sys_problems))
     _job("autopilot", lambda: autopilot.throttle())
+    try:   # audit 17 Nov: what happened this evening, for the owner's daily status (monitor.daily_status)
+        ev["problems"] = sys_problems
+        (DATA / "evening_status.json").write_text(json.dumps(ev, indent=1, default=str))
+    except Exception as e:
+        log.warning("evening status not written: %s", type(e).__name__)
     # the full HTML report file is sent once a week (Saturday summary), not every evening (owner's choice)
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,

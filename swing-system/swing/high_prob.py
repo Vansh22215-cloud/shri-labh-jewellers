@@ -127,7 +127,7 @@ def rank(sg):
 
 def send_evening(day, settings=None, sigs=None):
     """6:40 pm: send each signal as a Normal trade ('Buy at the next market open ...'). Returns how many were sent."""
-    from .live_engine import already, save_tip, send, tv_link
+    from .live_engine import already, issue_tip, send, tv_link
     s = settings or load_settings()
     cap = float(s.get("capital", 45000))
     if sigs is None:
@@ -147,9 +147,9 @@ def send_evening(day, settings=None, sigs=None):
                 continue
         except Exception:
             pass
-        rp = 2.0
-        per = max(1e-9, sg["close"] - sg["stop"])
-        qty = int(min(cap * rp / 100 / per, cap * 0.25 / sg["close"]))
+        from . import safety
+        rp = float((s.get("risk_limits") or {}).get("risk_per_trade_pct", 1))   # audit: was a hard-coded 2%
+        qty = safety.size(sg["close"], sg["stop"], s, rp)
         if qty < 1:
             continue
         msg = (f"• Normal trade (high-probability dip buy)\n\n"
@@ -162,15 +162,15 @@ def send_evening(day, settings=None, sigs=None):
                + (f"✅ Confirmed by: {', '.join(sg['conf'])}\n\n" if sg.get("conf") else "") +
                f"⭐ RANK - {r}/10 · Qty {qty} · tested: {_tier_line(sg)}, ~4 days\n\n"
                f"{tv_link(sym, daily=True)}")
-        send(msg)
+        if not issue_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
+                          "symbol": sym, "side": "buy", "entry": sg["close"], "stop": sg["stop"], "targets": "",
+                          "rank": r, "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "HP"}, msg, s):
+            continue
+        n += 1
         try:
             n += send_option(sg, r, day, s)
         except Exception as e:
             log.warning("high-probability option %s failed: %s", sym, type(e).__name__)
-        save_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
-                  "symbol": sym, "side": "buy", "entry": sg["close"], "stop": sg["stop"], "targets": "", "rank": r,
-                  "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "HP"})
-        n += 1
     return n
 
 
@@ -190,7 +190,7 @@ def send_option(sg, r, day, s):
     """F&O version of a signal on an F&O stock: buy a ~2%-in-the-money CALL, monthly expiry >= 15 days away.
     Modelled on 13 years (Black-Scholes on the stock's real path, 1.5% option costs): 70% of trades in profit,
     +17% of the premium on average (holdout 70%, +19%). Only if the loss at the stop fits the rank's risk."""
-    from .live_engine import already, fno_underlyings, fmt_fno, option_trade, save_tip, send
+    from .live_engine import already, fno_underlyings, fmt_fno, issue_tip, option_trade, send
     sym = sg["symbol"]
     if sym not in fno_underlyings() or already(sym, "FNO", str(day)):
         return 0
@@ -203,21 +203,20 @@ def send_option(sg, r, day, s):
                        float(s.get("capital", 45000)), hold_days=4, min_days=15, itm=0.02)
     if not opt:
         return 0
-    send(fmt_fno(c, opt, r) + f"\n\n🧪 Tested (modelled): {OPT_STATS['win_pct']:.0f}% of trades in profit, "
-                              f"avg {OPT_STATS['avg_pct']:+.0f}% of premium. Buy at the next market open.")
-    save_tip({"time": str(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))[:16], "type": "FNO", "symbol": sym,
+    return int(issue_tip({"time": str(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))[:16], "type": "FNO", "symbol": sym,
               "side": "buy", "entry": e, "stop": sg["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]),
               "rank": r, "qty": 1, "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
               "opt_targets": "/".join(f"{x:.2f}" for x in opt["targets"]), "spot_sl": opt["spot_sl"],
-              "status": "open", "hit": 0, "day": str(day), "setup": "HP"})
-    return 1
+              "status": "open", "hit": 0, "day": str(day), "setup": "HP"},
+                         fmt_fno(c, opt, r) + f"\n\n🧪 Tested (modelled): {OPT_STATS['win_pct']:.0f}% of trades in "
+                         f"profit, avg {OPT_STATS['avg_pct']:+.0f}% of premium. Buy at the next market open.", s))
 
 
 def evening_exits(day):
     """6:40 pm: for each open high-probability tip - closed above the 5-day average -> sell at the next market open;
     10 trading days -> time exit. (Safety stop is watched live by the engine.)"""
     from . import data_prices
-    from .live_engine import _LOCK, load_tips, send, TIPS_F
+    from .live_engine import _LOCK, load_tips, send, TIPS_F, write_tips
     msgs = []
     with _LOCK:
         t = load_tips()
@@ -244,7 +243,7 @@ def evening_exits(day):
                 close_tip(t, i, "time", raw)
                 msgs.append(f"⌛ {what} - 10 trading days without the bounce: sell at the next market open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
-        t.to_csv(TIPS_F, index=False)
+        write_tips(t)
     for m in msgs:
         send(m, label="exit alert")
     return msgs

@@ -79,7 +79,7 @@ def scan():
 def send_evening(day, settings=None, sigs=None):
     """Evening: new positional BUYs as 'Positional trade' tips (at most `positional_max_new` a day and
     `positional_max_open` open at once - the capital is small)."""
-    from .live_engine import already, load_tips, save_tip, send, tv_link
+    from .live_engine import already, issue_tip, load_tips, send, tv_link
     s = settings or load_settings()
     if not s.get("positional_tips", True):
         return 0
@@ -102,11 +102,11 @@ def send_evening(day, settings=None, sigs=None):
         sym = sg["symbol"]
         if already(sym, "NORMAL", str(day)):
             continue
-        per = max(1e-9, sg["close"] - sg["stop"])
-        qty = int(min(cap * RISK_PCT / 100 / per, cap * 0.25 / sg["close"]))
+        from . import safety
+        qty = safety.size(sg["close"], sg["stop"], s, RISK_PCT)
         if qty < 1:
             continue
-        send(f"• Positional trade (Rolling Candle Profile)\n\n"
+        msg = (f"• Positional trade (Rolling Candle Profile)\n\n"
              f"Buy #{sym} at the next market open ≈ {sg['close']:,.2f} 📊\n\n"
              f"SL at {sg['stop']:,.2f} ❗️ (wide safety stop - the real exit is the SELL signal)\n\n"
              f"Target: hold until the indicator's SELL signal - I'll alert you (max {MAX_DAYS} trading days)\n\n"
@@ -116,16 +116,16 @@ def send_evening(day, settings=None, sigs=None):
              f"(avg win {STATS['avg_win_pct']:+.0f}% / loss {STATS['avg_loss_pct']:+.0f}%), avg {STATS['avg_pct']:+.1f}% "
              f"a trade, ~{STATS['days']} days. Expect several small losses before a big winner.\n\n"
              f"{tv_link(sym, daily=True)}")
-        save_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
-                  "symbol": sym, "side": "buy", "entry": sg["close"], "stop": sg["stop"], "targets": "", "rank": RANK,
-                  "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "RCP"})
-        n += 1
+        if issue_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
+                      "symbol": sym, "side": "buy", "entry": sg["close"], "stop": sg["stop"], "targets": "", "rank": RANK,
+                      "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "RCP"}, msg, s):
+            n += 1
     return n
 
 
 def evening_exits(day):
     """Evening: open positional tips - the indicator's SELL signal or 60 trading days -> sell at the next market open."""
-    from .live_engine import _LOCK, TIPS_F, load_tips, send
+    from .live_engine import _LOCK, TIPS_F, load_tips, write_tips, send
     msgs = []
     with _LOCK:
         t = load_tips()
@@ -149,7 +149,7 @@ def evening_exits(day):
                 close_tip(t, i, "time", raw)
                 msgs.append(f"⌛ #{r['symbol']} (positional) - {MAX_DAYS} trading days: sell at the next market open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
-        t.to_csv(TIPS_F, index=False)
+        write_tips(t)
     for m in msgs:
         send(m, label="exit alert")
     return msgs

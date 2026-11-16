@@ -283,13 +283,15 @@ def _review(s, sh):
         g = closed[closed["sid"] == c["id"]]
         n, win, avg = len(g), (g["result"] > 0).mean() * 100 if len(g) else 0, g["result"].mean() if len(g) else 0
         if n >= 20 and win >= 55 and avg > 0 and len(s["promoted"]) < 3:
-            c["status"], c["promoted_on"] = "promoted", str(pd.Timestamp.now().date())
+            # audit 17 Nov: a new live strategy needs the OWNER's approval - the system only proposes it
             c["live"] = {"n": n, "win": round(win, 1), "avg": round(avg, 2)}
-            s["promoted"].append(c)
-            _notify(f"🧪 New strategy PROMOTED by the system: {c['id']} - {c['text']}.\nTested 13 years: "
-                    f"{c['stats']['all']['win']}% in profit, avg {c['stats']['all']['avg']:+.2f}%; live (silent) "
-                    f"record: {n} trades, {win:.0f}% in profit, avg {avg:+.2f}%. It now sends 'Discovered strategy' "
-                    "tips (rank 7/10).")
+            if c.get("status") != "awaiting_approval":
+                c["status"] = "awaiting_approval"
+                _notify(f"🧪 New strategy READY for your approval: {c['id']} - {c['text']}.\nTested 13 years (3 "
+                        f"separate periods): {c['stats']['all']['win']}% in profit, avg {c['stats']['all']['avg']:+.2f}%; "
+                        f"followed silently live: {n} trades, {win:.0f}% in profit, avg {avg:+.2f}%.\n"
+                        f"Reply /approve {c['id']} to let it send tips (rank 7/10). Nothing changes until you do.")
+            keep_c.append(c)
         elif n >= 30 and (avg <= 0 or win < 50):
             c["status"] = "retired"
             s["retired"].append(c)
@@ -312,31 +314,31 @@ def _review(s, sh):
 
 
 def _send_tip(c, h, day, settings):
-    from .live_engine import already, save_tip, send, tv_link
+    from . import safety
+    from .live_engine import already, issue_tip, tv_link
     if already(h["sym"], "NORMAL", str(day)):
         return 0
-    cap = float(settings.get("capital", 45000))
     stop = round(h["close"] - 4 * h["atr_raw"], 2)
-    qty = int(min(cap * 0.01 / max(1e-9, h["close"] - stop), cap * 0.25 / h["close"]))
+    qty = safety.size(h["close"], stop, settings, 1.0)
     if qty < 1:
         return 0
     st = c["stats"]["all"]
-    send(f"• Discovered strategy {c['id']} (found and proven by the system itself)\n\n"
+    msg = (f"• Discovered strategy {c['id']} (found and proven by the system itself)\n\n"
          f"Buy #{h['sym']} at the next market open ≈ {h['close']:,.2f} 📊\n\nSL at {stop:,.2f} ❗️ (wide safety stop)\n\n"
          f"Exit: sell after {c['hold']} trading days - I'll alert you\n\n1% Risk\n\n"
          f"⭐ RANK - 7/10 · Qty {qty} · Rule: {c['text']}. Tested 13 years: {st['win']}% in profit, avg "
          f"{st['avg']:+.2f}%; live record {c.get('live', {}).get('win', '-')}% in profit.\n\n"
          f"{tv_link(h['sym'], daily=True)}")
-    save_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
-              "symbol": h["sym"], "side": "buy", "entry": h["close"], "stop": stop, "targets": "", "rank": 7,
-              "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": f"D{c['id']}:{c['hold']}"})
-    return 1
+    return int(issue_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
+                          "symbol": h["sym"], "side": "buy", "entry": h["close"], "stop": stop, "targets": "", "rank": 7,
+                          "qty": qty, "status": "open", "hit": 0, "day": str(day),
+                          "setup": f"D{c['id']}:{c['hold']}"}, msg, settings))
 
 
 def evening_exits(day):
     """Promoted strategies' tips: sell after their holding period."""
     from .autopilot import close_tip
-    from .live_engine import _LOCK, TIPS_F, load_tips, send
+    from .live_engine import _LOCK, TIPS_F, load_tips, write_tips, send
     from .ml_ranker import _adjusted
     msgs = []
     with _LOCK:
@@ -353,7 +355,25 @@ def evening_exits(day):
                 close_tip(t, i, "time", raw)
                 msgs.append(f"⌛ #{r['symbol']} (discovered strategy) - {hold} trading days done: sell at the next market "
                             f"open (now {raw:,.2f}, {(raw / float(r['entry']) - 1) * 100:+.1f}%).")
-        t.to_csv(TIPS_F, index=False)
+        write_tips(t)
     for m in msgs:
         send(m, label="exit alert")
     return msgs
+
+
+def approve(sid):
+    """Owner's /approve Sx: a proven candidate becomes a live strategy (max 3)."""
+    s = _state()
+    for c in list(s["candidates"]):
+        if c["id"].upper() == str(sid).upper():
+            if c.get("status") != "awaiting_approval":
+                return f"{c['id']} has not finished its live proof yet ({c.get('live', {}).get('n', 0)} of 20 trades)."
+            if len(s["promoted"]) >= 3:
+                return "3 discovered strategies are already live - retire one first."
+            c["status"], c["promoted_on"] = "promoted", str(pd.Timestamp.now().date())
+            s["candidates"].remove(c)
+            s["promoted"].append(c)
+            _save(s)
+            log.info("Discovery: %s approved by the owner", c["id"])
+            return f"✅ {c['id']} approved - it sends 'Discovered strategy' tips from the next evening. ({c['text']})"
+    return f"No strategy {sid} is waiting for approval."

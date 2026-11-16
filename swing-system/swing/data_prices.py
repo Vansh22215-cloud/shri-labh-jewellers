@@ -88,11 +88,32 @@ def _download_batch(tickers, **kw):
     return {}
 
 
+def sanitize(df):
+    """Audit 17 Nov: never feed broken bars to a strategy - sorted dates, one bar per day (the last one kept),
+    no rows with a missing / zero / negative / infinite price, high >= low."""
+    if df is None or not len(df):
+        return df
+    df = df[~df.index.isna()]
+    df = df[~df.index.duplicated(keep="last")].sort_index()
+    px = [c for c in ("open", "high", "low", "close") if c in df]
+    if px:
+        v = df[px].apply(pd.to_numeric, errors="coerce")
+        good = np.isfinite(v).all(axis=1) & (v > 0).all(axis=1)
+        if "high" in df and "low" in df:
+            good &= v["high"] >= v["low"]
+        df = df[good]
+    return df
+
+
 def load(symbol):
     f = _path(symbol)
     if not f.exists():
         return None
-    return pd.read_csv(f, index_col="date", parse_dates=["date"])
+    try:
+        return sanitize(pd.read_csv(f, index_col="date", parse_dates=["date"]))
+    except Exception as e:
+        log.warning("price file %s unreadable (%s) - skipped", symbol, type(e).__name__)
+        return None
 
 
 def save(symbol, df):

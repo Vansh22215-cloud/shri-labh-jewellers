@@ -18,7 +18,7 @@ import sys
 import time
 from datetime import datetime, timedelta, timezone
 
-from .config import DATA, ROOT, get_logger
+from .config import DATA, ROOT, get_logger, load_settings
 
 log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -257,6 +257,16 @@ def minute_tasks(t=None):
     import html as _html
     t = t or now()
     wd = t.weekday() < 5
+    try:   # audit 17 Nov: no silent failures - heartbeat / recovery notice, kill-switch notice, outbox, safety stop
+        from . import monitor
+        _s = load_settings()
+        monitor.heartbeat(t)
+        monitor.kill_switch_watch(_s)
+        monitor.housekeeping(_s)
+        monitor.daily_status(t)
+        monitor.weekly_health(t)
+    except Exception as e:
+        log.warning("Daemon: monitor failed: %s", type(e).__name__)
     try:
         from . import kite
         if wd and kite.configured() and not kite.logged_in():

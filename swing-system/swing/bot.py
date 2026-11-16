@@ -9,6 +9,8 @@ import json
 import os
 import time
 
+import pandas as pd
+
 import re
 
 import requests
@@ -30,6 +32,8 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
         "/tips - every open tip the system sent you (entry, SL, how to exit)\n"
+        "/health - is everything running? what ran today and why there were (no) tips\n"
+        "/approve S1 - let a strategy the system discovered and proved start sending tips\n"
         "/status - is Kite connected, live test price, last alert check\n/kite - get a Kite login link now\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
@@ -266,6 +270,13 @@ def handle(token, owner, msg, capital):
             "Kite is not set up (the API key/secret are missing in GitHub Secrets)."
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
+    elif text.lower().startswith("/approve"):
+        from . import discovery
+        parts = text.split()
+        reply = discovery.approve(parts[1]) if len(parts) > 1 else "Use: /approve S1"
+    elif text.lower().startswith("/health"):
+        from .monitor import status_text
+        reply = status_text(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))
     elif text.lower().startswith(("/tips", "/open")):
         reply = open_tips_text()
     elif text.startswith("/status"):

@@ -61,11 +61,31 @@ def set_proposal_status(raw, status):
     IMPROVEMENTS.write_text(txt.replace(raw, new), encoding="utf-8")
 
 
+def _owner_approval_needed(what):
+    """Audit 17 Nov: the learning loop may PROPOSE, never silently switch live logic. A change is applied only when
+    the owner set allow_auto_promotion: true in settings.yaml; otherwise it is recorded as a proposal."""
+    if load_settings().get("allow_auto_promotion", False):
+        return False
+    changelog(f"- PROPOSAL (not applied - needs the owner's approval): {what}")
+    log.info("Weekly: proposal recorded, not applied (owner approval needed): %s", what)
+    return True
+
+
 def set_live(name):
+    if _owner_approval_needed(f"switch live_strategy to {name}"):
+        return
     f = ROOT / "settings.yaml"
     s = f.read_text(encoding="utf-8")
     s = re.sub(r"(?m)^live_strategy:.*$", f"live_strategy: {name}", s)
     f.write_text(s, encoding="utf-8")
+
+
+def _set_aggressive(name):
+    if _owner_approval_needed(f"switch aggressive_strategy to {name}"):
+        return
+    f = ROOT / "settings.yaml"
+    f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: {name}", f.read_text(encoding="utf-8")),
+                 encoding="utf-8")
 
 
 def versions():
@@ -157,9 +177,7 @@ def refresh_aggressive(out, settings):
                 risk_per_trade_pct=1.0, drawdown_pause_pct=10,
                 description="AGGRESSIVE MODE (NOT validated): walk-forward search pick - " + pick["how"])
     (STRATEGIES / f"a{n}.json").write_text(json.dumps(newp, indent=2))
-    f = ROOT / "settings.yaml"
-    f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: a{n}", f.read_text(encoding="utf-8")),
-                 encoding="utf-8")
+    _set_aggressive(f"a{n}")
     changelog(f"- Aggressive mode switched {cur} -> a{n}: {pick['how']} (monthly re-pick from the last 36 months).")
     return f"Aggressive mode switched to a{n}: {pick['how']}."
 
@@ -257,9 +275,7 @@ def test_proposal(prop, settings, live, live_res=None, live_table=None):
         log.warning("stats for %s%d failed: %s", prefix, n, e)
     (STRATEGIES / f"{prefix}{n}.json").write_text(json.dumps(newp, indent=2))
     if aggressive:
-        f = ROOT / "settings.yaml"
-        f.write_text(re.sub(r"(?m)^aggressive_strategy:.*$", f"aggressive_strategy: {prefix}{n}",
-                            f.read_text(encoding="utf-8")), encoding="utf-8")
+        _set_aggressive(f"{prefix}{n}")
     else:
         set_live(f"{prefix}{n}")
         validation_report.run(f"{prefix}{n}", note=f"promoted from {prop.get('id')}")

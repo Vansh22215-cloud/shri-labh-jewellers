@@ -162,7 +162,12 @@ def quotes(symbols):
             data = r.json().get("data", {})
             for s in chunk:
                 q = data.get(_instrument(s))
-                if not q:
+                if not q or not q.get("last_price"):
+                    continue                  # audit: one malformed instrument must not wipe out every quote
+                try:
+                    if not float(q["last_price"]) > 0:
+                        continue
+                except Exception:
                     continue
                 o = q.get("ohlc", {})
                 out[s] = {"last": float(q["last_price"]), "open": float(o.get("open") or q["last_price"]),
