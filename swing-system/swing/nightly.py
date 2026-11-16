@@ -468,6 +468,12 @@ def run():
             log.info("Evening: %d positional tip(s) sent", positional.send_evening(day, settings))
         except Exception as e:
             log.warning("positional tips failed: %s", type(e).__name__)
+        try:   # D110: AI picks (market-wide machine-learning ranker, 10-day hold)
+            from . import ml_ranker
+            ml_ranker.evening_exits(day)
+            log.info("Evening: %d AI pick(s) sent", ml_ranker.send_evening(day, settings))
+        except Exception as e:
+            log.warning("AI picks failed: %s", type(e).__name__)
         try:   # D109 autopilot: live record -> throttles; system problems -> one Telegram alert
             from . import autopilot
             autopilot.health_alert(sys_problems)

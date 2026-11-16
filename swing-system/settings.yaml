@@ -55,3 +55,8 @@ risk_limits:
 positional_tips: true
 positional_max_new: 0        # 0 = no limit (owner's choice D106)
 positional_max_open: 0       # 0 = no limit
+
+# D110 AI picks (market-wide machine-learning ranker, 10-day hold; retrained weekly)
+ai_picks: true
+ai_top: 5            # new AI picks per evening at most
+ai_max_open: 10      # open AI picks at once at most

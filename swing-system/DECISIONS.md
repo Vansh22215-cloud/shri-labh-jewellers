@@ -755,3 +755,13 @@ positional, intraday, F&O) over the last 20-30 closed tips: live avg < 0 -> dip-
 shadow record is clearly good (>= 40 results, >= 60% winners, avg >= +0.15R) may send from rank 7. Evening data /
 self-test problems and "logged in but no Kite prices for 30 min" -> one 'system problem' message a day.
 Owner's manual: OWNER_GUIDE.md.
+
+## D110 - 2026-11-16 - AI picks: market-wide machine-learning ranker (free; scikit-learn)
+`validation/ml_ranker_research.py`: ~35 features per stock-day (momentum 1d-1y, mean reversion, trend, volatility,
+volume, 52-week position, strength vs market, Vix Fix, WaveTrend, squeeze, market regime), cross-sectional ranks,
+gradient boosting, target = next-10-day return rank. STRICT walk-forward 2016-2026 (each year trained only on data
+ending 15 days before it). Net of 0.35%: top-5 +0.82% / 10 days vs +0.34% average stock; better in 8 of 11 years
+(2021-2023 slightly worse); last 3 years +0.94% vs +0.30%; IC 0.053; ~52% of picks in profit.
+As a filter on the dip-buy / positional it did NOT help (`ml_combo.py`) - so it is a separate tip type:
+'AI pick' every evening (top 5, max 10 open, rank 6/10, 1% risk, wide 4 ATR safety stop, sell after 10 trading
+days), retrained weekly on the runner; autopilot pauses it 60 days if its live record turns negative.

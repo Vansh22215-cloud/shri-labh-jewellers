@@ -23,7 +23,7 @@ from .config import DATA, get_logger, load_settings
 
 log = get_logger()
 STATE_F = DATA / "autopilot.json"
-EXPECT = {"DIP": 72.0, "POS": 45.0, "INTRA": 50.0, "FNO": 50.0}      # tested win rates (D98/D104/D105)
+EXPECT = {"DIP": 72.0, "POS": 45.0, "INTRA": 50.0, "FNO": 50.0, "AI": 52.0}      # tested win rates (D98/D104/D105)
 
 
 def _state():
@@ -45,6 +45,8 @@ def family(row):
         return "INTRA"
     if st == "RCP":
         return "POS"
+    if st == "AI":
+        return "AI"
     return "DIP"
 
 
@@ -112,6 +114,14 @@ def throttle(now=None):
         until = str((now + pd.Timedelta(days=60)).date())
     rules["pos_paused"] = bool(until)
     s["pos_paused_until"] = until
+    a = h.get("AI", {})
+    au = s.get("ai_paused_until")
+    if au and now >= pd.Timestamp(au):
+        au = None
+    if a.get("n", 0) >= 30 and a.get("avg_pct", 0) < 0 and not au and not old.get("ai_paused"):
+        au = str((now + pd.Timedelta(days=60)).date())
+    rules["ai_paused"] = bool(au)
+    s["ai_paused_until"] = au
     i = h.get("INTRA", {})
     from .live_engine import live_record
     sh = live_record(last_n=80, min_n=40)
@@ -127,10 +137,11 @@ def throttle(now=None):
     msgs = {"dip_rank10_only": ("dip-buy: only the strongest (10/10) tips are sent now", "dip-buy: back to normal"),
             "pos_paused": (f"positional tips paused until {until}", "positional tips resumed"),
             "intra_paused": ("intraday tips paused until the followed setups prove positive again",
-                             "intraday tips resumed")}
+                             "intraday tips resumed"),
+            "ai_paused": (f"AI picks paused until {au}", "AI picks resumed")}
     for k, (on, off) in msgs.items():
         if bool(rules.get(k)) != bool(old.get(k)) and (rules.get(k) or k in old):
-            fam = {"dip_rank10_only": "DIP", "pos_paused": "POS", "intra_paused": "INTRA"}[k]
+            fam = {"dip_rank10_only": "DIP", "pos_paused": "POS", "intra_paused": "INTRA", "ai_paused": "AI"}[k]
             x = h.get(fam, {})
             _notify(f"🤖 Autopilot: {on if rules.get(k) else off}. Live record of the last {x.get('n', 0)} closed "
                     f"tips: {x.get('win_pct', 0)}% in profit, avg {x.get('avg_pct', 0):+.2f}% "
