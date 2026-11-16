@@ -551,6 +551,8 @@ class Engine:
         self.sent = 0
         self.uni = []
         self.fno = set()
+        from collections import Counter
+        self.funnel = Counter()          # D107: why setups were dropped (counts only - logged every 30 min)
 
     def _ctx(self, sym):
         if sym not in self.ctx:
@@ -566,32 +568,41 @@ class Engine:
 
     def consider_intraday(self, c, now, settings):
         day = str(now.date())
+        f = self.funnel
+        f["candidates"] += 1
         if already(c["symbol"], "INTRADAY", day) and already(c["symbol"], "FNO", day):
+            f["already sent"] += 1
             return
         cap = float(settings.get("capital", 45000))
         left = max(1, int(((now.normalize() + pd.Timedelta(hours=15, minutes=15)) - now).total_seconds() // 300))
         tm = self._tm(c, self.candles.get(c["symbol"]), left)
         ok, why = gates(c, self._ctx(c["symbol"]), tm)
         if not ok:
+            f["quality gates"] += 1
             return
         r, parts = rank(c, self._ctx(c["symbol"]), tm, stats=learned_stats())
         record_shadow(c, r, now)           # every qualified setup is followed, sent or not - the model learns from all
         lv = live_record().get(c["setup"], {})
         if settings.get("intraday_mode", "auto") == "auto" and not (
                 lv.get("n", 0) >= 40 and lv.get("win_pct", 0) >= 65 and lv.get("avg_r", 0) > 0):
+            f["live-proof gate (auto mode)"] += 1
             return            # D98: intraday tips only once a setup PROVES >= 65% winners over >= 40 live results
         need = int(settings.get("min_rank", 8))
         if ok == "strict" or lv.get("paused"):
             need = 10 if lv.get("paused") else 9
         if r < need:
+            f[f"rank below {need}"] += 1
             return
         q = self.quotes.get(c["symbol"]) or {}
         if c["symbol"] not in ("NIFTY50", "BANKNIFTY") and q.get("value_cr") is not None and q["value_cr"] < 1.0:
+            f["too thin (< Rs 1 cr)"] += 1
             return            # under Rs 1 crore traded today: too thin to trade safely (slippage, circuit risk)
         ok_ft, px = follow_through(c, q)
         if not ok_ft:
+            f["breakout failed / ran away"] += 1
             return            # the breakout already failed, or the price ran away - not a good entry any more
         if not market_agrees(c, self.quotes.get("NIFTY50")):
+            f["against Nifty"] += 1
             return            # buying while Nifty falls (or shorting while it rises) loses more often
         if px:
             sgn = 1 if c["side"] == "buy" else -1
@@ -606,6 +617,7 @@ class Engine:
             qty = int(min(cap * risk_pct(r, "EQ") / 100 / per, cap / c["entry"]))
             if qty >= 1:
                 send(fmt_intraday(c, r, qty))
+                f["SENT intraday"] += 1
                 save_tip({"time": str(now)[:16], "type": "INTRADAY", "symbol": c["symbol"], "side": c["side"],
                           "entry": c["entry"], "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]),
                           "rank": r, "qty": qty, "status": "open", "hit": 0, "day": day})
@@ -622,8 +634,10 @@ class Engine:
             log.warning("option build %s failed: %s", c["symbol"], type(e).__name__)
             opt = None
         if not opt:
+            self.funnel["F&O: no option fits the risk"] += 1
             return
         send(fmt_fno(c, opt, r))
+        self.funnel["SENT F&O"] += 1
         save_tip({"time": str(now)[:16], "type": "FNO", "symbol": c["symbol"], "side": c["side"], "entry": c["entry"],
                   "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": 1,
                   "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
@@ -748,6 +762,17 @@ class Engine:
             if not kite.logged_in():
                 time.sleep(20)
                 continue
+            if not self.fno or getattr(self, "_mode", "") != "kite":      # D107: logged in after the engine started
+                self._mode = "kite"
+                try:
+                    self.fno = fno_underlyings()
+                except Exception:
+                    pass
+                log.info("Live engine: Kite connected - %d F&O underlyings, live Zerodha data", len(self.fno))
+            if time.time() - getattr(self, "_funnel_t", 0) >= 1800:
+                self._funnel_t = time.time()
+                log.info("Engine funnel (since start): candle downloads %d, %s", i,
+                         ", ".join(f"{k} {v}" for k, v in self.funnel.most_common()) or "no candidates yet")
             if i % 3 != 2 and hot_q:          # 2 of every 3 candle downloads go to the stocks moving right now
                 sym = hot_q.pop(0)
             else:
