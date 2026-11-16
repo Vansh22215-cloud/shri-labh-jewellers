@@ -199,15 +199,20 @@ def send_option(sg, r, day, s):
          "targets": [round(e * 1.02, 2), round(e * 1.04, 2), round(e * 1.06, 2)],
          "why": "high-probability dip buy (sell when the stock closes above its 5-day average)",
          "sl_basis": "daily close"}
+    from .safety import configured, limits
+    if not configured(s)[0]:
+        return 0                                   # no capital / risk settings -> no sizing (never guessed)
+    L = limits(s)
     opt = option_trade(c, r, e, pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None),
-                       float(s.get("capital", 45000)), hold_days=4, min_days=15, itm=0.02)
+                       float(s["capital"]), hold_days=4, min_days=15, itm=0.02,
+                       max_risk_pct=L["risk_per_trade_pct"], max_cost_pct=L["max_order_pct"])
     if not opt:
         return 0
     return int(issue_tip({"time": str(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))[:16], "type": "FNO", "symbol": sym,
               "side": "buy", "entry": e, "stop": sg["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]),
               "rank": r, "qty": 1, "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
               "opt_targets": "/".join(f"{x:.2f}" for x in opt["targets"]), "spot_sl": opt["spot_sl"],
-              "status": "open", "hit": 0, "day": str(day), "setup": "HP"},
+              "risk_rs": opt["loss"], "status": "open", "hit": 0, "day": str(day), "setup": "HP"},
                          fmt_fno(c, opt, r) + f"\n\n🧪 Tested (modelled): {OPT_STATS['win_pct']:.0f}% of trades in "
                          f"profit, avg {OPT_STATS['avg_pct']:+.0f}% of premium. Buy at the next market open.", s))
 

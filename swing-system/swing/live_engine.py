@@ -332,8 +332,9 @@ def _days_to(expiry, now):
     return max(0.25, (pd.Timestamp(expiry) + pd.Timedelta(hours=15, minutes=30) - now).total_seconds() / 86400)
 
 
-def option_trade(c, r, spot, now, capital, hold_days=1, min_days=3, itm=0.0):
-    """Best option to BUY for a stock/index setup c, within the rank's risk. -> dict or None."""
+def option_trade(c, r, spot, now, capital, hold_days=1, min_days=3, itm=0.0, max_risk_pct=None, max_cost_pct=50.0):
+    """Best option to BUY for a stock/index setup c, within the rank's risk. -> dict or None.
+    max_risk_pct (audit): the owner's per-trade risk limit caps the rank's option risk (was up to 5% of capital)."""
     from . import kite
     from .options_check import bs, implied_vol
     name = {"NIFTY50": "NIFTY", "BANKNIFTY": "BANKNIFTY"}.get(c["symbol"], c["symbol"])
@@ -352,7 +353,8 @@ def option_trade(c, r, spot, now, capital, hold_days=1, min_days=3, itm=0.0):
     i0 = int(np.argmin(np.abs(strikes - ref)))
     order = ([i0, i0 + 1, i0 - 1, i0 + 2] if itm else [i0 - 1, i0, i0 + 1, i0 + 2]) if kind == "CE" else \
         ([i0, i0 - 1, i0 + 1, i0 - 2] if itm else [i0 + 1, i0, i0 - 1, i0 - 2])             # slightly ITM first
-    limit = capital * risk_pct(r, "FNO") / 100
+    rp = risk_pct(r, "FNO") if max_risk_pct is None else min(risk_pct(r, "FNO"), float(max_risk_pct))
+    limit = capital * rp / 100
     for i in order:
         if i < 0 or i >= len(strikes):
             continue
@@ -379,7 +381,7 @@ def option_trade(c, r, spot, now, capital, hold_days=1, min_days=3, itm=0.0):
         prem_sl = bs(c["stop"], float(row["strike"]), t_after, iv, kind)
         loss = (ltp - prem_sl) * lot
         cost = ltp * lot
-        if loss <= 0 or loss > limit or cost > capital * 0.5:
+        if loss <= 0 or loss > limit or cost > capital * float(max_cost_pct) / 100:
             continue
         tg = [bs(x, float(row["strike"]), t_after, iv, kind) for x in c["targets"]]
         tg.append(bs(c["targets"][-1] + (c["targets"][-1] - c["entry"]) * 0.5, float(row["strike"]), t_after, iv, kind))
@@ -823,7 +825,10 @@ class Engine:
         day = str(now.date())
         spot = (self.quotes.get(c["symbol"]) or {}).get("last") or c["entry"]
         try:
-            opt = option_trade(c, r, spot, now, float(settings.get("capital", 45000)), hold_days)
+            from .safety import limits
+            L = limits(settings)
+            opt = option_trade(c, r, spot, now, float(settings["capital"]), hold_days,
+                               max_risk_pct=L["risk_per_trade_pct"], max_cost_pct=L["max_order_pct"])
         except Exception as e:
             log.warning("option build %s failed: %s", c["symbol"], type(e).__name__)
             opt = None
@@ -834,7 +839,8 @@ class Engine:
                       "stop": c["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]), "rank": r, "qty": 1,
                       "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
                       "opt_targets": "/".join(f"{x:.2f}" for x in opt["targets"]), "spot_sl": opt["spot_sl"],
-                      "status": "open", "hit": 0, "day": day, "setup": c.get("setup")}, fmt_fno(c, opt, r), settings):
+                      "risk_rs": opt["loss"], "status": "open", "hit": 0, "day": day, "setup": c.get("setup")},
+                     fmt_fno(c, opt, r), settings):
             self.funnel["SENT F&O"] += 1
             self.sent += 1
 

@@ -176,10 +176,20 @@ def validate(row, settings):
         return False, "stop-loss more than 50% away from the entry"
     if str(row.get("type")) == "FNO":
         try:
-            if not (float(row.get("premium") or 0) > 0 and float(row.get("lot") or 0) > 0):
+            prem, lot = float(row.get("premium") or 0), float(row.get("lot") or 0)
+            if not (prem > 0 and lot > 0 and math.isfinite(prem)):
                 return False, "option premium / lot size missing"
+            risk_rs = float(row.get("risk_rs") if row.get("risk_rs") is not None else prem * lot * max(qty, 1))
         except Exception:
             return False, "option premium / lot size invalid"
+        L = limits(settings)
+        cap = float(settings["capital"])
+        if not math.isfinite(risk_rs) or risk_rs <= 0:
+            return False, "option loss at the stop not known"
+        if risk_rs > cap * float(L["risk_per_trade_pct"]) / 100 * 1.01:
+            return False, f"option loss at the stop Rs {risk_rs:,.0f} above the per-trade limit"
+        if prem * lot * max(qty, 1) > cap * float(L["max_order_pct"]) / 100 * 1.01:
+            return False, "option cost above the per-order limit"
         return True, ""
     if qty < 1:
         return False, "quantity below 1"
@@ -246,6 +256,7 @@ def portfolio_check(row, settings, tips=None):
         return False, (f"total money at risk on open tips would be Rs {risk + new:,.0f} "
                        f"(limit {L['max_open_risk_pct']}% of capital)")
     if "result_pct" in t:      # losing-streak cooldown (closed tips, most recent first)
+        t = t.assign(result_pct=pd.to_numeric(t["result_pct"], errors="coerce"))
         cl = t[t["result_pct"].notna()].sort_values("closed_at")
         streak = 0
         for v in cl["result_pct"].iloc[::-1]:

@@ -316,3 +316,37 @@ def test_lower_ranked_strategies_cannot_use_up_the_dip_buy_room(outbox):
     sent_ai = sum(bool(le.issue_tip(_row(f"A{i}", setup="AI"), "AI PICK", S)) for i in range(6))
     assert sent_ai == 3                                       # AI capped at 3% of capital at risk
     assert le.issue_tip(_row("DIP1", setup="HP"), "DIP BUY", S)   # the dip-buy still has room
+
+
+def test_option_tip_risk_is_held_to_the_owners_per_trade_limit(outbox):
+    """Audit (second pass): option tips used the rank's own risk (up to 5% of capital), bypassing the 1% rule."""
+    fno = dict(_row("NIFTY50", entry=24000, stop=23900, qty=1), type="FNO", lot=75, premium=20.0,
+               contract="NIFTY26NOV24000CE")
+    ok, why = safety.validate(dict(fno, risk_rs=1500), S)            # 3.3% of 45,000
+    assert not ok and "per-trade limit" in why
+    ok, why = safety.validate(dict(fno, risk_rs=400), S)             # under 1%
+    assert ok, why
+    ok, why = safety.validate(dict(fno, premium=float("nan"), risk_rs=400), S)
+    assert not ok
+    ok, why = safety.validate(dict(fno, premium=200.0, risk_rs=400), S)   # 15,000 premium > 25% of capital
+    assert not ok and "per-order" in why
+
+
+def test_option_picker_respects_max_risk_pct(monkeypatch):
+    from swing import kite
+    ins = pd.DataFrame([{"tradingsymbol": f"VOLTAS26NOV{k}PE", "name": "VOLTAS", "expiry": pd.Timestamp("2026-11-26"),
+                         "strike": float(k), "lot_size": 375, "instrument_type": "PE"} for k in (1100, 1120, 1140, 1160)])
+    monkeypatch.setattr(le, "nfo", lambda: ins)
+
+    class Q:
+        def __init__(self, ts):
+            self.ts = ts
+
+        def json(self):
+            return {"data": {f"NFO:{self.ts}": {"last_price": 25.0, "oi": 10000,
+                                                "depth": {"buy": [{"price": 24.9}], "sell": [{"price": 25.1}]}}}}
+    monkeypatch.setattr(kite, "_get", lambda path, params=None, timeout=20: Q(params[0][1].split(":")[1]))
+    c = {"symbol": "VOLTAS", "side": "sell", "entry": 1130.0, "stop": 1134.0, "targets": [1122.0, 1114.0, 1106.0]}
+    now = pd.Timestamp("2026-11-12 10:30")
+    o = le.option_trade(c, 8, 1130.0, now, 45000, max_risk_pct=1.0, max_cost_pct=25)
+    assert o is None or o["loss"] <= 450

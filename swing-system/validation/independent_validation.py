@@ -259,6 +259,9 @@ def report_strategy(T, close_panel, nclose):
            "regime_nifty_above_200d": metrics(T[up], COST), "regime_nifty_below_200d": metrics(T[~up], COST),
            "excess_vs_average_stock_pct": round(float(np.nanmean(T["vs_avg_stock"]) * 100), 2),
            "excess_vs_nifty_pct": round(float(np.nanmean(T["vs_nifty"]) * 100), 2),
+           # after costs, per entry year: did the strategy's average trade beat the average stock held over the same days?
+           "excess_vs_average_stock_by_year_pct": {int(y): round(float(v * 100), 2) for y, v in
+                                                   (T["vs_avg_stock"] - COST).groupby(T["entry_date"].dt.year).mean().items()},
            "trades_from_delisted_stocks": int((T["src"] == "nse").sum())}
     return out
 
