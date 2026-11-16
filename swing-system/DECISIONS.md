@@ -733,3 +733,17 @@ always possible, that does not mean no trade."
   negative is paused automatically (needs rank 10 until it recovers).
 Evidence stated to the owner: in testing (D97, D105) no intraday setup or indicator was profitable after costs;
 intraday tips are therefore higher risk than the dip-buy / positional tips.
+
+## D107 - 2026-11-16 - Live engine: F&O list reloads after a late Kite login; funnel counts
+The engine loaded the F&O list once at 9:14 while not yet logged in -> 0 F&O underlyings all day. Now it reloads
+when Kite connects. Why setups are dropped is counted and logged every 30 minutes (counts only).
+
+## D108 - 2026-11-16 - Unattended for the long run
+- A failed GitHub run (package install, the bot itself...) now sends ONE Telegram 'system problem' message per
+  6 hours (new allowed label, only for real breakage); the crash-loop warning uses it too (it was muted before).
+- requirements.txt: lower bounds = versions proven on GitHub, upper bounds block future MAJOR releases that could
+  break the unattended system; yfinance floats inside 1.x because Yahoo changes need its fixes.
+- Already in place: hand-over chain (keep_alive) + hourly safety start, self-update on code change, crash-loop guard,
+  shadow learning / automatic pausing of losing setups, weekly re-test of the rules on Kite history.
+- What stays with the owner: the daily Kite login tap (Zerodha requires a human login every day), renewing the
+  Kite Connect subscription, and the GitHub / Telegram accounts.

@@ -22,6 +22,36 @@ LOG = DATA / "keep_alive.json"
 API = "https://api.github.com"
 
 
+def failed_steps(repo, run_id, h):
+    """Names of the steps of THIS run that failed (e.g. package install, the bot itself)."""
+    try:
+        jobs = requests.get(f"{API}/repos/{repo}/actions/runs/{run_id}/jobs", headers=h, timeout=20).json()
+        return [s["name"] for j in jobs.get("jobs", []) for s in j.get("steps", [])
+                if s.get("conclusion") == "failure"]
+    except Exception:
+        return []
+
+
+def alert_failure(names):
+    """D108: tell the owner once per 6 hours when a run failed, with what to do - the system must never die silently."""
+    f = DATA / "failure_alert.json"
+    try:
+        last = json.loads(f.read_text()).get("t", 0)
+    except Exception:
+        last = 0
+    if not names or time.time() - last < 6 * 3600:
+        return False
+    try:
+        from swing import telegram
+        telegram.send(load_settings(), "⚠️ System problem: a GitHub run failed at: " + ", ".join(names)[:300] +
+                      ".\nThe system restarts itself automatically. If this message keeps coming for a day, open "
+                      "GitHub → Actions → the failed run to see why (or ask Claude once).", label="system problem")
+        f.write_text(json.dumps({"t": time.time()}))
+        return True
+    except Exception:
+        return False
+
+
 def main():
     if not os.environ.get("GITHUB_ACTIONS"):
         return "not on GitHub"
@@ -32,6 +62,7 @@ def main():
     if not token or not repo:
         return "no GitHub key in this run (workflow needs the keep-alive step)"
     h = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
+    alert_failure([n for n in failed_steps(repo, run_id, h) if "next run" not in n.lower()])
     # 1) another run already waiting/running? then it carries on
     for status in ("queued", "pending", "waiting", "in_progress"):
         try:
@@ -63,7 +94,7 @@ def main():
             from swing import telegram
             telegram.send(load_settings(), "⚠️ System check: GitHub runs keep ending within minutes, so the automatic "
                                            "restart paused itself. The next scheduled or cron-job.org run restarts it. "
-                                           "Open a Claude session if this repeats.", label="keep-alive warning")
+                                           "Open a Claude session if this repeats.", label="system problem")
         except Exception:
             pass
         LOG.write_text(json.dumps([]))
