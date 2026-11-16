@@ -1,7 +1,7 @@
 # Failure test report (audit 17 Nov 2026)
 
 How to read it:
-- **TESTED:** an automated test breaks the thing on purpose. All of them are in `tests/`, run on every change, and passed at the time of writing (full suite: 498 passed in a clean clone).
+- **TESTED:** an automated test breaks the thing on purpose. All of them are in `tests/`, run on every change, and passed at the time of writing (full suite: 501 passed in a clean clone, 17 Nov).
 - **BY DESIGN:** shown by code inspection, no automated test.
 - **NOT TESTABLE HERE:** needs live infrastructure. The reason is stated.
 

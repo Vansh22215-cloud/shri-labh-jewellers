@@ -807,3 +807,19 @@ tips are recomputed from the 16 Nov price bars, re-sent as cards and put back in
   engine stop are closed at that day's close in the evening run.
 - Verified on real data: the whole evening run (exits, dip-buy, positional, AI picks, discovery, autopilot) and
   /tips work end to end; the lost 16 Nov positional tips were rebuilt, re-sent and are tracked again.
+
+## D115 - 2026-11-17 - Full audit: safety core, independent re-validation, claim corrections
+Evidence and details: FINAL_AUDIT_REPORT.md, SAFETY_AND_SECURITY_REPORT.md, FAILURE_TEST_REPORT.md,
+BACKTEST_VALIDATION.md, KNOWN_LIMITATIONS.md.
+
+**Safety**
+- Every new tip passes `safety.check_new_entry` (kill switch, latched safety stop, explicit capital, tip validation, portfolio and per-strategy risk caps, losing-streak cooldown).
+- 1% risk per tip for all strategies, options included (option tips had risked up to 5%). Orders ≤ 25% of capital.
+- Learning can only tighten. Discovered strategies need `/approve`. Strategy switches are proposals (`allow_auto_promotion: false`). AI retraining is validation-gated with rollback.
+
+**Claims corrected** (independent re-test: next-open entry, gap-adjusted stops, 228 delisted stocks rebuilt from NSE files, ETFs excluded, 0.35% costs)
+- Dip-buy: reproduced. 76.5% in profit, +2.39% per trade; out-of-sample 75.3%, +2.79%.
+- Positional: the win rate is reproduced (45.3%). The average is **+3.8%, not +5.4%** (wins +19%, losses −9%). `positional.STATS` updated.
+- AI picks: "better than the average stock in 8 of 11 years" is **not** reproduced after costs: it is 6 of 11, and the after-cost margin is about +0.1% per 10 days. `ml_ranker.STATS` and the tip wording are updated ("SMALL edge, lowest-priority tip"). It stays on, capped at 3% of capital at risk. Switching it off is the owner's decision (`ai_picks: false`).
+- Discovered S1: weak in a realistic 2-slot account (+0.76% per trade, 5 losing years). Not approved; recommend not approving.
+- Intraday / F&O: no edge after costs. Shadow mode, EXPERIMENTAL.

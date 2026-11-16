@@ -43,6 +43,7 @@
 | 21 | LOW | "Tomorrow" in Friday tips | "the next market open" | `test_high_prob` |
 | 22 | LOW | Brief Telegram outages alarmed the owner | Alert only after 30 min | `test_bot_tips` |
 | 23 | LOW | Broken price rows (duplicates, NaN, high < low) reached strategies | `data_prices.sanitize` | `test_price_loader_cleans_...` |
+| 24 | MEDIUM | Tip messages quoted research figures that do not reproduce (positional +5.4%, AI "8 of 11 years") | Messages now quote the independent re-test | BACKTEST_VALIDATION.md |
 
 ## Checked and found correct
 - **No look-ahead** in any live strategy. Truncation tests (`test_no_lookahead_strategies.py`) cut the history at many dates and show that the signals for past days never change.
@@ -52,8 +53,21 @@
 ## Accepted (not fixed in code)
 - Some modules still default to ₹45,000 when computing a size. This is harmless: the safety gate reads `settings.yaml` itself and refuses every tip if capital is not set there (`test_missing_capital_blocks_tips`).
 
-## Backtest validation (summary)
-See BACKTEST_VALIDATION.md.
+## Backtest validation (summary; details in BACKTEST_VALIDATION.md)
+| Strategy | Claim | Independent result (after costs, survivorship-corrected) | Verdict |
+|---|---|---|---|
+| Dip-buy | 76%, +2.5% | 76.5%, +2.39%; out-of-sample 75.3%, +2.79%; beats the average stock in 12 of 14 years | ✅ reproduced |
+| Positional | 45%, +5.4% | 45.3%, **+3.76%**; out-of-sample 42.9%, +3.12% | ⚠️ average overstated → corrected |
+| AI picks | beats the average stock in 8 of 11 years | 6 of 11 after costs; margin about +0.1% per 10 days | ❌ overstated → corrected, labelled small edge |
+| Discovered S1 | (candidate) | 52%, +1.41%; realistic account +0.76%, 5 losing years | ⚠️ weak, needs approval: do not approve |
+| Intraday / F&O | — | no edge after costs in the research | ⛔ experimental, shadow only |
+
+The validator itself had 3 defects found during this audit, all fixed before the final run:
+- a regime-mask type error
+- a price-weighted "average stock" benchmark
+- an unrealistic every-signal drawdown
+
+Delisted-stock prices needed corporate-action repair: NSE's old files left splits and bonuses unadjusted.
 
 ## Production checklist
 | Item | Status |
@@ -65,7 +79,7 @@ See BACKTEST_VALIDATION.md.
 | No silent failures (heartbeat, daily status, failed-run alerts) | ✅ READY |
 | Backups delivered and restorable | ✅ READY |
 | Learning cannot raise risk or go live without approval | ✅ READY |
-| Full test suite passes in a clean clone | ✅ READY (see the final run below) |
+| Full test suite passes in a clean clone | ✅ READY (501 passed, 17 Nov) |
 | **Telegram bot token rotated** | ⛔ **BLOCKED: owner action** (runbook) |
 | **Intraday / F&O tips** | ⛔ **BLOCKED** (experimental, shadow mode until their live record passes; labelled) |
 | Continuous 24/7 monitoring | ⚠️ LIMITED: GitHub Actions is not a continuous server (1–3 min gaps at hand-overs); keep stop orders at the broker |
