@@ -155,11 +155,26 @@ def quotes(symbols):
         return {}
     out = {}
     syms = list(dict.fromkeys(symbols))
-    try:
-        for i in range(0, len(syms), 500):
-            chunk = syms[i:i + 500]
-            r = _get("/quote", params=[("i", _instrument(s)) for s in chunk])   # full quote: incl. volume
-            data = r.json().get("data", {})
+    fails = 0
+    for i in range(0, len(syms), 500):
+        chunk = syms[i:i + 500]
+        data = None
+        for attempt in range(2):          # audit 17 Nov: Kite allows 1 quote request per second - pace + retry once
+            _pace()
+            try:
+                r = _get("/quote", params=[("i", _instrument(s)) for s in chunk])   # full quote: incl. volume
+                data = r.json().get("data", {})
+                break
+            except RuntimeError:
+                raise_expired = not logged_in()
+                if raise_expired:
+                    break
+            except Exception as e:
+                log.debug("Kite quote chunk failed (%s), attempt %d", type(e).__name__, attempt + 1)
+        if data is None:
+            fails += 1
+            continue
+        try:
             for s in chunk:
                 q = data.get(_instrument(s))
                 if not q or not q.get("last_price"):
@@ -179,10 +194,30 @@ def quotes(symbols):
                           "buy_qty": float(q.get("buy_quantity") or 0), "sell_qty": float(q.get("sell_quantity") or 0),
                           "bid5": sum(float(x.get("quantity") or 0) for x in (q.get("depth") or {}).get("buy", [])),
                           "ask5": sum(float(x.get("quantity") or 0) for x in (q.get("depth") or {}).get("sell", []))}
-    except Exception as e:
-        log.warning("Kite quotes failed (%s) - using Yahoo", type(e).__name__)
-        return {}
+        except Exception as e:
+            fails += 1
+            log.debug("Kite quote parse failed: %s", type(e).__name__)
+    if fails:
+        log.warning("Kite quotes: %d of %d batch(es) failed - those stocks use Yahoo / are skipped this round",
+                    fails, (len(syms) + 499) // 500)
     return out
+
+
+_LAST_QUOTE = {"t": 0.0}
+
+
+def _pace(min_gap=1.05):
+    """Never more than one quote request per second (Kite's documented limit)."""
+    import time as _t
+    with _PACE_LOCK:
+        wait = _LAST_QUOTE["t"] + min_gap - _t.time()
+        if wait > 0:
+            _t.sleep(wait)
+        _LAST_QUOTE["t"] = _t.time()
+
+
+import threading as _threading  # noqa: E402
+_PACE_LOCK = _threading.Lock()
 
 
 def instruments():
