@@ -784,3 +784,10 @@ promotion / retirement ('autopilot' Telegram label; autopilot messages moved to 
 First sweep (local, 1,500 combinations): 1 survivor - S1 "far above its 200-day average + strong 14-day RSI +
 closed near the day's low, hold 20 days": 2013-19 55% / +1.85% (excess +0.95), 2020-22 53% / +2.05% (+1.03),
 last 3 years 55% / +2.13% (+1.18), 12 of 14 years positive. (The live system runs its own first sweep.)
+
+## D113 - 2026-11-17 - BUG: the live tip store was not kept between runs (fixed)
+journal/live_tips.csv was neither in the Actions cache (only data/ is carried over) nor committed (personal), so
+every run started with an empty store: multi-day tips (positional, dip-buy, AI, F&O) lost their exit alerts after
+the run that sent them ended, /tips was empty and the autopilot had no live record. Moved to
+data/private/live_tips.csv (carried over, never committed); smart_money.csv too. The owner's lost 16 Nov positional
+tips are recomputed from the 16 Nov price bars, re-sent as cards and put back into tracking (one-off).

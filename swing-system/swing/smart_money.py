@@ -16,7 +16,7 @@ import pandas as pd
 from . import data_prices
 from .config import DATA, JOURNAL
 
-LOG = JOURNAL / "smart_money.csv"
+LOG = JOURNAL.parent / "data" / "private" / "smart_money.csv"   # D113: kept between runs (data/ is carried over)
 HFT = ["GRAVITON", "QE SECURITIES", "JUNOMONETA", "SILVERLEAF", "HRTI", "IRAGE", "NK SECURITIES", "ALPHAGREP",
        "TOWER RESEARCH", "ELIXIR WEALTH", "PACE STOCK BROKING", "MICROCURVES", "PUNIT", "SHARE INDIA", "F3 ADVISORS",
        "ACE BULLION", "STOCKSIPS", "NEXTBILLION", "MANSI SHARE", "ESTEE ADVISORS", "XTX", "JUMP TRADING", "QUADEYE",

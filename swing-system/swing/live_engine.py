@@ -33,7 +33,17 @@ import pandas as pd
 from .config import DATA, JOURNAL, get_logger, load_settings
 
 log = get_logger()
-TIPS_F = JOURNAL / "live_tips.csv"
+# D113: the tip store MUST live in data/ - the only folder carried from one GitHub run to the next (Actions cache).
+# It was in journal/ (not carried over, not committed): every run started with an empty store, so multi-day tips
+# lost their exit alerts. data/private = kept between runs, never committed (personal).
+TIPS_F = DATA / "private" / "live_tips.csv"
+try:
+    TIPS_F.parent.mkdir(parents=True, exist_ok=True)
+    _old = JOURNAL / "live_tips.csv"
+    if _old.exists() and not TIPS_F.exists():
+        _old.replace(TIPS_F)
+except Exception:
+    pass
 NFO_F = DATA / "kite_instruments_nfo.csv"
 CB75 = [(10, 30), (11, 45), (13, 0), (14, 15), (15, 30)]        # 75-minute candle closes (IST)
 from .setups import WORDS as WORD   # noqa: E402
