@@ -5269,7 +5269,7 @@ overrides: {"family": "double_bottom", "min_volume_mult": 1.0}
 
 ```proposal
 id: A641
-status: proposed
+status: rejected 2026-11-16 - A641 vs a3: beat it in 5/13 walk-forward years, CAGR 7.97% vs 12.55% (needs +0.64), worst fall -8.51% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the double_bottom entry rule.
 overrides: {"family": "double_bottom", "use_regime_filter": true}
@@ -5277,7 +5277,7 @@ overrides: {"family": "double_bottom", "use_regime_filter": true}
 
 ```proposal
 id: A642
-status: proposed
+status: rejected 2026-11-16 - A642 vs a3: beat it in 3/13 walk-forward years, CAGR 6.39% vs 12.55% (needs +0.64), worst fall -13.38% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the double_bottom entry rule.
 overrides: {"family": "double_bottom", "max_open_positions": 3}
@@ -5285,7 +5285,7 @@ overrides: {"family": "double_bottom", "max_open_positions": 3}
 
 ```proposal
 id: A643
-status: proposed
+status: rejected 2026-11-16 - A643 vs a3: beat it in 3/13 walk-forward years, CAGR 2.58% vs 12.55% (needs +0.64), worst fall -21.88% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the double_bottom entry rule.
 overrides: {"family": "double_bottom", "max_open_positions": 5}
@@ -5293,7 +5293,7 @@ overrides: {"family": "double_bottom", "max_open_positions": 5}
 
 ```proposal
 id: A644
-status: proposed
+status: rejected 2026-11-16 - A644 vs a3: beat it in 1/13 walk-forward years, CAGR 4.65% vs 12.55% (needs +0.64), worst fall -17.88% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the double_bottom entry rule.
 overrides: {"family": "double_bottom", "max_per_industry": 2}
@@ -5301,7 +5301,7 @@ overrides: {"family": "double_bottom", "max_per_industry": 2}
 
 ```proposal
 id: A645
-status: proposed
+status: rejected 2026-11-16 - A645 vs a3: beat it in 4/13 walk-forward years, CAGR 4.39% vs 12.55% (needs +0.64), worst fall -19.9% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the double_bottom entry rule.
 overrides: {"family": "double_bottom", "skip_if_us_drop_pct": 2.0}
@@ -5309,7 +5309,7 @@ overrides: {"family": "double_bottom", "skip_if_us_drop_pct": 2.0}
 
 ```proposal
 id: A646
-status: proposed
+status: rejected 2026-11-16 - A646 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.64), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the double_bottom entry rule.
 overrides: {"family": "double_bottom", "min_fii_long_pct": 25}
@@ -5317,7 +5317,7 @@ overrides: {"family": "double_bottom", "min_fii_long_pct": 25}
 
 ```proposal
 id: A647
-status: proposed
+status: rejected 2026-11-16 - A647 vs a3: beat it in 2/13 walk-forward years, CAGR 0.75% vs 12.55% (needs +0.64), worst fall -23.06% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "stop_atr_mult": 2.5}
@@ -5325,7 +5325,7 @@ overrides: {"family": "ascending_triangle", "stop_atr_mult": 2.5}
 
 ```proposal
 id: A648
-status: proposed
+status: rejected 2026-11-16 - A648 vs a3: beat it in 3/13 walk-forward years, CAGR 5.35% vs 12.55% (needs +0.64), worst fall -15.58% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "stop_atr_mult": 3.5}
@@ -5333,7 +5333,7 @@ overrides: {"family": "ascending_triangle", "stop_atr_mult": 3.5}
 
 ```proposal
 id: A649
-status: proposed
+status: rejected 2026-11-16 - A649 vs a3: beat it in 4/13 walk-forward years, CAGR 6.1% vs 12.55% (needs +0.64), worst fall -15.5% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "max_hold_days": 15}
@@ -5341,7 +5341,7 @@ overrides: {"family": "ascending_triangle", "max_hold_days": 15}
 
 ```proposal
 id: A650
-status: proposed
+status: rejected 2026-11-16 - A650 vs a3: beat it in 4/13 walk-forward years, CAGR 5.46% vs 12.55% (needs +0.64), worst fall -19.6% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "max_hold_days": 35}
@@ -5349,7 +5349,7 @@ overrides: {"family": "ascending_triangle", "max_hold_days": 35}
 
 ```proposal
 id: A651
-status: proposed
+status: rejected 2026-11-16 - A651 vs a3: beat it in 5/13 walk-forward years, CAGR 5.05% vs 12.55% (needs +0.64), worst fall -13.92% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "target1_r": 1.5}
@@ -5357,7 +5357,7 @@ overrides: {"family": "ascending_triangle", "target1_r": 1.5}
 
 ```proposal
 id: A652
-status: proposed
+status: rejected 2026-11-16 - A652 vs a3: beat it in 4/13 walk-forward years, CAGR 5.46% vs 12.55% (needs +0.64), worst fall -18.7% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "target2_r": 3.0}
@@ -5365,7 +5365,7 @@ overrides: {"family": "ascending_triangle", "target2_r": 3.0}
 
 ```proposal
 id: A653
-status: proposed
+status: rejected 2026-11-16 - A653 vs a3: beat it in 2/13 walk-forward years, CAGR 1.81% vs 12.55% (needs +0.64), worst fall -15.96% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "exit_style": "trail", "trail_atr_mult": 3.0}
@@ -5373,7 +5373,7 @@ overrides: {"family": "ascending_triangle", "exit_style": "trail", "trail_atr_mu
 
 ```proposal
 id: A654
-status: proposed
+status: rejected 2026-11-16 - A654 vs a3: beat it in 3/13 walk-forward years, CAGR 8.41% vs 12.55% (needs +0.64), worst fall -13.14% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "min_rs_filter": 50}
@@ -5381,7 +5381,7 @@ overrides: {"family": "ascending_triangle", "min_rs_filter": 50}
 
 ```proposal
 id: A655
-status: proposed
+status: rejected 2026-11-16 - A655 vs a3: beat it in 4/13 walk-forward years, CAGR 8.29% vs 12.55% (needs +0.64), worst fall -11.86% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "min_mom12_rank": 0.5}
@@ -5389,7 +5389,7 @@ overrides: {"family": "ascending_triangle", "min_mom12_rank": 0.5}
 
 ```proposal
 id: A656
-status: proposed
+status: rejected 2026-11-16 - A656 vs a3: beat it in 3/13 walk-forward years, CAGR 2.88% vs 12.55% (needs +0.64), worst fall -16.19% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "max_atr_pct": 5.0}
@@ -5397,7 +5397,7 @@ overrides: {"family": "ascending_triangle", "max_atr_pct": 5.0}
 
 ```proposal
 id: A657
-status: proposed
+status: rejected 2026-11-16 - A657 vs a3: beat it in 4/13 walk-forward years, CAGR 2.87% vs 12.55% (needs +0.64), worst fall -15.29% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "min_volume_mult": 1.0}
@@ -5405,7 +5405,7 @@ overrides: {"family": "ascending_triangle", "min_volume_mult": 1.0}
 
 ```proposal
 id: A658
-status: proposed
+status: rejected 2026-11-16 - A658 vs a3: beat it in 6/13 walk-forward years, CAGR 7.09% vs 12.55% (needs +0.64), worst fall -9.99% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "use_regime_filter": true}
@@ -5413,7 +5413,7 @@ overrides: {"family": "ascending_triangle", "use_regime_filter": true}
 
 ```proposal
 id: A659
-status: proposed
+status: rejected 2026-11-16 - A659 vs a3: beat it in 4/13 walk-forward years, CAGR 4.49% vs 12.55% (needs +0.64), worst fall -12.04% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "max_open_positions": 3}
@@ -5421,7 +5421,7 @@ overrides: {"family": "ascending_triangle", "max_open_positions": 3}
 
 ```proposal
 id: A660
-status: proposed
+status: rejected 2026-11-16 - A660 vs a3: beat it in 2/13 walk-forward years, CAGR 3.37% vs 12.55% (needs +0.64), worst fall -22.82% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "max_open_positions": 5}
@@ -5429,7 +5429,7 @@ overrides: {"family": "ascending_triangle", "max_open_positions": 5}
 
 ```proposal
 id: A661
-status: proposed
+status: rejected 2026-11-16 - A661 vs a3: beat it in 5/13 walk-forward years, CAGR 3.63% vs 12.55% (needs +0.64), worst fall -15.48% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "max_per_industry": 2}
@@ -5437,7 +5437,7 @@ overrides: {"family": "ascending_triangle", "max_per_industry": 2}
 
 ```proposal
 id: A662
-status: proposed
+status: rejected 2026-11-16 - A662 vs a3: beat it in 3/13 walk-forward years, CAGR 3.9% vs 12.55% (needs +0.64), worst fall -15.65% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "skip_if_us_drop_pct": 2.0}
@@ -5445,7 +5445,7 @@ overrides: {"family": "ascending_triangle", "skip_if_us_drop_pct": 2.0}
 
 ```proposal
 id: A663
-status: proposed
+status: rejected 2026-11-16 - A663 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.64), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the ascending_triangle entry rule.
 overrides: {"family": "ascending_triangle", "min_fii_long_pct": 25}
@@ -5453,7 +5453,7 @@ overrides: {"family": "ascending_triangle", "min_fii_long_pct": 25}
 
 ```proposal
 id: A664
-status: proposed
+status: rejected 2026-11-16 - A664 vs a3: beat it in 5/13 walk-forward years, CAGR 5.94% vs 12.55% (needs +0.64), worst fall -18.69% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "stop_atr_mult": 2.5}
@@ -5461,7 +5461,7 @@ overrides: {"family": "bull_flag", "stop_atr_mult": 2.5}
 
 ```proposal
 id: A665
-status: proposed
+status: rejected 2026-11-16 - A665 vs a3: beat it in 7/13 walk-forward years, CAGR 7.0% vs 12.55% (needs +0.64), worst fall -9.62% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "stop_atr_mult": 3.5}
@@ -5469,7 +5469,7 @@ overrides: {"family": "bull_flag", "stop_atr_mult": 3.5}
 
 ```proposal
 id: A666
-status: proposed
+status: rejected 2026-11-16 - A666 vs a3: beat it in 7/13 walk-forward years, CAGR 7.36% vs 12.55% (needs +0.64), worst fall -11.72% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "max_hold_days": 15}
@@ -5477,7 +5477,7 @@ overrides: {"family": "bull_flag", "max_hold_days": 15}
 
 ```proposal
 id: A667
-status: proposed
+status: rejected 2026-11-16 - A667 vs a3: beat it in 7/13 walk-forward years, CAGR 9.67% vs 12.55% (needs +0.64), worst fall -14.12% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "max_hold_days": 35}
@@ -5485,7 +5485,7 @@ overrides: {"family": "bull_flag", "max_hold_days": 35}
 
 ```proposal
 id: A668
-status: proposed
+status: rejected 2026-11-16 - A668 vs a3: beat it in 7/13 walk-forward years, CAGR 7.78% vs 12.55% (needs +0.64), worst fall -11.1% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "target1_r": 1.5}
@@ -5493,7 +5493,7 @@ overrides: {"family": "bull_flag", "target1_r": 1.5}
 
 ```proposal
 id: A669
-status: proposed
+status: rejected 2026-11-16 - A669 vs a3: beat it in 7/13 walk-forward years, CAGR 7.14% vs 12.55% (needs +0.64), worst fall -14.69% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "target2_r": 3.0}
@@ -5501,7 +5501,7 @@ overrides: {"family": "bull_flag", "target2_r": 3.0}
 
 ```proposal
 id: A670
-status: proposed
+status: rejected 2026-11-16 - A670 vs a3: beat it in 7/13 walk-forward years, CAGR 6.61% vs 12.55% (needs +0.64), worst fall -12.15% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "exit_style": "trail", "trail_atr_mult": 3.0}
@@ -5509,7 +5509,7 @@ overrides: {"family": "bull_flag", "exit_style": "trail", "trail_atr_mult": 3.0}
 
 ```proposal
 id: A671
-status: proposed
+status: rejected 2026-11-16 - A671 vs a3: beat it in 7/13 walk-forward years, CAGR 7.46% vs 12.55% (needs +0.64), worst fall -7.69% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "min_rs_filter": 50}
@@ -5517,7 +5517,7 @@ overrides: {"family": "bull_flag", "min_rs_filter": 50}
 
 ```proposal
 id: A672
-status: proposed
+status: rejected 2026-11-16 - A672 vs a3: beat it in 6/13 walk-forward years, CAGR 9.0% vs 12.55% (needs +0.64), worst fall -7.48% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "min_mom12_rank": 0.5}
@@ -5525,7 +5525,7 @@ overrides: {"family": "bull_flag", "min_mom12_rank": 0.5}
 
 ```proposal
 id: A673
-status: proposed
+status: rejected 2026-11-16 - A673 vs a3: beat it in 8/13 walk-forward years, CAGR 9.36% vs 12.55% (needs +0.64), worst fall -9.81% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "max_atr_pct": 5.0}
@@ -5533,7 +5533,7 @@ overrides: {"family": "bull_flag", "max_atr_pct": 5.0}
 
 ```proposal
 id: A674
-status: proposed
+status: rejected 2026-11-16 - A674 vs a3: beat it in 7/13 walk-forward years, CAGR 7.42% vs 12.55% (needs +0.64), worst fall -11.44% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "min_volume_mult": 1.0}
@@ -5541,7 +5541,7 @@ overrides: {"family": "bull_flag", "min_volume_mult": 1.0}
 
 ```proposal
 id: A675
-status: proposed
+status: rejected 2026-11-16 - A675 vs a3: beat it in 6/13 walk-forward years, CAGR 7.35% vs 12.55% (needs +0.64), worst fall -7.1% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "use_regime_filter": true}
@@ -5549,7 +5549,7 @@ overrides: {"family": "bull_flag", "use_regime_filter": true}
 
 ```proposal
 id: A676
-status: proposed
+status: rejected 2026-11-16 - A676 vs a3: beat it in 8/13 walk-forward years, CAGR 7.69% vs 12.55% (needs +0.64), worst fall -7.71% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "max_open_positions": 3}
@@ -5557,7 +5557,7 @@ overrides: {"family": "bull_flag", "max_open_positions": 3}
 
 ```proposal
 id: A677
-status: proposed
+status: rejected 2026-11-16 - A677 vs a3: beat it in 6/13 walk-forward years, CAGR 7.88% vs 12.55% (needs +0.64), worst fall -17.64% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "max_open_positions": 5}
@@ -5565,7 +5565,7 @@ overrides: {"family": "bull_flag", "max_open_positions": 5}
 
 ```proposal
 id: A678
-status: proposed
+status: rejected 2026-11-16 - A678 vs a3: beat it in 7/13 walk-forward years, CAGR 8.16% vs 12.55% (needs +0.64), worst fall -11.4% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "max_per_industry": 2}
@@ -5573,7 +5573,7 @@ overrides: {"family": "bull_flag", "max_per_industry": 2}
 
 ```proposal
 id: A679
-status: proposed
+status: rejected 2026-11-16 - A679 vs a3: beat it in 7/13 walk-forward years, CAGR 7.48% vs 12.55% (needs +0.64), worst fall -11.37% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "skip_if_us_drop_pct": 2.0}
@@ -5581,7 +5581,7 @@ overrides: {"family": "bull_flag", "skip_if_us_drop_pct": 2.0}
 
 ```proposal
 id: A680
-status: proposed
+status: rejected 2026-11-16 - A680 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.64), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the bull_flag entry rule.
 overrides: {"family": "bull_flag", "min_fii_long_pct": 25}
@@ -5589,7 +5589,7 @@ overrides: {"family": "bull_flag", "min_fii_long_pct": 25}
 
 ```proposal
 id: A681
-status: proposed
+status: rejected 2026-11-16 - A681 vs a3: beat it in 1/13 walk-forward years, CAGR 4.97% vs 12.55% (needs +0.64), worst fall -18.09% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "stop_atr_mult": 2.5}
@@ -5597,7 +5597,7 @@ overrides: {"family": "cup_handle", "stop_atr_mult": 2.5}
 
 ```proposal
 id: A682
-status: proposed
+status: rejected 2026-11-16 - A682 vs a3: beat it in 4/13 walk-forward years, CAGR 7.38% vs 12.55% (needs +0.64), worst fall -12.49% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "stop_atr_mult": 3.5}
@@ -5605,7 +5605,7 @@ overrides: {"family": "cup_handle", "stop_atr_mult": 3.5}
 
 ```proposal
 id: A683
-status: proposed
+status: rejected 2026-11-16 - A683 vs a3: beat it in 2/13 walk-forward years, CAGR 2.75% vs 12.55% (needs +0.64), worst fall -20.55% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "max_hold_days": 15}
@@ -5613,7 +5613,7 @@ overrides: {"family": "cup_handle", "max_hold_days": 15}
 
 ```proposal
 id: A684
-status: proposed
+status: rejected 2026-11-16 - A684 vs a3: beat it in 5/13 walk-forward years, CAGR 3.95% vs 12.55% (needs +0.64), worst fall -13.01% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "max_hold_days": 35}
@@ -5621,7 +5621,7 @@ overrides: {"family": "cup_handle", "max_hold_days": 35}
 
 ```proposal
 id: A685
-status: proposed
+status: rejected 2026-11-16 - A685 vs a3: beat it in 4/13 walk-forward years, CAGR 7.14% vs 12.55% (needs +0.64), worst fall -17.43% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "target1_r": 1.5}
@@ -5629,7 +5629,7 @@ overrides: {"family": "cup_handle", "target1_r": 1.5}
 
 ```proposal
 id: A686
-status: proposed
+status: rejected 2026-11-16 - A686 vs a3: beat it in 4/13 walk-forward years, CAGR 6.15% vs 12.55% (needs +0.64), worst fall -18.34% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "target2_r": 3.0}
@@ -5637,7 +5637,7 @@ overrides: {"family": "cup_handle", "target2_r": 3.0}
 
 ```proposal
 id: A687
-status: proposed
+status: rejected 2026-11-16 - A687 vs a3: beat it in 3/13 walk-forward years, CAGR 4.89% vs 12.55% (needs +0.64), worst fall -15.59% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "exit_style": "trail", "trail_atr_mult": 3.0}
@@ -5645,7 +5645,7 @@ overrides: {"family": "cup_handle", "exit_style": "trail", "trail_atr_mult": 3.0
 
 ```proposal
 id: A688
-status: proposed
+status: rejected 2026-11-16 - A688 vs a3: beat it in 5/13 walk-forward years, CAGR 5.03% vs 12.55% (needs +0.64), worst fall -21.81% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "min_rs_filter": 50}
@@ -5653,7 +5653,7 @@ overrides: {"family": "cup_handle", "min_rs_filter": 50}
 
 ```proposal
 id: A689
-status: proposed
+status: rejected 2026-11-16 - A689 vs a3: beat it in 6/13 walk-forward years, CAGR 6.72% vs 12.55% (needs +0.64), worst fall -16.23% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "min_mom12_rank": 0.5}
@@ -5661,7 +5661,7 @@ overrides: {"family": "cup_handle", "min_mom12_rank": 0.5}
 
 ```proposal
 id: A690
-status: proposed
+status: rejected 2026-11-16 - A690 vs a3: beat it in 6/13 walk-forward years, CAGR 5.23% vs 12.55% (needs +0.64), worst fall -18.53% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "max_atr_pct": 5.0}
@@ -5669,7 +5669,7 @@ overrides: {"family": "cup_handle", "max_atr_pct": 5.0}
 
 ```proposal
 id: A691
-status: proposed
+status: rejected 2026-11-16 - A691 vs a3: beat it in 2/13 walk-forward years, CAGR 4.33% vs 12.55% (needs +0.64), worst fall -17.9% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "min_volume_mult": 1.0}
@@ -5677,7 +5677,7 @@ overrides: {"family": "cup_handle", "min_volume_mult": 1.0}
 
 ```proposal
 id: A692
-status: proposed
+status: rejected 2026-11-16 - A692 vs a3: beat it in 4/13 walk-forward years, CAGR 6.55% vs 12.55% (needs +0.64), worst fall -14.1% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "use_regime_filter": true}
@@ -5685,7 +5685,7 @@ overrides: {"family": "cup_handle", "use_regime_filter": true}
 
 ```proposal
 id: A693
-status: proposed
+status: rejected 2026-11-16 - A693 vs a3: beat it in 6/13 walk-forward years, CAGR 6.81% vs 12.55% (needs +0.64), worst fall -12.52% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "max_open_positions": 3}
@@ -5693,7 +5693,7 @@ overrides: {"family": "cup_handle", "max_open_positions": 3}
 
 ```proposal
 id: A694
-status: proposed
+status: rejected 2026-11-16 - A694 vs a3: beat it in 4/13 walk-forward years, CAGR 5.37% vs 12.55% (needs +0.64), worst fall -20.55% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "max_open_positions": 5}
@@ -5701,7 +5701,7 @@ overrides: {"family": "cup_handle", "max_open_positions": 5}
 
 ```proposal
 id: A695
-status: proposed
+status: rejected 2026-11-16 - A695 vs a3: beat it in 4/13 walk-forward years, CAGR 5.61% vs 12.55% (needs +0.64), worst fall -19.05% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "max_per_industry": 2}
@@ -5709,7 +5709,7 @@ overrides: {"family": "cup_handle", "max_per_industry": 2}
 
 ```proposal
 id: A696
-status: proposed
+status: rejected 2026-11-16 - A696 vs a3: beat it in 4/13 walk-forward years, CAGR 7.36% vs 12.55% (needs +0.64), worst fall -18.6% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "skip_if_us_drop_pct": 2.0}
@@ -5717,7 +5717,7 @@ overrides: {"family": "cup_handle", "skip_if_us_drop_pct": 2.0}
 
 ```proposal
 id: A697
-status: proposed
+status: rejected 2026-11-16 - A697 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.64), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the cup_handle entry rule.
 overrides: {"family": "cup_handle", "min_fii_long_pct": 25}
@@ -5725,7 +5725,7 @@ overrides: {"family": "cup_handle", "min_fii_long_pct": 25}
 
 ```proposal
 id: A698
-status: proposed
+status: rejected 2026-11-16 - A698 vs a3: beat it in 5/13 walk-forward years, CAGR 9.01% vs 12.55% (needs +0.64), worst fall -4.63% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "stop_atr_mult": 2.5}
@@ -5733,7 +5733,7 @@ overrides: {"family": "pre_results_runup", "stop_atr_mult": 2.5}
 
 ```proposal
 id: A699
-status: proposed
+status: rejected 2026-11-16 - A699 vs a3: beat it in 5/13 walk-forward years, CAGR 8.71% vs 12.55% (needs +0.64), worst fall -4.34% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "stop_atr_mult": 3.5}
@@ -5741,7 +5741,7 @@ overrides: {"family": "pre_results_runup", "stop_atr_mult": 3.5}
 
 ```proposal
 id: A700
-status: proposed
+status: rejected 2026-11-16 - A700 vs a3: beat it in 5/13 walk-forward years, CAGR 8.25% vs 12.55% (needs +0.64), worst fall -3.56% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "max_hold_days": 15}
@@ -5749,7 +5749,7 @@ overrides: {"family": "pre_results_runup", "max_hold_days": 15}
 
 ```proposal
 id: A701
-status: proposed
+status: rejected 2026-11-16 - A701 vs a3: beat it in 5/13 walk-forward years, CAGR 8.93% vs 12.55% (needs +0.64), worst fall -6.17% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "max_hold_days": 35}
@@ -5757,7 +5757,7 @@ overrides: {"family": "pre_results_runup", "max_hold_days": 35}
 
 ```proposal
 id: A702
-status: proposed
+status: rejected 2026-11-16 - A702 vs a3: beat it in 5/13 walk-forward years, CAGR 8.65% vs 12.55% (needs +0.64), worst fall -4.63% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "target1_r": 1.5}
@@ -5765,7 +5765,7 @@ overrides: {"family": "pre_results_runup", "target1_r": 1.5}
 
 ```proposal
 id: A703
-status: proposed
+status: rejected 2026-11-16 - A703 vs a3: beat it in 5/13 walk-forward years, CAGR 8.84% vs 12.55% (needs +0.64), worst fall -4.56% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "target2_r": 3.0}
@@ -5773,7 +5773,7 @@ overrides: {"family": "pre_results_runup", "target2_r": 3.0}
 
 ```proposal
 id: A704
-status: proposed
+status: rejected 2026-11-16 - A704 vs a3: beat it in 5/13 walk-forward years, CAGR 8.22% vs 12.55% (needs +0.64), worst fall -4.49% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "exit_style": "trail", "trail_atr_mult": 3.0}
@@ -5781,7 +5781,7 @@ overrides: {"family": "pre_results_runup", "exit_style": "trail", "trail_atr_mul
 
 ```proposal
 id: A705
-status: proposed
+status: rejected 2026-11-16 - A705 vs a3: beat it in 5/13 walk-forward years, CAGR 9.01% vs 12.55% (needs +0.64), worst fall -4.47% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "min_rs_filter": 50}
@@ -5789,7 +5789,7 @@ overrides: {"family": "pre_results_runup", "min_rs_filter": 50}
 
 ```proposal
 id: A706
-status: proposed
+status: rejected 2026-11-16 - A706 vs a3: beat it in 6/13 walk-forward years, CAGR 9.06% vs 12.55% (needs +0.64), worst fall -3.43% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "min_mom12_rank": 0.5}
@@ -5797,7 +5797,7 @@ overrides: {"family": "pre_results_runup", "min_mom12_rank": 0.5}
 
 ```proposal
 id: A707
-status: proposed
+status: rejected 2026-11-16 - A707 vs a3: beat it in 5/13 walk-forward years, CAGR 8.95% vs 12.55% (needs +0.64), worst fall -4.52% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "max_atr_pct": 5.0}
@@ -5805,7 +5805,7 @@ overrides: {"family": "pre_results_runup", "max_atr_pct": 5.0}
 
 ```proposal
 id: A708
-status: proposed
+status: rejected 2026-11-16 - A708 vs a3: beat it in 5/13 walk-forward years, CAGR 7.97% vs 12.55% (needs +0.64), worst fall -4.11% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "min_volume_mult": 1.0}
@@ -5813,7 +5813,7 @@ overrides: {"family": "pre_results_runup", "min_volume_mult": 1.0}
 
 ```proposal
 id: A709
-status: proposed
+status: rejected 2026-11-16 - A709 vs a3: beat it in 4/13 walk-forward years, CAGR 8.48% vs 12.55% (needs +0.64), worst fall -4.58% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "use_regime_filter": true}
@@ -5821,7 +5821,7 @@ overrides: {"family": "pre_results_runup", "use_regime_filter": true}
 
 ```proposal
 id: A710
-status: proposed
+status: rejected 2026-11-16 - A710 vs a3: beat it in 4/13 walk-forward years, CAGR 8.89% vs 12.55% (needs +0.64), worst fall -4.57% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "max_open_positions": 3}
@@ -5829,7 +5829,7 @@ overrides: {"family": "pre_results_runup", "max_open_positions": 3}
 
 ```proposal
 id: A711
-status: proposed
+status: rejected 2026-11-16 - A711 vs a3: beat it in 5/13 walk-forward years, CAGR 8.8% vs 12.55% (needs +0.64), worst fall -4.56% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "max_open_positions": 5}
@@ -5837,7 +5837,7 @@ overrides: {"family": "pre_results_runup", "max_open_positions": 5}
 
 ```proposal
 id: A712
-status: proposed
+status: rejected 2026-11-16 - A712 vs a3: beat it in 5/13 walk-forward years, CAGR 9.01% vs 12.55% (needs +0.64), worst fall -4.47% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "max_per_industry": 2}
@@ -5845,7 +5845,7 @@ overrides: {"family": "pre_results_runup", "max_per_industry": 2}
 
 ```proposal
 id: A713
-status: proposed
+status: rejected 2026-11-16 - A713 vs a3: beat it in 5/13 walk-forward years, CAGR 9.11% vs 12.55% (needs +0.64), worst fall -3.64% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "skip_if_us_drop_pct": 2.0}
@@ -5853,7 +5853,7 @@ overrides: {"family": "pre_results_runup", "skip_if_us_drop_pct": 2.0}
 
 ```proposal
 id: A714
-status: proposed
+status: rejected 2026-11-16 - A714 vs a3: beat it in 6/13 walk-forward years, CAGR 6.92% vs 12.55% (needs +0.64), worst fall -0.24% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the pre_results_runup entry rule.
 overrides: {"family": "pre_results_runup", "min_fii_long_pct": 25}
@@ -5861,7 +5861,7 @@ overrides: {"family": "pre_results_runup", "min_fii_long_pct": 25}
 
 ```proposal
 id: A715
-status: proposed
+status: rejected 2026-11-16 - A715 vs a3: beat it in 3/13 walk-forward years, CAGR 5.55% vs 12.55% (needs +0.64), worst fall -25.37% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the minervini_vcp entry rule.
 overrides: {"family": "minervini_vcp", "stop_atr_mult": 2.5}
@@ -5869,7 +5869,7 @@ overrides: {"family": "minervini_vcp", "stop_atr_mult": 2.5}
 
 ```proposal
 id: A716
-status: proposed
+status: rejected 2026-11-16 - A716 vs a3: beat it in 4/13 walk-forward years, CAGR 7.95% vs 12.55% (needs +0.64), worst fall -15.07% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the minervini_vcp entry rule.
 overrides: {"family": "minervini_vcp", "stop_atr_mult": 3.5}
@@ -5877,7 +5877,7 @@ overrides: {"family": "minervini_vcp", "stop_atr_mult": 3.5}
 
 ```proposal
 id: A717
-status: proposed
+status: rejected 2026-11-16 - A717 vs a3: beat it in 5/13 walk-forward years, CAGR 6.08% vs 12.55% (needs +0.64), worst fall -26.23% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the minervini_vcp entry rule.
 overrides: {"family": "minervini_vcp", "max_hold_days": 15}
@@ -5885,7 +5885,7 @@ overrides: {"family": "minervini_vcp", "max_hold_days": 15}
 
 ```proposal
 id: A718
-status: proposed
+status: rejected 2026-11-16 - A718 vs a3: beat it in 6/13 walk-forward years, CAGR 10.83% vs 12.55% (needs +0.64), worst fall -14.83% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the minervini_vcp entry rule.
 overrides: {"family": "minervini_vcp", "max_hold_days": 35}
@@ -5893,7 +5893,7 @@ overrides: {"family": "minervini_vcp", "max_hold_days": 35}
 
 ```proposal
 id: A719
-status: proposed
+status: rejected 2026-11-16 - A719 vs a3: beat it in 3/13 walk-forward years, CAGR 8.07% vs 12.55% (needs +0.64), worst fall -12.95% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the minervini_vcp entry rule.
 overrides: {"family": "minervini_vcp", "target1_r": 1.5}
@@ -5901,8 +5901,648 @@ overrides: {"family": "minervini_vcp", "target1_r": 1.5}
 
 ```proposal
 id: A720
-status: proposed
+status: rejected 2026-11-16 - A720 vs a3: beat it in 4/13 walk-forward years, CAGR 9.48% vs 12.55% (needs +0.64), worst fall -13.37% vs -10.71%, gate FAIL
 written: 2026-11-13
 reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the minervini_vcp entry rule.
 overrides: {"family": "minervini_vcp", "target2_r": 3.0}
+```
+
+```proposal
+id: A721
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "exit_style": "trail", "trail_atr_mult": 3.0}
+```
+
+```proposal
+id: A722
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "min_rs_filter": 50}
+```
+
+```proposal
+id: A723
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "min_mom12_rank": 0.5}
+```
+
+```proposal
+id: A724
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "max_atr_pct": 5.0}
+```
+
+```proposal
+id: A725
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "min_volume_mult": 1.0}
+```
+
+```proposal
+id: A726
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "use_regime_filter": true}
+```
+
+```proposal
+id: A727
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "max_open_positions": 3}
+```
+
+```proposal
+id: A728
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "max_open_positions": 5}
+```
+
+```proposal
+id: A729
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "max_per_industry": 2}
+```
+
+```proposal
+id: A730
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "skip_if_us_drop_pct": 2.0}
+```
+
+```proposal
+id: A731
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the minervini_vcp entry rule.
+overrides: {"family": "minervini_vcp", "min_fii_long_pct": 25}
+```
+
+```proposal
+id: A732
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "stop_atr_mult": 2.5}
+```
+
+```proposal
+id: A733
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "stop_atr_mult": 3.5}
+```
+
+```proposal
+id: A734
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "max_hold_days": 15}
+```
+
+```proposal
+id: A735
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "max_hold_days": 35}
+```
+
+```proposal
+id: A736
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "target1_r": 1.5}
+```
+
+```proposal
+id: A737
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "target2_r": 3.0}
+```
+
+```proposal
+id: A738
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "exit_style": "trail", "trail_atr_mult": 3.0}
+```
+
+```proposal
+id: A739
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "min_rs_filter": 50}
+```
+
+```proposal
+id: A740
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "min_mom12_rank": 0.5}
+```
+
+```proposal
+id: A741
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "max_atr_pct": 5.0}
+```
+
+```proposal
+id: A742
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "min_volume_mult": 1.0}
+```
+
+```proposal
+id: A743
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "use_regime_filter": true}
+```
+
+```proposal
+id: A744
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "max_open_positions": 3}
+```
+
+```proposal
+id: A745
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "max_open_positions": 5}
+```
+
+```proposal
+id: A746
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "max_per_industry": 2}
+```
+
+```proposal
+id: A747
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "skip_if_us_drop_pct": 2.0}
+```
+
+```proposal
+id: A748
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the weinstein_stage2 entry rule.
+overrides: {"family": "weinstein_stage2", "min_fii_long_pct": 25}
+```
+
+```proposal
+id: A749
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "stop_atr_mult": 2.5}
+```
+
+```proposal
+id: A750
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "stop_atr_mult": 3.5}
+```
+
+```proposal
+id: A751
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "max_hold_days": 15}
+```
+
+```proposal
+id: A752
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "max_hold_days": 35}
+```
+
+```proposal
+id: A753
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "target1_r": 1.5}
+```
+
+```proposal
+id: A754
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "target2_r": 3.0}
+```
+
+```proposal
+id: A755
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "exit_style": "trail", "trail_atr_mult": 3.0}
+```
+
+```proposal
+id: A756
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "min_rs_filter": 50}
+```
+
+```proposal
+id: A757
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "min_mom12_rank": 0.5}
+```
+
+```proposal
+id: A758
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "max_atr_pct": 5.0}
+```
+
+```proposal
+id: A759
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "min_volume_mult": 1.0}
+```
+
+```proposal
+id: A760
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "use_regime_filter": true}
+```
+
+```proposal
+id: A761
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "max_open_positions": 3}
+```
+
+```proposal
+id: A762
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "max_open_positions": 5}
+```
+
+```proposal
+id: A763
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "max_per_industry": 2}
+```
+
+```proposal
+id: A764
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "skip_if_us_drop_pct": 2.0}
+```
+
+```proposal
+id: A765
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the darvas_box entry rule.
+overrides: {"family": "darvas_box", "min_fii_long_pct": 25}
+```
+
+```proposal
+id: A766
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "stop_atr_mult": 2.5}
+```
+
+```proposal
+id: A767
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "stop_atr_mult": 3.5}
+```
+
+```proposal
+id: A768
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "max_hold_days": 15}
+```
+
+```proposal
+id: A769
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "max_hold_days": 35}
+```
+
+```proposal
+id: A770
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "target1_r": 1.5}
+```
+
+```proposal
+id: A771
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "target2_r": 3.0}
+```
+
+```proposal
+id: A772
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "exit_style": "trail", "trail_atr_mult": 3.0}
+```
+
+```proposal
+id: A773
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "min_rs_filter": 50}
+```
+
+```proposal
+id: A774
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "min_mom12_rank": 0.5}
+```
+
+```proposal
+id: A775
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "max_atr_pct": 5.0}
+```
+
+```proposal
+id: A776
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "min_volume_mult": 1.0}
+```
+
+```proposal
+id: A777
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "use_regime_filter": true}
+```
+
+```proposal
+id: A778
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "max_open_positions": 3}
+```
+
+```proposal
+id: A779
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "max_open_positions": 5}
+```
+
+```proposal
+id: A780
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "max_per_industry": 2}
+```
+
+```proposal
+id: A781
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "skip_if_us_drop_pct": 2.0}
+```
+
+```proposal
+id: A782
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the momentum_12_1 entry rule.
+overrides: {"family": "momentum_12_1", "min_fii_long_pct": 25}
+```
+
+```proposal
+id: A783
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "stop_atr_mult": 2.5}
+```
+
+```proposal
+id: A784
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly wider stop avoids being shaken out of trends by normal volatility - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "stop_atr_mult": 3.5}
+```
+
+```proposal
+id: A785
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: shorter holds free capital faster for fresh signals when trends fade quickly - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "max_hold_days": 15}
+```
+
+```proposal
+id: A786
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: longer holds give drifting trends more time to reach targets - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "max_hold_days": 35}
+```
+
+```proposal
+id: A787
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer first target banks partial profit more often - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "target1_r": 1.5}
+```
+
+```proposal
+id: A788
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a nearer final target converts more winners before the time limit - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "target2_r": 3.0}
+```
+
+```proposal
+id: A789
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a trailing stop lets the few big trends run instead of capping them - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "exit_style": "trail", "trail_atr_mult": 3.0}
+```
+
+```proposal
+id: A790
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: buying only stocks stronger than the average stock favours leaders - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "min_rs_filter": 50}
+```
+
+```proposal
+id: A791
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring above-average 12-month momentum favours long-term winners - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "min_mom12_rank": 0.5}
+```
+
+```proposal
+id: A792
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping the most volatile stocks reduces gap losses through stops - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "max_atr_pct": 5.0}
+```
+
+```proposal
+id: A793
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: requiring at least average volume on the signal day filters thin moves - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "min_volume_mult": 1.0}
+```
+
+```proposal
+id: A794
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: avoiding new trades when the market is below its 200-day average cuts bear-market losses - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "use_regime_filter": true}
+```
+
+```proposal
+id: A795
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: fewer, best-ranked positions concentrate on the strongest signals - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "max_open_positions": 3}
+```
+
+```proposal
+id: A796
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: one more position spreads risk across more independent trades - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "max_open_positions": 5}
+```
+
+```proposal
+id: A797
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: at most two trades per industry limits sector-wide drawdowns - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "max_per_industry": 2}
+```
+
+```proposal
+id: A798
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries after a >2% overnight US fall avoids buying into global risk-off opens - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "skip_if_us_drop_pct": 2.0}
+```
+
+```proposal
+id: A799
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: skipping entries when FIIs are extremely short in index futures avoids hostile markets - applied to the high52_rank entry rule.
+overrides: {"family": "high52_rank", "min_fii_long_pct": 25}
+```
+
+```proposal
+id: A800
+status: proposed
+written: 2026-11-16
+reason: (idea factory) For a3: a slightly tighter stop cuts the size of losing trades while staying outside daily noise - applied to the pead entry rule.
+overrides: {"family": "pead", "stop_atr_mult": 2.5}
 ```
