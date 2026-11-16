@@ -12,8 +12,10 @@ import pandas as pd
 from .config import get_logger, load_settings
 
 log = get_logger()
-STATS = {"trades": 6340, "win_pct": 45.3, "avg_pct": 5.37, "avg_win_pct": 22.6, "avg_loss_pct": -8.9,
-         "holdout_win_pct": 43.2, "holdout_avg_pct": 3.16, "days": 43}
+# independent re-test (BACKTEST_VALIDATION.md, 17 Nov 2026: next-open entry, gap-adjusted stops, delisted stocks, 0.35%
+# costs) - replaces the original research figures (avg +5.4%, wins +22.6%), which were not reproduced
+STATS = {"trades": 6983, "win_pct": 45.3, "avg_pct": 3.76, "avg_win_pct": 19.3, "avg_loss_pct": -9.1,
+         "holdout_win_pct": 42.9, "holdout_avg_pct": 3.12, "days": 42}
 STOP_ATR, MAX_DAYS, NEAR_HIGH, RANK, RISK_PCT = 5.0, 60, 0.90, 6, 1.0
 
 

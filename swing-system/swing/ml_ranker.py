@@ -21,7 +21,9 @@ from .config import DATA, get_logger, load_settings
 log = get_logger()
 MODEL_F = DATA / "ml_model.pkl"
 H, STOP_ATR, RANK, RISK_PCT = 10, 4.0, 6, 1.0
-STATS = {"pick_avg": 0.82, "market_avg": 0.34, "years_better": "8 of 11", "holdout_pick": 0.94, "win": 52.7}
+# independent re-test (BACKTEST_VALIDATION.md, 17 Nov 2026): the original "8 of 11 years" compared the picks after
+# costs with the average stock before extra trading costs; honest after-cost comparison below
+STATS = {"pick_avg": 0.73, "edge_before_costs": 0.48, "years_better": "6 of 11", "holdout_pick": 0.84, "win": 53.3}
 STOCK = ["r1", "r5", "r20", "r60", "r120", "r250", "r250_20", "rsi2", "rsi14", "d20", "d50", "d200", "s50_200",
          "atr_pct", "vol20", "vol60", "vol_ratio", "vratio", "turnover", "hi52", "lo52", "wvf", "wt1", "sqz", "gap",
          "rngpos", "dn_days", "rs_r20", "rs_r60"]
@@ -287,9 +289,9 @@ def send_evening(day, settings=None, scored=None):
              f"Exit: sell after 10 trading days - I'll alert you\n\n"
              f"{RISK_PCT:g}% Risk\n\n"
              f"⭐ RANK - {RANK}/10 · Qty {qty} · top of today's market-wide AI ranking. Tested walk-forward: the "
-             f"top picks made {STATS['pick_avg']:+.2f}% per 10 days vs {STATS['market_avg']:+.2f}% for the average "
-             f"stock, better in {STATS['years_better']} years; only ~{STATS['win']:.0f}% of picks win - the edge is "
-             f"in the average.\n\n{tv_link(sym, daily=True)}")
+             f"top picks made {STATS['pick_avg']:+.2f}% per 10 days after costs ({STATS['edge_before_costs']:+.2f}% "
+             f"more than the average stock before costs, but after costs better in only {STATS['years_better']} "
+             f"years) - a SMALL edge, lowest-priority tip; ~{STATS['win']:.0f}% of picks win.\n\n{tv_link(sym, daily=True)}")
         if issue_tip({"time": str(pd.Timestamp.now(tz='Asia/Kolkata').tz_localize(None))[:16], "type": "NORMAL",
                       "symbol": sym, "side": "buy", "entry": r["close"], "stop": stop, "targets": "", "rank": RANK,
                       "qty": qty, "status": "open", "hit": 0, "day": str(day), "setup": "AI"}, msg, s):
