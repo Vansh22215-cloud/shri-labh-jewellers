@@ -5,7 +5,18 @@ the folder is copied (Windows or Linux).
 """
 import json
 import logging
+import os
+import time
 from pathlib import Path
+
+# D114: GitHub's computers run on UTC. The whole system thinks in Indian time (market hours, "today", dates of
+# tips, trades and reports): between midnight and 5:30 am IST a UTC 'today' was still yesterday. Every program
+# imports this module first, so the process clock is set to IST here once.
+os.environ["TZ"] = "Asia/Kolkata"
+try:
+    time.tzset()
+except AttributeError:      # Windows has no tzset (the owner's own PC is already on IST)
+    pass
 
 import yaml
 

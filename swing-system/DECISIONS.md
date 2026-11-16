@@ -798,3 +798,6 @@ tips are recomputed from the 16 Nov price bars, re-sent as cards and put back in
 - New evening tips are sent only on FRESH prices (exits always run); stale data -> no new tips + one alert.
 - Freshness was judged against the last NSE bhavcopy file, which may be unreachable from GitHub -> stale prices
   looked fresh. Now also: did Nifty actually trade today (5-minute bars dated today)?
+- The process clock is now Indian time (GitHub runs on UTC: 0:00-5:30 am IST 'today' was yesterday).
+- Long jobs (nightly, research ~1 h) blocked the bot: no replies, exit alerts or updates while they ran. They now
+  run in a background thread (one at a time); a code update waits for a running job to finish.

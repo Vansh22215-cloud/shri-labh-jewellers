@@ -13,6 +13,7 @@ Each job is claimed in data/jobs_done.json so nothing runs twice when a delayed 
 import json
 import os
 import subprocess
+import threading
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -133,17 +134,38 @@ def jobs_today_line(t=None):
 SCRIPTS = {"scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py"}
 
 
-def run_job(job, minutes_left):
-    if not claim(job):
-        return
+_JOB = {"thread": None, "name": None}
+
+
+def job_running():
+    th = _JOB["thread"]
+    return th is not None and th.is_alive()
+
+
+def run_job(job, minutes_left, background=True):
+    """D114: jobs run in a background thread (one at a time) so the bot keeps answering, exit alerts keep firing
+    and minute tasks keep running while a long job (nightly ~5 min, research up to ~1 hour) works."""
+    if job_running() or not claim(job):
+        return False
     env = dict(os.environ, SWING_CLAIMED=job,
                SWING_RESEARCH_BUDGET=str(max(10, min(120, minutes_left - 25))))
-    log.info("Daemon: running %s", job)
-    try:
-        subprocess.run([sys.executable, str(ROOT / "scripts" / SCRIPTS[job])], cwd=ROOT, env=env,
-                       timeout=max(60, (minutes_left - 5) * 60))
-    except Exception as e:
-        log.warning("Daemon: %s failed: %s", job, type(e).__name__)
+
+    def _go():
+        log.info("Daemon: running %s", job)
+        try:
+            subprocess.run([sys.executable, str(ROOT / "scripts" / SCRIPTS[job])], cwd=ROOT, env=env,
+                           timeout=max(60, (minutes_left - 5) * 60))
+        except Exception as e:
+            log.warning("Daemon: %s failed: %s", job, type(e).__name__)
+        log.info("Daemon: %s finished", job)
+
+    if not background:
+        _go()
+        return True
+    th = threading.Thread(target=_go, daemon=True)
+    _JOB.update(thread=th, name=job)
+    th.start()
+    return True
 
 
 CODE_PATHS = ["swing-system/swing", "swing-system/scripts", "swing-system/requirements.txt",
@@ -378,8 +400,11 @@ def run():
         if time.time() - last_update_check > 600:     # new program code pushed? hand over to a fresh run
             last_update_check = time.time()
             if update_waiting(start_version):
-                log.info("Daemon: newer program code found - ending this run so the next one uses it")
-                break
+                if job_running():     # never cut a job in half: hand over once it has finished
+                    last_update_check = time.time() - 540
+                else:
+                    log.info("Daemon: newer program code found - ending this run so the next one uses it")
+                    break
         if time.time() - last_track > 1800:    # forwarded calls: alert the owner when one is right / wrong
             last_track = time.time()
             for name, fn in (("views", "swing.market_views:track"), ("stock tips", "swing.tipcheck:update_and_notify")):
@@ -393,11 +418,16 @@ def run():
         except Exception as e:
             log.warning("Daemon: bot poll failed: %s", type(e).__name__)
         minute_tasks()
-        for job in due():
-            if job == "research" and left() < 30:
-                continue                       # not enough time left: the next run does it
-            run_job(job, left())
+        if not job_running():
+            for job in due():
+                if job == "research" and left() < 30:
+                    continue                       # not enough time left: the next run does it
+                if run_job(job, left()):
+                    break                          # one job at a time; the next starts when it has finished
         time.sleep(60 if left() > 3 else 5)
+    if job_running():                              # let a running job finish before this run ends
+        log.info("Daemon: waiting for %s to finish before ending", _JOB["name"])
+        _JOB["thread"].join(timeout=max(60, (MAX_MIN + 20 - (time.time() - start) / 60) * 60))
     try:
         from .ci_save import save
         save("daemon run")
