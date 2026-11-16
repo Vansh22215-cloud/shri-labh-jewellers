@@ -126,7 +126,7 @@ def rank(sg):
 
 
 def send_evening(day, settings=None, sigs=None):
-    """6:40 pm: send each signal as a Normal trade ('Buy tomorrow at open ...'). Returns how many were sent."""
+    """6:40 pm: send each signal as a Normal trade ('Buy at the next market open ...'). Returns how many were sent."""
     from .live_engine import already, save_tip, send, tv_link
     s = settings or load_settings()
     cap = float(s.get("capital", 45000))
@@ -153,7 +153,7 @@ def send_evening(day, settings=None, sigs=None):
         if qty < 1:
             continue
         msg = (f"• Normal trade (high-probability dip buy)\n\n"
-               f"Buy #{sym} tomorrow at open ≈ {sg['close']:,.2f} 📊\n\n"
+               f"Buy #{sym} at the next market open ≈ {sg['close']:,.2f} 📊\n\n"
                f"SL at {sg['stop']:,.2f} ❗️\n\n"
                f"Target: sell when it closes above its 5-day average (now ≈ {sg['sma5']:,.2f}) - I'll alert you\n\n"
                f"{rp:g}% Risk\n\n"
@@ -204,7 +204,7 @@ def send_option(sg, r, day, s):
     if not opt:
         return 0
     send(fmt_fno(c, opt, r) + f"\n\n🧪 Tested (modelled): {OPT_STATS['win_pct']:.0f}% of trades in profit, "
-                              f"avg {OPT_STATS['avg_pct']:+.0f}% of premium. Buy at tomorrow's open.")
+                              f"avg {OPT_STATS['avg_pct']:+.0f}% of premium. Buy at the next market open.")
     save_tip({"time": str(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))[:16], "type": "FNO", "symbol": sym,
               "side": "buy", "entry": e, "stop": sg["stop"], "targets": "/".join(f"{x:.2f}" for x in c["targets"]),
               "rank": r, "qty": 1, "contract": opt["contract"], "lot": opt["lot"], "premium": round(opt["premium"], 2),
@@ -214,7 +214,7 @@ def send_option(sg, r, day, s):
 
 
 def evening_exits(day):
-    """6:40 pm: for each open high-probability tip - closed above the 5-day average -> sell at tomorrow's open;
+    """6:40 pm: for each open high-probability tip - closed above the 5-day average -> sell at the next market open;
     10 trading days -> time exit. (Safety stop is watched live by the engine.)"""
     from . import data_prices
     from .live_engine import _LOCK, load_tips, send, TIPS_F
@@ -238,11 +238,11 @@ def evening_exits(day):
             from .autopilot import close_tip
             if c.iloc[-1] > s5.iloc[-1]:
                 close_tip(t, i, "done", raw)
-                msgs.append(f"✅ {what} - the stock closed above its 5-day average: SELL at tomorrow's open "
+                msgs.append(f"✅ {what} - the stock closed above its 5-day average: SELL at the next market open "
                             f"(now {raw:,.2f}, {chg:+.1f}% from the tip).")
             elif len(since) >= MAX_DAYS:
                 close_tip(t, i, "time", raw)
-                msgs.append(f"⌛ {what} - 10 trading days without the bounce: sell at tomorrow's open "
+                msgs.append(f"⌛ {what} - 10 trading days without the bounce: sell at the next market open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
         t.to_csv(TIPS_F, index=False)
     for m in msgs:

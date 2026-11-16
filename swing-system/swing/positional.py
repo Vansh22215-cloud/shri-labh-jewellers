@@ -107,7 +107,7 @@ def send_evening(day, settings=None, sigs=None):
         if qty < 1:
             continue
         send(f"• Positional trade (Rolling Candle Profile)\n\n"
-             f"Buy #{sym} tomorrow at open ≈ {sg['close']:,.2f} 📊\n\n"
+             f"Buy #{sym} at the next market open ≈ {sg['close']:,.2f} 📊\n\n"
              f"SL at {sg['stop']:,.2f} ❗️ (wide safety stop - the real exit is the SELL signal)\n\n"
              f"Target: hold until the indicator's SELL signal - I'll alert you (max {MAX_DAYS} trading days)\n\n"
              f"{RISK_PCT:g}% Risk\n\n"
@@ -124,7 +124,7 @@ def send_evening(day, settings=None, sigs=None):
 
 
 def evening_exits(day):
-    """Evening: open positional tips - the indicator's SELL signal or 60 trading days -> sell at tomorrow's open."""
+    """Evening: open positional tips - the indicator's SELL signal or 60 trading days -> sell at the next market open."""
     from .live_engine import _LOCK, TIPS_F, load_tips, send
     msgs = []
     with _LOCK:
@@ -144,10 +144,10 @@ def evening_exits(day):
             if sell_now(a):
                 close_tip(t, i, "done", raw)
                 msgs.append(f"🔻 #{r['symbol']} (positional) - the Rolling Candle Profile gave its SELL signal: "
-                            f"SELL at tomorrow's open (now {raw:,.2f}, {chg:+.1f}% from the tip).")
+                            f"SELL at the next market open (now {raw:,.2f}, {chg:+.1f}% from the tip).")
             elif len(since) >= MAX_DAYS:
                 close_tip(t, i, "time", raw)
-                msgs.append(f"⌛ #{r['symbol']} (positional) - {MAX_DAYS} trading days: sell at tomorrow's open "
+                msgs.append(f"⌛ #{r['symbol']} (positional) - {MAX_DAYS} trading days: sell at the next market open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
         t.to_csv(TIPS_F, index=False)
     for m in msgs:

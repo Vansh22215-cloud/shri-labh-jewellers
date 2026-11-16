@@ -452,6 +452,9 @@ def _send_one(token, chat, reply, reply_to):
     _api(token, "sendMessage", chat_id=chat, text=reply[:4000], **extra)
 
 
+_READ_FAIL_SINCE = None
+
+
 def _updates_problem(token, owner, res, offset):
     """Telegram refused to hand over messages. Log why (never the token), fix the common cause, tell the owner."""
     code, desc = res.get("error_code"), str(res.get("description", ""))[:200]
@@ -463,6 +466,12 @@ def _updates_problem(token, owner, res, offset):
         res = _api(token, "getUpdates", offset=offset, timeout=0)
         if res.get("ok"):
             return res
+    global _READ_FAIL_SINCE
+    transient = not (code in (401, 404, 409))
+    if transient:                      # D114: Telegram hiccups (5xx, network) fix themselves - only a LASTING one is told
+        _READ_FAIL_SINCE = _READ_FAIL_SINCE or time.time()
+        if time.time() - _READ_FAIL_SINCE < 1800:
+            return {"ok": False, "result": []}
     try:
         from .daemon import claim_once
         if owner and claim_once("bot read problem"):
@@ -486,8 +495,11 @@ def poll_once():
     owner = str(s.get("telegram_chat_id") or "").strip()
     offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
     res = _api(token, "getUpdates", offset=offset, timeout=0)
+    global _READ_FAIL_SINCE
     if not res.get("ok", False):
         res = _updates_problem(token, owner, res, offset)
+    else:
+        _READ_FAIL_SINCE = None
     n = 0
     for _ in range(4):        # an album's pictures can arrive a few seconds apart: wait for the rest, then answer
         for u in res.get("result", []):

@@ -227,7 +227,7 @@ def send_evening(day, settings=None, scored=None):
         if qty < 1:
             continue
         send(f"• AI pick (machine-learning ranker, 10-day hold)\n\n"
-             f"Buy #{sym} tomorrow at open ≈ {r['close']:,.2f} 📊\n\n"
+             f"Buy #{sym} at the next market open ≈ {r['close']:,.2f} 📊\n\n"
              f"SL at {stop:,.2f} ❗️ (wide safety stop)\n\n"
              f"Exit: sell after 10 trading days - I'll alert you\n\n"
              f"{RISK_PCT:g}% Risk\n\n"
@@ -259,7 +259,7 @@ def evening_exits(day):
             if len(since) >= H:
                 raw = float(d["raw_close"].iloc[-1])
                 close_tip(t, i, "time", raw)
-                msgs.append(f"⌛ #{r['symbol']} (AI pick) - 10 trading days done: sell at tomorrow's open "
+                msgs.append(f"⌛ #{r['symbol']} (AI pick) - 10 trading days done: sell at the next market open "
                             f"(now {raw:,.2f}, {(raw / float(r['entry']) - 1) * 100:+.1f}% from the tip).")
         t.to_csv(TIPS_F, index=False)
     for m in msgs:

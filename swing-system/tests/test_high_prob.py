@@ -39,7 +39,7 @@ def test_evening_sends_format_and_exits(monkeypatch, tmp_path):
     day0 = str(_stock().index[-1].date())
     assert hp.send_evening(day0, {"capital": 45000}) == 1
     lab, txt = sent[0]
-    for part in ("Buy #TEMPSENS tomorrow at open", "SL at", "2% Risk", "RANK - ", "5-day average", "tradingview.com"):
+    for part in ("Buy #TEMPSENS at the next market open", "SL at", "2% Risk", "RANK - ", "5-day average", "tradingview.com"):
         assert part in txt, part
     t = le.load_tips()
     assert t["setup"].iloc[0] == "HP" and t["status"].iloc[0] == "open"
@@ -49,7 +49,7 @@ def test_evening_sends_format_and_exits(monkeypatch, tmp_path):
     up.loc[nxt] = [up["close"].iloc[-4]] * 4 + [up["close"].iloc[-4], 1e6]
     monkeypatch.setattr("swing.data_prices.load", lambda s: up)
     msgs = hp.evening_exits(str(nxt.date()))
-    assert msgs and "SELL at tomorrow's open" in msgs[0] and le.load_tips()["status"].iloc[0] == "done"
+    assert msgs and "SELL at the next market open" in msgs[0] and le.load_tips()["status"].iloc[0] == "done"
 
 
 def test_rank_10_only_at_an_order_block():

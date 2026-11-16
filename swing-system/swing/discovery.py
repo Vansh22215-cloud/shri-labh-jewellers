@@ -322,7 +322,7 @@ def _send_tip(c, h, day, settings):
         return 0
     st = c["stats"]["all"]
     send(f"• Discovered strategy {c['id']} (found and proven by the system itself)\n\n"
-         f"Buy #{h['sym']} tomorrow at open ≈ {h['close']:,.2f} 📊\n\nSL at {stop:,.2f} ❗️ (wide safety stop)\n\n"
+         f"Buy #{h['sym']} at the next market open ≈ {h['close']:,.2f} 📊\n\nSL at {stop:,.2f} ❗️ (wide safety stop)\n\n"
          f"Exit: sell after {c['hold']} trading days - I'll alert you\n\n1% Risk\n\n"
          f"⭐ RANK - 7/10 · Qty {qty} · Rule: {c['text']}. Tested 13 years: {st['win']}% in profit, avg "
          f"{st['avg']:+.2f}%; live record {c.get('live', {}).get('win', '-')}% in profit.\n\n"
@@ -351,7 +351,7 @@ def evening_exits(day):
             if len(d[d.index > pd.Timestamp(str(r["day"]))]) >= hold:
                 raw = float(d["raw_close"].iloc[-1])
                 close_tip(t, i, "time", raw)
-                msgs.append(f"⌛ #{r['symbol']} (discovered strategy) - {hold} trading days done: sell at tomorrow's "
+                msgs.append(f"⌛ #{r['symbol']} (discovered strategy) - {hold} trading days done: sell at the next market "
                             f"open (now {raw:,.2f}, {(raw / float(r['entry']) - 1) * 100:+.1f}%).")
         t.to_csv(TIPS_F, index=False)
     for m in msgs:
