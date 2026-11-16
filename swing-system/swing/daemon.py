@@ -245,6 +245,10 @@ def minute_tasks(t=None):
             elif t >= t.replace(hour=9, minute=30, second=0) and t.hour < 15 and claim_once("kite login reminder", t):
                 _send(f"⏰ Reminder: not logged in to Kite yet - alerts are using slower Yahoo prices. "
                       f"<a href=\"{_html.escape(kite.login_url())}\">Log in</a>", label="kite login")
+            elif t >= t.replace(hour=11, minute=0, second=0) and t.hour < 14 and claim_once("kite login reminder 2", t):
+                _send(f"⏰ Still not logged in to Kite. Log in any time - scanning starts the moment you do (intraday "
+                      f"tips until 2:30 pm; evening tips come anyway). <a href=\"{_html.escape(kite.login_url())}\">"
+                      f"Log in</a>", label="kite login")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
     try:   # one-off owner request (picks with Kite data) - does nothing once done

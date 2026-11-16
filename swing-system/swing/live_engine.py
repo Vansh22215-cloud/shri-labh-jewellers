@@ -720,6 +720,17 @@ class Engine:
     def refresh_quotes(self):
         from . import kite
         q = kite.quotes(self.uni)
+        if not q and not kite.logged_in():   # D111: not logged in yet (late morning) - still watch open tips' stops
+            if time.time() - getattr(self, "_yq_t", 0) >= 120:
+                self._yq_t = time.time()
+                try:
+                    t0 = load_tips()
+                    syms = list(t0.loc[t0["status"] == "open", "symbol"].astype(str).unique()) if len(t0) else []
+                    if syms:
+                        yq, _src = kite.live_prices(syms)
+                        self.quotes.update(yq)
+                except Exception as e:
+                    log.warning("Yahoo fallback for open tips failed: %s", type(e).__name__)
         try:   # D109: logged in but Zerodha sends nothing for 30 min -> one alert a day
             from .autopilot import kite_watch
             kite_watch(bool(q), kite.logged_in(), now_ist())
@@ -790,6 +801,15 @@ class Engine:
                 except Exception:
                     pass
                 log.info("Live engine: Kite connected - %d F&O underlyings, live Zerodha data", len(self.fno))
+                if now.hour * 60 + now.minute >= 9 * 60 + 25:      # D111: late login - confirm everything is running
+                    try:
+                        t0 = load_tips()
+                        n_open = int((t0["status"] == "open").sum()) if len(t0) else 0
+                        send(f"✅ Kite connected at {now:%H:%M} - live scanning of the whole market has started "
+                             f"(intraday + F&O tips until 2:30 pm). {n_open} open tip(s) are being watched for "
+                             f"targets / stop-losses.", label="kite login")
+                    except Exception:
+                        pass
             if time.time() - getattr(self, "_funnel_t", 0) >= 1800:
                 self._funnel_t = time.time()
                 log.info("Engine funnel (since start): candle downloads %d, %s", i,

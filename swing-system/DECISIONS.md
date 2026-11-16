@@ -765,3 +765,8 @@ ending 15 days before it). Net of 0.35%: top-5 +0.82% / 10 days vs +0.34% averag
 As a filter on the dip-buy / positional it did NOT help (`ml_combo.py`) - so it is a separate tip type:
 'AI pick' every evening (top 5, max 10 open, rank 6/10, 1% risk, wide 4 ATR safety stop, sell after 10 trading
 days), retrained weekly on the runner; autopilot pauses it 60 days if its live record turns negative.
+
+## D111 - 2026-11-16 - Late Kite login handled
+Before the owner logs in, open tips' stops/targets are watched with Yahoo prices (every 2 min); a third login
+reminder at 11:00; on a login after 9:25 a 'Kite connected at HH:MM - live scanning started, N open tips watched'
+message. Scanning, the F&O list (D107) and all tip types start the moment the login arrives.
