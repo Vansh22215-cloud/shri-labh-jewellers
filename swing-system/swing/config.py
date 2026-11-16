@@ -107,9 +107,43 @@ def save_state(state):
     STATE.write_text(json.dumps(state, indent=2, default=str))
 
 
+import re as _re
+
+# SECURITY (audit 17 Nov): a Telegram bot token reached a committed report through an error message that contained
+# the API URL. Every log line (file AND console = the public GitHub log) and every text built from logs is now
+# scrubbed of anything that looks like a credential.
+_SECRET_PATTERNS = [
+    (_re.compile(r"bot\d{6,12}:[A-Za-z0-9_-]{30,}"), "bot<REDACTED>"),
+    (_re.compile(r"\b\d{6,12}:AA[A-Za-z0-9_-]{30,}"), "<REDACTED-TELEGRAM-TOKEN>"),
+    (_re.compile(r"(?i)(access_token|api_secret|api_key|request_token|checksum|authorization)(['\"]?\s*[:=]\s*['\"]?)"
+                 r"[A-Za-z0-9:_\-.]{8,}"), r"\1\2<REDACTED>"),
+    (_re.compile(r"(?i)token\s+[A-Za-z0-9]{6,}:[A-Za-z0-9]{8,}"), "token <REDACTED>"),
+]
+
+
+def redact(text):
+    """Remove anything that looks like a credential from a text (logs, reports, messages)."""
+    s = str(text)
+    for rx, rep in _SECRET_PATTERNS:
+        s = rx.sub(rep, s)
+    return s
+
+
+class _RedactFilter(logging.Filter):
+    def filter(self, record):
+        try:
+            record.msg = redact(record.getMessage())
+            record.args = ()
+        except Exception:
+            pass
+        return True
+
+
 def get_logger():
     """One log file for everything; the daily report summarises it in plain English."""
     log = logging.getLogger("swing")
+    if not any(isinstance(f, _RedactFilter) for f in log.filters):
+        log.addFilter(_RedactFilter())
     if not log.handlers:
         log.setLevel(logging.INFO)
         fh = logging.FileHandler(LOGS / "system.log", encoding="utf-8")

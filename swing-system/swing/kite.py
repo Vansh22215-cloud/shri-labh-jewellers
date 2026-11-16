@@ -120,7 +120,14 @@ def logged_in(now=None):
     return token(now) is not None
 
 
+# SAFETY (audit 17 Nov): this system is a manual trade-finder. The Kite client may ONLY read market data. Any other
+# endpoint (orders, GTT, holdings, positions, margins, funds, profile) is refused before a request is made.
+READ_ONLY_PREFIXES = ("/quote", "/instruments")
+
+
 def _get(path, params=None, timeout=20):
+    if not str(path).startswith(READ_ONLY_PREFIXES):
+        raise PermissionError(f"Kite endpoint not allowed (read-only market data only): {str(path)[:40]}")
     k, _ = keys()
     t = token()
     if not t:

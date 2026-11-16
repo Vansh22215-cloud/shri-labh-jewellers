@@ -46,7 +46,8 @@ def error_summary(since):
     msgs = []
     for line in f.read_text(encoding="utf-8", errors="ignore").splitlines()[-4000:]:
         if line[:19] >= since and (" ERROR " in line or " WARNING " in line):
-            msgs.append(line[24:].split(" ", 1)[-1][:160])
+            from .config import redact
+            msgs.append(redact(line[24:].split(" ", 1)[-1])[:160])
     uniq = list(dict.fromkeys(msgs))
     return uniq[:6] + ([f"... and {len(uniq) - 6} more (see logs/system.log)"] if len(uniq) > 6 else [])
 

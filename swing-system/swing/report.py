@@ -168,6 +168,8 @@ def daily_html(ctx):
     parts.append(f"<p class='muted'>{html.escape(DISCLAIMER)}</p></body></html>")
     out = "\n".join(parts)
     f = REPORTS / f"{day}.html"
+    from .config import redact
+    out = redact(out)                      # never a credential in a report (audit 17 Nov)
     f.write_text(out, encoding="utf-8")
     (REPORTS / "latest.html").write_text(out, encoding="utf-8")
     return f
