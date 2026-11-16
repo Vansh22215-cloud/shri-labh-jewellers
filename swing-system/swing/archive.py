@@ -379,8 +379,13 @@ def send_backups(settings, force_month=False):
     from .telegram import send_document
     notes = []
     p = backup_private()
-    notes.append("private backup: " + send_document(settings, p, "Backup of your trades and forwarded tips. Keep it; "
-                                                    "forward it back to the bot to restore.", mime="application/gzip"))
+    r = send_document(settings, p, "Backup of your tips, trades and forwarded tips. Keep it; forward it back to the bot "
+                                   "to restore.", mime="application/gzip", label="backup")
+    notes.append("private backup: " + r)
+    if r != "report sent":      # audit 17 Nov: a failed backup is told to the owner (it used to be muted silently)
+        from .telegram import send_reliable
+        send_reliable(settings, f"⚠️ Weekly backup could not be delivered ({r[:120]}). The daily local copies "
+                                "(14 days) are still kept on GitHub's cache.", label="system problem")
     p.unlink(missing_ok=True)
     today = date.today()
     if force_month or today.day <= 7:
@@ -391,7 +396,7 @@ def send_backups(settings, force_month=False):
         else:
             notes.append(f"archive {prev}: " + send_document(settings, p, f"Data archive for {prev} (prices, hourly, "
                                                              "5-minute, news, statements). Forward back to restore.",
-                                                             mime="application/gzip"))
+                                                             mime="application/gzip", label="backup"))
         p.unlink(missing_ok=True)
     return notes
 
@@ -413,4 +418,61 @@ def restore(tar_path):
             elif not dest.exists():
                 dest.write_bytes(data)
                 n += 1
+    return n
+
+
+# ----------------------------------------------------------------------------- daily local backups (audit 17 Nov)
+BACKUPS = DATA / "backups"
+STATE_FILES = ["autopilot.json", "discovery.json", "safety.json", "state.json", "watchlist.csv", "engine_shadow.csv",
+               "discovery_shadow.csv", "intraday_setups.json"]
+
+
+def _healthy(p):
+    """Only a readable file may enter a backup (a damaged file never overwrites a good copy)."""
+    try:
+        if p.suffix == ".csv":
+            pd.read_csv(p)
+        elif p.suffix == ".json":
+            import json as _j
+            _j.loads(p.read_text())
+        return p.stat().st_size > 0
+    except Exception:
+        return False
+
+
+def local_backup(keep=14):
+    """Once a day: the private folder (tips, trades, forwarded tips) + key state files -> data/backups/DATE.tar.gz.
+    The last `keep` days are kept. Returns (path, files, skipped_unhealthy)."""
+    BACKUPS.mkdir(parents=True, exist_ok=True)
+    out = BACKUPS / f"backup-{date.today()}.tar.gz"
+    files = [p for p in PRIVATE.glob("*") if p.is_file() and p.suffix in (".csv", ".json", ".jsonl", ".bak")]
+    files += [DATA / f for f in STATE_FILES if (DATA / f).exists()]
+    good = [p for p in files if p.suffix in (".jsonl", ".bak") or _healthy(p)]
+    bad = [p.name for p in files if p not in good]
+    tmp = out.with_suffix(".tmp")
+    with tarfile.open(tmp, "w:gz") as t:
+        for p in good:
+            t.add(p, arcname=str(p.relative_to(DATA)))
+    tmp.replace(out)
+    for old in sorted(BACKUPS.glob("backup-*.tar.gz"))[:-keep]:
+        old.unlink()
+    if bad:
+        log.warning("Local backup: %d damaged file(s) left out: %s", len(bad), ", ".join(bad))
+    return out, len(good), bad
+
+
+def restore_local(path, only_missing=True):
+    """Restore a local backup (data/backups/...). only_missing=False overwrites (used after damage)."""
+    n = 0
+    with tarfile.open(path, "r:gz") as t:
+        for m in t.getmembers():
+            name = Path(m.name)
+            if not m.isfile() or name.is_absolute() or ".." in name.parts:
+                continue
+            dest = DATA / name
+            if only_missing and dest.exists():
+                continue
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(t.extractfile(m).read())
+            n += 1
     return n

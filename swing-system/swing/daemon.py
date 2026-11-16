@@ -265,6 +265,10 @@ def minute_tasks(t=None):
         monitor.housekeeping(_s)
         monitor.daily_status(t)
         monitor.weekly_health(t)
+        if t.hour >= 20 and claim_once("local backup", t):          # daily local backup, last 14 days kept
+            from . import archive
+            _p, _n, _bad = archive.local_backup()
+            log.info("Local backup: %d files%s", _n, f", {len(_bad)} damaged left out" if _bad else "")
     except Exception as e:
         log.warning("Daemon: monitor failed: %s", type(e).__name__)
     try:

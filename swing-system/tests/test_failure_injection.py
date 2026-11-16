@@ -292,3 +292,21 @@ def test_telegram_down_plus_kill_switch_plus_bad_numbers(monkeypatch):
     assert not telegram._outbox().exists() or "BUY" not in telegram._outbox().read_text()
     sk = pd.read_csv(safety.SKIPPED_F)
     assert len(sk) == 1 and "kill switch" in sk["reason"].iloc[0]
+
+
+# ---------------------------------------------------------------- backups
+def test_local_backup_skips_damaged_files_and_restores(tmp_path, monkeypatch):
+    from swing import archive
+    data, priv = tmp_path / "data", tmp_path / "data" / "private"
+    priv.mkdir(parents=True)
+    monkeypatch.setattr(archive, "DATA", data)
+    monkeypatch.setattr(archive, "PRIVATE", priv)
+    monkeypatch.setattr(archive, "BACKUPS", data / "backups")
+    pd.DataFrame({"symbol": ["A"], "status": ["open"]}).to_csv(priv / "live_tips.csv", index=False)
+    (priv / "my_trades.csv").write_bytes(b"\x00\xff\xfe broken")
+    (data / "safety.json").write_text("{not json")
+    p, n, bad = archive.local_backup()
+    assert n == 1 and set(bad) == {"my_trades.csv", "safety.json"}
+    (priv / "live_tips.csv").unlink()                      # disaster: the store is gone
+    assert archive.restore_local(p) == 1
+    assert pd.read_csv(priv / "live_tips.csv")["symbol"].tolist() == ["A"]
