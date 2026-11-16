@@ -56,6 +56,10 @@ def parse(raw, d, syms):
     return df
 
 
+# bonus a:b -> b/(a+b); split x->y -> y/x
+SPLIT_RATIOS = [1 / 2, 1 / 3, 1 / 4, 1 / 5, 1 / 10, 2 / 3, 2 / 5, 3 / 5, 1 / 6, 1 / 8, 1 / 20]
+
+
 def build():
     raw = pd.read_csv(RAW).drop_duplicates(["symbol", "date"]).sort_values(["symbol", "date"])
     out = []
@@ -64,6 +68,21 @@ def build():
         prev_close = g["close"].shift()
         f = (g["prev"] / prev_close).where(prev_close > 0).fillna(1.0)
         f = f.where((f - 1).abs() > 0.02, 1.0)          # ignore tiny rounding differences
+        # Audit: older NSE files often did NOT adjust PREVCLOSE for splits / bonuses (Castrol 2012 bonus 1:1, Cadila
+        # 2015 split 5:1 showed as -50% / -80% 'crashes'). A day whose OPEN and CLOSE both sit within 6% of a standard
+        # split/bonus ratio of the previous close is treated as a corporate action. Real crashes almost never open
+        # AND close on such a ratio; any that do are mis-adjusted (documented in BACKTEST_VALIDATION.md).
+        ro, rc = g["open"] / prev_close, g["close"] / prev_close
+        hit = pd.Series(1.0, index=g.index)
+        for k in SPLIT_RATIOS:
+            m = ((ro / k - 1).abs() < 0.06) & ((rc / k - 1).abs() < 0.06) & (f == 1.0)
+            hit = hit.where(~m | (hit != 1.0), k)
+        f = f * hit
+        # demergers / odd ratios / ETF unit splits: NSE price bands (mostly 20%) make an OPENING gap of more than 25%
+        # almost always a corporate action -> adjust by the opening gap, keep that day's own move (open -> close).
+        # Crashes that happen during the day (DHFL 21 Sep 2018 opened flat) are kept as real.
+        big = ((ro - 1).abs() > 0.25) & (f == 1.0) & ro.notna() & (ro > 0)
+        f = f.where(~big, ro)
         # cumulative factor for each row = product of factors of all LATER ex-dates
         cum = f[::-1].cumprod()[::-1].shift(-1).fillna(1.0)
         g["adj_close"] = g["close"] * cum

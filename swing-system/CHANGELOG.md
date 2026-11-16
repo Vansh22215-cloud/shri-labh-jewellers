@@ -1,5 +1,53 @@
 # CHANGELOG
 
+## 2026-11-17 (full audit, repair and production hardening)
+The details, with evidence, are in FINAL_AUDIT_REPORT.md.
+
+**Safety**
+- One safety gate for every new tip (all strategies). It checks:
+  - the kill switch
+  - a latched safety stop, cleared only by an integrity check
+  - capital and risk explicitly set
+  - the tip's numbers are valid
+  - portfolio limits (open count, total and per-strategy money at risk) and the losing-streak cooldown
+
+  Exits are never blocked.
+- 1% risk per tip everywhere. Before:
+  - the dip-buy risked 2%
+  - an intraday order could use up to 100% of capital
+  - an option tip could risk up to 5%
+- Tip store: file lock, atomic writes, a last-good copy restored automatically. Each tip gets a signal id (no duplicates) and is recorded before it is sent. Telegram outbox with retries.
+- Learning can only tighten:
+  - discovered strategies need `/approve`
+  - automatic strategy switches are proposals only
+  - AI retraining must pass a validation check, with 4 versions kept for rollback
+- Intraday/F&O back in shadow mode and labelled EXPERIMENTAL.
+
+**Security**
+- Kite client limited to read-only market-data endpoints.
+- Credentials scrubbed from every log and report.
+- Bot token found in old commits: **rotate it** (see the runbook).
+
+**Reliability**
+- The tip store now survives between runs (it was lost at every hand-over until 16 Nov).
+- Independent evening jobs. No new tips on stale prices. Indian time. Long jobs in the background.
+- Kite quotes paced to 1 request/s with failures isolated.
+- Price data sanitised.
+
+**Monitoring**
+- Heartbeat with a recovery notice.
+- A daily status that says why there were no tips.
+- Weekly health, kill-switch notices.
+- Backups actually delivered (they were muted), plus daily local backups.
+
+**Research**
+- Point-in-time universe re-checked; survivorship gap quantified, with delisted stocks rebuilt from NSE files.
+- Truncation tests prove there is no look-ahead.
+- Independent re-validation of every live strategy (BACKTEST_VALIDATION.md).
+
+**Docs**
+- SYSTEM_ARCHITECTURE, FAILURE_TEST_REPORT, PRODUCTION_RUNBOOK, DAILY_HEALTH_CHECK, KNOWN_LIMITATIONS, SAFETY_AND_SECURITY_REPORT, BACKTEST_VALIDATION, FINAL_AUDIT_REPORT.
+
 ## 2026-11-11 (day-trader-skill, rebuilt for NSE)
 - Kite Connect live data with one-tap daily login; risk-checked order tickets with buttons; 1-minute alerts (D92).
 - Time Machine odds on every tip; NSE filings, insider trades, results summary, 9 am morning brief.

@@ -42,7 +42,18 @@ def universe(include_delisted=True):
     members = {a: set(g["symbol"]) for a, g in u.groupby("asof")}
     months = sorted(members)
     dl = _delisted() if include_delisted else {}
+    # ETFs / funds are not stocks (the live engine excludes them too, engine.py): anything not on today's NSE equity
+    # list whose name looks like a fund (liquid, gold, silver, index ETFs - many have since closed)
+    import re
+    try:
+        from swing.tipcheck import equity_list
+        eq = set(equity_list()["SYMBOL"])
+    except Exception:
+        eq = set()
+    fund = re.compile(r"BEES$|ETF|^LIQUID|GOLD|SILVER|^SETF|NIFTY|SHARE$|^KOTAK(PSU|BK)|CASE$|^LIQ")
     for sym in sorted(set(u["symbol"])):
+        if sym not in eq and fund.search(sym):
+            continue
         d0 = data_prices.load(sym)
         src = "yahoo"
         if (d0 is None or not len(d0)) and sym in dl:
@@ -202,13 +213,21 @@ def ai_and_disc_trades(data):
 
 # ----------------------------------------------------------------------------- metrics
 def drift_and_bench(trades, data_close, nifty_close):
-    """Average-stock and Nifty return over each trade's exact holding window (same entry/exit days)."""
-    avg = data_close.mean(axis=1)
+    """Average-stock and Nifty return over each trade's exact holding window (same entry/exit days).
+    Average stock = equal-weight mean of the RETURNS of every stock in the universe on the entry day (audit fix:
+    an earlier draft averaged price levels, i.e. a price-weighted index)."""
+    raw, member = data_close
+    idx = raw.index
     out_a, out_n = [], []
     for t in trades.itertuples():
         try:
-            out_a.append(avg.loc[t.exit_date] / avg.loc[t.entry_date] - 1)
-        except KeyError:
+            a, b = idx.get_indexer([t.entry_date])[0], idx.get_indexer([t.exit_date])[0]
+            if a < 0 or b < 0:
+                raise KeyError
+            m = member.iloc[a].values
+            r = raw.iloc[b].values[m] / raw.iloc[a].values[m] - 1
+            out_a.append(np.nanmean(r) if np.isfinite(r).any() else np.nan)
+        except (KeyError, IndexError):
             out_a.append(np.nan)
         try:
             out_n.append(nifty_close.asof(t.exit_date) / nifty_close.asof(t.entry_date) - 1)
@@ -244,7 +263,23 @@ def metrics(T, cost):
             "gap_through_stop_pct": round(float((T["why"] == "gap through stop").mean() * 100), 1)}
 
 
-def report_strategy(T, close_panel, nclose):
+# open-tip slots each strategy gets in production at 1% risk per tip (safety.STRATEGY_CAP; the dip-buy has the
+# rest of the 10% total) - the realistic account only takes a signal when a slot is free
+SLOTS = {"DIP": 10, "POS": 4, "AI": 3, "DISC_S1": 2}
+
+
+def capped(T, k):
+    T = T.sort_values(["entry_date", "sym"])
+    keep, open_exits = [], []
+    for idx, r in T.iterrows():
+        open_exits = [x for x in open_exits if x > r["entry_date"]]
+        if len(open_exits) < k:
+            keep.append(idx)
+            open_exits.append(r["exit_date"])
+    return T.loc[keep]
+
+
+def report_strategy(T, close_panel, nclose, name=None):
     if not len(T):
         return {"trades": 0}
     T = T.copy()
@@ -252,7 +287,7 @@ def report_strategy(T, close_panel, nclose):
     T["exit_date"] = pd.to_datetime(T["exit_date"])
     a, nb = drift_and_bench(T, close_panel, nclose)
     T["vs_avg_stock"], T["vs_nifty"] = T["gross"] - a, T["gross"] - nb
-    up = nifty()["up200"].reindex(T["entry_date"]).fillna(False).values
+    up = nifty()["up200"].reindex(T["entry_date"]).fillna(False).astype(bool).values
     out = {"after_costs": metrics(T, COST), "before_costs": metrics(T, 0.0), "cost_stress_0.60pct": metrics(T, COST_STRESS),
            "development_before_2023_11": metrics(T[T["entry_date"] < OOS], COST),
            "out_of_sample_2023_11_on": metrics(T[T["entry_date"] >= OOS], COST),
@@ -263,15 +298,21 @@ def report_strategy(T, close_panel, nclose):
            "excess_vs_average_stock_by_year_pct": {int(y): round(float(v * 100), 2) for y, v in
                                                    (T["vs_avg_stock"] - COST).groupby(T["entry_date"].dt.year).mean().items()},
            "trades_from_delisted_stocks": int((T["src"] == "nse").sum())}
+    if name in SLOTS:     # what the production account (limited open tips) would actually have taken
+        out[f"production_account_max_{SLOTS[name]}_open"] = metrics(capped(T, SLOTS[name]), COST)
     return out
 
 
 if __name__ == "__main__":
-    data = list(universe(include_delisted=True))
+    import os
+    NO_DL = os.environ.get("NO_DELISTED") == "1"          # comparison run: the survivorship-biased universe
+    SUF = "_no_delisted" if NO_DL else ""
+    data = list(universe(include_delisted=not NO_DL))
     print(f"universe loaded: {len(data)} stocks ({sum(1 for x in data if x[3] == 'nse')} rebuilt from NSE files)",
           file=sys.stderr)
-    close_panel = pd.DataFrame({s: d["close"] for s, d, m, src in data}).where(
-        pd.DataFrame({s: pd.Series(m, index=d.index) for s, d, m, src in data}))
+    raw_panel = pd.DataFrame({s: d["close"] for s, d, m, src in data}).sort_index()
+    member = pd.DataFrame({s: pd.Series(m, index=d.index) for s, d, m, src in data}).reindex(raw_panel.index)
+    close_panel = (raw_panel, member.fillna(False).astype(bool))
     nclose = nifty()["close"]
     res = {}
     with Pool(4) as p:
@@ -281,8 +322,8 @@ if __name__ == "__main__":
                 trades += r
             errs = [t for t in trades if "error" in t]
             T = pd.DataFrame([t for t in trades if "error" not in t])
-            T.to_csv(f"{ROOT}/validation/independent_trades_{name}.csv", index=False)
-            res[name] = report_strategy(T, close_panel, nclose)
+            T.to_csv(f"{ROOT}/validation/independent_trades_{name}{SUF}.csv", index=False)
+            res[name] = report_strategy(T, close_panel, nclose, name)
             res[name]["errors"] = len(errs)
             res[name]["without_delisted"] = metrics(T[T["src"] != "nse"].assign(
                 entry_date=lambda x: pd.to_datetime(x["entry_date"]), exit_date=lambda x: pd.to_datetime(x["exit_date"])),
@@ -291,9 +332,9 @@ if __name__ == "__main__":
     extra = ai_and_disc_trades(data)
     for name, tr in extra.items():
         T = pd.DataFrame(tr)
-        T.to_csv(f"{ROOT}/validation/independent_trades_{name}.csv", index=False)
-        res[name] = report_strategy(T, close_panel, nclose)
+        T.to_csv(f"{ROOT}/validation/independent_trades_{name}{SUF}.csv", index=False)
+        res[name] = report_strategy(T, close_panel, nclose, name)
         print(name, json.dumps(res[name].get("after_costs")), file=sys.stderr)
     res["_method"] = __doc__
-    json.dump(res, open(f"{ROOT}/validation/independent_validation.json", "w"), indent=1, default=str)
+    json.dump(res, open(f"{ROOT}/validation/independent_validation{SUF}.json", "w"), indent=1, default=str)
     print(json.dumps({k: v.get("after_costs") for k, v in res.items() if k != "_method"}, indent=1))
