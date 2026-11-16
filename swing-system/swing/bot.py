@@ -29,6 +29,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
+        "/tips - every open tip the system sent you (entry, SL, how to exit)\n"
         "/status - is Kite connected, live test price, last alert check\n/kite - get a Kite login link now\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
@@ -265,6 +266,8 @@ def handle(token, owner, msg, capital):
             "Kite is not set up (the API key/secret are missing in GitHub Secrets)."
     elif text.startswith("/start") or text.startswith("/help"):
         reply = HELP
+    elif text.lower().startswith(("/tips", "/open")):
+        reply = open_tips_text()
     elif text.startswith("/status"):
         reply = status_text()
     elif text.startswith("/report"):
@@ -292,6 +295,35 @@ def handle(token, owner, msg, capital):
     _send_reply(token, chat, reply, msg["message_id"])
     tipcheck.LAST_TICKET = None
     return owner
+
+
+KIND = {"HP": "Dip-buy", "RCP": "Positional", "AI": "AI pick"}
+
+
+def open_tips_text(limit=40):
+    """/tips: all open tips the system sent (so none is lost in the chat history)."""
+    from .live_engine import load_tips
+    t = load_tips()
+    if not len(t):
+        return "No tips sent yet."
+    o = t[t["status"] == "open"].copy()
+    if not len(o):
+        return "No open tips right now - all earlier tips are closed."
+    o = o.sort_values("time", ascending=False).head(limit)
+    L = [f"📌 OPEN TIPS ({len(o)})", ""]
+    for _, r in o.iterrows():
+        st = str(r.get("setup", "") or "")
+        kind = KIND.get(st, "Discovered strategy" if st.startswith("DS") else
+                        {"INTRADAY": "Intraday", "FNO": "F&O"}.get(str(r["type"]), "Normal"))
+        exit_ = {"Positional": "hold until the SELL alert", "AI pick": "sell after 10 trading days (alert)",
+                 "Dip-buy": "sell on the bounce alert (~4 days)", "Intraday": "square off by 3:15 pm"}.get(kind, "exit on the alert")
+        what = f"{r['symbol']} {r.get('contract', '')}".strip() if str(r["type"]) == "FNO" else f"#{r['symbol']}"
+        try:
+            L.append(f"• {kind} · {what} · {str(r['side']).upper()} ≈ {float(r['entry']):,.2f} · SL {float(r['stop']):,.2f} · "
+                     f"sent {str(r['time'])[:16]} · {exit_}")
+        except Exception:
+            L.append(f"• {kind} · {what} · sent {str(r['time'])[:16]}")
+    return "\n".join(L)
 
 
 def status_text():
