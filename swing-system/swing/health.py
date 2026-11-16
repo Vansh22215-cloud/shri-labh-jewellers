@@ -111,3 +111,33 @@ def sanity_check_plans(plans, capital):
         if pl["entry_high"] > 1.5 * pl["last_close"] or pl["entry_low"] < 0.5 * pl["last_close"]:
             probs.append(f"{s}: entry zone far from last price")
     return probs
+
+
+def traded_today(now=None):
+    """D114: did NSE trade today? (Nifty has 5-minute bars dated today on Yahoo, or Kite's Nifty quote is from
+    today). Independent of the NSE bhavcopy archive, which can be unreachable from GitHub's servers."""
+    import pandas as pd
+    now = pd.Timestamp(now) if now is not None else pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    if now.weekday() >= 5:
+        return False
+    try:
+        import yfinance as yf
+        d = yf.download("^NSEI", period="1d", interval="5m", progress=False, auto_adjust=False)
+        if len(d):
+            idx = d.index.tz_convert("Asia/Kolkata") if d.index.tz is not None else d.index
+            return bool(idx[-1].date() == now.date())
+    except Exception:
+        pass
+    return None          # unknown
+
+
+def expected_day(bhav_last, now=None):
+    """The latest NSE trading day the evening data should reach."""
+    import pandas as pd
+    now = pd.Timestamp(now) if now is not None else pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    exp = pd.Timestamp(bhav_last).normalize() if bhav_last is not None else None
+    if now.hour >= 16 and traded_today(now):
+        today = now.normalize()
+        if exp is None or today > exp:
+            exp = today
+    return exp

@@ -175,6 +175,10 @@ def run():
     last_bar = nifty_raw.index[-1] if nifty_raw is not None else pd.Timestamp("1900-01-01")
     bhav_dates = sorted(f.stem for f in (data_nse.BHAV).glob("*.csv") if f.stat().st_size > 0)
     expected = pd.Timestamp(bhav_dates[-1]) if bhav_dates else last_bar
+    try:   # D114: NSE's archive can be unreachable from GitHub -> also check that Nifty really traded today
+        expected = health.expected_day(expected) or expected
+    except Exception as e:
+        log.warning("trading-day check failed: %s", type(e).__name__)
     fresh = health.freshness(last_bar, expected)
     if not fresh:
         # attempt a fix: force a full re-download of the index data, then re-check
@@ -457,41 +461,40 @@ def run():
         lines.append("🩺 System problems: " + "; ".join(probs)[:600])
     lines.append(DISCLAIMER)
     tg = telegram.send(settings, "\n".join(lines), label="evening trades")
-    try:   # D98: the high-probability dip buy is the main Normal-trade strategy (~70% of tested trades in profit)
-        from . import high_prob
-        high_prob.evening_exits(day)
-        n_hp = high_prob.send_evening(day, settings)
-        log.info("Evening: %d high-probability tip(s) sent", n_hp)
-        try:   # D104: positional trades (Rolling Candle Profile near the 52-week high)
-            from . import positional
-            positional.evening_exits(day)
-            log.info("Evening: %d positional tip(s) sent", positional.send_evening(day, settings))
+    # D114: every evening job is independent (one failing must not skip the others), and NEW tips are only sent on
+    # fresh prices (exits always run). Stale data -> no new tips today + the owner gets one 'system problem' message.
+    new_ok = bool(fresh)
+    if not new_ok:
+        log.warning("Evening: prices are not fresh (%s vs %s) - exits only, no new tips today",
+                    last_bar.date(), expected.date())
+
+    def _job(name, fn):
+        try:
+            return fn()
         except Exception as e:
-            log.warning("positional tips failed: %s", type(e).__name__)
-        try:   # D110: AI picks (market-wide machine-learning ranker, 10-day hold)
-            from . import ml_ranker
-            ml_ranker.evening_exits(day)
-            log.info("Evening: %d AI pick(s) sent", ml_ranker.send_evening(day, settings))
-        except Exception as e:
-            log.warning("AI picks failed: %s", type(e).__name__)
-        try:   # D112: strategy discovery - weekly search; nightly shadow / promote / retire / tips / exits
-            from . import discovery
-            discovery.maybe_search()
-            discovery.evening_exits(day)
-            log.info("Evening: %d discovered-strategy tip(s) sent", discovery.evening(day, settings))
-        except Exception as e:
-            log.warning("discovery failed: %s", type(e).__name__)
-        try:   # D109 autopilot: live record -> throttles; system problems -> one Telegram alert
-            from . import autopilot
-            autopilot.health_alert(sys_problems)
-            autopilot.throttle()
-        except Exception as e:
-            log.warning("autopilot failed: %s", type(e).__name__)
+            log.warning("evening job '%s' failed: %s: %s", name, type(e).__name__, str(e)[:200])
+            return None
+
+    from . import high_prob, positional, ml_ranker, discovery, autopilot
+    _job("dip-buy exits", lambda: high_prob.evening_exits(day))
+    _job("positional exits", lambda: positional.evening_exits(day))
+    _job("AI exits", lambda: ml_ranker.evening_exits(day))
+    _job("discovered exits", lambda: discovery.evening_exits(day))
+    if new_ok:
+        n = _job("dip-buy tips", lambda: high_prob.send_evening(day, settings))
+        log.info("Evening: %s high-probability tip(s) sent", n)
+        n = _job("positional tips", lambda: positional.send_evening(day, settings))
+        log.info("Evening: %s positional tip(s) sent", n)
+        n = _job("AI picks", lambda: ml_ranker.send_evening(day, settings))
+        log.info("Evening: %s AI pick(s) sent", n)
+        _job("discovery search", lambda: discovery.maybe_search())
+        n = _job("discovered tips", lambda: discovery.evening(day, settings))
+        log.info("Evening: %s discovered-strategy tip(s) sent", n)
         if settings.get("normal_a3_tips", False):      # the older a3 swing tips (53% winners) only if switched on
             from .live_engine import evening_tips
-            evening_tips(tips or [], day, settings)
-    except Exception as e:
-        log.warning("evening tips failed: %s", type(e).__name__)
+            _job("a3 tips", lambda: evening_tips(tips or [], day, settings))
+    _job("autopilot alert", lambda: autopilot.health_alert(sys_problems))
+    _job("autopilot", lambda: autopilot.throttle())
     # the full HTML report file is sent once a week (Saturday summary), not every evening (owner's choice)
     state = load_state()
     state.update({"last_nightly_run": str(datetime.now()), "last_report": str(f), "last_trading_day": day,

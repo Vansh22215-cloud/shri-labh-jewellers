@@ -791,3 +791,10 @@ every run started with an empty store: multi-day tips (positional, dip-buy, AI, 
 the run that sent them ended, /tips was empty and the autopilot had no live record. Moved to
 data/private/live_tips.csv (carried over, never committed); smart_money.csv too. The owner's lost 16 Nov positional
 tips are recomputed from the 16 Nov price bars, re-sent as cards and put back into tracking (one-off).
+
+## D114 - 2026-11-17 - Audit fixes (evening run)
+- Evening jobs were nested: a crash in the dip-buy step skipped positional, AI picks, discovery and the autopilot.
+  Now each is independent and logs its own failure.
+- New evening tips are sent only on FRESH prices (exits always run); stale data -> no new tips + one alert.
+- Freshness was judged against the last NSE bhavcopy file, which may be unreachable from GitHub -> stale prices
+  looked fresh. Now also: did Nifty actually trade today (5-minute bars dated today)?
