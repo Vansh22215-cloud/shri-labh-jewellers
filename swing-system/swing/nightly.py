@@ -224,6 +224,7 @@ def run():
     if P["close"].index.duplicated().any():
         bad("duplicate dates in price panel")
         blockers.append("Duplicate rows in price data")
+    sys_problems = list(blockers)          # D109: data / self-test problems (not market conditions) -> owner alert
 
     regime = bool(sig["regime_ok"].loc[d])                       # used by this strategy version
     market_ok = bool(sig.get("market_regime_ok", sig["regime_ok"]).loc[d])  # shown to you
@@ -467,6 +468,12 @@ def run():
             log.info("Evening: %d positional tip(s) sent", positional.send_evening(day, settings))
         except Exception as e:
             log.warning("positional tips failed: %s", type(e).__name__)
+        try:   # D109 autopilot: live record -> throttles; system problems -> one Telegram alert
+            from . import autopilot
+            autopilot.health_alert(sys_problems)
+            autopilot.throttle()
+        except Exception as e:
+            log.warning("autopilot failed: %s", type(e).__name__)
         if settings.get("normal_a3_tips", False):      # the older a3 swing tips (53% winners) only if switched on
             from .live_engine import evening_tips
             evening_tips(tips or [], day, settings)

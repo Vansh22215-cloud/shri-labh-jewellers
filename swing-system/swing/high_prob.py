@@ -141,6 +141,12 @@ def send_evening(day, settings=None, sigs=None):
         r = rank(sg)
         if r < 1:                                   # D105: untiered (weak) dip - not sent
             continue
+        try:   # D109 autopilot: live record negative -> only the strongest dip-buys
+            from .autopilot import rules as _ap
+            if _ap().get("dip_rank10_only") and r < 10:
+                continue
+        except Exception:
+            pass
         rp = 2.0
         per = max(1e-9, sg["close"] - sg["stop"])
         qty = int(min(cap * rp / 100 / per, cap * 0.25 / sg["close"]))
@@ -229,12 +235,13 @@ def evening_exits(day):
             c, s5 = a["close"], a["close"].rolling(5).mean()
             raw = float(a["raw_close"].iloc[-1])
             chg = (raw / float(r["entry"]) - 1) * 100
+            from .autopilot import close_tip
             if c.iloc[-1] > s5.iloc[-1]:
-                t.loc[i, "status"] = "done"
+                close_tip(t, i, "done", raw)
                 msgs.append(f"✅ {what} - the stock closed above its 5-day average: SELL at tomorrow's open "
                             f"(now {raw:,.2f}, {chg:+.1f}% from the tip).")
             elif len(since) >= MAX_DAYS:
-                t.loc[i, "status"] = "time"
+                close_tip(t, i, "time", raw)
                 msgs.append(f"⌛ {what} - 10 trading days without the bounce: sell at tomorrow's open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
         t.to_csv(TIPS_F, index=False)

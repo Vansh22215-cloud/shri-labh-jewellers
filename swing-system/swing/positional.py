@@ -83,6 +83,13 @@ def send_evening(day, settings=None, sigs=None):
     s = settings or load_settings()
     if not s.get("positional_tips", True):
         return 0
+    try:   # D109 autopilot: live record negative -> paused for 60 days, then retried
+        from .autopilot import rules as _ap
+        if _ap().get("pos_paused"):
+            log.info("Positional: paused by the autopilot (live record)")
+            return 0
+    except Exception:
+        pass
     cap = float(s.get("capital", 45000))
     sigs = scan() if sigs is None else sigs
     t = load_tips()
@@ -133,12 +140,13 @@ def evening_exits(day):
                 continue
             raw = float(a["raw_close"].iloc[-1])
             chg = (raw / float(r["entry"]) - 1) * 100
+            from .autopilot import close_tip
             if sell_now(a):
-                t.loc[i, "status"] = "done"
+                close_tip(t, i, "done", raw)
                 msgs.append(f"🔻 #{r['symbol']} (positional) - the Rolling Candle Profile gave its SELL signal: "
                             f"SELL at tomorrow's open (now {raw:,.2f}, {chg:+.1f}% from the tip).")
             elif len(since) >= MAX_DAYS:
-                t.loc[i, "status"] = "time"
+                close_tip(t, i, "time", raw)
                 msgs.append(f"⌛ #{r['symbol']} (positional) - {MAX_DAYS} trading days: sell at tomorrow's open "
                             f"(now {raw:,.2f}, {chg:+.1f}%).")
         t.to_csv(TIPS_F, index=False)

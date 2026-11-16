@@ -428,7 +428,7 @@ def fmt_normal(c, r, qty, rp, tomorrow=False):
 # ----------------------------------------------------------------------------- tip store + exits
 COLS = ["id", "time", "type", "symbol", "side", "entry", "stop", "targets", "rank", "qty", "contract", "lot",
         "premium", "opt_targets", "spot_sl", "status", "hit", "day", "setup", "hi_since", "lo_since", "closed_at",
-        "result_r"]
+        "result_r", "result_pct"]
 
 
 _LOCK = threading.RLock()       # the scan loop and the swing pass both write the tip file
@@ -457,6 +457,11 @@ def _save_tip(row):
 def send(text, label="trade tip"):
     from . import telegram
     return telegram.send(load_settings(), text, label=label)
+
+
+def _close(t, i, status, px, now):
+    from .autopilot import close_tip
+    close_tip(t, i, status, px, now)
 
 
 def exits(quotes, now, opt_quotes=None, candles=None):
@@ -491,12 +496,12 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                     cl = float(bb["close"].iloc[-1])
                     sl = float(r["spot_sl"])
                     if (cl < sl) if r["side"] == "buy" else (cl > sl):
-                        t.loc[i, "status"] = "stop"
+                        _close(t, i, "stop", cl, now)
                         msgs.append(f"⛔️ {sym} {r['contract']} - SL: 75-min candle closed at {_n(cl)} beyond {_n(sl)} "
                                     "SPOT. Exit the option.")
                         continue
             if hit >= len(tg) and tg:
-                t.loc[i, "status"] = "done"
+                _close(t, i, "done", (quotes.get(sym) or {}).get("last"), now)
         else:
             q = quotes.get(sym)
             if not q:
@@ -522,7 +527,7 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
             buy = r["side"] == "buy"
             tg = [float(x) for x in str(r["targets"]).split("/") if x]
             if (lo <= float(r["stop"])) if buy else (hi >= float(r["stop"])):
-                t.loc[i, "status"] = "stop"
+                _close(t, i, "stop", float(r["stop"]), now)
                 msgs.append(f"⛔️ #{sym} - stop-loss {_n(r['stop'])} hit. Exit." +
                             (" (intraday)" if r["type"] == "INTRADAY" else ""))
                 continue
@@ -531,9 +536,9 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                 msgs.append(f"✅ #{sym} - Target {hit} hit ({_n(tg[hit - 1])})" +
                             (" - all targets done, book profit" if hit == len(tg) else " - book part, move SL to cost"))
             if tg and hit >= len(tg):
-                t.loc[i, "status"] = "done"
+                _close(t, i, "done", tg[-1], now)
             elif r["type"] == "INTRADAY" and now.hour * 60 + now.minute >= 15 * 60 + 15:
-                t.loc[i, "status"] = "squared"
+                _close(t, i, "squared", px, now)
                 msgs.append(f"⏰ #{sym} - 3:15 pm: square off the intraday trade now (now {_n(px)}).")
         t.loc[i, "hit"] = hit
     t.to_csv(TIPS_F, index=False)
@@ -588,6 +593,17 @@ class Engine:
             f["live-proof gate (auto mode)"] += 1
             return            # D98: intraday tips only once a setup PROVES >= 65% winners over >= 40 live results
         need = int(settings.get("min_rank", 8))
+        try:   # D109 autopilot: live record decides
+            from .autopilot import rules as _ap
+            ap = _ap()
+            if ap.get("intra_paused"):
+                f["autopilot: intraday paused (live record negative)"] += 1
+                record_shadow(c, r, now)
+                return
+            if c["setup"] in ap.get("intra_rank7_setups", []):
+                need = min(need, 7)
+        except Exception:
+            pass
         if ok == "strict" or lv.get("paused"):
             need = 10 if lv.get("paused") else 9
         if r < need:
@@ -704,6 +720,11 @@ class Engine:
     def refresh_quotes(self):
         from . import kite
         q = kite.quotes(self.uni)
+        try:   # D109: logged in but Zerodha sends nothing for 30 min -> one alert a day
+            from .autopilot import kite_watch
+            kite_watch(bool(q), kite.logged_in(), now_ist())
+        except Exception:
+            pass
         if q:
             self.quotes.update(q)
             try:   # D103: order-book pressure shadow record every 30 min (judged later by orderflow.evaluate)

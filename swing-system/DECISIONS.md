@@ -747,3 +747,11 @@ when Kite connects. Why setups are dropped is counted and logged every 30 minute
   shadow learning / automatic pausing of losing setups, weekly re-test of the rules on Kite history.
 - What stays with the owner: the daily Kite login tap (Zerodha requires a human login every day), renewing the
   Kite Connect subscription, and the GitHub / Telegram accounts.
+
+## D109 - 2026-11-16 - Autopilot: the system grades itself (before Claude is switched off)
+`swing/autopilot.py`: every closed tip stores its real result (result_pct, closed_at). Per strategy (dip-buy,
+positional, intraday, F&O) over the last 20-30 closed tips: live avg < 0 -> dip-buy only 10/10; positional paused
+60 days then retried; intraday paused until the shadow record (all followed setups) is positive. Setups whose
+shadow record is clearly good (>= 40 results, >= 60% winners, avg >= +0.15R) may send from rank 7. Evening data /
+self-test problems and "logged in but no Kite prices for 30 min" -> one 'system problem' message a day.
+Owner's manual: OWNER_GUIDE.md.
