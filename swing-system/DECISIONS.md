@@ -801,3 +801,9 @@ tips are recomputed from the 16 Nov price bars, re-sent as cards and put back in
 - The process clock is now Indian time (GitHub runs on UTC: 0:00-5:30 am IST 'today' was yesterday).
 - Long jobs (nightly, research ~1 h) blocked the bot: no replies, exit alerts or updates while they ran. They now
   run in a background thread (one at a time); a code update waits for a running job to finish.
+- A brief Telegram outage (502) no longer sends the owner a warning - only a problem lasting 30+ minutes.
+- Tip wording 'tomorrow' -> 'the next market open' (Friday evening tips said 'tomorrow').
+- A stock is never tipped again (same type) while its earlier tip is still open; intraday tips left open by an
+  engine stop are closed at that day's close in the evening run.
+- Verified on real data: the whole evening run (exits, dip-buy, positional, AI picks, discovery, autopilot) and
+  /tips work end to end; the lost 16 Nov positional tips were rebuilt, re-sent and are tracked again.
