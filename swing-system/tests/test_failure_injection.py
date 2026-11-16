@@ -310,3 +310,9 @@ def test_local_backup_skips_damaged_files_and_restores(tmp_path, monkeypatch):
     (priv / "live_tips.csv").unlink()                      # disaster: the store is gone
     assert archive.restore_local(p) == 1
     assert pd.read_csv(priv / "live_tips.csv")["symbol"].tolist() == ["A"]
+
+
+def test_lower_ranked_strategies_cannot_use_up_the_dip_buy_room(outbox):
+    sent_ai = sum(bool(le.issue_tip(_row(f"A{i}", setup="AI"), "AI PICK", S)) for i in range(6))
+    assert sent_ai == 3                                       # AI capped at 3% of capital at risk
+    assert le.issue_tip(_row("DIP1", setup="HP"), "DIP BUY", S)   # the dip-buy still has room

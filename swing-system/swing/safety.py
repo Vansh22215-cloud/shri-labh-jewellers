@@ -22,6 +22,9 @@ from .config import DATA, PRIVATE, ROOT, get_logger
 log = get_logger()
 STATE_F = DATA / "safety.json"
 SKIPPED_F = PRIVATE / "skipped_signals.csv"
+# money at risk each strategy may use at most (% of capital): lower-ranked strategies can never use up the room the
+# strongest one (the dip-buy, which comes only on market dips) needs
+STRATEGY_CAP = {"AI": 3.0, "RCP": 4.0, "DS": 2.0, "INTRADAY": 2.0, "FNO": 3.0}
 DEFAULT_LIMITS = {"risk_per_trade_pct": 1.0, "max_order_pct": 25.0, "max_open_positions": 15, "max_open_risk_pct": 10.0, "loss_streak_pause": 8,
                   "loss_streak_cooldown_days": 3}
 
@@ -48,7 +51,7 @@ def _notify(text):
     try:
         from . import telegram
         from .config import load_settings
-        telegram.send(load_settings(), text, label="system problem")
+        telegram.send_reliable(load_settings(), text, label="system problem")
     except Exception:
         pass
 
@@ -223,6 +226,22 @@ def portfolio_check(row, settings, tips=None):
                if str(row.get("type")) == "FNO" else float(row["qty"]) * abs(float(row["entry"]) - float(row["stop"])))
     except Exception:
         new = 0.0
+    fam = lambda r: ("INTRADAY" if str(r.get("type")) == "INTRADAY" else "FNO" if str(r.get("type")) == "FNO"
+                     else "DS" if str(r.get("setup", "")).startswith("DS") else str(r.get("setup", "")))
+    caps = dict(STRATEGY_CAP, **(L.get("strategy_max_open_risk_pct") or {}))
+    k = fam(row)
+    if k in caps:
+        used = 0.0
+        for _, r in op.iterrows():
+            if fam(r) != k:
+                continue
+            try:
+                used += (float(r.get("premium") or 0) * float(r.get("lot") or 0) * float(r.get("qty") or 1)
+                         if str(r["type"]) == "FNO" else float(r["qty"]) * abs(float(r["entry"]) - float(r["stop"])))
+            except Exception:
+                continue
+        if used + new > cap * float(caps[k]) / 100:
+            return False, f"{k} tips already use their share of risk ({caps[k]}% of capital)"
     if risk + new > cap * float(L["max_open_risk_pct"]) / 100:
         return False, (f"total money at risk on open tips would be Rs {risk + new:,.0f} "
                        f"(limit {L['max_open_risk_pct']}% of capital)")
