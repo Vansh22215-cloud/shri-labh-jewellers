@@ -449,8 +449,42 @@ def load_tips():
 
 
 def already(sym, typ, day):
+    """True if this stock already got a tip of this type today - or (D114) still has an OPEN multi-day tip of
+    this type (a stock is never tipped twice while the first tip is running)."""
     t = load_tips()
-    return bool(len(t) and ((t["symbol"] == sym) & (t["type"] == typ) & (t["day"] == day)).any())
+    if not len(t):
+        return False
+    same = (t["symbol"].astype(str) == str(sym)) & (t["type"].astype(str) == typ)
+    if (same & (t["day"].astype(str).str[:10] == str(day)[:10])).any():
+        return True
+    return bool(typ in ("NORMAL", "FNO") and (same & (t["status"].astype(str) == "open")).any())
+
+
+def expire_old_intraday(today):
+    """D114: intraday tips still 'open' from an earlier day (the engine stopped before the 3:15 pm square-off check)
+    are closed at that day's closing price, so /tips and the live record stay correct."""
+    from .autopilot import close_tip
+    with _LOCK:
+        t = load_tips()
+        if not len(t):
+            return 0
+        old = t[(t["type"].astype(str) == "INTRADAY") & (t["status"].astype(str) == "open")
+                & (t["day"].astype(str).str[:10] < str(today)[:10])]
+        n = 0
+        for i, r in old.iterrows():
+            px = None
+            try:
+                from . import data_prices
+                d = data_prices.load(str(r["symbol"]))
+                bar = d[d.index.normalize() == pd.Timestamp(str(r["day"])[:10])]
+                px = float(bar["close"].iloc[-1]) if len(bar) else None
+            except Exception:
+                pass
+            close_tip(t, i, "squared", px)
+            n += 1
+        if n:
+            t.to_csv(TIPS_F, index=False)
+        return n
 
 
 def save_tip(row):

@@ -476,6 +476,8 @@ def run():
             return None
 
     from . import high_prob, positional, ml_ranker, discovery, autopilot
+    from .live_engine import expire_old_intraday
+    _job("expire old intraday tips", lambda: expire_old_intraday(str(pd.Timestamp.now().date() + pd.Timedelta(days=1))))
     _job("dip-buy exits", lambda: high_prob.evening_exits(day))
     _job("positional exits", lambda: positional.evening_exits(day))
     _job("AI exits", lambda: ml_ranker.evening_exits(day))

@@ -146,3 +146,18 @@ def test_learning_pauses_a_losing_setup(monkeypatch, tmp_path):
     assert rec["RANGE"]["paused"] and not rec["VWAP"]["paused"]
     st = le.learned_stats()
     assert st["RANGE"]["allowed"] is False and st["VWAP"]["avg_net"] > 0
+
+
+def test_no_second_tip_while_one_is_open_and_old_intraday_expires(monkeypatch, tmp_path):
+    import pandas as pd
+    from swing import live_engine as le
+    monkeypatch.setattr(le, "TIPS_F", tmp_path / "t.csv")
+    pd.DataFrame([{"type": "NORMAL", "symbol": "ABC", "day": "2026-11-10", "status": "open", "side": "buy",
+                   "entry": 100, "stop": 90, "targets": "", "time": "2026-11-10 18:40"},
+                  {"type": "INTRADAY", "symbol": "XYZ", "day": "2026-11-10", "status": "open", "side": "buy",
+                   "entry": 50, "stop": 49, "targets": "51", "time": "2026-11-10 10:00"}]).to_csv(tmp_path / "t.csv", index=False)
+    assert le.already("ABC", "NORMAL", "2026-11-17")            # still open -> no duplicate
+    assert not le.already("ABC", "INTRADAY", "2026-11-17")
+    assert le.expire_old_intraday("2026-11-17") == 1
+    t = le.load_tips()
+    assert t.loc[t.symbol == "XYZ", "status"].iloc[0] == "squared"
