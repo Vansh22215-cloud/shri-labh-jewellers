@@ -1,4 +1,4 @@
-"""ONE-OFF owner request (2026-11-17): re-send the open tips of a given day as clean cards (the owner deleted the
+"""ONE-OFF owner request (2026-11-17, sent once): re-send the open tips of a given day as clean cards (the owner deleted the
 originals in Telegram). Request: oneoff/resend_request.json {"id": ..., "day": "YYYY-MM-DD", "setup": "RCP"}.
 Runs once inside the daemon (where the tip store lives) and marks itself done in data/oneoff_done.json."""
 import json
