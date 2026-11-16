@@ -14,6 +14,7 @@ the system never touches your money or your Zerodha account.
 | **F&O trade** (option buying) | Buy the option shown; exit on the alert |
 | **Normal trade (dip-buy)** in the evening, rank 8-10/10 | Buy at next morning's open; sell on the exit alert (~4 days) |
 | **Positional trade** in the evening, rank 6/10 | Buy at next open; hold until the SELL alert (weeks); expect several small losses before a big win |
+| **AI pick** in the evening, rank 6/10 | Buy at next open; sell after 10 trading days (alert). ~half win, but winners beat the market on average |
 | **Exit alert** (✅ ⛔️ ⏰ 🔻 ⌛) | Do what it says |
 | **Company of the day** | Read if you like |
 | **⚠️ System problem / 🤖 Autopilot** | Usually nothing to do - it explains itself. Repeating every day for a week? see "When to get help" |
@@ -37,6 +38,7 @@ On github.com open the repository → branch `claude/nse-swing-trading-system-sq
 | `capital: 45000` | Your trading capital (quantities are sized from it) |
 | `intraday_mode: on` / `off` | Intraday tips on/off |
 | `positional_tips: true/false` | Positional tips on/off |
+| `ai_picks: true/false`, `ai_top: 5` | AI picks on/off, how many per evening |
 | `min_rank: 8` | Lowest rank sent (9 = fewer, stronger tips) |
 | `risk_limits` | 1% risk per trade, 25% max per order, 2% daily-loss stop |
 
