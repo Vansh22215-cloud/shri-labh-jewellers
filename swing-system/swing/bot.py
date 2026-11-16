@@ -300,6 +300,40 @@ def handle(token, owner, msg, capital):
 KIND = {"HP": "Dip-buy", "RCP": "Positional", "AI": "AI pick"}
 
 
+def tip_card(r):
+    """One tip as a clean card (used by /tips and by re-sends)."""
+    import pandas as pd
+    from .live_engine import tv_link
+    st = str(r.get("setup", "") or "")
+    kind = KIND.get(st, "Discovered strategy" if st.startswith("DS") else
+                    {"INTRADAY": "Intraday", "FNO": "F&O"}.get(str(r["type"]), "Normal"))
+    exit_ = {"Positional": "hold until the SELL alert (max 60 trading days)",
+             "AI pick": "sell after 10 trading days - you get an alert",
+             "Dip-buy": "sell when the bounce alert comes (~4 days)", "Intraday": "square off by 3:15 pm"}.get(
+        kind, "exit when the alert comes")
+    try:
+        day = pd.Timestamp(str(r.get("day") or str(r["time"])[:10]))
+        when = f"sent {day:%d %b}" + (" · buy at the next open after that" if kind not in ("Intraday", "F&O") else "")
+    except Exception:
+        when = f"sent {str(r['time'])[:16]}"
+    L = [f"📌 {kind.upper()} TRADE", f"#{r['symbol']}" + (f" {r.get('contract', '')}" if str(r["type"]) == "FNO" else ""),
+         f"{'BUY' if str(r['side']) == 'buy' else 'SELL'} ≈ {float(r['entry']):,.2f}",
+         f"Stop-loss: {float(r['stop']):,.2f}"]
+    tg = [x for x in str(r.get("targets", "") or "").split("/") if x and x != "nan"]
+    if tg:
+        L.append("Targets: " + " / ".join(f"{float(x):,.2f}" for x in tg))
+    try:
+        L.append(f"Qty: {int(float(r['qty']))} · Rank {int(float(r['rank']))}/10")
+    except Exception:
+        pass
+    L += [f"Exit: {exit_}", when]
+    try:
+        L.append(tv_link(str(r["symbol"]), daily=True))
+    except Exception:
+        pass
+    return "\n".join(L)
+
+
 def open_tips_text(limit=40):
     """/tips: all open tips the system sent (so none is lost in the chat history)."""
     from .live_engine import load_tips
@@ -310,6 +344,8 @@ def open_tips_text(limit=40):
     if not len(o):
         return "No open tips right now - all earlier tips are closed."
     o = o.sort_values("time", ascending=False).head(limit)
+    if len(o) <= 8:     # few tips: full cards
+        return f"📌 OPEN TIPS ({len(o)})\n\n" + "\n\n".join(tip_card(r) for _, r in o.iterrows())
     L = [f"📌 OPEN TIPS ({len(o)})", ""]
     for _, r in o.iterrows():
         st = str(r.get("setup", "") or "")

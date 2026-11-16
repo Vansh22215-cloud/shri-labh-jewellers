@@ -251,6 +251,11 @@ def minute_tasks(t=None):
                       f"Log in</a>", label="kite login")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
+    try:   # one-off owner request: re-send deleted tips - does nothing once done
+        from . import oneoff_resend
+        oneoff_resend.maybe_run(t)
+    except Exception as e:
+        log.warning("Daemon: one-off re-send failed: %s", type(e).__name__)
     try:   # one-off owner request (picks with Kite data) - does nothing once done
         from . import oneoff_picks
         oneoff_picks.maybe_run(t)
