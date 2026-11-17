@@ -903,3 +903,15 @@ Owner: "Market is going on ... if any stock among all NSE stocks gets a signal, 
   - Everything is recorded before it is sent.
   - Switch: `vantage_live`.
 - **Needs** the day's Kite login. Without it there are no live alerts, and the evening scan still runs.
+
+## D121 - 2026-11-17 - Improvement research results; liquidity floor for VANTAGE signals (owner-approved)
+The pre-registered tests (`vantage-ai/validation/IMPROVE_PREREGISTRATION.md`, results in `IMPROVE_RESULTS.md`) were all judged on the Nov 2023+ holdout.
+- **Failed (not adopted):**
+  - market-breadth filter, leader (RS) filter, sector filter, delivery-% filter
+  - meta-labeling (personal likely %)
+  - break-even and time-stop exits
+  - wider dip-buy rules
+
+  They helped in older data but not in the recent three years, or they cut profits.
+- **Passed:** scanning all NSE stocks that trade **≥ ₹2 crore a day**. That's about 25 signals a week in the holdout at the same quality (+2.9% per trade, PF 1.48). Stocks under ₹2 cr/day were weaker (PF 1.20).
+- **Applied (owner approved):** VANTAGE BUY signals, live and end-of-day, only for stocks with a 20-day average traded value ≥ ₹2 cr. Setting: `vantage_min_turnover_cr`. SELLs and stop alerts for BUYs already sent are unaffected.

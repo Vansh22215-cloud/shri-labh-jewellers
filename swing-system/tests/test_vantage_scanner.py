@@ -193,3 +193,11 @@ def test_buy_messages_carry_the_quantity():
     assert "📦 Qty:" in vantage.buy_message("ICICIBANK", b, 46, 5510, False)
     assert "📦 Qty:" in vantage.live_buy_message("ICICIBANK", b, 46, 5510, 1424.0, pd.Timestamp("2026-11-18 11:42"), False)
     assert safety.size(1424.0, 1283.0, s) == 3
+
+
+def test_thin_stocks_get_no_buy(env, monkeypatch):
+    day = "2026-11-17"
+    monkeypatch.setattr(vantage, "scan", lambda d, bars: [("THIN", {"buy": _buy(day), "in_position": True}, 1.5e7),
+                                                          ("LIQUID", {"buy": _buy(day), "in_position": True}, 2.5e7)])
+    r = vantage.run(day)
+    assert r["buys"] == 1 and "#LIQUID" in env[-1][1]                  # Rs 1.5 cr/day skipped, Rs 2.5 cr/day sent

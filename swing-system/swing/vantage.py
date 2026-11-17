@@ -181,6 +181,12 @@ def qty_line(entry, stop, settings=None):
             f"({L['risk_per_trade_pct']:g}% of ₹{cap:,.0f})")
 
 
+def min_turnover(s):
+    """D121 (owner-approved 17 Nov): BUY signals only for stocks trading >= Rs 2 crore a day on average (20 days).
+    Pre-registered test: thinner stocks were clearly weaker in the 2023-26 holdout (PF 1.20 vs 1.48)."""
+    return float(s.get("vantage_min_turnover_cr", 2)) * 1e7
+
+
 def buy_message(sym, b, lk, n, thin):
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"🟢 BUY · {('Rolling Candle Profile' if b['setup'] == 'RCP' else b['setup'])}"
@@ -250,7 +256,7 @@ def run(day=None, source="auto"):
                 _save_signals(sig)                          # record first ...
                 telegram.send_reliable(s, sell_message(sym, sell, sig.loc[i, "close"]), label="vantage indicator")
                 sent_s += 1
-        if buy and not kill:
+        if buy and not kill and tv >= min_turnover(s):
             key = (sym, str(pd.Timestamp(buy["signal"]).date()))
             if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():
                 continue                                    # already sent (re-run) - never twice
@@ -423,7 +429,7 @@ def live_step(scanner, s=None):
     sent = 0
     for sym, st, tv in res:
         b = st.get("buy") if isinstance(st, dict) else None
-        if not b or isinstance(tv, str):
+        if not b or isinstance(tv, str) or tv < min_turnover(s):
             continue
         if ((live["day"] == day) & (live["sym"] == sym)).any():
             continue                                          # one live alert per stock per day
