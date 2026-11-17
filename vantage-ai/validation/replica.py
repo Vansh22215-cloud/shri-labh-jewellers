@@ -13,7 +13,8 @@ P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePu
          strongScore=80, brkLen=50, minRvol=1.5, maxExtAtr=3.0, minRoomR=1.5, minGapBars=5, maxStopPct=15.0,
          exitMode="Fixed risk/reward", atrLen=14, stopMult=3.0, trailMult=4.0, t1R=2.0, t2R=3.0, useMarket=True, swingLen=5,
          wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0,
-         useDip=True, dipStopMult=4.0, dipMaxDays=10, useRCP=True, rcpStopMult=5.0, rcpMaxDays=60)
+         useDip=True, dipStopMult=4.0, dipMaxDays=10, useRCP=True, rcpStopMult=5.0, rcpMaxDays=60,
+         dipRsi=2.0, beAtR=None, timeStopBars=None)        # research switches (defaults = the live logic)
 SW = "/home/user/shri-labh-jewellers/swing-system"
 
 
@@ -170,7 +171,7 @@ def run(d, bench, allow=None, p=None, state=None):
         obt = pd.Series(order_block_touches(dd)[0]).rolling(3, min_periods=1).max().fillna(0).astype(bool).values
         zone = obt | wavetrend_oversold(h, l, c) | msb_order_block(o, h, l, c) | swing_low_hold(o, h, l, c)
         with np.errstate(invalid="ignore"):
-            dipBase = (c >= 1.10 * sma200) & (rsi2 < 2) & benchOk & (b > bS200) & (bR2 < 20)
+            dipBase = (c >= 1.10 * sma200) & (rsi2 < p["dipRsi"]) & benchOk & (b > bS200) & (bR2 < 20)
         dipSig = dipBase & ~sqz & (fear | zone)
         dipTier = np.where(fear & zone, "A", np.where(fear, "B", "C"))
     else:
@@ -329,7 +330,15 @@ def run(d, bench, allow=None, p=None, state=None):
             hiSince = max(hiSince, h[t])
             if posType in ("Breakout", "Pullback") and p["exitMode"] != "Fixed risk/reward":
                 stopLvl = max(stopLvl, hiSince - p["trailMult"] * atr[t])
-            if posType == "Dip-buy":
+            if p["beAtR"] and posType in ("Breakout", "Pullback", "RCP") and h[t] >= planEntry + p["beAtR"] * (planEntry - initStop):
+                stopLvl = max(stopLvl, entryPx)                       # E1: break-even once +1R was reached
+            if (p["timeStopBars"] and posType in ("Breakout", "Pullback", "RCP") and not pendingExit
+                    and t - entryBar >= p["timeStopBars"] and c[t] < entryPx):
+                pendingExit, pendingWhy = True, f"Time stop ({p['timeStopBars']} bars, no progress)"
+                ev_sell = {"why": pendingWhy, "price": float(c[t]), "signal": (cur or {}).get("signal"), "intrabar": False}
+            if pendingExit:
+                pass
+            elif posType == "Dip-buy":
                 why = ("Closed above the 5-day average (dip-buy exit)" if c[t] > sma5[t] else
                        f"Time exit ({p['dipMaxDays']} days)" if t - entryBar >= p["dipMaxDays"] - 1 else "")
                 if why:
