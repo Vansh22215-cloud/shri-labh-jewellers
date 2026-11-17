@@ -645,6 +645,53 @@ def _close(t, i, status, px, now):
     close_tip(t, i, status, px, now)
 
 
+def _kind(r):
+    st, ty = str(r.get("setup") or ""), str(r.get("type") or "")
+    if ty == "INTRADAY":
+        return "intraday"
+    if ty == "FNO":
+        return "F&O"
+    return {"HP": "dip-buy", "RCP": "positional", "AI": "AI pick", "SWING": "system swing",
+            "A3": "system swing"}.get(st, "discovered strategy" if st.startswith("DS") else "swing")
+
+
+def _pnl(r, px):
+    """' · result -3.1% (≈ -₹1,234 on 40 shares)' from the tip's own entry and quantity."""
+    try:
+        e, q = float(r["entry"]), float(r.get("qty") or 0)
+        sign = 1 if str(r.get("side", "buy")) == "buy" else -1
+        pct = sign * (float(px) / e - 1) * 100
+        rs = sign * (float(px) - e) * q
+        return f"\nResult {pct:+.1f}%" + (f" (≈ {'+' if rs >= 0 else '-'}₹{abs(rs):,.0f} on {q:g} shares)" if q >= 1 else "")
+    except Exception:
+        return ""
+
+
+def _stop_fill(r, q, px, sent_at, session_open, now):
+    """Realistic exit price for a stop hit: the stop, unless the price is already beyond it (gap / fast fall) -
+    then today's open (gap at the open) or the price now."""
+    stop = float(r["stop"])
+    buy = str(r.get("side", "buy")) == "buy"
+    try:
+        op = float(q.get("open") or 0)
+    except Exception:
+        op = 0
+    if sent_at < session_open <= now and op > 0 and ((op < stop) if buy else (op > stop)):
+        return op
+    if (px < stop) if buy else (px > stop):
+        return px
+    return stop
+
+
+def stop_message(r, fill, px):
+    sym = r["symbol"]
+    gap = abs(float(fill) - float(r["stop"])) / float(r["stop"]) > 0.002
+    return (f"⛔️ STOP-LOSS HIT - #{sym} ({_kind(r)})\n"
+            f"Stop {_n(r['stop'])} · now {_n(px)} · entry {_n(r['entry'])}"
+            + (f"\nPrice went straight through the stop (gap / fast fall) - exit near {_n(fill)}" if gap else "")
+            + _pnl(r, fill) + "\n👉 Your stop-loss was hit: exit now if you hold it (sell at market).")
+
+
 def exits(quotes, now, opt_quotes=None, candles=None):
     """Exit alerts for every open tip: targets (one by one), stop-loss, 3:15 pm intraday square-off."""
     with _LOCK:
@@ -700,6 +747,12 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                 after = b[b.index >= sent_at.floor("5min") + pd.Timedelta(minutes=5)]   # bars that began after the tip
                 if len(after):
                     hi, lo = max(hi, float(after["high"].max())), min(lo, float(after["low"].min()))
+            session_open = now.normalize() + pd.Timedelta(hours=9, minutes=15)
+            if sent_at < session_open and now >= session_open:
+                # tip from before today's session: EVERY price of today counts, so today's high / low from the quote
+                # catch a touch even between two price checks
+                hi = max(hi, float(q.get("high") or px))
+                lo = min(lo, float(q.get("low") or px))
             if pd.notna(r.get("hi_since")):
                 hi = max(hi, float(r["hi_since"]))
             if pd.notna(r.get("lo_since")):
@@ -708,14 +761,17 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
             buy = r["side"] == "buy"
             tg = [float(x) for x in str(r["targets"]).split("/") if x]
             if (lo <= float(r["stop"])) if buy else (hi >= float(r["stop"])):
-                _close(t, i, "stop", float(r["stop"]), now)
-                msgs.append(f"⛔️ #{sym} - stop-loss {_n(r['stop'])} hit. Exit." +
-                            (" (intraday)" if r["type"] == "INTRADAY" else ""))
+                fill = _stop_fill(r, q, px, sent_at, session_open, now)
+                _close(t, i, "stop", fill, now)
+                msgs.append(stop_message(r, fill, px))
                 continue
             while hit < len(tg) and ((hi >= tg[hit]) if buy else (lo <= tg[hit])):
                 hit += 1
-                msgs.append(f"✅ #{sym} - Target {hit} hit ({_n(tg[hit - 1])})" +
-                            (" - all targets done, book profit" if hit == len(tg) else " - book part, move SL to cost"))
+                msgs.append(f"✅ TARGET {hit} HIT - #{sym} ({_kind(r)})\n"
+                            f"Target {_n(tg[hit - 1])} · now {_n(px)} · entry {_n(r['entry'])}"
+                            f"{_pnl(r, tg[hit - 1])}\n"
+                            + ("👉 All targets done - book the profit." if hit == len(tg)
+                               else "👉 Book part, move the stop-loss to your entry price."))
             if tg and hit >= len(tg):
                 _close(t, i, "done", tg[-1], now)
             elif r["type"] == "INTRADAY" and now.hour * 60 + now.minute >= 15 * 60 + 15:
@@ -726,6 +782,18 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
     for m in msgs:
         send(m, label="exit alert")
     return msgs
+
+
+def _option_ltp(con):
+    from . import kite
+    if not con:
+        return {}
+    try:
+        kite._pace()
+        d = kite._get("/quote/ltp", params=[("i", f"NFO:{x}") for x in con]).json()["data"]
+        return {x: float(d[f"NFO:{x}"]["last_price"]) for x in con if f"NFO:{x}" in d}
+    except Exception:
+        return {}
 
 
 # ----------------------------------------------------------------------------- the engine
@@ -933,17 +1001,38 @@ class Engine:
             for s, v in q.items():
                 if v.get("prev"):
                     self.prev.setdefault(s, v["prev"])
-        opt = {}
         t = load_tips()
         if len(t):
             con = t.loc[(t["status"] == "open") & (t["type"] == "FNO"), "contract"].dropna().astype(str).tolist()
-            if con:
-                try:
-                    d = kite._get("/quote/ltp", params=[("i", f"NFO:{x}") for x in con]).json()["data"]
-                    opt = {x: float(d[f"NFO:{x}"]["last_price"]) for x in con if f"NFO:{x}" in d}
-                except Exception:
-                    pass
-        return opt
+            return _option_ltp(con)
+        return {}
+
+    def watch_exits(self, every=5):
+        """FAST EXIT WATCH (owner 17 Nov: 'instant message once the stop-loss is hit'). Own thread: every ~5 s one
+        small Kite quote request for just the open tips' stocks (+ option premiums) and the exit check - independent of
+        the slow whole-market scan. Not logged in to Kite: Yahoo prices every 60 s."""
+        from . import kite
+        last_y = 0.0
+        while not self.stop_flag:
+            now = now_ist()
+            if now.hour * 60 + now.minute > 15 * 60 + 31:
+                break
+            try:
+                t = load_tips()
+                op = t[t["status"].astype(str) == "open"] if len(t) else t
+                if len(op):
+                    syms = list(op["symbol"].astype(str).unique())
+                    q = kite.quotes(syms) if kite.logged_in() else {}
+                    if not q and time.time() - last_y >= 60:
+                        last_y = time.time()
+                        q, _src = kite.live_prices(syms)
+                    if q:
+                        self.quotes.update(q)
+                        con = op.loc[op["type"] == "FNO", "contract"].dropna().astype(str).tolist()
+                        exits(self.quotes, now, _option_ltp(con) if con and kite.logged_in() else {}, self.candles)
+            except Exception as e:
+                log.warning("fast exit watch: %s", type(e).__name__)
+            time.sleep(every)
 
     def run(self, until=None):
         """Main loop (background thread). Ends at 15:31 or when stop_flag is set."""
@@ -954,6 +1043,7 @@ class Engine:
         if len(t):   # stocks of still-open tips are always watched (exit alerts)
             self.uni += [x for x in t.loc[t["status"] == "open", "symbol"].astype(str) if x not in self.uni]
         self.fno = fno_underlyings()
+        threading.Thread(target=self.watch_exits, daemon=True).start()     # fast exit alerts (every ~5 s)
         log.info("Live engine: %d stocks in the universe, %d F&O underlyings, prices: %s", len(self.uni),
                  len(self.fno), "Zerodha" if kite.logged_in() else "Yahoo (not logged in)")
         i, j, last_q, hot_q = 0, 0, 0.0, []

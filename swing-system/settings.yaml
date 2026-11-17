@@ -62,6 +62,6 @@ positional_max_open: 0       # 0 = no limit
 allow_auto_promotion: false
 
 # D110 AI picks (market-wide machine-learning ranker, 10-day hold; retrained weekly)
-ai_picks: true
+ai_picks: false     # owner 17 Nov: switched off (small edge after costs, BACKTEST_VALIDATION.md); open AI tips still get exit alerts
 ai_top: 5            # new AI picks per evening at most
 ai_max_open: 10      # open AI picks at once at most

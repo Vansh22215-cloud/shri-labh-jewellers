@@ -823,3 +823,13 @@ BACKTEST_VALIDATION.md, KNOWN_LIMITATIONS.md.
 - AI picks: "better than the average stock in 8 of 11 years" is **not** reproduced after costs: it is 6 of 11, and the after-cost margin is about +0.1% per 10 days. `ml_ranker.STATS` and the tip wording are updated ("SMALL edge, lowest-priority tip"). It stays on, capped at 3% of capital at risk. Switching it off is the owner's decision (`ai_picks: false`).
 - Discovered S1: weak in a realistic 2-slot account (+0.76% per trade, 5 losing years). Not approved; recommend not approving.
 - Intraday / F&O: no edge after costs. Shadow mode, EXPERIMENTAL.
+
+## D116 - 2026-11-17 - Owner: AI picks OFF; instant exit alerts
+- `ai_picks: false` (owner: "don't want AI picks"). No new AI picks and no weekly retraining; any open AI pick still gets its exit alert and its 10-day exit.
+- **Fast exit watch** (`Engine.watch_exits`): its own thread checks the open tips' stocks every ~5 seconds with one small Kite request, independent of the slow whole-market scan.
+  - Before, open tips were checked every ~30 seconds, once the full refresh had finished.
+  - Without a Kite login it uses Yahoo every 60 seconds (was 120).
+  - For a tip from before today, today's high and low also count, so a touch between two checks is never missed.
+- Exit messages say which tip it is (positional / dip-buy / ...), the stop or target, the price now, the entry, and the result in % and ₹ for the tip's quantity.
+  - A gap or fast fall through the stop is reported at the realistic price (today's open or the price now), not the stop.
+  - The record uses that price too.

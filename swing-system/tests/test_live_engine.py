@@ -79,7 +79,7 @@ def test_exit_alerts_once_each(monkeypatch, tmp_path):
                  "targets": "278/282/285", "rank": 8, "qty": 10, "status": "open", "hit": 0, "day": "2026-11-12"})
     now = pd.Timestamp("2026-11-12 11:00")
     le.exits({"RSYSTEMS": {"last": 282.5, "high": 283, "low": 273}}, now)
-    assert [l for l, _ in sent] == ["exit alert", "exit alert"] and "Target 2 hit" in sent[-1][1]
+    assert [l for l, _ in sent] == ["exit alert", "exit alert"] and "TARGET 2 HIT" in sent[-1][1]
     sent.clear()
     le.exits({"RSYSTEMS": {"last": 282.5, "high": 283, "low": 273}}, now)
     assert sent == []                                                             # nothing repeated

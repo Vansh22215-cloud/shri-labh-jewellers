@@ -207,8 +207,10 @@ def weekly_health(now):
         pass
     try:
         from . import ml_ranker
+        from .config import load_settings
         m = ml_ranker._load_model_file() or {}
-        L.append(f"🧠 AI model: trained {m.get('trained', '?')}, validation rank-correlation {m.get('val_ic', '?')}")
+        if load_settings().get("ai_picks", True):
+            L.append(f"🧠 AI model: trained {m.get('trained', '?')}, validation rank-correlation {m.get('val_ic', '?')}")
     except Exception:
         pass
     L.append("Research, not advice.")
