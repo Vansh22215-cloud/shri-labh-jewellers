@@ -163,7 +163,30 @@ def _n(x):
     return f"{x:,.2f}"
 
 
-def qty_line(entry, stop, settings=None):
+def results_soon(sym, day, days=5):
+    """D123 (owner-approved): the company's next results date if it falls within the next `days` trading days
+    (weekdays), else None. Results dates come from data/events/earnings (announced in advance: SEBI requires
+    5 days' notice of the board meeting)."""
+    try:
+        e = pd.to_datetime(pd.read_csv(DATA / "events" / "earnings" / f"{sym}.csv")["date"], errors="coerce").dropna()
+    except Exception:
+        return None
+    day = pd.Timestamp(day).normalize()
+    end = pd.bdate_range(day, periods=days + 1)[-1]
+    nxt = e[(e > day) & (e <= end)]
+    return nxt.min() if len(nxt) else None
+
+
+def results_line(sym, day):
+    r = results_soon(sym, day)
+    if r is None:
+        return "", 1.0
+    n = len(pd.bdate_range(pd.Timestamp(day).normalize(), r)) - 1
+    return (f"\n📅 Results on {r:%d %b} (in {n} trading day{'s' if n != 1 else ''}) - half quantity: signals just "
+            f"before results earned about half as much in testing"), 0.5
+
+
+def qty_line(entry, stop, settings=None, scale=1.0):
     """Owner 17 Nov: quantity in every BUY message - the system's own sizing (1% risk of the stated capital, at most
     25% of capital in one stock). Never a guessed capital: no line when capital is not set."""
     from . import safety
@@ -173,12 +196,12 @@ def qty_line(entry, stop, settings=None):
         return ""
     cap = float(s["capital"])
     L = safety.limits(s)
-    q = safety.size(entry, stop, s)
+    q = safety.size(entry, stop, s, float(L["risk_per_trade_pct"]) * scale)
     if q < 1:
         return (f"\n📦 Qty: 0 - one share does not fit your limits (₹{cap:,.0f} capital, "
                 f"{L['risk_per_trade_pct']:g}% risk, max {L['max_order_pct']:g}% in one stock) - skip")
     return (f"\n📦 Qty: {q} shares ≈ ₹{q * entry:,.0f} · max loss ≈ ₹{q * (entry - stop):,.0f} "
-            f"({L['risk_per_trade_pct']:g}% of ₹{cap:,.0f})")
+            f"({float(L['risk_per_trade_pct']) * scale:g}% of ₹{cap:,.0f})")
 
 
 def min_turnover(s):
@@ -187,13 +210,13 @@ def min_turnover(s):
     return float(s.get("vantage_min_turnover_cr", 2)) * 1e7
 
 
-def buy_message(sym, b, lk, n, thin):
+def buy_message(sym, b, lk, n, thin, day=None):
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"🟢 BUY · {('Rolling Candle Profile' if b['setup'] == 'RCP' else b['setup'])}"
             f"{(' ' + b['tier']) if b.get('tier') else ''}" + (f" · likely win {lk}% ({n} past NSE signals)" if lk else "") +
             f"\nBuy at the next market open ≈ ₹{_n(b['close'])} · Stop-loss ₹{_n(b['stop'])}"
             + (f" · Target ₹{_n(b['t2'])}" if b.get("t2") == b.get("t2") and b.get("t2") else "")
-            + qty_line(b["close"], b["stop"])
+            + _res_and_qty(sym, b["close"], b["stop"], day)
             + ("\n⚠️ Thinly traded stock - check the bid/ask before buying" if thin else ""))
 
 
@@ -268,7 +291,7 @@ def run(day=None, source="auto"):
                    "sent_at": str(now)[:16], "exit_date": "", "exit_why": "", "exit_price": ""}
             sig = pd.concat([sig, pd.DataFrame([row]).astype(str)], ignore_index=True)
             _save_signals(sig)                              # ... then send
-            msg = buy_message(sym, buy, lk, n, tv < 1e7)
+            msg = buy_message(sym, buy, lk, n, tv < 1e7, day)
             if live_today.get(sym):
                 msg = msg.replace(f"#{sym}\n\n", f"#{sym}\n\n✅ CONFIRMED at the close (today's live signal held)\n", 1)
             telegram.send_reliable(s, msg, label="vantage indicator")
@@ -388,13 +411,18 @@ def _load_live():
         return pd.DataFrame(columns=["day", "sym", "setup", "tier", "time", "price", "stop", "outcome"])
 
 
+def _res_and_qty(sym, entry, stop, day):
+    rl, scale = results_line(sym, day) if day is not None else ("", 1.0)
+    return rl + qty_line(entry, stop, scale=scale)
+
+
 def live_buy_message(sym, b, lk, n, price, t, thin):
     kind = "Rolling Candle Profile" if b["setup"] == "RCP" else b["setup"]
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"⚡ LIVE BUY signal · {kind}{(' ' + b['tier']) if b.get('tier') else ''}"
             + (f" · likely win {lk}% if it holds to the close" if lk else "") +
             f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · Stop-loss ₹{_n(b['stop'])}"
-            + qty_line(price, b["stop"])
+            + _res_and_qty(sym, price, b["stop"], t)
             + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
             "\n⏳ Forming candle: I'll confirm ✅ or cancel ❌ right after the 3:30 pm close.")
 

@@ -921,3 +921,4 @@ The pre-registered tests (`vantage-ai/validation/IMPROVE_PREREGISTRATION.md`, re
 - **Results-day guard (R4) passed,** but the owner does not want BUYs blocked ("results can also give better ones").
   - Data: signals with results due within 5 trading days still earn money, but about half (+1.7% vs +3.5% per trade in the last 3 years).
   - Proposed (awaiting approval): keep the signal, show the results date, and halve the quantity.
+- **D123 (owner approved):** VANTAGE BUYs with company results due within 5 trading days are still sent. The message shows "📅 Results on <date> (in N trading days) - half quantity", and the quantity uses half the risk (0.5%). Results dates come from `data/events/earnings` (506 companies; no change for others).

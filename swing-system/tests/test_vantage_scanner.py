@@ -201,3 +201,17 @@ def test_thin_stocks_get_no_buy(env, monkeypatch):
                                                           ("LIQUID", {"buy": _buy(day), "in_position": True}, 2.5e7)])
     r = vantage.run(day)
     assert r["buys"] == 1 and "#LIQUID" in env[-1][1]                  # Rs 1.5 cr/day skipped, Rs 2.5 cr/day sent
+
+
+def test_results_soon_shows_date_and_halves_quantity(monkeypatch, tmp_path):
+    from swing import config
+    (tmp_path / "events" / "earnings").mkdir(parents=True)
+    pd.DataFrame({"date": ["2026-11-20", "2027-02-10"]}).to_csv(tmp_path / "events" / "earnings" / "ICICIBANK.csv", index=False)
+    monkeypatch.setattr(vantage, "DATA", tmp_path)
+    b = {"setup": "RCP", "tier": "", "score": 80, "close": 1424.0, "stop": 1283.0, "t2": float("nan")}
+    msg = vantage.buy_message("ICICIBANK", b, 46, 5510, False, pd.Timestamp("2026-11-17"))
+    assert "📅 Results on 20 Nov (in 3 trading days) - half quantity" in msg
+    full = vantage.qty_line(1424.0, 1283.0, {"capital": 90000, "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct": 25}})
+    assert vantage.results_soon("ICICIBANK", pd.Timestamp("2026-11-10")) is None      # 8 trading days away: normal
+    assert "half quantity" not in vantage.buy_message("ICICIBANK", b, 46, 5510, False, pd.Timestamp("2026-11-10"))
+    assert "(0.5% of" in msg and "Qty" in full
