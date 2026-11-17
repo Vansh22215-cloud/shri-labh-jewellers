@@ -12,7 +12,9 @@ import pandas as pd
 P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePullback=False, minScore=70,
          strongScore=80, brkLen=50, minRvol=1.5, maxExtAtr=3.0, minRoomR=1.5, minGapBars=5, maxStopPct=15.0,
          exitMode="Fixed risk/reward", atrLen=14, stopMult=3.0, trailMult=4.0, t1R=2.0, t2R=3.0, useMarket=True, swingLen=5,
-         wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0)
+         wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0,
+         useDip=True, dipStopMult=4.0, dipMaxDays=10, useRCP=True, rcpStopMult=5.0, rcpMaxDays=60)
+SW = "/home/user/shri-labh-jewellers/swing-system"
 
 
 def ema(x, n):
@@ -148,6 +150,39 @@ def run(d, bench, allow=None, p=None):
     with np.errstate(invalid="ignore"):
         newBreak = (c > hiPrior) & (shift(c) <= shift(hiPrior))
 
+    # ---------------- Type 3 DIP-BUY and Type 4 RCP POSITIONAL: the tested reference implementations (swing-system)
+    import sys
+    if SW not in sys.path:
+        sys.path.insert(0, SW)
+    from swing.confirmations import msb_order_block, squeeze_on, swing_low_hold, vix_fix_spike, wavetrend_oversold
+    from swing.high_prob import rsi as rsi_n
+    from swing.orderflow import order_block_touches
+    from swing.rolling_profile import signals as rcp_signals
+    atrS = sma(tr, 14)                                      # ATR as a simple average of the true range (as tested)
+    sma5, sma200 = sma(c, 5), sma(c, 200)
+    if p["useDip"]:
+        rsi2 = rsi_n(pd.Series(c), 2).values
+        bS200 = bench.rolling(200).mean().reindex(d.index).values
+        bR2 = rsi_n(bench, 2).reindex(d.index).values
+        fear = vix_fix_spike(h, l, c)
+        sqz = squeeze_on(h, l, c)
+        dd = pd.DataFrame({"open": o, "high": h, "low": l, "close": c}, index=d.index)
+        obt = pd.Series(order_block_touches(dd)[0]).rolling(3, min_periods=1).max().fillna(0).astype(bool).values
+        zone = obt | wavetrend_oversold(h, l, c) | msb_order_block(o, h, l, c) | swing_low_hold(o, h, l, c)
+        with np.errstate(invalid="ignore"):
+            dipBase = (c >= 1.10 * sma200) & (rsi2 < 2) & benchOk & (b > bS200) & (bR2 < 20)
+        dipSig = dipBase & ~sqz & (fear | zone)
+        dipTier = np.where(fear & zone, "A", np.where(fear, "B", "C"))
+    else:
+        dipSig, dipTier = np.zeros(n, bool), np.full(n, "")
+    if p["useRCP"]:
+        R = rcp_signals(d[["open", "high", "low", "close", "volume"]], "price")
+        rcpBuy, rcpSell = R["buy"].values, R["sell"].values
+        with np.errstate(invalid="ignore"):
+            posSig = rcpBuy & (c >= 0.9 * pd.Series(c).rolling(250).max().values)
+    else:
+        rcpSell, posSig = np.zeros(n, bool), np.zeros(n, bool)
+
     # ---------------- sequential part (structure + score + state), in the exact order of core.pine
     swHi = swHiPrev = swLo = swLoPrev = np.nan
     hiTaken = loTaken = False
@@ -161,6 +196,7 @@ def run(d, bench, allow=None, p=None):
     entryBar = None
     lastExitBar = -100000
     posQty = entryScore = 0
+    posType, posTier = "", ""
     t1Done = t2Done = False
     trades, cur, pend_info = [], None, {}
     wsum = sum(p[k] for k in ("wTrend", "wMom", "wStr", "wRS", "wVol", "wMkt"))
@@ -276,7 +312,7 @@ def run(d, bench, allow=None, p=None):
             if l[t] <= stopLvl:
                 exit_why = "Trailing stop" if stopLvl > initStop else "Stop-loss"
                 inPos, exitFill, exitPx, lastExitBar = False, True, min(o[t], stopLvl), t
-            elif p["exitMode"] == "Fixed risk/reward" and h[t] >= tgt2:
+            elif posType in ("Breakout", "Pullback") and p["exitMode"] == "Fixed risk/reward" and h[t] >= tgt2:
                 inPos, exitFill, exitPx, lastExitBar, exit_why = False, True, max(o[t], tgt2), t, "Target 2"
         if exitFill and cur is not None:
             cur.update(exit_date=d.index[t], exit=exitPx, why=exit_why, days=t - entryBar, t1_hit=t1Done)
@@ -288,9 +324,19 @@ def run(d, bench, allow=None, p=None):
             if not t2Done and h[t] >= tgt2:
                 t2Done = True
             hiSince = max(hiSince, h[t])
-            if p["exitMode"] != "Fixed risk/reward":
+            if posType in ("Breakout", "Pullback") and p["exitMode"] != "Fixed risk/reward":
                 stopLvl = max(stopLvl, hiSince - p["trailMult"] * atr[t])
-            if p["exitMode"] == "Combined":
+            if posType == "Dip-buy":
+                why = ("Closed above the 5-day average (dip-buy exit)" if c[t] > sma5[t] else
+                       f"Time exit ({p['dipMaxDays']} days)" if t - entryBar >= p["dipMaxDays"] - 1 else "")
+                if why:
+                    pendingExit, pendingWhy = True, why
+            elif posType == "RCP":
+                why = ("Rolling Candle Profile SELL" if rcpSell[t] else
+                       f"Time exit ({p['rcpMaxDays']} days)" if t - entryBar >= p["rcpMaxDays"] - 1 else "")
+                if why:
+                    pendingExit, pendingWhy = True, why
+            elif p["exitMode"] == "Combined":
                 why = ""
                 if c[t] < e50[t] and hist[t] < 0:
                     why = "Trend deterioration (below EMA50, MACD negative)"
@@ -303,14 +349,29 @@ def run(d, bench, allow=None, p=None):
                 if why:
                     pendingExit, pendingWhy = True, why
         gapOk = t - lastExitBar >= p["minGapBars"]
-        if (not inPos and not pendingEntry and gapOk and (breakoutSetup or pullbackSetup) and notExtended and stopOk
-                and roomOk and mktOk and not rejection and score >= p["minScore"] and qtyCalc >= 1 and allow[t]):
-            pendingEntry = True
-            setupType = "Breakout" if breakoutSetup else "Pullback"
-            planEntry, initStop, stopLvl = c[t], planStop, planStop
-            tgt1, tgt2 = c[t] + p["t1R"] * riskPS, c[t] + p["t2R"] * riskPS
-            posQty, entryScore = qtyCalc, score
-            signal_date = d.index[t]
-            regime = "BULLISH" if mktBull[t] else "BEARISH" if mktBear[t] else "SIDEWAYS"
-            pend_info = {"signal": signal_date, "regime": regime}
+        if not inPos and not pendingEntry and gapOk and allow[t]:
+            # priority: the setup with the best tested record first
+            pick, ps = None, np.nan
+            if dipSig[t] and atrS[t] > 0:
+                pick, ps = "Dip-buy", c[t] - p["dipStopMult"] * atrS[t]
+            elif posSig[t] and atrS[t] > 0:
+                pick, ps = "RCP", c[t] - p["rcpStopMult"] * atrS[t]
+            elif ((breakoutSetup or pullbackSetup) and notExtended and stopOk and roomOk and mktOk and not rejection
+                  and score >= p["minScore"]):
+                pick, ps = ("Breakout" if breakoutSetup else "Pullback"), planStop
+            if pick is not None:
+                rps = c[t] - ps
+                q = min(int(np.floor(riskAmt / rps)) if rps > 0 else 0, qtyCap)
+                if q >= 1:
+                    pendingEntry = True
+                    setupType = posType = pick
+                    posTier = dipTier[t] if pick == "Dip-buy" else ""
+                    planEntry, initStop, stopLvl = c[t], ps, ps
+                    if pick in ("Breakout", "Pullback"):
+                        tgt1, tgt2 = c[t] + p["t1R"] * rps, c[t] + p["t2R"] * rps
+                    else:
+                        tgt1 = tgt2 = np.nan
+                    posQty, entryScore = q, score
+                    regime = "BULLISH" if mktBull[t] else "BEARISH" if mktBear[t] else "SIDEWAYS"
+                    pend_info = {"signal": d.index[t], "regime": regime, "tier": posTier}
     return trades

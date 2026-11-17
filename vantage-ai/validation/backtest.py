@@ -19,6 +19,12 @@ PRE-REGISTERED RULES (written before the first run; the defaults in core.pine we
     * an entry type that fails is switched OFF by default (the user can still switch it on)
     * the default exit mode stays "Combined" unless it fails the bar while another exit mode passes
     * NO other parameter is changed after seeing results (no curve fitting)
+ADDENDUM (17 Nov, written BEFORE the run that includes them): entry types 3 "Dip-buy" (tiered dip-buy with Vix Fix /
+WaveTrend / order block / MSB order block / swing-low hold confirmations, no entry while Squeeze is ON) and 4 "RCP"
+(Rolling Candle Profile BUY within 10% of the 52-week high) use their own previously tested rules and exits. Each
+entry type must pass the same bar on its own; a type that fails is OFF by default. The "likely %" shown on a BUY is
+the historical share of similar signals (same type; dip-buy by tier; breakout by score band 70-79 / 80-89 / 90+)
+that ended in profit after 0.35% costs in this run - a past frequency, not a guaranteed probability.
 Run: python3 backtest.py  ->  results.json, trades_<mode>.csv
 """
 import json
@@ -90,6 +96,30 @@ def breakdowns(T, ranks):
     return out
 
 
+def calibration(T):
+    """Historical win rate (after costs) of similar signals: by type; dip-buy by tier; breakout by score band."""
+    T = T.copy()
+    T["win"] = (T["gross"] - iv.COST) > 0
+    T["band"] = np.where(T["score"] >= 90, "90+", np.where(T["score"] >= 80, "80-89", "70-79"))
+    ho = T["entry_date"] >= iv.OOS
+    out = {}
+    def row(g):
+        return {"n": int(len(g)), "win_pct": round(float(g["win"].mean() * 100)) if len(g) else None,
+                "avg_pct": round(float((g["gross"] - iv.COST).mean() * 100), 2) if len(g) else None,
+                "holdout_n": int((g["entry_date"] >= iv.OOS).sum()),
+                "holdout_win_pct": round(float(g.loc[g["entry_date"] >= iv.OOS, "win"].mean() * 100)) if (g["entry_date"] >= iv.OOS).any() else None}
+    for st, g in T.groupby("setup"):
+        out[st] = row(g)
+        if st == "Dip-buy":
+            for tr_, gg in g.groupby("tier"):
+                out[f"Dip-buy {tr_}"] = row(gg)
+        if st in ("Breakout", "Pullback"):
+            for b_, gg in g.groupby("band"):
+                out[f"{st} {b_}"] = row(gg)
+    _ = ho
+    return out
+
+
 def single_stocks(data_by, ranks_month):
     """Rule-based (no cherry-picking): the 5 largest and the stocks ranked 151-155 in the first month of 2014.
     Indicator with its own sizing (₹50,000, 1% risk, non-compounding, 0.35% costs) vs ₹50,000 bought and held."""
@@ -147,6 +177,7 @@ if __name__ == "__main__":
                 rep[f"entry_type_{st}"] = dict(after_costs=r2["after_costs"], holdout=r2["out_of_sample_2023_11_on"],
                                                PASS=ok2, checks=chk2, years_beating_avg_pct=beat2)
             rep["single_stocks"] = single_stocks({s: d for s, d, m, src in data}, ranks_month)
+            rep["calibration"] = calibration(T)
         res[mode] = rep
         a = rep["after_costs"]
         print(f"{mode}: {'PASS' if ok else 'fail'} n={a.get('trades')} win={a.get('win_pct')} exp={a.get('expectancy_pct')} "
