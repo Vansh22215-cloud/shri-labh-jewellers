@@ -82,11 +82,11 @@
   }
  },
  "today": {
-  "date": "2026-11-16",
+  "date": "2026-11-17",
   "trend": "uptrend",
   "fear": "calm",
   "breadth": "mixed",
-  "vix": 15.7,
-  "breadth_pct": 57.0
+  "vix": 15.5,
+  "breadth_pct": 58.0
  }
 }
