@@ -14,10 +14,13 @@ JOBS = [("run_scan.py", {}), ("run_vantage.py", {"SWING_CLAIMED": "vantage2"}), 
 
 
 def main():
-    work = Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/swing_dry_run")
-    if work.exists():
-        shutil.rmtree(work)
-    shutil.copytree(ROOT, work, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"))
+    base = Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/swing_dry_run")
+    if base.exists():
+        shutil.rmtree(base)
+    work = base / "swing-system"                       # same layout as the repository (the VANTAGE logic lives in
+    ign = shutil.ignore_patterns(".git", "__pycache__", "*.pyc")   # ../vantage-ai/validation)
+    shutil.copytree(ROOT, work, ignore=ign)
+    shutil.copytree(ROOT.parent / "vantage-ai", base / "vantage-ai", ignore=ign)
     env = dict(os.environ, SWING_DRY_RUN="1", TELEGRAM_BOT_TOKEN="123456:dry-run", TELEGRAM_CHAT_ID="dry-run")
     env.pop("GITHUB_ACTIONS", None)
     out = work / "data" / "private" / "dry_run_messages.txt"

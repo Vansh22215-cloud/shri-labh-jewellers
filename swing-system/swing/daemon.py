@@ -85,6 +85,27 @@ def failed(job, t=None, max_tries=3):
     log.warning("Daemon: %s did not complete (attempt %d of %d)", job, tries, max_tries)
 
 
+def retry_later(job, minutes=20, max_tries=12, t=None):
+    """The job could not do its work yet (e.g. prices not published): free it to run again in `minutes`."""
+    t = t or now()
+    k = key(job, t)
+    if k is None:
+        return
+    st = _load()
+    tries = int(st.get("tries " + k, 0)) + 1
+    st["tries " + k] = tries
+    if tries < max_tries:
+        st.pop(k, None)
+        st["not before " + k] = str(t + timedelta(minutes=minutes))[:19]
+    STATE.write_text(json.dumps(st, indent=1))
+    log.info("Daemon: %s will retry in %d min (attempt %d of %d)", job, minutes, tries, max_tries)
+
+
+def _waiting(st, job, t):
+    nb = st.get("not before " + str(key(job, t)))
+    return bool(nb) and str(t)[:19] < nb
+
+
 def current_scan_slot(t):
     if t.weekday() >= 5:
         return None
@@ -108,7 +129,7 @@ def due(t=None):
     if wd < 5 and t >= t.replace(hour=18, minute=40, second=0) and not st.get(key("nightly", t)):
         out.append("nightly")
     if wd < 5 and t >= t.replace(hour=18, minute=50, second=0) and not st.get(key("vantage2", t)) \
-            and st.get(key("vantage", t)) and "nightly" not in out:
+            and st.get(key("vantage", t)) and "nightly" not in out and not _waiting(st, "vantage2", t):
         from .vantage import due_evening
         if due_evening(f"{t:%Y-%m-%d}"):
             out.append("vantage2")                 # retry with Yahoo's candle when the 3:40 pm scan had no Kite data

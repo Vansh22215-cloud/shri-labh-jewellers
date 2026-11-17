@@ -11,7 +11,11 @@ from swing import vantage  # noqa: E402
 if __name__ == "__main__":
     job = os.environ.get("SWING_CLAIMED", "vantage")
     try:
-        print("vantage:", vantage.run(source="kite" if job == "vantage" else "yahoo"))
+        r = vantage.run(source="kite" if job == "vantage" else "yahoo")
+        print("vantage:", r)
+        if job == "vantage2" and not r.get("ok") and str(r.get("why", "")).startswith("prices not ready"):
+            from swing.daemon import retry_later
+            retry_later("vantage2", minutes=20, max_tries=12)   # Yahoo lags: try again every 20 min (to ~11 pm)
     except Exception as e:
         print("vantage failed:", redact(f"{type(e).__name__}: {e}"))
         raise

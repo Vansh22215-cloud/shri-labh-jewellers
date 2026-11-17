@@ -957,3 +957,8 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 
 ## D128 - 2026-11-18 - Practice mode
 `SWING_DRY_RUN=1` writes every Telegram message to `data/private/dry_run_messages.txt` instead of sending it. `scripts/dry_run_all.py` runs every daily job on a copy of the system in that mode, for end-to-end checks without touching the owner's chat or data.
+
+## D129 - 2026-11-18 - Fixes found by the practice run
+- **Yahoo can publish the day's prices hours late.** The 6:50 pm backup scan used to count as done even when only a few stocks had the day's candle. It now scans only when at least 60% of normal stocks have it. Otherwise it retries every 20 minutes, up to 12 times (`daemon.retry_later`).
+- **A broken scan is never reported as "0 signals".** If more than 20% of stocks fail inside the VANTAGE logic, the scan stops and a "system problem" message is sent.
+- **The practice run** (`scripts/dry_run_all.py`) now copies the repository layout, including `vantage-ai/`.

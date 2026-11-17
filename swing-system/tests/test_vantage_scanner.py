@@ -259,3 +259,33 @@ def test_no_buy_before_close_alert_outside_the_window_or_when_switched_off(env, 
     assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=20), res, {"vantage_close_call": False}, {}) == 0
     assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=20), res, {"kill_switch": True}, {}) == 0
     assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=20), res, {}, {}) == 1
+
+
+def test_evening_scan_waits_when_most_prices_are_not_out_yet(env, monkeypatch):
+    """Practice run 18 Nov: Yahoo had the day's candle for only 3 stocks at night - the scan must not count as done."""
+    def not_ready(day, bars):
+        raise vantage.NotReady("only 3 of 2400 stocks have the day's prices yet")
+    monkeypatch.setattr(vantage, "scan", not_ready)
+    monkeypatch.setattr(vantage, "today_bars", lambda syms, day: {})
+    r = vantage.run("2026-11-17", source="yahoo")
+    assert not r["ok"] and r["why"].startswith("prices not ready")
+    assert vantage.due_evening("2026-11-17")                    # still due
+
+
+def test_retry_later_spaces_the_evening_retries(monkeypatch, tmp_path):
+    from swing import daemon
+    monkeypatch.setattr(daemon, "STATE", tmp_path / "state.json")
+    monkeypatch.setattr(vantage, "LAST_F", tmp_path / "last.json")
+    t = pd.Timestamp("2026-11-17 18:55")
+    st = {daemon.key("vantage", t): True, daemon.key("nightly", t): True, daemon.key("vantage2", t): True}
+    (tmp_path / "state.json").write_text(json.dumps(st))
+    daemon.retry_later("vantage2", minutes=20, t=t)
+    assert "vantage2" not in daemon.due(t + pd.Timedelta(minutes=5))
+    assert "vantage2" in daemon.due(t + pd.Timedelta(minutes=21))
+
+
+def test_broken_logic_is_reported_not_silent(env, monkeypatch):
+    monkeypatch.setattr(vantage, "scan", lambda d, bars: [("A", {}, "ModuleNotFoundError")] * 10)
+    r = vantage.run("2026-11-17")
+    assert not r["ok"] and "scan errors on 10 of 10" in r["why"]
+    assert any(label == "system problem" for label, _ in env)

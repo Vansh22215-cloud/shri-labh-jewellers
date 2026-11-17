@@ -27,6 +27,8 @@ SIGNALS_F = PRIVATE / "vantage_signals.csv"
 LAST_F = DATA / "vantage_last.json"
 BARS = 900                      # 260 warm-up + 52-week high + state convergence (positions last <= 60 days)
 _BENCH = None
+_MISSING = {"n": 0}
+MIN_READY = 0.6                 # Yahoo fallback: scan only when >= 60% of normal stocks have the day's candle
 
 
 def _replica():
@@ -94,6 +96,8 @@ def history(sym, day, bar):
     else:
         y = data_prices.load(sym)
         if y is None or day not in y.index:
+            if len(d) >= 519 and (day - d.index[-1]).days <= 6:
+                _MISSING["n"] += 1                           # a normal stock whose candle for `day` is not out yet
             return None
         d.loc[day] = y.loc[day, ["open", "high", "low", "close", "volume"]].values
     d = d.sort_index().tail(BARS)
@@ -103,6 +107,10 @@ def history(sym, day, bar):
     if (day - prev).days > 6:                              # a gap of more than a long weekend: stale history
         return None
     return d
+
+
+class NotReady(Exception):
+    """The day's prices are not published yet for most stocks (Yahoo can lag by hours) - try again later."""
 
 
 def _scan_one(args):
@@ -130,11 +138,14 @@ def scan(day, bars, procs=4):
         if nb:
             bench = pd.concat([bench, pd.Series([nb["close"]], index=[day])])
     work = []
+    _MISSING["n"] = 0
     for s in symbols():
         d = history(s, day, bars.get(s))
         if d is not None:
             work.append((s, d))
-    log.info("VANTAGE scan: %d stocks with usable data", len(work))
+    log.info("VANTAGE scan: %d stocks with usable data (%d without the day's candle yet)", len(work), _MISSING["n"])
+    if not bars and len(work) < MIN_READY * (len(work) + _MISSING["n"]):
+        raise NotReady(f"only {len(work)} of {len(work) + _MISSING['n']} stocks have the day's prices yet")
     with get_context("fork").Pool(procs, initializer=_init, initargs=(bench,)) as p:   # own process, no threads
         return p.map(_scan_one, work, chunksize=20)
 
@@ -254,7 +265,24 @@ def run(day=None, source="auto"):
     if not bars and source == "kite":
         summ["why"] = "Kite not logged in"
         return summ
-    res = scan(day, bars)
+    try:
+        res = scan(day, bars)
+    except NotReady as e:
+        summ["why"] = f"prices not ready: {e}"
+        log.info("VANTAGE: %s - will retry", summ["why"])
+        return summ
+    errs = [tv for _, _, tv in res if isinstance(tv, str)]
+    if res and len(errs) > 0.2 * len(res):                  # the logic itself is broken: never report "0 signals"
+        from collections import Counter
+        summ["why"] = f"scan errors on {len(errs)} of {len(res)} stocks: {Counter(errs).most_common(2)}"
+        log.warning("VANTAGE: %s", summ["why"])
+        try:
+            from . import telegram
+            telegram.send_reliable(s, "⚠️ VANTAGE scanner problem: " + summ["why"] + " - signals could not be checked "
+                                      "today.", label="system problem")
+        except Exception:
+            pass
+        return summ
     cal = calibration()
     confirmed = {sym for sym, st, tv in res if isinstance(st, dict) and st.get("buy") and not isinstance(tv, str)}
     live_today = close_followups(day, confirmed, s)          # ❌ for live alerts that did not hold
