@@ -181,6 +181,29 @@ def code_version(ref="HEAD"):
     return "|".join(out)
 
 
+def token_rotated(now=None, wait_s=180, every_h=6):
+    """Owner 17 Nov: after a bot-key change in GitHub Secrets, a running run still holds the OLD key (secrets are
+    given to a run only when it starts) and Telegram answers 401. After 3 minutes of 401s, end the run so the next
+    one starts with the new key - at most once every 6 hours (a really wrong key must not cause a restart loop)."""
+    from . import bot
+    now = now or time.time()
+    since = bot.TOKEN_REFUSED_SINCE
+    if not since or now - since < wait_s or not os.environ.get("GITHUB_ACTIONS"):
+        return False
+    f = DATA / "token_restart.json"
+    try:
+        last = float(json.loads(f.read_text()).get("t"))
+    except Exception:
+        last = None                    # never handed over for this reason
+    if last is not None and now - last < every_h * 3600:
+        return False
+    try:
+        f.write_text(json.dumps({"t": now}))
+    except Exception:
+        pass
+    return True
+
+
 def update_waiting(start_version):
     """True if newer program code was pushed to the branch since this run started (then the run ends early and
     the next one - started automatically by keep_alive - uses the new code within minutes)."""
@@ -431,6 +454,10 @@ def run():
             answered += poll_once()
         except Exception as e:
             log.warning("Daemon: bot poll failed: %s", type(e).__name__)
+        if token_rotated() and not job_running():
+            log.info("Daemon: Telegram refuses the bot key (rotated?) - ending this run so the next one loads the "
+                     "current GitHub Secret")
+            break
         minute_tasks()
         if not job_running():
             for job in due():

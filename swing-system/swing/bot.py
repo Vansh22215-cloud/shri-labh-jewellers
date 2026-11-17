@@ -464,6 +464,7 @@ def _send_one(token, chat, reply, reply_to):
 
 
 _READ_FAIL_SINCE = None
+TOKEN_REFUSED_SINCE = None        # first time Telegram answered 401 Unauthorized (cleared on the next good read)
 
 
 def _updates_problem(token, owner, res, offset):
@@ -477,7 +478,9 @@ def _updates_problem(token, owner, res, offset):
         res = _api(token, "getUpdates", offset=offset, timeout=0)
         if res.get("ok"):
             return res
-    global _READ_FAIL_SINCE
+    global _READ_FAIL_SINCE, TOKEN_REFUSED_SINCE
+    if code == 401:                    # bot key not accepted (e.g. the owner rotated it): the daemon hands over
+        TOKEN_REFUSED_SINCE = TOKEN_REFUSED_SINCE or time.time()
     transient = not (code in (401, 404, 409))
     if transient:                      # D114: Telegram hiccups (5xx, network) fix themselves - only a LASTING one is told
         _READ_FAIL_SINCE = _READ_FAIL_SINCE or time.time()
@@ -510,7 +513,8 @@ def poll_once():
     if not res.get("ok", False):
         res = _updates_problem(token, owner, res, offset)
     else:
-        _READ_FAIL_SINCE = None
+        global TOKEN_REFUSED_SINCE
+        _READ_FAIL_SINCE = TOKEN_REFUSED_SINCE = None
     n = 0
     for _ in range(4):        # an album's pictures can arrive a few seconds apart: wait for the rest, then answer
         for u in res.get("result", []):

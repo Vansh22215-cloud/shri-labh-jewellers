@@ -69,3 +69,15 @@ def test_fast_watcher_alerts_within_one_cycle(monkeypatch):
 def test_ai_picks_are_off_in_settings():
     from swing.config import load_settings
     assert load_settings()["ai_picks"] is False
+
+
+def test_rotated_bot_key_hands_over_once(monkeypatch, tmp_path):
+    from swing import bot, daemon
+    monkeypatch.setattr(daemon, "DATA", tmp_path)
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setattr(bot, "TOKEN_REFUSED_SINCE", None)
+    assert not daemon.token_rotated(1000.0)
+    monkeypatch.setattr(bot, "TOKEN_REFUSED_SINCE", 1000.0)
+    assert not daemon.token_rotated(1100.0)          # wait 3 minutes first (a single hiccup is not a rotation)
+    assert daemon.token_rotated(1200.0)              # hand over: next run gets the new GitHub Secret
+    assert not daemon.token_rotated(1300.0)          # at most once every 6 hours - no restart loop

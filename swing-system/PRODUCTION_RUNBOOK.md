@@ -24,7 +24,7 @@ Commands you can send the bot: `/tips` (every open tip) · `/health` (status now
 | 🔄 "System recovered … was not running from X to Y" | Check `/tips` against your broker positions; exits that fell in the gap may have been missed. |
 | No message at all for 2 market days | GitHub → Actions → "swing-system" → **Run workflow** (task `bot`). If it fails, see "When to get help". |
 | Kite "Invalid checksum" / login refused | GitHub → Settings → Secrets → re-enter `KITE_API_SECRET` exactly as the Kite developer console shows it. |
-| Telegram bot token must change (leak) | Telegram → @BotFather → `/revoke` → pick the bot → copy the NEW token → GitHub → repo → Settings → Secrets and variables → Actions → `TELEGRAM_BOT_TOKEN` → Update. The chat stays the same. |
+| Telegram bot token must change (leak) | Telegram → @BotFather → `/revoke` → pick the bot → copy the NEW token → GitHub → repo → Settings → Secrets and variables → Actions → `TELEGRAM_BOT_TOKEN` → Update. The chat stays the same. The running system notices the old key is refused and restarts itself within ~4 minutes with the new one (messages in between are queued and re-sent). |
 | Tips lost / store damaged | The system restores its last good copy by itself. If everything is gone (cache lost): forward the latest **weekly backup file** from the chat to the bot; it merges it back. |
 
 ## Reading a failed GitHub run
