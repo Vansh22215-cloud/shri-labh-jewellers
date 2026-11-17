@@ -55,6 +55,8 @@ def env(monkeypatch, tmp_path):
     monkeypatch.setattr(vantage, "today_bars", lambda syms, day: {"TITAN": {}})
     monkeypatch.setattr(vantage, "calibration", lambda: {"Dip-buy A": {"win_pct": 80, "n": 171}})
     monkeypatch.setattr(vantage, "_last_close", lambda sym, day: 105.0)
+    monkeypatch.setattr(vantage, "CALL_F", tmp_path / "calls.csv")
+    monkeypatch.setattr(vantage, "CALL_FROM", 9999)            # buy-before-close window off unless a test opens it
     return sent
 
 
@@ -215,3 +217,45 @@ def test_results_soon_shows_date_and_halves_quantity(monkeypatch, tmp_path):
     assert vantage.results_soon("ICICIBANK", pd.Timestamp("2026-11-10")) is None      # 8 trading days away: normal
     assert "half quantity" not in vantage.buy_message("ICICIBANK", b, 46, 5510, False, pd.Timestamp("2026-11-10"))
     assert "(0.5% of" in msg and "Qty" in full
+
+
+def test_buy_before_close_alert_once_then_confirmed_or_sell_next_open(env, monkeypatch, tmp_path):
+    """Round 3 (C1): ~3:20 pm 'BUY NOW - before the close' once per stock; the close scan confirms it or says sell."""
+    monkeypatch.setattr(vantage, "LIVE_F", tmp_path / "live.csv")
+    monkeypatch.setattr(vantage, "SNAP_F", tmp_path / "snap.json")
+    monkeypatch.setattr(vantage, "CALL_FROM", 15 * 60 + 15)
+    now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    t = now.normalize() + pd.Timedelta(hours=15, minutes=21)
+    vantage.write_snapshot({"TITAN": {"open": 100, "high": 103, "low": 99, "last": 101, "volume": 5e5},
+                            "NIFTY50": {"open": 1, "high": 1, "low": 1, "last": 1, "volume": 1}})
+
+    class Sc:
+        day = now.normalize()
+
+        def cycle(self):
+            return t, [("TITAN", {"buy": dict(_buy(now), close=101.0)}, 5e8), ("ABC", {"buy": _buy(now)}, 5e8),
+                       ("THIN", {"buy": _buy(now)}, 1e6)]
+    r = vantage.live_step(Sc())
+    assert r["close_calls"] == 2                                       # thin stock: no alert
+    calls = [x for _, x in env if "BUY NOW - before the 3:30 pm close" in x]
+    assert len(calls) == 2 and "#TITAN" in calls[0] and "Price now ₹101.00 (15:21)" in calls[0]
+    assert vantage.live_step(Sc())["close_calls"] == 0                # once per stock per day
+    monkeypatch.setattr(vantage, "scan", lambda d, bars: [("TITAN", {"buy": _buy(now), "in_position": True}, 5e8)])
+    n0 = len(env)
+    vantage.run(str(now.date()))
+    texts = [x for _, x in env[n0:]]
+    assert any("#ABC" in x and "did not hold at the close" in x and "sell at the next market open" in x for x in texts)
+    assert any("#TITAN\n\n✅ CONFIRMED - if you bought before the close, you are in" in x and "🟢 BUY" in x for x in texts)
+
+
+def test_no_buy_before_close_alert_outside_the_window_or_when_switched_off(env, monkeypatch, tmp_path):
+    from swing import safety
+    monkeypatch.setattr(vantage, "CALL_FROM", 15 * 60 + 15)
+    monkeypatch.setattr(safety, "emergency_active", lambda: False)
+    now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize()
+    res = [("TITAN", {"buy": _buy(now)}, 5e8)]
+    assert vantage.close_call(now, now + pd.Timedelta(hours=14), res, {}, {}) == 0
+    assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=30), res, {}, {}) == 0
+    assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=20), res, {"vantage_close_call": False}, {}) == 0
+    assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=20), res, {"kill_switch": True}, {}) == 0
+    assert vantage.close_call(now, now + pd.Timedelta(hours=15, minutes=20), res, {}, {}) == 1

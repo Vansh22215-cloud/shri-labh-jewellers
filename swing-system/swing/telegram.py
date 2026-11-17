@@ -9,6 +9,8 @@ log = get_logger()
 
 
 def _chat_id(token):
+    if dry_run():
+        return "dry-run"
     r = requests.get(f"https://api.telegram.org/bot{token}/getUpdates", timeout=20).json()
     for u in reversed(r.get("result", [])):
         msg = u.get("message") or u.get("channel_post")
@@ -17,9 +19,34 @@ def _chat_id(token):
     return None
 
 
+class _DryResp:
+    status_code, text = 200, "ok"
+
+    def json(self):
+        return {"ok": True}
+
+
+def dry_run():
+    """Practice mode (SWING_DRY_RUN=1, used by scripts/dry_run_all.py): nothing reaches Telegram; every message is
+    written to data/private/dry_run_messages.txt instead."""
+    import os
+    return os.environ.get("SWING_DRY_RUN") == "1"
+
+
+def _dry_write(kind, data):
+    from .config import DATA
+    p = DATA / "private" / "dry_run_messages.txt"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, "a", encoding="utf-8") as f:
+        f.write(f"----- {kind}\n{data}\n")
+    return _DryResp()
+
+
 def _post(token, data, tries=4):
     """POST one message; retries network errors / Telegram rate limits (429) / server errors with backoff."""
     import time
+    if dry_run():
+        return _dry_write("message", data.get("text", ""))
     last = None
     for i in range(tries):
         try:
@@ -133,6 +160,9 @@ def send_document(settings, path, caption="", mime="text/html", label="file"):
     chat = str(settings.get("telegram_chat_id") or "").strip()
     if not token or not chat:
         return "Telegram not set up"
+    if dry_run():
+        _dry_write("document", f"{path} | {caption}")
+        return "report sent"
     try:
         with open(path, "rb") as fh:
             requests.post(f"https://api.telegram.org/bot{token}/sendDocument", data={"chat_id": chat, "caption": caption[:1000]},

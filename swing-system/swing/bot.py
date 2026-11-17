@@ -30,6 +30,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
         "/bought SYMBOL - you bought the system's tip (only bought tips count toward your risk limits)\n"
         "/skip SYMBOL - you did not take that tip\n"
+        "/basket - this month's basket of the 20 strongest stocks; /basket 20000 - money for it (adds quantities)\n"
         "/bought SYMBOL QTY PRICE [STOP] - record your own trade (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
@@ -86,6 +87,23 @@ def _score_text():
     for k, v in sc["by_verdict"].items():
         lines.append(f"• {k}: {v['tips']} tips, target hit {v['target_hit_pct']}%, stop hit {v['stop_hit_pct']}%")
     return "\n".join(lines)
+
+
+def basket_command(text):
+    """/basket -> the current monthly basket; /basket 20000 -> money for the basket (quantities in the monthly list)."""
+    from . import basket
+    parts = text.replace(",", "").split()
+    if len(parts) == 1:
+        return basket.show()
+    try:
+        amt = float(parts[1].replace("₹", ""))
+    except ValueError:
+        return "Use: /basket 20000  (the money you want in the monthly basket)"
+    if amt < 0 or amt > 1e9:
+        return "Use: /basket 20000  (the money you want in the monthly basket)"
+    basket.set_capital(amt)
+    return (f"✅ Monthly basket money set to ₹{amt:,.0f} (₹{amt / basket.TOP:,.0f} per stock). Quantities will be in "
+            "the next monthly list." if amt else "Monthly basket quantities switched off.")
 
 
 def trade_command(text):
@@ -308,6 +326,8 @@ def handle(token, owner, msg, capital):
         reply = _score_text()
     elif text.lower().startswith(("/bought", "/sold", "/trades", "/skip")):
         reply = trade_command(text)
+    elif text.lower().startswith("/basket"):
+        reply = basket_command(text)
     else:
         forwarded_tip = True
         tipcheck.LAST_TICKET = None

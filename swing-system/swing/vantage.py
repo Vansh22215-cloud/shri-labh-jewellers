@@ -258,6 +258,7 @@ def run(day=None, source="auto"):
     cal = calibration()
     confirmed = {sym for sym, st, tv in res if isinstance(st, dict) and st.get("buy") and not isinstance(tv, str)}
     live_today = close_followups(day, confirmed, s)          # ❌ for live alerts that did not hold
+    called = close_call_followups(day, confirmed, s)         # buy-now alerts: ✅ below, or ❌ sell at the next open
     sig = _load_signals()
     sent_b = sent_s = 0
     from . import safety
@@ -292,7 +293,10 @@ def run(day=None, source="auto"):
             sig = pd.concat([sig, pd.DataFrame([row]).astype(str)], ignore_index=True)
             _save_signals(sig)                              # ... then send
             msg = buy_message(sym, buy, lk, n, tv < 1e7, day)
-            if live_today.get(sym):
+            if called.get(sym):
+                msg = msg.replace(f"#{sym}\n\n", f"#{sym}\n\n✅ CONFIRMED - if you bought before the close, you are in. "
+                                                  "Missed it? Buy at the next open:\n", 1)
+            elif live_today.get(sym):
                 msg = msg.replace(f"#{sym}\n\n", f"#{sym}\n\n✅ CONFIRMED at the close (today's live signal held)\n", 1)
             telegram.send_reliable(s, msg, label="vantage indicator")
             sent_b += 1
@@ -472,7 +476,83 @@ def live_step(scanner, s=None):
         tmp.replace(LIVE_F)                                   # record first ...
         telegram.send_reliable(s, live_buy_message(sym, b, lk, n, b["close"], t, tv < 1e7), label="vantage indicator")
         sent += 1                                             # ... then send
-    return {"ok": True, "candidates": len(res), "live_buys": sent, "stops": stops, "time": f"{t:%H:%M:%S}"}
+    calls = close_call(scanner.day, t, res, s, cal)
+    return {"ok": True, "candidates": len(res), "live_buys": sent, "stops": stops, "close_calls": calls,
+            "time": f"{t:%H:%M:%S}"}
+
+
+# ============================================================================== BUY BEFORE THE CLOSE (round 3, C1)
+# 13-year test (vantage-ai/validation/IMPROVE3_RESULTS.md): buying at the signal day's close instead of the next
+# morning's open earned more per trade (recent years +3.24% vs +2.91%) and won more often (44.2% vs 42.5%) - the
+# overnight jump is avoided. So at ~3:20 pm every stock whose BUY signal is on gets one "buy now, before the close"
+# alert; the 3:40 pm scan confirms it or says to sell at the next open if it did not hold.
+CALL_F = PRIVATE / "vantage_closecall.csv"
+CALL_FROM, CALL_TO = 15 * 60 + 15, 15 * 60 + 29
+
+
+def _load_calls():
+    try:
+        return pd.read_csv(CALL_F, dtype=str)
+    except Exception:
+        return pd.DataFrame(columns=["day", "sym", "time", "price", "stop", "outcome"])
+
+
+def close_call_message(sym, b, lk, n, price, t, thin):
+    kind = "Rolling Candle Profile" if b["setup"] == "RCP" else b["setup"]
+    return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
+            f"🔔 BUY NOW - before the 3:30 pm close · {kind}{(' ' + b['tier']) if b.get('tier') else ''}"
+            + (f" · likely win {lk}%" if lk else "") +
+            f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · Stop-loss ₹{_n(b['stop'])}"
+            + _res_and_qty(sym, price, b["stop"], t)
+            + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
+            "\nBuying now (not tomorrow morning) earned more in the 13-year test. I'll confirm ✅ after the close.")
+
+
+def close_call(day, t, res, s, cal):
+    """Once per stock per day, between 3:15 and 3:29 pm: every stock with a BUY signal on gets the buy-now alert."""
+    from . import telegram, safety
+    if not s.get("vantage_close_call", True) or t is None or not (CALL_FROM <= t.hour * 60 + t.minute <= CALL_TO):
+        return 0
+    if s.get("kill_switch") or safety.emergency_active():
+        return 0
+    calls, d, sent = _load_calls(), str(day.date()), 0
+    for sym, st, tv in res:
+        b = st.get("buy") if isinstance(st, dict) else None
+        if not b or isinstance(tv, str) or tv < min_turnover(s):
+            continue
+        if ((calls["day"] == d) & (calls["sym"] == sym)).any():
+            continue
+        lk, n = likely(cal, b["setup"], b.get("tier", ""), b.get("score", 0))
+        row = {"day": d, "sym": sym, "time": f"{t:%H:%M}", "price": f"{b['close']:.2f}", "stop": f"{b['stop']:.2f}",
+               "outcome": ""}
+        calls = pd.concat([calls, pd.DataFrame([row]).astype(str)], ignore_index=True)
+        tmp = CALL_F.with_suffix(".tmp")
+        calls.to_csv(tmp, index=False)
+        tmp.replace(CALL_F)                                   # record first ...
+        telegram.send_reliable(s, close_call_message(sym, b, lk, n, b["close"], t, tv < 1e7), label="vantage indicator")
+        sent += 1                                             # ... then send
+    return sent
+
+
+def close_call_followups(day, confirmed, s=None):
+    """At the close scan: buy-now alerts that held -> {sym: True}; those that did not -> ❌ sell at the next open."""
+    from . import telegram
+    s = s or load_settings()
+    calls = _load_calls()
+    m = (calls["day"] == str(day.date())) & (calls["outcome"].fillna("").isin(["", "nan"]))
+    out = {}
+    for i, r in calls[m].iterrows():
+        out[r["sym"]] = r["sym"] in confirmed
+        calls.loc[i, "outcome"] = "confirmed" if out[r["sym"]] else "cancelled"
+    if out:
+        tmp = CALL_F.with_suffix(".tmp")
+        calls.to_csv(tmp, index=False)
+        tmp.replace(CALL_F)
+    for sym, ok in out.items():
+        if not ok:
+            telegram.send_reliable(s, f"#VANTAGE INDICATOR\n\n#{sym}\n\n❌ The 3:20 pm buy signal did not hold at the "
+                                      "close. If you bought it, sell at the next market open.", label="vantage indicator")
+    return out
 
 
 def close_followups(day, confirmed, s=None):

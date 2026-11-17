@@ -69,3 +69,12 @@ allow_auto_promotion: false
 ai_picks: false     # owner 17 Nov: switched off (small edge after costs, BACKTEST_VALIDATION.md); open AI tips still get exit alerts
 ai_top: 5            # new AI picks per evening at most
 ai_max_open: 10      # open AI picks at once at most
+
+# Round 3 (18 Nov): ~3:20 pm "BUY NOW - before the close" alert for VANTAGE signals (buying at the close earned more
+# than buying the next morning in the 13-year test).
+vantage_close_call: true
+# Round 4 (18 Nov): monthly basket of the 20 strongest NSE stocks, sent after the last trading day of each month.
+monthly_basket: true
+# Money for the basket (rupees). 0 = list without quantities. Telegram /basket 20000 also sets it.
+basket_capital: 0
+

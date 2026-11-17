@@ -923,3 +923,37 @@ The pre-registered tests (`vantage-ai/validation/IMPROVE_PREREGISTRATION.md`, re
   - Proposed (awaiting approval): keep the signal, show the results date, and halve the quantity.
 - **D123 (owner approved):** VANTAGE BUYs with company results due within 5 trading days are still sent. The message shows "📅 Results on <date> (in N trading days) - half quantity", and the quantity uses half the risk (0.5%). Results dates come from `data/events/earnings` (506 companies; no change for others).
 - **D124:** the approved results rule (D123) is extended to every stock tip (dip-buy, positional, breakout, others) in `live_engine.issue_tip`: results within 5 trading days means the date is shown and the quantity is halved. Option and intraday tips are unchanged.
+
+## D125 - 2026-11-18 - 24-hour push: buy before the close (round 3 passed, applied)
+The owner shortened the research push to 24 hours: "do whatever it needs and make the most best for me".
+- **Test:** `vantage-ai/validation/IMPROVE3_PREREGISTRATION.md` and `IMPROVE3_RESULTS.md`. Buying VANTAGE signals at the signal day's close beat the next-morning open in both periods.
+  - Holdout: +3.24% vs +2.91% per trade, 44.2% vs 42.5% won.
+  - Development: +4.31% vs +4.08%.
+- **Applied:** every ~3 minutes between 3:15 and 3:29 pm, each stock with a VANTAGE BUY on today's nearly finished candle gets one "🔔 BUY NOW - before the 3:30 pm close" alert. It carries the price, stop, quantity and results note, and goes only to stocks of ₹2 cr/day or more.
+- **At 3:40 pm:**
+  - If the signal held: "✅ CONFIRMED - if you bought before the close, you are in. Missed it? Buy at the next open".
+  - If it did not hold: "❌ ... sell at the next market open".
+- **Records:** `data/private/vantage_closecall.csv` is written before sending.
+- **Switch:** `vantage_close_call`.
+- **Limits:** no change to risk limits or sizing. The kill switch and safety stop block these alerts.
+- Needs the day's Kite login, like the other live alerts.
+
+## D126 - 2026-11-18 - Monthly basket of the 20 strongest stocks (round 4 passed, applied)
+- **Test:** M3 = the NSE-momentum-index-style ranking of the point-in-time top-300, 20 stocks with equal money, monthly, cash when NIFTY is below its 200-day average. It passed every pre-registered condition.
+  - Holdout: 19.5% a year vs NIFTY 7.4%, worst fall 8.9% vs 14.8%.
+  - Development: 24.6% vs 12.0%, worst fall 34.2% vs 29.3%.
+  - It beat NIFTY in 71% of calendar years.
+  - M1 and M2 (without the cash rule) failed on the worst-fall condition.
+- **Applied:** `swing/basket.py`, daemon job `basket` on weekday evenings at 7:05 pm or later. It sends once a month, after the last weekday of the month; if that day is a holiday, it sends on the next trading day. The first basket goes out at the first run.
+  - The message lists SELL, BUY and KEEP for the next open.
+  - The ETF/fund exclusion matches the test.
+- **Quantities:** only when the owner sets the money with `/basket 20000` in Telegram, or `basket_capital` in settings.yaml. Otherwise there are no quantities. Capital is never guessed.
+- **Kill switch:** sells only.
+- **No stop-loss** (as tested). The message says plainly that it can fall 10–30% in bad years.
+- **Switch:** `monthly_basket`.
+
+## D127 - 2026-11-18 - Round 5: new short-term setups failed (not adopted)
+Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades a week but earn about zero after costs (holdout −0.12%, −0.23% and +0.18% per trade). See `IMPROVE5_RESULTS.md`. Not adopted.
+
+## D128 - 2026-11-18 - Practice mode
+`SWING_DRY_RUN=1` writes every Telegram message to `data/private/dry_run_messages.txt` instead of sending it. `scripts/dry_run_all.py` runs every daily job on a copy of the system in that mode, for end-to-end checks without touching the owner's chat or data.

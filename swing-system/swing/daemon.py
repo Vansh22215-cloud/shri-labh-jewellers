@@ -61,7 +61,7 @@ def key(job, t=None):
         slot = current_scan_slot(t)
         return None if slot is None else f"scan {slot:%H:%M} {t:%Y-%m-%d}"
     # a manual run outside the job's own time is not recorded (so it never blocks the real evening run)
-    if job in ("nightly", "company") and (t.weekday() >= 5 or t.hour < 18):
+    if job in ("nightly", "company", "basket") and (t.weekday() >= 5 or t.hour < 18):
         return None
     if job == "research" and (t.weekday() >= 5 or t.hour < 20):
         return None
@@ -118,6 +118,11 @@ def due(t=None):
     if wd < 5 and t >= t.replace(hour=20, minute=17, second=0) and not st.get(key("research", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=21, minute=30)):
         out.append("research")
+    if wd < 5 and t >= t.replace(hour=19, minute=5, second=0) and not st.get(key("basket", t)) \
+            and (st.get(key("nightly", t)) or t >= t.replace(hour=20, minute=0)) and "nightly" not in out:
+        from .basket import due as basket_due
+        if basket_due(t):
+            out.append("basket")                   # monthly basket of the 20 strongest stocks (round 4, M3)
     if wd == 5 and t >= t.replace(hour=10, minute=17, second=0) and not st.get(key("weekly", t)):
         out.append("weekly")
     return out
@@ -138,7 +143,7 @@ def jobs_today_line(t=None):
             + (f" (missed {', '.join(missed)} - GitHub did not start a run in time)" if missed else "") + ".")
 
 
-SCRIPTS = {"vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py"}
+SCRIPTS = {"vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py", "basket": "run_basket.py"}
 
 
 _JOB = {"thread": None, "name": None}
