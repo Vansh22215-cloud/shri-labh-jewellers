@@ -479,7 +479,7 @@ def _updates_problem(token, owner, res, offset):
         if res.get("ok"):
             return res
     global _READ_FAIL_SINCE, TOKEN_REFUSED_SINCE
-    if code == 401:                    # bot key not accepted (e.g. the owner rotated it): the daemon hands over
+    if code in (401, 404):             # bot key not accepted (404 = malformed key) (e.g. the owner rotated it): the daemon hands over
         if not TOKEN_REFUSED_SINCE:
             from .config import token_shape
             log.warning("Bot: the bot key in GitHub Secrets was refused. Its format: %s", token_shape(token))
