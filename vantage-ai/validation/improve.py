@@ -224,7 +224,7 @@ def analyse():
     key = set(zip(base["sym"], base["signal"]))
     for k in ("D1", "D2"):
         V = frame(f"{HERE}/improve_trades_{k}.csv")
-        add = V[[(s, d) not in key for s, d in zip(V["sym"], V["signal"])] & (V["setup"] == "Dip-buy")]
+        add = V[np.array([(s, d) not in key for s, d in zip(V["sym"], V["signal"])]) & (V["setup"] == "Dip-buy").values]
         ad, ah = split(add)
         sd, sh = stats(ad), stats(ah)
         ok = (sh.get("n", 0) > 0 and sh["win"] >= 70 and sh["exp"] >= 1.5 and sd.get("n", 0) > 0 and sd["win"] >= 70
