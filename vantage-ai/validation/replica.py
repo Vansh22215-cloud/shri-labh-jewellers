@@ -9,9 +9,9 @@ script waits 260 bars), tie handling in pivots, data-vendor price differences.""
 import numpy as np
 import pandas as pd
 
-P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePullback=True, minScore=70,
+P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePullback=False, minScore=70,
          strongScore=80, brkLen=50, minRvol=1.5, maxExtAtr=3.0, minRoomR=1.5, minGapBars=5, maxStopPct=15.0,
-         exitMode="Combined", atrLen=14, stopMult=3.0, trailMult=4.0, t1R=2.0, t2R=3.0, useMarket=True, swingLen=5,
+         exitMode="Fixed risk/reward", atrLen=14, stopMult=3.0, trailMult=4.0, t1R=2.0, t2R=3.0, useMarket=True, swingLen=5,
          wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0)
 
 

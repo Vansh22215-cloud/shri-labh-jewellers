@@ -38,12 +38,13 @@ import replica  # noqa: E402
 HERE = "/home/user/shri-labh-jewellers/vantage-ai/validation"
 BENCH = None
 MODE = "Combined"
+EXTRA = {}
 
 
 def _one(args):
     sym, d, m, src = args
     try:
-        tr = replica.run(d, BENCH, allow=m, p={"exitMode": MODE})
+        tr = replica.run(d, BENCH, allow=m, p=dict(EXTRA, exitMode=MODE))
         for x in tr:
             x.update(sym=sym, src=src)
         return tr
@@ -100,7 +101,7 @@ def single_stocks(data_by, ranks_month):
                 continue
             d = data_by[sym]
             d = d[d.index >= "2013-01-01"]
-            T = frame(replica.run(d, BENCH, p={"exitMode": MODE}))
+            T = frame(replica.run(d, BENCH, p=dict(EXTRA, exitMode=MODE)))
             pnl = float(((T["exit"] - T["entry"]) * T["qty"] - 0.00175 * (T["exit"] + T["entry"]) * T["qty"]).sum()) if len(T) else 0.0
             s0 = d[d.index >= "2014-01-01"]
             bh = 50000 * (float(s0["close"].iloc[-1]) / float(s0["open"].iloc[0]) - 1)
@@ -123,7 +124,10 @@ if __name__ == "__main__":
     member = pd.DataFrame({s: pd.Series(m, index=d.index) for s, d, m, src in data}).reindex(raw.index).fillna(False).astype(bool)
     panel = (raw, member)
     res = {"_method": __doc__}
-    for mode in ("Combined", "ATR trailing stop", "Fixed risk/reward"):
+    final = "--final" in sys.argv          # the published defaults (decided by the pre-registered rules above)
+    if final:
+        EXTRA = {"usePullback": False}
+    for mode in (("Fixed risk/reward",) if final else ("Combined", "ATR trailing stop", "Fixed risk/reward")):
         MODE = mode
         trades = []
         with Pool(4) as p:
@@ -131,11 +135,11 @@ if __name__ == "__main__":
                 trades += r
         errs = [t for t in trades if "error" in t]
         T = frame(trades)
-        T.to_csv(f"{HERE}/trades_{mode.split()[0]}.csv", index=False)
+        T.to_csv(f"{HERE}/trades_{'FINAL' if final else mode.split()[0]}.csv", index=False)
         rep = iv.report_strategy(T, panel, BENCH)
         ok, chk, beat = verdict(rep)
         rep.update(PASS=ok, checks=chk, years_beating_avg_pct=beat, errors=len(errs), trades_per_year=round(len(T) / 13.9, 1))
-        if mode == "Combined":
+        if mode == ("Fixed risk/reward" if final else "Combined"):
             rep["breakdowns"] = breakdowns(T, ranks)
             for st, g in T.groupby("setup"):
                 r2 = iv.report_strategy(g, panel, BENCH)
@@ -148,4 +152,4 @@ if __name__ == "__main__":
         print(f"{mode}: {'PASS' if ok else 'fail'} n={a.get('trades')} win={a.get('win_pct')} exp={a.get('expectancy_pct')} "
               f"ci={a.get('expectancy_ci95_pct')} pf={a.get('profit_factor')} holdout={rep['out_of_sample_2023_11_on'].get('expectancy_pct')} "
               f"beat={beat}% errs={len(errs)}", file=sys.stderr)
-    json.dump(res, open(f"{HERE}/results.json", "w"), indent=1, default=str)
+    json.dump(res, open(f"{HERE}/{'results_final' if final else 'results'}.json", "w"), indent=1, default=str)

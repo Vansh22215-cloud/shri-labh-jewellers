@@ -20,8 +20,9 @@ maxAllocPct = input.float(25, "Max capital per trade (%)", minval = 1, maxval = 
 G_ENT = "2 · Entries"
 useBreakout = input.bool(true, "Type 1: Breakout entries", group = G_ENT,
      tooltip = "Trend up + close above the highest high of the lookback period on above-average volume.")
-usePullback = input.bool(true, "Type 2: Pullback entries", group = G_ENT,
-     tooltip = "Strong uptrend + dip to the 20-EMA / demand zone on lighter volume + confirmed recovery candle.")
+usePullback = input.bool(false, "Type 2: Pullback entries (OFF: failed validation)", group = G_ENT,
+     tooltip = "Strong uptrend + dip to the 20-EMA / demand zone on lighter volume + confirmed recovery candle. OFF by " +
+     "default: it failed the pre-registered 13-year NSE test (see TEST_RESULTS.md). Switch on only for your own testing.")
 minScore    = input.int(70, "Minimum setup score for BUY", minval = 50, maxval = 100, group = G_ENT,
      tooltip = "A BUY also needs a valid setup and all safety filters. The score alone never creates a BUY.")
 strongScore = input.int(80, "Strong-setup score", minval = 60, maxval = 100, group = G_ENT)
@@ -37,9 +38,10 @@ minGapBars  = input.int(5, "Min bars between an exit and the next BUY", minval =
 maxStopPct  = input.float(15, "Skip if the stop is more than X% below entry", minval = 2, maxval = 50, group = G_ENT)
 
 G_EXT = "3 · Exits"
-exitMode    = input.string("Combined", "Exit mode", options = ["ATR trailing stop", "Fixed risk/reward", "Combined"],
-     group = G_EXT, tooltip = "ATR trailing stop: protective + trailing stop only.  Fixed risk/reward: stop or Target 2.  " +
-     "Combined (default): protective + trailing stop, plus an exit on confirmed bearish deterioration.")
+exitMode    = input.string("Fixed risk/reward", "Exit mode", options = ["ATR trailing stop", "Fixed risk/reward", "Combined"],
+     group = G_EXT, tooltip = "Fixed risk/reward (default, the only mode that passed the 13-year NSE test): protective " +
+     "stop or Target 2.  ATR trailing stop: protective + trailing stop.  Combined: trailing stop + exits on bearish " +
+     "deterioration (cut winners too early in testing). See TEST_RESULTS.md.")
 atrLen      = input.int(14, "ATR length", minval = 5, maxval = 50, group = G_EXT)
 stopMult    = input.float(3.0, "Initial stop (× ATR below entry)", minval = 0.5, maxval = 10, step = 0.25, group = G_EXT)
 trailMult   = input.float(4.0, "Trailing stop (× ATR below the highest high since entry)", minval = 0.5, maxval = 10,
