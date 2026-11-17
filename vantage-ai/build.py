@@ -39,11 +39,46 @@ def calibrated(core):
     return core
 
 
+def _code_part(line):
+    """The line without a trailing // comment (ignoring // inside strings)."""
+    q = None
+    for i, ch in enumerate(line):
+        if q:
+            if ch == q:
+                q = None
+        elif ch in "\"'":
+            q = ch
+        elif line.startswith("//", i):
+            return line[:i]
+    return line
+
+
+def unwrap(text):
+    """Join every wrapped continuation line (indent not a multiple of 4) onto its statement, so each statement is ONE
+    line. TradingView's mobile editor can change leading spaces on paste, which breaks Pine's line-wrapping rule
+    (owner 17 Nov: 'Syntax error at input G_CAP')."""
+    out = []
+    for line in text.split("\n"):
+        ind = len(line) - len(line.lstrip(" "))
+        if line.strip() and not line.lstrip().startswith("//") and ind % 4 != 0 and out:
+            prev = out[-1]
+            assert _code_part(prev) == prev, "a wrapped statement follows a line with a comment: " + prev
+            out[-1] = prev.rstrip() + " " + line.strip()
+        else:
+            out.append(line)
+    res = "\n".join(out)
+    for ln in res.split("\n"):
+        ind = len(ln) - len(ln.lstrip(" "))
+        assert not (ln.strip() and not ln.lstrip().startswith("//") and ind % 4), "continuation left: " + ln
+    return res
+
+
 def build():
     global CORE
     CORE = calibrated(CORE)
     ind = HEAD_IND + CORE + (HERE / "src" / "indicator_tail.pine").read_text()
     st = HEAD_STR + CORE + (HERE / "src" / "strategy_tail.pine").read_text()
+    ind, st = unwrap(ind), unwrap(st)
     (HERE / "VANTAGE_AI_Indicator.pine").write_text(ind)
     (HERE / "VANTAGE_AI_Strategy.pine").write_text(st)
     return ind, st
