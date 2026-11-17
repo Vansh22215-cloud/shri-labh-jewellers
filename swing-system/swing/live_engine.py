@@ -671,7 +671,7 @@ def _kind(r):
         return "intraday"
     if ty == "FNO":
         return "F&O"
-    return {"HP": "dip-buy", "RCP": "positional", "AI": "AI pick", "SWING": "system swing",
+    return {"HP": "dip-buy", "RCP": "positional", "BRK": "breakout", "AI": "AI pick", "SWING": "system swing",
             "A3": "system swing"}.get(st, "discovered strategy" if st.startswith("DS") else "swing")
 
 

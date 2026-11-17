@@ -329,7 +329,7 @@ def handle(token, owner, msg, capital):
     return owner
 
 
-KIND = {"HP": "Dip-buy", "RCP": "Positional", "AI": "AI pick"}
+KIND = {"HP": "Dip-buy", "RCP": "Positional", "BRK": "Breakout", "AI": "AI pick"}
 
 
 def tip_card(r):

@@ -483,11 +483,12 @@ def run():
             log.warning("evening job '%s' failed: %s: %s", name, type(e).__name__, str(e)[:200])
             return None
 
-    from . import high_prob, positional, ml_ranker, discovery, autopilot
+    from . import high_prob, positional, ml_ranker, discovery, autopilot, breakout
     from .live_engine import expire_old_intraday
     _job("expire old intraday tips", lambda: expire_old_intraday(str(pd.Timestamp.now().date() + pd.Timedelta(days=1))))
     _job("dip-buy exits", lambda: high_prob.evening_exits(day))
     _job("positional exits", lambda: positional.evening_exits(day))
+    _job("breakout exits", lambda: breakout.evening_exits(day))
     _job("AI exits", lambda: ml_ranker.evening_exits(day))
     _job("discovered exits", lambda: discovery.evening_exits(day))
     if new_ok:
@@ -495,6 +496,8 @@ def run():
         log.info("Evening: %s high-probability tip(s) sent", n)
         n = _job("positional tips", lambda: positional.send_evening(day, settings))
         log.info("Evening: %s positional tip(s) sent", n)
+        n = _job("breakout tips", lambda: breakout.send_evening(day, settings))
+        log.info("Evening: %s breakout tip(s) sent", n)
         n = _job("AI picks", lambda: ml_ranker.send_evening(day, settings))
         log.info("Evening: %s AI pick(s) sent", n)
         _job("discovery search", lambda: discovery.maybe_search())

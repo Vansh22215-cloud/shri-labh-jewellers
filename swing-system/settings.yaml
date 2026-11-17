@@ -55,6 +55,7 @@ risk_limits:
 
 # D104 positional trades (Rolling Candle Profile BUY near the 52-week high; exit on its SELL signal)
 positional_tips: true
+breakout_tips: true          # D118: 52-week-high + tight-range breakouts (passed the pre-registered 13-year test)
 positional_max_new: 0        # 0 = no limit (owner's choice D106)
 positional_max_open: 0       # 0 = no limit
 

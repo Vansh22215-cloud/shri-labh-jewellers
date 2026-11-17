@@ -841,3 +841,27 @@ Owner: "Now on there will be no limits on this... give tips, if I will buy I wil
 - `/skip SYMBOL`: the tip is still tracked (the live record stays honest) but sends no exit alerts.
 - Every tip ends with "Bought it? Reply /bought X · Not taking it? /skip X".
 - Unchanged: per-tip checks (1% risk, order ≤ 25% of capital, valid numbers), the kill switch, the safety stop, and never the same stock twice while its tip is open.
+
+## D118 - 2026-11-17 - New trade finder: BREAKOUT tips (52-week-high + tight-range breakouts)
+Owner: "Find other smarter and best ways of finding trades, and do tests."
+`validation/new_strategies_research.py` tested 6 published swing methods with textbook settings. The setup:
+- No tuning on our data.
+- The same independent simulator as BACKTEST_VALIDATION.md: delisted stocks included, entry at the next open, gap-adjusted stops, 0.35% costs.
+- A pass bar committed **before** the first run: CI above 0, out-of-sample positive, beats the average stock in ≥ 60% of years, profit factor ≥ 1.3, positive at 0.60% costs.
+
+| Method | Trades | Win% | Avg/trade | Out-of-sample | Years beating avg stock | Verdict |
+|---|---|---|---|---|---|---|
+| 52-week-high breakout on volume (BRK52) | 4,799 | 39.0 | +2.94% | +2.09% | 79% | **PASS** |
+| Minervini trend template + breakout | 5,261 | 33.3 | +2.24% | +0.70% | 79% | PASS (not used: weak recently, overlaps) |
+| Tight-range (VCP) breakout | 3,207 | 37.9 | +2.56% | +1.76% | 64% | **PASS** |
+| Leader pullback to 20-day EMA | 10,127 | 34.8 | +0.51% | +0.31% | 50% | fail |
+| Gap-and-go | 321 | 48.0 | +0.85% | +1.17% | 43% | fail (CI includes 0) |
+| Turtle 55-day breakout | 8,535 | 29.3 | +2.38% | +0.94% | 36% | fail (not better than holding stocks) |
+
+**Decision:** new "Breakout trade" evening tips, `swing/breakout.py` (BRK52 or VCP).
+- **Exit:** first close below the 50-day average, a 3 ATR safety stop watched live, or 60 days at most.
+- **Sizing:** rank 6/10, 1% risk.
+- **Combined result** (one trade per stock at a time): 5,434 trades, 38% in profit, average win +19.5%, average loss −7.5%, +2.85% per trade; last 3 years +2.03%. About 390 a year (1–2 per trading day), with 14–17% overlap with positional.
+- **Autopilot:** pauses it for 60 days if its live record turns negative over 30+ tips. Setting: `breakout_tips`.
+
+`tests/test_breakout.py` proves the live rule equals the tested rule day by day, with no look-ahead.
