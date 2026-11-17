@@ -163,12 +163,31 @@ def _n(x):
     return f"{x:,.2f}"
 
 
+def qty_line(entry, stop, settings=None):
+    """Owner 17 Nov: quantity in every BUY message - the system's own sizing (1% risk of the stated capital, at most
+    25% of capital in one stock). Never a guessed capital: no line when capital is not set."""
+    from . import safety
+    s = settings or load_settings()
+    ok, _why = safety.configured(s)
+    if not ok:
+        return ""
+    cap = float(s["capital"])
+    L = safety.limits(s)
+    q = safety.size(entry, stop, s)
+    if q < 1:
+        return (f"\n📦 Qty: 0 - one share does not fit your limits (₹{cap:,.0f} capital, "
+                f"{L['risk_per_trade_pct']:g}% risk, max {L['max_order_pct']:g}% in one stock) - skip")
+    return (f"\n📦 Qty: {q} shares ≈ ₹{q * entry:,.0f} · max loss ≈ ₹{q * (entry - stop):,.0f} "
+            f"({L['risk_per_trade_pct']:g}% of ₹{cap:,.0f})")
+
+
 def buy_message(sym, b, lk, n, thin):
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"🟢 BUY · {('Rolling Candle Profile' if b['setup'] == 'RCP' else b['setup'])}"
             f"{(' ' + b['tier']) if b.get('tier') else ''}" + (f" · likely win {lk}% ({n} past NSE signals)" if lk else "") +
             f"\nBuy at the next market open ≈ ₹{_n(b['close'])} · Stop-loss ₹{_n(b['stop'])}"
             + (f" · Target ₹{_n(b['t2'])}" if b.get("t2") == b.get("t2") and b.get("t2") else "")
+            + qty_line(b["close"], b["stop"])
             + ("\n⚠️ Thinly traded stock - check the bid/ask before buying" if thin else ""))
 
 
@@ -367,6 +386,7 @@ def live_buy_message(sym, b, lk, n, price, t, thin):
             f"⚡ LIVE BUY signal · {kind}{(' ' + b['tier']) if b.get('tier') else ''}"
             + (f" · likely win {lk}% if it holds to the close" if lk else "") +
             f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · Stop-loss ₹{_n(b['stop'])}"
+            + qty_line(price, b["stop"])
             + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
             "\n⏳ Forming candle: I'll confirm ✅ or cancel ❌ right after the 3:30 pm close.")
 

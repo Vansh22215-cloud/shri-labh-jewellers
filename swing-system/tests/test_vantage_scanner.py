@@ -182,3 +182,14 @@ def test_index_without_volume_is_kept_in_the_snapshot(monkeypatch, tmp_path):
                             "DEAD": {"open": 10, "high": 10, "low": 10, "last": 10, "volume": 0}})
     t, bars = vantage.read_snapshot()
     assert "NIFTY50" in bars and "DEAD" not in bars
+
+
+def test_buy_messages_carry_the_quantity():
+    from swing import safety
+    s = {"capital": 45000, "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct": 25}}
+    assert "📦 Qty: 3 shares ≈ ₹4,272 · max loss ≈ ₹423 (1% of ₹45,000)" in vantage.qty_line(1424.0, 1283.0, s)
+    assert "Qty: 0" in vantage.qty_line(30000.0, 29000.0, s)            # one share > 25% of capital
+    b = {"setup": "RCP", "tier": "", "score": 80, "close": 1424.0, "stop": 1283.0, "t2": float("nan")}
+    assert "📦 Qty:" in vantage.buy_message("ICICIBANK", b, 46, 5510, False)
+    assert "📦 Qty:" in vantage.live_buy_message("ICICIBANK", b, 46, 5510, 1424.0, pd.Timestamp("2026-11-18 11:42"), False)
+    assert safety.size(1424.0, 1283.0, s) == 3
