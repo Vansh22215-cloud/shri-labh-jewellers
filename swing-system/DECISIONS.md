@@ -922,3 +922,4 @@ The pre-registered tests (`vantage-ai/validation/IMPROVE_PREREGISTRATION.md`, re
   - Data: signals with results due within 5 trading days still earn money, but about half (+1.7% vs +3.5% per trade in the last 3 years).
   - Proposed (awaiting approval): keep the signal, show the results date, and halve the quantity.
 - **D123 (owner approved):** VANTAGE BUYs with company results due within 5 trading days are still sent. The message shows "📅 Results on <date> (in N trading days) - half quantity", and the quantity uses half the risk (0.5%). Results dates come from `data/events/earnings` (506 companies; no change for others).
+- **D124:** the approved results rule (D123) is extended to every stock tip (dip-buy, positional, breakout, others) in `live_engine.issue_tip`: results within 5 trading days means the date is shown and the quantity is halved. Option and intraday tips are unchanged.

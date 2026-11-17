@@ -614,6 +614,26 @@ def signal_id(row):
     return hashlib.sha1(key.encode()).hexdigest()[:10]
 
 
+def results_adjust(row, msg):
+    """D124 (owner-approved rule D123 extended to every tip): a stock tip whose company results fall within the next 5
+    trading days keeps coming, with the date shown and HALF the quantity (such tips earned about half as much in
+    the 13-year test). Options / intraday tips are unchanged."""
+    if str(row.get("type")) != "NORMAL":
+        return msg
+    try:
+        from .vantage import results_soon
+        r = results_soon(str(row["symbol"]), pd.Timestamp(str(row.get("time"))[:10]))
+        q = int(float(row.get("qty") or 0))
+    except Exception:
+        return msg
+    if r is None or q < 1:
+        return msg
+    half = max(1, q // 2)
+    row["qty"] = half
+    msg = msg.replace(f"Qty {q} ", f"Qty {half} ").replace(f"Qty {q}\n", f"Qty {half}\n")
+    return msg + f"\n\n📅 Results on {r:%d %b} - half quantity ({half} instead of {q}): tips just before results earned about half as much in testing."
+
+
 def issue_tip(row, msg, settings=None):
     """THE way every new trade recommendation leaves the system (audit 17 Nov):
     1) safety gate (kill switch, safety stop, configured capital/risk, valid numbers, portfolio limits)
@@ -626,6 +646,7 @@ def issue_tip(row, msg, settings=None):
     row = dict(row)
     row.setdefault("time", str(now_ist())[:16])
     row["sid"] = signal_id(row)
+    msg = results_adjust(row, msg)                 # D124: results coming -> date shown, half quantity
     ok, why = safety.check_new_entry(row, s)
     if not ok:
         safety.record_skip(row, why)

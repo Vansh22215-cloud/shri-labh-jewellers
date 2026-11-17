@@ -106,3 +106,13 @@ def test_kite_connected_notice_once_a_day(monkeypatch, tmp_path):
     assert le.late_login_notice_due(pd.Timestamp("2026-11-17 10:30"))
     assert not le.late_login_notice_due(pd.Timestamp("2026-11-17 12:23"))     # next run hand-over: no repeat
     assert le.late_login_notice_due(pd.Timestamp("2026-11-18 10:00"))
+
+
+def test_tip_before_results_gets_half_quantity(monkeypatch):
+    from swing import vantage
+    monkeypatch.setattr(vantage, "results_soon", lambda sym, day, days=5: pd.Timestamp("2026-11-20"))
+    sent = _sent(monkeypatch)
+    S = {"capital": 45000, "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct": 25}}
+    assert le.issue_tip(_tip(time="2026-11-17 18:41", qty=40), "• Positional trade\n⭐ RANK - 6/10 · Qty 40 · stuff", S)
+    assert "Qty 20 ·" in sent[0][1] and "📅 Results on 20 Nov - half quantity (20 instead of 40)" in sent[0][1]
+    assert int(le.load_tips()["qty"].iloc[0]) == 20
