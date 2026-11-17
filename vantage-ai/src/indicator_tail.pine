@@ -49,9 +49,8 @@ cMid  = color.new(#FFD740, 0)
 cTxt  = color.new(#E6EDF3, 0)
 cDim  = color.new(#8B949E, 0)
 
-dRow(int r, string k, string v, color c) =>
-    table.cell(dash, 0, r, k, text_color = cDim, text_size = txtSize, text_halign = text.align_left)
-    table.cell(dash, 1, r, v, text_color = c, text_size = txtSize, text_halign = text.align_right)
+dK(int r, string k) => table.cell(dash, 0, r, k, text_color = cDim, text_size = txtSize, text_halign = text.align_left)
+dV(int r, string v, color c) => table.cell(dash, 1, r, v, text_color = c, text_size = txtSize, text_halign = text.align_right)
 
 stockTrend = close > ema50 and ema50 > ema200 ? "BULLISH" : close < ema50 and ema50 < ema200 ? "BEARISH" : "SIDEWAYS"
 status = buyNow ? "BUY (next open)" : sellNow ? "SELL (exit)" : inPos ? "HOLD" : score >= minScore ? "WAIT – no trigger yet" :
@@ -63,56 +62,84 @@ if showDash and barstate.islast
     table.clear(dash, 0, 0, 1, 23)
     table.cell(dash, 0, 0, "VANTAGE AI", text_color = color.new(#58A6FF, 0), text_size = txtSize, text_halign = text.align_left)
     table.cell(dash, 1, 0, "NSE positional · long-only", text_color = cDim, text_size = txtSize, text_halign = text.align_right)
-    dRow(1, "Stock", syminfo.ticker, cTxt)
-    dRow(2, "Timeframe", timeframe.period, timeframe.isdaily ? cTxt : cMid)
-    dRow(3, "Market regime", mktRegime, mktRegime == "BULLISH" ? cGood : mktRegime == "BEARISH" ? cBad : cMid)
-    dRow(4, "Stock trend", stockTrend, stockTrend == "BULLISH" ? cGood : stockTrend == "BEARISH" ? cBad : cMid)
-    dRow(5, "Momentum", ptMom >= 12 ? "STRONG" : "WEAK", ptMom >= 12 ? cGood : cBad)
-    dRow(6, "Relative strength", not rsKnown ? "N/A" : rsOut ? "OUTPERFORMING" : "UNDERPERFORMING", not rsKnown ? cDim : rsOut ? cGood : cBad)
-    dRow(7, "Volume", ptVol >= 6 ? "CONFIRMED" : "WEAK", ptVol >= 6 ? cGood : cBad)
-    dRow(8, "Market structure", structDir == 1 ? "BULLISH" : structDir == -1 ? "BEARISH" : "NEUTRAL",
+    dK(1, "Stock")
+    dV(1, syminfo.ticker, cTxt)
+    dK(2, "Timeframe")
+    dV(2, timeframe.period, timeframe.isdaily ? cTxt : cMid)
+    dK(3, "Market regime")
+    dV(3, mktRegime, mktRegime == "BULLISH" ? cGood : mktRegime == "BEARISH" ? cBad : cMid)
+    dK(4, "Stock trend")
+    dV(4, stockTrend, stockTrend == "BULLISH" ? cGood : stockTrend == "BEARISH" ? cBad : cMid)
+    dK(5, "Momentum")
+    dV(5, ptMom >= 12 ? "STRONG" : "WEAK", ptMom >= 12 ? cGood : cBad)
+    dK(6, "Relative strength")
+    dV(6, not rsKnown ? "N/A" : rsOut ? "OUTPERFORMING" : "UNDERPERFORMING", not rsKnown ? cDim : rsOut ? cGood : cBad)
+    dK(7, "Volume")
+    dV(7, ptVol >= 6 ? "CONFIRMED" : "WEAK", ptVol >= 6 ? cGood : cBad)
+    dK(8, "Market structure")
+    dV(8, structDir == 1 ? "BULLISH" : structDir == -1 ? "BEARISH" : "NEUTRAL",
          structDir == 1 ? cGood : structDir == -1 ? cBad : cMid)
-    dRow(9, "Setup score", str.tostring(score) + "/100", score >= strongScore ? cGood : score >= minScore ? cMid : score >= 50 ? cTxt : cBad)
-    dRow(10, "  why", "Trend " + str.tostring(ptTrend, "#.#") + "/25 · Mom " + str.tostring(ptMom, "#") + "/20 · Str " +
+    dK(9, "Setup score")
+    dV(9, str.tostring(score) + "/100", score >= strongScore ? cGood : score >= minScore ? cMid : score >= 50 ? cTxt : cBad)
+    dK(10, "  why")
+    dV(10, "Trend " + str.tostring(ptTrend, "#.#") + "/25 · Mom " + str.tostring(ptMom, "#") + "/20 · Str " +
          str.tostring(ptStr, "#") + "/20", cDim)
-    dRow(11, "", "RS " + str.tostring(ptRS, "#.#") + "/15 · Vol " + str.tostring(ptVol, "#.#") + "/10 · Mkt " +
+    dK(11, "")
+    dV(11, "RS " + str.tostring(ptRS, "#.#") + "/15 · Vol " + str.tostring(ptVol, "#.#") + "/10 · Mkt " +
          str.tostring(ptMkt, "#") + "/10", cDim)
-    dRow(12, "Trade status", status, statusCol)
+    dK(12, "Trade status")
+    dV(12, status, statusCol)
     r = 13
     if inPos or pendingEntry
-        dRow(r, "Signal", setupType + tierTxt + " · likely win " + str.tostring(posLikely) + "%", cGood)
+        dK(r, "Signal")
+        dV(r, setupType + tierTxt + " · likely win " + str.tostring(posLikely) + "%", cGood)
         r += 1
-    dRow(r, "This stock's record", nClosed > 0 ? str.tostring(nWins) + " of " + str.tostring(nClosed) + " past signals won" : "no closed signals yet", cDim)
+    dK(r, "This stock's record")
+    dV(r, nClosed > 0 ? str.tostring(nWins) + " of " + str.tostring(nClosed) + " past signals won" : "no closed signals yet", cDim)
     r += 1
     if inPos or pendingEntry
-        dRow(r,     "Entry",  inPos ? f(entryPx) : "next open ≈ " + f(planEntry), cTxt)
-        dRow(r + 1, "Stop-loss (initial)", f(initStop), cBad)
-        dRow(r + 2, "Stop now (trailing)", f(stopLvl), cBad)
-        dRow(r + 3, "Target / exit", na(tgt1) ? (posType == "Dip-buy" ? "first close above 5-day avg (≈" + f(sma5) + ")" :
+        dK(r, "Entry")
+        dV(r, inPos ? f(entryPx) : "next open ≈ " + f(planEntry), cTxt)
+        dK(r + 1, "Stop-loss (initial)")
+        dV(r + 1, f(initStop), cBad)
+        dK(r + 2, "Stop now (trailing)")
+        dV(r + 2, f(stopLvl), cBad)
+        dK(r + 3, "Target / exit")
+        dV(r + 3, na(tgt1) ? (posType == "Dip-buy" ? "first close above 5-day avg (≈" + f(sma5) + ")" :
              "Rolling Candle Profile SELL") : f(tgt1) + " / " + f(tgt2), cGood)
-        dRow(r + 4, "Quantity", str.tostring(posQty) + " shares", cTxt)
-        dRow(r + 5, "Risk", "₹" + str.tostring(posQty * (planEntry - initStop), "#,###") + " (" + str.tostring(riskPct) + "%)", cMid)
+        dK(r + 4, "Quantity")
+        dV(r + 4, str.tostring(posQty) + " shares", cTxt)
+        dK(r + 5, "Risk")
+        dV(r + 5, "₹" + str.tostring(posQty * (planEntry - initStop), "#,###") + " (" + str.tostring(riskPct) + "%)", cMid)
         if inPos
             pnl = (close / entryPx - 1) * 100
-            dRow(r + 6, "Unrealised P/L", str.tostring(pnl, "+#.##;-#.##") + "%", pnl >= 0 ? cGood : cBad)
+            dK(r + 6, "Unrealised P/L")
+            dV(r + 6, str.tostring(pnl, "+#.##;-#.##") + "%", pnl >= 0 ? cGood : cBad)
         r := r + 7
     else
         // calculator for a BUY at today's close with the system's stop (what a trade would look like now)
         inv = qtyCalc * close
-        dRow(r,     "If bought now", qtyCalc >= 1 ? str.tostring(qtyCalc) + " sh · " + f(inv) : "size < 1 share", cDim)
-        dRow(r + 1, "Stop / max loss", f(planStop) + " / ₹" + str.tostring(qtyCalc * riskPS, "#,###"), cDim)
-        dRow(r + 2, "Reward to T2 · R:R", "₹" + str.tostring(qtyCalc * t2R * riskPS, "#,###") + " · 1:" + str.tostring(t2R), cDim)
+        dK(r, "If bought now")
+        dV(r, qtyCalc >= 1 ? str.tostring(qtyCalc) + " sh · " + f(inv) : "size < 1 share", cDim)
+        dK(r + 1, "Stop / max loss")
+        dV(r + 1, f(planStop) + " / ₹" + str.tostring(qtyCalc * riskPS, "#,###"), cDim)
+        dK(r + 2, "Reward to T2 · R:R")
+        dV(r + 2, "₹" + str.tostring(qtyCalc * t2R * riskPS, "#,###") + " · 1:" + str.tostring(t2R), cDim)
         r := r + 3
     if not chart.is_standard
-        dRow(r, "⚠ Chart type", "Use standard candles – signals invalid", cBad)
+        dK(r, "⚠ Chart type")
+        dV(r, "Use standard candles – signals invalid", cBad)
         r += 1
     if not timeframe.isdaily
-        dRow(r, "⚠ Timeframe", "Designed and tested for 1D", cMid)
+        dK(r, "⚠ Timeframe")
+        dV(r, "Designed and tested for 1D", cMid)
         r += 1
     if not benchOk
-        dRow(r, "⚠ Benchmark", "No data – RS/market neutral", cMid)
+        dK(r, "⚠ Benchmark")
+        dV(r, "No data – RS/market neutral", cMid)
         r += 1
-    dRow(r, "Note", "Score = confluence, not a probability", cDim)
+    dK(r, "Note")
+    dV(r, "Score = confluence, not a probability", cDim)
 
 // ---------------------------------------------------------------------------------------------- 12 · ALERTS
 // alertcondition: pick one condition per alert in the TradingView dialog ("Once per bar close").

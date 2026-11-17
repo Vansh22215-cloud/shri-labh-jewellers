@@ -211,15 +211,15 @@ warm     = bar_index >= 260 and not na(ema200) and not na(atr)
 // (EmreKb), order blocks and swing-low hold. SuperTrend / HTF sweep-CISD / AVPT were tested too and are NOT used
 // (they did not improve or worsened the signals).
 clampf(float x, float lo, float hi) => math.min(hi, math.max(lo, x))
-// (every ta.* call is evaluated on every bar: Pine v6 'and'/'or' are lazy, so none is placed on their right side)
-pvHigh(int n) =>
-    hAll  = ta.highest(high, 2 * n + 1)
-    hLeft = ta.highest(high, n)[n + 1]
-    high[n] == hAll and high[n] > hLeft
-pvLow(int n) =>
-    lAll  = ta.lowest(low, 2 * n + 1)
-    lLeft = ta.lowest(low, n)[n + 1]
-    low[n] == lAll and low[n] < lLeft
+// No multi-line functions anywhere (TradingView's mobile editor re-indents the lines after a '=>' when pasting).
+// Every ta.* call is evaluated on every bar (Pine v6 'and'/'or' are lazy, so none sits on their right side).
+// Pivot = the bar n back is the highest (lowest) of the 2n+1 window and strictly above (below) the n bars before it.
+lAll5  = ta.lowest(low, 11)
+lLeft5 = ta.lowest(low, 5)[6]
+hAll9  = ta.highest(high, 19)
+hLeft9 = ta.highest(high, 9)[10]
+lAll9  = ta.lowest(low, 19)
+lLeft9 = ta.lowest(low, 9)[10]
 
 atrS   = ta.sma(ta.tr(true), 14)                         // ATR as a simple average (as tested for types 3 and 4)
 sma5   = ta.sma(close, 5)
@@ -244,7 +244,7 @@ sqDev   = 2 * ta.stdev(close, 20)
 sqRng   = ta.sma(ta.tr(true), 20)
 sqzOn   = sqBasis - sqDev > sqBasis - 1.5 * sqRng and sqBasis + sqDev < sqBasis + 1.5 * sqRng
 // Swing-low hold (5-bar pivots, used only after confirmation)
-isPL5 = pvLow(5)
+isPL5 = low[5] == lAll5 and low[5] < lLeft5
 var float pl5 = na
 if isPL5
     pl5 := low[5]
@@ -252,8 +252,8 @@ rmaTr = ta.rma(ta.tr(true), 14)
 slHoldBar = not na(pl5) and low <= pl5 + 0.1 * rmaTr and close > pl5 and close > open
 slHold = nz(ta.barssince(slHoldBar), 99) <= 4
 // Market Structure Break & Order Block (9-bar pivots, 0.33 break)
-isPH9 = pvHigh(9)
-isPL9 = pvLow(9)
+isPH9 = high[9] == hAll9 and high[9] > hLeft9
+isPL9 = low[9] == lAll9 and low[9] < lLeft9
 var float ph9 = na
 var float pl9 = na
 var int   pl9Bar = na
@@ -317,9 +317,7 @@ dipTier  = fear and zoneAny ? "A" : fear ? "B" : "C"
 // Rolling Candle Profile with Buy/Sell Signals - (c) Zeiierman, CC BY-NC-SA 4.0. Price-pressure mode, default inputs
 // (EMA 21 anchor, 12 bands, 60 bars, width 0.01, wick 0.85, dominance 0.25, 7 bands, 6-bar spacing). Port of the
 // tested Python port (swing-system/swing/rolling_profile.py). Personal, non-commercial use.
-kern(float here, float center, float iw) =>
-    q = 1.0 - math.abs(here - center) * iw
-    q <= 0 ? 0.0 : q * q * (3.0 - 2.0 * q)
+kern(float here, float center, float iw) => math.pow(math.max(0.0, 1.0 - math.abs(here - center) * iw), 2) * (3.0 - 2.0 * math.max(0.0, 1.0 - math.abs(here - center) * iw))
 rcpTick   = syminfo.mintick
 rcpAnchor = ta.ema(close, 21)
 rcpR      = math.max(high - low, rcpTick)
@@ -402,10 +400,8 @@ hiClose250 = ta.highest(close, 250)
 rcpSetup = useRCP and rcpBuy and close >= 0.9 * hiClose250
 
 // Historical win rate (after costs) of similar signals in the 13-year NSE test - a past frequency, not a promise.
-likelyPct(string typ, string tier, int sc) =>
-    typ == "Dip-buy" ? (tier == "A" ? 80 : tier == "B" ? 75 : 80) : typ == "RCP" ? 46 : typ == "Breakout" ? (sc >= 90 ? 36 : sc >= 80 ? 37 : 36) : 33
-likelyN(string typ, string tier, int sc) =>
-    typ == "Dip-buy" ? (tier == "A" ? 171 : tier == "B" ? 254 : 25) : typ == "RCP" ? 5510 : typ == "Breakout" ? (sc >= 90 ? 800 : sc >= 80 ? 457 : 47) : 397
+likelyPct(string typ, string tier, int sc) => typ == "Dip-buy" ? (tier == "A" ? 80 : tier == "B" ? 75 : 80) : typ == "RCP" ? 46 : typ == "Breakout" ? (sc >= 90 ? 36 : sc >= 80 ? 37 : 36) : 33
+likelyN(string typ, string tier, int sc) => typ == "Dip-buy" ? (tier == "A" ? 171 : tier == "B" ? 254 : 25) : typ == "RCP" ? 5510 : typ == "Breakout" ? (sc >= 90 ? 800 : sc >= 80 ? 457 : 47) : 397
 
 // ---------------------------------------------------------------------------------------------- 9 · POSITION STATE
 // One simulated long position. Everything below changes ONLY on confirmed (closed) bars.
