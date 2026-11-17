@@ -181,10 +181,11 @@ def code_version(ref="HEAD"):
     return "|".join(out)
 
 
-def token_rotated(now=None, wait_s=180, every_h=6):
+def token_rotated(now=None, wait_s=180, every_h=0.5):
     """Owner 17 Nov: after a bot-key change in GitHub Secrets, a running run still holds the OLD key (secrets are
     given to a run only when it starts) and Telegram answers 401. After 3 minutes of 401s, end the run so the next
-    one starts with the new key - at most once every 6 hours (a really wrong key must not cause a restart loop)."""
+    one starts with the new key - at most once every 30 minutes (a wrong key must not cause a fast restart loop;
+    each new run reads the secret again, so a corrected key is picked up within ~30 minutes)."""
     from . import bot
     now = now or time.time()
     since = bot.TOKEN_REFUSED_SINCE

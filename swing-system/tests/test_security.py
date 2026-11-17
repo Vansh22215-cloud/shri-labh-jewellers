@@ -56,3 +56,13 @@ def test_kite_client_is_read_only(monkeypatch):
     assert not calls
     kite._get("/quote", params=[("i", "NSE:INFY")])
     assert calls and calls[0].endswith("/quote")
+
+
+def test_bot_key_paste_mistakes_are_repaired_and_never_logged():
+    from swing.config import clean_bot_token, token_shape
+    k = "1234567890:AAF0zABCDEFGHIJKLMNOPQRSTUVWXYZ0123"
+    for pasted in (k, f" {k}\n", f'"{k}"', f"bot{k}", f"https://api.telegram.org/bot{k}/getMe", f"1234567890: AAF0z{k[16:]}"):
+        assert clean_bot_token(pasted) == k
+    assert "looks right" in token_shape(k) and k not in token_shape(k)
+    assert "35" in token_shape(k[:-3]) and k[:-3] not in token_shape(k[:-3])
+    assert "missing" in token_shape("")

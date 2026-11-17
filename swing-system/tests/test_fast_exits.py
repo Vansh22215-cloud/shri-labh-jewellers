@@ -80,4 +80,5 @@ def test_rotated_bot_key_hands_over_once(monkeypatch, tmp_path):
     monkeypatch.setattr(bot, "TOKEN_REFUSED_SINCE", 1000.0)
     assert not daemon.token_rotated(1100.0)          # wait 3 minutes first (a single hiccup is not a rotation)
     assert daemon.token_rotated(1200.0)              # hand over: next run gets the new GitHub Secret
-    assert not daemon.token_rotated(1300.0)          # at most once every 6 hours - no restart loop
+    assert not daemon.token_rotated(1300.0)          # at most once every 30 minutes - no fast restart loop
+    assert daemon.token_rotated(1200.0 + 1900)

@@ -6,6 +6,7 @@ the folder is copied (Windows or Linux).
 import json
 import logging
 import os
+import re
 import time
 from pathlib import Path
 
@@ -82,6 +83,7 @@ def load_settings(path=None):
     for env_key, key in (("TELEGRAM_BOT_TOKEN", "telegram_bot_token"), ("TELEGRAM_CHAT_ID", "telegram_chat_id")):
         if os.environ.get(env_key):
             defaults[key] = os.environ[env_key]
+    defaults["telegram_bot_token"] = clean_bot_token(defaults.get("telegram_bot_token"))
     # Private values (e.g. Telegram token) live in my_secrets.yaml, which is never uploaded to GitHub.
     sec = ROOT / "my_secrets.yaml"
     if path is None and sec.exists():
@@ -153,3 +155,32 @@ def get_logger():
         sh.setFormatter(logging.Formatter("%(levelname)s %(message)s"))
         log.addHandler(sh)
     return log
+
+
+_TOKEN_RE = re.compile(r"(\d{6,12}:[A-Za-z0-9_-]{30,})")
+
+
+def clean_bot_token(v):
+    """Common paste mistakes in the GitHub Secret are repaired: spaces / line breaks, quotes, a leading 'bot', or
+    the whole Telegram URL pasted instead of the key (owner 17 Nov: the rotated key was refused)."""
+    v = re.sub(r"\s+", "", str(v or "")).strip("'\"`")
+    m = _TOKEN_RE.search(v)
+    return m.group(1) if m else v
+
+
+def token_shape(v):
+    """What is wrong with the bot key's FORMAT - never the key itself (safe for the public log)."""
+    v = str(v or "")
+    if not v:
+        return "missing (TELEGRAM_BOT_TOKEN secret is empty or not set)"
+    if ":" not in v:
+        return f"no ':' in it ({len(v)} characters) - not a bot key; copy it again from @BotFather"
+    a, b = v.split(":", 1)
+    probs = []
+    if not a.isdigit():
+        probs.append("the part before ':' is not all digits")
+    if len(b) != 35:
+        probs.append(f"the part after ':' has {len(b)} characters (a bot key has 35)")
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", b):
+        probs.append("the part after ':' has characters a bot key never has")
+    return "; ".join(probs) or "format looks right (digits:35 characters) - so Telegram has a different/newer key"
