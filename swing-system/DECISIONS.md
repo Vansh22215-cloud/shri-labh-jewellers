@@ -915,3 +915,9 @@ The pre-registered tests (`vantage-ai/validation/IMPROVE_PREREGISTRATION.md`, re
   They helped in older data but not in the recent three years, or they cut profits.
 - **Passed:** scanning all NSE stocks that trade **≥ ₹2 crore a day**. That's about 25 signals a week in the holdout at the same quality (+2.9% per trade, PF 1.48). Stocks under ₹2 cr/day were weaker (PF 1.20).
 - **Applied (owner approved):** VANTAGE BUY signals, live and end-of-day, only for stocks with a 20-day average traded value ≥ ₹2 cr. Setting: `vantage_min_turnover_cr`. SELLs and stop alerts for BUYs already sent are unaffected.
+
+## D122 - 2026-11-17 - Round 2 decisions
+- **Limit entry (R2), a near miss in the test:** the owner chose a forward test. Every VANTAGE BUY now records `limit_test` = signal close − 0.25 ATR in `data/private/vantage_signals.csv`. After a few weeks, the live record shows whether a limit order would have filled and helped. Nothing changes in the messages.
+- **Results-day guard (R4) passed,** but the owner does not want BUYs blocked ("results can also give better ones").
+  - Data: signals with results due within 5 trading days still earn money, but about half (+1.7% vs +3.5% per trade in the last 3 years).
+  - Proposed (awaiting approval): keep the signal, show the results date, and halve the quantity.

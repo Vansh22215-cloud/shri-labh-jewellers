@@ -413,7 +413,7 @@ def run(d, bench, allow=None, p=None, state=None):
                     posQty, entryScore = q, score
                     regime = "BULLISH" if mktBull[t] else "BEARISH" if mktBear[t] else "SIDEWAYS"
                     pend_info = {"signal": d.index[t], "regime": regime, "tier": posTier}
-                    ev_buy = {"setup": pick, "tier": posTier, "score": int(score), "close": float(c[t]),
+                    ev_buy = {"setup": pick, "tier": posTier, "score": int(score), "close": float(c[t]), "atr": float(atr[t]),
                               "stop": float(ps), "t1": float(tgt1), "t2": float(tgt2), "signal": d.index[t]}
         if state is not None and t == n - 1:
             state.update(last_date=d.index[t], buy=ev_buy, sell=ev_sell, in_position=bool(inPos or pendingEntry))

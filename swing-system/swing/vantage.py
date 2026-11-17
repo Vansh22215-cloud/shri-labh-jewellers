@@ -144,7 +144,7 @@ def _load_signals():
         return pd.read_csv(SIGNALS_F, dtype=str)
     except Exception:
         return pd.DataFrame(columns=["sym", "signal", "setup", "tier", "score", "close", "stop", "likely", "status",
-                                     "sent_at", "exit_date", "exit_why", "exit_price"])
+                                     "sent_at", "exit_date", "exit_why", "exit_price", "limit_test"])
 
 
 def _save_signals(t):
@@ -261,8 +261,10 @@ def run(day=None, source="auto"):
             if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():
                 continue                                    # already sent (re-run) - never twice
             lk, n = likely(cal, buy["setup"], buy.get("tier", ""), buy.get("score", 0))
+            lim = buy["close"] - 0.25 * float(buy.get("atr") or 0)   # D122 forward test (R2): would a limit fill?
             row = {"sym": sym, "signal": key[1], "setup": buy["setup"], "tier": buy.get("tier", ""), "score": buy["score"],
                    "close": f"{buy['close']:.2f}", "stop": f"{buy['stop']:.2f}", "likely": lk, "status": "open",
+                   "limit_test": f"{lim:.2f}" if buy.get("atr") else "",
                    "sent_at": str(now)[:16], "exit_date": "", "exit_why": "", "exit_price": ""}
             sig = pd.concat([sig, pd.DataFrame([row]).astype(str)], ignore_index=True)
             _save_signals(sig)                              # ... then send
