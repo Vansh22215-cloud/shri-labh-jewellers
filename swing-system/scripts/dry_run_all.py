@@ -9,7 +9,8 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-JOBS = ["run_scan.py", "run_vantage.py", "run_nightly.py", "company_of_day.py", "run_research.py", "run_weekly.py"]
+JOBS = [("run_scan.py", {}), ("run_vantage.py", {"SWING_CLAIMED": "vantage2"}), ("run_nightly.py", {}),
+        ("company_of_day.py", {}), ("run_basket.py", {}), ("run_research.py", {}), ("run_weekly.py", {})]
 
 
 def main():
@@ -21,11 +22,12 @@ def main():
     env.pop("GITHUB_ACTIONS", None)
     out = work / "data" / "private" / "dry_run_messages.txt"
     rows = []
-    for job in JOBS:
+    for job, extra in JOBS:
         before = out.read_text(encoding="utf-8").count("----- ") if out.exists() else 0
         t0 = time.time()
         try:
-            r = subprocess.run([sys.executable, str(work / "scripts" / job)], cwd=work, env=env, capture_output=True,
+            r = subprocess.run([sys.executable, str(work / "scripts" / job)], cwd=work, env=dict(env, **extra),
+                               capture_output=True,
                                text=True, timeout=3600)
             code, tail = r.returncode, (r.stdout + r.stderr).strip().splitlines()[-3:]
         except subprocess.TimeoutExpired:

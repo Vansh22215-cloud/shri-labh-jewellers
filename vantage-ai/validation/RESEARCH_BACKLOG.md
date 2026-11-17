@@ -15,5 +15,5 @@
 | 3 | Buy at the close instead of next open | the live alerts now make it possible to buy at 3:25 pm when the signal is about to confirm | removes overnight gap cost | done: PASSED, applied (3:20 pm buy-now alert, D125) |
 | 4 | Proven India momentum: monthly rotation | top 10–20 stocks by 6/12-month momentum, risk-adjusted, monthly rebalance (the idea behind NSE's Nifty200 Momentum 30 index) | regular trades every month; documented edge in India | done: M3 PASSED, applied (monthly basket, D126) |
 | 5 | New short-term families for more weekly trades | pocket pivot (O'Neil), NR7 / inside-day breakout in an uptrend, 3-day pullback in leaders (Connors) | more good trades a week | done: 0 of 3 passed (all ~zero profit after costs) |
-| 6 | Risk at the portfolio level | volatility-scaled size, a cap on open risk per sector, correlation | smaller drawdowns at equal profit | planned |
+| 6 | Risk at the portfolio level | volatility-scaled size, a cap on open risk per sector, correlation | smaller drawdowns at equal profit | done: NIFTY-200-day rule for tips failed (round 6) |
 | 7 | Live-record check | compare the first live week of tips with the tested numbers | catch problems early | after a week of tips |
