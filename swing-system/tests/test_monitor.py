@@ -73,3 +73,17 @@ def test_daily_status_lists_todays_tips_by_likely_win(monkeypatch, tmp_path):
     assert lines[2:] == ["#DIPBUY #TITAN - 79%", "#VANTAGE #GLENMARK - 46%", "#POSITIONAL #ICICIBANK - 45%",
                          "#BREAKOUT #MCX - 38%"]
     assert "#DIPBUY #TITAN - 79%" in monitor.status_text(pd.Timestamp(f"{day} 19:20"))
+
+
+def test_tips_list_sent_once_on_its_own_if_the_status_already_went_out(monkeypatch):
+    import pandas as pd
+    from swing import monitor, daemon
+    claimed, sent = set(), []
+    monkeypatch.setattr(daemon, "claim_once", lambda k, now=None: (k not in claimed, claimed.add(k))[0])
+    monkeypatch.setattr(monitor, "_send", lambda text: sent.append(text))
+    monkeypatch.setattr(monitor, "tips_ranked", lambda day, limit=15: ["", "Tips (most likely to win first):", "#VANTAGE #X - 80%"])
+    claimed.add("daily status")                               # today's status was sent by the old version
+    t = pd.Timestamp("2026-11-17 21:55")
+    monitor.daily_status(t)
+    monitor.daily_status(t)
+    assert len(sent) == 1 and "#VANTAGE #X - 80%" in sent[0]

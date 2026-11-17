@@ -240,8 +240,16 @@ def status_text(now):
 def daily_status(now):
     from .daemon import claim_once
     t = pd.Timestamp(now)
-    if t.weekday() < 5 and (t.hour, t.minute) >= (19, 20) and claim_once("daily status", now):
+    if t.weekday() >= 5 or (t.hour, t.minute) < (19, 20):
+        return
+    if claim_once("daily status", now):
+        claim_once("tips ranked", now)                       # the list is part of the status message
         _send(status_text(now))
+    elif claim_once("tips ranked", now):
+        # the status already went out without the list (e.g. sent by an older program version): send it on its own
+        lines = tips_ranked(str(t.date()))
+        if lines:
+            _send(f"🩺 DAILY STATUS · {t:%a %d %b} - tips" + "\n".join(lines) + "\nResearch, not advice.")
 
 
 def weekly_health(now):
