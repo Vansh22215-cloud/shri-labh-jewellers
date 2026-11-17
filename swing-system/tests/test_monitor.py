@@ -56,3 +56,20 @@ def test_status_explains_why_no_tips(monkeypatch, tmp_path):
     (tmp_path / "evening_status.json").unlink()
     monkeypatch.setattr("swing.health.traded_today", lambda now=None: True)
     assert "did not run" in monitor.status_text(pd.Timestamp("2026-11-17 19:30"))
+
+
+def test_daily_status_lists_todays_tips_by_likely_win(monkeypatch, tmp_path):
+    import pandas as pd
+    from swing import live_engine as le, monitor, vantage
+    day = "2026-11-17"
+    for sym, setup, rank in (("ICICIBANK", "RCP", 6), ("TITAN", "HP", 10), ("MCX", "BRK", 6)):
+        le.save_tip({"time": f"{day} 18:41", "type": "NORMAL", "symbol": sym, "side": "buy", "entry": 100, "stop": 90,
+                     "targets": "", "rank": rank, "qty": 4, "status": "open", "hit": 0, "day": day, "setup": setup})
+    monkeypatch.setattr(vantage, "SIGNALS_F", tmp_path / "v.csv")
+    pd.DataFrame([{"sym": "GLENMARK", "signal": day, "setup": "RCP", "likely": "46", "sent_at": f"{day} 15:42",
+                   "status": "open"}]).to_csv(tmp_path / "v.csv", index=False)
+    lines = monitor.tips_ranked(day)
+    assert lines[1] == "Tips (most likely to win first):"
+    assert lines[2:] == ["#DIPBUY #TITAN - 79%", "#VANTAGE #GLENMARK - 46%", "#POSITIONAL #ICICIBANK - 45%",
+                         "#BREAKOUT #MCX - 38%"]
+    assert "#DIPBUY #TITAN - 79%" in monitor.status_text(pd.Timestamp(f"{day} 19:20"))

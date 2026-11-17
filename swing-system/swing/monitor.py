@@ -91,6 +91,68 @@ def _today_tips(day):
     return sent, closed
 
 
+def _tip_likely(r):
+    """(label, likely-win % or None) of one system tip - the tested win rate of its kind."""
+    st, ty = str(r.get("setup", "")), str(r.get("type", ""))
+    try:
+        rank = int(float(r.get("rank") or 0))
+    except Exception:
+        rank = 0
+    if ty == "INTRADAY":
+        return "INTRADAY", None
+    if ty == "FNO":
+        from .high_prob import OPT_STATS
+        return "FNO", (round(OPT_STATS["win_pct"]) if st == "HP" else None)
+    if st == "HP":
+        from .confirmations import TIERS
+        tier = {10: "A", 9: "B", 8: "C"}.get(rank)
+        return "DIPBUY", (TIERS[tier]["win"] if tier else 72)
+    if st == "RCP":
+        from .positional import STATS
+        return "POSITIONAL", round(STATS["win_pct"])
+    if st == "BRK":
+        from .breakout import STATS
+        return "BREAKOUT", round(STATS["win_pct"])
+    if st == "AI":
+        from .ml_ranker import STATS
+        return "AI", round(STATS["win"])
+    if st.startswith("DS"):
+        return "DISCOVERED", 53
+    return "SWING", 53
+
+
+def tips_ranked(day, limit=15):
+    """Owner 17 Nov: every tip sent today (system tips + VANTAGE signals), highest likely win first:
+    '#VANTAGE #TITAN - 80%'. Short: at most `limit` lines."""
+    rows = []
+    try:
+        sent, _ = _today_tips(day)
+        for _, r in sent.iterrows():
+            lab, pct = _tip_likely(r)
+            rows.append((pct, lab, str(r["symbol"])))
+    except Exception:
+        pass
+    try:
+        from .vantage import SIGNALS_F
+        v = pd.read_csv(SIGNALS_F, dtype=str)
+        for _, r in v[v["sent_at"].astype(str).str[:10] == day].iterrows():
+            try:
+                pct = int(float(r["likely"]))
+            except Exception:
+                pct = None
+            rows.append((pct, "VANTAGE", str(r["sym"])))
+    except Exception:
+        pass
+    if not rows:
+        return []
+    rows.sort(key=lambda x: (-(x[0] if x[0] is not None else -1), x[1], x[2]))
+    out = ["", "Tips (most likely to win first):"]
+    out += [f"#{lab} #{sym} - " + (f"{pct}%" if pct is not None else "test") for pct, lab, sym in rows[:limit]]
+    if len(rows) > limit:
+        out.append(f"… and {len(rows) - limit} more (lower likely win)")
+    return out
+
+
 def status_text(now):
     """The daily status message (also used by /health)."""
     from . import safety
@@ -167,6 +229,10 @@ def status_text(now):
         else:
             why = "no stock met the tested rules today (normal)"
         L.append(f"ℹ️ Why no tips: {why}.")
+    try:
+        L += tips_ranked(day)
+    except Exception:
+        pass
     L.append("Research, not advice.")
     return "\n".join(L)
 
