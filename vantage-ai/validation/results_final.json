@@ -1,207 +1,207 @@
 {
- "_method": "VANTAGE AI \u2014 validation of the EXACT indicator logic (replica.py = core.pine) on NSE data, 2013-2026.\n\nData / method (same as the swing system's BACKTEST_VALIDATION.md):\n  * point-in-time top-300 NSE stocks by turnover (monthly, decided only from earlier data); 228 delisted / renamed\n    stocks rebuilt from NSE's own daily files (no survivorship bias); ETFs excluded\n  * BUY decided at the daily close -> filled at the NEXT open; stops fill at the stop or at the open if it gaps below\n  * costs 0.35% per round trip (STT, exchange/SEBI/stamp/GST, slippage); stress test at 0.60%\n  * a stock may only get a NEW signal while it is in that month's top-300 (open trades continue)\n  * development period: 2013 - Oct 2023 \u00b7 untouched holdout: Nov 2023 - Nov 2026\n\nPRE-REGISTERED RULES (written before the first run; the defaults in core.pine were fixed before it too):\n  PASS BAR for the indicator and for each entry type separately (all must hold, after costs):\n    1. expectancy > 0 and the 95% confidence interval's lower end > 0\n    2. holdout (Nov 2023+) expectancy > 0 on >= 100 trades\n    3. beats the average top-300 stock held over the same days in >= 55% of years\n    4. profit factor >= 1.3\n    5. still positive at 0.60% costs\n  DECISIONS:\n    * an entry type that fails is switched OFF by default (the user can still switch it on)\n    * the default exit mode stays \"Combined\" unless it fails the bar while another exit mode passes\n    * NO other parameter is changed after seeing results (no curve fitting)\nRun: python3 backtest.py  ->  results.json, trades_<mode>.csv\n",
+ "_method": "VANTAGE AI \u2014 validation of the EXACT indicator logic (replica.py = core.pine) on NSE data, 2013-2026.\n\nData / method (same as the swing system's BACKTEST_VALIDATION.md):\n  * point-in-time top-300 NSE stocks by turnover (monthly, decided only from earlier data); 228 delisted / renamed\n    stocks rebuilt from NSE's own daily files (no survivorship bias); ETFs excluded\n  * BUY decided at the daily close -> filled at the NEXT open; stops fill at the stop or at the open if it gaps below\n  * costs 0.35% per round trip (STT, exchange/SEBI/stamp/GST, slippage); stress test at 0.60%\n  * a stock may only get a NEW signal while it is in that month's top-300 (open trades continue)\n  * development period: 2013 - Oct 2023 \u00b7 untouched holdout: Nov 2023 - Nov 2026\n\nPRE-REGISTERED RULES (written before the first run; the defaults in core.pine were fixed before it too):\n  PASS BAR for the indicator and for each entry type separately (all must hold, after costs):\n    1. expectancy > 0 and the 95% confidence interval's lower end > 0\n    2. holdout (Nov 2023+) expectancy > 0 on >= 100 trades\n    3. beats the average top-300 stock held over the same days in >= 55% of years\n    4. profit factor >= 1.3\n    5. still positive at 0.60% costs\n  DECISIONS:\n    * an entry type that fails is switched OFF by default (the user can still switch it on)\n    * the default exit mode stays \"Combined\" unless it fails the bar while another exit mode passes\n    * NO other parameter is changed after seeing results (no curve fitting)\nADDENDUM (17 Nov, written BEFORE the run that includes them): entry types 3 \"Dip-buy\" (tiered dip-buy with Vix Fix /\nWaveTrend / order block / MSB order block / swing-low hold confirmations, no entry while Squeeze is ON) and 4 \"RCP\"\n(Rolling Candle Profile BUY within 10% of the 52-week high) use their own previously tested rules and exits. Each\nentry type must pass the same bar on its own; a type that fails is OFF by default. The \"likely %\" shown on a BUY is\nthe historical share of similar signals (same type; dip-buy by tier; breakout by score band 70-79 / 80-89 / 90+)\nthat ended in profit after 0.35% costs in this run - a past frequency, not a guaranteed probability.\nRun: python3 backtest.py  ->  results.json, trades_<mode>.csv\n",
  "Fixed risk/reward": {
   "after_costs": {
-   "trades": 3225,
-   "win_pct": 37.3,
-   "avg_win_pct": 28.29,
-   "avg_loss_pct": -10.67,
-   "expectancy_pct": 3.87,
+   "trades": 7264,
+   "win_pct": 45.9,
+   "avg_win_pct": 19.3,
+   "avg_loss_pct": -9.26,
+   "expectancy_pct": 3.84,
    "expectancy_ci95_pct": [
-    3.2,
-    4.55
+    3.37,
+    4.31
    ],
-   "profit_factor": 1.58,
-   "max_drawdown_pct_at_1pct_risk": -113.8,
-   "longest_losing_streak": 81,
+   "profit_factor": 1.77,
+   "max_drawdown_pct_at_1pct_risk": -154.9,
+   "longest_losing_streak": 41,
    "best_year": [
-    2014,
-    11.39
-   ],
-   "worst_year": [
-    2026,
-    -4.49
-   ],
-   "losing_years": 6,
-   "years": 14,
-   "avg_days_held": 52.0,
-   "gap_through_stop_pct": 0.0
-  },
-  "before_costs": {
-   "trades": 3225,
-   "win_pct": 37.3,
-   "avg_win_pct": 28.64,
-   "avg_loss_pct": -10.32,
-   "expectancy_pct": 4.22,
-   "expectancy_ci95_pct": [
-    3.55,
-    4.9
-   ],
-   "profit_factor": 1.65,
-   "max_drawdown_pct_at_1pct_risk": -103.5,
-   "longest_losing_streak": 81,
-   "best_year": [
-    2014,
-    11.74
-   ],
-   "worst_year": [
-    2026,
-    -4.14
-   ],
-   "losing_years": 6,
-   "years": 14,
-   "avg_days_held": 52.0,
-   "gap_through_stop_pct": 0.0
-  },
-  "cost_stress_0.60pct": {
-   "trades": 3225,
-   "win_pct": 37.3,
-   "avg_win_pct": 28.04,
-   "avg_loss_pct": -10.92,
-   "expectancy_pct": 3.62,
-   "expectancy_ci95_pct": [
-    2.95,
-    4.3
-   ],
-   "profit_factor": 1.53,
-   "max_drawdown_pct_at_1pct_risk": -121.2,
-   "longest_losing_streak": 81,
-   "best_year": [
-    2014,
-    11.14
-   ],
-   "worst_year": [
-    2026,
-    -4.74
-   ],
-   "losing_years": 6,
-   "years": 14,
-   "avg_days_held": 52.0,
-   "gap_through_stop_pct": 0.0
-  },
-  "development_before_2023_11": {
-   "trades": 2551,
-   "win_pct": 39.6,
-   "avg_win_pct": 28.53,
-   "avg_loss_pct": -10.79,
-   "expectancy_pct": 4.76,
-   "expectancy_ci95_pct": [
-    3.99,
-    5.54
-   ],
-   "profit_factor": 1.73,
-   "max_drawdown_pct_at_1pct_risk": -113.8,
-   "longest_losing_streak": 80,
-   "best_year": [
-    2014,
-    11.39
+    2023,
+    10.31
    ],
    "worst_year": [
     2018,
-    -3.77
+    -4.3
    ],
-   "losing_years": 4,
+   "losing_years": 3,
+   "years": 14,
+   "avg_days_held": 41.7,
+   "gap_through_stop_pct": 0.0
+  },
+  "before_costs": {
+   "trades": 7264,
+   "win_pct": 46.7,
+   "avg_win_pct": 19.29,
+   "avg_loss_pct": -9.05,
+   "expectancy_pct": 4.19,
+   "expectancy_ci95_pct": [
+    3.72,
+    4.66
+   ],
+   "profit_factor": 1.87,
+   "max_drawdown_pct_at_1pct_risk": -137.9,
+   "longest_losing_streak": 41,
+   "best_year": [
+    2023,
+    10.66
+   ],
+   "worst_year": [
+    2018,
+    -3.95
+   ],
+   "losing_years": 3,
+   "years": 14,
+   "avg_days_held": 41.7,
+   "gap_through_stop_pct": 0.0
+  },
+  "cost_stress_0.60pct": {
+   "trades": 7264,
+   "win_pct": 45.3,
+   "avg_win_pct": 19.3,
+   "avg_loss_pct": -9.41,
+   "expectancy_pct": 3.59,
+   "expectancy_ci95_pct": [
+    3.12,
+    4.06
+   ],
+   "profit_factor": 1.7,
+   "max_drawdown_pct_at_1pct_risk": -167.1,
+   "longest_losing_streak": 41,
+   "best_year": [
+    2023,
+    10.06
+   ],
+   "worst_year": [
+    2018,
+    -4.55
+   ],
+   "losing_years": 3,
+   "years": 14,
+   "avg_days_held": 41.7,
+   "gap_through_stop_pct": 0.0
+  },
+  "development_before_2023_11": {
+   "trades": 5744,
+   "win_pct": 46.7,
+   "avg_win_pct": 19.39,
+   "avg_loss_pct": -9.35,
+   "expectancy_pct": 4.08,
+   "expectancy_ci95_pct": [
+    3.54,
+    4.62
+   ],
+   "profit_factor": 1.82,
+   "max_drawdown_pct_at_1pct_risk": -154.9,
+   "longest_losing_streak": 41,
+   "best_year": [
+    2020,
+    10.21
+   ],
+   "worst_year": [
+    2018,
+    -4.3
+   ],
+   "losing_years": 3,
    "years": 11,
-   "avg_days_held": 53.9,
+   "avg_days_held": 42.2,
    "gap_through_stop_pct": 0.0
   },
   "out_of_sample_2023_11_on": {
-   "trades": 674,
-   "win_pct": 28.9,
-   "avg_win_pct": 27.04,
-   "avg_loss_pct": -10.28,
-   "expectancy_pct": 0.51,
+   "trades": 1520,
+   "win_pct": 42.6,
+   "avg_win_pct": 18.92,
+   "avg_loss_pct": -8.94,
+   "expectancy_pct": 2.92,
    "expectancy_ci95_pct": [
-    -0.82,
-    1.85
+    1.96,
+    3.87
    ],
-   "profit_factor": 1.07,
-   "max_drawdown_pct_at_1pct_risk": -113.3,
-   "longest_losing_streak": 44,
+   "profit_factor": 1.57,
+   "max_drawdown_pct_at_1pct_risk": -127.2,
+   "longest_losing_streak": 33,
    "best_year": [
     2023,
-    12.93
+    15.93
    ],
    "worst_year": [
-    2026,
-    -4.49
+    2025,
+    0.39
    ],
-   "losing_years": 2,
+   "losing_years": 0,
    "years": 4,
-   "avg_days_held": 44.7,
+   "avg_days_held": 39.9,
    "gap_through_stop_pct": 0.0
   },
   "regime_nifty_above_200d": {
-   "trades": 3068,
-   "win_pct": 37.5,
-   "avg_win_pct": 28.3,
-   "avg_loss_pct": -10.67,
-   "expectancy_pct": 3.94,
+   "trades": 6384,
+   "win_pct": 46.1,
+   "avg_win_pct": 19.17,
+   "avg_loss_pct": -9.28,
+   "expectancy_pct": 3.82,
    "expectancy_ci95_pct": [
-    3.25,
-    4.63
+    3.32,
+    4.32
    ],
-   "profit_factor": 1.59,
-   "max_drawdown_pct_at_1pct_risk": -125.6,
-   "longest_losing_streak": 80,
+   "profit_factor": 1.76,
+   "max_drawdown_pct_at_1pct_risk": -184.3,
+   "longest_losing_streak": 36,
    "best_year": [
-    2014,
-    11.35
+    2023,
+    10.32
    ],
    "worst_year": [
-    2026,
-    -6.7
+    2018,
+    -4.74
    ],
-   "losing_years": 6,
+   "losing_years": 5,
    "years": 14,
-   "avg_days_held": 51.8,
+   "avg_days_held": 41.5,
    "gap_through_stop_pct": 0.0
   },
   "regime_nifty_below_200d": {
-   "trades": 157,
-   "win_pct": 34.4,
-   "avg_win_pct": 27.91,
-   "avg_loss_pct": -10.73,
-   "expectancy_pct": 2.56,
+   "trades": 880,
+   "win_pct": 44.4,
+   "avg_win_pct": 20.26,
+   "avg_loss_pct": -9.07,
+   "expectancy_pct": 3.96,
    "expectancy_ci95_pct": [
-    -0.41,
-    5.54
+    2.59,
+    5.33
    ],
-   "profit_factor": 1.36,
-   "max_drawdown_pct_at_1pct_risk": -25.1,
-   "longest_losing_streak": 12,
+   "profit_factor": 1.79,
+   "max_drawdown_pct_at_1pct_risk": -54.7,
+   "longest_losing_streak": 22,
    "best_year": [
     2020,
-    21.85
+    20.28
    ],
    "worst_year": [
-    2024,
-    -7.88
+    2014,
+    -10.22
    ],
-   "losing_years": 5,
+   "losing_years": 4,
    "years": 13,
-   "avg_days_held": 56.1,
+   "avg_days_held": 42.9,
    "gap_through_stop_pct": 0.0
   },
-  "excess_vs_average_stock_pct": 0.62,
-  "excess_vs_nifty_pct": 2.11,
+  "excess_vs_average_stock_pct": 1.12,
+  "excess_vs_nifty_pct": 2.39,
   "excess_vs_average_stock_by_year_pct": {
-   "2013": 2.72,
-   "2014": 1.08,
-   "2015": 1.17,
-   "2016": -0.23,
-   "2017": 0.22,
-   "2018": 2.3,
-   "2019": 1.95,
-   "2020": -2.35,
-   "2021": 0.95,
-   "2022": 0.28,
-   "2023": -0.2,
-   "2024": -1.82,
-   "2025": 2.24,
-   "2026": -2.61
+   "2013": 2.53,
+   "2014": 0.62,
+   "2015": 0.7,
+   "2016": 0.64,
+   "2017": 0.72,
+   "2018": 1.28,
+   "2019": 2.89,
+   "2020": 0.06,
+   "2021": 0.42,
+   "2022": 0.69,
+   "2023": 0.33,
+   "2024": 0.18,
+   "2025": 0.53,
+   "2026": 0.97
   },
-  "trades_from_delisted_stocks": 368,
+  "trades_from_delisted_stocks": 830,
   "PASS": true,
   "checks": {
    "1 expectancy>0 & CI lower>0": true,
@@ -210,698 +210,880 @@
    "4 profit factor >=1.3": true,
    "5 positive at 0.60% costs": true
   },
-  "years_beating_avg_pct": 64,
+  "years_beating_avg_pct": 100,
   "errors": 0,
-  "trades_per_year": 232.0,
+  "trades_per_year": 522.6,
   "breakdowns": {
    "setup": {
     "Breakout": {
-     "trades": 3225,
-     "win_pct": 37.3,
-     "avg_win_pct": 28.29,
-     "avg_loss_pct": -10.67,
-     "expectancy_pct": 3.87,
+     "trades": 1304,
+     "win_pct": 36.4,
+     "avg_win_pct": 28.67,
+     "avg_loss_pct": -10.81,
+     "expectancy_pct": 3.57,
      "expectancy_ci95_pct": [
-      3.2,
-      4.55
+      2.51,
+      4.64
      ],
-     "profit_factor": 1.58,
-     "max_drawdown_pct_at_1pct_risk": -113.8,
-     "longest_losing_streak": 81,
+     "profit_factor": 1.52,
+     "max_drawdown_pct_at_1pct_risk": -62.5,
+     "longest_losing_streak": 24,
      "best_year": [
-      2014,
-      11.39
+      2023,
+      8.99
      ],
      "worst_year": [
-      2026,
-      -4.49
+      2018,
+      -7.73
      ],
      "losing_years": 6,
      "years": 14,
-     "avg_days_held": 52.0,
+     "avg_days_held": 51.0,
+     "gap_through_stop_pct": 0.0
+    },
+    "Dip-buy": {
+     "trades": 450,
+     "win_pct": 77.3,
+     "avg_win_pct": 4.63,
+     "avg_loss_pct": -4.23,
+     "expectancy_pct": 2.62,
+     "expectancy_ci95_pct": [
+      2.11,
+      3.14
+     ],
+     "profit_factor": 3.74,
+     "max_drawdown_pct_at_1pct_risk": -3.5,
+     "longest_losing_streak": 8,
+     "best_year": [
+      2020,
+      3.88
+     ],
+     "worst_year": [
+      2019,
+      -1.94
+     ],
+     "losing_years": 1,
+     "years": 14,
+     "avg_days_held": 3.5,
+     "gap_through_stop_pct": 0.0
+    },
+    "RCP": {
+     "trades": 5510,
+     "win_pct": 45.5,
+     "avg_win_pct": 19.56,
+     "avg_loss_pct": -9.0,
+     "expectancy_pct": 4.0,
+     "expectancy_ci95_pct": [
+      3.44,
+      4.57
+     ],
+     "profit_factor": 1.82,
+     "max_drawdown_pct_at_1pct_risk": -97.1,
+     "longest_losing_streak": 31,
+     "best_year": [
+      2020,
+      11.14
+     ],
+     "worst_year": [
+      2018,
+      -3.99
+     ],
+     "losing_years": 3,
+     "years": 14,
+     "avg_days_held": 42.6,
      "gap_through_stop_pct": 0.0
     }
    },
    "regime": {
-    "BULLISH": {
-     "trades": 2992,
-     "win_pct": 36.8,
-     "avg_win_pct": 28.27,
-     "avg_loss_pct": -10.65,
-     "expectancy_pct": 3.67,
+    "BEARISH": {
+     "trades": 496,
+     "win_pct": 46.8,
+     "avg_win_pct": 22.11,
+     "avg_loss_pct": -8.77,
+     "expectancy_pct": 5.68,
      "expectancy_ci95_pct": [
-      2.97,
-      4.37
+      3.66,
+      7.69
      ],
-     "profit_factor": 1.55,
-     "max_drawdown_pct_at_1pct_risk": -120.2,
-     "longest_losing_streak": 75,
+     "profit_factor": 2.22,
+     "max_drawdown_pct_at_1pct_risk": -44.0,
+     "longest_losing_streak": 28,
      "best_year": [
-      2014,
-      11.51
+      2023,
+      23.52
+     ],
+     "worst_year": [
+      2015,
+      -5.93
+     ],
+     "losing_years": 2,
+     "years": 11,
+     "avg_days_held": 43.6,
+     "gap_through_stop_pct": 0.0
+    },
+    "BULLISH": {
+     "trades": 6256,
+     "win_pct": 45.6,
+     "avg_win_pct": 19.18,
+     "avg_loss_pct": -9.34,
+     "expectancy_pct": 3.66,
+     "expectancy_ci95_pct": [
+      3.15,
+      4.17
+     ],
+     "profit_factor": 1.72,
+     "max_drawdown_pct_at_1pct_risk": -184.3,
+     "longest_losing_streak": 33,
+     "best_year": [
+      2023,
+      10.24
      ],
      "worst_year": [
       2026,
-      -5.69
+      -4.6
      ],
-     "losing_years": 6,
+     "losing_years": 5,
      "years": 14,
-     "avg_days_held": 50.5,
+     "avg_days_held": 41.1,
      "gap_through_stop_pct": 0.0
     },
     "SIDEWAYS": {
-     "trades": 233,
-     "win_pct": 44.2,
-     "avg_win_pct": 28.43,
-     "avg_loss_pct": -10.93,
-     "expectancy_pct": 6.47,
+     "trades": 512,
+     "win_pct": 48.2,
+     "avg_win_pct": 18.05,
+     "avg_loss_pct": -8.66,
+     "expectancy_pct": 4.23,
      "expectancy_ci95_pct": [
-      3.87,
-      9.07
+      2.75,
+      5.7
      ],
-     "profit_factor": 2.06,
-     "max_drawdown_pct_at_1pct_risk": -19.6,
-     "longest_losing_streak": 12,
+     "profit_factor": 1.94,
+     "max_drawdown_pct_at_1pct_risk": -21.6,
+     "longest_losing_streak": 17,
      "best_year": [
       2020,
-      17.9
+      10.46
      ],
      "worst_year": [
-      2018,
-      -9.92
+      2024,
+      -5.84
      ],
      "losing_years": 5,
      "years": 13,
-     "avg_days_held": 70.3,
+     "avg_days_held": 47.3,
      "gap_through_stop_pct": 0.0
     }
    },
    "vol_bucket": {
     "high volatility": {
-     "trades": 607,
-     "win_pct": 43.5,
-     "avg_win_pct": 30.5,
-     "avg_loss_pct": -11.59,
-     "expectancy_pct": 6.71,
+     "trades": 1645,
+     "win_pct": 47.7,
+     "avg_win_pct": 20.66,
+     "avg_loss_pct": -9.58,
+     "expectancy_pct": 4.83,
      "expectancy_ci95_pct": [
-      5.01,
-      8.42
+      3.82,
+      5.84
      ],
-     "profit_factor": 2.03,
-     "max_drawdown_pct_at_1pct_risk": -43.7,
-     "longest_losing_streak": 21,
+     "profit_factor": 1.96,
+     "max_drawdown_pct_at_1pct_risk": -70.0,
+     "longest_losing_streak": 26,
      "best_year": [
-      2014,
-      20.63
+      2020,
+      14.93
      ],
      "worst_year": [
-      2018,
-      -10.49
+      2022,
+      -3.02
      ],
-     "losing_years": 3,
+     "losing_years": 2,
      "years": 12,
-     "avg_days_held": 64.9,
+     "avg_days_held": 44.9,
      "gap_through_stop_pct": 0.0
     },
     "low volatility": {
-     "trades": 1567,
-     "win_pct": 34.4,
-     "avg_win_pct": 25.85,
-     "avg_loss_pct": -10.09,
-     "expectancy_pct": 2.27,
+     "trades": 3133,
+     "win_pct": 46.0,
+     "avg_win_pct": 18.03,
+     "avg_loss_pct": -8.94,
+     "expectancy_pct": 3.47,
      "expectancy_ci95_pct": [
-      1.39,
-      3.15
+      2.84,
+      4.11
      ],
-     "profit_factor": 1.34,
-     "max_drawdown_pct_at_1pct_risk": -83.8,
-     "longest_losing_streak": 49,
+     "profit_factor": 1.72,
+     "max_drawdown_pct_at_1pct_risk": -130.9,
+     "longest_losing_streak": 40,
      "best_year": [
       2023,
-      9.66
+      10.12
      ],
      "worst_year": [
-      2026,
-      -5.6
+      2020,
+      -7.43
      ],
      "losing_years": 6,
      "years": 14,
-     "avg_days_held": 47.2,
+     "avg_days_held": 41.6,
      "gap_through_stop_pct": 0.0
     },
     "medium volatility": {
-     "trades": 1051,
-     "win_pct": 38.2,
-     "avg_win_pct": 30.11,
-     "avg_loss_pct": -11.09,
-     "expectancy_pct": 4.63,
+     "trades": 2486,
+     "win_pct": 44.4,
+     "avg_win_pct": 20.0,
+     "avg_loss_pct": -9.44,
+     "expectancy_pct": 3.64,
      "expectancy_ci95_pct": [
-      3.38,
-      5.88
+      2.75,
+      4.54
      ],
-     "profit_factor": 1.67,
-     "max_drawdown_pct_at_1pct_risk": -61.6,
-     "longest_losing_streak": 55,
+     "profit_factor": 1.69,
+     "max_drawdown_pct_at_1pct_risk": -98.5,
+     "longest_losing_streak": 42,
      "best_year": [
       2017,
-      12.17
+      12.44
      ],
      "worst_year": [
       2015,
-      -4.86
+      -4.49
      ],
      "losing_years": 5,
      "years": 14,
-     "avg_days_held": 51.6,
+     "avg_days_held": 39.6,
      "gap_through_stop_pct": 0.0
     }
    },
    "cap": {
     "large-cap (top 100)": {
-     "trades": 1049,
-     "win_pct": 33.7,
-     "avg_win_pct": 24.35,
-     "avg_loss_pct": -9.38,
-     "expectancy_pct": 2.0,
+     "trades": 2483,
+     "win_pct": 45.4,
+     "avg_win_pct": 16.13,
+     "avg_loss_pct": -8.24,
+     "expectancy_pct": 2.83,
      "expectancy_ci95_pct": [
-      1.0,
-      3.01
+      2.2,
+      3.46
      ],
-     "profit_factor": 1.32,
-     "max_drawdown_pct_at_1pct_risk": -59.3,
-     "longest_losing_streak": 30,
+     "profit_factor": 1.63,
+     "max_drawdown_pct_at_1pct_risk": -55.1,
+     "longest_losing_streak": 20,
      "best_year": [
       2020,
-      10.15
+      9.5
      ],
      "worst_year": [
-      2026,
-      -6.56
-     ],
-     "losing_years": 8,
-     "years": 14,
-     "avg_days_held": 52.8,
-     "gap_through_stop_pct": 0.0
-    },
-    "mid-cap (101-300)": {
-     "trades": 2176,
-     "win_pct": 39.1,
-     "avg_win_pct": 29.93,
-     "avg_loss_pct": -11.35,
-     "expectancy_pct": 4.78,
-     "expectancy_ci95_pct": [
-      3.9,
-      5.65
-     ],
-     "profit_factor": 1.69,
-     "max_drawdown_pct_at_1pct_risk": -79.4,
-     "longest_losing_streak": 51,
-     "best_year": [
-      2014,
-      13.12
-     ],
-     "worst_year": [
-      2018,
-      -4.01
+      2015,
+      -4.48
      ],
      "losing_years": 6,
      "years": 14,
-     "avg_days_held": 51.6,
+     "avg_days_held": 42.1,
+     "gap_through_stop_pct": 0.0
+    },
+    "mid-cap (101-300)": {
+     "trades": 4781,
+     "win_pct": 46.1,
+     "avg_win_pct": 20.92,
+     "avg_loss_pct": -9.79,
+     "expectancy_pct": 4.36,
+     "expectancy_ci95_pct": [
+      3.73,
+      5.0
+     ],
+     "profit_factor": 1.83,
+     "max_drawdown_pct_at_1pct_risk": -112.8,
+     "longest_losing_streak": 42,
+     "best_year": [
+      2023,
+      11.14
+     ],
+     "worst_year": [
+      2018,
+      -5.55
+     ],
+     "losing_years": 3,
+     "years": 14,
+     "avg_days_held": 41.5,
      "gap_through_stop_pct": 0.0
     }
    },
    "why": {
-    "Stop-loss": {
-     "trades": 2021,
-     "win_pct": 0.0,
-     "avg_win_pct": null,
-     "avg_loss_pct": -10.67,
-     "expectancy_pct": -10.67,
+    "Closed above the 5-day average (dip-buy exit)": {
+     "trades": 433,
+     "win_pct": 80.1,
+     "avg_win_pct": 4.64,
+     "avg_loss_pct": -2.99,
+     "expectancy_pct": 3.13,
      "expectancy_ci95_pct": [
-      -10.8,
-      -10.54
+      2.66,
+      3.59
      ],
-     "profit_factor": 0.0,
-     "max_drawdown_pct_at_1pct_risk": -2125.0,
-     "longest_losing_streak": 2021,
+     "profit_factor": 6.26,
+     "max_drawdown_pct_at_1pct_risk": -1.1,
+     "longest_losing_streak": 8,
      "best_year": [
-      2025,
-      -8.99
+      2020,
+      4.91
      ],
      "worst_year": [
-      2014,
-      -11.99
+      2025,
+      0.6
+     ],
+     "losing_years": 0,
+     "years": 14,
+     "avg_days_held": 3.4,
+     "gap_through_stop_pct": 0.0
+    },
+    "Rolling Candle Profile SELL": {
+     "trades": 2550,
+     "win_pct": 17.1,
+     "avg_win_pct": 7.61,
+     "avg_loss_pct": -7.73,
+     "expectancy_pct": -5.11,
+     "expectancy_ci95_pct": [
+      -5.44,
+      -4.78
+     ],
+     "profit_factor": 0.2,
+     "max_drawdown_pct_at_1pct_risk": -787.2,
+     "longest_losing_streak": 56,
+     "best_year": [
+      2023,
+      -3.08
+     ],
+     "worst_year": [
+      2024,
+      -6.34
      ],
      "losing_years": 14,
      "years": 14,
-     "avg_days_held": 38.9,
+     "avg_days_held": 31.9,
+     "gap_through_stop_pct": 0.0
+    },
+    "Stop-loss": {
+     "trades": 1464,
+     "win_pct": 0.0,
+     "avg_win_pct": null,
+     "avg_loss_pct": -12.73,
+     "expectancy_pct": -12.73,
+     "expectancy_ci95_pct": [
+      -12.98,
+      -12.47
+     ],
+     "profit_factor": 0.0,
+     "max_drawdown_pct_at_1pct_risk": -1534.8,
+     "longest_losing_streak": 1464,
+     "best_year": [
+      2025,
+      -10.69
+     ],
+     "worst_year": [
+      2015,
+      -14.42
+     ],
+     "losing_years": 14,
+     "years": 14,
+     "avg_days_held": 30.8,
      "gap_through_stop_pct": 0.0
     },
     "Target 2": {
-     "trades": 1204,
+     "trades": 475,
      "win_pct": 100.0,
-     "avg_win_pct": 28.29,
+     "avg_win_pct": 28.67,
      "avg_loss_pct": null,
-     "expectancy_pct": 28.29,
+     "expectancy_pct": 28.67,
      "expectancy_ci95_pct": [
-      27.86,
-      28.72
+      28.01,
+      29.33
      ],
      "profit_factor": null,
      "max_drawdown_pct_at_1pct_risk": 0.0,
      "longest_losing_streak": 0,
      "best_year": [
-      2014,
-      31.07
+      2026,
+      32.82
      ],
      "worst_year": [
-      2025,
-      24.93
+      2023,
+      24.87
      ],
      "losing_years": 0,
      "years": 14,
-     "avg_days_held": 74.0,
+     "avg_days_held": 73.0,
+     "gap_through_stop_pct": 0.0
+    },
+    "Time exit (10 days)": {
+     "trades": 8,
+     "win_pct": 12.5,
+     "avg_win_pct": 1.03,
+     "avg_loss_pct": -7.6,
+     "expectancy_pct": -6.52,
+     "expectancy_ci95_pct": [
+      -10.81,
+      -2.23
+     ],
+     "profit_factor": 0.02,
+     "max_drawdown_pct_at_1pct_risk": -2.8,
+     "longest_losing_streak": 7,
+     "best_year": [
+      2013,
+      1.03
+     ],
+     "worst_year": [
+      2018,
+      -19.23
+     ],
+     "losing_years": 5,
+     "years": 6,
+     "avg_days_held": 10.0,
+     "gap_through_stop_pct": 0.0
+    },
+    "Time exit (60 days)": {
+     "trades": 2334,
+     "win_pct": 88.8,
+     "avg_win_pct": 22.07,
+     "avg_loss_pct": -4.27,
+     "expectancy_pct": 19.12,
+     "expectancy_ci95_pct": [
+      18.15,
+      20.09
+     ],
+     "profit_factor": 41.04,
+     "max_drawdown_pct_at_1pct_risk": -1.5,
+     "longest_losing_streak": 4,
+     "best_year": [
+      2020,
+      30.27
+     ],
+     "worst_year": [
+      2018,
+      9.1
+     ],
+     "losing_years": 0,
+     "years": 14,
+     "avg_days_held": 60.0,
      "gap_through_stop_pct": 0.0
     }
    },
    "year": {
     "2013": {
-     "trades": 111,
-     "win_pct": 43.2,
-     "avg_win_pct": 29.09,
-     "avg_loss_pct": -11.0,
-     "expectancy_pct": 6.34,
+     "trades": 363,
+     "win_pct": 42.1,
+     "avg_win_pct": 17.68,
+     "avg_loss_pct": -9.16,
+     "expectancy_pct": 2.16,
      "expectancy_ci95_pct": [
-      2.51,
-      10.17
+      0.32,
+      3.99
      ],
-     "profit_factor": 2.02,
-     "max_drawdown_pct_at_1pct_risk": -27.5,
-     "longest_losing_streak": 20,
+     "profit_factor": 1.41,
+     "max_drawdown_pct_at_1pct_risk": -53.0,
+     "longest_losing_streak": 14,
      "best_year": [
       2013,
-      6.34
+      2.16
      ],
      "worst_year": [
       2013,
-      6.34
+      2.16
      ],
      "losing_years": 0,
      "years": 1,
-     "avg_days_held": 62.3,
+     "avg_days_held": 39.5,
      "gap_through_stop_pct": 0.0
     },
     "2014": {
-     "trades": 350,
-     "win_pct": 54.3,
-     "avg_win_pct": 31.07,
-     "avg_loss_pct": -11.99,
-     "expectancy_pct": 11.39,
+     "trades": 759,
+     "win_pct": 55.7,
+     "avg_win_pct": 24.23,
+     "avg_loss_pct": -9.29,
+     "expectancy_pct": 9.39,
      "expectancy_ci95_pct": [
-      9.05,
-      13.73
+      7.75,
+      11.04
      ],
-     "profit_factor": 3.08,
-     "max_drawdown_pct_at_1pct_risk": -28.2,
-     "longest_losing_streak": 18,
-     "best_year": [
-      2014,
-      11.39
-     ],
-     "worst_year": [
-      2014,
-      11.39
-     ],
-     "losing_years": 0,
-     "years": 1,
-     "avg_days_held": 65.3,
-     "gap_through_stop_pct": 0.0
-    },
-    "2015": {
-     "trades": 163,
-     "win_pct": 22.7,
-     "avg_win_pct": 30.0,
-     "avg_loss_pct": -11.29,
-     "expectancy_pct": -1.92,
-     "expectancy_ci95_pct": [
-      -4.66,
-      0.83
-     ],
-     "profit_factor": 0.78,
-     "max_drawdown_pct_at_1pct_risk": -52.3,
-     "longest_losing_streak": 29,
-     "best_year": [
-      2015,
-      -1.92
-     ],
-     "worst_year": [
-      2015,
-      -1.92
-     ],
-     "losing_years": 1,
-     "years": 1,
-     "avg_days_held": 53.2,
-     "gap_through_stop_pct": 0.0
-    },
-    "2016": {
-     "trades": 213,
-     "win_pct": 34.7,
-     "avg_win_pct": 27.67,
-     "avg_loss_pct": -10.85,
-     "expectancy_pct": 2.53,
-     "expectancy_ci95_pct": [
-      -0.02,
-      5.08
-     ],
-     "profit_factor": 1.36,
-     "max_drawdown_pct_at_1pct_risk": -88.2,
-     "longest_losing_streak": 80,
-     "best_year": [
-      2016,
-      2.53
-     ],
-     "worst_year": [
-      2016,
-      2.53
-     ],
-     "losing_years": 0,
-     "years": 1,
-     "avg_days_held": 58.2,
-     "gap_through_stop_pct": 0.0
-    },
-    "2017": {
-     "trades": 377,
-     "win_pct": 37.7,
-     "avg_win_pct": 26.82,
-     "avg_loss_pct": -10.46,
-     "expectancy_pct": 3.58,
-     "expectancy_ci95_pct": [
-      1.68,
-      5.48
-     ],
-     "profit_factor": 1.55,
-     "max_drawdown_pct_at_1pct_risk": -38.4,
-     "longest_losing_streak": 33,
-     "best_year": [
-      2017,
-      3.58
-     ],
-     "worst_year": [
-      2017,
-      3.58
-     ],
-     "losing_years": 0,
-     "years": 1,
-     "avg_days_held": 53.4,
-     "gap_through_stop_pct": 0.0
-    },
-    "2018": {
-     "trades": 143,
-     "win_pct": 18.2,
-     "avg_win_pct": 25.56,
-     "avg_loss_pct": -10.29,
-     "expectancy_pct": -3.77,
-     "expectancy_ci95_pct": [
-      -6.16,
-      -1.39
-     ],
-     "profit_factor": 0.55,
-     "max_drawdown_pct_at_1pct_risk": -55.0,
-     "longest_losing_streak": 34,
-     "best_year": [
-      2018,
-      -3.77
-     ],
-     "worst_year": [
-      2018,
-      -3.77
-     ],
-     "losing_years": 1,
-     "years": 1,
-     "avg_days_held": 38.7,
-     "gap_through_stop_pct": 0.0
-    },
-    "2019": {
-     "trades": 133,
-     "win_pct": 24.8,
-     "avg_win_pct": 26.48,
-     "avg_loss_pct": -10.22,
-     "expectancy_pct": -1.11,
-     "expectancy_ci95_pct": [
-      -3.88,
-      1.65
-     ],
-     "profit_factor": 0.85,
-     "max_drawdown_pct_at_1pct_risk": -42.4,
-     "longest_losing_streak": 34,
-     "best_year": [
-      2019,
-      -1.11
-     ],
-     "worst_year": [
-      2019,
-      -1.11
-     ],
-     "losing_years": 1,
-     "years": 1,
-     "avg_days_held": 52.6,
-     "gap_through_stop_pct": 0.0
-    },
-    "2020": {
-     "trades": 226,
-     "win_pct": 50.4,
-     "avg_win_pct": 29.68,
-     "avg_loss_pct": -10.84,
-     "expectancy_pct": 9.6,
-     "expectancy_ci95_pct": [
-      6.86,
-      12.33
-     ],
-     "profit_factor": 2.79,
-     "max_drawdown_pct_at_1pct_risk": -29.7,
+     "profit_factor": 3.28,
+     "max_drawdown_pct_at_1pct_risk": -23.5,
      "longest_losing_streak": 16,
      "best_year": [
-      2020,
-      9.6
+      2014,
+      9.39
      ],
      "worst_year": [
-      2020,
-      9.6
+      2014,
+      9.39
      ],
      "losing_years": 0,
-     "years": 1,
-     "avg_days_held": 55.8,
-     "gap_through_stop_pct": 0.0
-    },
-    "2021": {
-     "trades": 354,
-     "win_pct": 40.7,
-     "avg_win_pct": 30.89,
-     "avg_loss_pct": -11.59,
-     "expectancy_pct": 5.69,
-     "expectancy_ci95_pct": [
-      3.46,
-      7.92
-     ],
-     "profit_factor": 1.83,
-     "max_drawdown_pct_at_1pct_risk": -43.4,
-     "longest_losing_streak": 20,
-     "best_year": [
-      2021,
-      5.69
-     ],
-     "worst_year": [
-      2021,
-      5.69
-     ],
-     "losing_years": 0,
-     "years": 1,
-     "avg_days_held": 51.9,
-     "gap_through_stop_pct": 0.0
-    },
-    "2022": {
-     "trades": 188,
-     "win_pct": 23.9,
-     "avg_win_pct": 29.81,
-     "avg_loss_pct": -10.85,
-     "expectancy_pct": -1.12,
-     "expectancy_ci95_pct": [
-      -3.67,
-      1.44
-     ],
-     "profit_factor": 0.86,
-     "max_drawdown_pct_at_1pct_risk": -78.4,
-     "longest_losing_streak": 29,
-     "best_year": [
-      2022,
-      -1.12
-     ],
-     "worst_year": [
-      2022,
-      -1.12
-     ],
-     "losing_years": 1,
      "years": 1,
      "avg_days_held": 44.2,
      "gap_through_stop_pct": 0.0
     },
-    "2023": {
-     "trades": 378,
-     "win_pct": 55.0,
-     "avg_win_pct": 25.22,
-     "avg_loss_pct": -9.13,
-     "expectancy_pct": 9.77,
+    "2015": {
+     "trades": 483,
+     "win_pct": 30.4,
+     "avg_win_pct": 14.44,
+     "avg_loss_pct": -9.67,
+     "expectancy_pct": -2.33,
      "expectancy_ci95_pct": [
-      7.95,
-      11.59
+      -3.79,
+      -0.87
      ],
-     "profit_factor": 3.38,
-     "max_drawdown_pct_at_1pct_risk": -37.3,
-     "longest_losing_streak": 29,
+     "profit_factor": 0.65,
+     "max_drawdown_pct_at_1pct_risk": -87.8,
+     "longest_losing_streak": 31,
      "best_year": [
-      2023,
-      9.77
+      2015,
+      -2.33
      ],
      "worst_year": [
-      2023,
-      9.77
+      2015,
+      -2.33
+     ],
+     "losing_years": 1,
+     "years": 1,
+     "avg_days_held": 37.4,
+     "gap_through_stop_pct": 0.0
+    },
+    "2016": {
+     "trades": 448,
+     "win_pct": 48.9,
+     "avg_win_pct": 17.97,
+     "avg_loss_pct": -9.88,
+     "expectancy_pct": 3.73,
+     "expectancy_ci95_pct": [
+      2.14,
+      5.33
+     ],
+     "profit_factor": 1.74,
+     "max_drawdown_pct_at_1pct_risk": -57.9,
+     "longest_losing_streak": 25,
+     "best_year": [
+      2016,
+      3.73
+     ],
+     "worst_year": [
+      2016,
+      3.73
      ],
      "losing_years": 0,
      "years": 1,
-     "avg_days_held": 47.6,
+     "avg_days_held": 45.1,
+     "gap_through_stop_pct": 0.0
+    },
+    "2017": {
+     "trades": 741,
+     "win_pct": 52.2,
+     "avg_win_pct": 17.6,
+     "avg_loss_pct": -8.53,
+     "expectancy_pct": 5.12,
+     "expectancy_ci95_pct": [
+      3.87,
+      6.37
+     ],
+     "profit_factor": 2.26,
+     "max_drawdown_pct_at_1pct_risk": -27.2,
+     "longest_losing_streak": 17,
+     "best_year": [
+      2017,
+      5.12
+     ],
+     "worst_year": [
+      2017,
+      5.12
+     ],
+     "losing_years": 0,
+     "years": 1,
+     "avg_days_held": 45.4,
+     "gap_through_stop_pct": 0.0
+    },
+    "2018": {
+     "trades": 359,
+     "win_pct": 28.7,
+     "avg_win_pct": 10.22,
+     "avg_loss_pct": -10.14,
+     "expectancy_pct": -4.3,
+     "expectancy_ci95_pct": [
+      -5.46,
+      -3.13
+     ],
+     "profit_factor": 0.41,
+     "max_drawdown_pct_at_1pct_risk": -103.4,
+     "longest_losing_streak": 39,
+     "best_year": [
+      2018,
+      -4.3
+     ],
+     "worst_year": [
+      2018,
+      -4.3
+     ],
+     "losing_years": 1,
+     "years": 1,
+     "avg_days_held": 35.3,
+     "gap_through_stop_pct": 0.0
+    },
+    "2019": {
+     "trades": 362,
+     "win_pct": 41.2,
+     "avg_win_pct": 15.38,
+     "avg_loss_pct": -8.75,
+     "expectancy_pct": 1.18,
+     "expectancy_ci95_pct": [
+      -0.5,
+      2.86
+     ],
+     "profit_factor": 1.23,
+     "max_drawdown_pct_at_1pct_risk": -58.1,
+     "longest_losing_streak": 18,
+     "best_year": [
+      2019,
+      1.18
+     ],
+     "worst_year": [
+      2019,
+      1.18
+     ],
+     "losing_years": 0,
+     "years": 1,
+     "avg_days_held": 43.1,
+     "gap_through_stop_pct": 0.0
+    },
+    "2020": {
+     "trades": 484,
+     "win_pct": 53.9,
+     "avg_win_pct": 27.31,
+     "avg_loss_pct": -9.8,
+     "expectancy_pct": 10.21,
+     "expectancy_ci95_pct": [
+      7.0,
+      13.43
+     ],
+     "profit_factor": 3.26,
+     "max_drawdown_pct_at_1pct_risk": -66.2,
+     "longest_losing_streak": 29,
+     "best_year": [
+      2020,
+      10.21
+     ],
+     "worst_year": [
+      2020,
+      10.21
+     ],
+     "losing_years": 0,
+     "years": 1,
+     "avg_days_held": 46.3,
+     "gap_through_stop_pct": 0.0
+    },
+    "2021": {
+     "trades": 737,
+     "win_pct": 50.1,
+     "avg_win_pct": 18.92,
+     "avg_loss_pct": -9.21,
+     "expectancy_pct": 4.87,
+     "expectancy_ci95_pct": [
+      3.45,
+      6.3
+     ],
+     "profit_factor": 2.06,
+     "max_drawdown_pct_at_1pct_risk": -18.9,
+     "longest_losing_streak": 17,
+     "best_year": [
+      2021,
+      4.87
+     ],
+     "worst_year": [
+      2021,
+      4.87
+     ],
+     "losing_years": 0,
+     "years": 1,
+     "avg_days_held": 41.0,
+     "gap_through_stop_pct": 0.0
+    },
+    "2022": {
+     "trades": 468,
+     "win_pct": 32.1,
+     "avg_win_pct": 16.98,
+     "avg_loss_pct": -10.3,
+     "expectancy_pct": -1.56,
+     "expectancy_ci95_pct": [
+      -3.0,
+      -0.12
+     ],
+     "profit_factor": 0.78,
+     "max_drawdown_pct_at_1pct_risk": -88.9,
+     "longest_losing_streak": 25,
+     "best_year": [
+      2022,
+      -1.56
+     ],
+     "worst_year": [
+      2022,
+      -1.56
+     ],
+     "losing_years": 1,
+     "years": 1,
+     "avg_days_held": 38.1,
+     "gap_through_stop_pct": 0.0
+    },
+    "2023": {
+     "trades": 729,
+     "win_pct": 62.6,
+     "avg_win_pct": 21.11,
+     "avg_loss_pct": -7.72,
+     "expectancy_pct": 10.31,
+     "expectancy_ci95_pct": [
+      8.83,
+      11.79
+     ],
+     "profit_factor": 4.57,
+     "max_drawdown_pct_at_1pct_risk": -28.8,
+     "longest_losing_streak": 20,
+     "best_year": [
+      2023,
+      10.31
+     ],
+     "worst_year": [
+      2023,
+      10.31
+     ],
+     "losing_years": 0,
+     "years": 1,
+     "avg_days_held": 45.8,
      "gap_through_stop_pct": 0.0
     },
     "2024": {
-     "trades": 346,
-     "win_pct": 23.7,
-     "avg_win_pct": 27.6,
-     "avg_loss_pct": -11.1,
-     "expectancy_pct": -1.93,
+     "trades": 663,
+     "win_pct": 41.9,
+     "avg_win_pct": 17.05,
+     "avg_loss_pct": -9.68,
+     "expectancy_pct": 1.53,
      "expectancy_ci95_pct": [
-      -3.74,
-      -0.13
+      0.14,
+      2.91
      ],
-     "profit_factor": 0.77,
-     "max_drawdown_pct_at_1pct_risk": -97.1,
-     "longest_losing_streak": 43,
+     "profit_factor": 1.27,
+     "max_drawdown_pct_at_1pct_risk": -71.7,
+     "longest_losing_streak": 22,
      "best_year": [
       2024,
-      -1.93
+      1.53
      ],
      "worst_year": [
       2024,
-      -1.93
-     ],
-     "losing_years": 1,
-     "years": 1,
-     "avg_days_held": 45.0,
-     "gap_through_stop_pct": 0.0
-    },
-    "2025": {
-     "trades": 176,
-     "win_pct": 30.1,
-     "avg_win_pct": 24.93,
-     "avg_loss_pct": -8.99,
-     "expectancy_pct": 1.23,
-     "expectancy_ci95_pct": [
-      -1.18,
-      3.64
-     ],
-     "profit_factor": 1.2,
-     "max_drawdown_pct_at_1pct_risk": -33.9,
-     "longest_losing_streak": 17,
-     "best_year": [
-      2025,
-      1.23
-     ],
-     "worst_year": [
-      2025,
-      1.23
+      1.53
      ],
      "losing_years": 0,
      "years": 1,
-     "avg_days_held": 53.1,
+     "avg_days_held": 36.5,
+     "gap_through_stop_pct": 0.0
+    },
+    "2025": {
+     "trades": 371,
+     "win_pct": 37.2,
+     "avg_win_pct": 14.74,
+     "avg_loss_pct": -8.12,
+     "expectancy_pct": 0.39,
+     "expectancy_ci95_pct": [
+      -1.0,
+      1.77
+     ],
+     "profit_factor": 1.08,
+     "max_drawdown_pct_at_1pct_risk": -30.4,
+     "longest_losing_streak": 18,
+     "best_year": [
+      2025,
+      0.39
+     ],
+     "worst_year": [
+      2025,
+      0.39
+     ],
+     "losing_years": 0,
+     "years": 1,
+     "avg_days_held": 42.6,
      "gap_through_stop_pct": 0.0
     },
     "2026": {
-     "trades": 67,
-     "win_pct": 11.9,
-     "avg_win_pct": 30.99,
-     "avg_loss_pct": -9.3,
-     "expectancy_pct": -4.49,
+     "trades": 297,
+     "win_pct": 33.0,
+     "avg_win_pct": 21.05,
+     "avg_loss_pct": -9.03,
+     "expectancy_pct": 0.9,
      "expectancy_ci95_pct": [
-      -7.83,
-      -1.14
+      -1.42,
+      3.21
      ],
-     "profit_factor": 0.45,
-     "max_drawdown_pct_at_1pct_risk": -40.4,
-     "longest_losing_streak": 19,
+     "profit_factor": 1.15,
+     "max_drawdown_pct_at_1pct_risk": -55.5,
+     "longest_losing_streak": 32,
      "best_year": [
       2026,
-      -4.49
+      0.9
      ],
      "worst_year": [
       2026,
-      -4.49
+      0.9
      ],
-     "losing_years": 1,
+     "losing_years": 0,
      "years": 1,
-     "avg_days_held": 27.1,
+     "avg_days_held": 36.7,
      "gap_through_stop_pct": 0.0
     }
    }
   },
   "entry_type_Breakout": {
    "after_costs": {
-    "trades": 3225,
-    "win_pct": 37.3,
-    "avg_win_pct": 28.29,
-    "avg_loss_pct": -10.67,
-    "expectancy_pct": 3.87,
+    "trades": 1304,
+    "win_pct": 36.4,
+    "avg_win_pct": 28.67,
+    "avg_loss_pct": -10.81,
+    "expectancy_pct": 3.57,
     "expectancy_ci95_pct": [
-     3.2,
-     4.55
+     2.51,
+     4.64
     ],
-    "profit_factor": 1.58,
-    "max_drawdown_pct_at_1pct_risk": -113.8,
-    "longest_losing_streak": 81,
+    "profit_factor": 1.52,
+    "max_drawdown_pct_at_1pct_risk": -62.5,
+    "longest_losing_streak": 24,
     "best_year": [
-     2014,
-     11.39
+     2023,
+     8.99
     ],
     "worst_year": [
-     2026,
-     -4.49
+     2018,
+     -7.73
     ],
     "losing_years": 6,
     "years": 14,
-    "avg_days_held": 52.0,
+    "avg_days_held": 51.0,
     "gap_through_stop_pct": 0.0
    },
    "holdout": {
-    "trades": 674,
-    "win_pct": 28.9,
-    "avg_win_pct": 27.04,
-    "avg_loss_pct": -10.28,
-    "expectancy_pct": 0.51,
+    "trades": 268,
+    "win_pct": 29.5,
+    "avg_win_pct": 27.93,
+    "avg_loss_pct": -10.14,
+    "expectancy_pct": 1.08,
     "expectancy_ci95_pct": [
-     -0.82,
-     1.85
+     -1.1,
+     3.26
     ],
-    "profit_factor": 1.07,
-    "max_drawdown_pct_at_1pct_risk": -113.3,
-    "longest_losing_streak": 44,
+    "profit_factor": 1.15,
+    "max_drawdown_pct_at_1pct_risk": -53.8,
+    "longest_losing_streak": 18,
     "best_year": [
      2023,
-     12.93
+     16.29
     ],
     "worst_year": [
      2026,
-     -4.49
+     -3.58
     ],
     "losing_years": 2,
     "years": 4,
-    "avg_days_held": 44.7,
+    "avg_days_held": 42.7,
     "gap_through_stop_pct": 0.0
    },
    "PASS": true,
@@ -912,88 +1094,279 @@
     "4 profit factor >=1.3": true,
     "5 positive at 0.60% costs": true
    },
-   "years_beating_avg_pct": 64
+   "years_beating_avg_pct": 57
+  },
+  "entry_type_Dip-buy": {
+   "after_costs": {
+    "trades": 450,
+    "win_pct": 77.3,
+    "avg_win_pct": 4.63,
+    "avg_loss_pct": -4.23,
+    "expectancy_pct": 2.62,
+    "expectancy_ci95_pct": [
+     2.11,
+     3.14
+    ],
+    "profit_factor": 3.74,
+    "max_drawdown_pct_at_1pct_risk": -3.5,
+    "longest_losing_streak": 8,
+    "best_year": [
+     2020,
+     3.88
+    ],
+    "worst_year": [
+     2019,
+     -1.94
+    ],
+    "losing_years": 1,
+    "years": 14,
+    "avg_days_held": 3.5,
+    "gap_through_stop_pct": 0.0
+   },
+   "holdout": {
+    "trades": 90,
+    "win_pct": 77.8,
+    "avg_win_pct": 4.99,
+    "avg_loss_pct": -2.21,
+    "expectancy_pct": 3.39,
+    "expectancy_ci95_pct": [
+     2.32,
+     4.46
+    ],
+    "profit_factor": 7.91,
+    "max_drawdown_pct_at_1pct_risk": -1.1,
+    "longest_losing_streak": 8,
+    "best_year": [
+     2024,
+     3.8
+    ],
+    "worst_year": [
+     2025,
+     0.6
+    ],
+    "losing_years": 0,
+    "years": 4,
+    "avg_days_held": 3.7,
+    "gap_through_stop_pct": 0.0
+   },
+   "PASS": false,
+   "checks": {
+    "1 expectancy>0 & CI lower>0": true,
+    "2 holdout>0 on >=100 trades": false,
+    "3 beats avg stock >=55% of years": true,
+    "4 profit factor >=1.3": true,
+    "5 positive at 0.60% costs": true
+   },
+   "years_beating_avg_pct": 93
+  },
+  "entry_type_RCP": {
+   "after_costs": {
+    "trades": 5510,
+    "win_pct": 45.5,
+    "avg_win_pct": 19.56,
+    "avg_loss_pct": -9.0,
+    "expectancy_pct": 4.0,
+    "expectancy_ci95_pct": [
+     3.44,
+     4.57
+    ],
+    "profit_factor": 1.82,
+    "max_drawdown_pct_at_1pct_risk": -97.1,
+    "longest_losing_streak": 31,
+    "best_year": [
+     2020,
+     11.14
+    ],
+    "worst_year": [
+     2018,
+     -3.99
+    ],
+    "losing_years": 3,
+    "years": 14,
+    "avg_days_held": 42.6,
+    "gap_through_stop_pct": 0.0
+   },
+   "holdout": {
+    "trades": 1162,
+    "win_pct": 42.9,
+    "avg_win_pct": 19.45,
+    "avg_loss_pct": -8.81,
+    "expectancy_pct": 3.3,
+    "expectancy_ci95_pct": [
+     2.17,
+     4.44
+    ],
+    "profit_factor": 1.66,
+    "max_drawdown_pct_at_1pct_risk": -84.0,
+    "longest_losing_streak": 28,
+    "best_year": [
+     2023,
+     16.11
+    ],
+    "worst_year": [
+     2025,
+     0.46
+    ],
+    "losing_years": 0,
+    "years": 4,
+    "avg_days_held": 42.0,
+    "gap_through_stop_pct": 0.0
+   },
+   "PASS": true,
+   "checks": {
+    "1 expectancy>0 & CI lower>0": true,
+    "2 holdout>0 on >=100 trades": true,
+    "3 beats avg stock >=55% of years": true,
+    "4 profit factor >=1.3": true,
+    "5 positive at 0.60% costs": true
+   },
+   "years_beating_avg_pct": 93
   },
   "single_stocks": {
    "SBIN": {
     "group": "large",
-    "trades": 8,
-    "indicator_pnl_rs": 1366,
+    "trades": 28,
+    "indicator_pnl_rs": 3256,
     "buy_and_hold_pnl_rs": 267304,
-    "win_pct": 37.5,
-    "max_capital_used_rs": 11129
+    "win_pct": 35.7,
+    "max_capital_used_rs": 9671
    },
    "MCDOWELL-N": {
     "group": "large",
-    "trades": 10,
-    "indicator_pnl_rs": -1378,
+    "trades": 19,
+    "indicator_pnl_rs": 974,
     "buy_and_hold_pnl_rs": 71554,
-    "win_pct": 20.0,
-    "max_capital_used_rs": 8006
+    "win_pct": 36.8,
+    "max_capital_used_rs": 6525
    },
    "ICICIBANK": {
     "group": "large",
-    "trades": 9,
-    "indicator_pnl_rs": 3287,
+    "trades": 36,
+    "indicator_pnl_rs": -1160,
     "buy_and_hold_pnl_rs": 398281,
     "win_pct": 44.4,
-    "max_capital_used_rs": 9761
+    "max_capital_used_rs": 6912
    },
    "INFY": {
     "group": "large",
-    "trades": 10,
-    "indicator_pnl_rs": 1494,
+    "trades": 29,
+    "indicator_pnl_rs": 1718,
     "buy_and_hold_pnl_rs": 138435,
-    "win_pct": 40.0,
-    "max_capital_used_rs": 12047
+    "win_pct": 44.8,
+    "max_capital_used_rs": 9554
    },
    "AXISBANK": {
     "group": "large",
-    "trades": 12,
-    "indicator_pnl_rs": -418,
+    "trades": 27,
+    "indicator_pnl_rs": -473,
     "buy_and_hold_pnl_rs": 197344,
-    "win_pct": 25.0,
+    "win_pct": 40.7,
     "max_capital_used_rs": 8587
    },
    "INDIACEM": {
     "group": "mid",
-    "trades": 7,
-    "indicator_pnl_rs": 347,
+    "trades": 20,
+    "indicator_pnl_rs": 797,
     "buy_and_hold_pnl_rs": 222987,
-    "win_pct": 28.6,
-    "max_capital_used_rs": 5272
+    "win_pct": 40.0,
+    "max_capital_used_rs": 6984
    },
    "GSKCONS": {
     "group": "mid",
-    "trades": 1,
-    "indicator_pnl_rs": 928,
+    "trades": 2,
+    "indicator_pnl_rs": 1634,
     "buy_and_hold_pnl_rs": 70331,
     "win_pct": 100.0,
-    "max_capital_used_rs": 5244
+    "max_capital_used_rs": 6051
    },
    "CHAMBLFERT": {
     "group": "mid",
-    "trades": 17,
-    "indicator_pnl_rs": -864,
+    "trades": 27,
+    "indicator_pnl_rs": -1251,
     "buy_and_hold_pnl_rs": 594507,
-    "win_pct": 23.5,
-    "max_capital_used_rs": 6696
+    "win_pct": 40.7,
+    "max_capital_used_rs": 5073
    },
    "SYNDIBANK": {
     "group": "mid",
-    "trades": 2,
-    "indicator_pnl_rs": 914,
+    "trades": 6,
+    "indicator_pnl_rs": -320,
     "buy_and_hold_pnl_rs": -42018,
-    "win_pct": 50.0,
+    "win_pct": 16.7,
     "max_capital_used_rs": 4247
    },
    "DISHMAN": {
     "group": "mid",
-    "trades": 3,
-    "indicator_pnl_rs": -1643,
+    "trades": 8,
+    "indicator_pnl_rs": 2556,
     "buy_and_hold_pnl_rs": 244928,
-    "win_pct": 0.0,
-    "max_capital_used_rs": 3535
+    "win_pct": 37.5,
+    "max_capital_used_rs": 3524
+   }
+  },
+  "calibration": {
+   "Breakout": {
+    "n": 1304,
+    "win_pct": 36,
+    "avg_pct": 3.57,
+    "holdout_n": 268,
+    "holdout_win_pct": 29
+   },
+   "Breakout 70-79": {
+    "n": 47,
+    "win_pct": 36,
+    "avg_pct": 3.21,
+    "holdout_n": 12,
+    "holdout_win_pct": 33
+   },
+   "Breakout 80-89": {
+    "n": 457,
+    "win_pct": 37,
+    "avg_pct": 3.92,
+    "holdout_n": 66,
+    "holdout_win_pct": 23
+   },
+   "Breakout 90+": {
+    "n": 800,
+    "win_pct": 36,
+    "avg_pct": 3.39,
+    "holdout_n": 190,
+    "holdout_win_pct": 32
+   },
+   "Dip-buy": {
+    "n": 450,
+    "win_pct": 77,
+    "avg_pct": 2.62,
+    "holdout_n": 90,
+    "holdout_win_pct": 78
+   },
+   "Dip-buy A": {
+    "n": 171,
+    "win_pct": 80,
+    "avg_pct": 3.34,
+    "holdout_n": 37,
+    "holdout_win_pct": 84
+   },
+   "Dip-buy B": {
+    "n": 254,
+    "win_pct": 75,
+    "avg_pct": 2.26,
+    "holdout_n": 48,
+    "holdout_win_pct": 75
+   },
+   "Dip-buy C": {
+    "n": 25,
+    "win_pct": 80,
+    "avg_pct": 1.48,
+    "holdout_n": 5,
+    "holdout_win_pct": 60
+   },
+   "RCP": {
+    "n": 5510,
+    "win_pct": 46,
+    "avg_pct": 4.0,
+    "holdout_n": 1162,
+    "holdout_win_pct": 43
    }
   }
  }

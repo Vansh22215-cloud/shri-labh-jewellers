@@ -17,6 +17,16 @@
 | 12 | Alerts fire once, at the bar close | Events are edge-triggered (true on one bar). `alertcondition` plus `alert(..., alert.freq_once_per_bar_close)` | ✅ by inspection |
 | 13 | Performance claims are backed by tests | TEST_RESULTS.md: 13 years, pre-registered pass bar, survivorship-free universe | ✅; weaknesses reported |
 
+## Version 2 additions (dip-buy, Rolling Candle Profile, likely %)
+- **No look-ahead with the new types:** truncation test on 6 stocks with all three types, 66 cuts, **0 differences**.
+- **Pine v6 lazy evaluation:** `and`/`or` skip their right side, so a `ta.*` call written there would not run on every bar and its history would be wrong.
+  - Found in self-review: 9 places (pivots, Vix Fix, pullback lows, RSI lows, volume averages, order-block high, crossunder, 250-day high).
+  - All were moved to their own lines. No `ta.*` call remains on the right of `and`/`or` or inside a ternary branch.
+- **The new types reuse the tested reference code** (`swing-system/swing/confirmations.py`, `orderflow.py`, `rolling_profile.py`) in the replica. The Pine port mirrors that code; differences can come only from the Pine port itself, which is not compiled here.
+- **Likely % is calibrated from the test run.** `build.py` writes the measured win rates into the script.
+- **Dip-buy rule note:** it passed every check except "≥ 100 holdout trades" (it had 90). It is ON because the owner explicitly asked to add it. This is reported, not hidden.
+- **Licence:** includes a port of Zeiierman's Rolling Candle Profile (CC BY-NC-SA 4.0), so the script is CC BY-NC-SA 4.0. Personal, non-commercial use; don't sell it or publish it as closed source.
+
 ## Issues found and fixed during development
 - **Planned default exit failed the test.** "Combined" was the planned default. Its failed-breakout exit cut winners: holdout −0.20%.
   - The pre-registered rule switched the default to "Fixed risk/reward", which passed.

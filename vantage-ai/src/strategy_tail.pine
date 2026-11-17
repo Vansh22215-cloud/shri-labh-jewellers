@@ -7,9 +7,10 @@
 //   deterioration SELL         -> strategy.close at the close -> fills at the next bar's open
 if barstate.isconfirmed and warm
     if buyNow
-        strategy.entry("Long", strategy.long, qty = posQty, comment = setupType + " " + str.tostring(entryScore))
+        strategy.entry("Long", strategy.long, qty = posQty, comment = setupType + " " + posTier)
     if (inPos or pendingEntry) and not pendingExit
-        strategy.exit("Stop/Target", "Long", stop = stopLvl, limit = exitMode == "Fixed risk/reward" ? tgt2 : na,
+        strategy.exit("Stop/Target", "Long", stop = stopLvl,
+             limit = (posType == "Breakout" or posType == "Pullback") and exitMode == "Fixed risk/reward" ? tgt2 : na,
              comment_loss = "Stop", comment_profit = "Target 2")
     if pendingExit and sellNow
         strategy.close("Long", comment = sellWhy)

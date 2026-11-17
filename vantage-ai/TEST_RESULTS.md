@@ -1,4 +1,48 @@
-# VANTAGE AI — Test results (13 years of NSE data, run 17 Nov 2026)
+# VANTAGE AI — Test results
+
+## Version 2 (current): Breakout + Dip-buy + Rolling Candle Profile (17 Nov 2026)
+Same method as below: point-in-time top-300 NSE stocks, 2013–2026, delisted stocks included, next-open fills, 0.35% costs. The rules for the new types were written before the run (`validation/backtest.py`, addendum).
+
+| Measure | v1 (Breakout only) | **v2 (all types)** |
+|---|---|---|
+| Trades | 3,225 | 7,264 |
+| Trades that won | 37% | **46%** |
+| Average win / loss | +28% / −11% | +19% / −9% |
+| **Average per trade (after costs)** | +3.87% | **+3.84%** (+3.59% at 0.60% costs) |
+| Profit factor | 1.58 | **1.77** |
+| **Last 3 years (held out)** | +0.51% | **+2.92%** |
+| Years beating the average stock | 9 of 14 | **14 of 14** |
+| Losing years (average trade) | 6 | **3** (2015, 2018, 2022) |
+| Average holding | 52 days | 42 days |
+
+**By signal type.** "Likely win" is the share of past signals of that type that ended in profit after costs; it is the number shown on the chart.
+
+| Type | Trades | Won | Avg/trade | Last 3 years | Verdict |
+|---|---|---|---|---|---|
+| Dip-buy A (fear spike + support zone) | 171 | **80%** | +3.34% | 84% won | |
+| Dip-buy B (fear spike) | 254 | **75%** | +2.26% | 75% won | |
+| Dip-buy C (support zone only) | 25 | 80% | +1.48% | 5 trades | |
+| **Dip-buy total** | 450 | **77%** | +2.62% | 78% won, +3.39% | Passes every check except the holdout sample size (90 trades vs 100 required). ON because the owner asked for it |
+| **Rolling Candle Profile** | 5,510 | 46% | **+4.00%** | +3.30% | ✅ PASS (beat the average stock in 93% of years) |
+| Breakout | 1,304 | 36% | +3.57% | +1.08% | ✅ PASS |
+
+- **The setup score does not predict breakout success:** score 70–79 won 36%, 80–89 37%, 90+ 36%. The likely % is therefore not raised for higher scores.
+- **By market:** NIFTY BULLISH / SIDEWAYS / BEARISH at entry: +3.66% / +4.23% / +5.68% per trade (the BEARISH entries are mostly dip-buys and RCP).
+- **By size and volatility:** large-caps +2.83%, mid-caps +4.36%; low / medium / high volatility +3.47% / +3.64% / +4.83%.
+- **By year** (average per trade): 2013 +2.2 · 2014 +9.4 · 2015 −2.3 · 2016 +3.7 · 2017 +5.1 · 2018 −4.3 · 2019 +1.2 · 2020 +10.2 · 2021 +4.9 · 2022 −1.6 · 2023 +10.3 · 2024 +1.5 · 2025 +0.4 · 2026 +0.9
+
+**A ₹50,000 account** (1% risk per trade, not compounded, costs included; for reference only):
+
+| Account | Per year | Worst drawdown | Last 3 years |
+|---|---|---|---|
+| Max 4 positions | ≈ +₹3,060 (6.1%) | −₹3,469 | +₹4,770 |
+| Max 8 positions | ≈ +₹5,270 (**10.5%**, about the same as NIFTY) | −₹6,606 (much smaller than NIFTY's falls) | +₹4,970 |
+
+The longest losing streak was 11. On a single stock that rose 5×, buy-and-hold still wins.
+
+---
+
+## Version 1 (history)
 
 ## How it was tested
 - **What was tested:** `validation/replica.py`, a line-by-line Python copy of the Pine core (`src/core.pine`), run on real NSE data.

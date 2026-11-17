@@ -1,6 +1,13 @@
 # VANTAGE AI — NSE positional decision engine for TradingView (Pine Script v6)
 
-A long-only, daily-timeframe indicator for NSE stocks. It gives **BUY / HOLD / SELL / WAIT**, a transparent 0–100 setup score, stop-loss, targets and position size. It comes with a backtesting strategy that uses identical logic.
+A long-only, daily-timeframe indicator for NSE stocks. It gives **BUY / HOLD / SELL / WAIT** from three tested signal types:
+- **Dip-buy:** tiered, confirmed by Vix Fix, WaveTrend, order blocks, the structure-break order block and swing-low hold; no entry during a Squeeze.
+- **Rolling Candle Profile:** the positional signal.
+- **Breakout.**
+
+Every BUY shows its **historical "likely win" %**. The chart also shows a transparent 0–100 setup score, stop-loss, targets and position size. A backtesting strategy with identical logic comes with it.
+
+**13-year NSE test, all types:** 46% of trades won, +3.8% per trade after costs, last 3 years +2.9%, beat the average stock in 14 of 14 years (TEST_RESULTS.md).
 
 | File | What it is |
 |---|---|

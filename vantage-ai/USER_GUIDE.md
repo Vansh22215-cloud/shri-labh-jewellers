@@ -18,9 +18,9 @@ VANTAGE AI is a TradingView indicator for **NSE stocks on the daily chart**. It 
 ## 2. Reading the chart
 | You see | Meaning | What you do |
 |---|---|---|
-| 🟢 green arrow + **BUY** label (setup type, score) | All conditions met at today's close | Consider buying at **tomorrow's open**. Quantity and stop are on the dashboard |
+| 🟢 green arrow + **BUY** label (signal type, **"Likely win: X%"**, how many past signals that is based on, this stock's own record) | All conditions met at today's close | Consider buying at **tomorrow's open**. Quantity and stop are on the dashboard |
 | Blue / red / green lines | Entry, **stop-loss** (red, only moves up) and targets | Place your stop-loss order at the red line. Raise it when the line rises |
-| 🔴 red arrow + **SELL** label (reason) | Exit the position | Sell at the next open (or immediately if the stop was hit) |
+| 🔴 red arrow + **SELL** label (reason, result %) | Exit the position | Sell at the next open (or immediately if the stop was hit) |
 | Nothing new | WAIT | Do nothing |
 | Faint orange / teal steps | Last confirmed resistance / support | For context only |
 
@@ -42,36 +42,30 @@ VANTAGE AI is a TradingView indicator for **NSE stocks on the daily chart**. It 
 - **During a trade:** entry, initial stop, current stop, targets, quantity, money at risk and open profit/loss.
 - **No trade:** what a trade would look like if bought now (shares, stop, maximum loss, reward).
 
-## 4. What BUY requires (all of these)
-1. A **setup**:
-   - **Breakout:**
-     - the stock is in an uptrend (price above the 50-day and 200-day averages, the 50-day above the 200-day)
-     - it closes above the highest price of the last 50 days
-     - volume is at least 1.5× normal
-     - momentum is positive
-     - it is doing at least as well as NIFTY
-   - **Pullback** (**OFF by default**: it failed the 13-year test; see TEST_RESULTS.md):
-     - a strong uptrend dips to the 20-day average or demand zone on lighter volume
-     - then a candle closes above the previous day's high
-2. **Score ≥ 70.**
-3. **Not overextended:** not more than 3 ATR above the 20-day average, and RSI ≤ 80.
-4. **Sensible stop:** it is 3 ATR below the entry and no more than 15% away.
-5. **Room to run:** the next resistance is at least 1.5 × the risk away (a new 52-week high has none).
-6. **Market not bearish** (if the filter is on).
-7. **No rejection candle** (a long upper wick into resistance).
-8. **Not already in a trade,** and at least 5 bars since the last exit.
+## 4. The 3 kinds of BUY (each one was tested on 13 years of NSE data)
+| Signal | What it is | Likely win* | Exit |
+|---|---|---|---|
+| **Dip-buy A / B / C** | A strong stock (≥ 10% above its 200-day average) has a sharp 2-day dip while NIFTY is in an uptrend. Confirmed by a fear spike (Vix Fix) and/or a support zone (order block, WaveTrend oversold, structure-break order block, swing-low hold). Never during a Squeeze | **A 80% · B 75% · C 80%** | First close above the 5-day average; 4 ATR stop; 10 days at most |
+| **Rolling Candle Profile** | Zeiierman's profile shows buyers in control, price above a rising 21-EMA, within 10% of the 52-week high | **46%** (big winners) | Its own SELL signal; 5 ATR stop; 60 days at most |
+| **Breakout** | Uptrend + close above the 50-day high on ≥ 1.5× volume + momentum + strength vs NIFTY + room to resistance + score ≥ 70 | **36%** (big winners) | Stop 3 ATR or Target 2 (3R) |
+| Pullback | OFF by default: it failed the test | 33% | — |
 
-**The score alone never creates a BUY.**
+\* **"Likely win" = how often similar past signals ended in profit** in the 13-year NSE test, after costs. It is a past frequency, **not a promise**. A 46% signal can still be more profitable than an 80% one, because its winners are bigger.
 
-## 5. What SELL means and when it comes
-**Default exit mode: "Fixed risk/reward".** It is the only exit mode that passed the 13-year test.
-- **Stop-loss:** the price touched the stop, 3 ATR below the entry.
-- **Target 2:** the price reached entry + 3 × risk (3R). Take the profit.
-- **Target 1 (2R)** only sends an alert. It does not sell.
+Every BUY also needs a closed candle, no open position, at least 5 bars since the last exit, and a valid stop. The 0–100 score is shown for information. It gates breakouts, but the tests show it does **not** change the odds.
 
-Other modes (Settings → Exits). Both failed the test because they cut winners too early. Use them only for your own testing.
-- **ATR trailing stop:** the stop trails 4 ATR below the highest price since entry. It never moves down.
-- **Combined:** trailing stop, plus exits on trend deterioration, a bearish CHoCH, a support breakdown or a failed breakout.
+## 5. What SELL means
+Each signal type uses the exit that was tested with it. The SELL label shows the reason and the result.
+- **Dip-buy:**
+  - the first daily close above the 5-day average (usually 2–5 days), or
+  - 10 days, or
+  - the 4 ATR stop.
+- **Rolling Candle Profile:**
+  - the profile's own SELL signal, or
+  - 60 days, or
+  - the 5 ATR stop.
+- **Breakout:** the 3 ATR stop, or Target 2 (3 × risk). Target 1 is only an alert.
+  - Other breakout exit modes (ATR trailing, Combined) are in Settings → Exits. They failed the test.
 
 ## 6. Position size (your ₹50,000)
 - **Formula:**
@@ -92,14 +86,11 @@ Other modes (Settings → Exits). Both failed the test because they cut winners 
 
 ## 7. What the numbers really mean
 - **The score measures how many things line up. It is not a probability of profit.** A score of 90 does not mean a 90% chance.
-- **Tested result** (TEST_RESULTS.md):
-  - about **37% of trades win**: average win +28%, average loss −11%, about +3.9% per trade after costs
-  - **expect long losing streaks:** 14 losses in a row happened in a realistic account
-- **Honest bottom line:**
-  - Each trade has a measurable edge.
-  - But a ₹50,000 account using it earned **about 3–8% a year (2013–2026)**, *less than simply holding NIFTY 50 (about 10.5%)*, and the **last 3 years were weak**.
-  - Use it to **pick and time stocks with defined risk**, not as a promise to beat the index.
-- Past results do not guarantee future results.
+- **Tested result** (TEST_RESULTS.md, all signal types together, 13 years):
+  - **46% of trades won**, average +3.8% per trade after costs.
+  - The last 3 years: +2.9% per trade.
+  - It beat the average stock in **every one of the 14 years**.
+- **Losing streaks still happen** (11 in a row in testing), and past results do not guarantee the future.
 
 ## 8. Alerts
 1. Open the stock's chart with VANTAGE AI on it, then click ⏰ **Alert**.
@@ -128,8 +119,8 @@ These are the defaults. They were fixed **before** testing and **not** tuned to 
 | Breakout lookback / volume | 50 bars / 1.5× |
 | Initial stop | 3 ATR |
 | Targets | 2R (alert) / 3R (exit) |
-| Exit mode | Fixed risk/reward (the only exit mode that passed the test) |
-| Entry types | Breakout ON, Pullback OFF (failed the test) |
+| Breakout exit mode | Fixed risk/reward (the only one that passed the test). Dip-buy and RCP always use their own tested exits |
+| Entry types | Dip-buy ON · Rolling Candle Profile ON · Breakout ON · Pullback OFF (failed the test) |
 | Market filter | NIFTY 50, on |
 | Minimum gap between trades | 5 bars |
 
