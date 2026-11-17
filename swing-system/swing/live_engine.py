@@ -819,6 +819,20 @@ def _option_ltp(con):
         return {}
 
 
+def late_login_notice_due(now):
+    """The 'Kite connected' confirmation goes out once per day - not again at every GitHub run hand-over
+    (17 Nov: several hand-overs during the day each repeated it)."""
+    f = DATA / "kite_connected_notice.txt"
+    day = str(now.date())
+    try:
+        if f.exists() and f.read_text().strip() == day:
+            return False
+        f.write_text(day)
+    except Exception:
+        pass
+    return True
+
+
 # ----------------------------------------------------------------------------- the engine
 class Engine:
     def __init__(self):
@@ -1098,13 +1112,16 @@ class Engine:
                 except Exception:
                     pass
                 log.info("Live engine: Kite connected - %d F&O underlyings, live Zerodha data", len(self.fno))
-                if now.hour * 60 + now.minute >= 9 * 60 + 25:      # D111: late login - confirm everything is running
+                if now.hour * 60 + now.minute >= 9 * 60 + 25 and late_login_notice_due(now):   # D111, once a day
                     try:
                         t0 = load_tips()
                         n_open = int((t0["status"] == "open").sum()) if len(t0) else 0
+                        mode = str(settings.get("intraday_mode", "auto"))
+                        what = ("intraday + F&O tips until 2:30 pm" if mode == "on" else
+                                "intraday / F&O run in test mode - no tips from them until their live record is proven")
                         send(f"✅ Kite connected at {now:%H:%M} - live scanning of the whole market has started "
-                             f"(intraday + F&O tips until 2:30 pm). {n_open} open tip(s) are being watched for "
-                             f"targets / stop-losses.", label="kite login")
+                             f"({what}). {n_open} open tip(s) are being watched for targets / stop-losses every few "
+                             f"seconds.", label="kite login")
                     except Exception:
                         pass
             if time.time() - getattr(self, "_funnel_t", 0) >= 1800:

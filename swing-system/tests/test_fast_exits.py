@@ -99,3 +99,10 @@ def test_only_bought_tips_count_toward_limits_and_skipped_ones_stay_quiet(monkey
     le.exits({"P2": {"last": 90.0, "open": 99.0, "high": 99.0, "low": 89.0}}, pd.Timestamp("2026-11-17 10:00"))
     assert sent == []                                          # skipped tip: no exit alert
     assert le.load_tips().set_index("symbol").loc["P2", "status"] == "stop"   # but its result is still recorded
+
+
+def test_kite_connected_notice_once_a_day(monkeypatch, tmp_path):
+    monkeypatch.setattr(le, "DATA", tmp_path)
+    assert le.late_login_notice_due(pd.Timestamp("2026-11-17 10:30"))
+    assert not le.late_login_notice_due(pd.Timestamp("2026-11-17 12:23"))     # next run hand-over: no repeat
+    assert le.late_login_notice_due(pd.Timestamp("2026-11-18 10:00"))
