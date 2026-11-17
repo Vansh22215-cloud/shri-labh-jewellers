@@ -15,7 +15,7 @@ P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePu
          wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0,
          useDip=True, dipStopMult=4.0, dipMaxDays=10, useRCP=True, rcpStopMult=5.0, rcpMaxDays=60,
          dipRsi=2.0, beAtR=None, timeStopBars=None,
-         gapGuardAtr=None, limitAtr=None, scaleOutR=None, earnings=None, earnDays=5)        # research switches (defaults = the live logic)
+         gapGuardAtr=None, limitAtr=None, scaleOutR=None, earnings=None, earnDays=5, entryAtClose=False)        # research switches (defaults = the live logic)
 SW = "/home/user/shri-labh-jewellers/swing-system"
 
 
@@ -413,6 +413,12 @@ def run(d, bench, allow=None, p=None, state=None):
                     posQty, entryScore = q, score
                     regime = "BULLISH" if mktBull[t] else "BEARISH" if mktBear[t] else "SIDEWAYS"
                     pend_info = {"signal": d.index[t], "regime": regime, "tier": posTier}
+                    if p["entryAtClose"]:                          # C1: bought at the signal day's close
+                        pendingEntry, inPos, entryPx, entryBar, hiSince = False, True, c[t], t, c[t]
+                        t1Done = t2Done = False
+                        halfDone, halfPx = False, np.nan
+                        cur = dict(pend_info, entry_date=d.index[t], entry=c[t], init_stop=initStop, plan_entry=planEntry,
+                                   qty=posQty, setup=setupType, score=entryScore, t1=tgt1, t2=tgt2)
                     ev_buy = {"setup": pick, "tier": posTier, "score": int(score), "close": float(c[t]), "atr": float(atr[t]),
                               "stop": float(ps), "t1": float(tgt1), "t2": float(tgt2), "signal": d.index[t]}
         if state is not None and t == n - 1:
