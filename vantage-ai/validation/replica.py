@@ -14,7 +14,8 @@ P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePu
          exitMode="Fixed risk/reward", atrLen=14, stopMult=3.0, trailMult=4.0, t1R=2.0, t2R=3.0, useMarket=True, swingLen=5,
          wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0,
          useDip=True, dipStopMult=4.0, dipMaxDays=10, useRCP=True, rcpStopMult=5.0, rcpMaxDays=60,
-         dipRsi=2.0, beAtR=None, timeStopBars=None)        # research switches (defaults = the live logic)
+         dipRsi=2.0, beAtR=None, timeStopBars=None,
+         gapGuardAtr=None, limitAtr=None, scaleOutR=None, earnings=None, earnDays=5)        # research switches (defaults = the live logic)
 SW = "/home/user/shri-labh-jewellers/swing-system"
 
 
@@ -200,6 +201,7 @@ def run(d, bench, allow=None, p=None, state=None):
     posType, posTier = "", ""
     t1Done = t2Done = False
     trades, cur, pend_info = [], None, {}
+    halfDone, halfPx = False, np.nan
     wsum = sum(p[k] for k in ("wTrend", "wMom", "wStr", "wRS", "wVol", "wMkt"))
     wnorm = 100.0 / wsum if wsum > 0 else 0.0
 
@@ -305,10 +307,20 @@ def run(d, bench, allow=None, p=None, state=None):
         if inPos and pendingExit:
             inPos, pendingExit, exitFill, exitPx, lastExitBar = False, False, True, o[t], t
             exit_why = pendingWhy
+        fillPx = o[t]
+        if pendingEntry and p["gapGuardAtr"] is not None and o[t] > planEntry + p["gapGuardAtr"] * atr[t - 1]:
+            pendingEntry = False                                   # R1: gapped too far above the plan - cancelled
+        if pendingEntry and p["limitAtr"] is not None:
+            lim = planEntry - p["limitAtr"] * atr[t - 1]
+            if l[t] <= lim:
+                fillPx = min(o[t], lim)                            # R2: limit filled
+            else:
+                pendingEntry = False                               # R2: not filled - no trade
         if pendingEntry:
-            pendingEntry, inPos, entryPx, entryBar, hiSince = False, True, o[t], t, h[t]
+            pendingEntry, inPos, entryPx, entryBar, hiSince = False, True, fillPx, t, h[t]
+            halfDone, halfPx = False, np.nan
             t1Done = t2Done = False
-            cur = dict(pend_info, entry_date=d.index[t], entry=o[t], init_stop=initStop, plan_entry=planEntry, qty=posQty,
+            cur = dict(pend_info, entry_date=d.index[t], entry=fillPx, init_stop=initStop, plan_entry=planEntry, qty=posQty,
                        setup=setupType, score=entryScore, t1=tgt1, t2=tgt2)
         if inPos:
             if l[t] <= stopLvl:
@@ -319,6 +331,8 @@ def run(d, bench, allow=None, p=None, state=None):
         if exitFill and cur is not None and exit_why in ("Stop-loss", "Trailing stop", "Target 2"):
             ev_sell = {"why": exit_why, "price": float(exitPx), "signal": cur.get("signal"), "intrabar": True}
         if exitFill and cur is not None:
+            if halfDone:
+                cur["gross_override"] = 0.5 * (halfPx / cur["entry"] - 1) + 0.5 * (exitPx / cur["entry"] - 1)
             cur.update(exit_date=d.index[t], exit=exitPx, why=exit_why, days=t - entryBar, t1_hit=t1Done)
             trades.append(cur)
             cur = None
@@ -328,6 +342,9 @@ def run(d, bench, allow=None, p=None, state=None):
             if not t2Done and h[t] >= tgt2:
                 t2Done = True
             hiSince = max(hiSince, h[t])
+            if (p["scaleOutR"] and not halfDone and posType in ("Breakout", "Pullback", "RCP")
+                    and h[t] >= planEntry + p["scaleOutR"] * (planEntry - initStop)):
+                halfDone, halfPx = True, max(o[t], planEntry + p["scaleOutR"] * (planEntry - initStop))   # R3
             if posType in ("Breakout", "Pullback") and p["exitMode"] != "Fixed risk/reward":
                 stopLvl = max(stopLvl, hiSince - p["trailMult"] * atr[t])
             if p["beAtR"] and posType in ("Breakout", "Pullback", "RCP") and h[t] >= planEntry + p["beAtR"] * (planEntry - initStop):
@@ -364,7 +381,14 @@ def run(d, bench, allow=None, p=None, state=None):
                     pendingExit, pendingWhy = True, why
                     ev_sell = {"why": why, "price": float(c[t]), "signal": (cur or {}).get("signal"), "intrabar": False}
         gapOk = t - lastExitBar >= p["minGapBars"]
-        if not inPos and not pendingEntry and gapOk and allow[t]:
+        earnSoon = False
+        if p["earnings"] is not None and len(p["earnings"]):
+            k = np.searchsorted(p["earnings"], d.index[t].value, side="right")
+            if k < len(p["earnings"]) and t + p["earnDays"] < n and p["earnings"][k] <= d.index[t + p["earnDays"]].value:
+                earnSoon = True                                    # R4: results within the next 5 trading days
+            elif k < len(p["earnings"]) and t + p["earnDays"] >= n and p["earnings"][k] <= d.index[-1].value + 7 * 86400e9:
+                earnSoon = True
+        if not inPos and not pendingEntry and gapOk and allow[t] and not earnSoon:
             # priority: the setup with the best tested record first
             pick, ps = None, np.nan
             if dipSig[t] and atrS[t] > 0:
