@@ -103,8 +103,15 @@ def due(t=None):
     if current_scan_slot(t) is not None and not st.get(key("scan", t)):
         out.append("scan")
     wd = t.weekday()
+    if wd < 5 and t >= t.replace(hour=15, minute=40, second=0) and not st.get(key("vantage", t)):
+        out.append("vantage")                      # VANTAGE INDICATOR scan of every NSE stock (today's candle: Kite)
     if wd < 5 and t >= t.replace(hour=18, minute=40, second=0) and not st.get(key("nightly", t)):
         out.append("nightly")
+    if wd < 5 and t >= t.replace(hour=18, minute=50, second=0) and not st.get(key("vantage2", t)) \
+            and st.get(key("vantage", t)) and "nightly" not in out:
+        from .vantage import due_evening
+        if due_evening(f"{t:%Y-%m-%d}"):
+            out.append("vantage2")                 # retry with Yahoo's candle when the 3:40 pm scan had no Kite data
     if wd < 5 and t >= t.replace(hour=18, minute=45, second=0) and not st.get(key("company", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=19, minute=30)) and "nightly" not in out:
         out.append("company")
@@ -131,7 +138,7 @@ def jobs_today_line(t=None):
             + (f" (missed {', '.join(missed)} - GitHub did not start a run in time)" if missed else "") + ".")
 
 
-SCRIPTS = {"scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py"}
+SCRIPTS = {"vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py"}
 
 
 _JOB = {"thread": None, "name": None}
@@ -169,7 +176,7 @@ def run_job(job, minutes_left, background=True):
 
 
 CODE_PATHS = ["swing-system/swing", "swing-system/scripts", "swing-system/requirements.txt",
-              "swing-system/strategies", "swing-system/settings.yaml"]
+              "swing-system/strategies", "swing-system/settings.yaml", "vantage-ai/validation/replica.py"]
 
 
 def code_version(ref="HEAD"):

@@ -93,7 +93,7 @@ def weekly_prev(d):
     return prev.reindex(key).values
 
 
-def run(d, bench, allow=None, p=None):
+def run(d, bench, allow=None, p=None, state=None):
     """d: daily OHLCV (index = dates); bench: benchmark close Series. -> list of trade dicts (same rules as Pine)."""
     p = dict(P, **(p or {}))
     o, h, l, c, v = (d[k].values.astype(float) for k in ("open", "high", "low", "close", "volume"))
@@ -299,6 +299,7 @@ def run(d, bench, allow=None, p=None):
             continue
 
         # state machine (confirmed bars)
+        ev_buy = ev_sell = None
         exitFill, exitPx, exit_why = False, np.nan, ""
         if inPos and pendingExit:
             inPos, pendingExit, exitFill, exitPx, lastExitBar = False, False, True, o[t], t
@@ -314,6 +315,8 @@ def run(d, bench, allow=None, p=None):
                 inPos, exitFill, exitPx, lastExitBar = False, True, min(o[t], stopLvl), t
             elif posType in ("Breakout", "Pullback") and p["exitMode"] == "Fixed risk/reward" and h[t] >= tgt2:
                 inPos, exitFill, exitPx, lastExitBar, exit_why = False, True, max(o[t], tgt2), t, "Target 2"
+        if exitFill and cur is not None and exit_why in ("Stop-loss", "Trailing stop", "Target 2"):
+            ev_sell = {"why": exit_why, "price": float(exitPx), "signal": cur.get("signal"), "intrabar": True}
         if exitFill and cur is not None:
             cur.update(exit_date=d.index[t], exit=exitPx, why=exit_why, days=t - entryBar, t1_hit=t1Done)
             trades.append(cur)
@@ -331,11 +334,13 @@ def run(d, bench, allow=None, p=None):
                        f"Time exit ({p['dipMaxDays']} days)" if t - entryBar >= p["dipMaxDays"] - 1 else "")
                 if why:
                     pendingExit, pendingWhy = True, why
+                    ev_sell = {"why": why, "price": float(c[t]), "signal": (cur or {}).get("signal"), "intrabar": False}
             elif posType == "RCP":
                 why = ("Rolling Candle Profile SELL" if rcpSell[t] else
                        f"Time exit ({p['rcpMaxDays']} days)" if t - entryBar >= p["rcpMaxDays"] - 1 else "")
                 if why:
                     pendingExit, pendingWhy = True, why
+                    ev_sell = {"why": why, "price": float(c[t]), "signal": (cur or {}).get("signal"), "intrabar": False}
             elif p["exitMode"] == "Combined":
                 why = ""
                 if c[t] < e50[t] and hist[t] < 0:
@@ -348,6 +353,7 @@ def run(d, bench, allow=None, p=None):
                     why = "Failed breakout"
                 if why:
                     pendingExit, pendingWhy = True, why
+                    ev_sell = {"why": why, "price": float(c[t]), "signal": (cur or {}).get("signal"), "intrabar": False}
         gapOk = t - lastExitBar >= p["minGapBars"]
         if not inPos and not pendingEntry and gapOk and allow[t]:
             # priority: the setup with the best tested record first
@@ -374,4 +380,8 @@ def run(d, bench, allow=None, p=None):
                     posQty, entryScore = q, score
                     regime = "BULLISH" if mktBull[t] else "BEARISH" if mktBear[t] else "SIDEWAYS"
                     pend_info = {"signal": d.index[t], "regime": regime, "tier": posTier}
+                    ev_buy = {"setup": pick, "tier": posTier, "score": int(score), "close": float(c[t]),
+                              "stop": float(ps), "t1": float(tgt1), "t2": float(tgt2), "signal": d.index[t]}
+        if state is not None and t == n - 1:
+            state.update(last_date=d.index[t], buy=ev_buy, sell=ev_sell, in_position=bool(inPos or pendingEntry))
     return trades

@@ -1,0 +1,257 @@
+"""VANTAGE INDICATOR scanner (owner 17 Nov): the exact VANTAGE AI logic (vantage-ai/validation/replica.py = the Pine
+core, tested on 13 years of NSE data) run on EVERY NSE equity right after the daily close; each new BUY - and later
+the SELL for every BUY it sent - goes to Telegram:
+
+    #VANTAGE INDICATOR
+
+    #TITAN
+
+    🟢 BUY · Dip-buy A · likely win 80% ...
+
+When: 3:40 pm on trading days with today's candle from Kite (exact, minutes after the close). Not logged in to Kite
+-> retried at 6:50 pm with Yahoo's daily candle. A stock is skipped (never guessed) when its price history is stale.
+Every signal is recorded BEFORE it is sent (data/private/vantage_signals.csv) and sent once.
+"""
+import json
+import sys
+from multiprocessing import get_context
+
+import numpy as np
+import pandas as pd
+
+from .config import DATA, PRIVATE, ROOT, get_logger, load_settings
+
+log = get_logger()
+REPLICA_DIR = ROOT.parent / "vantage-ai" / "validation"
+SIGNALS_F = PRIVATE / "vantage_signals.csv"
+LAST_F = DATA / "vantage_last.json"
+BARS = 900                      # 260 warm-up + 52-week high + state convergence (positions last <= 60 days)
+_BENCH = None
+
+
+def _replica():
+    if str(REPLICA_DIR) not in sys.path:
+        sys.path.insert(0, str(REPLICA_DIR))
+    import replica
+    return replica
+
+
+def calibration():
+    """Likely-win % per signal type, from the 13-year test (the same numbers the TradingView indicator shows)."""
+    try:
+        cal = json.load(open(REPLICA_DIR / "results_final.json"))["Fixed risk/reward"]["calibration"]
+    except Exception:
+        cal = {}
+    return cal
+
+
+def likely(cal, setup, tier, score):
+    if setup == "Dip-buy":
+        k = f"Dip-buy {tier}"
+    elif setup == "Breakout":
+        k = "Breakout 90+" if score >= 90 else "Breakout 80-89" if score >= 80 else "Breakout 70-79"
+    else:
+        k = setup
+    v = cal.get(k) or cal.get(setup) or {}
+    return v.get("win_pct"), v.get("n")
+
+
+def symbols():
+    """Every NSE equity (EQ / BE series)."""
+    from .tipcheck import equity_list
+    eq = equity_list()
+    ser = "SERIES" if "SERIES" in eq.columns else " SERIES"
+    return sorted({str(s).strip() for s in eq.loc[eq[ser].astype(str).str.strip().isin(["EQ", "BE"]), "SYMBOL"]})
+
+
+def today_bars(syms, day):
+    """Today's daily candle for every symbol from Kite quotes (open/high/low/last/volume) - {} if not logged in."""
+    from . import kite
+    if not kite.logged_in():
+        return {}
+    q = kite.quotes(syms)
+    out = {}
+    for s, v in q.items():
+        try:
+            if v.get("volume", 0) > 0 and v["last"] > 0:
+                out[s] = {"open": v["open"], "high": max(v["high"], v["last"]), "low": min(v["low"], v["last"]),
+                          "close": v["last"], "volume": float(v["volume"])}
+        except Exception:
+            continue
+    return out
+
+
+def history(sym, day, bar):
+    """Daily OHLCV up to and including `day` (today's candle from Kite when given). None = unusable (stale/short)."""
+    from . import data_prices
+    d = data_prices.load(sym)
+    if d is None or not len(d):
+        return None
+    d = d[["open", "high", "low", "close", "volume"]].copy()
+    d = d[d.index < day]                                   # today's row always comes from the freshest source
+    if bar:
+        d.loc[day] = [bar["open"], bar["high"], bar["low"], bar["close"], bar["volume"]]
+    else:
+        y = data_prices.load(sym)
+        if y is None or day not in y.index:
+            return None
+        d.loc[day] = y.loc[day, ["open", "high", "low", "close", "volume"]].values
+    d = d.sort_index().tail(BARS)
+    if len(d) < 520:
+        return None
+    prev = d.index[-2]
+    if (day - prev).days > 6:                              # a gap of more than a long weekend: stale history
+        return None
+    return d
+
+
+def _scan_one(args):
+    sym, d = args
+    try:
+        st = {}
+        _replica().run(d, _BENCH, state=st)
+        tv = float((d["close"] * d["volume"]).tail(20).mean())
+        return sym, st, tv
+    except Exception as e:
+        return sym, {}, f"{type(e).__name__}"
+
+
+def _init(bench):
+    global _BENCH
+    _BENCH = bench
+
+
+def scan(day, bars, procs=4):
+    """-> list of (sym, buy, sell, avg turnover) for every stock with usable data."""
+    from . import data_prices
+    bench = data_prices.load("NIFTY50")["close"]
+    if bench.index[-1] < day:                              # NIFTY's own candle for today (needed by the rules)
+        nb = bars.get("NIFTY50")
+        if nb:
+            bench = pd.concat([bench, pd.Series([nb["close"]], index=[day])])
+    work = []
+    for s in symbols():
+        d = history(s, day, bars.get(s))
+        if d is not None:
+            work.append((s, d))
+    log.info("VANTAGE scan: %d stocks with usable data", len(work))
+    with get_context("fork").Pool(procs, initializer=_init, initargs=(bench,)) as p:   # own process, no threads
+        return p.map(_scan_one, work, chunksize=20)
+
+
+def _load_signals():
+    try:
+        return pd.read_csv(SIGNALS_F, dtype=str)
+    except Exception:
+        return pd.DataFrame(columns=["sym", "signal", "setup", "tier", "score", "close", "stop", "likely", "status",
+                                     "sent_at", "exit_date", "exit_why", "exit_price"])
+
+
+def _save_signals(t):
+    tmp = SIGNALS_F.with_suffix(".tmp")
+    t.to_csv(tmp, index=False)
+    tmp.replace(SIGNALS_F)
+
+
+def _last_close(sym, day):
+    from . import data_prices
+    d = data_prices.load(sym)
+    return float(d["close"].iloc[-1]) if d is not None and len(d) else float("nan")
+
+
+def _n(x):
+    return f"{x:,.2f}"
+
+
+def buy_message(sym, b, lk, n, thin):
+    return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
+            f"🟢 BUY · {('Rolling Candle Profile' if b['setup'] == 'RCP' else b['setup'])}"
+            f"{(' ' + b['tier']) if b.get('tier') else ''}" + (f" · likely win {lk}% ({n} past NSE signals)" if lk else "") +
+            f"\nBuy at the next market open ≈ ₹{_n(b['close'])} · Stop-loss ₹{_n(b['stop'])}"
+            + (f" · Target ₹{_n(b['t2'])}" if b.get("t2") == b.get("t2") and b.get("t2") else "")
+            + ("\n⚠️ Thinly traded stock - check the bid/ask before buying" if thin else ""))
+
+
+def sell_message(sym, s, entry):
+    res = (s["price"] / float(entry) - 1) * 100 if entry else None
+    return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n🔴 SELL (exit) · {s['why']}"
+            + (f"\nResult ≈ {res:+.1f}% (from ₹{_n(float(entry))})" if res is not None else "")
+            + ("" if s.get("intrabar") else "\nSell at the next market open."))
+
+
+def run(day=None, source="auto"):
+    """The whole job. -> dict summary. Writes vantage_last.json (ok=True only when today's candle was available)."""
+    from . import telegram, health
+    s = load_settings()
+    now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    day = pd.Timestamp(day or now.normalize())
+    summ = {"day": str(day.date()), "ok": False}
+    if not s.get("vantage_scanner", True):
+        summ["why"] = "switched off"
+        return summ
+    try:
+        if not health.traded_today():
+            summ.update(ok=True, why="market closed today")
+            LAST_F.write_text(json.dumps(summ))
+            return summ
+    except Exception:
+        pass
+    syms = symbols()
+    from . import data_prices
+    try:                                                    # every NSE equity's history up to yesterday (new ones in full)
+        data_prices.update(syms + ["NIFTY50"])
+    except Exception as e:
+        log.warning("VANTAGE: price update failed: %s", type(e).__name__)
+    bars = today_bars(syms + ["NIFTY50"], day) if source in ("auto", "kite") else {}
+    if not bars and source == "kite":
+        summ["why"] = "Kite not logged in"
+        return summ
+    res = scan(day, bars)
+    cal = calibration()
+    sig = _load_signals()
+    sent_b = sent_s = 0
+    from . import safety
+    kill = bool(s.get("kill_switch")) or bool(safety.emergency_active())
+    for sym, st, tv in res:
+        if isinstance(tv, str):
+            continue
+        buy, sell = st.get("buy"), st.get("sell")
+        open_rows = sig[(sig["sym"] == sym) & (sig["status"] == "open")]
+        if not sell and len(open_rows) and not st.get("in_position", True) and not buy:
+            # safety net: the exit happened on a day this stock could not be scanned -> tell the owner now
+            sell = {"why": "exit signal (it came on a day the stock could not be scanned)",
+                    "price": float(_last_close(sym, day)), "intrabar": False}
+        if sell and len(open_rows):
+            i = open_rows.index[-1]
+            if str(sig.loc[i, "exit_date"]) in ("", "nan"):
+                sig.loc[i, ["status", "exit_date", "exit_why", "exit_price"]] = ["closed", str(day.date()), sell["why"],
+                                                                                 f"{sell['price']:.2f}"]
+                _save_signals(sig)                          # record first ...
+                telegram.send_reliable(s, sell_message(sym, sell, sig.loc[i, "close"]), label="vantage indicator")
+                sent_s += 1
+        if buy and not kill:
+            key = (sym, str(pd.Timestamp(buy["signal"]).date()))
+            if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():
+                continue                                    # already sent (re-run) - never twice
+            lk, n = likely(cal, buy["setup"], buy.get("tier", ""), buy.get("score", 0))
+            row = {"sym": sym, "signal": key[1], "setup": buy["setup"], "tier": buy.get("tier", ""), "score": buy["score"],
+                   "close": f"{buy['close']:.2f}", "stop": f"{buy['stop']:.2f}", "likely": lk, "status": "open",
+                   "sent_at": str(now)[:16], "exit_date": "", "exit_why": "", "exit_price": ""}
+            sig = pd.concat([sig, pd.DataFrame([row]).astype(str)], ignore_index=True)
+            _save_signals(sig)                              # ... then send
+            telegram.send_reliable(s, buy_message(sym, buy, lk, n, tv < 1e7), label="vantage indicator")
+            sent_b += 1
+    summ.update(ok=True, source="Kite" if bars else "Yahoo", stocks=len(res), buys=sent_b, sells=sent_s)
+    LAST_F.write_text(json.dumps(summ))
+    log.info("VANTAGE scan %s: %d stocks, %d BUY and %d SELL sent (%s)", summ["day"], len(res), sent_b, sent_s,
+             summ["source"])
+    return summ
+
+
+def due_evening(day_str):
+    """The 6:50 pm retry runs only if the 3:40 pm scan did not complete today."""
+    try:
+        j = json.loads(LAST_F.read_text())
+        return not (j.get("day") == day_str and j.get("ok"))
+    except Exception:
+        return True

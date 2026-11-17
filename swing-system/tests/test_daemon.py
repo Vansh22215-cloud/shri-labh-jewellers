@@ -10,8 +10,8 @@ def _t(s):
 def test_due_jobs_follow_the_ist_clock(monkeypatch, tmp_path):
     monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs.json")
     assert daemon.due(_t("2026-11-04T10:47")) == ["scan"]            # Wednesday morning
-    assert daemon.due(_t("2026-11-04T16:30")) == []
-    assert daemon.due(_t("2026-11-04T18:45")) == ["nightly"]
+    assert daemon.due(_t("2026-11-04T16:30")) == ["vantage"]         # VANTAGE INDICATOR scan after the close
+    assert daemon.due(_t("2026-11-04T18:45")) == ["vantage", "nightly"]
     assert "research" in daemon.due(_t("2026-11-04T21:40"))
     assert daemon.due(_t("2026-11-07T10:30")) == ["weekly"]          # Saturday
     assert daemon.due(_t("2026-11-08T12:00")) == []                  # Sunday
@@ -29,6 +29,8 @@ def test_claim_prevents_double_runs_but_not_manual_daytime_runs(monkeypatch, tmp
 def test_company_of_the_day_is_its_own_job_and_retried(monkeypatch, tmp_path):
     monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs.json")
     monkeypatch.setattr(daemon, "now", lambda: _t("2026-11-04T18:50"))
+    assert daemon.claim("vantage")                                    # the 3:40 pm scan ran
+    monkeypatch.setattr("swing.vantage.due_evening", lambda d: False)
     assert daemon.due(_t("2026-11-04T18:50")) == ["nightly"]          # trades message first
     assert daemon.claim("nightly")
     assert daemon.due(_t("2026-11-04T18:50")) == ["company"]

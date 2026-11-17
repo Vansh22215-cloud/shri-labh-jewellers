@@ -76,7 +76,7 @@ def _balanced(part):
 
 
 # Owner's choice (D95): Telegram carries ONLY these. Everything else is written to the log, not sent.
-ALLOWED = ("trade tip", "exit alert", "kite login", "company of the day",
+ALLOWED = ("trade tip", "exit alert", "kite login", "company of the day", "vantage indicator",
            "system problem", "autopilot", "system status", "backup")   # D108: only when the system itself is broken (rare) - so it never fails silently
 
 
@@ -145,7 +145,7 @@ def send_document(settings, path, caption="", mime="text/html", label="file"):
 
 
 # ----------------------------------------------------------------------------- reliable delivery (audit 17 Nov)
-CRITICAL = ("trade tip", "exit alert", "system problem", "autopilot", "kite login", "system status")
+CRITICAL = ("trade tip", "exit alert", "system problem", "autopilot", "kite login", "system status", "vantage indicator")
 
 
 def _outbox():

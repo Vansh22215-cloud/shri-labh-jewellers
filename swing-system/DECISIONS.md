@@ -865,3 +865,23 @@ Owner: "Find other smarter and best ways of finding trades, and do tests."
 - **Autopilot:** pauses it for 60 days if its live record turns negative over 30+ tips. Setting: `breakout_tips`.
 
 `tests/test_breakout.py` proves the live rule equals the tested rule day by day, with no look-ahead.
+
+## D119 - 2026-11-17 - VANTAGE INDICATOR scanner: every NSE company -> Telegram
+Owner: "such companies are found and sent to me on telegram ... #VANTAGE INDICATOR #Company code. Instantly. All the companies. No need of claude."
+
+`swing/vantage.py` runs the **exact** VANTAGE AI logic (`vantage-ai/validation/replica.py`, the Pine core tested on 13 years of NSE data) on **every NSE equity**: 2,599 companies from NSE's own list, ETFs excluded.
+- **When:**
+  - 3:40 pm on trading days, using today's candle from Kite (minutes after the close).
+  - Without a Kite login, at 6:50 pm with Yahoo's candle.
+  - Holidays are skipped. Stale price history means the stock is skipped, never guessed.
+- **Message:**
+  - BUY: `#VANTAGE INDICATOR` / `#SYMBOL`, then the signal type, likely win %, entry and stop. Thinly traded stocks (under ₹1 crore a day) are flagged.
+  - SELL: sent later only for BUYs that were sent, with the reason and result. If the exit day could not be scanned, the SELL is still sent on the next scan.
+- **Safety:**
+  - Each signal is recorded (`data/private/vantage_signals.csv`) before it is sent, and is never sent twice.
+  - Delivery is retried if Telegram is down.
+  - The kill switch and safety stop block new BUYs.
+  - Switch: `vantage_scanner`.
+- **Coverage:** a stock needs about 2 years of daily history (520 bars). Newer listings are scanned once they have it.
+- **Validation:** the 13-year test covered the top 300; smaller companies are scanned with the same rules but were not part of that test.
+- **Evidence:** `tests/test_vantage_scanner.py` shows the scan's "today" signal equals the backtest's signal for that day. A dry run on 1,192 stocks took 86 s.
