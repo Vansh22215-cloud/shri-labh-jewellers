@@ -1027,6 +1027,13 @@ class Engine:
             pass
         if q:
             self.quotes.update(q)
+            if time.time() - getattr(self, "_snap_t", 0) >= 20:     # D120: live VANTAGE scan reads this snapshot
+                self._snap_t = time.time()
+                try:
+                    from .vantage import write_snapshot
+                    write_snapshot(self.quotes)
+                except Exception as e:
+                    log.warning("quote snapshot failed: %s", type(e).__name__)
             try:   # D103: order-book pressure shadow record every 30 min (judged later by orderflow.evaluate)
                 import time as _t
                 from . import orderflow

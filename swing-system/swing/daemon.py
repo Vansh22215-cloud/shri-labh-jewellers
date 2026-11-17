@@ -283,6 +283,22 @@ def _safe_intraday(fn):
         log.warning("Daemon: intraday scan failed: %s", type(e).__name__)
 
 
+_VLIVE = {"proc": None, "starts": 0}
+
+
+def ensure_vantage_live():
+    """Keep the live VANTAGE scanner process running (restarted if it dies, at most 5 times a run)."""
+    p = _VLIVE["proc"]
+    if p is not None and p.poll() is None:
+        return True
+    if _VLIVE["starts"] >= 5:
+        return False
+    _VLIVE["starts"] += 1
+    _VLIVE["proc"] = subprocess.Popen([sys.executable, str(ROOT / "scripts" / "run_vantage_live.py")], cwd=ROOT)
+    log.info("Daemon: VANTAGE live scanner started")
+    return True
+
+
 def minute_tasks(t=None):
     """Small things checked every minute: Kite login prompt/reminder, instant alerts, the 2-week paper review."""
     import html as _html
@@ -302,6 +318,11 @@ def minute_tasks(t=None):
             log.info("Local backup: %d files%s", _n, f", {len(_bad)} damaged left out" if _bad else "")
     except Exception as e:
         log.warning("Daemon: monitor failed: %s", type(e).__name__)
+    try:   # D120: VANTAGE INDICATOR live scan of every NSE stock during market hours (own process)
+        if wd and 9 * 60 + 20 <= t.hour * 60 + t.minute < 15 * 60 + 30 and load_settings().get("vantage_live", True):
+            ensure_vantage_live()
+    except Exception as e:
+        log.warning("Daemon: VANTAGE live start failed: %s", type(e).__name__)
     try:
         from . import kite
         if wd and kite.configured() and not kite.logged_in():

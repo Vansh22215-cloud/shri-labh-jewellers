@@ -885,3 +885,21 @@ Owner: "such companies are found and sent to me on telegram ... #VANTAGE INDICAT
 - **Coverage:** a stock needs about 2 years of daily history (520 bars). Newer listings are scanned once they have it.
 - **Validation:** the 13-year test covered the top 300; smaller companies are scanned with the same rules but were not part of that test.
 - **Evidence:** `tests/test_vantage_scanner.py` shows the scan's "today" signal equals the backtest's signal for that day. A dry run on 1,192 stocks took 86 s.
+
+## D120 - 2026-11-17 - VANTAGE INDICATOR live during market hours
+Owner: "Market is going on ... if any stock among all NSE stocks gets a signal, I get an instant message."
+- **Live scan:** `scripts/run_vantage_live.py` is started by the daemon at 9:20 and runs to 3:30 as its own process.
+  - Every ~3 minutes it runs the same VANTAGE logic on every NSE stock using **today's candle so far**: open, high, low, last price and volume from the live engine's 30-second Kite quotes, saved to `data/live_quotes.json` (no extra Kite requests).
+  - A fast check first skips stocks that cannot meet any BUY's necessary condition. A test proves it never drops a real signal. A cycle takes ~40 s for all stocks.
+- **⚡ LIVE BUY alert:** sent once per stock per day.
+  - It is a forming signal and can disappear before the close.
+  - At the close scan (3:40 pm) each live alert gets ✅ CONFIRMED (with the normal BUY message, now tracked) or ❌ CANCELLED.
+  - **The tested results apply to confirmed signals only.** Acting on a live alert before the close is untested.
+- **🔴 Stop-loss:** for BUYs already sent, alerted instantly when the day's low touches the stop.
+- **Safety:**
+  - Snapshots older than 3 minutes are never used.
+  - Stale histories are skipped.
+  - The kill switch and safety stop block live BUYs.
+  - Everything is recorded before it is sent.
+  - Switch: `vantage_live`.
+- **Needs** the day's Kite login. Without it there are no live alerts, and the evening scan still runs.

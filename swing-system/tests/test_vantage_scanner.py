@@ -107,3 +107,78 @@ def test_schedule(monkeypatch, tmp_path):
     assert "vantage" in daemon.due(pd.Timestamp("2026-11-17 15:41"))
     assert "vantage" not in daemon.due(pd.Timestamp("2026-11-17 15:20"))
     assert "vantage" not in daemon.due(pd.Timestamp("2026-11-21 15:41"))     # Saturday
+
+
+def test_prefilter_never_drops_a_real_signal():
+    """Every BUY the full logic finds must pass the live pre-filter (it only skips stocks that cannot signal)."""
+    rep = vantage._replica()
+    misses = checked = 0
+    for seed in range(6):
+        d = _stock(seed)
+        bench = pd.Series(np.linspace(18000, 24000, len(d)), index=d.index)
+        for _, tr in pd.DataFrame(rep.run(d, bench)).iterrows():
+            k = d.index.get_loc(tr["signal"])
+            hist, today = d.iloc[:k], d.iloc[k]
+            c = hist["close"]
+            dip, rcp, brk = 1.10 * 0.97 * c.tail(200).mean(), 0.9 * c.tail(249).max(), hist["high"].tail(50).max()
+            checked += 1
+            misses += not (today["close"] >= min(dip, rcp) or today["close"] > brk)
+    assert checked > 5 and misses == 0
+
+
+def test_live_alert_once_then_confirmed_or_cancelled(env, monkeypatch, tmp_path):
+    monkeypatch.setattr(vantage, "LIVE_F", tmp_path / "live.csv")
+    monkeypatch.setattr(vantage, "SNAP_F", tmp_path / "snap.json")
+    now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    vantage.write_snapshot({"TITAN": {"open": 100, "high": 103, "low": 99, "last": 101, "volume": 5e5},
+                            "NIFTY50": {"open": 1, "high": 1, "low": 1, "last": 1, "volume": 1}})
+
+    class Sc:
+        day = now.normalize()
+
+        def cycle(self):
+            return now, [("TITAN", {"buy": dict(_buy(now), close=101.0)}, 5e8), ("ABC", {"buy": _buy(now)}, 5e8)]
+    r = vantage.live_step(Sc())
+    assert r["live_buys"] == 2
+    assert env[0][1].startswith("#VANTAGE INDICATOR\n\n#TITAN\n\n⚡ LIVE BUY signal · Dip-buy A")
+    assert "Price now ₹101.00" in env[0][1] and "confirm ✅ or cancel ❌" in env[0][1]
+    assert vantage.live_step(Sc())["live_buys"] == 0                   # once per stock per day
+    # close: TITAN held (normal BUY carries ✅ CONFIRMED), ABC did not (❌ CANCELLED)
+    monkeypatch.setattr(vantage, "scan", lambda d, bars: [("TITAN", {"buy": _buy(now), "in_position": True}, 5e8)])
+    vantage.run(str(now.date()))
+    texts = [t for _, t in env[2:]]
+    assert any(t.startswith("#VANTAGE INDICATOR\n\n#ABC\n\n❌ CANCELLED") for t in texts)
+    assert any("#TITAN\n\n✅ CONFIRMED at the close" in t and "🟢 BUY" in t for t in texts)
+
+
+def test_stale_snapshot_is_never_used(monkeypatch, tmp_path):
+    monkeypatch.setattr(vantage, "SNAP_F", tmp_path / "snap.json")
+    old = (pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None) - pd.Timedelta(minutes=10))
+    (tmp_path / "snap.json").write_text(json.dumps({"time": str(old)[:19], "q": {"X": [1, 1, 1, 1, 1]}}))
+    assert vantage.read_snapshot() == (None, {})
+
+
+def test_live_stop_loss_alert_for_a_sent_buy(env, monkeypatch, tmp_path):
+    monkeypatch.setattr(vantage, "LIVE_F", tmp_path / "live.csv")
+    monkeypatch.setattr(vantage, "SNAP_F", tmp_path / "snap.json")
+    monkeypatch.setattr(vantage, "scan", lambda d, bars: [("TITAN", {"buy": _buy("2026-11-16"), "in_position": True}, 5e8)])
+    vantage.run("2026-11-16")                                         # BUY sent yesterday, stop 92
+    now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    vantage.write_snapshot({"TITAN": {"open": 95, "high": 96, "low": 91.5, "last": 92.5, "volume": 5e5}})
+
+    class Sc:
+        day = pd.Timestamp("2026-11-17")
+
+        def cycle(self):
+            return now, []
+    r = vantage.live_step(Sc())
+    assert r["stops"] == 1 and "Stop-loss hit (live)" in env[-1][1]
+    assert vantage.live_step(Sc())["stops"] == 0                       # only once
+
+
+def test_index_without_volume_is_kept_in_the_snapshot(monkeypatch, tmp_path):
+    monkeypatch.setattr(vantage, "SNAP_F", tmp_path / "snap.json")
+    vantage.write_snapshot({"NIFTY50": {"open": 24000, "high": 24100, "low": 23900, "last": 24050, "volume": 0},
+                            "DEAD": {"open": 10, "high": 10, "low": 10, "last": 10, "volume": 0}})
+    t, bars = vantage.read_snapshot()
+    assert "NIFTY50" in bars and "DEAD" not in bars
