@@ -17,8 +17,8 @@ S = {"capital": 45000, "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct":
 def _row(sym="ABC", entry=100.0, stop=95.0, qty=None, **kw):
     q = safety.size(entry, stop, S) if qty is None else qty
     r = {"type": "NORMAL", "symbol": sym, "side": "buy", "entry": entry, "stop": stop, "targets": "", "rank": 9,
-         "qty": q, "status": "open", "hit": 0, "day": "2026-11-17", "setup": "HP"}
-    r.update(kw)
+         "qty": q, "status": "open", "hit": 0, "day": "2026-11-17", "setup": "HP", "taken": "yes"}
+    r.update(kw)          # taken = the owner confirmed buying it (/bought): only those count toward the limits
     return r
 
 

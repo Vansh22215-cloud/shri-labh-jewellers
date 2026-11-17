@@ -24,7 +24,8 @@ STATE_F = DATA / "safety.json"
 SKIPPED_F = PRIVATE / "skipped_signals.csv"
 # money at risk each strategy may use at most (% of capital): lower-ranked strategies can never use up the room the
 # strongest one (the dip-buy, which comes only on market dips) needs
-STRATEGY_CAP = {"AI": 3.0, "RCP": 4.0, "DS": 2.0, "INTRADAY": 2.0, "FNO": 3.0}
+# owner 17 Nov: NO limit on positional (RCP) tips; and limits count only tips the owner confirmed buying (/bought)
+STRATEGY_CAP = {"AI": 3.0, "DS": 2.0, "INTRADAY": 2.0, "FNO": 3.0}
 DEFAULT_LIMITS = {"risk_per_trade_pct": 1.0, "max_order_pct": 25.0, "max_open_positions": 15, "max_open_risk_pct": 10.0, "loss_streak_pause": 8,
                   "loss_streak_cooldown_days": 3}
 
@@ -220,6 +221,12 @@ def portfolio_check(row, settings, tips=None):
     if not len(t):
         return True, ""
     op = t[t["status"].astype(str) == "open"]
+    # owner 17 Nov: the limits measure the owner's REAL exposure - only tips confirmed with /bought count. Tips the
+    # owner did not take (or has not marked) never block new ones.
+    if "taken" in op:
+        op = op[op["taken"].astype(str).str.lower() == "yes"]
+    else:
+        op = op.iloc[0:0]
     if len(op) >= int(L["max_open_positions"]):
         return False, f"{len(op)} tips already open (limit {L['max_open_positions']})"
     risk = 0.0

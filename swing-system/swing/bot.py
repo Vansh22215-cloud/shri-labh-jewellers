@@ -28,7 +28,9 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "XAUUSD, BTC ...), e.g. 'Nifty weakness only below 24290' or 'XAUUSD BUY 2650 SL 2640 TP 2670'. "
         "I track every one and message you when it is right, wrong or runs out of time.\n"
         "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
-        "/bought SYMBOL QTY PRICE [STOP] - record a trade you placed (e.g. /bought ICICIBANK 5 1425 1340)\n"
+        "/bought SYMBOL - you bought the system's tip (only bought tips count toward your risk limits)\n"
+        "/skip SYMBOL - you did not take that tip\n"
+        "/bought SYMBOL QTY PRICE [STOP] - record your own trade (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
         "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
         "/tips - every open tip the system sent you (entry, SL, how to exit)\n"
@@ -101,6 +103,25 @@ def trade_command(text):
     if len(parts) < 2:
         return "Usage: /bought ICICIBANK 5 1425 1340   or   /sold ICICIBANK 1500"
     sym = parts[1].upper()
+    if cmd == "/skip":
+        from .live_engine import mark_taken
+        r = mark_taken(sym, taken=False)
+        return (f"Noted: you did not take the {sym} tip. It no longer counts toward your limits (exit alerts for it "
+                "stop mattering - ignore them).") if r is not None else f"No open tip for {sym}."
+    if cmd == "/bought" and len(parts) == 2:          # '/bought SYMBOL' = I bought the system's tip as sent
+        from .live_engine import mark_taken
+        r = mark_taken(sym, taken=True)
+        if r is None:
+            return f"No open tip for {sym}. For your own trade use: /bought {sym} QTY PRICE [STOP]"
+        try:
+            qty, price, stop = int(float(r["qty"])), float(r["entry"]), float(r["stop"])
+            row = pd.DataFrame([{"symbol": sym, "buy_date": str(pd.Timestamp.today().date()), "buy_price": price,
+                                 "qty": qty, "stop": stop}])
+            pd.concat([my[my["symbol"] != sym], row], ignore_index=True).to_csv(journal.MY_TRADES, index=False)
+        except Exception:
+            qty, price, stop = r.get("qty"), r.get("entry"), r.get("stop")
+        return (f"✅ Noted: you bought the {sym} tip ({qty} @ ~{price}, stop {stop}). It now counts toward your risk "
+                "limits and you'll get its exit alerts. Set the stop-loss as a GTT in Kite.")
     if cmd == "/bought":
         try:
             qty, price = int(parts[2]), float(parts[3])
@@ -285,7 +306,7 @@ def handle(token, owner, msg, capital):
         reply = _report_summary()
     elif text.startswith("/score"):
         reply = _score_text()
-    elif text.lower().startswith(("/bought", "/sold", "/trades")):
+    elif text.lower().startswith(("/bought", "/sold", "/trades", "/skip")):
         reply = trade_command(text)
     else:
         forwarded_tip = True

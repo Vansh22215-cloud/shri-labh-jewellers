@@ -82,3 +82,20 @@ def test_rotated_bot_key_hands_over_once(monkeypatch, tmp_path):
     assert daemon.token_rotated(1200.0)              # hand over: next run gets the new GitHub Secret
     assert not daemon.token_rotated(1300.0)          # at most once every 30 minutes - no fast restart loop
     assert daemon.token_rotated(1200.0 + 1900)
+
+
+def test_only_bought_tips_count_toward_limits_and_skipped_ones_stay_quiet(monkeypatch):
+    from swing import bot, safety
+    sent = _sent(monkeypatch)
+    S = {"capital": 45000, "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct": 25, "max_open_risk_pct": 2}}
+    for i in range(3):                                         # 3 positional tips, 1% risk each, none confirmed
+        le.save_tip(_tip(symbol=f"P{i}", qty=90, status="open"))
+    ok, why = safety.portfolio_check(_tip(symbol="NEW", qty=90), S)
+    assert ok, why                                             # unconfirmed tips never block (no positional cap)
+    assert "Noted" in bot.trade_command("/bought P0") and "Noted" in bot.trade_command("/bought P1")
+    ok, why = safety.portfolio_check(_tip(symbol="NEW", qty=90), S)
+    assert not ok and "total money at risk" in why            # 2 bought at 1% each = the 2% limit
+    assert "did not take" in bot.trade_command("/skip P2")
+    le.exits({"P2": {"last": 90.0, "open": 99.0, "high": 99.0, "low": 89.0}}, pd.Timestamp("2026-11-17 10:00"))
+    assert sent == []                                          # skipped tip: no exit alert
+    assert le.load_tips().set_index("symbol").loc["P2", "status"] == "stop"   # but its result is still recorded

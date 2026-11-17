@@ -25,6 +25,5 @@ def test_send_evening_respects_room_and_open(monkeypatch, tmp_path):
     s = {"capital": 45000, "ai_top": 3, "ai_max_open": 4, "ai_picks": True}
     assert ml.send_evening("2026-11-17", s, sc) == 3
     assert "AI pick" in sent[0] and "RANK - 6/10" in sent[0]
-    assert ml.send_evening("2026-11-18", s, sc) == 0          # safety: AI picks may use at most 3% of capital
-    s["risk_limits"] = {"risk_per_trade_pct": 1, "strategy_max_open_risk_pct": {"AI": 10}}
     assert ml.send_evening("2026-11-18", s, sc) == 1          # 4 open at most, and open symbols are skipped
+    # (risk caps count only tips the owner confirmed with /bought - these 3 are unconfirmed)

@@ -440,7 +440,7 @@ def fmt_normal(c, r, qty, rp, tomorrow=False):
 # ----------------------------------------------------------------------------- tip store + exits
 COLS = ["id", "time", "type", "symbol", "side", "entry", "stop", "targets", "rank", "qty", "contract", "lot",
         "premium", "opt_targets", "spot_sl", "status", "hit", "day", "setup", "hi_since", "lo_since", "closed_at",
-        "result_r", "result_pct", "sid"]
+        "result_r", "result_pct", "sid", "taken"]
 
 
 class _TipsLock:
@@ -511,6 +511,25 @@ def load_tips():
         except Exception:
             pass
         raise
+
+
+def mark_taken(symbol, taken=True):
+    """Owner 17 Nov: '/bought SYMBOL' or '/skip SYMBOL' -> the newest OPEN tip for that stock is marked taken / not
+    taken. Only taken tips count toward the risk limits (they are the owner's real money). -> the tip row or None."""
+    with _LOCK:
+        t = load_tips()
+        if not len(t):
+            return None
+        if "taken" not in t:
+            t["taken"] = ""
+        t["taken"] = t["taken"].astype(object)
+        m = (t["symbol"].astype(str).str.upper() == str(symbol).upper()) & (t["status"].astype(str) == "open")
+        if not m.any():
+            return None
+        i = t[m].index[-1]
+        t.loc[i, "taken"] = "yes" if taken else "no"
+        write_tips(t)
+        return t.loc[i]
 
 
 def write_tips(t):
@@ -633,7 +652,8 @@ def issue_tip(row, msg, settings=None):
     except Exception:
         risk_line = ""
     footer = (f"\n\n🧾 Signal {row['sid']} · {row['time']} IST · {risk_line}\n"
-              "⚠️ A stop-loss is not a guaranteed price: gaps and thin trading can cause a bigger loss.")
+              "⚠️ A stop-loss is not a guaranteed price: gaps and thin trading can cause a bigger loss.\n"
+              f"👉 Bought it? Reply /bought {row['symbol']}  ·  Not taking it? /skip {row['symbol']}")
     if row.get("type") in EXPERIMENTAL:
         footer += "\n🧪 " + EXPERIMENTAL[row["type"]]
     send(msg + footer)
@@ -702,8 +722,10 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
     t = load_tips()
     if not len(t):
         return []
-    msgs = []
+    sent_msgs = []
     for i, r in t[t["status"] == "open"].iterrows():
+        # a tip the owner said he did not take (/skip) is still tracked (live record) but sends no exit alerts
+        msgs = [] if str(r.get("taken", "")).lower() == "no" else sent_msgs
         sym = r["symbol"]
         hit = int(r["hit"] or 0) if pd.notna(r["hit"]) else 0
         if r["type"] == "FNO":
@@ -778,6 +800,7 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
                 _close(t, i, "squared", px, now)
                 msgs.append(f"⏰ #{sym} - 3:15 pm: square off the intraday trade now (now {_n(px)}).")
         t.loc[i, "hit"] = hit
+    msgs = sent_msgs
     write_tips(t)
     for m in msgs:
         send(m, label="exit alert")

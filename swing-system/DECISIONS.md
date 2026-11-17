@@ -833,3 +833,11 @@ BACKTEST_VALIDATION.md, KNOWN_LIMITATIONS.md.
 - Exit messages say which tip it is (positional / dip-buy / ...), the stop or target, the price now, the entry, and the result in % and ₹ for the tip's quantity.
   - A gap or fast fall through the stop is reported at the realistic price (today's open or the price now), not the stop.
   - The record uses that price too.
+
+## D117 - 2026-11-17 - Owner: no limit on positional tips; limits count only trades the owner takes
+Owner: "Now on there will be no limits on this... give tips, if I will buy I will tell."
+- The positional per-strategy cap (4% at risk = 4 open tips) is removed.
+- The portfolio limits (total money at risk, open count, per-strategy caps for experimental types, losing-streak cooldown) now count **only tips the owner confirmed with `/bought SYMBOL`**. Unconfirmed or skipped tips never block new ones.
+- `/skip SYMBOL`: the tip is still tracked (the live record stays honest) but sends no exit alerts.
+- Every tip ends with "Bought it? Reply /bought X · Not taking it? /skip X".
+- Unchanged: per-tip checks (1% risk, order ≤ 25% of capital, valid numbers), the kill switch, the safety stop, and never the same stock twice while its tip is open.
