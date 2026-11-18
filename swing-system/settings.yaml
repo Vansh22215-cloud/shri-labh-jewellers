@@ -79,3 +79,5 @@ monthly_basket: true
 basket_capital: 0
 # Round 13 (18 Nov, owner approved): "ADD MORE" when a VANTAGE trend trade is up 8%+ after 15 trading days.
 vantage_add_to_winners: true
+# D139 (18 Nov, owner approved): never send a stock again while it already has an open tip from any channel.
+no_repeat_tips: true

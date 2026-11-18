@@ -24,6 +24,7 @@ from .config import DATA, PRIVATE, ROOT, get_logger
 log = get_logger()
 J = ROOT / "journal"
 CSV, MD = J / "all_tips.csv", J / "all_tips.md"
+MUTED_FROM = "2026-11-11"     # D95: evening strategy tips and hourly-scan ideas are log-only from this day
 COST = 0.0035
 
 
@@ -80,8 +81,10 @@ def collect(load):
             lo, hi, st, tg = _f(t.entry_low), _f(t.entry_high), _f(t.stop), _f(getattr(t, "target1", None))
             if d is None or None in (lo, hi, st):
                 continue
-            kind = str(getattr(t, "strategy", "scan")) + ("" if str(getattr(t, "kind", "tip")) == "tip" else " (shadow, not sent)")
-            rows.append(_row(src, kind, t.date, t.symbol, zone_trade(d, t.date, lo, hi, st, tg), stop=st, target=tg))
+            kind = str(getattr(t, "strategy", "scan")) + ("" if str(getattr(t, "kind", "tip")) == "tip" else " (shadow)")
+            sent = "sent" if (str(getattr(t, "kind", "tip")) == "tip" and str(t.date)[:10] < MUTED_FROM) else "recorded only"
+            rows.append(_row(src, kind, t.date, t.symbol, zone_trade(d, t.date, lo, hi, st, tg), stop=st, target=tg,
+                             sent=sent))
     # 2) VANTAGE tips
     try:
         from .vantage import _load_signals
@@ -99,7 +102,9 @@ def collect(load):
                "why": str(getattr(t, "exit_why", "")) if closed else ""}
         kind = "VANTAGE " + ("Rolling Candle Profile" if t.setup == "RCP" else str(t.setup)) + \
             (f" {t.tier}" if str(t.tier) not in ("", "nan") else "")
-        rows.append(_row("VANTAGE", kind, t.signal, t.sym, res, stop=_f(t.stop),
+        nxt = round(float(after["open"].iloc[0]), 2) if len(after) else None
+        rows.append(_row("VANTAGE", kind, t.signal, t.sym, res, stop=_f(t.stop), sent="sent", next_open=nxt,
+                         next_open_vs_buy_pct=round((nxt / ref - 1) * 100, 2) if nxt else None,
                          added="yes" if str(getattr(t, "added", "")) not in ("", "nan") else ""))
     # 3) live-engine tips (no qty / taken written)
     try:
@@ -118,7 +123,19 @@ def collect(load):
         elif not closed:
             res["exit"] = float(d["close"].iloc[-1])
         rows.append(_row("live engine", f"{t.type} {'' if str(t.setup) == 'nan' else t.setup}".strip(), t.day, t.symbol, res,
-                         stop=_f(t.stop)))
+                         stop=_f(t.stop), sent="sent"))
+    # 3b) repeats blocked by D139 - followed as if bought, to learn whether blocking them was right
+    try:
+        P = pd.read_csv(PRIVATE / "suppressed_repeats.csv", dtype=str)
+    except Exception:
+        P = pd.DataFrame()
+    for t in P.itertuples():
+        d, ref = load(t.symbol), _f(t.ref_price)
+        if d is None or ref is None:
+            continue
+        rows.append(_row("blocked repeat", f"{t.channel} (held by {t.held_by})", t.day, t.symbol,
+                         {"status": "watch", "entry": ref, "exit": float(d["close"].iloc[-1]), "entry_date": t.day},
+                         stop=_f(t.stop), sent="blocked"))
     # 4) company of the day (research pick, not a trade)
     try:
         C = pd.read_csv(J / "company_picks.csv")
@@ -130,7 +147,8 @@ def collect(load):
             continue
         p0 = _f(t.price) or float(d[d.index <= pd.Timestamp(t.date)]["close"].iloc[-1])
         rows.append(_row("company of the day", "research pick", t.date, t.symbol,
-                         {"status": "watch", "entry": p0, "exit": float(d["close"].iloc[-1]), "entry_date": str(t.date)}))
+                         {"status": "watch", "entry": p0, "exit": float(d["close"].iloc[-1]), "entry_date": str(t.date)},
+                         sent="sent"))
     # 5) monthly basket
     try:
         B = json.loads((PRIVATE / "basket.json").read_text())
@@ -183,13 +201,13 @@ def report(R, today=None):
          "Every idea the system sent, followed with the same rules (see swing/tracker.py). Open = valued at today's close.", ""]
     if not len(R):
         return "\n".join(L + ["No tips yet."]) + "\n"
-    L += ["| Source | Type | Ideas | Bought (in zone) | Closed: won | Closed avg | Open: up | Open avg |",
-          "|---|---|---|---|---|---|---|---|"]
-    for (src, kind), g in R.groupby(["source", "type"]):
+    L += ["| Source | Type | Sent to owner? | Ideas | Bought (in zone) | Closed: won | Closed avg | Open: up | Open avg |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for (src, kind, snt), g in R.groupby(["source", "type", "sent"], dropna=False):
         c = g[g["status"] == "closed"]
         o = g[g["status"].isin(["open", "watch"])]
         bought = g[~g["status"].astype(str).str.startswith(("skipped", "waiting"))]
-        L.append(f"| {src} | {kind} | {len(g)} | {len(bought)} | "
+        L.append(f"| {src} | {kind} | {snt} | {len(g)} | {len(bought)} | "
                  + (f"{int((c['result_pct'] > 0).sum())} of {len(c)}" if len(c) else "-") + " | "
                  + (f"{c['result_pct'].mean():+.2f}%" if len(c) else "-") + " | "
                  + (f"{int((o['result_pct'] > 0).sum())} of {len(o)}" if len(o) else "-") + " | "
@@ -209,8 +227,8 @@ def build(load=None):
     load = load or data_prices.load
     R = collect(load)
     J.mkdir(parents=True, exist_ok=True)
-    cols = ["source", "type", "date", "symbol", "status", "why", "entry_date", "entry", "stop", "target", "exit_date",
-            "exit", "result_pct", "days", "added"]
+    cols = ["source", "type", "sent", "date", "symbol", "status", "why", "entry_date", "entry", "stop", "target",
+            "exit_date", "exit", "result_pct", "days", "added", "next_open", "next_open_vs_buy_pct"]
     if len(R):
         R = R.reindex(columns=cols)
     R.to_csv(CSV, index=False)

@@ -60,33 +60,36 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip (retired list) | weekday | Tue | 1 | +13.13% | 100% |
 | strategy tip (retired list) | weekday | Wed | 3 | +11.18% | 100% |
 
-## 3. Lessons to research
-- None yet (needs at least 10 ideas per situation).
+## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)
+- [weak] hourly scan: when liquidity = 10-50 cr, ideas averaged +0.7% (n=4) vs -1.6% when over 50 cr (n=14)
+- [weak] strategy tip: when liquidity = over 50 cr, ideas averaged -1.1% (n=12) vs -3.6% when 10-50 cr (n=4)
+- [medium] strategy tip: when market mood = calm, ideas averaged -0.5% (n=9) vs -3.4% when jumpy (n=7)
+- [weak] strategy tip: when weekday = Fri, ideas averaged -0.5% (n=3) vs -3.4% when Wed (n=7)
+- [medium] strategy tip (retired list): when market = falling, ideas averaged +10.7% (n=5) vs -0.5% when rising (n=10)
+- [weak] strategy tip (retired list): when weekday = Wed, ideas averaged +11.2% (n=3) vs +1.2% when Mon (n=7)
+- [weak] strategy tip: 2 of 3 losing ideas - Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)
 
 ## 4. Mistakes: why each losing idea lost (plain diagnosis)
 | Mistake | Ideas | Average | Sources |
 |---|---|---|---|
-| Gave back a profit - it was up 5%+ and then turned into a loss (an exit mistake) | 1 | -12.4% | strategy tip |
+| Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake) | 3 | -9.1% | hourly scan, strategy tip |
 | Never worked - it never rose meaningfully above the buy price (a selection mistake) | 2 | -6.7% | hourly scan, strategy tip (retired list) |
-| Drifted down slowly (no clear cause) | 6 | -7.1% | hourly scan, strategy tip, strategy tip (retired list) |
+| Drifted down slowly (no clear cause) | 4 | -7.0% | hourly scan, strategy tip, strategy tip (retired list) |
 
-- AVALON (strategy tip, 2026-11-11): -12.4%, best point +6.1%, market -0.3% -> Gave back a profit - it was up 5%+ and then turned into a loss (an exit mistake)
-- RPTECH (strategy tip, 2026-11-11): -9.8%, best point +2.3%, market -0.3% -> Drifted down slowly (no clear cause)
-- EMIL (strategy tip, 2026-11-11): -6.3%, best point +3.6%, market -0.3% -> Drifted down slowly (no clear cause)
-- CYIENT (strategy tip (retired list), 2026-11-05): -3.8%, best point +1.2%, market +0.8% -> Drifted down slowly (no clear cause)
+- AVALON (strategy tip, recorded only, 2026-11-11): -12.4%, best point +6.1%, market -0.3% -> Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)
+- RPTECH (strategy tip, recorded only, 2026-11-11): -9.8%, best point +2.3%, market -0.3% -> Drifted down slowly (no clear cause)
+- EMIL (strategy tip, recorded only, 2026-11-11): -6.3%, best point +3.6%, market -0.3% -> Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)
+- CYIENT (strategy tip (retired list), recorded only, 2026-11-05): -3.8%, best point +1.2%, market +0.8% -> Drifted down slowly (no clear cause)
 - ANTELOPUS (strategy tip (retired list), 2026-11-06): -7.0%, best point +0.8%, market +0.7% -> Never worked - it never rose meaningfully above the buy price (a selection mistake)
 - JAYNECOIND (strategy tip (retired list), 2026-11-09): -3.1%, best point +2.1%, market -0.1% -> Drifted down slowly (no clear cause)
 - SHANTIGOLD (hourly scan, 2026-11-09): -11.2%, best point +1.6%, market -0.1% -> Drifted down slowly (no clear cause)
-- EBGNG (hourly scan, 2026-11-11): -8.6%, best point +4.4%, market -0.3% -> Drifted down slowly (no clear cause)
-- SHANTIGOLD (hourly scan, 2026-11-17): -6.4%, best point +0.0% -> Never worked - it never rose meaningfully above the buy price (a selection mistake)
+- EBGNG (hourly scan, recorded only, 2026-11-11): -8.6%, best point +4.4%, market -0.3% -> Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)
+- SHANTIGOLD (hourly scan, recorded only, 2026-11-17): -6.4%, best point +0.0% -> Never worked - it never rose meaningfully above the buy price (a selection mistake)
+
+**Normal mix in the 13-year test (all stocks, Nov 2023+), share of money lost:** Gave back a profit 38%; The whole market fell 3%+ during the trade (not the stock's fault) 21%; Drifted down slowly (no clear cause) 13%; Never worked 12%; Company results came during the trade and hit the price 7%; Opened below the stop-loss 7%; Stopped out within 3 days (timing / normal noise) 1%
 
 ## 5. Repeat stocks (sent 3+ times)
-- CYIENT: 6 times (hourly scan, strategy tip), average -1.2%
-- CHENNPETRO: 4 times (hourly scan, strategy tip), average +0.1%
-- EMIL: 4 times (hourly scan, strategy tip), average -3.0%
-- WELCORP: 4 times (hourly scan, strategy tip), average -0.2%
-- GESHIP: 3 times (hourly scan, strategy tip), average +6.1%
-- HCLTECH: 3 times (hourly scan, strategy tip), average -2.2%
+- None.
 
 ## 6. Skipped ideas (opened outside the buy zone): missed winners or avoided losses?
 - RAIN (strategy tip (retired list)): -14.5% since that open

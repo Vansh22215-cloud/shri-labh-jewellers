@@ -337,6 +337,19 @@ def add_to_winners(day, bars, sig, s):
     return sent
 
 
+def _held_elsewhere(sym, channel, day, b, s):
+    """D139 (owner: no repeat tips): True (and the repeat is recorded for the Learner) when the stock already has an
+    open tip - from the live engine, or (for live / 3:20 pm alerts) an open VANTAGE tip from an earlier day."""
+    if not s.get("no_repeat_tips", True):
+        return False
+    from .registry import open_stocks, record_suppressed
+    held = open_stocks().get(str(sym))
+    if not held or (channel == "VANTAGE" and held == "VANTAGE"):
+        return False                                      # same channel: its own once-per-signal rule applies
+    record_suppressed(sym, channel, held, day, b.get("close"), b.get("stop"))
+    return True
+
+
 def run(day=None, source="auto"):
     """The whole job. -> dict summary. Writes vantage_last.json (ok=True only when today's candle was available)."""
     from . import telegram, health
@@ -411,6 +424,8 @@ def run(day=None, source="auto"):
             key = (sym, str(pd.Timestamp(buy["signal"]).date()))
             if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():
                 continue                                    # already sent (re-run) - never twice
+            if _held_elsewhere(sym, "VANTAGE", day, buy, s):
+                continue                                    # D139: open tip from another channel - not repeated
             lk, n = likely(cal, buy["setup"], buy.get("tier", ""), buy.get("score", 0))
             lim = buy["close"] - 0.25 * float(buy.get("atr") or 0)   # D122 forward test (R2): would a limit fill?
             row = {"sym": sym, "signal": key[1], "setup": buy["setup"], "tier": buy.get("tier", ""), "score": buy["score"],
@@ -601,6 +616,8 @@ def live_step(scanner, s=None):
             continue
         if ((live["day"] == day) & (live["sym"] == sym)).any():
             continue                                          # one live alert per stock per day
+        if _held_elsewhere(sym, "VANTAGE live", day, b, s):
+            continue                                          # D139: open tip from any channel - not repeated
         lk, n = likely(cal, b["setup"], b.get("tier", ""), b.get("score", 0))
         row = {"day": day, "sym": sym, "setup": b["setup"], "tier": b.get("tier", ""), "time": f"{t:%H:%M}",
                "price": f"{b['close']:.2f}", "stop": f"{b['stop']:.2f}", "outcome": ""}
@@ -658,6 +675,8 @@ def close_call(day, t, res, s, cal):
             continue
         if ((calls["day"] == d) & (calls["sym"] == sym)).any():
             continue
+        if _held_elsewhere(sym, "VANTAGE 3:20 pm", d, b, s):
+            continue                                          # D139: open tip from any channel - not repeated
         lk, n = likely(cal, b["setup"], b.get("tier", ""), b.get("score", 0))
         row = {"day": d, "sym": sym, "time": f"{t:%H:%M}", "price": f"{b['close']:.2f}", "stop": f"{b['stop']:.2f}",
                "outcome": ""}

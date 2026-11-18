@@ -1,0 +1,8 @@
+first_seen,key,source,situation,lesson,evidence,status
+2026-11-18,hourly scan|liquidity|10-50 cr>over 50 cr,hourly scan,liquidity,"hourly scan: when liquidity = 10-50 cr, ideas averaged +0.7% (n=4) vs -1.6% when over 50 cr (n=14)",weak,to research (test on 13 years before any change)
+2026-11-18,strategy tip|liquidity|over 50 cr>10-50 cr,strategy tip,liquidity,"strategy tip: when liquidity = over 50 cr, ideas averaged -1.1% (n=12) vs -3.6% when 10-50 cr (n=4)",weak,to research (test on 13 years before any change)
+2026-11-18,strategy tip|market_mood|calm>jumpy,strategy tip,market_mood,"strategy tip: when market mood = calm, ideas averaged -0.5% (n=9) vs -3.4% when jumpy (n=7)",medium,to research (test on 13 years before any change)
+2026-11-18,strategy tip|weekday|Fri>Wed,strategy tip,weekday,"strategy tip: when weekday = Fri, ideas averaged -0.5% (n=3) vs -3.4% when Wed (n=7)",weak,to research (test on 13 years before any change)
+2026-11-18,strategy tip (retired list)|market|falling>rising,strategy tip (retired list),market,"strategy tip (retired list): when market = falling, ideas averaged +10.7% (n=5) vs -0.5% when rising (n=10)",medium,to research (test on 13 years before any change)
+2026-11-18,strategy tip (retired list)|weekday|Wed>Mon,strategy tip (retired list),weekday,"strategy tip (retired list): when weekday = Wed, ideas averaged +11.2% (n=3) vs +1.2% when Mon (n=7)",weak,to research (test on 13 years before any change)
+2026-11-18,strategy tip|mistake|gave_back,strategy tip,mistake,strategy tip: 2 of 3 losing ideas - Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake),weak,to research (test on 13 years before any change)

@@ -1056,3 +1056,22 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - AVALON gave back a +6% profit and is now −12.4%.
   - CYIENT was sent 6 times (hourly scan and strategy tips repeat the same stocks), CHENNPETRO, EMIL and WELCORP 4 times each.
   - The one skipped idea that fell, RAIN (−14.5%), was a loss avoided.
+
+## D139 - 2026-11-18 - No repeat tips, a sharper Learner, and a 13-year mistake census (owner: "Yes smartly"; "bare minimum, we can't wait till 40%")
+- **No repeat tips:** `swing/registry.py` keeps one list of open tips across the channels that send (VANTAGE and the live engine).
+  - A stock with an open tip is not sent again by another channel, or by a later live or 3:20 pm alert.
+  - The blocked repeat goes to `data/private/suppressed_repeats.csv`, and the Learner follows it ("blocked repeat") to learn whether blocking was right.
+  - ADD MORE is not a repeat.
+  - Switch: `no_repeat_tips`.
+- **Correction:** evening strategy tips and hourly-scan ideas have been log-only since 11 Nov (D95). The tracker now marks every idea "sent" or "recorded only". The earlier "CYIENT sent 6 times" was internal re-picking; it never reached the owner.
+- **Learner lessons from the first sign:**
+  - a situation gap of ≥ 2 points with ≥ 3 ideas a side;
+  - any mistake cause seen twice;
+  - each labelled weak / medium / strong evidence (2–4 / 5–9 / 10+).
+- **"Gave back a profit"** now starts at +3%.
+- **VANTAGE tips record the next morning's open,** to compare buying at 3:20 pm with buying the next morning.
+- **Mistake census** (`vantage-ai/validation/mistake_census.py` / `.json`): the diagnosis applied to all losing VANTAGE trades of 13 years.
+  - The biggest fixable cause is "gave back a profit" (all stocks: 37–38% of money lost).
+  - Then market falls (21–26%) and results during the trade (top-300: 26–31%).
+  - The Learner compares the live mistake mix with this normal mix and flags gaps of 15+ points.
+  - Round 20 (protecting profits) was started from it.

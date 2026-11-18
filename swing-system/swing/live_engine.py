@@ -652,6 +652,13 @@ def issue_tip(row, msg, settings=None):
         safety.record_skip(row, why)
         log.info("Tip skipped (%s %s): %s", row.get("type"), row.get("symbol"), why)
         return False
+    if row.get("type") in ("NORMAL", "FNO") and s.get("no_repeat_tips", True):   # D139: one open tip per stock
+        from .registry import open_stocks, record_suppressed
+        held = open_stocks().get(str(row.get("symbol")))
+        if held and held != f"live engine {row.get('type')}":
+            record_suppressed(row.get("symbol"), f"live engine {row.get('type')}", held, row.get("time"),
+                              row.get("entry"), row.get("stop"))
+            return False
     with _LOCK:
         t = load_tips()
         if len(t) and "sid" in t and (t["sid"].astype(str) == row["sid"]).any():

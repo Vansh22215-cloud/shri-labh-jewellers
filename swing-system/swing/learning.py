@@ -28,10 +28,16 @@ log = get_logger()
 J = ROOT / "journal"
 MD, QUEUE = J / "learning.md", J / "learning_queue.csv"
 PROFILE = ROOT.parent / "vantage-ai" / "validation" / "tested_profile.json"
+CENSUS = ROOT.parent / "vantage-ai" / "validation" / "mistake_census.json"
 STATE = PRIVATE / "learning_state.json"
 TYPE_MAP = {"VANTAGE Rolling Candle Profile": "RCP", "VANTAGE Breakout": "Breakout", "VANTAGE Dip-buy A": "Dip-buy A",
             "VANTAGE Dip-buy B": "Dip-buy B", "VANTAGE Dip-buy C": "Dip-buy C"}
 MIN_CLOSED, MIN_BUCKET = 20, 10
+MIN_SIGN = 2                    # owner 18 Nov: "bare minimum - we can't wait": a cause seen twice is already a lesson
+
+
+def evidence(n):
+    return "strong" if n >= 10 else "medium" if n >= 5 else "weak"
 _LAST = (pd.DataFrame(), [], pd.DataFrame(), [])
 
 
@@ -104,7 +110,7 @@ def enrich(R, load):
 # from our mistakes is more important than the trade we find") - every losing / weak idea gets a plain diagnosis.
 CODES = {
     "never_worked": "Never worked - it never rose meaningfully above the buy price (a selection mistake)",
-    "gave_back": "Gave back a profit - it was up 5%+ and then turned into a loss (an exit mistake)",
+    "gave_back": "Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)",
     "fast_stop": "Stopped out within 3 days (timing / normal noise)",
     "gap_through_stop": "Opened below the stop-loss - the loss was bigger than planned (overnight risk)",
     "market_fell": "The whole market fell 3%+ during the trade (not the stock's fault)",
@@ -152,7 +158,7 @@ def diagnose(r, load):
         code = "results_shock"
     elif mkt is not None and mkt <= -0.03:
         code = "market_fell"
-    elif best == best and best is not None and best >= 5:
+    elif best == best and best is not None and best >= 3:
         code = "gave_back"
     elif r["status"] == "closed" and str(r.get("why")) == "stop-loss" and days == days and days is not None and days <= 3:
         code = "fast_stop"
@@ -160,7 +166,8 @@ def diagnose(r, load):
         code = "never_worked"
     else:
         code = "slow_bleed"
-    line = (f"{r['symbol']} ({r['source']}, {str(r['date'])[:10]}): {res:+.1f}%"
+    tag = "" if str(r.get("sent")) in ("sent", "nan", "None") else f", {r.get('sent')}"
+    line = (f"{r['symbol']} ({r['source']}{tag}, {str(r['date'])[:10]}): {res:+.1f}%"
             + (f", best point {best:+.1f}%" if best == best and best is not None else "")
             + (f", market {mkt * 100:+.1f}%" if mkt is not None else "") + f" -> {CODES[code]}")
     return code, line
@@ -190,7 +197,9 @@ def mistakes(R, load):
 
 def repeats(R):
     """The same stock sent again and again (several channels or days) - concentration and repeat-mistake risk."""
-    B = R[R["source"].isin(["strategy tip", "hourly scan", "VANTAGE", "live engine"])]
+    B = R[R["source"].isin(["strategy tip", "strategy tip (retired list)", "hourly scan", "VANTAGE", "live engine"])]
+    if "sent" in B:
+        B = B[B["sent"].astype(str) == "sent"]                   # only what actually reached the owner
     g = B.groupby("symbol").agg(times=("symbol", "size"), sources=("source", lambda x: ", ".join(sorted(set(x)))),
                                 avg=("result_pct", "mean")).reset_index()
     return g[g["times"] >= 3].sort_values("times", ascending=False)
@@ -259,14 +268,15 @@ def lessons(W):
     if not len(W):
         return out
     for (src, col), g in W.groupby(["source", "situation"]):
-        g = g[g["n"] >= MIN_BUCKET]
+        g = g[g["n"] >= 3]
         if len(g) < 2:
             continue
         hi, lo = g.loc[g["avg_pct"].idxmax()], g.loc[g["avg_pct"].idxmin()]
-        if hi["avg_pct"] - lo["avg_pct"] >= 3:
+        if hi["avg_pct"] - lo["avg_pct"] >= 2:
             out.append({"key": f"{src}|{col}|{hi['value']}>{lo['value']}", "source": src, "situation": col,
                         "lesson": f"{src}: when {col.replace('_', ' ')} = {hi['value']}, ideas averaged {hi['avg_pct']:+.1f}% "
                                   f"(n={hi['n']}) vs {lo['avg_pct']:+.1f}% when {lo['value']} (n={lo['n']})",
+                        "evidence": evidence(min(hi["n"], lo["n"])),
                         "status": "to research (test on 13 years before any change)"})
     return out
 
@@ -276,12 +286,11 @@ def mistake_lessons(M):
     if not len(M):
         return out
     for src, g in M.groupby("source"):
-        top = g["code"].value_counts()
-        if len(g) >= MIN_BUCKET and top.iloc[0] / len(g) >= 0.4:
-            code = top.index[0]
-            out.append({"key": f"{src}|mistake|{code}", "source": src, "situation": "mistake",
-                        "lesson": f"{src}: {top.iloc[0]} of {len(g)} losing ideas share one cause - {CODES[code]}",
-                        "status": "to research (test on 13 years before any change)"})
+        for code, k in g["code"].value_counts().items():
+            if k >= MIN_SIGN and code != "slow_bleed":
+                out.append({"key": f"{src}|mistake|{code}", "source": src, "situation": "mistake",
+                            "lesson": f"{src}: {k} of {len(g)} losing ideas - {CODES[code]}",
+                            "evidence": evidence(k), "status": "to research (test on 13 years before any change)"})
     return out
 
 
@@ -294,8 +303,8 @@ def write(R, E, W, Ls, today=None, extra=None):
           "| Source | Situation | Value | Ideas | Average | Won |", "|---|---|---|---|---|---|"]
     for r in W.itertuples():
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
-    L += ["", "## 3. Lessons to research"] + ([f"- {x['lesson']}" for x in Ls] or ["- None yet (needs at least "
-                                                                                 f"{MIN_BUCKET} ideas per situation)."])
+    L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
+        ([f"- [{x.get('evidence', '?')}] {x['lesson']}" for x in Ls] or ["- None yet."])
     if extra:
         M, lines, Rp, Sk = extra
         L += ["", "## 4. Mistakes: why each losing idea lost (plain diagnosis)"]
@@ -306,6 +315,21 @@ def write(R, E, W, Ls, today=None, extra=None):
             L += [""] + [f"- {x}" for x in lines]
         else:
             L.append("- No losing ideas to diagnose yet.")
+        try:   # the normal mix of mistakes in 13 years (all stocks, last 3 years) - is the live mix different?
+            cen = json.loads(CENSUS.read_text())["all holdout"]["causes"]
+            L += ["", "**Normal mix in the 13-year test (all stocks, Nov 2023+), share of money lost:** "
+                  + "; ".join(f"{k.split(' - ')[0]} {v['share_of_all_money_lost']:.0f}%"
+                              for k, v in sorted(cen.items(), key=lambda z: -z[1]["share_of_all_money_lost"]))]
+            V = M[M["source"] == "VANTAGE"]
+            if len(V) >= MIN_SIGN:
+                live = V.groupby("code")["result_pct"].sum() / V["result_pct"].sum() * 100
+                for code, sh in live.items():
+                    norm = cen.get(CODES[code], {}).get("share_of_all_money_lost", 0)
+                    if sh - norm >= 15:
+                        L.append(f"- ⚠️ VANTAGE live: '{CODES[code].split(' - ')[0]}' is {sh:.0f}% of money lost vs {norm:.0f}% "
+                                 f"normally ({len(V)} losing tips, evidence {evidence(len(V))})")
+        except Exception:
+            pass
         L += ["", "## 5. Repeat stocks (sent 3+ times)"]
         L += [f"- {r.symbol}: {r.times} times ({r.sources}), average {r.avg:+.1f}%" for r in Rp.itertuples()] or ["- None."]
         L += ["", "## 6. Skipped ideas (opened outside the buy zone): missed winners or avoided losses?"]
@@ -319,7 +343,7 @@ def write(R, E, W, Ls, today=None, extra=None):
         try:
             Q = pd.read_csv(QUEUE)
         except Exception:
-            Q = pd.DataFrame(columns=["first_seen", "key", "source", "situation", "lesson", "status"])
+            Q = pd.DataFrame(columns=["first_seen", "key", "source", "situation", "lesson", "evidence", "status"])
         new = [dict(x, first_seen=str(pd.Timestamp.now().date())) for x in Ls if x["key"] not in set(Q["key"])]
         if new:
             pd.concat([Q, pd.DataFrame(new)], ignore_index=True).to_csv(QUEUE, index=False)
@@ -328,6 +352,8 @@ def write(R, E, W, Ls, today=None, extra=None):
 def weekly_message(R, E, Ls, today=None):
     today = pd.Timestamp(today or pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize())
     wk = R[pd.to_datetime(R["date"], errors="coerce") >= today - pd.Timedelta(days=7)]
+    if "sent" in wk:
+        wk = wk[wk["sent"].astype(str) == "sent"]
     closed_wk = R[(R["status"] == "closed") & (pd.to_datetime(R["exit_date"], errors="coerce") >= today - pd.Timedelta(days=7))]
     L = ["📒 Weekly learning", "", f"Ideas sent this week: {len(wk)}"]
     if len(closed_wk):
@@ -335,7 +361,8 @@ def weekly_message(R, E, Ls, today=None):
                  f"average {closed_wk['result_pct'].mean():+.1f}%")
     for src, g in R[R["status"].isin(["open", "closed"])].groupby("source"):
         c = g[g["status"] == "closed"]
-        L.append(f"• {src}: {len(g)} bought" + (f", {len(c)} closed ({(c['result_pct'] > 0).mean() * 100:.0f}% won, "
+        snt = g["sent"].astype(str).value_counts().index[0] if "sent" in g else ""
+        L.append(f"• {src}{' (recorded only, not sent)' if snt == 'recorded only' else ''}: {len(g)} bought" + (f", {len(c)} closed ({(c['result_pct'] > 0).mean() * 100:.0f}% won, "
                                                  f"avg {c['result_pct'].mean():+.1f}%)" if len(c) else "")
                  + f", open avg {g[g['status'] == 'open']['result_pct'].mean():+.1f}%" * bool((g['status'] == 'open').any()))
     M, lines, Rp, Sk = _LAST
