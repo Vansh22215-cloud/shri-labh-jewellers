@@ -53,3 +53,12 @@ Share of all money lost on VANTAGE trades, holdout (all stocks / top-300):
   - Holdout all stocks: VANTAGE +2.63% vs random −0.89%.
   - **The edge is stock choice.**
 - **Consequence:** research priority moves to stock choice (which facts in VANTAGE's choice carry the edge; whether more stocks of the same quality exist), not timing.
+
+## 19 Nov 2026, 00:15 IST check-in
+- No new live record yet. The live system's first evening run of the tracker and Learner is 19 Nov at about 18:40 IST, after the first full trading day with ₹51,000.
+- The local replay is unchanged: 17 VANTAGE tips, open average +0.2%.
+- **Backlog 13 progress:**
+  - **(a) done:** fingerprint = strong, near-high stocks, about 3/4 of the edge.
+  - **(b) answered:** about 7 matching stocks a day, so money, not candidates, is the limit.
+  - **(c) answered:** VANTAGE's own timing adds about 0.75 points a trade over fingerprint-matched random picks, so it is kept.
+- **Next research item:** start from the first live evening (beliefs B2 and B6 checks).
