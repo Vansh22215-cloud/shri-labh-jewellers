@@ -1,0 +1,101 @@
+{
+ "note": "What the system believes, how sure it is, and what would prove it wrong (ATLAS input). The Learner checks every 'check' against the live record each evening.",
+ "beliefs": [
+  {
+   "id": "B1",
+   "belief": "VANTAGE's edge is WHICH stocks it picks",
+   "level": "proven",
+   "evidence": "luck_check2.json: beats random stocks/days in 100% of 200 worlds, every period",
+   "wrong_if": "after 30+ closed live VANTAGE tips, fewer than half beat NIFTY over the same days",
+   "check": "vantage_vs_nifty"
+  },
+  {
+   "id": "B2",
+   "belief": "Buying at 3:20 pm beats buying the next morning",
+   "level": "proven",
+   "evidence": "IMPROVE3; live_rules_by_year.json (9 of 14 years)",
+   "wrong_if": "after 30+ live VANTAGE tips, the next morning's open is on average BELOW the 3:20 pm price (waiting would have been cheaper)",
+   "check": "next_open_gap"
+  },
+  {
+   "id": "B3",
+   "belief": "ADD MORE adds a small edge",
+   "level": "promising (watch)",
+   "evidence": "IMPROVE13; 6 of 14 years better",
+   "wrong_if": "after 10+ live add-ons, tips with ADD MORE do no better than tips without",
+   "check": "add_more"
+  },
+  {
+   "id": "B4",
+   "belief": "Tips just before results earn about half -> half quantity",
+   "level": "proven",
+   "evidence": "IMPROVE2 R4",
+   "wrong_if": "after 20+ live results-week tips, they do as well as the others",
+   "check": "results_week"
+  },
+  {
+   "id": "B5",
+   "belief": "Panic days (falling, jumpy, weak breadth) give the best VANTAGE tips",
+   "level": "promising",
+   "evidence": "situation_memory: best in both periods, small samples",
+   "wrong_if": "after 10+ live panic-day tips, they average below the other tips",
+   "check": "panic_days"
+  },
+  {
+   "id": "B6",
+   "belief": "Thin stocks (< Rs 2 cr/day) give weaker tips",
+   "level": "proven",
+   "evidence": "IMPROVE_RESULTS U; round 23 robustness",
+   "wrong_if": "after 20+ rejected thin signals, they average better than sent tips",
+   "check": "rejected_thin"
+  },
+  {
+   "id": "B7",
+   "belief": "Blocking repeat tips protects money",
+   "level": "assumption (not tested)",
+   "evidence": "risk logic only (D139)",
+   "wrong_if": "after 10+ blocked repeats, they average clearly better than sent tips",
+   "check": "blocked"
+  },
+  {
+   "id": "B8",
+   "belief": "Live VANTAGE tips will match the 13-year profile per type",
+   "level": "expected",
+   "evidence": "tested_profile.json",
+   "wrong_if": "the Learner's expectation check says 'below expected' for any type",
+   "check": "expectation"
+  },
+  {
+   "id": "B9",
+   "belief": "'Gave back a profit' is the price of letting winners run",
+   "level": "proven",
+   "evidence": "IMPROVE20 + round 1 E1",
+   "wrong_if": "a NEW exit idea cuts it without cutting yearly growth",
+   "check": null
+  },
+  {
+   "id": "B10",
+   "belief": "Market-weather rules don't help VANTAGE",
+   "level": "proven",
+   "evidence": "rounds 6, 8, 12, 19 + market-break exit",
+   "wrong_if": "a new market signal passes development + holdout + year-by-year",
+   "check": null
+  },
+  {
+   "id": "B11",
+   "belief": "Timing inside the chosen stocks adds little in recent years",
+   "level": "proven (since 2023)",
+   "evidence": "luck_check.json",
+   "wrong_if": "timing-rule tests start passing again on new data",
+   "check": null
+  }
+ ],
+ "unknowns": [
+  "Every strategy uses only daily price and volume: no intraday structure, order book, or option-market data per stock has been tested as a stock-choice signal.",
+  "All strategies buy only (no shorting): in falling markets the system can only wait.",
+  "All tests assume fills at the open or close price: real 3:20 pm and 9:15 am fills are unmeasured (Kite 5-minute archive needed).",
+  "Results dates exist for only 506 companies: event effects for the rest are invisible.",
+  "The holdout (Nov 2023+) was a strong small/mid-cap rally: every 'recent' conclusion may be specific to that market.",
+  "Stock choice is VANTAGE's edge, but nobody knows yet WHICH part of the choice carries it (backlog 13a)."
+ ]
+}

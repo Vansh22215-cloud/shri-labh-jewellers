@@ -30,6 +30,8 @@ MD, QUEUE = J / "learning.md", J / "learning_queue.csv"
 PROFILE = ROOT.parent / "vantage-ai" / "validation" / "tested_profile.json"
 CENSUS = ROOT.parent / "vantage-ai" / "validation" / "mistake_census.json"
 MEMORY = ROOT.parent / "vantage-ai" / "validation" / "situation_memory.json"
+BELIEFS = ROOT.parent / "vantage-ai" / "validation" / "beliefs.json"
+EXPERIMENTS = ROOT.parent / "vantage-ai" / "validation" / "experiments.json"
 STATE = PRIVATE / "learning_state.json"
 TYPE_MAP = {"VANTAGE Rolling Candle Profile": "RCP", "VANTAGE Breakout": "Breakout", "VANTAGE Dip-buy A": "Dip-buy A",
             "VANTAGE Dip-buy B": "Dip-buy B", "VANTAGE Dip-buy C": "Dip-buy C"}
@@ -42,6 +44,7 @@ def evidence(n):
 _LAST = (pd.DataFrame(), [], pd.DataFrame(), [])
 _OPP = []
 BR, TODAY_KEY = None, None
+_CHECKS = []
 
 
 def profile():
@@ -83,8 +86,9 @@ def memory_line(key):
     if not m:
         return f"{key}: no memory yet"
     a = m["all"]
+    types = "; ".join(f"{t} {v['avg_pct']:+.1f}% (n={v['n']})" for t, v in m.items() if t not in ("all", "days_in_13y"))
     return (f"{key} - in 13 years VANTAGE tips on such days ({m['days_in_13y']} days) averaged {a['avg_pct']:+.1f}%, "
-            f"won {a['win_pct']:.0f}% ({a['n']} tips)" + (" - the best kind of day in the test (both periods)"
+            f"won {a['win_pct']:.0f}% ({a['n']} tips); by type: {types}" + (" - the best kind of day in the test (both periods)"
                                                         if key == "falling | jumpy | breadth weak" else ""))
 
 
@@ -292,6 +296,98 @@ def skipped_review(R, load):
     return out
 
 
+def belief_checks(R, E):
+    """ATLAS input: each belief's live check -> (id, belief, status, detail). status: holding / at risk / broken /
+    waiting (not enough live data yet)."""
+    try:
+        B = json.loads(BELIEFS.read_text())["beliefs"]
+    except Exception:
+        return []
+    V = R[(R["source"] == "VANTAGE") & R["status"].isin(["open", "closed"])]
+    C = V[V["status"] == "closed"]
+    out = []
+    for b in B:
+        st, det = "no live check", ""
+        k = b.get("check")
+        if k == "vantage_vs_nifty":
+            x = C["vs_nifty_pct"].dropna() if "vs_nifty_pct" in C else pd.Series(dtype=float)
+            st, det = ("waiting", f"{len(x)} of 30 closed") if len(x) < 30 else \
+                (("holding" if (x > 0).mean() >= 0.5 else "broken"), f"{(x > 0).mean() * 100:.0f}% beat NIFTY")
+        elif k == "next_open_gap":
+            x = V["next_open_vs_buy_pct"].dropna() if "next_open_vs_buy_pct" in V else pd.Series(dtype=float)
+            st, det = ("waiting", f"{len(x)} of 30 tips") if len(x) < 30 else \
+                (("holding" if x.mean() >= 0 else "at risk"), f"next open {x.mean():+.2f}% vs the 3:20 pm price")
+            if 0 < len(x) < 30:
+                det += f" (so far {x.mean():+.2f}%)"
+        elif k == "add_more":
+            a = C[C.get("added", pd.Series(index=C.index, dtype=str)).astype(str) == "yes"] if "added" in C else C.iloc[0:0]
+            n = C.drop(a.index)
+            st, det = ("waiting", f"{len(a)} of 10 add-ons closed") if len(a) < 10 else \
+                (("holding" if a["result_pct"].mean() > n["result_pct"].mean() else "at risk"),
+                 f"with {a['result_pct'].mean():+.2f}% vs without {n['result_pct'].mean():+.2f}%")
+        elif k == "results_week":
+            y = C[C.get("results_week", pd.Series(index=C.index, dtype=str)) == "yes"] if "results_week" in C else C.iloc[0:0]
+            st, det = ("waiting", f"{len(y)} of 20") if len(y) < 20 else \
+                (("holding" if y["result_pct"].mean() < C.drop(y.index)["result_pct"].mean() else "at risk"),
+                 f"results-week {y['result_pct'].mean():+.2f}% vs others {C.drop(y.index)['result_pct'].mean():+.2f}%")
+        elif k == "panic_days":
+            y = V[V.get("day_type", pd.Series(index=V.index, dtype=str)) == "falling | jumpy | breadth weak"] if "day_type" in V else V.iloc[0:0]
+            st, det = ("waiting", f"{len(y)} of 10 panic-day tips") if len(y) < 10 else \
+                (("holding" if y["result_pct"].mean() >= V.drop(y.index)["result_pct"].mean() else "at risk"),
+                 f"panic days {y['result_pct'].mean():+.2f}% vs others {V.drop(y.index)['result_pct'].mean():+.2f}%")
+        elif k in ("rejected_thin", "blocked"):
+            src = "rejected by VANTAGE" if k == "rejected_thin" else "blocked repeat"
+            y = R[R["source"] == src]
+            need = 20 if k == "rejected_thin" else 10
+            st, det = ("waiting", f"{len(y)} of {need}") if len(y) < need else \
+                (("holding" if y["result_pct"].mean() <= V["result_pct"].mean() + 1 else "at risk"),
+                 f"{src} {y['result_pct'].mean():+.2f}% vs sent {V['result_pct'].mean():+.2f}%")
+        elif k == "expectation":
+            bad = [x for x in E if x[1] == "below expected"]
+            st, det = ("broken", "; ".join(x[0] for x in bad)) if bad else ("holding", "no type below its tested range")
+        out.append((b["id"], b["belief"], b["level"], st, det, b["wrong_if"]))
+    return out
+
+
+def daily_question(checks):
+    """ATLAS: 'What do we currently believe that might be wrong, and what experiment could prove us wrong?'"""
+    order = {"broken": 0, "at risk": 1, "waiting": 2, "holding": 3, "no live check": 4}
+    weak = sorted(checks, key=lambda c: (order.get(c[3], 5), 0 if "assumption" in c[2] else 1))
+    if not weak:
+        return ""
+    c = weak[0]
+    return f"Could we be wrong that \"{c[1]}\" ({c[2]}, live: {c[3]}{' - ' + c[4] if c[4] else ''})? It is wrong if {c[5]}."
+
+
+def scorecard(R, E, checks):
+    """ATLAS 'is the system getting smarter?' scorecard."""
+    L = []
+    try:
+        X = json.loads(EXPERIMENTS.read_text())
+        L.append(f"- Discovery productivity: {X['count']} ideas tested, {X['passed']} passed "
+                 f"({X['passed'] / max(1, X['count']) * 100:.0f}%) - failures are kept so none is retested blindly")
+    except Exception:
+        pass
+    V = R[(R["source"] == "VANTAGE") & (R["status"] == "closed")]
+    if len(V) and "likely_pct" in V:
+        pass
+    if len(V) >= 5:
+        L.append(f"- Calibration: closed VANTAGE tips won {(V['result_pct'] > 0).mean() * 100:.0f}% ({len(V)} tips) vs "
+                 "the 46-80% the messages say by type")
+    if "next_open_vs_buy_pct" in R:
+        x = R["next_open_vs_buy_pct"].dropna()
+        if len(x):
+            L.append(f"- Execution: the next morning opened {x.mean():+.2f}% vs the 3:20 pm buy price on average ({len(x)} tips)")
+    for src in ("rejected by VANTAGE", "blocked repeat"):
+        y = R[R["source"] == src]
+        if len(y):
+            L.append(f"- Opportunity capture: {src} ideas {y['result_pct'].mean():+.2f}% on average ({len(y)}) - "
+                     "high = we are leaving money; low = the rules protect us")
+    L.append(f"- Edge decay watch: {sum(1 for x in E if x[1] in ('below expected', 'watch', 'early warning'))} type(s) "
+             f"flagged; beliefs at risk or broken: {sum(1 for c in checks if c[3] in ('at risk', 'broken'))}")
+    return L
+
+
 def strategies_live(R):
     """Project ALPHA 'strategy lifecycle': live results per registered strategy (strategies/registry.json)."""
     try:
@@ -449,6 +545,13 @@ def write(R, E, W, Ls, today=None, extra=None):
     for r in W.itertuples():
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
     L += ["", "## Today's market, from memory"] + [f"- {memory_line(TODAY_KEY)}" if TODAY_KEY else "- unknown"]
+    global _CHECKS
+    _CHECKS = belief_checks(R, E)
+    L += ["", "## Today's question (what might we be wrong about?)", "- " + (daily_question(_CHECKS) or "none")]
+    L += ["", "## Beliefs and their live checks (vantage-ai/validation/beliefs.json)",
+          "| Belief | Evidence | Live | Detail |", "|---|---|---|---|"]
+    L += [f"| {c[1]} | {c[2]} | {c[3]} | {c[4]} |" for c in _CHECKS]
+    L += ["", "## Is the system getting smarter? (scorecard)"] + scorecard(R, E, _CHECKS)
     L += ["", "## 0. Strategies and their status (strategies/registry.json)"] + strategies_live(R)
     L += ["", "## 2b. Opportunity cost: could the same money have done better?"] + (_OPP or ["- Not enough bought ideas yet."])
     L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
@@ -506,6 +609,12 @@ def weekly_message(R, E, Ls, today=None):
     L = ["📒 Weekly learning", "", f"Ideas sent this week: {len(wk)}"]
     if TODAY_KEY:
         L.append("🧠 Market memory: " + memory_line(TODAY_KEY))
+    q = daily_question(_CHECKS)
+    if q:
+        L.append("❓ " + q)
+    bad = [c for c in _CHECKS if c[3] in ("at risk", "broken")]
+    for c in bad:
+        L.append(f"⚠️ Belief {c[3]}: {c[1]} ({c[4]})")
     if len(closed_wk):
         L.append(f"Closed this week: {len(closed_wk)} - won {int((closed_wk['result_pct'] > 0).sum())}, "
                  f"average {closed_wk['result_pct'].mean():+.1f}%")

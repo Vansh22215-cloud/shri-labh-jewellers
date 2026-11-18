@@ -1,4 +1,4 @@
-# The Learner (18 Nov 2026)
+# The Learner (19 Nov 2026)
 
 Every idea tracked by swing/tracker.py, with its situation and journey (swing/learning.py). Lessons go to research; live tips change only after a passed test and the owner's yes.
 
@@ -69,7 +69,30 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip (retired list) | weekday | Wed | 3 | +11.18% | 100% |
 
 ## Today's market, from memory
-- rising | calm | breadth strong - in 13 years VANTAGE tips on such days (1387 days) averaged +5.3%, won 49% (4028 tips)
+- rising | calm | breadth strong - in 13 years VANTAGE tips on such days (1387 days) averaged +5.3%, won 49% (4028 tips); by type: Breakout +4.4% (n=838); Dip-buy +2.8% (n=291); RCP +5.8% (n=2899)
+
+## Today's question (what might we be wrong about?)
+- Could we be wrong that "Blocking repeat tips protects money" (assumption (not tested), live: waiting - 0 of 10)? It is wrong if after 10+ blocked repeats, they average clearly better than sent tips.
+
+## Beliefs and their live checks (vantage-ai/validation/beliefs.json)
+| Belief | Evidence | Live | Detail |
+|---|---|---|---|
+| VANTAGE's edge is WHICH stocks it picks | proven | waiting | 0 of 30 closed |
+| Buying at 3:20 pm beats buying the next morning | proven | waiting | 9 of 30 tips (so far -0.38%) |
+| ADD MORE adds a small edge | promising (watch) | waiting | 0 of 10 add-ons closed |
+| Tips just before results earn about half -> half quantity | proven | waiting | 0 of 20 |
+| Panic days (falling, jumpy, weak breadth) give the best VANTAGE tips | promising | waiting | 0 of 10 panic-day tips |
+| Thin stocks (< Rs 2 cr/day) give weaker tips | proven | waiting | 0 of 20 |
+| Blocking repeat tips protects money | assumption (not tested) | waiting | 0 of 10 |
+| Live VANTAGE tips will match the 13-year profile per type | expected | holding | no type below its tested range |
+| 'Gave back a profit' is the price of letting winners run | proven | no live check |  |
+| Market-weather rules don't help VANTAGE | proven | no live check |  |
+| Timing inside the chosen stocks adds little in recent years | proven (since 2023) | no live check |  |
+
+## Is the system getting smarter? (scorecard)
+- Discovery productivity: 75 ideas tested, 8 passed (11%) - failures are kept so none is retested blindly
+- Execution: the next morning opened -0.38% vs the 3:20 pm buy price on average (9 tips)
+- Edge decay watch: 0 type(s) flagged; beliefs at risk or broken: 0
 
 ## 0. Strategies and their status (strategies/registry.json)
 - V-RCP VANTAGE trend (Rolling Candle Profile) [live]: 16 ideas, open 16 (avg +0.21%)

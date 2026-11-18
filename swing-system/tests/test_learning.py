@@ -87,3 +87,16 @@ def test_opportunity_cost_columns():
     E = learning.same_day(learning.enrich(R, lambda s: n if s == "NIFTY50" else d))
     a = E[E.symbol == "A"].iloc[0]
     assert a["nifty_same_days_pct"] == 2.0 and a["vs_nifty_pct"] == 3.0 and a["per_day_pct"] == 1.0 and a["vs_same_day_pct"] == 4.0
+
+
+def test_belief_checks_and_question(monkeypatch, tmp_path):
+    import json as _j
+    f = tmp_path / "b.json"
+    f.write_text(_j.dumps({"beliefs": [
+        {"id": "B2", "belief": "3:20 pm beats next morning", "level": "proven", "wrong_if": "next open lower", "check": "next_open_gap"},
+        {"id": "B7", "belief": "blocking repeats protects", "level": "assumption (not tested)", "wrong_if": "x", "check": "blocked"}]}))
+    monkeypatch.setattr(learning, "BELIEFS", f)
+    R = pd.DataFrame({"source": "VANTAGE", "status": "open", "result_pct": 1.0, "next_open_vs_buy_pct": [-0.5] * 31})
+    C = learning.belief_checks(R, [])
+    assert C[0][3] == "at risk" and C[1][3] == "waiting"
+    assert "3:20 pm beats next morning" in learning.daily_question(C)

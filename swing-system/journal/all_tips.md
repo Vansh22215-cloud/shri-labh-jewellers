@@ -1,4 +1,4 @@
-# Every tip, tracked (18 Nov 2026)
+# Every tip, tracked (19 Nov 2026)
 
 Every idea the system sent, followed with the same rules (see swing/tracker.py). Open = valued at today's close.
 

@@ -1098,3 +1098,16 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - All documented in `LEARNER.md`.
 - **Not built** (no value for us now): a multi-strategy capital allocator, because VANTAGE is the only proven strategy and correlation weighting needs several. Also a dashboard.
 - **No live tip changed.**
+
+## D142 - 2026-11-18 - ATLAS input applied (owner forwarded a second architecture)
+- **Beliefs register** (`vantage-ai/validation/beliefs.json`): 11 beliefs, each with an evidence level, its evidence, "wrong if…" and a live check. The Learner reports the status of each (holding / at risk / broken / waiting) and asks ATLAS's daily question: "What do we believe that might be wrong, and what would prove it?" The question appears in `learning.md` and the weekly message.
+- **Unknowns list:** 6 assumptions shared by every strategy (daily price/volume only; buy-only; fills assumed at open/close; results dates only for 506 companies; the holdout was a strong rally; which part of the stock choice carries the edge).
+- **"Is the system getting smarter?" scorecard:**
+  - discovery productivity (75 tested / 8 passed)
+  - calibration
+  - execution gap (the next open vs the 3:20 pm price)
+  - opportunity capture (rejected and blocked ideas)
+  - edge-decay flags
+- **Market memory by type:** each day type now also shows how each tip type did on such days.
+- **Prosecutor test of the live liquidity floor:** round 23, running.
+- **Not built:** a genetic strategy search ("alpha genome"), because the risk of overfitting is high with 75 tests already on one holdout. Also a multi-strategy capital brain, because VANTAGE is the only proven strategy.
