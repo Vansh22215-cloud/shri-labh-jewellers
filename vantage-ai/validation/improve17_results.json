@@ -1,0 +1,49 @@
+{
+ "top300": {
+  "third_lots": 488,
+  "dev": {
+   "base_live": {
+    "cagr": 20.0,
+    "maxdd": -17.1
+   },
+   "P2": {
+    "cagr": 20.8,
+    "maxdd": -16.2
+   }
+  },
+  "holdout": {
+   "base_live": {
+    "cagr": 15.7,
+    "maxdd": -20.3
+   },
+   "P2": {
+    "cagr": 17.5,
+    "maxdd": -20.6
+   }
+  }
+ },
+ "all": {
+  "third_lots": 2087,
+  "dev": {
+   "base_live": {
+    "cagr": 35.6,
+    "maxdd": -18.5
+   },
+   "P2": {
+    "cagr": 35.2,
+    "maxdd": -19.1
+   }
+  },
+  "holdout": {
+   "base_live": {
+    "cagr": 11.9,
+    "maxdd": -24.8
+   },
+   "P2": {
+    "cagr": 14.5,
+    "maxdd": -21.0
+   }
+  }
+ },
+ "PASS": false
+}

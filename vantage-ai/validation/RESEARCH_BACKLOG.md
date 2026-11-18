@@ -24,7 +24,7 @@
 ## Queue (targeted)
 1. ~~**Breakouts that tie up money:**~~ done: inconsistent across sets (top-300 yes, all stocks no), no test. path study of breakout trades, like the round-13 exploration. Is a breakout that has made no progress after N days dead money compared with a fresh signal?
 2. ~~**More dip-buys of the same quality in all stocks:**~~ done (round 16): failed in the holdout. the per-day value of dip-buys is huge. Test RSI(2) < 5 (D1) at the account level in both trade sets. D2 (< 10) failed.
-3. **Add-to-winners, second step:** a third lot at day 30 if up ≥ 15%. Turtles add up to 4 units. Always within the 1% limit per lot.
+3. ~~**Add-to-winners, second step:**~~ done (round 17): near miss. Holdout +1.8 / +2.6 points, development +0.8 / −0.4. Re-check with live records later. a third lot at day 30 if up ≥ 15%. Turtles add up to 4 units. Always within the 1% limit per lot.
 4. **Trades in results weeks:** do open trend trades that cross a results date behave differently? Exit-before-results test.
 5. **Live record review**, weekly once tips exist:
    - tips vs the tested numbers
