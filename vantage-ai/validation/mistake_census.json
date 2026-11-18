@@ -1,0 +1,198 @@
+{
+ "all development": {
+  "trades": 22394,
+  "losers": 11654,
+  "loss_share": 52.0,
+  "causes": {
+   "Stopped out within 3 days (timing / normal noise)": {
+    "n": 179,
+    "share_of_losers": 1.5,
+    "avg_loss_pct": -10.89,
+    "share_of_all_money_lost": 1.5
+   },
+   "Opened below the stop-loss - the loss was bigger than planned (overnight risk)": {
+    "n": 454,
+    "share_of_losers": 3.9,
+    "avg_loss_pct": -17.04,
+    "share_of_all_money_lost": 6.0
+   },
+   "Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)": {
+    "n": 4954,
+    "share_of_losers": 42.5,
+    "avg_loss_pct": -9.66,
+    "share_of_all_money_lost": 37.0
+   },
+   "The whole market fell 3%+ during the trade (not the stock's fault)": {
+    "n": 2547,
+    "share_of_losers": 21.9,
+    "avg_loss_pct": -13.08,
+    "share_of_all_money_lost": 25.8
+   },
+   "Never worked - it never rose meaningfully above the buy price (a selection mistake)": {
+    "n": 1145,
+    "share_of_losers": 9.8,
+    "avg_loss_pct": -11.9,
+    "share_of_all_money_lost": 10.5
+   },
+   "Company results came during the trade and hit the price": {
+    "n": 1049,
+    "share_of_losers": 9.0,
+    "avg_loss_pct": -9.57,
+    "share_of_all_money_lost": 7.8
+   },
+   "Drifted down slowly (no clear cause)": {
+    "n": 1326,
+    "share_of_losers": 11.4,
+    "avg_loss_pct": -11.12,
+    "share_of_all_money_lost": 11.4
+   }
+  }
+ },
+ "all holdout": {
+  "trades": 6750,
+  "losers": 4053,
+  "loss_share": 60.0,
+  "causes": {
+   "Stopped out within 3 days (timing / normal noise)": {
+    "n": 59,
+    "share_of_losers": 1.5,
+    "avg_loss_pct": -11.02,
+    "share_of_all_money_lost": 1.4
+   },
+   "Opened below the stop-loss - the loss was bigger than planned (overnight risk)": {
+    "n": 159,
+    "share_of_losers": 3.9,
+    "avg_loss_pct": -20.29,
+    "share_of_all_money_lost": 7.1
+   },
+   "Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)": {
+    "n": 1731,
+    "share_of_losers": 42.7,
+    "avg_loss_pct": -9.93,
+    "share_of_all_money_lost": 38.0
+   },
+   "The whole market fell 3%+ during the trade (not the stock's fault)": {
+    "n": 825,
+    "share_of_losers": 20.4,
+    "avg_loss_pct": -11.7,
+    "share_of_all_money_lost": 21.3
+   },
+   "Never worked - it never rose meaningfully above the buy price (a selection mistake)": {
+    "n": 430,
+    "share_of_losers": 10.6,
+    "avg_loss_pct": -12.68,
+    "share_of_all_money_lost": 12.0
+   },
+   "Company results came during the trade and hit the price": {
+    "n": 367,
+    "share_of_losers": 9.1,
+    "avg_loss_pct": -9.15,
+    "share_of_all_money_lost": 7.4
+   },
+   "Drifted down slowly (no clear cause)": {
+    "n": 482,
+    "share_of_losers": 11.9,
+    "avg_loss_pct": -11.9,
+    "share_of_all_money_lost": 12.7
+   }
+  }
+ },
+ "top300 development": {
+  "trades": 5745,
+  "losers": 3060,
+  "loss_share": 53.3,
+  "causes": {
+   "Stopped out within 3 days (timing / normal noise)": {
+    "n": 44,
+    "share_of_losers": 1.4,
+    "avg_loss_pct": -11.36,
+    "share_of_all_money_lost": 1.7
+   },
+   "Opened below the stop-loss - the loss was bigger than planned (overnight risk)": {
+    "n": 58,
+    "share_of_losers": 1.9,
+    "avg_loss_pct": -16.54,
+    "share_of_all_money_lost": 3.4
+   },
+   "Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)": {
+    "n": 949,
+    "share_of_losers": 31.0,
+    "avg_loss_pct": -7.45,
+    "share_of_all_money_lost": 24.7
+   },
+   "The whole market fell 3%+ during the trade (not the stock's fault)": {
+    "n": 637,
+    "share_of_losers": 20.8,
+    "avg_loss_pct": -10.92,
+    "share_of_all_money_lost": 24.3
+   },
+   "Never worked - it never rose meaningfully above the buy price (a selection mistake)": {
+    "n": 233,
+    "share_of_losers": 7.6,
+    "avg_loss_pct": -10.23,
+    "share_of_all_money_lost": 8.3
+   },
+   "Company results came during the trade and hit the price": {
+    "n": 794,
+    "share_of_losers": 25.9,
+    "avg_loss_pct": -9.4,
+    "share_of_all_money_lost": 26.1
+   },
+   "Drifted down slowly (no clear cause)": {
+    "n": 345,
+    "share_of_losers": 11.3,
+    "avg_loss_pct": -9.44,
+    "share_of_all_money_lost": 11.4
+   }
+  }
+ },
+ "top300 holdout": {
+  "trades": 1519,
+  "losers": 873,
+  "loss_share": 57.5,
+  "causes": {
+   "Stopped out within 3 days (timing / normal noise)": {
+    "n": 16,
+    "share_of_losers": 1.8,
+    "avg_loss_pct": -12.29,
+    "share_of_all_money_lost": 2.5
+   },
+   "Opened below the stop-loss - the loss was bigger than planned (overnight risk)": {
+    "n": 19,
+    "share_of_losers": 2.2,
+    "avg_loss_pct": -19.96,
+    "share_of_all_money_lost": 4.9
+   },
+   "Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)": {
+    "n": 223,
+    "share_of_losers": 25.5,
+    "avg_loss_pct": -7.1,
+    "share_of_all_money_lost": 20.3
+   },
+   "The whole market fell 3%+ during the trade (not the stock's fault)": {
+    "n": 185,
+    "share_of_losers": 21.2,
+    "avg_loss_pct": -9.83,
+    "share_of_all_money_lost": 23.3
+   },
+   "Never worked - it never rose meaningfully above the buy price (a selection mistake)": {
+    "n": 72,
+    "share_of_losers": 8.2,
+    "avg_loss_pct": -8.49,
+    "share_of_all_money_lost": 7.8
+   },
+   "Company results came during the trade and hit the price": {
+    "n": 265,
+    "share_of_losers": 30.4,
+    "avg_loss_pct": -9.09,
+    "share_of_all_money_lost": 30.8
+   },
+   "Drifted down slowly (no clear cause)": {
+    "n": 93,
+    "share_of_losers": 10.7,
+    "avg_loss_pct": -8.72,
+    "share_of_all_money_lost": 10.4
+   }
+  }
+ }
+}
