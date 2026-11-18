@@ -1046,3 +1046,13 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **What it saves to GitHub:** `journal/learning.md`, `learning_queue.csv` and the enriched `all_tips.csv`.
 - **Messages:** a "weekly learning" message every Saturday (a new allowed label), and an instant "Learning check" only when a type is clearly below its tested range.
 - **Docs:** `swing-system/LEARNER.md`.
+
+## D138 - 2026-11-18 - The Learner learns from mistakes (owner: "how we learn from our mistakes is more important")
+- **Diagnosis:** every losing idea gets a plain diagnosis (never worked / gave back a profit / fast stop / gap through the stop / market fell / results shock / slow drift).
+- **Also reported:** repeat stocks across channels, a review of skipped ideas, and research items when one cause explains 40%+ of a source's losses.
+- **Shown in:** `journal/learning.md` (sections 4–6), the weekly message, and `all_tips.csv` (`mistake` column).
+- **First findings (18 Nov):**
+  - 9 losing or weak ideas, mostly from the older "a3" strategy and the hourly scan.
+  - AVALON gave back a +6% profit and is now −12.4%.
+  - CYIENT was sent 6 times (hourly scan and strategy tips repeat the same stocks), CHENNPETRO, EMIL and WELCORP 4 times each.
+  - The one skipped idea that fell, RAIN (−14.5%), was a loss avoided.

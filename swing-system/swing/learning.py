@@ -32,6 +32,7 @@ STATE = PRIVATE / "learning_state.json"
 TYPE_MAP = {"VANTAGE Rolling Candle Profile": "RCP", "VANTAGE Breakout": "Breakout", "VANTAGE Dip-buy A": "Dip-buy A",
             "VANTAGE Dip-buy B": "Dip-buy B", "VANTAGE Dip-buy C": "Dip-buy C"}
 MIN_CLOSED, MIN_BUCKET = 20, 10
+_LAST = (pd.DataFrame(), [], pd.DataFrame(), [])
 
 
 def profile():
@@ -99,6 +100,116 @@ def enrich(R, load):
     return pd.concat([R.reset_index(drop=True), pd.DataFrame(rows)], axis=1)
 
 
+# ============================================================================== MISTAKES (owner 18 Nov: "how we learn
+# from our mistakes is more important than the trade we find") - every losing / weak idea gets a plain diagnosis.
+CODES = {
+    "never_worked": "Never worked - it never rose meaningfully above the buy price (a selection mistake)",
+    "gave_back": "Gave back a profit - it was up 5%+ and then turned into a loss (an exit mistake)",
+    "fast_stop": "Stopped out within 3 days (timing / normal noise)",
+    "gap_through_stop": "Opened below the stop-loss - the loss was bigger than planned (overnight risk)",
+    "market_fell": "The whole market fell 3%+ during the trade (not the stock's fault)",
+    "results_shock": "Company results came during the trade and hit the price",
+    "slow_bleed": "Drifted down slowly (no clear cause)",
+}
+
+
+def _nifty_move(load, a, b):
+    n = load("NIFTY50")
+    if n is None or not len(n):
+        return None
+    w = n[(n.index >= pd.Timestamp(a)) & (n.index <= pd.Timestamp(b))]["close"]
+    return float(w.iloc[-1] / w.iloc[0] - 1) if len(w) >= 2 else None
+
+
+def _results_inside(sym, a, b):
+    import glob
+    from .config import DATA as _D
+    f = _D / "events" / "earnings" / f"{sym}.csv"
+    if not f.exists():
+        return False
+    try:
+        d = pd.to_datetime(pd.read_csv(f)["date"], errors="coerce").dropna()
+        return bool(((d > pd.Timestamp(a)) & (d <= pd.Timestamp(b))).any())
+    except Exception:
+        return False
+
+
+def diagnose(r, load):
+    """-> (code, plain line) for an idea that lost money (closed) or is down 3%+ (open); ('', '') otherwise."""
+    res = r.get("result_pct")
+    if res != res or res is None or str(r.get("status")) not in ("open", "closed"):
+        return "", ""
+    if not ((r["status"] == "closed" and res <= 0) or (r["status"] == "open" and res <= -3)):
+        return "", ""
+    a = str(r.get("entry_date") or r.get("date"))[:10]
+    b = str(r.get("exit_date"))[:10] if str(r.get("exit_date")) not in ("nan", "", "None") else str(pd.Timestamp.now().date())
+    best, days = r.get("best_pct"), r.get("days")
+    mkt = _nifty_move(load, a, b)
+    if r["status"] == "closed" and str(r.get("why")) == "stop-loss" and r.get("stop") == r.get("stop") \
+            and r.get("exit") == r.get("exit") and r["exit"] < r["stop"] * 0.995:
+        code = "gap_through_stop"
+    elif _results_inside(r["symbol"], a, b) and res <= -3:
+        code = "results_shock"
+    elif mkt is not None and mkt <= -0.03:
+        code = "market_fell"
+    elif best == best and best is not None and best >= 5:
+        code = "gave_back"
+    elif r["status"] == "closed" and str(r.get("why")) == "stop-loss" and days == days and days is not None and days <= 3:
+        code = "fast_stop"
+    elif best == best and best is not None and best < 1:
+        code = "never_worked"
+    else:
+        code = "slow_bleed"
+    line = (f"{r['symbol']} ({r['source']}, {str(r['date'])[:10]}): {res:+.1f}%"
+            + (f", best point {best:+.1f}%" if best == best and best is not None else "")
+            + (f", market {mkt * 100:+.1f}%" if mkt is not None else "") + f" -> {CODES[code]}")
+    return code, line
+
+
+def what_if(r, load):
+    """Simple counterfactuals for one bought idea (information only, never a rule):
+    - sold at its best point would have been +X% (how much an exit rule could save at most);
+    - a target at +10% would have been reached or not."""
+    best = r.get("best_pct")
+    if best != best or best is None:
+        return {}
+    return {"reached_plus10": bool(best >= 10), "max_possible_pct": round(best, 2)}
+
+
+def mistakes(R, load):
+    rows, lines = [], []
+    for r in R.to_dict("records"):
+        code, line = diagnose(r, load)
+        if code:
+            rows.append({"source": r["source"], "type": r["type"], "symbol": r["symbol"], "date": r["date"], "code": code,
+                         "result_pct": r["result_pct"]})
+            lines.append(line)
+    M = pd.DataFrame(rows)
+    return M, lines
+
+
+def repeats(R):
+    """The same stock sent again and again (several channels or days) - concentration and repeat-mistake risk."""
+    B = R[R["source"].isin(["strategy tip", "hourly scan", "VANTAGE", "live engine"])]
+    g = B.groupby("symbol").agg(times=("symbol", "size"), sources=("source", lambda x: ", ".join(sorted(set(x)))),
+                                avg=("result_pct", "mean")).reset_index()
+    return g[g["times"] >= 3].sort_values("times", ascending=False)
+
+
+def skipped_review(R, load):
+    """Ideas skipped because they opened outside the buy zone: winners missed or losses avoided?"""
+    S = R[R["status"].astype(str).str.startswith("skipped")]
+    out = []
+    for r in S.itertuples():
+        d = load(r.symbol)
+        if d is None:
+            continue
+        p0 = d[d.index > pd.Timestamp(str(r.date)[:10])]
+        if len(p0):
+            out.append((r.symbol, r.source, round((float(d["close"].iloc[-1]) / float(p0["open"].iloc[0]) - 1) * 100, 2)))
+    return out
+
+
 def expectation(R, prof):
     """-> list of (type, verdict, plain line) for VANTAGE types with a tested profile."""
     out = []
@@ -160,7 +271,21 @@ def lessons(W):
     return out
 
 
-def write(R, E, W, Ls, today=None):
+def mistake_lessons(M):
+    out = []
+    if not len(M):
+        return out
+    for src, g in M.groupby("source"):
+        top = g["code"].value_counts()
+        if len(g) >= MIN_BUCKET and top.iloc[0] / len(g) >= 0.4:
+            code = top.index[0]
+            out.append({"key": f"{src}|mistake|{code}", "source": src, "situation": "mistake",
+                        "lesson": f"{src}: {top.iloc[0]} of {len(g)} losing ideas share one cause - {CODES[code]}",
+                        "status": "to research (test on 13 years before any change)"})
+    return out
+
+
+def write(R, E, W, Ls, today=None, extra=None):
     today = today or pd.Timestamp.now(tz="Asia/Kolkata").strftime("%d %b %Y")
     L = [f"# The Learner ({today})", "", "Every idea tracked by swing/tracker.py, with its situation and journey "
          "(swing/learning.py). Lessons go to research; live tips change only after a passed test and the owner's yes.", "",
@@ -171,6 +296,23 @@ def write(R, E, W, Ls, today=None):
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
     L += ["", "## 3. Lessons to research"] + ([f"- {x['lesson']}" for x in Ls] or ["- None yet (needs at least "
                                                                                  f"{MIN_BUCKET} ideas per situation)."])
+    if extra:
+        M, lines, Rp, Sk = extra
+        L += ["", "## 4. Mistakes: why each losing idea lost (plain diagnosis)"]
+        if len(M):
+            L += ["| Mistake | Ideas | Average | Sources |", "|---|---|---|---|"]
+            for code, g in M.groupby("code"):
+                L.append(f"| {CODES[code]} | {len(g)} | {g['result_pct'].mean():+.1f}% | {', '.join(sorted(set(g['source'])))} |")
+            L += [""] + [f"- {x}" for x in lines]
+        else:
+            L.append("- No losing ideas to diagnose yet.")
+        L += ["", "## 5. Repeat stocks (sent 3+ times)"]
+        L += [f"- {r.symbol}: {r.times} times ({r.sources}), average {r.avg:+.1f}%" for r in Rp.itertuples()] or ["- None."]
+        L += ["", "## 6. Skipped ideas (opened outside the buy zone): missed winners or avoided losses?"]
+        L += [f"- {a} ({b}): {c:+.1f}% since that open" for a, b, c in Sk] or ["- None."]
+        if Sk:
+            v = [c for _, _, c in Sk]
+            L.append(f"- In total: {sum(x > 0 for x in v)} of {len(v)} would be up, average {np.mean(v):+.1f}%")
     J.mkdir(parents=True, exist_ok=True)
     MD.write_text("\n".join(L) + "\n")
     if Ls:
@@ -196,6 +338,14 @@ def weekly_message(R, E, Ls, today=None):
         L.append(f"• {src}: {len(g)} bought" + (f", {len(c)} closed ({(c['result_pct'] > 0).mean() * 100:.0f}% won, "
                                                  f"avg {c['result_pct'].mean():+.1f}%)" if len(c) else "")
                  + f", open avg {g[g['status'] == 'open']['result_pct'].mean():+.1f}%" * bool((g['status'] == 'open').any()))
+    M, lines, Rp, Sk = _LAST
+    if len(M):
+        top = M["code"].value_counts()
+        L.append(f"❌ Main mistake so far: {CODES[top.index[0]]} ({top.iloc[0]} of {len(M)} losing ideas)")
+        worst = M.sort_values("result_pct").head(3)
+        L.append("Worst: " + ", ".join(f"{r.symbol} {r.result_pct:+.1f}%" for r in worst.itertuples()))
+    if len(Rp):
+        L.append("🔁 Sent 3+ times: " + ", ".join(f"{r.symbol} ×{r.times}" for r in Rp.head(4).itertuples()))
     for x in E:
         if x[1] in ("below expected", "watch", "early warning"):
             L.append(f"⚠️ {x[2]}")
@@ -238,8 +388,16 @@ def build(load=None):
     R = enrich(R, load)
     R.to_csv(tracker.CSV, index=False)
     E, W = expectation(R, profile()), when_it_works(R)
-    Ls = lessons(W)
-    write(R, E, W, Ls)
+    M, lines = mistakes(R, load)
+    Rp, Sk = repeats(R), skipped_review(R, load)
+    Ls = lessons(W) + mistake_lessons(M)
+    if len(M):
+        R = R.merge(M[["source", "symbol", "date", "code"]].rename(columns={"code": "mistake"}),
+                    on=["source", "symbol", "date"], how="left")
+        R.to_csv(tracker.CSV, index=False)
+    write(R, E, W, Ls, extra=(M, lines, Rp, Sk))
+    global _LAST
+    _LAST = (M, lines, Rp, Sk)
     return R, E, W, Ls
 
 

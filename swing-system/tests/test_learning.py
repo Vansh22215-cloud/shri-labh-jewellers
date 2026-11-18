@@ -35,3 +35,27 @@ def test_alert_once(monkeypatch, tmp_path):
     monkeypatch.setattr(learning, "STATE", tmp_path / "st.json")
     E = [("VANTAGE Rolling Candle Profile", "below expected", "x")]
     assert learning.alerts(E, s={}) == 1 and learning.alerts(E, s={}) == 0 and sent == ["system problem"]
+
+
+def test_mistake_diagnosis():
+    idx = pd.bdate_range("2026-11-02", periods=30)
+    flat = pd.DataFrame({"open": 100.0, "high": 101.0, "low": 99.0, "close": 100.0, "volume": 1e6}, index=idx)
+    fall = flat.copy(); fall["close"] = np.linspace(100, 85, 30)
+    load = lambda s: fall if s == "NIFTY50" else flat
+    base = {"symbol": "X", "source": "VANTAGE", "date": "2026-11-02", "entry_date": "2026-11-03", "exit_date": "2026-11-20"}
+    assert learning.diagnose(dict(base, status="closed", result_pct=-6, best_pct=7.0), lambda s: flat)[0] == "gave_back"
+    assert learning.diagnose(dict(base, status="closed", result_pct=-6, best_pct=0.5), lambda s: flat)[0] == "never_worked"
+    assert learning.diagnose(dict(base, status="closed", result_pct=-6, best_pct=2.0), load)[0] == "market_fell"
+    assert learning.diagnose(dict(base, status="closed", result_pct=-9, why="stop-loss", stop=90.0, exit=85.0,
+                                  best_pct=1.0), lambda s: flat)[0] == "gap_through_stop"
+    assert learning.diagnose(dict(base, status="closed", result_pct=4, best_pct=6), lambda s: flat) == ("", "")
+    assert learning.diagnose(dict(base, status="open", result_pct=-1, best_pct=2), lambda s: flat) == ("", "")
+
+
+def test_repeats_and_mistake_lessons():
+    R = pd.DataFrame({"source": ["hourly scan", "strategy tip", "strategy tip"], "symbol": ["CYIENT"] * 3,
+                      "result_pct": [-1.0, -2.0, -0.5]})
+    assert learning.repeats(R).iloc[0]["times"] == 3
+    M = pd.DataFrame({"source": "strategy tip", "code": ["never_worked"] * 6 + ["slow_bleed"] * 4, "result_pct": -3.0})
+    L = learning.mistake_lessons(M)
+    assert len(L) == 1 and "6 of 10" in L[0]["lesson"]

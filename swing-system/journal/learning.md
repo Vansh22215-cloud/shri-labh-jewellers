@@ -62,3 +62,34 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 
 ## 3. Lessons to research
 - None yet (needs at least 10 ideas per situation).
+
+## 4. Mistakes: why each losing idea lost (plain diagnosis)
+| Mistake | Ideas | Average | Sources |
+|---|---|---|---|
+| Gave back a profit - it was up 5%+ and then turned into a loss (an exit mistake) | 1 | -12.4% | strategy tip |
+| Never worked - it never rose meaningfully above the buy price (a selection mistake) | 2 | -6.7% | hourly scan, strategy tip (retired list) |
+| Drifted down slowly (no clear cause) | 6 | -7.1% | hourly scan, strategy tip, strategy tip (retired list) |
+
+- AVALON (strategy tip, 2026-11-11): -12.4%, best point +6.1%, market -0.3% -> Gave back a profit - it was up 5%+ and then turned into a loss (an exit mistake)
+- RPTECH (strategy tip, 2026-11-11): -9.8%, best point +2.3%, market -0.3% -> Drifted down slowly (no clear cause)
+- EMIL (strategy tip, 2026-11-11): -6.3%, best point +3.6%, market -0.3% -> Drifted down slowly (no clear cause)
+- CYIENT (strategy tip (retired list), 2026-11-05): -3.8%, best point +1.2%, market +0.8% -> Drifted down slowly (no clear cause)
+- ANTELOPUS (strategy tip (retired list), 2026-11-06): -7.0%, best point +0.8%, market +0.7% -> Never worked - it never rose meaningfully above the buy price (a selection mistake)
+- JAYNECOIND (strategy tip (retired list), 2026-11-09): -3.1%, best point +2.1%, market -0.1% -> Drifted down slowly (no clear cause)
+- SHANTIGOLD (hourly scan, 2026-11-09): -11.2%, best point +1.6%, market -0.1% -> Drifted down slowly (no clear cause)
+- EBGNG (hourly scan, 2026-11-11): -8.6%, best point +4.4%, market -0.3% -> Drifted down slowly (no clear cause)
+- SHANTIGOLD (hourly scan, 2026-11-17): -6.4%, best point +0.0% -> Never worked - it never rose meaningfully above the buy price (a selection mistake)
+
+## 5. Repeat stocks (sent 3+ times)
+- CYIENT: 6 times (hourly scan, strategy tip), average -1.2%
+- CHENNPETRO: 4 times (hourly scan, strategy tip), average +0.1%
+- EMIL: 4 times (hourly scan, strategy tip), average -3.0%
+- WELCORP: 4 times (hourly scan, strategy tip), average -0.2%
+- GESHIP: 3 times (hourly scan, strategy tip), average +6.1%
+- HCLTECH: 3 times (hourly scan, strategy tip), average -2.2%
+
+## 6. Skipped ideas (opened outside the buy zone): missed winners or avoided losses?
+- RAIN (strategy tip (retired list)): -14.5% since that open
+- BHARTIHEXA (hourly scan): +0.1% since that open
+- TCS (hourly scan): -0.1% since that open
+- In total: 1 of 3 would be up, average -4.8%

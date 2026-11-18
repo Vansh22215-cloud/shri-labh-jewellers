@@ -17,11 +17,21 @@ It runs every evening after the price update (`scripts/run_nightly.py`).
    - After 20 closed tips the verdict is "on track", "watch" or "below expected" (outside the 90% expected range).
    - Before that, "early warning" if more than a quarter of open tips are already deeper than 90% of tested trades.
 4. **When it works and when not:** the result by situation for every source → `journal/learning.md`.
-5. **Lessons → research, never straight into tips:**
+5. **Mistakes: why each losing idea lost.** Every closed loss and every open idea down 3% or more gets one plain diagnosis:
+   - never worked (a selection mistake)
+   - gave back a profit (an exit mistake)
+   - stopped out within 3 days (timing)
+   - opened below the stop-loss (overnight risk)
+   - the market fell 3%+ (not the stock)
+   - a results shock
+   - a slow drift
+
+   It also reports repeat stocks (sent 3+ times, across channels) and skipped ideas (missed winners or avoided losses). When one cause explains 40%+ of a source's losses (≥ 10 losses), that becomes a research item.
+6. **Lessons → research, never straight into tips:**
    - Gaps of ≥ 3 points between situations (≥ 10 ideas each) go to `journal/learning_queue.csv`.
    - The 3-hourly research check-in reads them, logs them in `vantage-ai/validation/LIVE_REVIEW.md`, and tests them on 13 years before anything changes.
-6. **The owner hears:**
-   - a short "📒 Weekly learning" message every Saturday;
+7. **The owner hears:**
+   - a short "📒 Weekly learning" message every Saturday, including the main mistake, the worst ideas and the repeat stocks;
    - an instant "⚠️ Learning check" only when a tip type is clearly below its tested range (once per type).
 
 ## The loop
