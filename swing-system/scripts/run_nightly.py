@@ -31,6 +31,11 @@ if __name__ == "__main__":
         tracker.run()
     except Exception as e:
         print("tracker failed:", e)
+    try:   # THE LEARNER (owner 18 Nov): situation + journey of every idea, live vs the test, when it works, lessons
+        from swing import learning
+        learning.run()
+    except Exception as e:
+        print("learner failed:", e)
     try:   # silent forward record of promoter buying (owner 18 Nov; no messages, no tip changes)
         from swing import shadow
         shadow.run()

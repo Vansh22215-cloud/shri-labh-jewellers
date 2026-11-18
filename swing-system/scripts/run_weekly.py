@@ -21,6 +21,11 @@ if __name__ == "__main__":
         telegram.send(load_settings(), weekly_summary(), html=True, label="weekly summary")
     except Exception as e:
         print("weekly summary failed:", type(e).__name__, e)
+    try:   # THE LEARNER's weekly message (owner 18 Nov): what the tracked tips taught us this week
+        from swing import learning
+        print("weekly learning:", learning.send_weekly())
+    except Exception as e:
+        print("weekly learning failed:", type(e).__name__, e)
     try:   # the full report of the week's last evening, once a week
         import json
         from pathlib import Path as _P

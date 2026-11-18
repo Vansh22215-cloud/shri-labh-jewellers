@@ -1,97 +1,97 @@
-source,type,date,symbol,status,why,entry_date,entry,stop,target,exit_date,exit,result_pct,days,added
-strategy tip,a3,2026-11-11,WELCORP,open,,2026-11-12,2218.800048828125,1770.61,3095.99,,2224.89990234375,0.27,5.0,
-strategy tip,a3,2026-11-11,CYIENT,open,,2026-11-12,1105.0,940.7,1418.61,,1086.4000244140625,-1.68,5.0,
-strategy tip,a3,2026-11-11,AVALON,open,,2026-11-12,2040.0,1621.7,2876.3,,1786.4000244140625,-12.43,5.0,
-strategy tip,a3,2026-11-11,TDPOWERSYS,open,,2026-11-12,630.0,470.98,887.74,,632.2999877929688,0.37,5.0,
-strategy tip,a3,2026-11-11,GESHIP,open,,2026-11-12,1448.0,1249.28,1807.34,,1530.5999755859375,5.7,5.0,
-strategy tip,a3,2026-11-11,RPTECH,open,,2026-11-12,694.0,551.61,970.24,,626.25,-9.76,5.0,
-strategy tip,a3,2026-11-11,EMIL,open,,2026-11-12,145.60000610351562,118.29,199.98,,136.42999267578125,-6.3,5.0,
-strategy tip,a3,2026-11-12,ANTELOPUS,open,,2026-11-13,843.6500244140625,622.27,1286.41,,858.1500244140625,1.72,4.0,
-strategy tip,a3,2026-11-12,MPHASIS,open,,2026-11-13,2390.0,2094.7,3040.6,,2397.0,0.29,4.0,
-strategy tip,a3,2026-11-13,WELCORP,open,,2026-11-16,2240.0,1795.49,3100.23,,2224.89990234375,-0.67,3.0,
-strategy tip,a3,2026-11-13,CYIENT,open,,2026-11-16,1095.0,970.58,1373.55,,1086.4000244140625,-0.79,3.0,
-strategy tip,a3,2026-11-13,BHARTIHEXA,open,,2026-11-16,1665.0,1491.46,2013.59,,1666.300048828125,0.08,3.0,
-strategy tip,a3,2026-11-16,HCLTECH,open,,2026-11-17,1375.0,1272.08,1609.64,,1344.699951171875,-2.2,2.0,
-strategy tip,a3,2026-11-16,CHENNPETRO,open,,2026-11-17,1418.0999755859375,1221.86,1828.29,,1419.699951171875,0.11,2.0,
-strategy tip,a3,2026-11-16,AJANTPHARM,open,,2026-11-17,3361.39990234375,2999.76,4082.27,,3273.800048828125,-2.61,2.0,
-strategy tip,a3,2026-11-17,TCS,open,,2026-11-18,2382.5,2218.63,2782.54,,2379.5,-0.13,1.0,
-strategy tip,a3,2026-11-18,CHENNPETRO,waiting (no trading day yet),,,,1226.23,1806.64,,,,,
-strategy tip,a3,2026-11-18,CYIENT,waiting (no trading day yet),,,,972.66,1313.89,,,,,
-strategy tip,a3,2026-11-18,SYRMA,waiting (no trading day yet),,,,1276.85,1871.3,,,,,
-strategy tip,a3,2026-11-18,MRPL,waiting (no trading day yet),,,,156.37,215.18,,,,,
-strategy tip,a3,2026-11-18,IPCALAB,waiting (no trading day yet),,,,1670.86,2220.57,,,,,
-strategy tip,a3,2026-11-18,EMIL,waiting (no trading day yet),,,,111.0,187.28,,,,,
-strategy tip (retired list),a1,2026-11-02,FEDERALBNK,open,,2026-11-03,337.0,306.33,399.84,,360.3500061035156,6.93,11.0,
-strategy tip (retired list),a1,2026-11-03,ICICIBANK,closed,target 1,2026-11-04,1424.0,1339.62,1594.26,2026-11-11,1616.0,13.13,5.0,
-strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,CYIENTDLM,open,,2026-11-05,757.4000244140625,560.85,1139.26,,819.5499877929688,8.21,9.0,
-strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,FILATEX,open,,2026-11-05,93.6999969482422,73.75,127.47,,110.41000366210938,17.83,9.0,
-strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,RAIN,skipped - opened outside the zone,,2026-11-05,,149.88,252.15,,,,,
-strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,CUB,open,,2026-11-05,216.0,184.23,272.04,,232.1999969482422,7.5,9.0,
-strategy tip (retired list),"a3 (shadow, not sent)",2026-11-05,CYIENT,open,,2026-11-06,1128.9000244140625,968.0,1450.7,,1086.4000244140625,-3.76,8.0,
-strategy tip (retired list),"a3 (shadow, not sent)",2026-11-05,BALAMINES,open,,2026-11-06,1785.0,1540.26,2301.47,,1898.199951171875,6.34,8.0,
-strategy tip (retired list),a3,2026-11-06,AJANTPHARM,open,,2026-11-09,3338.199951171875,2930.41,4062.29,,3273.800048828125,-1.93,7.0,
-strategy tip (retired list),a3,2026-11-06,ANTELOPUS,open,,2026-11-09,922.4500122070312,664.54,1336.71,,858.1500244140625,-6.97,7.0,
-strategy tip (retired list),a3,2026-11-09,GMMPFAUDLR,open,,2026-11-11,1148.9000244140625,915.93,1602.24,,1190.5999755859375,3.63,6.0,
-strategy tip (retired list),a3,2026-11-09,GANDHAR,open,,2026-11-11,261.0,205.69,371.54,,260.9800109863281,-0.01,6.0,
-strategy tip (retired list),a3,2026-11-09,SHRIPISTON,open,,2026-11-11,4330.0,3881.56,5187.27,,4287.7001953125,-0.98,6.0,
-strategy tip (retired list),a3,2026-11-09,FINCABLES,open,,2026-11-11,1220.0,1003.52,1690.16,,1186.0,-2.79,6.0,
-strategy tip (retired list),a3,2026-11-09,BALAMINES,open,,2026-11-11,1814.0,1546.2,2297.7,,1898.199951171875,4.64,6.0,
-strategy tip (retired list),a3,2026-11-09,JAYNECOIND,open,,2026-11-11,91.04000091552734,79.3,110.62,,88.20999908447266,-3.11,6.0,
-hourly scan,scan,2026-11-09,GMMPFAUDLR,open,,2026-11-11,1148.9000244140625,923.74,1601.63,,1190.5999755859375,3.63,6.0,
-hourly scan,scan,2026-11-09,GANDHAR,open,,2026-11-11,261.0,200.51,366.14,,260.9800109863281,-0.01,6.0,
-hourly scan,scan,2026-11-09,SHRIPISTON,open,,2026-11-11,4330.0,3880.34,5180.13,,4287.7001953125,-0.98,6.0,
-hourly scan,scan,2026-11-09,SHANTIGOLD,open,,2026-11-11,275.3500061035156,187.15,446.64,,244.4499969482422,-11.22,6.0,
-hourly scan,scan,2026-11-09,GESHIP,open,,2026-11-11,1430.800048828125,1248.27,1794.96,,1530.5999755859375,6.98,6.0,
-hourly scan,scan,2026-11-11,WELCORP,open,,2026-11-12,2218.800048828125,1803.51,3120.47,,2224.89990234375,0.27,5.0,
-hourly scan,scan,2026-11-11,CYIENT,open,,2026-11-12,1105.0,949.43,1425.73,,1086.4000244140625,-1.68,5.0,
-hourly scan,scan,2026-11-11,EBGNG,open,,2026-11-12,566.0,407.63,857.09,,517.2000122070312,-8.62,5.0,
-hourly scan,scan,2026-11-11,GESHIP,open,,2026-11-12,1448.0,1250.25,1806.9,,1530.5999755859375,5.7,5.0,
-hourly scan,scan,2026-11-13,WELCORP,open,,2026-11-16,2240.0,1802.86,3106.77,,2224.89990234375,-0.67,3.0,
-hourly scan,scan,2026-11-13,CYIENT,open,,2026-11-16,1095.0,956.13,1346.63,,1086.4000244140625,-0.79,3.0,
-hourly scan,scan,2026-11-13,BHARTIHEXA,skipped - opened outside the zone,,2026-11-16,,1453.73,1937.54,,,,,
-hourly scan,scan,2026-11-16,HCLTECH,open,,2026-11-17,1375.0,1279.98,1613.04,,1344.699951171875,-2.2,2.0,
-hourly scan,scan,2026-11-16,CHENNPETRO,open,,2026-11-17,1418.0999755859375,1219.65,1822.8,,1419.699951171875,0.11,2.0,
-hourly scan,scan,2026-11-16,AJANTPHARM,open,,2026-11-17,3361.39990234375,3014.81,4087.29,,3273.800048828125,-2.61,2.0,
-hourly scan,scan,2026-11-17,TCS,skipped - opened outside the zone,,2026-11-18,,2250.06,2812.37,,,,,
-hourly scan,scan,2026-11-17,EMIL,open,,2026-11-18,136.10000610351562,114.39,189.95,,136.42999267578125,0.24,1.0,
-hourly scan,scan,2026-11-17,SHANTIGOLD,open,,2026-11-18,261.04998779296875,195.7,382.29,,244.4499969482422,-6.36,1.0,
-hourly scan,scan,2026-11-17,PFOCUS,open,,2026-11-18,281.6499938964844,231.65,378.51,,275.75,-2.09,1.0,
-hourly scan,scan,2026-11-17,IPCALAB,open,,2026-11-18,1834.4000244140625,1656.27,2218.26,,1854.0999755859373,1.07,1.0,
-hourly scan,scan,2026-11-18,CHENNPETRO,waiting (no trading day yet),,,,1257.03,1837.44,,,,,
-hourly scan,scan,2026-11-18,PAISALO,waiting (no trading day yet),,,,68.66,88.97,,,,,
-hourly scan,scan,2026-11-18,SYRMA,waiting (no trading day yet),,,,1253.25,1843.2,,,,,
-hourly scan,scan,2026-11-18,HCLTECH,waiting (no trading day yet),,,,1245.23,1564.34,,,,,
-hourly scan,scan,2026-11-18,AVALON,waiting (no trading day yet),,,,1419.03,2621.04,,,,,
-hourly scan,scan,2026-11-18,EMIL,waiting (no trading day yet),,,,111.17,187.45,,,,,
-hourly scan,scan,2026-11-18,RPTECH,waiting (no trading day yet),,,,491.9,924.8,,,,,
-hourly scan,scan,2026-11-18,HAL,waiting (no trading day yet),,,,4304.51,5495.47,,,,,
-hourly scan,scan,2026-11-18,CYIENT,waiting (no trading day yet),,,,977.29,1312.73,,,,,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,ABCAPITAL,open,,2026-11-17,411.5,345.7,,,412.3999938964844,0.22,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,ARTEMISMED,open,,2026-11-17,348.75,288.71,,,343.3999938964844,-1.53,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,BAJFINANCE,open,,2026-11-17,1121.1,963.76,,,1093.8499755859375,-2.43,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,FILATEX,open,,2026-11-17,108.48,77.66,,,110.41000366210938,1.78,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,GREAVESCOT,open,,2026-11-17,243.5,183.39,,,266.6300048828125,9.5,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,KIMS,open,,2026-11-17,768.3,663.73,,,759.0,-1.21,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,KPRMILL,open,,2026-11-17,1217.1,991.67,,,1207.5,-0.79,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,MARICO,open,,2026-11-17,924.0,805.2,,,906.0499877929688,-1.94,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,UNITDSPR,open,,2026-11-17,1444.0,1254.71,,,1441.0,-0.21,1.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,360ONE,open,,2026-11-18,1211.05,1016.44,,,1211.050048828125,0.0,0.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,ARVSMART,open,,2026-11-18,633.55,541.17,,,633.5499877929688,-0.0,0.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,FAZE3Q,open,,2026-11-18,612.05,413.37,,,612.0499877929688,-0.0,0.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,GHCLTEXTIL,open,,2026-11-18,136.9,106.0,,,136.89999389648438,-0.0,0.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,MWL,open,,2026-11-18,41.31,31.8,,,41.310001373291016,0.0,0.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,SBIN,open,,2026-11-18,1135.0,1001.55,,,1135.0,0.0,0.0,
-VANTAGE,VANTAGE Breakout,2026-11-18,SUNTV,open,,2026-11-18,696.35,608.69,,,696.3499755859375,-0.0,0.0,
-VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,VSSL,open,,2026-11-18,380.35,312.76,,,380.3500061035156,0.0,0.0,
-company of the day,research pick,2026-11-03,ACE,watch,,2026-11-03,1050.55,,,,1189.199951171875,13.2,,
-company of the day,research pick,2026-11-04,ACGL,watch,,2026-11-04,1771.800048828125,,,,1789.0999755859375,0.98,,
-company of the day,research pick,2026-11-05,BLS,watch,,2026-11-05,226.87,,,,227.75,0.39,,
-company of the day,research pick,2026-11-06,ARROWGREEN,watch,,2026-11-06,723.2,,,,672.5,-7.01,,
-company of the day,research pick,2026-11-09,CRIZAC,watch,,2026-11-09,152.64,,,,150.61000061035156,-1.33,,
-company of the day,research pick,2026-11-10,FORCEMOT,watch,,2026-11-10,18837.0,,,,20088.0,6.64,,
-company of the day,research pick,2026-11-11,CMPDI,watch,,2026-11-11,192.85,,,,181.17999267578125,-6.05,,
-company of the day,research pick,2026-11-12,HINDCOPPER,watch,,2026-11-12,446.15,,,,419.2000122070313,-6.04,,
-company of the day,research pick,2026-11-13,JSLL,watch,,2026-11-13,342.1,,,,296.3500061035156,-13.37,,
-company of the day,research pick,2026-11-16,INFOBEAN,watch,,2026-11-16,160.23,,,,158.30999755859375,-1.2,,
-company of the day,research pick,2026-11-17,LUPIN,watch,,2026-11-17,1950.0,,,,1971.9000244140625,1.12,,
-company of the day,research pick,2026-11-18,3BBLACKBIO,watch,,2026-11-18,1321.6,,,,1321.5999755859375,-0.0,,
+source,type,date,symbol,status,why,entry_date,entry,stop,target,exit_date,exit,result_pct,days,added,market,market_mood,liquidity,from_52w_high,best_pct,worst_pct,result_R,results_week,weekday
+strategy tip,a3,2026-11-11,WELCORP,open,,2026-11-12,2218.800048828125,1770.61,3095.99,,2224.89990234375,0.27,5.0,,rising,jumpy,over 50 cr,15%+ below,4.52,-3.9,0.01,no,Wed
+strategy tip,a3,2026-11-11,CYIENT,open,,2026-11-12,1105.0,940.7,1418.61,,1086.4000244140625,-1.68,5.0,,rising,jumpy,over 50 cr,5-15% below,0.76,-3.55,-0.11,no,Wed
+strategy tip,a3,2026-11-11,AVALON,open,,2026-11-12,2040.0,1621.7,2876.3,,1786.4000244140625,-12.43,5.0,,rising,jumpy,over 50 cr,15%+ below,6.1,-14.04,-0.61,no,Wed
+strategy tip,a3,2026-11-11,TDPOWERSYS,open,,2026-11-12,630.0,470.98,887.74,,632.2999877929688,0.37,5.0,,rising,jumpy,over 50 cr,15%+ below,8.87,-2.38,0.01,no,Wed
+strategy tip,a3,2026-11-11,GESHIP,open,,2026-11-12,1448.0,1249.28,1807.34,,1530.5999755859375,5.7,5.0,,rising,jumpy,over 50 cr,15%+ below,9.25,-1.24,0.42,no,Wed
+strategy tip,a3,2026-11-11,RPTECH,open,,2026-11-12,694.0,551.61,970.24,,626.25,-9.76,5.0,,rising,jumpy,10-50 cr,15%+ below,2.34,-11.1,-0.48,no,Wed
+strategy tip,a3,2026-11-11,EMIL,open,,2026-11-12,145.60000610351562,118.29,199.98,,136.42999267578125,-6.3,5.0,,rising,jumpy,10-50 cr,15%+ below,3.61,-7.85,-0.34,no,Wed
+strategy tip,a3,2026-11-12,ANTELOPUS,open,,2026-11-13,843.6500244140625,622.27,1286.41,,858.1500244140625,1.72,4.0,,rising,calm,10-50 cr,15%+ below,7.91,0.0,0.07,no,Thu
+strategy tip,a3,2026-11-12,MPHASIS,open,,2026-11-13,2390.0,2094.7,3040.6,,2397.0,0.29,4.0,,rising,calm,over 50 cr,15%+ below,3.35,-0.67,0.02,no,Thu
+strategy tip,a3,2026-11-13,WELCORP,open,,2026-11-16,2240.0,1795.49,3100.23,,2224.89990234375,-0.67,3.0,,rising,calm,over 50 cr,15%+ below,3.54,-2.59,-0.03,no,Fri
+strategy tip,a3,2026-11-13,CYIENT,open,,2026-11-16,1095.0,970.58,1373.55,,1086.4000244140625,-0.79,3.0,,rising,calm,over 50 cr,5-15% below,1.27,-2.67,-0.07,no,Fri
+strategy tip,a3,2026-11-13,BHARTIHEXA,open,,2026-11-16,1665.0,1491.46,2013.59,,1666.300048828125,0.08,3.0,,rising,calm,10-50 cr,5-15% below,3.63,-1.54,0.01,no,Fri
+strategy tip,a3,2026-11-16,HCLTECH,open,,2026-11-17,1375.0,1272.08,1609.64,,1344.699951171875,-2.2,2.0,,rising,calm,over 50 cr,15%+ below,0.46,-3.03,-0.29,no,Mon
+strategy tip,a3,2026-11-16,CHENNPETRO,open,,2026-11-17,1418.0999755859375,1221.86,1828.29,,1419.699951171875,0.11,2.0,,rising,calm,over 50 cr,15%+ below,2.46,-1.21,0.01,no,Mon
+strategy tip,a3,2026-11-16,AJANTPHARM,open,,2026-11-17,3361.39990234375,2999.76,4082.27,,3273.800048828125,-2.61,2.0,,rising,calm,over 50 cr,5-15% below,0.68,-2.78,-0.24,no,Mon
+strategy tip,a3,2026-11-17,TCS,open,,2026-11-18,2382.5,2218.63,2782.54,,2379.5,-0.13,1.0,,rising,calm,over 50 cr,15%+ below,1.07,-0.13,-0.02,no,Tue
+strategy tip,a3,2026-11-18,CHENNPETRO,waiting (no trading day yet),,,,1226.23,1806.64,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+strategy tip,a3,2026-11-18,CYIENT,waiting (no trading day yet),,,,972.66,1313.89,,,,,,rising,calm,over 50 cr,5-15% below,,,,no,Wed
+strategy tip,a3,2026-11-18,SYRMA,waiting (no trading day yet),,,,1276.85,1871.3,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+strategy tip,a3,2026-11-18,MRPL,waiting (no trading day yet),,,,156.37,215.18,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+strategy tip,a3,2026-11-18,IPCALAB,waiting (no trading day yet),,,,1670.86,2220.57,,,,,,rising,calm,over 50 cr,5-15% below,,,,no,Wed
+strategy tip,a3,2026-11-18,EMIL,waiting (no trading day yet),,,,111.0,187.28,,,,,,rising,calm,10-50 cr,15%+ below,,,,no,Wed
+strategy tip (retired list),a1,2026-11-02,FEDERALBNK,open,,2026-11-03,337.0,306.33,399.84,,360.3500061035156,6.93,11.0,,falling,jumpy,over 50 cr,5-15% below,9.47,-2.23,0.76,no,Mon
+strategy tip (retired list),a1,2026-11-03,ICICIBANK,closed,target 1,2026-11-04,1424.0,1339.62,1594.26,2026-11-11,1616.0,13.13,5.0,,falling,jumpy,over 50 cr,within 5%,13.48,-0.84,2.22,no,Tue
+strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,CYIENTDLM,open,,2026-11-05,757.4000244140625,560.85,1139.26,,819.5499877929688,8.21,9.0,,falling,jumpy,over 50 cr,15%+ below,18.07,0.0,0.32,no,Wed
+strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,FILATEX,open,,2026-11-05,93.6999969482422,73.75,127.47,,110.41000366210938,17.83,9.0,,falling,jumpy,10-50 cr,15%+ below,27.83,-3.71,0.84,no,Wed
+strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,RAIN,skipped - opened outside the zone,,2026-11-05,,149.88,252.15,,,,,,falling,jumpy,over 50 cr,15%+ below,,,,no,Wed
+strategy tip (retired list),"a3 (shadow, not sent)",2026-11-04,CUB,open,,2026-11-05,216.0,184.23,272.04,,232.1999969482422,7.5,9.0,,falling,jumpy,over 50 cr,5-15% below,10.65,-0.63,0.51,no,Wed
+strategy tip (retired list),"a3 (shadow, not sent)",2026-11-05,CYIENT,open,,2026-11-06,1128.9000244140625,968.0,1450.7,,1086.4000244140625,-3.76,8.0,,rising,jumpy,over 50 cr,5-15% below,1.25,-5.59,-0.26,no,Thu
+strategy tip (retired list),"a3 (shadow, not sent)",2026-11-05,BALAMINES,open,,2026-11-06,1785.0,1540.26,2301.47,,1898.199951171875,6.34,8.0,,rising,jumpy,10-50 cr,15%+ below,11.15,-2.52,0.46,no,Thu
+strategy tip (retired list),a3,2026-11-06,AJANTPHARM,open,,2026-11-09,3338.199951171875,2930.41,4062.29,,3273.800048828125,-1.93,7.0,,rising,jumpy,over 50 cr,5-15% below,2.16,-2.19,-0.16,no,Fri
+strategy tip (retired list),a3,2026-11-06,ANTELOPUS,open,,2026-11-09,922.4500122070312,664.54,1336.71,,858.1500244140625,-6.97,7.0,,rising,jumpy,10-50 cr,15%+ below,0.76,-10.56,-0.25,no,Fri
+strategy tip (retired list),a3,2026-11-09,GMMPFAUDLR,open,,2026-11-11,1148.9000244140625,915.93,1602.24,,1190.5999755859375,3.63,6.0,,rising,jumpy,10-50 cr,15%+ below,9.5,-0.25,0.18,no,Mon
+strategy tip (retired list),a3,2026-11-09,GANDHAR,open,,2026-11-11,261.0,205.69,371.54,,260.9800109863281,-0.01,6.0,,rising,jumpy,10-50 cr,15%+ below,4.02,-1.15,-0.0,no,Mon
+strategy tip (retired list),a3,2026-11-09,SHRIPISTON,open,,2026-11-11,4330.0,3881.56,5187.27,,4287.7001953125,-0.98,6.0,,rising,jumpy,10-50 cr,5-15% below,0.81,-1.92,-0.09,no,Mon
+strategy tip (retired list),a3,2026-11-09,FINCABLES,open,,2026-11-11,1220.0,1003.52,1690.16,,1186.0,-2.79,6.0,,rising,jumpy,over 50 cr,15%+ below,7.78,-3.28,-0.16,yes,Mon
+strategy tip (retired list),a3,2026-11-09,BALAMINES,open,,2026-11-11,1814.0,1546.2,2297.7,,1898.199951171875,4.64,6.0,,rising,jumpy,10-50 cr,15%+ below,9.37,-0.59,0.31,no,Mon
+strategy tip (retired list),a3,2026-11-09,JAYNECOIND,open,,2026-11-11,91.04000091552734,79.3,110.62,,88.20999908447266,-3.11,6.0,,rising,jumpy,10-50 cr,15%+ below,2.15,-3.34,-0.24,no,Mon
+hourly scan,scan,2026-11-09,GMMPFAUDLR,open,,2026-11-11,1148.9000244140625,923.74,1601.63,,1190.5999755859375,3.63,6.0,,rising,jumpy,10-50 cr,15%+ below,9.5,-0.25,0.19,no,Mon
+hourly scan,scan,2026-11-09,GANDHAR,open,,2026-11-11,261.0,200.51,366.14,,260.9800109863281,-0.01,6.0,,rising,jumpy,10-50 cr,15%+ below,4.02,-1.15,-0.0,no,Mon
+hourly scan,scan,2026-11-09,SHRIPISTON,open,,2026-11-11,4330.0,3880.34,5180.13,,4287.7001953125,-0.98,6.0,,rising,jumpy,10-50 cr,5-15% below,0.81,-1.92,-0.09,no,Mon
+hourly scan,scan,2026-11-09,SHANTIGOLD,open,,2026-11-11,275.3500061035156,187.15,446.64,,244.4499969482422,-11.22,6.0,,rising,jumpy,over 50 cr,15%+ below,1.6,-11.73,-0.35,no,Mon
+hourly scan,scan,2026-11-09,GESHIP,open,,2026-11-11,1430.800048828125,1248.27,1794.96,,1530.5999755859375,6.98,6.0,,rising,jumpy,over 50 cr,15%+ below,10.57,-1.49,0.55,no,Mon
+hourly scan,scan,2026-11-11,WELCORP,open,,2026-11-12,2218.800048828125,1803.51,3120.47,,2224.89990234375,0.27,5.0,,rising,jumpy,over 50 cr,15%+ below,4.52,-3.9,0.01,no,Wed
+hourly scan,scan,2026-11-11,CYIENT,open,,2026-11-12,1105.0,949.43,1425.73,,1086.4000244140625,-1.68,5.0,,rising,jumpy,over 50 cr,5-15% below,0.76,-3.55,-0.12,no,Wed
+hourly scan,scan,2026-11-11,EBGNG,open,,2026-11-12,566.0,407.63,857.09,,517.2000122070312,-8.62,5.0,,rising,jumpy,over 50 cr,15%+ below,4.37,-9.54,-0.31,no,Wed
+hourly scan,scan,2026-11-11,GESHIP,open,,2026-11-12,1448.0,1250.25,1806.9,,1530.5999755859375,5.7,5.0,,rising,jumpy,over 50 cr,15%+ below,9.25,-1.24,0.42,no,Wed
+hourly scan,scan,2026-11-13,WELCORP,open,,2026-11-16,2240.0,1802.86,3106.77,,2224.89990234375,-0.67,3.0,,rising,calm,over 50 cr,15%+ below,3.54,-2.59,-0.03,no,Fri
+hourly scan,scan,2026-11-13,CYIENT,open,,2026-11-16,1095.0,956.13,1346.63,,1086.4000244140625,-0.79,3.0,,rising,calm,over 50 cr,5-15% below,1.27,-2.67,-0.06,no,Fri
+hourly scan,scan,2026-11-13,BHARTIHEXA,skipped - opened outside the zone,,2026-11-16,,1453.73,1937.54,,,,,,rising,calm,10-50 cr,5-15% below,,,,no,Fri
+hourly scan,scan,2026-11-16,HCLTECH,open,,2026-11-17,1375.0,1279.98,1613.04,,1344.699951171875,-2.2,2.0,,rising,calm,over 50 cr,15%+ below,0.46,-3.03,-0.32,no,Mon
+hourly scan,scan,2026-11-16,CHENNPETRO,open,,2026-11-17,1418.0999755859375,1219.65,1822.8,,1419.699951171875,0.11,2.0,,rising,calm,over 50 cr,15%+ below,2.46,-1.21,0.01,no,Mon
+hourly scan,scan,2026-11-16,AJANTPHARM,open,,2026-11-17,3361.39990234375,3014.81,4087.29,,3273.800048828125,-2.61,2.0,,rising,calm,over 50 cr,5-15% below,0.68,-2.78,-0.25,no,Mon
+hourly scan,scan,2026-11-17,TCS,skipped - opened outside the zone,,2026-11-18,,2250.06,2812.37,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Tue
+hourly scan,scan,2026-11-17,EMIL,open,,2026-11-18,136.10000610351562,114.39,189.95,,136.42999267578125,0.24,1.0,,rising,calm,10-50 cr,15%+ below,2.65,-1.42,0.02,no,Tue
+hourly scan,scan,2026-11-17,SHANTIGOLD,open,,2026-11-18,261.04998779296875,195.7,382.29,,244.4499969482422,-6.36,1.0,,rising,calm,over 50 cr,15%+ below,0.0,-6.9,-0.25,no,Tue
+hourly scan,scan,2026-11-17,PFOCUS,open,,2026-11-18,281.6499938964844,231.65,378.51,,275.75,-2.09,1.0,,rising,calm,over 50 cr,15%+ below,0.98,-4.31,-0.12,no,Tue
+hourly scan,scan,2026-11-17,IPCALAB,open,,2026-11-18,1834.4000244140625,1656.27,2218.26,,1854.0999755859373,1.07,1.0,,rising,calm,over 50 cr,5-15% below,2.64,-0.02,0.11,no,Tue
+hourly scan,scan,2026-11-18,CHENNPETRO,waiting (no trading day yet),,,,1257.03,1837.44,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,PAISALO,waiting (no trading day yet),,,,68.66,88.97,,,,,,rising,calm,10-50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,SYRMA,waiting (no trading day yet),,,,1253.25,1843.2,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,HCLTECH,waiting (no trading day yet),,,,1245.23,1564.34,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,AVALON,waiting (no trading day yet),,,,1419.03,2621.04,,,,,,rising,calm,over 50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,EMIL,waiting (no trading day yet),,,,111.17,187.45,,,,,,rising,calm,10-50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,RPTECH,waiting (no trading day yet),,,,491.9,924.8,,,,,,rising,calm,10-50 cr,15%+ below,,,,no,Wed
+hourly scan,scan,2026-11-18,HAL,waiting (no trading day yet),,,,4304.51,5495.47,,,,,,rising,calm,over 50 cr,5-15% below,,,,no,Wed
+hourly scan,scan,2026-11-18,CYIENT,waiting (no trading day yet),,,,977.29,1312.73,,,,,,rising,calm,over 50 cr,5-15% below,,,,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,ABCAPITAL,open,,2026-11-17,411.5,345.7,,,412.3999938964844,0.22,1.0,,rising,calm,over 50 cr,within 5%,1.39,-1.31,0.01,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,ARTEMISMED,open,,2026-11-17,348.75,288.71,,,343.3999938964844,-1.53,1.0,,rising,calm,under 10 cr,5-15% below,0.47,-6.38,-0.09,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,BAJFINANCE,open,,2026-11-17,1121.1,963.76,,,1093.8499755859375,-2.43,1.0,,rising,calm,over 50 cr,within 5%,0.52,-2.79,-0.17,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,FILATEX,open,,2026-11-17,108.48,77.66,,,110.41000366210938,1.78,1.0,,rising,calm,10-50 cr,5-15% below,10.42,-4.13,0.06,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,GREAVESCOT,open,,2026-11-17,243.5,183.39,,,266.6300048828125,9.5,1.0,,rising,calm,over 50 cr,5-15% below,10.47,-5.59,0.38,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,KIMS,open,,2026-11-17,768.3,663.73,,,759.0,-1.21,1.0,,rising,calm,10-50 cr,5-15% below,1.13,-2.28,-0.09,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,KPRMILL,open,,2026-11-17,1217.1,991.67,,,1207.5,-0.79,1.0,,rising,calm,10-50 cr,5-15% below,2.48,-1.4,-0.04,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,MARICO,open,,2026-11-17,924.0,805.2,,,906.0499877929688,-1.94,1.0,,rising,calm,over 50 cr,within 5%,0.0,-2.22,-0.15,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-17,UNITDSPR,open,,2026-11-17,1444.0,1254.71,,,1441.0,-0.21,1.0,,rising,calm,over 50 cr,5-15% below,0.51,-0.96,-0.02,no,Tue
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,360ONE,open,,2026-11-18,1211.05,1016.44,,,1211.050048828125,0.0,0.0,,rising,calm,over 50 cr,within 5%,0.4,-1.09,0.0,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,ARVSMART,open,,2026-11-18,633.55,541.17,,,633.5499877929688,-0.0,0.0,,rising,calm,under 10 cr,5-15% below,2.3,-0.93,-0.0,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,FAZE3Q,open,,2026-11-18,612.05,413.37,,,612.0499877929688,-0.0,0.0,,rising,calm,10-50 cr,5-15% below,12.16,-7.82,-0.0,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,GHCLTEXTIL,open,,2026-11-18,136.9,106.0,,,136.89999389648438,-0.0,0.0,,rising,calm,under 10 cr,5-15% below,2.13,-2.12,-0.0,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,MWL,open,,2026-11-18,41.31,31.8,,,41.310001373291016,0.0,0.0,,rising,calm,under 10 cr,5-15% below,1.43,-1.94,0.0,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,SBIN,open,,2026-11-18,1135.0,1001.55,,,1135.0,0.0,0.0,,rising,calm,over 50 cr,5-15% below,0.67,-2.58,0.0,no,Wed
+VANTAGE,VANTAGE Breakout,2026-11-18,SUNTV,open,,2026-11-18,696.35,608.69,,,696.3499755859375,-0.0,0.0,,rising,calm,over 50 cr,within 5%,1.07,-5.97,-0.0,no,Wed
+VANTAGE,VANTAGE Rolling Candle Profile,2026-11-18,VSSL,open,,2026-11-18,380.35,312.76,,,380.3500061035156,0.0,0.0,,rising,calm,under 10 cr,5-15% below,0.7,-1.25,0.0,no,Wed
+company of the day,research pick,2026-11-03,ACE,watch,,2026-11-03,1050.55,,,,1189.199951171875,13.2,,,falling,jumpy,10-50 cr,15%+ below,,,,no,Tue
+company of the day,research pick,2026-11-04,ACGL,watch,,2026-11-04,1771.800048828125,,,,1789.0999755859375,0.98,,,falling,jumpy,under 10 cr,5-15% below,,,,no,Wed
+company of the day,research pick,2026-11-05,BLS,watch,,2026-11-05,226.87,,,,227.75,0.39,,,rising,jumpy,10-50 cr,15%+ below,,,,no,Thu
+company of the day,research pick,2026-11-06,ARROWGREEN,watch,,2026-11-06,723.2,,,,672.5,-7.01,,,rising,jumpy,under 10 cr,15%+ below,,,,no,Fri
+company of the day,research pick,2026-11-09,CRIZAC,watch,,2026-11-09,152.64,,,,150.61000061035156,-1.33,,,rising,jumpy,under 10 cr,15%+ below,,,,no,Mon
+company of the day,research pick,2026-11-10,FORCEMOT,watch,,2026-11-10,18837.0,,,,20088.0,6.64,,,rising,jumpy,over 50 cr,15%+ below,,,,no,Tue
+company of the day,research pick,2026-11-11,CMPDI,watch,,2026-11-11,192.85,,,,181.17999267578125,-6.05,,,rising,jumpy,10-50 cr,15%+ below,,,,no,Wed
+company of the day,research pick,2026-11-12,HINDCOPPER,watch,,2026-11-12,446.15,,,,419.2000122070313,-6.04,,,rising,calm,over 50 cr,15%+ below,,,,no,Thu
+company of the day,research pick,2026-11-13,JSLL,watch,,2026-11-13,342.1,,,,296.3500061035156,-13.37,,,rising,calm,10-50 cr,15%+ below,,,,no,Fri
+company of the day,research pick,2026-11-16,INFOBEAN,watch,,2026-11-16,160.23,,,,158.30999755859375,-1.2,,,rising,calm,10-50 cr,15%+ below,,,,no,Mon
+company of the day,research pick,2026-11-17,LUPIN,watch,,2026-11-17,1950.0,,,,1971.9000244140625,1.12,,,rising,calm,over 50 cr,15%+ below,,,,no,Tue
+company of the day,research pick,2026-11-18,3BBLACKBIO,watch,,2026-11-18,1321.6,,,,1321.5999755859375,-0.0,,,rising,calm,under 10 cr,15%+ below,,,,no,Wed

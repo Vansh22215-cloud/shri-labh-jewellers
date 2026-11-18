@@ -1040,3 +1040,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - Shadow a3 (not sent): +7.2%.
   - VANTAGE (17–18 Nov): 16 trend tips, open average +0.2%.
 - **Rule from now on:** any new tip type must be added to the tracker in the same change that starts sending it.
+
+## D137 - 2026-11-18 - The Learner: the second engine (owner: "two things simultaneously... built entire system for this")
+- **What it does:** `swing/learning.py` runs every evening after the tracker (D136). It adds each idea's situation (known that day) and journey, judges live results against the 13-year profile per type (`tested_profile.json`), shows results by situation, and turns big gaps into research items (`journal/learning_queue.csv`), never into tip changes.
+- **What it saves to GitHub:** `journal/learning.md`, `learning_queue.csv` and the enriched `all_tips.csv`.
+- **Messages:** a "weekly learning" message every Saturday (a new allowed label), and an instant "Learning check" only when a type is clearly below its tested range.
+- **Docs:** `swing-system/LEARNER.md`.
