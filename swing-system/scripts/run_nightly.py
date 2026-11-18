@@ -21,6 +21,11 @@ if __name__ == "__main__":
         archive.run_daily()
     except Exception as e:
         print("archive failed:", e)
+    try:   # silent forward record of promoter buying (owner 18 Nov; no messages, no tip changes)
+        from swing import shadow
+        shadow.run()
+    except Exception as e:
+        print("shadow record failed:", e)
     try:   # on GitHub: keep the results for the next run (no Claude needed)
         from swing.ci_save import save
         print("save:", save("nightly run"))

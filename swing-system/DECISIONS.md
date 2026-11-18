@@ -985,3 +985,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - The "📊 Past record of this signal type" line (D130) is removed.
 - The same layout applies to the 3:20 pm buy-now and 3:40 pm BUY messages.
 - **The company record** (`vantage-ai/validation/company_record.json`, built by `company_record.py`) covers 2,351 NSE companies with at least 2 years of prices. It counts each company's VANTAGE signals over its whole history in the 13-year test, using the same logic, costs and data handling as round 1's all-stock run. Companies listed less than 2 years ago show "No past Vantage signals for this company yet."
+
+## D132 - 2026-11-18 - Silent forward record: promoter buying (owner: "Yes")
+- **The idea:** round 9's near miss (#4). Buy the morning after a promoter market purchase of ≥ ₹10 lakh is disclosed, sell 5 trading days later. In the test it made +0.8% per trade in both periods, against a bar of +1.0%.
+- **The record:** `swing/shadow.py`, run in the evening job after the price update. It records every new disclosure in `data/private/shadow_promoter.csv`, one per stock per day, and fills in the would-be trade once prices exist. It applies the same costs and the same ₹2 cr/day filter as the test.
+- **Effect on the owner:** no messages, no change to tips.
+- **Decision point:** after a few months of live events, the record shows whether the idea reaches the bar.
