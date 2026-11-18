@@ -962,3 +962,15 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Yahoo can publish the day's prices hours late.** The 6:50 pm backup scan used to count as done even when only a few stocks had the day's candle. It now scans only when at least 60% of normal stocks have it. Otherwise it retries every 20 minutes, up to 12 times (`daemon.retry_later`).
 - **A broken scan is never reported as "0 signals".** If more than 20% of stocks fail inside the VANTAGE logic, the scan stops and a "system problem" message is sent.
 - **The practice run** (`scripts/dry_run_all.py`) now copies the repository layout, including `vantage-ai/`.
+
+## D130 - 2026-11-18 - "Almost every tip shows 46%": explained and made clear
+- **Owner's observation:** almost all VANTAGE tips showed 46%. The cause: the likely-win % is the 13-year record of the signal TYPE, and the trend-follow type (Rolling Candle Profile) makes up ~75% of signals.
+- **Pre-registered test** (`vantage-ai/validation/CALIB_PREREGISTRATION.md` / `CALIB_RESULTS.md`): a per-signal % from 10 facts known on the signal day, including the company's own past record. It **failed** on the 2023-26 holdout.
+  - It was no more accurate than the type table.
+  - There was no steady pattern within the trend-follow type.
+  - A company's own past record did not predict its next signal.
+- **Applied:** every VANTAGE BUY message (end of day, live, buy-before-close) now carries two lines.
+  - "📊 Past record of this signal type: 46% won (43% in the last 3 years), average +4.0% per trade - fewer than half win, but winners are bigger than losers"
+  - "🏢 SYMBOL: x of y past VANTAGE signals won"
+- **Daily ranked list:** it shows the type next to each VANTAGE tip, plus a one-line note on what the % means.
+- No change to which tips are sent.

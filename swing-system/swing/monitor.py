@@ -140,7 +140,8 @@ def tips_ranked(day, limit=15):
                 pct = int(float(r["likely"]))
             except Exception:
                 pct = None
-            rows.append((pct, "VANTAGE", str(r["sym"])))
+            kind = {"RCP": "trend", "Breakout": "breakout"}.get(str(r.get("setup")), f"dip {r.get('tier', '')}".strip())
+            rows.append((pct, "VANTAGE", f"{r['sym']} ({kind})"))
     except Exception:
         pass
     if not rows:
@@ -150,6 +151,8 @@ def tips_ranked(day, limit=15):
     out += [f"#{lab} #{sym} - " + (f"{pct}%" if pct is not None else "test") for pct, lab, sym in rows[:limit]]
     if len(rows) > limit:
         out.append(f"… and {len(rows) - limit} more (lower likely win)")
+    if any(lab == "VANTAGE" for _, lab, _ in rows):
+        out.append("(VANTAGE % = how often that type of signal won in 13 years of NSE data)")
     return out
 
 

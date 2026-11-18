@@ -70,8 +70,9 @@ def test_daily_status_lists_todays_tips_by_likely_win(monkeypatch, tmp_path):
                    "status": "open"}]).to_csv(tmp_path / "v.csv", index=False)
     lines = monitor.tips_ranked(day)
     assert lines[1] == "Tips (most likely to win first):"
-    assert lines[2:] == ["#DIPBUY #TITAN - 79%", "#VANTAGE #GLENMARK - 46%", "#POSITIONAL #ICICIBANK - 45%",
-                         "#BREAKOUT #MCX - 38%"]
+    assert lines[2:] == ["#DIPBUY #TITAN - 79%", "#VANTAGE #GLENMARK (trend) - 46%", "#POSITIONAL #ICICIBANK - 45%",
+                         "#BREAKOUT #MCX - 38%",
+                         "(VANTAGE % = how often that type of signal won in 13 years of NSE data)"]
     assert "#DIPBUY #TITAN - 79%" in monitor.status_text(pd.Timestamp(f"{day} 19:20"))
 
 
