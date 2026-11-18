@@ -45,6 +45,7 @@ _LAST = (pd.DataFrame(), [], pd.DataFrame(), [])
 _OPP = []
 BR, TODAY_KEY = None, None
 _CHECKS = []
+_MISSED = []
 
 
 def profile():
@@ -294,6 +295,47 @@ def skipped_review(R, load):
         if len(p0):
             out.append((r.symbol, r.source, round((float(d["close"].iloc[-1]) / float(p0["open"].iloc[0]) - 1) * 100, 2)))
     return out
+
+
+def missed_movers(R, load, days=20, top=20):
+    """ATLAS opportunity intelligence: the biggest risers of the last `days` trading days among stocks trading
+    >= Rs 2 cr/day - which did the system tip, and what did the missed ones look like when the rise began?"""
+    try:
+        from .vantage import symbols
+        syms = symbols()
+    except Exception:
+        return []
+    rows = []
+    for sym in syms:
+        d = load(sym)
+        if d is None or len(d) < 260:
+            continue
+        c, v, h = d["close"].astype(float), d["volume"].astype(float), d["high"].astype(float)
+        k0 = len(c) - 1 - days
+        turn = float((c * v).iloc[k0 - 20:k0].mean())
+        if turn < 2e7 or c.iloc[k0] <= 0:
+            continue
+        rows.append({"symbol": sym, "rise_pct": (c.iloc[-1] / c.iloc[k0] - 1) * 100, "start": str(c.index[k0].date()),
+                     "ret6m_at_start": (c.iloc[k0] / c.iloc[max(0, k0 - 126)] - 1) * 100,
+                     "from_high_at_start": (c.iloc[k0] / h.iloc[max(0, k0 - 251):k0 + 1].max() - 1) * 100})
+    if not rows:
+        return []
+    M = pd.DataFrame(rows).sort_values("rise_pct", ascending=False).head(top)
+    start = pd.Timestamp(M["start"].iloc[0]) - pd.Timedelta(days=10)
+    tipped = set(R.loc[pd.to_datetime(R["date"], errors="coerce") >= start, "symbol"].astype(str))
+    sent = set(R.loc[(pd.to_datetime(R["date"], errors="coerce") >= start) & (R.get("sent", "") == "sent"), "symbol"].astype(str)) \
+        if "sent" in R else tipped
+    M["tipped"] = [("sent" if s in sent else "recorded/blocked/rejected" if s in tipped else "missed") for s in M["symbol"]]
+    miss = M[M["tipped"] == "missed"]
+    L = [f"- Top {len(M)} risers of the last {days} trading days (stocks >= Rs 2 cr/day): {int((M['tipped'] == 'sent').sum())} "
+         f"were sent to you, {int((M['tipped'] != 'missed').sum() - (M['tipped'] == 'sent').sum())} were seen but not sent, "
+         f"{len(miss)} were never detected"]
+    if len(miss):
+        L.append(f"- Missed ones at the start of their rise: 6-month return median {miss['ret6m_at_start'].median():+.0f}%, "
+                 f"{miss['from_high_at_start'].median():+.0f}% from the 52-week high (VANTAGE usually picks strong stocks "
+                 "near their highs - missed risers far from highs are a different kind of opportunity)")
+        L.append("- Missed: " + ", ".join(f"{r.symbol} +{r.rise_pct:.0f}%" for r in miss.head(8).itertuples()))
+    return L
 
 
 def belief_checks(R, E):
@@ -552,6 +594,7 @@ def write(R, E, W, Ls, today=None, extra=None):
           "| Belief | Evidence | Live | Detail |", "|---|---|---|---|"]
     L += [f"| {c[1]} | {c[2]} | {c[3]} | {c[4]} |" for c in _CHECKS]
     L += ["", "## Is the system getting smarter? (scorecard)"] + scorecard(R, E, _CHECKS)
+    L += ["", "## Opportunities we never detected (biggest risers)"] + (_MISSED or ["- not computed"])
     L += ["", "## 0. Strategies and their status (strategies/registry.json)"] + strategies_live(R)
     L += ["", "## 2b. Opportunity cost: could the same money have done better?"] + (_OPP or ["- Not enough bought ideas yet."])
     L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
@@ -674,6 +717,11 @@ def build(load=None):
     R = enrich(R, load)
     R.to_csv(tracker.CSV, index=False)
     R = same_day(R)
+    global _MISSED
+    try:
+        _MISSED = missed_movers(R, load)
+    except Exception as e:
+        _MISSED = [f"- failed: {type(e).__name__}"]
     E, W = expectation(R, profile()), when_it_works(R)
     global _OPP
     _OPP = opportunity(R, profile())
@@ -694,6 +742,14 @@ def build(load=None):
 def run():
     try:
         R, E, W, Ls = build()
+        try:   # ATLAS immutable memory: append-only, hash-chained history of every idea
+            from . import ledger
+            ok, n0 = ledger.verify()
+            if not ok:
+                log.warning("LEDGER TAMPERING: the idea history was edited after line %d", n0)
+            log.info("Ledger: %d new lines (history intact: %s)", ledger.append(R), ok)
+        except Exception as e:
+            log.warning("ledger failed: %s", type(e).__name__)
         n = alerts(E)
         log.info("Learner: %d ideas, %d expectation lines, %d lessons, %d alerts", len(R), len(E), len(Ls), n)
     except Exception as e:

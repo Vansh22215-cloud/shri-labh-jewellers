@@ -82,17 +82,23 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | ADD MORE adds a small edge | promising (watch) | waiting | 0 of 10 add-ons closed |
 | Tips just before results earn about half -> half quantity | proven | waiting | 0 of 20 |
 | Panic days (falling, jumpy, weak breadth) give the best VANTAGE tips | promising | waiting | 0 of 10 panic-day tips |
-| Thin stocks (< Rs 2 cr/day) give weaker tips | proven | waiting | 0 of 20 |
+| Thin stocks (< Rs 2 cr/day) give weaker tips | contested (round 23: at account level the floor is not better; after +1% thin-stock costs about equal in the holdout, smaller fall without it) | waiting | 0 of 20 |
 | Blocking repeat tips protects money | assumption (not tested) | waiting | 0 of 10 |
 | Live VANTAGE tips will match the 13-year profile per type | expected | holding | no type below its tested range |
 | 'Gave back a profit' is the price of letting winners run | proven | no live check |  |
 | Market-weather rules don't help VANTAGE | proven | no live check |  |
 | Timing inside the chosen stocks adds little in recent years | proven (since 2023) | no live check |  |
+| VANTAGE's choice is mostly 'strong, near-high stocks'; its own rules add about 0.75 points a trade on top | proven (fingerprint.json) | no live check |  |
 
 ## Is the system getting smarter? (scorecard)
-- Discovery productivity: 75 ideas tested, 8 passed (11%) - failures are kept so none is retested blindly
+- Discovery productivity: 77 ideas tested, 9 passed (12%) - failures are kept so none is retested blindly
 - Execution: the next morning opened -0.38% vs the 3:20 pm buy price on average (9 tips)
 - Edge decay watch: 0 type(s) flagged; beliefs at risk or broken: 0
+
+## Opportunities we never detected (biggest risers)
+- Top 20 risers of the last 20 trading days (stocks >= Rs 2 cr/day): 2 were sent to you, 0 were seen but not sent, 18 were never detected
+- Missed ones at the start of their rise: 6-month return median +17%, -17% from the 52-week high (VANTAGE usually picks strong stocks near their highs - missed risers far from highs are a different kind of opportunity)
+- Missed: BHAGYANGR +52%, SALASAR +48%, JYOTISTRUC +48%, IGIL +38%, STYLEBAAZA +37%, HINDOILEXP +37%, ICIL +36%, SAREGAMA +33%
 
 ## 0. Strategies and their status (strategies/registry.json)
 - V-RCP VANTAGE trend (Rolling Candle Profile) [live]: 16 ideas, open 16 (avg +0.21%)
