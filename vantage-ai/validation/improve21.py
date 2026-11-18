@@ -58,20 +58,21 @@ SETUPS = {"B": load("trades_FINAL.csv"), "C": load("improve3_trades_C1.csv")}
 SETUPS["C+A"] = with_adds(SETUPS["C"])
 STRESS = {"S0 normal": {}, "S1 costs 0.6%": {"cost": 0.006}, "S2 buys 0.3% worse": {"slip": 0.003},
           "S3 30% of tips missed": {"miss": 0.3}, "S4 all three": {"cost": 0.006, "slip": 0.003, "miss": 0.3}}
-out, flags = {}, []
-for per in ("holdout", "dev"):
-    out[per] = {}
-    for sname, kw in STRESS.items():
-        row = {}
-        for k, T in SETUPS.items():
-            S = T[T["signal"] >= OOS] if per == "holdout" else T[T["signal"] < OOS]
-            R = [sim(S, s, **kw) for s in range(15)]
-            row[k] = {"cagr": round(float(np.median([a for a, b in R])), 1), "maxdd": round(float(np.median([b for a, b in R])), 1)}
-        out[per][sname] = row
-        for k in ("C", "C+A"):
-            if row[k]["cagr"] < row["B"]["cagr"]:
-                flags.append(f"{per} {sname}: {k} below B")
-        print(per, sname, row, flush=True)
-out["flags"] = flags
-json.dump(out, open(f"{HERE}/improve21_results.json", "w"), indent=1)
-print("FLAGS:", flags)
+if __name__ == "__main__":
+    out, flags = {}, []
+    for per in ("holdout", "dev"):
+        out[per] = {}
+        for sname, kw in STRESS.items():
+            row = {}
+            for k, T in SETUPS.items():
+                S = T[T["signal"] >= OOS] if per == "holdout" else T[T["signal"] < OOS]
+                R = [sim(S, s, **kw) for s in range(15)]
+                row[k] = {"cagr": round(float(np.median([a for a, b in R])), 1), "maxdd": round(float(np.median([b for a, b in R])), 1)}
+            out[per][sname] = row
+            for k in ("C", "C+A"):
+                if row[k]["cagr"] < row["B"]["cagr"]:
+                    flags.append(f"{per} {sname}: {k} below B")
+            print(per, sname, row, flush=True)
+    out["flags"] = flags
+    json.dump(out, open(f"{HERE}/improve21_results.json", "w"), indent=1)
+    print("FLAGS:", flags)

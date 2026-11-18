@@ -46,6 +46,7 @@ _OPP = []
 BR, TODAY_KEY = None, None
 _CHECKS = []
 _MISSED = []
+_MISSED_N = 0
 
 
 def profile():
@@ -327,6 +328,8 @@ def missed_movers(R, load, days=20, top=20):
         if "sent" in R else tipped
     M["tipped"] = [("sent" if s in sent else "recorded/blocked/rejected" if s in tipped else "missed") for s in M["symbol"]]
     miss = M[M["tipped"] == "missed"]
+    global _MISSED_N
+    _MISSED_N = len(miss)
     L = [f"- Top {len(M)} risers of the last {days} trading days (stocks >= Rs 2 cr/day): {int((M['tipped'] == 'sent').sum())} "
          f"were sent to you, {int((M['tipped'] != 'missed').sum() - (M['tipped'] == 'sent').sum())} were seen but not sent, "
          f"{len(miss)} were never detected"]
@@ -433,14 +436,18 @@ def scorecard(R, E, checks):
 def strategies_live(R):
     """Project ALPHA 'strategy lifecycle': live results per registered strategy (strategies/registry.json)."""
     try:
-        reg = json.loads((ROOT / "strategies" / "registry.json").read_text())["strategies"]
+        doc = json.loads((ROOT / "strategies" / "registry.json").read_text())
+        reg, stages = doc["strategies"], {x["n"]: x for x in doc.get("stages", [])}
     except Exception:
         return []
     L = []
     for st in reg:
+        n = st.get("stage")
+        sx = "" if n is None else (" · stage 0 retired" if n == 0 else
+                                   f" · stage {n}/7 {stages.get(n, {}).get('name', '')}")
         tr = st.get("track")
         if not tr:
-            L.append(f"- {st['id']} {st['name']}: {st['status']}")
+            L.append(f"- {st['id']} {st['name']}: {st['status']}{sx}")
             continue
         g = R[R["source"] == tr["source"]]
         if "type" in tr:
@@ -451,7 +458,11 @@ def strategies_live(R):
             g = g[g["added"].astype(str) == tr["added"]]
         c = g[g["status"] == "closed"]
         o = g[g["status"].isin(["open", "watch"])]
-        L.append(f"- {st['id']} {st['name']} [{st['status']}]: {len(g)} ideas"
+        nxt = ""
+        if n in (4, 6):                # readiness for the next stage, from the live record
+            need = 30 if n == 4 else 100
+            nxt = f" · ready for review: {len(c)}/{need} closed"
+        L.append(f"- {st['id']} {st['name']} [{st['status']}{sx}{nxt}]: {len(g)} ideas"
                  + (f", closed {len(c)} ({(c['result_pct'] > 0).mean() * 100:.0f}% won, avg {c['result_pct'].mean():+.2f}%)" if len(c) else "")
                  + (f", open {len(o)} (avg {o['result_pct'].mean():+.2f}%)" if len(o) and o['result_pct'].notna().any() else ""))
     return L
@@ -643,7 +654,48 @@ def write(R, E, W, Ls, today=None, extra=None):
             pd.concat([Q, pd.DataFrame(new)], ignore_index=True).to_csv(QUEUE, index=False)
 
 
-def weekly_message(R, E, Ls, today=None):
+def portfolio_risk(R, settings, gap=0.10):
+    """ATLAS portfolio risk intelligence (Telegram weekly only, never written to git): if every OPEN sent tip had
+    been bought exactly as advised (1% risk sizing, 25% cap), how much money it needs and what is at risk.
+    No capital configured -> no money lines (never guess capital)."""
+    from . import safety
+    ok, _ = safety.configured(settings)
+    try:
+        cap = float(settings.get("capital") or 0)
+    except (TypeError, ValueError):
+        cap = 0
+    if not ok or cap <= 0:
+        return []
+    o = R[(R["status"] == "open") & (R["sent"].astype(str) == "sent")
+          & R["source"].isin(["VANTAGE", "live engine"])] if "sent" in R else R.iloc[0:0]   # channels that send now
+    need = at_stop = at_gap = 0.0
+    n = jumped = 0
+    for r in o.itertuples():
+        try:
+            e, st, now = float(r.entry), float(r.stop), float(r.exit)
+        except (TypeError, ValueError):
+            continue
+        if not all(x == x and x > 0 for x in (e, st, now)) or st >= e:
+            continue
+        q = safety.size(e, st, settings)
+        if q <= 0:
+            continue
+        n += 1
+        need += q * e
+        at_stop += q * max(0.0, now - st)                 # from today's price down to the stop
+        at_gap += q * now * gap                            # a gap open: stop-losses cannot sell above the open
+        jumped += now * (1 - gap) < st
+    if not n:
+        return []
+    return [f"🧮 If you bought every open tip as advised: {n} positions, money needed ≈ ₹{need:,.0f} "
+            f"({need / cap * 100:.0f}% of ₹{cap:,.0f})"
+            + (" - more than your money: you can only take some, take the newest/strongest" if need > cap else ""),
+            f"   Loss if all hit their stop-loss from today's prices ≈ ₹{at_stop:,.0f} ({at_stop / cap * 100:.1f}%); "
+            f"if the whole market opened {gap * 100:.0f}% lower one morning ≈ ₹{at_gap:,.0f} "
+            f"({at_gap / cap * 100:.1f}%; {jumped} of {n} would open below their stop)"]
+
+
+def weekly_message(R, E, Ls, today=None, settings=None):
     today = pd.Timestamp(today or pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize())
     wk = R[pd.to_datetime(R["date"], errors="coerce") >= today - pd.Timedelta(days=7)]
     if "sent" in wk:
@@ -680,6 +732,8 @@ def weekly_message(R, E, Ls, today=None):
             L.append(f"⚠️ {x[2]}")
     if Ls:
         L.append(f"🔎 {len(Ls)} lesson(s) sent to research, e.g.: {Ls[0]['lesson']}")
+    if settings is not None:
+        L += portfolio_risk(R, settings)
     L.append("Nothing changes in your tips without a passed test and your yes.")
     return "\n".join(L)
 
@@ -734,6 +788,11 @@ def build(load=None):
                     on=["source", "symbol", "date"], how="left")
         R.to_csv(tracker.CSV, index=False)
     write(R, E, W, Ls, extra=(M, lines, Rp, Sk))
+    try:   # ATLAS research budget manager: ranked list of what to test next
+        from . import research_queue
+        research_queue.build(_CHECKS, _MISSED_N)
+    except Exception as e:
+        log.warning("research queue failed: %s", type(e).__name__)
     global _LAST
     _LAST = (M, lines, Rp, Sk)
     return R, E, W, Ls
@@ -760,4 +819,5 @@ def send_weekly():
     from . import telegram
     from .config import load_settings
     R, E, W, Ls = build()
-    return telegram.send(load_settings(), weekly_message(R, E, Ls), label="weekly learning")
+    s = load_settings()
+    return telegram.send(s, weekly_message(R, E, Ls, settings=s), label="weekly learning")

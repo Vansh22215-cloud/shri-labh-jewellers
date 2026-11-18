@@ -104,6 +104,7 @@
   "All tests assume fills at the open or close price: real 3:20 pm and 9:15 am fills are unmeasured (Kite 5-minute archive needed).",
   "Results dates exist for only 506 companies: event effects for the rest are invisible.",
   "The holdout (Nov 2023+) was a strong small/mid-cap rally: every 'recent' conclusion may be specific to that market.",
-  "Stock choice is VANTAGE's edge, but nobody knows yet WHICH part of the choice carries it (backlog 13a)."
+  "Stock choice is VANTAGE's edge, but nobody knows yet WHICH part of the choice carries it (backlog 13a).",
+  "Every 'worst fall' in the tests is measured when trades close; the fall at daily prices is deeper (round 24: a 10% market gap costs about 15% in one morning, the stops cannot help)."
  ]
 }
