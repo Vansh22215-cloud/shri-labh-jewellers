@@ -25,10 +25,11 @@
 1. ~~**Breakouts that tie up money:**~~ done: inconsistent across sets (top-300 yes, all stocks no), no test. path study of breakout trades, like the round-13 exploration. Is a breakout that has made no progress after N days dead money compared with a fresh signal?
 2. ~~**More dip-buys of the same quality in all stocks:**~~ done (round 16): failed in the holdout. the per-day value of dip-buys is huge. Test RSI(2) < 5 (D1) at the account level in both trade sets. D2 (< 10) failed.
 3. ~~**Add-to-winners, second step:**~~ done (round 17): near miss. Holdout +1.8 / +2.6 points, development +0.8 / −0.4. Re-check with live records later. a third lot at day 30 if up ≥ 15%. Turtles add up to 4 units. Always within the 1% limit per lot.
-4. **Trades in results weeks:** do open trend trades that cross a results date behave differently? Exit-before-results test.
+4. ~~**Trades in results weeks:**~~ done (exploration): the average 2-day results reaction of open trades is +0.1 to +0.3%. No rule. do open trend trades that cross a results date behave differently? Exit-before-results test.
 5. **Live record review**, weekly once tips exist:
    - tips vs the tested numbers
    - the R2 limit-entry record
    - the promoter shadow record
    - the close-call (3:20 pm) fills
 6. **Kite intraday candles:** the archive stores 5-minute data daily (`archive.run_daily`). After about 3 months, test the real fill price at 3:20 pm vs the close, and 9:15 vs the open.
+7. **Tighter trend stop** (round 18, running): RCP stop at 4 or 3 ATR instead of 5, sized to keep the 1% risk.
