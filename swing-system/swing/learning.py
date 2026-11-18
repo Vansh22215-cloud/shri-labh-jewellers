@@ -70,6 +70,7 @@ def enrich(R, load):
     """Adds situation + journey columns (no look-ahead: situation uses data up to the signal day only)."""
     if not len(R):
         return R
+    R = R.drop(columns=[c for c in ENRICHED if c in R.columns])     # a re-run replaces, never duplicates, these columns
     M = _market(load)
     rows = []
     for r in R.itertuples():
@@ -93,7 +94,8 @@ def enrich(R, load):
             if e == e and e and str(r.status) in ("open", "closed"):
                 ed = pd.Timestamp(str(r.entry_date)[:10]) if str(r.entry_date) not in ("nan", "") else day
                 xd = pd.Timestamp(str(r.exit_date)[:10]) if str(getattr(r, "exit_date", "nan")) not in ("nan", "") else d.index[-1]
-                w = d[(d.index >= ed) & (d.index <= xd)]
+                # bought at the signal day's close (VANTAGE) -> only the days AFTER count; zone tips: from the entry day
+                w = d[((d.index > ed) if str(r.source) == "VANTAGE" else (d.index >= ed)) & (d.index <= xd)]
                 if len(w):
                     x["best_pct"] = round((float(w["high"].max()) / e - 1) * 100, 2)
                     x["worst_pct"] = round((float(w["low"].min()) / e - 1) * 100, 2)
@@ -151,7 +153,8 @@ def diagnose(r, load):
     b = str(r.get("exit_date"))[:10] if str(r.get("exit_date")) not in ("nan", "", "None") else str(pd.Timestamp.now().date())
     best, days = r.get("best_pct"), r.get("days")
     mkt = _nifty_move(load, a, b)
-    if r["status"] == "closed" and str(r.get("why")) == "stop-loss" and r.get("stop") == r.get("stop") \
+    stopped = "stop" in str(r.get("why", "")).lower()               # "stop-loss", "Stop-loss (live)", "Stop-loss"
+    if r["status"] == "closed" and stopped and r.get("stop") == r.get("stop") \
             and r.get("exit") == r.get("exit") and r["exit"] < r["stop"] * 0.995:
         code = "gap_through_stop"
     elif _results_inside(r["symbol"], a, b) and res <= -3:
@@ -160,7 +163,7 @@ def diagnose(r, load):
         code = "market_fell"
     elif best == best and best is not None and best >= 3:
         code = "gave_back"
-    elif r["status"] == "closed" and str(r.get("why")) == "stop-loss" and days == days and days is not None and days <= 3:
+    elif r["status"] == "closed" and stopped and days == days and days is not None and days <= 3:
         code = "fast_stop"
     elif best == best and best is not None and best < 1:
         code = "never_worked"
@@ -246,6 +249,7 @@ def expectation(R, prof):
 
 
 BUCKETS = ["market", "market_mood", "liquidity", "from_52w_high", "results_week", "weekday"]
+ENRICHED = BUCKETS + ["best_pct", "worst_pct", "result_R", "mistake"]
 
 
 def when_it_works(R):
@@ -419,6 +423,7 @@ def build(load=None):
     Rp, Sk = repeats(R), skipped_review(R, load)
     Ls = lessons(W) + mistake_lessons(M)
     if len(M):
+        R = R.drop(columns=[c for c in ("mistake",) if c in R.columns])
         R = R.merge(M[["source", "symbol", "date", "code"]].rename(columns={"code": "mistake"}),
                     on=["source", "symbol", "date"], how="left")
         R.to_csv(tracker.CSV, index=False)

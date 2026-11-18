@@ -59,3 +59,16 @@ def test_repeats_and_mistake_lessons():
     M = pd.DataFrame({"source": "strategy tip", "code": ["never_worked"] * 6 + ["slow_bleed"] * 4, "result_pct": -3.0})
     L = learning.mistake_lessons(M)
     assert len(L) == 1 and "6 of 10" in L[0]["lesson"]
+
+
+def test_live_stop_label_and_vantage_best_point():
+    idx = pd.bdate_range("2026-11-02", periods=6)
+    flat = pd.DataFrame({"open": 100.0, "high": 101.0, "low": 99.0, "close": 100.0, "volume": 1e6}, index=idx)
+    r = {"symbol": "X", "source": "VANTAGE", "date": "2026-11-02", "entry_date": "2026-11-02", "exit_date": "2026-11-04",
+         "status": "closed", "result_pct": -9, "why": "Stop-loss (live)", "stop": 90.0, "exit": 85.0, "best_pct": 1.0}
+    assert learning.diagnose(r, lambda s: flat)[0] == "gap_through_stop"
+    hot = flat.copy()
+    hot.loc[idx[0], "high"] = 130.0                       # the signal day's own high must not count for VANTAGE
+    R = pd.DataFrame([dict(r, status="open", entry=100.0, exit=100.0, result_pct=0.0, exit_date="nan")])
+    E = learning.enrich(R, lambda s: hot if s != "NIFTY50" else None)
+    assert E.iloc[0]["best_pct"] == 1.0
