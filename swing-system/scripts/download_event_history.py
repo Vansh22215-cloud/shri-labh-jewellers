@@ -44,6 +44,11 @@ def fetch(kind, a, b, s):
                 and "back" in (str(r.get("desc", "")) + str(r.get("attchmntText", ""))).lower()]
         return pd.DataFrame([{"symbol": r.get("symbol"), "an_dt": r.get("an_dt"), "desc": r.get("desc"),
                               "text": str(r.get("attchmntText", ""))[:300]} for r in rows])
+    if kind == "bonus":
+        d = nf._get_json(s, f"{API}/corporate-announcements?index=equities&from_date={f}&to_date={t}")
+        rows = [r for r in (d or []) if "bonus" in (str(r.get("desc", "")) + " " + str(r.get("attchmntText", ""))).lower()]
+        return pd.DataFrame([{"symbol": r.get("symbol"), "an_dt": r.get("an_dt"), "desc": r.get("desc"),
+                              "text": str(r.get("attchmntText", ""))[:300]} for r in rows])
     if kind == "index":
         d = nf._get_json(s, f"{API}/press-release-cms20?fromDate={f}&toDate={t}")
         rows = []
