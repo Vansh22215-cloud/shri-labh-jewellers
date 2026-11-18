@@ -1,0 +1,34 @@
+{
+ "top300": {
+  "dev": {
+   "vantage_avg_pct": 4.08,
+   "random_stock_random_day_avg_pct_median": 0.9,
+   "random_best_of_200": 1.49,
+   "random_win_pct_median": 48.4,
+   "vantage_beats_random_pct": 100.0
+  },
+  "holdout": {
+   "vantage_avg_pct": 2.91,
+   "random_stock_random_day_avg_pct_median": 1.03,
+   "random_best_of_200": 1.93,
+   "random_win_pct_median": 48.1,
+   "vantage_beats_random_pct": 100.0
+  }
+ },
+ "all": {
+  "dev": {
+   "vantage_avg_pct": 7.14,
+   "random_stock_random_day_avg_pct_median": 1.12,
+   "random_best_of_200": 1.54,
+   "random_win_pct_median": 46.5,
+   "vantage_beats_random_pct": 100.0
+  },
+  "holdout": {
+   "vantage_avg_pct": 2.63,
+   "random_stock_random_day_avg_pct_median": -0.89,
+   "random_best_of_200": -0.3,
+   "random_win_pct_median": 41.9,
+   "vantage_beats_random_pct": 100.0
+  }
+ }
+}

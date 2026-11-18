@@ -244,6 +244,33 @@ def skipped_review(R, load):
     return out
 
 
+def strategies_live(R):
+    """Project ALPHA 'strategy lifecycle': live results per registered strategy (strategies/registry.json)."""
+    try:
+        reg = json.loads((ROOT / "strategies" / "registry.json").read_text())["strategies"]
+    except Exception:
+        return []
+    L = []
+    for st in reg:
+        tr = st.get("track")
+        if not tr:
+            L.append(f"- {st['id']} {st['name']}: {st['status']}")
+            continue
+        g = R[R["source"] == tr["source"]]
+        if "type" in tr:
+            g = g[g["type"] == tr["type"]]
+        if "type_prefix" in tr:
+            g = g[g["type"].astype(str).str.startswith(tr["type_prefix"])]
+        if "added" in tr and "added" in g:
+            g = g[g["added"].astype(str) == tr["added"]]
+        c = g[g["status"] == "closed"]
+        o = g[g["status"].isin(["open", "watch"])]
+        L.append(f"- {st['id']} {st['name']} [{st['status']}]: {len(g)} ideas"
+                 + (f", closed {len(c)} ({(c['result_pct'] > 0).mean() * 100:.0f}% won, avg {c['result_pct'].mean():+.2f}%)" if len(c) else "")
+                 + (f", open {len(o)} (avg {o['result_pct'].mean():+.2f}%)" if len(o) and o['result_pct'].notna().any() else ""))
+    return L
+
+
 def same_day(R):
     """Each bought idea vs the average of the other ideas of the same source sent the same day (choice quality)."""
     B = R[R["status"].isin(["open", "closed"]) & R["result_pct"].notna()].copy()
@@ -373,6 +400,7 @@ def write(R, E, W, Ls, today=None, extra=None):
           "| Source | Situation | Value | Ideas | Average | Won |", "|---|---|---|---|---|---|"]
     for r in W.itertuples():
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
+    L += ["", "## 0. Strategies and their status (strategies/registry.json)"] + strategies_live(R)
     L += ["", "## 2b. Opportunity cost: could the same money have done better?"] + (_OPP or ["- Not enough bought ideas yet."])
     L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
         ([f"- [{x.get('evidence', '?')}] {x['lesson']} - {x['status']}" for x in Ls] or ["- None yet."])

@@ -38,3 +38,7 @@
 10. ~~**Per-stock cap 25% vs 15%**~~ checked: the median position is 5–7% of the money; the 25% cap binds on 0.2–0.9% of trades and a 15% cap would bind on 2.3%. No effect worth testing.
 11. ~~**Market already 10% below its high**~~ skipped: three market-weather rules already failed (rounds 6, 8, 12).
 12. **Now the most valuable item is the live record** (`journal/all_tips.md`, every idea tracked, D136; review log `LIVE_REVIEW.md`) (item 5): tips start on 19 Nov with ₹51,000. After 2–4 weeks, compare live tips with the test numbers (win %, profit per trade, buy-price slippage at 3:20 pm and at the next open).
+13. **TOP PRIORITY (luck checks, 18 Nov):** VANTAGE's edge is stock choice, not timing.
+    (a) Which parts of the choice carry the edge? Compare VANTAGE stocks with random universe stocks on the same days, fact by fact.
+    (b) Are there more stocks of the same quality the scanner misses (opportunity intelligence)?
+    (c) Does holding the chosen stocks with simpler timing (fewer timing rules) keep the edge at lower cost?

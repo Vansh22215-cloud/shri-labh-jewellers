@@ -42,3 +42,14 @@ Share of all money lost on VANTAGE trades, holdout (all stocks / top-300):
 - **Selling before results:** the average results reaction is +0.1 to +0.3% (round 18 notes).
 
 **Testing:** round 20, protecting profits with a break-even stop after +5% or +8%.
+
+## 18 Nov 2026: Truth Engine luck checks (Project ALPHA input)
+- **Luck check 1** (random DAYS inside VANTAGE's own stocks, same holding times):
+  - VANTAGE beats random in 96–100% of worlds before 2023.
+  - In the last 3 years only 72% (top-300) and 5.5% (all stocks).
+  - **Timing adds little recently.**
+- **Luck check 2** (random STOCKS on random days from the same universe):
+  - VANTAGE beats random in 100% of 200 worlds in every period, by +2 to +6 points a trade.
+  - Holdout all stocks: VANTAGE +2.63% vs random −0.89%.
+  - **The edge is stock choice.**
+- **Consequence:** research priority moves to stock choice (which facts in VANTAGE's choice carry the edge; whether more stocks of the same quality exist), not timing.

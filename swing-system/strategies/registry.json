@@ -1,0 +1,175 @@
+{
+ "note": "Every strategy with a life history (Project ALPHA 'strategy lifecycle'). Status changes only with a passed test and the owner's yes; the Learner reports live results per entry.",
+ "strategies": [
+  {
+   "id": "V-RCP",
+   "name": "VANTAGE trend (Rolling Candle Profile)",
+   "status": "live",
+   "since": "2026-11-17",
+   "hypothesis": "Stocks in a steady rise keep rising; exit on the RCP SELL, 5 ATR stop or 60 days",
+   "evidence": "vantage-ai TEST_RESULTS.md, results_final.json; luck_check.json",
+   "track": {
+    "source": "VANTAGE",
+    "type": "VANTAGE Rolling Candle Profile"
+   },
+   "tested": "RCP"
+  },
+  {
+   "id": "V-BRK",
+   "name": "VANTAGE breakout",
+   "status": "live",
+   "since": "2026-11-17",
+   "hypothesis": "Breaks above recent highs continue; 3 ATR stop, target 3R",
+   "evidence": "results_final.json",
+   "track": {
+    "source": "VANTAGE",
+    "type": "VANTAGE Breakout"
+   },
+   "tested": "Breakout"
+  },
+  {
+   "id": "V-DIP",
+   "name": "VANTAGE dip-buy A/B/C",
+   "status": "live",
+   "since": "2026-11-17",
+   "hypothesis": "Strong stocks bounce after a sharp short fall; exit above the 5-day average",
+   "evidence": "results_final.json",
+   "track": {
+    "source": "VANTAGE",
+    "type_prefix": "VANTAGE Dip-buy"
+   },
+   "tested": "Dip-buy A"
+  },
+  {
+   "id": "RULE-LIQ",
+   "name": "Only stocks trading >= Rs 2 cr/day",
+   "status": "live",
+   "since": "2026-11-17",
+   "decision": "D121",
+   "evidence": "IMPROVE_RESULTS.md"
+  },
+  {
+   "id": "RULE-RESULTS",
+   "name": "Half quantity before results",
+   "status": "live",
+   "since": "2026-11-17",
+   "decision": "D123/D124",
+   "evidence": "IMPROVE2_RESULTS.md"
+  },
+  {
+   "id": "RULE-320",
+   "name": "Buy at 3:20 pm before the close",
+   "status": "live",
+   "since": "2026-11-18",
+   "decision": "D125",
+   "evidence": "IMPROVE3_RESULTS.md; live_rules_by_year.json (9 of 14 years better)"
+  },
+  {
+   "id": "RULE-ADD",
+   "name": "ADD MORE at day 15 if up 8%+ (1% risk cap)",
+   "status": "live - watch",
+   "since": "2026-11-18",
+   "decision": "D133",
+   "evidence": "IMPROVE13_RESULTS.md; live_rules_by_year.json (6 of 14 years better, small edge)",
+   "track": {
+    "source": "VANTAGE",
+    "added": "yes"
+   }
+  },
+  {
+   "id": "RULE-NOREPEAT",
+   "name": "No repeat tips across channels",
+   "status": "live",
+   "since": "2026-11-18",
+   "decision": "D139",
+   "track": {
+    "source": "blocked repeat"
+   }
+  },
+  {
+   "id": "BASKET-M3",
+   "name": "Monthly basket of 20 strongest (cash when NIFTY < 200d)",
+   "status": "live",
+   "since": "2026-11-18",
+   "decision": "D126",
+   "evidence": "IMPROVE3_RESULTS.md",
+   "track": {
+    "source": "monthly basket"
+   }
+  },
+  {
+   "id": "LE-DIP",
+   "name": "Live engine: high-probability dip-buy",
+   "status": "live",
+   "decision": "D98",
+   "track": {
+    "source": "live engine",
+    "type_prefix": "NORMAL"
+   }
+  },
+  {
+   "id": "LE-INTRADAY",
+   "name": "Live engine: intraday",
+   "status": "live (auto/shadow mode)",
+   "decision": "D94/D106",
+   "track": {
+    "source": "live engine",
+    "type_prefix": "INTRADAY"
+   }
+  },
+  {
+   "id": "LE-FNO",
+   "name": "Live engine: F&O option buying",
+   "status": "live",
+   "decision": "D99",
+   "track": {
+    "source": "live engine",
+    "type_prefix": "FNO"
+   }
+  },
+  {
+   "id": "SH-PROMOTER",
+   "name": "Promoter buying 5-day trade",
+   "status": "shadow (silent record)",
+   "since": "2026-11-18",
+   "decision": "D132",
+   "evidence": "IMPROVE9_RESULTS.md"
+  },
+  {
+   "id": "SH-LIMIT",
+   "name": "Limit entry 0.25 ATR below",
+   "status": "shadow (forward test)",
+   "since": "2026-11-17",
+   "decision": "D122"
+  },
+  {
+   "id": "CAND-THIRD",
+   "name": "Third lot at day 30 if up 15%",
+   "status": "candidate (near miss)",
+   "evidence": "IMPROVE17_RESULTS.md"
+  },
+  {
+   "id": "RET-AI",
+   "name": "AI picks",
+   "status": "retired",
+   "decision": "owner 17 Nov",
+   "evidence": "BACKTEST_VALIDATION.md"
+  },
+  {
+   "id": "RET-A3",
+   "name": "Older a3 evening swing tips",
+   "status": "retired (normal_a3_tips off; log-only since 11 Nov)",
+   "track": {
+    "source": "strategy tip"
+   }
+  },
+  {
+   "id": "RET-HOURLY",
+   "name": "Hourly scan ideas",
+   "status": "log-only since 11 Nov (D95)",
+   "track": {
+    "source": "hourly scan"
+   }
+  }
+ ]
+}

@@ -60,6 +60,26 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip (retired list) | weekday | Tue | 1 | +13.13% | 100% |
 | strategy tip (retired list) | weekday | Wed | 3 | +11.18% | 100% |
 
+## 0. Strategies and their status (strategies/registry.json)
+- V-RCP VANTAGE trend (Rolling Candle Profile) [live]: 16 ideas, open 16 (avg +0.21%)
+- V-BRK VANTAGE breakout [live]: 1 ideas, open 1 (avg +0.00%)
+- V-DIP VANTAGE dip-buy A/B/C [live]: 0 ideas
+- RULE-LIQ Only stocks trading >= Rs 2 cr/day: live
+- RULE-RESULTS Half quantity before results: live
+- RULE-320 Buy at 3:20 pm before the close: live
+- RULE-ADD ADD MORE at day 15 if up 8%+ (1% risk cap) [live - watch]: 0 ideas
+- RULE-NOREPEAT No repeat tips across channels [live]: 0 ideas
+- BASKET-M3 Monthly basket of 20 strongest (cash when NIFTY < 200d) [live]: 0 ideas
+- LE-DIP Live engine: high-probability dip-buy [live]: 0 ideas
+- LE-INTRADAY Live engine: intraday [live (auto/shadow mode)]: 0 ideas
+- LE-FNO Live engine: F&O option buying [live]: 0 ideas
+- SH-PROMOTER Promoter buying 5-day trade: shadow (silent record)
+- SH-LIMIT Limit entry 0.25 ATR below: shadow (forward test)
+- CAND-THIRD Third lot at day 30 if up 15%: candidate (near miss)
+- RET-AI AI picks: retired
+- RET-A3 Older a3 evening swing tips [retired (normal_a3_tips off; log-only since 11 Nov)]: 22 ideas, open 16 (avg -1.75%)
+- RET-HOURLY Hourly scan ideas [log-only since 11 Nov (D95)]: 29 ideas, open 18 (avg -1.07%)
+
 ## 2b. Opportunity cost: could the same money have done better?
 - VANTAGE: 4 of 9 beat simply holding NIFTY over the same days (average +1.01 points)
 - hourly scan: 6 of 14 beat simply holding NIFTY over the same days (average -0.57 points)
