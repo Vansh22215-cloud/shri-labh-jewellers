@@ -1,0 +1,334 @@
+{
+ "1_turn_of_month": {
+  "top300": {
+   "dev": {
+    "inside": {
+     "n": 3506,
+     "win": 45.9,
+     "per_trade": 4.25,
+     "pf": 1.83
+    },
+    "outside": {
+     "n": 2239,
+     "win": 48.1,
+     "per_trade": 3.82,
+     "pf": 1.8
+    }
+   },
+   "holdout": {
+    "inside": {
+     "n": 932,
+     "win": 43.1,
+     "per_trade": 3.09,
+     "pf": 1.59
+    },
+    "outside": {
+     "n": 587,
+     "win": 41.6,
+     "per_trade": 2.62,
+     "pf": 1.53
+    }
+   }
+  },
+  "all": {
+   "dev": {
+    "inside": {
+     "n": 9897,
+     "win": 48.1,
+     "per_trade": 7.01,
+     "pf": 2.28
+    },
+    "outside": {
+     "n": 6719,
+     "win": 50.3,
+     "per_trade": 6.71,
+     "pf": 2.31
+    }
+   },
+   "holdout": {
+    "inside": {
+     "n": 2663,
+     "win": 41.8,
+     "per_trade": 2.98,
+     "pf": 1.5
+    },
+    "outside": {
+     "n": 1795,
+     "win": 39.3,
+     "per_trade": 2.76,
+     "pf": 1.44
+    }
+   }
+  },
+  "PASS": false
+ },
+ "6_panic_sizing": {
+  "panic_days_pct": 8.5,
+  "top300": {
+   "dev": {
+    "today": {
+     "cagr": 19.0,
+     "maxdd": -17.1,
+     "per_week": 4.2
+    },
+    "half_in_panic": {
+     "cagr": 18.5,
+     "maxdd": -17.8,
+     "per_week": 4.2
+    },
+    "panic_share_of_signals_pct": 4.3
+   },
+   "holdout": {
+    "today": {
+     "cagr": 14.7,
+     "maxdd": -20.1,
+     "per_week": 2.7
+    },
+    "half_in_panic": {
+     "cagr": 13.7,
+     "maxdd": -20.9,
+     "per_week": 3.0
+    },
+    "panic_share_of_signals_pct": 14.7
+   }
+  },
+  "all": {
+   "dev": {
+    "today": {
+     "cagr": 34.5,
+     "maxdd": -16.8,
+     "per_week": 12.3
+    },
+    "half_in_panic": {
+     "cagr": 33.8,
+     "maxdd": -16.7,
+     "per_week": 12.3
+    },
+    "panic_share_of_signals_pct": 3.3
+   },
+   "holdout": {
+    "today": {
+     "cagr": 11.5,
+     "maxdd": -24.1,
+     "per_week": 3.3
+    },
+    "half_in_panic": {
+     "cagr": 11.7,
+     "maxdd": -22.2,
+     "per_week": 3.7
+    },
+    "panic_share_of_signals_pct": 15.0
+   }
+  },
+  "PASS": false
+ },
+ "3_results": {
+  "events": 15852,
+  "dev": {
+   "bad_n": 1468,
+   "bad_drift_pct": -0.59,
+   "good_n": 1544,
+   "good_trade_pct": 0.89,
+   "good_trade_pf": 1.51,
+   "good_win": 52.9
+  },
+  "holdout": {
+   "bad_n": 560,
+   "bad_drift_pct": -0.94,
+   "good_n": 644,
+   "good_trade_pct": 0.47,
+   "good_trade_pf": 1.25,
+   "good_win": 52.5
+  },
+  "PASS_avoid_after_bad": false,
+  "PASS_ride_good": false,
+  "guard": {
+   "top300": {
+    "dev": {
+     "after_bad_results": {
+      "n": 18,
+      "win": 72.2,
+      "per_trade": 5.37,
+      "pf": 2.74
+     },
+     "others": {
+      "n": 3919,
+      "win": 47.3,
+      "per_trade": 4.08,
+      "pf": 1.9
+     }
+    },
+    "holdout": {
+     "after_bad_results": {
+      "n": 10,
+      "win": 80.0,
+      "per_trade": 6.51,
+      "pf": 3.68
+     },
+     "others": {
+      "n": 1371,
+      "win": 43.2,
+      "per_trade": 3.37,
+      "pf": 1.69
+     }
+    }
+   },
+   "all": {
+    "dev": {
+     "after_bad_results": {
+      "n": 25,
+      "win": 64.0,
+      "per_trade": 6.04,
+      "pf": 3.78
+     },
+     "others": {
+      "n": 6481,
+      "win": 50.2,
+      "per_trade": 6.21,
+      "pf": 2.37
+     }
+    },
+    "holdout": {
+     "after_bad_results": {
+      "n": 12,
+      "win": 75.0,
+      "per_trade": 4.88,
+      "pf": 2.95
+     },
+     "others": {
+      "n": 2088,
+      "win": 43.7,
+      "per_trade": 3.84,
+      "pf": 1.77
+     }
+    }
+   }
+  },
+  "PASS_guard": false
+ },
+ "2_upper_circuit": {
+  "top300": {
+   "dev": {
+    "n": 1027,
+    "win": 45.4,
+    "per_trade": 1.95,
+    "pf": 1.57
+   },
+   "holdout": {
+    "n": 201,
+    "win": 46.3,
+    "per_trade": 0.45,
+    "pf": 1.14,
+    "per_week": 1.3
+   },
+   "holdout_by_band": {
+    "5": {
+     "n": 144,
+     "win": 46.5,
+     "per_trade": 0.47,
+     "pf": 1.17
+    },
+    "10": {
+     "n": 36,
+     "win": 55.6,
+     "per_trade": 2.58,
+     "pf": 1.98
+    },
+    "20": {
+     "n": 21,
+     "win": 28.6,
+     "per_trade": -3.32,
+     "pf": 0.49
+    }
+   },
+   "holdout_by_year": {
+    "2023": {
+     "n": 11,
+     "win": 36.4,
+     "per_trade": 0.35,
+     "pf": 1.1
+    },
+    "2024": {
+     "n": 85,
+     "win": 54.1,
+     "per_trade": 1.21,
+     "pf": 1.44
+    },
+    "2025": {
+     "n": 48,
+     "win": 39.6,
+     "per_trade": -0.92,
+     "pf": 0.72
+    },
+    "2026": {
+     "n": 57,
+     "win": 42.1,
+     "per_trade": 0.5,
+     "pf": 1.14
+    }
+   }
+  },
+  "all": {
+   "dev": {
+    "n": 7584,
+    "win": 40.7,
+    "per_trade": 0.6,
+    "pf": 1.15
+   },
+   "holdout": {
+    "n": 4175,
+    "win": 41.0,
+    "per_trade": 0.08,
+    "pf": 1.02,
+    "per_week": 26.6
+   },
+   "holdout_by_band": {
+    "5": {
+     "n": 3091,
+     "win": 40.5,
+     "per_trade": 0.19,
+     "pf": 1.05
+    },
+    "10": {
+     "n": 502,
+     "win": 43.4,
+     "per_trade": 0.16,
+     "pf": 1.04
+    },
+    "20": {
+     "n": 582,
+     "win": 41.6,
+     "per_trade": -0.61,
+     "pf": 0.87
+    }
+   },
+   "holdout_by_year": {
+    "2023": {
+     "n": 236,
+     "win": 45.3,
+     "per_trade": 0.97,
+     "pf": 1.28
+    },
+    "2024": {
+     "n": 2155,
+     "win": 42.5,
+     "per_trade": 0.3,
+     "pf": 1.08
+    },
+    "2025": {
+     "n": 940,
+     "win": 36.7,
+     "per_trade": -0.77,
+     "pf": 0.81
+    },
+    "2026": {
+     "n": 844,
+     "win": 40.6,
+     "per_trade": 0.2,
+     "pf": 1.05
+    }
+   }
+  },
+  "PASS": false
+ }
+}
