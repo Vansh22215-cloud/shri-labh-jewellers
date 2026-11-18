@@ -62,3 +62,9 @@ Share of all money lost on VANTAGE trades, holdout (all stocks / top-300):
   - **(b) answered:** about 7 matching stocks a day, so money, not candidates, is the limit.
   - **(c) answered:** VANTAGE's own timing adds about 0.75 points a trade over fingerprint-matched random picks, so it is kept.
 - **Next research item:** start from the first live evening (beliefs B2 and B6 checks).
+
+## 19 Nov 2026, 03:30 IST check-in
+- No new live record (first live evening run is 19 Nov about 18:40 IST). Replay unchanged: 17 VANTAGE tips, open +0.2%.
+- ATLAS parts added since the last check-in: idea ledger, missed-movers section, ranked research queue, 7-stage promotion, weekly portfolio risk, crash scenario (round 24, survives; a 10% market gap = about 15% loss in one morning).
+- **Backlog 15 (missed big risers, top of the new research queue) explored on development data only:** the missed risers' look at the start (strong, 10-30% below the 52-week high, 20-day high on 2x volume) gives 7,057 cases with a 20-day result of +1.2% vs +1.5% for any stock, and is worse in 10 of 12 years. The big risers are only "obvious" in hindsight. Closed, no test (holdout not looked at). The research queue now pushes it down.
+- Next: backlog 14 (live belief checks) from the first live evening.

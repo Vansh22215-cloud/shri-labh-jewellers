@@ -6,8 +6,8 @@ What is worth testing next, ranked. Score = value of the question x how often id
 
 | Kind | Tested | Passed (near miss = half) | Chance used |
 |---|---|---|---|
+| stress | 2 | 2 | 75% |
 | universe | 1 | 1 | 67% |
-| stress | 1 | 1 | 67% |
 | discovery | 1 | 1 | 67% |
 | adversarial | 3 | 2 | 60% |
 | portfolio | 3 | 1 | 40% |
@@ -24,13 +24,13 @@ What is worth testing next, ranked. Score = value of the question x how often id
 
 ## Ranked queue
 
-1. [THIS WEEK] (missed, score 1.33) 18 of the top 20 risers were never detected: is there a testable pattern in them (most started far from their 52-week high)? - already tested: FP
-2. [THIS WEEK] (unknown, score 0.33) Blind spot: Every strategy uses only daily price and volume: no intraday structure, order book, or option-market data per stock has been tested as a stock-choice signal.
-3. [later] (unknown, score 0.33) Blind spot: All strategies buy only (no shorting): in falling markets the system can only wait.
-4. [later] (unknown, score 0.33) Blind spot: All tests assume fills at the open or close price: real 3:20 pm and 9:15 am fills are unmeasured (Kite 5-minute archive needed).
-5. [later] (unknown, score 0.33) Blind spot: Results dates exist for only 506 companies: event effects for the rest are invisible.
-6. [later] (unknown, score 0.33) Blind spot: The holdout (Nov 2023+) was a strong small/mid-cap rally: every 'recent' conclusion may be specific to that market.
-7. [later] (unknown, score 0.33) Blind spot: Stock choice is VANTAGE's edge, but nobody knows yet WHICH part of the choice carries it (backlog 13a).
+1. [THIS WEEK] (unknown, score 0.33) Blind spot: Every strategy uses only daily price and volume: no intraday structure, order book, or option-market data per stock has been tested as a stock-choice signal.
+2. [THIS WEEK] (unknown, score 0.33) Blind spot: All strategies buy only (no shorting): in falling markets the system can only wait.
+3. [later] (unknown, score 0.33) Blind spot: All tests assume fills at the open or close price: real 3:20 pm and 9:15 am fills are unmeasured (Kite 5-minute archive needed).
+4. [later] (unknown, score 0.33) Blind spot: Results dates exist for only 506 companies: event effects for the rest are invisible.
+5. [later] (unknown, score 0.33) Blind spot: The holdout (Nov 2023+) was a strong small/mid-cap rally: every 'recent' conclusion may be specific to that market.
+6. [later] (unknown, score 0.33) Blind spot: Stock choice is VANTAGE's edge, but nobody knows yet WHICH part of the choice carries it (backlog 13a).
+7. [later] (unknown, score 0.33) Blind spot: Every 'worst fall' in the tests is measured when trades close; the fall at daily prices is deeper (round 24: a 10% market gap costs about 15% in one morning, the stops cannot help).
 8. [later] (lesson, score 0.06) strategy tip: when weekday = Fri, ideas averaged -0.5% (n=3) vs -3.4% when Wed (n=7)
 9. [later] (lesson, score 0.06) strategy tip (retired list): when weekday = Wed, ideas averaged +11.2% (n=3) vs +1.2% when Mon (n=7)
 10. [later] (lesson, score 0.03) strategy tip: when market mood = calm, ideas averaged -0.5% (n=9) vs -3.4% when jumpy (n=7) - already tested: R8-6, R6-G, X-market-break

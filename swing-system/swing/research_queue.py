@@ -67,7 +67,7 @@ def candidates(checks=(), queue=None, missed_n=0, unknowns=()):
                       "tested": ", ".join(done)})
     if missed_n >= 10:
         C.append({"kind": "missed", "idea": f"{missed_n} of the top 20 risers were never detected: is there a testable "
-                  "pattern in them (most started far from their 52-week high)?", "value": VALUE["missed"], "tested": "FP"})
+                  "pattern in them (most started far from their 52-week high)?", "value": VALUE["missed"], "tested": "FP, X-missed"})
     for u in unknowns:
         C.append({"kind": "unknown", "idea": f"Blind spot: {u}", "value": VALUE["unknown"], "tested": ""})
     return C
@@ -79,7 +79,7 @@ def rank(C, rates):
         fam = FAMILY_OF[c["kind"]]
         c["family"] = fam
         c["prior"] = rates.get(fam, (0, 0, base))[2]
-        c["score"] = c["value"] * c["prior"] * (0.3 if c["tested"] and c["kind"] != "missed" else 1.0)
+        c["score"] = c["value"] * c["prior"] * (0.3 if c["tested"] else 1.0)
     return sorted(C, key=lambda c: -c["score"])
 
 
@@ -115,7 +115,11 @@ def build(checks=(), missed_n=0, today=None):
     except Exception:
         unk = []
     rates = family_rates()
-    C = rank(candidates(checks, q, missed_n, unk), rates)
+    try:   # an idea already explored and closed is not queued again
+        done = {e["id"] for e in json.loads((VAL / "experiments.json").read_text())["experiments"]}
+    except Exception:
+        done = set()
+    C = rank(candidates(checks, q, 0 if "X-missed" in done else missed_n, unk), rates)
     write(C, rates, today)
     log.info("Research queue: %d ideas ranked", len(C))
     return C

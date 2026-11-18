@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 78,
+ "count": 79,
  "passed": 10,
  "experiments": [
   {
@@ -781,6 +781,16 @@
    "verdict": "PASS - survives (risk measured, no rule)",
    "why": "10% gap = about 15% one-morning loss, growth stays positive; stops do not protect against gaps",
    "files": "IMPROVE24_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-missed",
+   "round": "exploration",
+   "family": "exploration",
+   "hypothesis": "Missed big risers are predictable: strong stock 10-30% below its 52-week high breaks a 20-day high on 2x volume",
+   "verdict": "no fix needed / not worth a test",
+   "why": "development only: 7,057 cases, 20-day result +1.2% vs +1.5% for any stock, worse in 10 of 12 years; big risers are found in hindsight",
+   "files": "LIVE_REVIEW.md 19 Nov 03:30",
    "area": "finder"
   }
  ],
