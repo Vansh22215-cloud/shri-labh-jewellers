@@ -15,7 +15,8 @@ P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePu
          wTrend=25.0, wMom=20.0, wStr=20.0, wRS=15.0, wVol=10.0, wMkt=10.0,
          useDip=True, dipStopMult=4.0, dipMaxDays=10, useRCP=True, rcpStopMult=5.0, rcpMaxDays=60,
          dipRsi=2.0, beAtR=None, timeStopBars=None,
-         gapGuardAtr=None, limitAtr=None, scaleOutR=None, earnings=None, earnDays=5, entryAtClose=False)        # research switches (defaults = the live logic)
+         gapGuardAtr=None, limitAtr=None, scaleOutR=None, earnings=None, earnDays=5, entryAtClose=False,
+         rcpSellMinDays=0, rcpTrailAtr=None)        # research switches (defaults = the live logic)
 SW = "/home/user/shri-labh-jewellers/swing-system"
 
 
@@ -345,6 +346,8 @@ def run(d, bench, allow=None, p=None, state=None):
             if (p["scaleOutR"] and not halfDone and posType in ("Breakout", "Pullback", "RCP")
                     and h[t] >= planEntry + p["scaleOutR"] * (planEntry - initStop)):
                 halfDone, halfPx = True, max(o[t], planEntry + p["scaleOutR"] * (planEntry - initStop))   # R3
+            if p["rcpTrailAtr"] and posType == "RCP":              # X5: trailing stop from the highest high
+                stopLvl = max(stopLvl, hiSince - p["rcpTrailAtr"] * atr[t])
             if posType in ("Breakout", "Pullback") and p["exitMode"] != "Fixed risk/reward":
                 stopLvl = max(stopLvl, hiSince - p["trailMult"] * atr[t])
             if p["beAtR"] and posType in ("Breakout", "Pullback", "RCP") and h[t] >= planEntry + p["beAtR"] * (planEntry - initStop):
@@ -362,7 +365,7 @@ def run(d, bench, allow=None, p=None, state=None):
                     pendingExit, pendingWhy = True, why
                     ev_sell = {"why": why, "price": float(c[t]), "signal": (cur or {}).get("signal"), "intrabar": False}
             elif posType == "RCP":
-                why = ("Rolling Candle Profile SELL" if rcpSell[t] else
+                why = ("Rolling Candle Profile SELL" if rcpSell[t] and t - entryBar >= p["rcpSellMinDays"] else
                        f"Time exit ({p['rcpMaxDays']} days)" if t - entryBar >= p["rcpMaxDays"] - 1 else "")
                 if why:
                     pendingExit, pendingWhy = True, why
