@@ -16,3 +16,14 @@ Each cell: yearly growth / worst fall.
 - **Tight bases:** Minervini's rule does not hold on NSE in our data (development).
 - **Volume breakouts:** helped top-300 stocks, hurt all stocks.
 - Not adopted.
+
+## Also checked: what happens after the trend (RCP) SELL (development, top-300)
+| Exit | Trade result | Stock 5 days later | 10 days | 20 days |
+|---|---|---|---|---|
+| RCP SELL (2,011 trades) | −5.1% | +0.5% | +0.6% | +1.5% |
+| Stop-loss | −15.4% | +1.0% | +0.8% | +1.0% |
+| 60-day time exit | +19.3% | +0.5% | +0.8% | +1.9% |
+
+- After the SELL, stocks only drift at about the normal pace of the market.
+- The money freed earns more in a fresh signal (≈ +2% per 20 days).
+- The SELL is not costing profit. Nothing to change.
