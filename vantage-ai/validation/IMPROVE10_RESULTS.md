@@ -18,3 +18,6 @@ Each cell: yearly growth / worst fall.
 - **V2:** more dip-buys help in older all-stock data, but hurt badly in the recent years (6.3% vs 11.5%). ❌
 - **V3:** ❌
 - **V4:** dropping breakouts lowers growth. ❌ Breakouts are weak per day of money, but they still add to the account.
+
+
+**Correction (18 Nov):** the all-stock baseline was rebuilt on current data (`improve_trades_U2.csv`). Against it, the verdict is unchanged. See `IMPROVE18_RESULTS.md` → "Re-scored".

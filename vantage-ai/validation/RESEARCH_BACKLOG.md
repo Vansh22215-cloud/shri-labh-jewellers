@@ -32,4 +32,4 @@
    - the promoter shadow record
    - the close-call (3:20 pm) fills
 6. **Kite intraday candles:** the archive stores 5-minute data daily (`archive.run_daily`). After about 3 months, test the real fill price at 3:20 pm vs the close, and 9:15 vs the open.
-7. **Tighter trend stop** (round 18, running): RCP stop at 4 or 3 ATR instead of 5, sized to keep the 1% risk.
+7. ~~**Tighter trend stop**~~ done (round 18): failed. Note: use `improve_trades_U2.csv` as the all-stock baseline from now on.: RCP stop at 4 or 3 ATR instead of 5, sized to keep the 1% risk.

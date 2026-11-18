@@ -9,3 +9,6 @@
 - More dip-buys help strongly in the older all-stock data, but hurt in the recent years. That is the same pattern as D2 (round 10).
 - The extra (looser) dips are weaker, and they take money away from trend trades.
 - The current dip rule (RSI(2) < 2) stays.
+
+
+**Correction (18 Nov):** the all-stock baseline was rebuilt on current data (`improve_trades_U2.csv`). Against it, the verdict is unchanged. See `IMPROVE18_RESULTS.md` → "Re-scored".

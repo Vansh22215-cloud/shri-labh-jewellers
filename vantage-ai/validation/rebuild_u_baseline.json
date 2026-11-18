@@ -1,0 +1,62 @@
+{
+ "baseline_U2": {
+  "dev": {
+   "cagr": 40.5,
+   "maxdd": -18.1,
+   "per_week": 16.1
+  },
+  "holdout": {
+   "cagr": 11.8,
+   "maxdd": -20.7,
+   "per_week": 4.0
+  }
+ },
+ "R10_V2_wider_dips": {
+  "dev": {
+   "cagr": 40.5,
+   "maxdd": -19.1,
+   "per_week": 17.6
+  },
+  "holdout": {
+   "cagr": 6.3,
+   "maxdd": -21.3,
+   "per_week": 4.1
+  }
+ },
+ "R16_D1_dips": {
+  "dev": {
+   "cagr": 40.3,
+   "maxdd": -21.1,
+   "per_week": 16.4
+  },
+  "holdout": {
+   "cagr": 8.7,
+   "maxdd": -23.1,
+   "per_week": 4.0
+  }
+ },
+ "R18_Z1_stop4": {
+  "dev": {
+   "cagr": 41.3,
+   "maxdd": -18.8,
+   "per_week": 15.1
+  },
+  "holdout": {
+   "cagr": 4.6,
+   "maxdd": -30.2,
+   "per_week": 3.2
+  }
+ },
+ "R18_Z2_stop3": {
+  "dev": {
+   "cagr": 41.4,
+   "maxdd": -20.8,
+   "per_week": 13.7
+  },
+  "holdout": {
+   "cagr": -3.7,
+   "maxdd": -34.5,
+   "per_week": 2.7
+  }
+ }
+}
