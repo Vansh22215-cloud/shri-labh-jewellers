@@ -44,8 +44,8 @@
   {
    "id": "B6",
    "belief": "Thin stocks (< Rs 2 cr/day) give weaker tips",
-   "level": "proven",
-   "evidence": "IMPROVE_RESULTS U; round 23 robustness",
+   "level": "contested (round 23: at account level the floor is not better; after +1% thin-stock costs about equal in the holdout, smaller fall without it)",
+   "evidence": "IMPROVE_RESULTS U (per trade); IMPROVE23_RESULTS.md (account level: fragile)",
    "wrong_if": "after 20+ rejected thin signals, they average better than sent tips",
    "check": "rejected_thin"
   },
@@ -87,6 +87,14 @@
    "level": "proven (since 2023)",
    "evidence": "luck_check.json",
    "wrong_if": "timing-rule tests start passing again on new data",
+   "check": null
+  },
+  {
+   "id": "B12",
+   "belief": "VANTAGE's choice is mostly 'strong, near-high stocks'; its own rules add about 0.75 points a trade on top",
+   "level": "proven (fingerprint.json)",
+   "evidence": "random stocks with the same fingerprint earn +3.3% / +2.1% vs VANTAGE +4.1% / +2.9%; VANTAGE beats them in 98-100% of worlds",
+   "wrong_if": "a simple fingerprint pick matches VANTAGE in live tracking",
    "check": null
   }
  ],

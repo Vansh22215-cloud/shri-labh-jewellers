@@ -1,0 +1,43 @@
+{
+ "fingerprint_median_percentile": {
+  "ret6m": 70.6,
+  "from_high": 81.5,
+  "vol20": 51.7,
+  "turnover": 53.0,
+  "ret1m": 76.6
+ },
+ "band": {
+  "ret6m": [
+   0.52,
+   0.867
+  ],
+  "from_high": [
+   0.632,
+   0.942
+  ],
+  "vol20": [
+   0.258,
+   0.773
+  ],
+  "turnover": [
+   0.291,
+   0.773
+  ],
+  "ret1m": [
+   0.578,
+   0.898
+  ]
+ },
+ "dev": {
+  "vantage_avg_pct": 4.08,
+  "fingerprint_random_avg_pct_median": 3.33,
+  "matching_cells_per_day": 6.5,
+  "vantage_beats_matched_random_pct": 100.0
+ },
+ "holdout": {
+  "vantage_avg_pct": 2.91,
+  "fingerprint_random_avg_pct_median": 2.14,
+  "matching_cells_per_day": 7.5,
+  "vantage_beats_matched_random_pct": 98.5
+ }
+}
