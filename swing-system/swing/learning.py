@@ -121,6 +121,14 @@ CODES = {
 }
 
 
+# Causes already researched on 13 years: a lesson about them says so instead of asking for the same test again.
+TESTED = {"gave_back": "tested twice (rounds 1 E1 and 20): break-even stops cost more than they save - the price of "
+                       "letting winners run",
+          "market_fell": "tested (rounds 6, 8, 12, 19 and the market-break exit): no rule helped",
+          "results_shock": "tested (round 2 R4 -> half quantity before results, live; selling before results did not help)",
+          "fast_stop": "tested (round 18): tighter stops made it worse"}
+
+
 def _nifty_move(load, a, b):
     n = load("NIFTY50")
     if n is None or not len(n):
@@ -294,7 +302,9 @@ def mistake_lessons(M):
             if k >= MIN_SIGN and code != "slow_bleed":
                 out.append({"key": f"{src}|mistake|{code}", "source": src, "situation": "mistake",
                             "lesson": f"{src}: {k} of {len(g)} losing ideas - {CODES[code]}",
-                            "evidence": evidence(k), "status": "to research (test on 13 years before any change)"})
+                            "evidence": evidence(k),
+                            "status": ("known: " + TESTED[code]) if code in TESTED else
+                                      "to research (test on 13 years before any change)"})
     return out
 
 
@@ -308,7 +318,7 @@ def write(R, E, W, Ls, today=None, extra=None):
     for r in W.itertuples():
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
     L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
-        ([f"- [{x.get('evidence', '?')}] {x['lesson']}" for x in Ls] or ["- None yet."])
+        ([f"- [{x.get('evidence', '?')}] {x['lesson']} - {x['status']}" for x in Ls] or ["- None yet."])
     if extra:
         M, lines, Rp, Sk = extra
         L += ["", "## 4. Mistakes: why each losing idea lost (plain diagnosis)"]
