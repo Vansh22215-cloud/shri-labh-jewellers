@@ -1,0 +1,9406 @@
+{
+"20MICRONS": [
+14,
+4
+],
+"21STCENMGM": [
+6,
+3
+],
+"360ONE": [
+14,
+7
+],
+"3IINFOLTD": [
+11,
+4
+],
+"3MINDIA": [
+1,
+0
+],
+"3PLAND": [
+11,
+3
+],
+"5PAISA": [
+7,
+4
+],
+"63MOONS": [
+11,
+7
+],
+"8KMILES": [
+5,
+3
+],
+"A2ZINFRA": [
+15,
+5
+],
+"A2ZMES": [
+1,
+1
+],
+"AAATECH": [
+7,
+3
+],
+"AADHARHFC": [
+3,
+1
+],
+"AAKASH": [
+8,
+7
+],
+"AAREYDRUGS": [
+7,
+2
+],
+"AARON": [
+18,
+5
+],
+"AARTECH": [
+1,
+0
+],
+"AARTIDRUGS": [
+20,
+8
+],
+"AARTIIND": [
+31,
+14
+],
+"AARTIPHARM": [
+5,
+2
+],
+"AARTISURF": [
+2,
+0
+],
+"AARVI": [
+6,
+5
+],
+"AAVAS": [
+8,
+3
+],
+"ABAN": [
+10,
+4
+],
+"ABB": [
+20,
+10
+],
+"ABBOTINDIA": [
+8,
+4
+],
+"ABCAPITAL": [
+19,
+9
+],
+"ABCIND": [
+5,
+3
+],
+"ABDL": [
+2,
+1
+],
+"ABFRL": [
+20,
+8
+],
+"ABGSHIP": [
+0,
+0
+],
+"ABINFRA": [
+12,
+5
+],
+"ABIRLANUVO": [
+11,
+4
+],
+"ABMINTLLTD": [
+9,
+3
+],
+"ABREL": [
+21,
+12
+],
+"ABSLAMC": [
+10,
+5
+],
+"ACC": [
+21,
+7
+],
+"ACCELYA": [
+25,
+13
+],
+"ACCURACY": [
+8,
+5
+],
+"ACE": [
+24,
+11
+],
+"ACEINTEG": [
+6,
+6
+],
+"ACI": [
+4,
+0
+],
+"ACL": [
+6,
+2
+],
+"ACUTAAS": [
+9,
+4
+],
+"ADANIENSOL": [
+20,
+11
+],
+"ADANIENT": [
+26,
+16
+],
+"ADANIGAS": [
+2,
+1
+],
+"ADANIGREEN": [
+12,
+6
+],
+"ADANIPORTS": [
+27,
+11
+],
+"ADANIPOWER": [
+20,
+10
+],
+"ADANITRANS": [
+17,
+10
+],
+"ADFFOODS": [
+24,
+11
+],
+"ADL": [
+7,
+3
+],
+"ADLABS": [
+0,
+0
+],
+"ADOR": [
+22,
+8
+],
+"ADORWELD": [
+19,
+6
+],
+"ADROITINFO": [
+13,
+2
+],
+"ADSL": [
+13,
+3
+],
+"ADVANIHOTR": [
+10,
+4
+],
+"ADVANTA": [
+6,
+4
+],
+"ADVENZYMES": [
+7,
+5
+],
+"AEGISCHEM": [
+22,
+11
+],
+"AEGISLOG": [
+27,
+15
+],
+"AEROENTER": [
+2,
+1
+],
+"AEROFLEX": [
+2,
+1
+],
+"AERONEU": [
+1,
+0
+],
+"AETHER": [
+5,
+1
+],
+"AFFLE": [
+12,
+9
+],
+"AFIL": [
+2,
+0
+],
+"AFSL": [
+2,
+0
+],
+"AGARIND": [
+14,
+9
+],
+"AGASTYAEN": [
+7,
+3
+],
+"AGCNET": [
+13,
+6
+],
+"AGI": [
+22,
+16
+],
+"AGIIL": [
+3,
+1
+],
+"AGRITECH": [
+12,
+9
+],
+"AGROPHOS": [
+12,
+5
+],
+"AHLADA": [
+3,
+0
+],
+"AHLEAST": [
+11,
+4
+],
+"AHLUCONT": [
+12,
+6
+],
+"AHLWEST": [
+10,
+3
+],
+"AHMEDFORGE": [
+3,
+2
+],
+"AIAENG": [
+21,
+11
+],
+"AIFL": [
+3,
+1
+],
+"AIIL": [
+4,
+1
+],
+"AIL": [
+5,
+3
+],
+"AIRAN": [
+6,
+4
+],
+"AIROLAM": [
+9,
+6
+],
+"AJANTPHARM": [
+23,
+13
+],
+"AJMERA": [
+15,
+6
+],
+"AJOONI": [
+7,
+2
+],
+"AKASH": [
+9,
+2
+],
+"AKG": [
+9,
+3
+],
+"AKI": [
+0,
+0
+],
+"AKSHAR": [
+1,
+0
+],
+"AKSHARCHEM": [
+5,
+3
+],
+"AKSHOPTFBR": [
+14,
+5
+],
+"AKUMS": [
+1,
+1
+],
+"AKZOINDIA": [
+24,
+7
+],
+"ALANKIT": [
+13,
+3
+],
+"ALBERTDAVD": [
+9,
+5
+],
+"ALBK": [
+5,
+0
+],
+"ALEMBICLTD": [
+18,
+6
+],
+"ALICON": [
+15,
+11
+],
+"ALIVUS": [
+9,
+6
+],
+"ALKALI": [
+15,
+6
+],
+"ALKEM": [
+15,
+6
+],
+"ALKYLAMINE": [
+19,
+12
+],
+"ALLCARGO": [
+15,
+8
+],
+"ALLDIGI": [
+19,
+10
+],
+"ALMONDZ": [
+23,
+9
+],
+"ALOKINDS": [
+11,
+2
+],
+"ALPA": [
+18,
+9
+],
+"ALPHAGEO": [
+12,
+5
+],
+"ALSTOMT&D": [
+5,
+3
+],
+"AMARAJABAT": [
+15,
+11
+],
+"AMBER": [
+6,
+5
+],
+"AMBICAAGAR": [
+6,
+4
+],
+"AMBIKCO": [
+19,
+12
+],
+"AMBUJACEM": [
+29,
+10
+],
+"AMDIND": [
+14,
+5
+],
+"AMIORG": [
+5,
+1
+],
+"AMJLAND": [
+16,
+5
+],
+"AMNPLST": [
+0,
+0
+],
+"AMRUTANJAN": [
+19,
+10
+],
+"AMTEKAUTO": [
+3,
+2
+],
+"AMTEKINDIA": [
+3,
+1
+],
+"ANANDRATHI": [
+17,
+10
+],
+"ANANTRAJ": [
+28,
+12
+],
+"ANDHRABANK": [
+2,
+1
+],
+"ANDHRAPAP": [
+18,
+5
+],
+"ANDHRSUGAR": [
+19,
+8
+],
+"ANGELONE": [
+10,
+6
+],
+"ANIKINDS": [
+19,
+6
+],
+"ANMOL": [
+4,
+3
+],
+"ANNAPURNA": [
+3,
+0
+],
+"ANTELOPUS": [
+15,
+8
+],
+"ANTGRAPHIC": [
+13,
+3
+],
+"ANUP": [
+11,
+8
+],
+"ANURAS": [
+7,
+2
+],
+"APARINDS": [
+16,
+11
+],
+"APCL": [
+9,
+3
+],
+"APCOTEXIND": [
+23,
+10
+],
+"APEX": [
+7,
+1
+],
+"APLAPOLLO": [
+34,
+20
+],
+"APLLTD": [
+18,
+11
+],
+"APOLLO": [
+17,
+12
+],
+"APOLLOHOSP": [
+21,
+10
+],
+"APOLLOPIPE": [
+8,
+4
+],
+"APOLLOTYRE": [
+25,
+10
+],
+"APOLSINHOT": [
+9,
+4
+],
+"APTECHT": [
+11,
+6
+],
+"APTUS": [
+3,
+0
+],
+"AQYLON": [
+7,
+0
+],
+"ARCHIDPLY": [
+16,
+8
+],
+"ARCHIES": [
+12,
+3
+],
+"ARCOTECH": [
+3,
+2
+],
+"ARE&M": [
+19,
+11
+],
+"ARENTERP": [
+6,
+2
+],
+"ARHAM": [
+4,
+2
+],
+"ARIES": [
+19,
+10
+],
+"ARIHANT": [
+5,
+3
+],
+"ARIHANTCAP": [
+3,
+1
+],
+"ARIHANTSUP": [
+11,
+6
+],
+"ARKADE": [
+0,
+0
+],
+"ARMANFIN": [
+19,
+5
+],
+"AROGRANITE": [
+11,
+5
+],
+"ARROWGREEN": [
+8,
+7
+],
+"ARSHIYA": [
+10,
+5
+],
+"ARSSINFRA": [
+13,
+4
+],
+"ARTEMISMED": [
+13,
+7
+],
+"ARTNIRMAN": [
+1,
+1
+],
+"ARVEE": [
+4,
+1
+],
+"ARVIND": [
+23,
+15
+],
+"ARVINDFASN": [
+12,
+5
+],
+"ARVINDREM": [
+2,
+1
+],
+"ARVSMART": [
+18,
+8
+],
+"ASAHIINDIA": [
+22,
+12
+],
+"ASAHISONG": [
+17,
+8
+],
+"ASAL": [
+20,
+7
+],
+"ASALCBR": [
+7,
+3
+],
+"ASHAPURMIN": [
+17,
+8
+],
+"ASHIANA": [
+20,
+11
+],
+"ASHIMASYN": [
+17,
+9
+],
+"ASHOKA": [
+16,
+10
+],
+"ASHOKAMET": [
+1,
+0
+],
+"ASHOKLEY": [
+27,
+15
+],
+"ASIANENE": [
+8,
+6
+],
+"ASIANHOTNR": [
+13,
+6
+],
+"ASIANPAINT": [
+37,
+15
+],
+"ASIANTILES": [
+21,
+10
+],
+"ASKAUTOLTD": [
+4,
+1
+],
+"ASMS": [
+14,
+4
+],
+"ASPINWALL": [
+8,
+2
+],
+"ASTEC": [
+20,
+12
+],
+"ASTERDM": [
+17,
+9
+],
+"ASTRAL": [
+27,
+16
+],
+"ASTRAMICRO": [
+24,
+15
+],
+"ASTRAZEN": [
+10,
+7
+],
+"ASTRON": [
+1,
+0
+],
+"ATALREAL": [
+10,
+5
+],
+"ATAM": [
+1,
+0
+],
+"ATFL": [
+17,
+7
+],
+"ATGL": [
+9,
+6
+],
+"ATL": [
+0,
+0
+],
+"ATLANTA": [
+9,
+4
+],
+"ATLANTAA": [
+14,
+7
+],
+"ATLASCYCLE": [
+6,
+2
+],
+"ATUL": [
+17,
+9
+],
+"ATULAUTO": [
+12,
+4
+],
+"AUBANK": [
+19,
+5
+],
+"AURIONPRO": [
+17,
+9
+],
+"AUROPHARMA": [
+26,
+14
+],
+"AURUM": [
+17,
+5
+],
+"AURUS": [
+6,
+1
+],
+"AUSOMENT": [
+13,
+8
+],
+"AUTOAXLES": [
+19,
+9
+],
+"AUTOIND": [
+17,
+8
+],
+"AVADHSUGAR": [
+11,
+2
+],
+"AVALON": [
+5,
+1
+],
+"AVANTEL": [
+1,
+0
+],
+"AVANTI": [
+6,
+5
+],
+"AVANTIFEED": [
+24,
+12
+],
+"AVG": [
+12,
+4
+],
+"AVONMORE": [
+5,
+0
+],
+"AVROIND": [
+12,
+4
+],
+"AVTNPL": [
+15,
+8
+],
+"AWFIS": [
+0,
+0
+],
+"AWHCL": [
+6,
+2
+],
+"AWL": [
+0,
+0
+],
+"AXIS-IT&T": [
+1,
+1
+],
+"AXISBANK": [
+29,
+10
+],
+"AXISCADES": [
+16,
+11
+],
+"AXITA": [
+1,
+0
+],
+"AYMSYNTEX": [
+7,
+3
+],
+"AZAD": [
+2,
+1
+],
+"BAFNAPH": [
+15,
+4
+],
+"BAGFILMS": [
+9,
+3
+],
+"BAHETI": [
+7,
+4
+],
+"BAIDFIN": [
+1,
+0
+],
+"BAJAJ-AUTO": [
+26,
+11
+],
+"BAJAJCON": [
+21,
+11
+],
+"BAJAJCORP": [
+6,
+2
+],
+"BAJAJELEC": [
+20,
+8
+],
+"BAJAJFINSV": [
+30,
+13
+],
+"BAJAJHCARE": [
+3,
+1
+],
+"BAJAJHFL": [
+0,
+0
+],
+"BAJAJHIND": [
+12,
+3
+],
+"BAJAJHLDNG": [
+23,
+9
+],
+"BAJEL": [
+1,
+0
+],
+"BAJFINANCE": [
+40,
+21
+],
+"BALAJEE": [
+0,
+0
+],
+"BALAJITELE": [
+18,
+11
+],
+"BALAMINES": [
+19,
+9
+],
+"BALAXI": [
+10,
+5
+],
+"BALKRISHNA": [
+5,
+3
+],
+"BALKRISIND": [
+24,
+12
+],
+"BALMLAWRIE": [
+19,
+7
+],
+"BALPHARMA": [
+11,
+4
+],
+"BALRAMCHIN": [
+22,
+12
+],
+"BALUFORGE": [
+0,
+0
+],
+"BANARBEADS": [
+15,
+5
+],
+"BANARISUG": [
+14,
+7
+],
+"BANCOINDIA": [
+23,
+9
+],
+"BANDHANBNK": [
+7,
+1
+],
+"BANG": [
+11,
+6
+],
+"BANKA": [
+7,
+1
+],
+"BANKBARODA": [
+26,
+10
+],
+"BANKINDIA": [
+16,
+10
+],
+"BANSALWIRE": [
+0,
+0
+],
+"BANSWRAS": [
+14,
+7
+],
+"BARBEQUE": [
+0,
+0
+],
+"BASF": [
+16,
+8
+],
+"BASML": [
+16,
+2
+],
+"BATAINDIA": [
+24,
+9
+],
+"BAYERCROP": [
+14,
+6
+],
+"BBL": [
+18,
+12
+],
+"BBOX": [
+22,
+7
+],
+"BBTC": [
+18,
+9
+],
+"BBTCL": [
+6,
+4
+],
+"BCG": [
+6,
+5
+],
+"BCLIND": [
+5,
+2
+],
+"BCONCEPTS": [
+14,
+8
+],
+"BDL": [
+19,
+7
+],
+"BEARDSELL": [
+14,
+4
+],
+"BECTORFOOD": [
+9,
+6
+],
+"BEDMUTHA": [
+16,
+10
+],
+"BEL": [
+37,
+18
+],
+"BEML": [
+24,
+14
+],
+"BEPL": [
+17,
+10
+],
+"BERGEPAINT": [
+33,
+14
+],
+"BESTAGRO": [
+1,
+1
+],
+"BETA": [
+11,
+8
+],
+"BFINVEST": [
+16,
+4
+],
+"BFUTILITIE": [
+15,
+5
+],
+"BGRENERGY": [
+13,
+7
+],
+"BHAGCHEM": [
+7,
+4
+],
+"BHAGERIA": [
+10,
+1
+],
+"BHAGYANGR": [
+19,
+9
+],
+"BHANDARI": [
+6,
+4
+],
+"BHARATFIN": [
+4,
+2
+],
+"BHARATFORG": [
+29,
+17
+],
+"BHARATGEAR": [
+12,
+5
+],
+"BHARATRAS": [
+19,
+12
+],
+"BHARATWIRE": [
+14,
+9
+],
+"BHARTIARTL": [
+32,
+17
+],
+"BHARTIHEXA": [
+3,
+1
+],
+"BHARTISHIP": [
+2,
+0
+],
+"BHEL": [
+15,
+10
+],
+"BHUSANSTL": [
+2,
+2
+],
+"BIGBLOC": [
+17,
+7
+],
+"BIKAJI": [
+4,
+2
+],
+"BIL": [
+17,
+7
+],
+"BILVYAPAR": [
+6,
+4
+],
+"BINANIIND": [
+8,
+4
+],
+"BIOCON": [
+32,
+15
+],
+"BIOFILCHEM": [
+5,
+2
+],
+"BIRET": [
+10,
+6
+],
+"BIRLACABLE": [
+19,
+9
+],
+"BIRLACORPN": [
+23,
+8
+],
+"BIRLAMONEY": [
+13,
+8
+],
+"BIRLANU": [
+14,
+6
+],
+"BLAL": [
+1,
+0
+],
+"BLBLIMITED": [
+13,
+3
+],
+"BLISSGVS": [
+21,
+10
+],
+"BLKASHYAP": [
+18,
+9
+],
+"BLS": [
+13,
+7
+],
+"BLSE": [
+3,
+1
+],
+"BLUECHIP": [
+15,
+5
+],
+"BLUECOAST": [
+13,
+6
+],
+"BLUEDART": [
+6,
+3
+],
+"BLUEJET": [
+2,
+1
+],
+"BLUESTARCO": [
+31,
+16
+],
+"BODALCHEM": [
+17,
+12
+],
+"BOHRAIND": [
+6,
+0
+],
+"BOMDYEING": [
+16,
+7
+],
+"BOROLTD": [
+5,
+2
+],
+"BORORENEW": [
+11,
+4
+],
+"BOROSCI": [
+0,
+0
+],
+"BOSCH-HCIL": [
+18,
+7
+],
+"BOSCHLTD": [
+0,
+0
+],
+"BPCL": [
+28,
+12
+],
+"BPL": [
+13,
+5
+],
+"BRENT": [
+22,
+12
+],
+"BRFL": [
+3,
+1
+],
+"BRIGADE": [
+21,
+12
+],
+"BRITANNIA": [
+31,
+19
+],
+"BRNL": [
+2,
+2
+],
+"BROOKS": [
+17,
+9
+],
+"BSE": [
+14,
+10
+],
+"BSHSL": [
+10,
+4
+],
+"BSL": [
+12,
+7
+],
+"BSLIMITED": [
+2,
+1
+],
+"BSOFT": [
+25,
+12
+],
+"BTML": [
+6,
+2
+],
+"BURNPUR": [
+12,
+4
+],
+"BUTTERFLY": [
+11,
+6
+],
+"BVCL": [
+17,
+5
+],
+"BYKE": [
+26,
+7
+],
+"CADILAHC": [
+14,
+5
+],
+"CAIRN": [
+6,
+2
+],
+"CALSOFT": [
+16,
+5
+],
+"CAMLINFINE": [
+10,
+4
+],
+"CAMPUS": [
+2,
+0
+],
+"CAMS": [
+7,
+3
+],
+"CANBK": [
+28,
+12
+],
+"CANFINHOME": [
+29,
+15
+],
+"CANTABIL": [
+22,
+8
+],
+"CAPACITE": [
+7,
+4
+],
+"CAPF": [
+11,
+6
+],
+"CAPITALSFB": [
+1,
+0
+],
+"CAPLIPOINT": [
+16,
+9
+],
+"CAPTRUST": [
+3,
+2
+],
+"CARBORUNIV": [
+21,
+9
+],
+"CARERATING": [
+15,
+6
+],
+"CARTRADE": [
+5,
+4
+],
+"CARYSIL": [
+7,
+2
+],
+"CASTROLIND": [
+16,
+6
+],
+"CCAVENUE": [
+15,
+4
+],
+"CCCL": [
+12,
+6
+],
+"CCHHL": [
+9,
+4
+],
+"CCL": [
+29,
+12
+],
+"CDSL": [
+13,
+8
+],
+"CEATLTD": [
+21,
+12
+],
+"CEBBCO": [
+11,
+3
+],
+"CEIGALL": [
+2,
+1
+],
+"CELEBRITY": [
+12,
+4
+],
+"CELESTIAL": [
+8,
+3
+],
+"CELLO": [
+0,
+0
+],
+"CEMPRO": [
+24,
+18
+],
+"CENTENKA": [
+24,
+11
+],
+"CENTEXT": [
+15,
+7
+],
+"CENTRALBK": [
+15,
+7
+],
+"CENTRUM": [
+4,
+2
+],
+"CENTUM": [
+19,
+9
+],
+"CENTURYPLY": [
+25,
+12
+],
+"CENTURYTEX": [
+20,
+13
+],
+"CERA": [
+17,
+12
+],
+"CEREBRAINT": [
+17,
+8
+],
+"CESC": [
+30,
+13
+],
+"CGCL": [
+29,
+9
+],
+"CGPOWER": [
+27,
+11
+],
+"CHALET": [
+13,
+5
+],
+"CHAMBLFERT": [
+27,
+11
+],
+"CHEMBOND": [
+7,
+3
+],
+"CHEMCON": [
+1,
+0
+],
+"CHEMFAB": [
+9,
+5
+],
+"CHEMFALKAL": [
+5,
+1
+],
+"CHEMPLASTS": [
+3,
+2
+],
+"CHENNPETRO": [
+25,
+12
+],
+"CHEVIOT": [
+4,
+1
+],
+"CHOICEIN": [
+11,
+6
+],
+"CHOLAFIN": [
+37,
+15
+],
+"CHOLAHLDNG": [
+23,
+12
+],
+"CHROMATIC": [
+3,
+0
+],
+"CIEINDIA": [
+24,
+11
+],
+"CIGNITITEC": [
+17,
+8
+],
+"CINELINE": [
+17,
+6
+],
+"CINEVISTA": [
+16,
+6
+],
+"CIPLA": [
+28,
+10
+],
+"CLEAN": [
+3,
+1
+],
+"CLEDUCATE": [
+9,
+6
+],
+"CLNINDIA": [
+11,
+6
+],
+"CLSEL": [
+6,
+3
+],
+"CMAHENDRA": [
+1,
+1
+],
+"CMC": [
+4,
+2
+],
+"CMSINFO": [
+7,
+3
+],
+"CNL": [
+12,
+7
+],
+"COALINDIA": [
+24,
+11
+],
+"COASTCORP": [
+3,
+1
+],
+"COCHINSHIP": [
+10,
+6
+],
+"COFFEEDAY": [
+7,
+4
+],
+"COFORGE": [
+30,
+14
+],
+"COHANCE": [
+10,
+5
+],
+"COLPAL": [
+26,
+14
+],
+"COMPUSOFT": [
+7,
+3
+],
+"COMSYN": [
+5,
+3
+],
+"CONCOR": [
+26,
+12
+],
+"CONCORDBIO": [
+1,
+1
+],
+"CONFIPET": [
+8,
+2
+],
+"CONSOFINVT": [
+16,
+8
+],
+"CONTROLPR": [
+12,
+8
+],
+"CORALFINAC": [
+3,
+3
+],
+"CORDSCABLE": [
+15,
+9
+],
+"COREEDUTEC": [
+0,
+0
+],
+"COROMANDEL": [
+24,
+16
+],
+"CORPBANK": [
+5,
+1
+],
+"COSMOFILMS": [
+14,
+10
+],
+"COSMOFIRST": [
+18,
+12
+],
+"COUNCODOS": [
+10,
+1
+],
+"COX&KINGS": [
+9,
+5
+],
+"CPCAP": [
+13,
+7
+],
+"CRAFTSMAN": [
+4,
+2
+],
+"CREATIVEYE": [
+16,
+4
+],
+"CREDITACC": [
+13,
+5
+],
+"CREST": [
+19,
+8
+],
+"CRESTO": [
+5,
+0
+],
+"CRISIL": [
+21,
+7
+],
+"CROMPGREAV": [
+7,
+2
+],
+"CROMPTON": [
+12,
+5
+],
+"CROWN": [
+9,
+7
+],
+"CSBBANK": [
+8,
+5
+],
+"CSLFINANCE": [
+6,
+1
+],
+"CTE": [
+16,
+7
+],
+"CUB": [
+33,
+15
+],
+"CUBEXTUB": [
+20,
+7
+],
+"CUMMINSIND": [
+24,
+13
+],
+"CUPID": [
+16,
+9
+],
+"CURAA": [
+5,
+2
+],
+"CYBERMEDIA": [
+11,
+4
+],
+"CYBERTECH": [
+11,
+3
+],
+"CYIENT": [
+26,
+16
+],
+"CYIENTDLM": [
+3,
+1
+],
+"DAAWAT": [
+19,
+11
+],
+"DABUR": [
+30,
+13
+],
+"DALBHARAT": [
+9,
+5
+],
+"DALMIABHA": [
+14,
+11
+],
+"DALMIASUG": [
+18,
+6
+],
+"DAMODARIND": [
+6,
+3
+],
+"DANGEE": [
+5,
+3
+],
+"DATAMATICS": [
+14,
+8
+],
+"DATAPATTNS": [
+4,
+2
+],
+"DAVANGERE": [
+0,
+0
+],
+"DBCORP": [
+18,
+8
+],
+"DBL": [
+12,
+7
+],
+"DBOL": [
+2,
+1
+],
+"DBREALTY": [
+11,
+6
+],
+"DBSTOCKBRO": [
+19,
+3
+],
+"DCAL": [
+19,
+7
+],
+"DCBBANK": [
+27,
+13
+],
+"DCI": [
+13,
+3
+],
+"DCM": [
+11,
+4
+],
+"DCMFINSERV": [
+9,
+4
+],
+"DCMNVL": [
+5,
+5
+],
+"DCMSHRIRAM": [
+23,
+9
+],
+"DCMSRIND": [
+3,
+1
+],
+"DCW": [
+18,
+6
+],
+"DCXINDIA": [
+1,
+0
+],
+"DECCANCE": [
+17,
+10
+],
+"DEEDEV": [
+2,
+1
+],
+"DEEPAKFERT": [
+26,
+14
+],
+"DEEPAKNTR": [
+30,
+17
+],
+"DEEPIND": [
+9,
+4
+],
+"DEEPINDS": [
+11,
+4
+],
+"DELHIVERY": [
+7,
+2
+],
+"DELPHIFX": [
+15,
+6
+],
+"DELTACORP": [
+13,
+7
+],
+"DELTAMAGNT": [
+15,
+5
+],
+"DEN": [
+12,
+4
+],
+"DENABANK": [
+3,
+2
+],
+"DENORA": [
+17,
+7
+],
+"DEVIT": [
+16,
+6
+],
+"DEVYANI": [
+3,
+1
+],
+"DFMFOODS": [
+7,
+3
+],
+"DGCONTENT": [
+10,
+4
+],
+"DHAMPURSUG": [
+17,
+9
+],
+"DHANBANK": [
+12,
+6
+],
+"DHANI": [
+2,
+0
+],
+"DHANUKA": [
+22,
+15
+],
+"DHARMAJ": [
+4,
+1
+],
+"DHFL": [
+16,
+7
+],
+"DHRUV": [
+4,
+0
+],
+"DHUNINV": [
+15,
+9
+],
+"DIACABS": [
+15,
+5
+],
+"DIAMINESQ": [
+0,
+0
+],
+"DIAMONDYD": [
+7,
+2
+],
+"DIAPOWER": [
+8,
+1
+],
+"DICIND": [
+20,
+7
+],
+"DIFFNKG": [
+2,
+1
+],
+"DIGIDRIVE": [
+0,
+0
+],
+"DIGISPICE": [
+10,
+3
+],
+"DIGJAMLMTD": [
+13,
+2
+],
+"DISHMAN": [
+8,
+3
+],
+"DISHTV": [
+13,
+4
+],
+"DIVGIITTS": [
+3,
+2
+],
+"DIVISLAB": [
+23,
+13
+],
+"DIXON": [
+8,
+6
+],
+"DJML": [
+6,
+2
+],
+"DLF": [
+23,
+11
+],
+"DLINKINDIA": [
+20,
+9
+],
+"DMART": [
+14,
+8
+],
+"DMCC": [
+5,
+0
+],
+"DNAMEDIA": [
+13,
+7
+],
+"DODLA": [
+8,
+3
+],
+"DOLATALGO": [
+6,
+1
+],
+"DOLLAR": [
+8,
+4
+],
+"DOLLEX": [
+0,
+0
+],
+"DOLPHIN": [
+5,
+4
+],
+"DOLPHINOFF": [
+4,
+1
+],
+"DOMS": [
+1,
+0
+],
+"DONEAR": [
+12,
+5
+],
+"DOW": [
+0,
+0
+],
+"DPABHUSHAN": [
+15,
+9
+],
+"DPSCLTD": [
+14,
+5
+],
+"DPTL": [
+1,
+0
+],
+"DPWIRES": [
+8,
+4
+],
+"DRCSYSTEMS": [
+5,
+2
+],
+"DREAMFOLKS": [
+0,
+0
+],
+"DREDGECORP": [
+15,
+6
+],
+"DRREDDY": [
+29,
+11
+],
+"DSKULKARNI": [
+3,
+1
+],
+"DSSL": [
+20,
+9
+],
+"DTIL": [
+5,
+3
+],
+"DUCON": [
+9,
+3
+],
+"DVL": [
+13,
+9
+],
+"DWARKESH": [
+14,
+6
+],
+"DYCL": [
+5,
+1
+],
+"DYNAMATECH": [
+8,
+6
+],
+"DYNPRO": [
+8,
+3
+],
+"E2E": [
+15,
+7
+],
+"EASEMYTRIP": [
+2,
+0
+],
+"EASTSILK": [
+17,
+8
+],
+"EASUNREYRL": [
+3,
+0
+],
+"ECLERX": [
+23,
+12
+],
+"ECOSMOBLTY": [
+0,
+0
+],
+"EDELWEISS": [
+22,
+12
+],
+"EDL": [
+3,
+1
+],
+"EDUCOMP": [
+5,
+2
+],
+"EICHERMOT": [
+31,
+18
+],
+"EIDPARRY": [
+22,
+11
+],
+"EIFFL": [
+9,
+2
+],
+"EIHAHOTELS": [
+20,
+10
+],
+"EIHOTEL": [
+22,
+12
+],
+"EIMCOELECO": [
+12,
+5
+],
+"EKC": [
+17,
+5
+],
+"ELDEHSG": [
+4,
+2
+],
+"ELDERPHARM": [
+2,
+0
+],
+"ELECON": [
+17,
+11
+],
+"ELECTCAST": [
+18,
+10
+],
+"ELECTHERM": [
+17,
+8
+],
+"ELGIEQUIP": [
+22,
+12
+],
+"ELGIRUBCO": [
+11,
+5
+],
+"ELIN": [
+2,
+1
+],
+"EMAMIINFRA": [
+7,
+3
+],
+"EMAMILTD": [
+16,
+10
+],
+"EMAMIREAL": [
+11,
+6
+],
+"EMBASSY": [
+13,
+5
+],
+"EMBDL": [
+14,
+8
+],
+"EMCURE": [
+4,
+1
+],
+"EMIL": [
+3,
+1
+],
+"EMKAY": [
+16,
+11
+],
+"EMMBI": [
+15,
+7
+],
+"EMSLIMITED": [
+2,
+0
+],
+"EMUDHRA": [
+4,
+2
+],
+"ENDURANCE": [
+18,
+6
+],
+"ENERGYDEV": [
+10,
+5
+],
+"ENGINERSIN": [
+23,
+6
+],
+"ENIL": [
+21,
+8
+],
+"ENTERO": [
+2,
+1
+],
+"EPACK": [
+0,
+0
+],
+"EPIGRAL": [
+3,
+2
+],
+"EPL": [
+31,
+11
+],
+"EQUIPPP": [
+11,
+1
+],
+"EQUITAS": [
+3,
+1
+],
+"EQUITASBNK": [
+5,
+4
+],
+"ERAINFRA": [
+1,
+0
+],
+"ERIS": [
+13,
+6
+],
+"EROSMEDIA": [
+9,
+5
+],
+"ESABINDIA": [
+22,
+8
+],
+"ESAFSFB": [
+1,
+1
+],
+"ESCORTS": [
+24,
+13
+],
+"ESSAROIL": [
+2,
+1
+],
+"ESSARPORTS": [
+2,
+0
+],
+"ESSARSHPNG": [
+12,
+2
+],
+"ESSDEE": [
+3,
+1
+],
+"ESSELPACK": [
+19,
+8
+],
+"ESSENTIA": [
+11,
+2
+],
+"ESTER": [
+17,
+8
+],
+"ETERNAL": [
+9,
+5
+],
+"ETHOSLTD": [
+6,
+3
+],
+"EUREKAFORB": [
+1,
+0
+],
+"EUROBOND": [
+3,
+2
+],
+"EUROTEXIND": [
+12,
+1
+],
+"EVEREADY": [
+21,
+12
+],
+"EVERESTIND": [
+17,
+10
+],
+"EVERONN": [
+1,
+0
+],
+"EVONILE": [
+4,
+2
+],
+"EXCEL": [
+10,
+4
+],
+"EXCELCROP": [
+11,
+7
+],
+"EXCELINDUS": [
+19,
+8
+],
+"EXICOM": [
+1,
+0
+],
+"EXIDEIND": [
+22,
+11
+],
+"EXPLEOSOL": [
+14,
+7
+],
+"EXXARO": [
+2,
+0
+],
+"FACT": [
+18,
+12
+],
+"FAGBEARING": [
+4,
+3
+],
+"FAIRCHEM": [
+3,
+1
+],
+"FAIRCHEMOR": [
+4,
+0
+],
+"FAZE3Q": [
+2,
+0
+],
+"FCL": [
+20,
+9
+],
+"FCONSUMER": [
+12,
+6
+],
+"FCSSOFT": [
+12,
+6
+],
+"FDC": [
+18,
+8
+],
+"FEDDERLOYD": [
+5,
+1
+],
+"FEDERALBNK": [
+30,
+14
+],
+"FEDFINA": [
+2,
+1
+],
+"FIBERWEB": [
+2,
+1
+],
+"FIEMIND": [
+24,
+9
+],
+"FILATEX": [
+23,
+9
+],
+"FILATFASH": [
+0,
+0
+],
+"FINANTECH": [
+1,
+1
+],
+"FINCABLES": [
+24,
+15
+],
+"FINEORG": [
+6,
+3
+],
+"FINOPB": [
+3,
+2
+],
+"FINPIPE": [
+25,
+12
+],
+"FIRSTCRY": [
+0,
+0
+],
+"FIVESTAR": [
+4,
+0
+],
+"FLAIR": [
+3,
+0
+],
+"FLEXITUFF": [
+14,
+3
+],
+"FLFL": [
+9,
+4
+],
+"FLUOROCHEM": [
+7,
+3
+],
+"FMGOETZE": [
+19,
+6
+],
+"FMNL": [
+8,
+4
+],
+"FOCUS": [
+9,
+5
+],
+"FOODSIN": [
+2,
+1
+],
+"FORCEMOT": [
+7,
+1
+],
+"FORTIS": [
+28,
+9
+],
+"FOSECOIND": [
+18,
+10
+],
+"FRETAIL": [
+3,
+2
+],
+"FRL": [
+3,
+0
+],
+"FSC": [
+0,
+0
+],
+"FSL": [
+25,
+12
+],
+"FTSE": [
+41,
+13
+],
+"FUSION": [
+2,
+0
+],
+"GABRIEL": [
+27,
+17
+],
+"GAEL": [
+21,
+11
+],
+"GAIL": [
+24,
+7
+],
+"GAL": [
+9,
+4
+],
+"GALAPREC": [
+1,
+1
+],
+"GALAXYSURF": [
+13,
+4
+],
+"GALLANTT": [
+19,
+10
+],
+"GALLISPAT": [
+12,
+5
+],
+"GANDHAR": [
+1,
+1
+],
+"GANDHITUBE": [
+21,
+7
+],
+"GANECOS": [
+14,
+11
+],
+"GANESHBE": [
+7,
+1
+],
+"GANESHHOU": [
+19,
+10
+],
+"GANESHHOUC": [
+16,
+8
+],
+"GANGAFORGE": [
+10,
+5
+],
+"GANGESSECU": [
+8,
+3
+],
+"GARFIBRES": [
+26,
+14
+],
+"GARWALLROP": [
+12,
+7
+],
+"GATECH": [
+3,
+2
+],
+"GATECHDVR": [
+7,
+2
+],
+"GATEWAY": [
+2,
+1
+],
+"GATI": [
+9,
+5
+],
+"GAYAHWS": [
+11,
+4
+],
+"GAYAPROJ": [
+17,
+8
+],
+"GDL": [
+13,
+4
+],
+"GEECEE": [
+17,
+9
+],
+"GEEKAYWIRE": [
+12,
+5
+],
+"GENCON": [
+4,
+0
+],
+"GENESYS": [
+12,
+6
+],
+"GENUSPAPER": [
+11,
+2
+],
+"GENUSPOWER": [
+22,
+7
+],
+"GEOJITBNPP": [
+5,
+3
+],
+"GEOJITFSL": [
+17,
+12
+],
+"GEOMETRIC": [
+6,
+1
+],
+"GEPIL": [
+6,
+3
+],
+"GESHIP": [
+20,
+13
+],
+"GET&D": [
+10,
+4
+],
+"GFLLIMITED": [
+15,
+7
+],
+"GHCL": [
+22,
+13
+],
+"GHCLTEXTIL": [
+3,
+2
+],
+"GICHSGFIN": [
+17,
+11
+],
+"GICL": [
+13,
+4
+],
+"GICRE": [
+9,
+3
+],
+"GILLANDERS": [
+13,
+4
+],
+"GILLETTE": [
+11,
+9
+],
+"GINNIFILA": [
+13,
+7
+],
+"GIPCL": [
+24,
+6
+],
+"GITANJALI": [
+4,
+1
+],
+"GKWLIMITED": [
+12,
+5
+],
+"GLAND": [
+7,
+2
+],
+"GLAXO": [
+18,
+11
+],
+"GLENMARK": [
+26,
+14
+],
+"GLFL": [
+19,
+6
+],
+"GLOBAL": [
+12,
+6
+],
+"GLOBALE": [
+0,
+0
+],
+"GLOBALVECT": [
+14,
+7
+],
+"GLOBE": [
+7,
+3
+],
+"GLOBOFFS": [
+6,
+3
+],
+"GLOBUSSPR": [
+13,
+6
+],
+"GLODYNE": [
+0,
+0
+],
+"GLOSTERLTD": [
+0,
+0
+],
+"GLS": [
+5,
+4
+],
+"GMBREW": [
+21,
+9
+],
+"GMDCLTD": [
+17,
+10
+],
+"GMMPFAUDLR": [
+13,
+3
+],
+"GMRAIRPORT": [
+24,
+13
+],
+"GMRINFRA": [
+20,
+9
+],
+"GMRP&UI": [
+6,
+4
+],
+"GNA": [
+8,
+7
+],
+"GNFC": [
+23,
+8
+],
+"GOACARBON": [
+14,
+8
+],
+"GOCLCORP": [
+15,
+7
+],
+"GOCOLORS": [
+3,
+0
+],
+"GODFRYPHLP": [
+13,
+6
+],
+"GODIGIT": [
+2,
+0
+],
+"GODREJAGRO": [
+7,
+4
+],
+"GODREJCP": [
+26,
+12
+],
+"GODREJIND": [
+26,
+13
+],
+"GODREJPROP": [
+24,
+12
+],
+"GOKEX": [
+17,
+6
+],
+"GOKUL": [
+13,
+5
+],
+"GOKULAGRO": [
+16,
+10
+],
+"GOLDIAM": [
+24,
+13
+],
+"GOLDTECH": [
+15,
+7
+],
+"GOODLUCK": [
+16,
+8
+],
+"GOODYEAR": [
+6,
+0
+],
+"GOPAL": [
+0,
+0
+],
+"GOYALALUM": [
+0,
+0
+],
+"GPIL": [
+18,
+10
+],
+"GPPL": [
+18,
+11
+],
+"GPTHEALTH": [
+2,
+0
+],
+"GPTINFRA": [
+12,
+8
+],
+"GRANULES": [
+22,
+14
+],
+"GRAPHITE": [
+21,
+8
+],
+"GRASIM": [
+32,
+16
+],
+"GRAUWEIL": [
+4,
+3
+],
+"GRAVITA": [
+24,
+14
+],
+"GREAVESCOT": [
+19,
+6
+],
+"GREENLAM": [
+15,
+6
+],
+"GREENPANEL": [
+7,
+5
+],
+"GREENPLY": [
+21,
+11
+],
+"GREENPOWER": [
+12,
+5
+],
+"GRINDWELL": [
+30,
+15
+],
+"GRINFRA": [
+3,
+1
+],
+"GRMOVER": [
+5,
+4
+],
+"GROBTEA": [
+8,
+5
+],
+"GRPLTD": [
+10,
+7
+],
+"GRSE": [
+11,
+5
+],
+"GRUH": [
+14,
+8
+],
+"GRWRHITECH": [
+3,
+2
+],
+"GSFC": [
+17,
+9
+],
+"GSKCONS": [
+2,
+2
+],
+"GSLSU": [
+0,
+0
+],
+"GSS": [
+14,
+6
+],
+"GTECJAINX": [
+8,
+3
+],
+"GTL": [
+7,
+2
+],
+"GTLINFRA": [
+8,
+4
+],
+"GTOFFSHORE": [
+1,
+1
+],
+"GTPL": [
+7,
+2
+],
+"GUFICBIO": [
+20,
+9
+],
+"GUJALKALI": [
+22,
+8
+],
+"GUJAPOLLO": [
+15,
+7
+],
+"GUJENERGY": [
+16,
+6
+],
+"GUJFLUORO": [
+9,
+5
+],
+"GUJGASLTD": [
+15,
+6
+],
+"GUJRAFFIA": [
+6,
+2
+],
+"GUJRATGAS": [
+4,
+4
+],
+"GULFOILLUB": [
+16,
+7
+],
+"GULFPETRO": [
+14,
+7
+],
+"GULPOLY": [
+12,
+3
+],
+"GVKPIL": [
+10,
+8
+],
+"GVPIL": [
+15,
+8
+],
+"GVPTECH": [
+4,
+1
+],
+"GVT&D": [
+18,
+10
+],
+"HAL": [
+17,
+11
+],
+"HALEOSLABS": [
+9,
+6
+],
+"HANGSENG": [
+0,
+0
+],
+"HANUNG": [
+1,
+1
+],
+"HAPPSTMNDS": [
+1,
+0
+],
+"HAPPYFORGE": [
+4,
+2
+],
+"HARDWYN": [
+4,
+1
+],
+"HARIOMPIPE": [
+3,
+1
+],
+"HARRMALAYA": [
+18,
+3
+],
+"HARSHA": [
+3,
+1
+],
+"HATHWAY": [
+9,
+3
+],
+"HATSUN": [
+14,
+8
+],
+"HAVELLS": [
+31,
+15
+],
+"HAVISHA": [
+5,
+3
+],
+"HBLENGINE": [
+18,
+9
+],
+"HBLPOWER": [
+16,
+8
+],
+"HBSL": [
+12,
+9
+],
+"HCC": [
+14,
+5
+],
+"HCG": [
+18,
+10
+],
+"HCL-INSYS": [
+9,
+3
+],
+"HCLTECH": [
+33,
+18
+],
+"HDFC": [
+25,
+12
+],
+"HDFCAMC": [
+14,
+5
+],
+"HDFCBANK": [
+38,
+18
+],
+"HDFCLIFE": [
+16,
+6
+],
+"HDFCSML250": [
+7,
+3
+],
+"HDIL": [
+12,
+3
+],
+"HEADSUP": [
+3,
+1
+],
+"HEALTHX": [
+14,
+8
+],
+"HECPROJECT": [
+9,
+3
+],
+"HEGAM": [
+24,
+13
+],
+"HEIDELBERG": [
+19,
+9
+],
+"HELIOSMATH": [
+4,
+2
+],
+"HEMIPROP": [
+5,
+2
+],
+"HERANBA": [
+2,
+1
+],
+"HERCULES": [
+15,
+6
+],
+"HERITGFOOD": [
+24,
+10
+],
+"HEROMOTOCO": [
+22,
+10
+],
+"HESTERBIO": [
+12,
+7
+],
+"HEXATRADEX": [
+13,
+9
+],
+"HEXAWARE": [
+13,
+7
+],
+"HFCL": [
+20,
+10
+],
+"HGINFRA": [
+11,
+5
+],
+"HGM": [
+11,
+5
+],
+"HGS": [
+17,
+8
+],
+"HIKAL": [
+22,
+7
+],
+"HIL": [
+14,
+6
+],
+"HILTON": [
+14,
+8
+],
+"HIMATSEIDE": [
+22,
+10
+],
+"HINDALCO": [
+28,
+14
+],
+"HINDCOMPOS": [
+11,
+5
+],
+"HINDCON": [
+14,
+4
+],
+"HINDCOPPER": [
+17,
+7
+],
+"HINDOILEXP": [
+15,
+7
+],
+"HINDPETRO": [
+28,
+14
+],
+"HINDUJAVEN": [
+8,
+4
+],
+"HINDUNILVR": [
+30,
+13
+],
+"HINDWAREAP": [
+7,
+4
+],
+"HINDZINC": [
+33,
+15
+],
+"HIRECT": [
+21,
+13
+],
+"HISARMETAL": [
+10,
+5
+],
+"HITACHIHOM": [
+6,
+4
+],
+"HITECH": [
+18,
+13
+],
+"HITECHCORP": [
+12,
+6
+],
+"HITECHGEAR": [
+17,
+7
+],
+"HITECHPLAS": [
+7,
+4
+],
+"HLEGLAS": [
+3,
+1
+],
+"HLVLTD": [
+10,
+5
+],
+"HMAAGRO": [
+0,
+0
+],
+"HMT": [
+15,
+3
+],
+"HMVL": [
+15,
+8
+],
+"HNDFDS": [
+8,
+5
+],
+"HOMEFIRST": [
+6,
+2
+],
+"HONASA": [
+3,
+1
+],
+"HONAUT": [
+3,
+2
+],
+"HONDAPOWER": [
+15,
+8
+],
+"HOVS": [
+10,
+5
+],
+"HPAL": [
+1,
+1
+],
+"HPIL": [
+9,
+4
+],
+"HPL": [
+11,
+9
+],
+"HSCL": [
+24,
+13
+],
+"HSIL": [
+12,
+11
+],
+"HTMEDIA": [
+13,
+5
+],
+"HUBTOWN": [
+16,
+9
+],
+"HUDCO": [
+13,
+5
+],
+"HUHTAMAKI": [
+22,
+8
+],
+"HYBRIDFIN": [
+6,
+1
+],
+"IBREALEST": [
+12,
+8
+],
+"IBULHSGFIN": [
+15,
+5
+],
+"IBULISL": [
+0,
+0
+],
+"IBULLSLTD": [
+19,
+8
+],
+"IBVENTURES": [
+9,
+4
+],
+"ICDSLTD": [
+5,
+2
+],
+"ICEMAKE": [
+14,
+6
+],
+"ICICIBANK": [
+39,
+16
+],
+"ICICIGI": [
+17,
+5
+],
+"ICICILIFE": [
+12,
+4
+],
+"ICICILIQ": [
+0,
+0
+],
+"ICIL": [
+21,
+14
+],
+"ICRA": [
+15,
+6
+],
+"IDBI": [
+16,
+8
+],
+"IDEA": [
+17,
+7
+],
+"IDEAFORGE": [
+1,
+1
+],
+"IDFC": [
+15,
+5
+],
+"IDFCBANK": [
+1,
+0
+],
+"IDFCFIRSTB": [
+14,
+7
+],
+"IEX": [
+12,
+6
+],
+"IFBAGRO": [
+16,
+8
+],
+"IFBIND": [
+17,
+7
+],
+"IFCI": [
+17,
+7
+],
+"IFGLEXPOR": [
+17,
+7
+],
+"IFGLREFRAC": [
+7,
+5
+],
+"IGARASHI": [
+22,
+14
+],
+"IGL": [
+28,
+13
+],
+"IGPL": [
+21,
+11
+],
+"IIFL": [
+27,
+12
+],
+"IIFLCAPS": [
+11,
+3
+],
+"IIFLSEC": [
+9,
+2
+],
+"IIFLWAM": [
+5,
+4
+],
+"IITL": [
+11,
+2
+],
+"IKIO": [
+1,
+0
+],
+"IL&FSENGG": [
+13,
+6
+],
+"IL&FSTRANS": [
+13,
+2
+],
+"IMAGICAA": [
+12,
+3
+],
+"IMFA": [
+23,
+12
+],
+"IMPAL": [
+20,
+8
+],
+"INCREDIBLE": [
+5,
+2
+],
+"INDBANK": [
+15,
+9
+],
+"INDGN": [
+1,
+1
+],
+"INDHOTEL": [
+31,
+12
+],
+"INDIACEM": [
+20,
+8
+],
+"INDIAGLYCO": [
+20,
+9
+],
+"INDIAMART": [
+9,
+3
+],
+"INDIANB": [
+24,
+10
+],
+"INDIANCARD": [
+12,
+4
+],
+"INDIANHUME": [
+22,
+8
+],
+"INDIASHLTR": [
+2,
+1
+],
+"INDIAVIX": [
+9,
+1
+],
+"INDIGO": [
+16,
+6
+],
+"INDIGOPNTS": [
+5,
+0
+],
+"INDNIPPON": [
+20,
+10
+],
+"INDOAMIN": [
+3,
+1
+],
+"INDOBORAX": [
+6,
+3
+],
+"INDOCO": [
+11,
+4
+],
+"INDORAMA": [
+11,
+2
+],
+"INDOSTAR": [
+6,
+4
+],
+"INDOTECH": [
+17,
+8
+],
+"INDOTHAI": [
+20,
+12
+],
+"INDOUS": [
+0,
+0
+],
+"INDOWIND": [
+13,
+9
+],
+"INDRAMEDCO": [
+21,
+11
+],
+"INDSWFTLAB": [
+15,
+7
+],
+"INDTERRAIN": [
+17,
+7
+],
+"INDUSINDBK": [
+34,
+16
+],
+"INDUSTOWER": [
+21,
+9
+],
+"INEOSSTYRO": [
+7,
+3
+],
+"INFIBEAM": [
+14,
+4
+],
+"INFINITE": [
+11,
+6
+],
+"INFOBEAN": [
+9,
+2
+],
+"INFOMEDIA": [
+16,
+0
+],
+"INFRATEL": [
+7,
+4
+],
+"INFY": [
+31,
+14
+],
+"INGERRAND": [
+20,
+8
+],
+"INGVYSYABK": [
+6,
+1
+],
+"INNOVACAP": [
+2,
+1
+],
+"INNOVANA": [
+8,
+4
+],
+"INOXGREEN": [
+4,
+3
+],
+"INOXINDIA": [
+3,
+1
+],
+"INOXLEISUR": [
+18,
+9
+],
+"INOXWIND": [
+10,
+3
+],
+"INSECTICID": [
+20,
+9
+],
+"INSPIRISYS": [
+17,
+4
+],
+"INTELLECT": [
+14,
+4
+],
+"INTENTECH": [
+7,
+4
+],
+"INTERARCH": [
+0,
+0
+],
+"INTLCONV": [
+4,
+0
+],
+"INVENTURE": [
+16,
+4
+],
+"IOB": [
+9,
+5
+],
+"IOC": [
+29,
+12
+],
+"IOLCP": [
+18,
+9
+],
+"IONEXCHANG": [
+6,
+1
+],
+"IPAPPM": [
+8,
+1
+],
+"IPCALAB": [
+26,
+14
+],
+"IPL": [
+3,
+2
+],
+"IRB": [
+25,
+9
+],
+"IRCON": [
+15,
+7
+],
+"IRCTC": [
+6,
+3
+],
+"IREDA": [
+1,
+0
+],
+"IRFC": [
+6,
+3
+],
+"IRIS": [
+5,
+4
+],
+"IRISDOREME": [
+10,
+6
+],
+"IRMENERGY": [
+1,
+0
+],
+"ISEC": [
+11,
+5
+],
+"ISFT": [
+16,
+6
+],
+"ISGEC": [
+6,
+4
+],
+"ITC": [
+28,
+13
+],
+"ITDC": [
+3,
+2
+],
+"ITDCEM": [
+20,
+15
+],
+"ITI": [
+11,
+7
+],
+"IVC": [
+13,
+6
+],
+"IVP": [
+17,
+7
+],
+"IXIGO": [
+1,
+1
+],
+"IZMO": [
+18,
+7
+],
+"J&KBANK": [
+17,
+7
+],
+"JAGRAN": [
+19,
+7
+],
+"JAGSNPHARM": [
+16,
+9
+],
+"JAIBALAJI": [
+15,
+8
+],
+"JAICORPLTD": [
+20,
+6
+],
+"JAIPURKURT": [
+8,
+6
+],
+"JAMNAAUTO": [
+29,
+10
+],
+"JASH": [
+13,
+7
+],
+"JAYAGROGN": [
+15,
+6
+],
+"JAYBARMARU": [
+21,
+9
+],
+"JAYNECOIND": [
+14,
+5
+],
+"JAYSREETEA": [
+14,
+7
+],
+"JBFIND": [
+10,
+7
+],
+"JBMA": [
+21,
+15
+],
+"JCHAC": [
+7,
+3
+],
+"JETAIRWAYS": [
+7,
+3
+],
+"JETFREIGHT": [
+9,
+4
+],
+"JGCHEM": [
+2,
+1
+],
+"JHS": [
+17,
+4
+],
+"JINDALPHOT": [
+13,
+7
+],
+"JINDALPOLY": [
+13,
+5
+],
+"JINDALSAW": [
+23,
+9
+],
+"JINDALSTEL": [
+23,
+12
+],
+"JINDCOT": [
+2,
+1
+],
+"JINDRILL": [
+13,
+6
+],
+"JINDWORLD": [
+18,
+7
+],
+"JIOFIN": [
+0,
+0
+],
+"JISLDVREQS": [
+18,
+7
+],
+"JISLJALEQS": [
+18,
+10
+],
+"JITFINFRA": [
+7,
+4
+],
+"JKCEMENT": [
+25,
+17
+],
+"JKIL": [
+15,
+9
+],
+"JKLAKSHMI": [
+19,
+7
+],
+"JKPAPER": [
+26,
+7
+],
+"JKTYRE": [
+23,
+15
+],
+"JLHL": [
+5,
+1
+],
+"JMA": [
+11,
+6
+],
+"JMCPROJECT": [
+16,
+5
+],
+"JMFINANCIL": [
+19,
+14
+],
+"JMTAUTOLTD": [
+10,
+4
+],
+"JNKINDIA": [
+1,
+1
+],
+"JOCIL": [
+13,
+6
+],
+"JPASSOCIAT": [
+10,
+3
+],
+"JPOLYINVST": [
+9,
+7
+],
+"JPPOWER": [
+16,
+6
+],
+"JSFB": [
+1,
+0
+],
+"JSL": [
+25,
+12
+],
+"JSLHISAR": [
+9,
+6
+],
+"JSLL": [
+6,
+4
+],
+"JSWDULUX": [
+28,
+9
+],
+"JSWENERGY": [
+21,
+10
+],
+"JSWHL": [
+16,
+6
+],
+"JSWINFRA": [
+4,
+1
+],
+"JSWSTEEL": [
+37,
+16
+],
+"JTEKTINDIA": [
+14,
+7
+],
+"JTLIND": [
+6,
+2
+],
+"JUBILANT": [
+5,
+5
+],
+"JUBLFOOD": [
+22,
+11
+],
+"JUBLINDS": [
+18,
+8
+],
+"JUBLINGREA": [
+6,
+2
+],
+"JUBLPHARMA": [
+15,
+10
+],
+"JUMPNET": [
+1,
+0
+],
+"JUNIPER": [
+0,
+0
+],
+"JUSTDIAL": [
+10,
+2
+],
+"JWL": [
+19,
+7
+],
+"JYOTHYLAB": [
+20,
+10
+],
+"JYOTICNC": [
+1,
+0
+],
+"JYOTISTRUC": [
+17,
+4
+],
+"KABRAEXTRU": [
+18,
+8
+],
+"KAJARIACER": [
+30,
+13
+],
+"KAKATCEM": [
+11,
+5
+],
+"KALAMANDIR": [
+2,
+0
+],
+"KALINDEE": [
+4,
+2
+],
+"KALPATPOWR": [
+21,
+8
+],
+"KALYANIFRG": [
+21,
+5
+],
+"KALYANKJIL": [
+8,
+7
+],
+"KAMATHOTEL": [
+15,
+7
+],
+"KAMDHENU": [
+23,
+12
+],
+"KAMOPAINTS": [
+2,
+0
+],
+"KANANIIND": [
+7,
+3
+],
+"KANORICHEM": [
+12,
+7
+],
+"KANPRPLA": [
+6,
+2
+],
+"KANSAINER": [
+24,
+12
+],
+"KAPSTON": [
+16,
+4
+],
+"KARDA": [
+8,
+3
+],
+"KARMAENG": [
+10,
+6
+],
+"KARURVYSYA": [
+23,
+13
+],
+"KAUSHALYA": [
+11,
+5
+],
+"KAVDEFENCE": [
+11,
+6
+],
+"KAYA": [
+11,
+3
+],
+"KAYNES": [
+1,
+0
+],
+"KCP": [
+20,
+6
+],
+"KCPSUGIND": [
+11,
+5
+],
+"KDDL": [
+13,
+6
+],
+"KEC": [
+21,
+11
+],
+"KECL": [
+18,
+4
+],
+"KEEPLEARN": [
+4,
+2
+],
+"KEI": [
+31,
+17
+],
+"KELLTONTEC": [
+10,
+1
+],
+"KEMROCK": [
+2,
+0
+],
+"KENNAMET": [
+7,
+6
+],
+"KERNEX": [
+18,
+8
+],
+"KESORAMIND": [
+18,
+7
+],
+"KEYFINSERV": [
+11,
+5
+],
+"KFINTECH": [
+4,
+3
+],
+"KHADIM": [
+8,
+2
+],
+"KHAICHEM": [
+3,
+2
+],
+"KHAITANLTD": [
+16,
+7
+],
+"KHANDSE": [
+10,
+1
+],
+"KICL": [
+17,
+7
+],
+"KILITCH": [
+12,
+9
+],
+"KIMS": [
+11,
+5
+],
+"KINGFA": [
+15,
+5
+],
+"KIOCL": [
+5,
+2
+],
+"KIRIINDUS": [
+15,
+5
+],
+"KIRLFER": [
+7,
+4
+],
+"KIRLOSBROS": [
+18,
+9
+],
+"KIRLOSENG": [
+21,
+12
+],
+"KIRLOSIND": [
+15,
+10
+],
+"KIRLPNU": [
+4,
+2
+],
+"KITEX": [
+17,
+7
+],
+"KKCL": [
+20,
+9
+],
+"KMSUGAR": [
+16,
+3
+],
+"KNAGRI": [
+3,
+1
+],
+"KNRCON": [
+28,
+11
+],
+"KOHINOOR": [
+9,
+6
+],
+"KOKUYOCMLN": [
+17,
+8
+],
+"KOLTEPATIL": [
+21,
+7
+],
+"KOPRAN": [
+15,
+7
+],
+"KOTAKBANK": [
+33,
+15
+],
+"KOTARISUG": [
+17,
+4
+],
+"KOTHARIPET": [
+18,
+10
+],
+"KOTHARIPRO": [
+11,
+2
+],
+"KOTYARK": [
+6,
+1
+],
+"KOVAI": [
+4,
+3
+],
+"KPIGREEN": [
+8,
+3
+],
+"KPIL": [
+31,
+14
+],
+"KPIT": [
+11,
+4
+],
+"KPITTECH": [
+13,
+8
+],
+"KPRMILL": [
+33,
+16
+],
+"KRBL": [
+20,
+12
+],
+"KREBSBIO": [
+6,
+3
+],
+"KRIDHANINF": [
+10,
+5
+],
+"KRISHANA": [
+21,
+8
+],
+"KRISHIVAL": [
+5,
+1
+],
+"KRISHNADEF": [
+9,
+6
+],
+"KRITI": [
+11,
+2
+],
+"KRITIKA": [
+9,
+4
+],
+"KRITINUT": [
+2,
+1
+],
+"KRN": [
+2,
+1
+],
+"KRONOX": [
+1,
+0
+],
+"KROSS": [
+1,
+0
+],
+"KRSNAA": [
+4,
+1
+],
+"KRYSTAL": [
+1,
+0
+],
+"KSB": [
+27,
+14
+],
+"KSBPUMPS": [
+10,
+5
+],
+"KSCL": [
+19,
+10
+],
+"KSHITIJPOL": [
+7,
+3
+],
+"KSK": [
+3,
+2
+],
+"KSL": [
+22,
+12
+],
+"KSOLVES": [
+7,
+3
+],
+"KTKBANK": [
+20,
+7
+],
+"KUANTUM": [
+9,
+5
+],
+"KWALITY": [
+9,
+2
+],
+"L&TFH": [
+18,
+7
+],
+"LAGNAM": [
+7,
+4
+],
+"LAKSHMIEFL": [
+4,
+2
+],
+"LAKSHVILAS": [
+9,
+6
+],
+"LAL": [
+2,
+0
+],
+"LALPATHLAB": [
+17,
+9
+],
+"LAMBODHARA": [
+7,
+6
+],
+"LANCORHOL": [
+1,
+0
+],
+"LANDMARK": [
+2,
+0
+],
+"LANDSMILL": [
+11,
+4
+],
+"LAOPALA": [
+19,
+11
+],
+"LATENTVIEW": [
+5,
+1
+],
+"LATTEYS": [
+7,
+3
+],
+"LAURUSLABS": [
+18,
+9
+],
+"LAXMICOT": [
+5,
+0
+],
+"LAXMIMACH": [
+7,
+4
+],
+"LCCINFOTEC": [
+13,
+6
+],
+"LEEL": [
+0,
+0
+],
+"LEMERITE": [
+7,
+5
+],
+"LEMONTREE": [
+12,
+7
+],
+"LEXUS": [
+6,
+3
+],
+"LFIC": [
+18,
+8
+],
+"LGBBROSLTD": [
+22,
+13
+],
+"LGHL": [
+9,
+3
+],
+"LIBAS": [
+5,
+1
+],
+"LIBERTSHOE": [
+17,
+7
+],
+"LICHSGFIN": [
+25,
+9
+],
+"LICI": [
+4,
+1
+],
+"LIKHITHA": [
+4,
+4
+],
+"LINC": [
+12,
+6
+],
+"LINCOLN": [
+11,
+4
+],
+"LINDEINDIA": [
+18,
+9
+],
+"LLOYDELENG": [
+8,
+4
+],
+"LLOYDSENGG": [
+15,
+11
+],
+"LLOYDSME": [
+5,
+4
+],
+"LMW": [
+7,
+5
+],
+"LODHA": [
+7,
+4
+],
+"LOKESHMACH": [
+21,
+9
+],
+"LORDSCHLO": [
+2,
+0
+],
+"LOTUSEYE": [
+16,
+5
+],
+"LOVABLE": [
+10,
+4
+],
+"LOYALTEX": [
+1,
+0
+],
+"LPDC": [
+10,
+5
+],
+"LT": [
+40,
+11
+],
+"LTF": [
+30,
+10
+],
+"LTFOODS": [
+27,
+14
+],
+"LTI": [
+13,
+8
+],
+"LTIM": [
+2,
+0
+],
+"LTM": [
+19,
+9
+],
+"LTTS": [
+15,
+5
+],
+"LUMAXIND": [
+19,
+10
+],
+"LUMAXTECH": [
+19,
+13
+],
+"LUPIN": [
+25,
+9
+],
+"LUXIND": [
+13,
+8
+],
+"LXCHEM": [
+2,
+0
+],
+"LYKALABS": [
+16,
+9
+],
+"M&M": [
+29,
+17
+],
+"M&MFIN": [
+23,
+10
+],
+"M50": [
+26,
+14
+],
+"MAANALU": [
+26,
+14
+],
+"MACPOWER": [
+10,
+5
+],
+"MADHAV": [
+14,
+7
+],
+"MADHUCON": [
+13,
+4
+],
+"MADRASFERT": [
+13,
+3
+],
+"MAGADSUGAR": [
+9,
+4
+],
+"MAGMA": [
+9,
+4
+],
+"MAGNUM": [
+17,
+7
+],
+"MAHABANK": [
+21,
+14
+],
+"MAHAPEXLTD": [
+8,
+3
+],
+"MAHASTEEL": [
+13,
+6
+],
+"MAHEPC": [
+3,
+0
+],
+"MAHESHWARI": [
+4,
+3
+],
+"MAHINDCIE": [
+13,
+6
+],
+"MAHINDUGIN": [
+5,
+5
+],
+"MAHLIFE": [
+23,
+11
+],
+"MAHLOG": [
+8,
+2
+],
+"MAHSCOOTER": [
+19,
+11
+],
+"MAHSEAMLES": [
+19,
+13
+],
+"MAITHANALL": [
+20,
+10
+],
+"MAJESCO": [
+9,
+2
+],
+"MALLCOM": [
+6,
+2
+],
+"MALUPAPER": [
+10,
+4
+],
+"MANAKALUCO": [
+12,
+6
+],
+"MANAKCOAT": [
+20,
+6
+],
+"MANAKSIA": [
+19,
+6
+],
+"MANAKSTEEL": [
+14,
+3
+],
+"MANALIPETC": [
+24,
+7
+],
+"MANAPPURAM": [
+28,
+15
+],
+"MANBA": [
+1,
+0
+],
+"MANCREDIT": [
+1,
+0
+],
+"MANDHANA": [
+4,
+1
+],
+"MANGALAM": [
+12,
+5
+],
+"MANGCHEFER": [
+15,
+7
+],
+"MANGLMCEM": [
+19,
+10
+],
+"MANINDS": [
+19,
+10
+],
+"MANINFRA": [
+20,
+9
+],
+"MANKIND": [
+3,
+1
+],
+"MANOMAY": [
+3,
+1
+],
+"MANORAMA": [
+6,
+5
+],
+"MANORG": [
+1,
+1
+],
+"MANPASAND": [
+6,
+1
+],
+"MANUGRAPH": [
+12,
+2
+],
+"MANYAVAR": [
+2,
+0
+],
+"MAPMYINDIA": [
+3,
+1
+],
+"MARALOVER": [
+16,
+9
+],
+"MARATHON": [
+13,
+4
+],
+"MARG": [
+1,
+0
+],
+"MARICO": [
+39,
+13
+],
+"MARINE": [
+14,
+7
+],
+"MARKSANS": [
+23,
+14
+],
+"MARUTI": [
+19,
+12
+],
+"MASFIN": [
+11,
+4
+],
+"MASKINVEST": [
+6,
+4
+],
+"MASTEK": [
+22,
+12
+],
+"MATRIMONY": [
+5,
+1
+],
+"MAWANASUG": [
+13,
+8
+],
+"MAX": [
+5,
+3
+],
+"MAXESTATES": [
+2,
+0
+],
+"MAXHEALTH": [
+11,
+5
+],
+"MAXIND": [
+9,
+6
+],
+"MAXINDIA": [
+1,
+0
+],
+"MAXVIL": [
+9,
+5
+],
+"MAXWELL": [
+4,
+3
+],
+"MAYURUNIQ": [
+16,
+8
+],
+"MAZDA": [
+12,
+7
+],
+"MAZDOCK": [
+11,
+6
+],
+"MBAPL": [
+18,
+8
+],
+"MBECL": [
+14,
+4
+],
+"MBLINFRA": [
+16,
+7
+],
+"MCDHOLDING": [
+8,
+3
+],
+"MCDOWELL-N": [
+21,
+8
+],
+"MCL": [
+12,
+6
+],
+"MCLEODRUSS": [
+13,
+4
+],
+"MCX": [
+24,
+11
+],
+"MEDANTA": [
+4,
+2
+],
+"MEDIASSIST": [
+1,
+0
+],
+"MEDICAMEQ": [
+0,
+0
+],
+"MEDICO": [
+2,
+0
+],
+"MEDPLUS": [
+3,
+1
+],
+"MEGASTAR": [
+3,
+2
+],
+"MEGH": [
+12,
+6
+],
+"MELSTAR": [
+11,
+4
+],
+"MENONBE": [
+13,
+5
+],
+"MEP": [
+5,
+1
+],
+"MERCK": [
+8,
+4
+],
+"METROBRAND": [
+6,
+2
+],
+"METROPOLIS": [
+12,
+6
+],
+"MFML": [
+0,
+0
+],
+"MFSL": [
+24,
+11
+],
+"MGEL": [
+9,
+4
+],
+"MGL": [
+15,
+7
+],
+"MHLXMIRU": [
+3,
+0
+],
+"MHRIL": [
+17,
+8
+],
+"MICEL": [
+12,
+5
+],
+"MIDHANI": [
+10,
+4
+],
+"MINDACORP": [
+21,
+12
+],
+"MINDAIND": [
+19,
+10
+],
+"MINDTECK": [
+7,
+5
+],
+"MINDTREE": [
+22,
+12
+],
+"MIRCELECTR": [
+18,
+7
+],
+"MIRZAINT": [
+16,
+8
+],
+"MITCON": [
+8,
+2
+],
+"MITTAL": [
+9,
+3
+],
+"MKPL": [
+8,
+5
+],
+"MMFL": [
+25,
+14
+],
+"MMP": [
+8,
+5
+],
+"MMTC": [
+10,
+6
+],
+"MODEFENCE": [
+3,
+1
+],
+"MODIRUBBER": [
+7,
+2
+],
+"MODISONLTD": [
+7,
+5
+],
+"MODTHREAD": [
+1,
+0
+],
+"MOHITIND": [
+11,
+3
+],
+"MOIL": [
+24,
+7
+],
+"MOKSH": [
+8,
+4
+],
+"MOL": [
+5,
+1
+],
+"MOLDTECH": [
+12,
+3
+],
+"MOLDTKPAC": [
+19,
+8
+],
+"MON100": [
+43,
+23
+],
+"MONARCH": [
+6,
+3
+],
+"MONNETISPA": [
+2,
+0
+],
+"MONSANTO": [
+6,
+4
+],
+"MONTECARLO": [
+11,
+4
+],
+"MOREPENLAB": [
+17,
+9
+],
+"MOTHERSON": [
+29,
+16
+],
+"MOTHERSUMI": [
+17,
+10
+],
+"MOTILALOFS": [
+22,
+12
+],
+"MOTISONS": [
+1,
+0
+],
+"MOTOGENFIN": [
+11,
+1
+],
+"MPHASIS": [
+25,
+13
+],
+"MPSLTD": [
+21,
+7
+],
+"MRF": [
+0,
+0
+],
+"MRPL": [
+18,
+9
+],
+"MSPL": [
+15,
+4
+],
+"MSTCLTD": [
+11,
+6
+],
+"MSUMI": [
+9,
+2
+],
+"MTARTECH": [
+6,
+4
+],
+"MTEDUCARE": [
+6,
+1
+],
+"MTNL": [
+14,
+8
+],
+"MUFIN": [
+3,
+2
+],
+"MUFTI": [
+0,
+0
+],
+"MUKANDLTD": [
+19,
+8
+],
+"MUKKA": [
+1,
+0
+],
+"MUKTAARTS": [
+9,
+3
+],
+"MUNJALAU": [
+22,
+9
+],
+"MUNJALSHOW": [
+17,
+6
+],
+"MURUDCERA": [
+16,
+4
+],
+"MUTHOOTCAP": [
+9,
+5
+],
+"MUTHOOTFIN": [
+25,
+17
+],
+"MUTHOOTMF": [
+1,
+0
+],
+"MVGJL": [
+1,
+0
+],
+"MWL": [
+5,
+3
+],
+"MYSOREBANK": [
+4,
+1
+],
+"N100": [
+20,
+14
+],
+"NACLIND": [
+11,
+6
+],
+"NAGREEKCAP": [
+16,
+9
+],
+"NAGREEKEXP": [
+14,
+5
+],
+"NAHARCAP": [
+17,
+10
+],
+"NAHARINDUS": [
+18,
+5
+],
+"NAHARPOLY": [
+10,
+4
+],
+"NAHARSPING": [
+18,
+6
+],
+"NAM-INDIA": [
+15,
+8
+],
+"NARMADA": [
+14,
+3
+],
+"NASDAQ": [
+24,
+14
+],
+"NATCOPHARM": [
+24,
+9
+],
+"NATHBIOGEN": [
+12,
+2
+],
+"NATIONALUM": [
+24,
+13
+],
+"NAUKRI": [
+25,
+15
+],
+"NAVA": [
+20,
+10
+],
+"NAVINFLUOR": [
+27,
+15
+],
+"NAVKARCORP": [
+9,
+3
+],
+"NAVNETEDUL": [
+15,
+7
+],
+"NAZARA": [
+6,
+2
+],
+"NBCC": [
+21,
+11
+],
+"NBIFIN": [
+10,
+4
+],
+"NBVENTURES": [
+8,
+5
+],
+"NCC": [
+18,
+10
+],
+"NCLIND": [
+17,
+7
+],
+"NDGL": [
+9,
+3
+],
+"NDL": [
+20,
+9
+],
+"NDLVENTURE": [
+22,
+11
+],
+"NDRAUTO": [
+12,
+5
+],
+"NDTV": [
+8,
+5
+],
+"NECCLTD": [
+8,
+0
+],
+"NECLIFE": [
+12,
+4
+],
+"NELCAST": [
+18,
+5
+],
+"NELCO": [
+18,
+7
+],
+"NEOGEN": [
+9,
+3
+],
+"NESCO": [
+26,
+12
+],
+"NESTLEIND": [
+32,
+17
+],
+"NET4": [
+0,
+0
+],
+"NETWEB": [
+2,
+1
+],
+"NETWORK18": [
+13,
+5
+],
+"NEUEON": [
+8,
+4
+],
+"NEULANDLAB": [
+15,
+6
+],
+"NEWGEN": [
+12,
+7
+],
+"NEXTMEDIA": [
+9,
+3
+],
+"NEYVELILIG": [
+2,
+1
+],
+"NFL": [
+15,
+7
+],
+"NGIL": [
+1,
+1
+],
+"NGLFINE": [
+3,
+0
+],
+"NH": [
+15,
+10
+],
+"NHPC": [
+26,
+14
+],
+"NIACL": [
+4,
+1
+],
+"NIBL": [
+10,
+6
+],
+"NIITLTD": [
+19,
+7
+],
+"NIITMTS": [
+1,
+0
+],
+"NIITTECH": [
+13,
+7
+],
+"NIKKEI": [
+0,
+0
+],
+"NILAINFRA": [
+12,
+6
+],
+"NILASPACES": [
+12,
+6
+],
+"NILKAMAL": [
+18,
+13
+],
+"NINSYS": [
+2,
+1
+],
+"NIPPOBATRY": [
+12,
+6
+],
+"NIRAJ": [
+4,
+2
+],
+"NIRAJISPAT": [
+1,
+1
+],
+"NITCO": [
+13,
+5
+],
+"NITINFIRE": [
+3,
+1
+],
+"NITINSPIN": [
+20,
+9
+],
+"NITIRAJ": [
+9,
+4
+],
+"NKIND": [
+11,
+0
+],
+"NLCINDIA": [
+18,
+7
+],
+"NMDC": [
+26,
+13
+],
+"NOCIL": [
+24,
+12
+],
+"NOIDATOLL": [
+15,
+7
+],
+"NORBTEAEXP": [
+25,
+9
+],
+"NORTHARC": [
+3,
+0
+],
+"NOVAAGRI": [
+0,
+0
+],
+"NPST": [
+5,
+5
+],
+"NRAIL": [
+11,
+3
+],
+"NRBBEARING": [
+24,
+10
+],
+"NRL": [
+2,
+1
+],
+"NSIL": [
+13,
+8
+],
+"NSLNISP": [
+1,
+0
+],
+"NTPC": [
+27,
+15
+],
+"NUCLEUS": [
+12,
+6
+],
+"NURECA": [
+3,
+0
+],
+"NUVAMA": [
+4,
+2
+],
+"NUVOCO": [
+4,
+1
+],
+"NYKAA": [
+7,
+4
+],
+"OAL": [
+3,
+1
+],
+"OBCL": [
+1,
+0
+],
+"OBEROIRLTY": [
+22,
+11
+],
+"OCL": [
+13,
+8
+],
+"OFSS": [
+19,
+8
+],
+"OIL": [
+22,
+12
+],
+"OILCOUNTUB": [
+15,
+6
+],
+"OLAELEC": [
+0,
+0
+],
+"OLECTRA": [
+23,
+12
+],
+"OMAXAUTO": [
+14,
+5
+],
+"OMAXE": [
+20,
+6
+],
+"OMINFRAL": [
+16,
+11
+],
+"OMKARCHEM": [
+15,
+7
+],
+"OMMETALS": [
+7,
+3
+],
+"OMNITECH": [
+0,
+0
+],
+"ONELIFECAP": [
+10,
+3
+],
+"ONEPOINT": [
+14,
+8
+],
+"ONGC": [
+20,
+9
+],
+"ONIDA": [
+22,
+9
+],
+"ONMOBILE": [
+11,
+4
+],
+"ONWARDTEC": [
+17,
+6
+],
+"OPTIEMUS": [
+10,
+4
+],
+"OPTOCIRCUI": [
+5,
+1
+],
+"ORBITCORP": [
+2,
+1
+],
+"ORBTEXP": [
+10,
+5
+],
+"ORCHIDCHEM": [
+2,
+1
+],
+"ORCHPHARMA": [
+16,
+9
+],
+"ORICONENT": [
+11,
+4
+],
+"ORIENTALTL": [
+11,
+4
+],
+"ORIENTBANK": [
+7,
+4
+],
+"ORIENTBELL": [
+16,
+6
+],
+"ORIENTCEM": [
+14,
+7
+],
+"ORIENTCER": [
+18,
+4
+],
+"ORIENTELEC": [
+7,
+4
+],
+"ORIENTHOT": [
+16,
+7
+],
+"ORIENTLTD": [
+9,
+4
+],
+"ORIENTPPR": [
+20,
+10
+],
+"ORIENTREF": [
+14,
+8
+],
+"ORIENTTECH": [
+0,
+0
+],
+"ORISSAMINE": [
+5,
+3
+],
+"ORTINGLOBE": [
+4,
+1
+],
+"OSWALAGRO": [
+9,
+3
+],
+"OSWALGREEN": [
+9,
+4
+],
+"OSWALSEEDS": [
+11,
+4
+],
+"OUDHSUG": [
+4,
+2
+],
+"PAGEIND": [
+2,
+2
+],
+"PAISALO": [
+16,
+7
+],
+"PAKKA": [
+2,
+0
+],
+"PALASHSECU": [
+9,
+4
+],
+"PALREDTEC": [
+10,
+6
+],
+"PANACEABIO": [
+14,
+6
+],
+"PANACHE": [
+11,
+3
+],
+"PANAMAPET": [
+26,
+14
+],
+"PANSARI": [
+14,
+5
+],
+"PAPERPROD": [
+8,
+4
+],
+"PAR": [
+9,
+9
+],
+"PARACABLES": [
+17,
+10
+],
+"PARADEEP": [
+6,
+3
+],
+"PARAGMILK": [
+12,
+7
+],
+"PARAL": [
+0,
+0
+],
+"PARAS": [
+4,
+3
+],
+"PARASPETRO": [
+6,
+4
+],
+"PARIN": [
+9,
+7
+],
+"PARKHOTELS": [
+0,
+0
+],
+"PASHUPATI": [
+13,
+6
+],
+"PASUPTAC": [
+3,
+0
+],
+"PATANJALI": [
+11,
+5
+],
+"PATELENG": [
+14,
+8
+],
+"PATINTLOG": [
+14,
+4
+],
+"PAVNAIND": [
+7,
+3
+],
+"PAYTM": [
+6,
+3
+],
+"PCBL": [
+21,
+13
+],
+"PCJEWELLER": [
+21,
+10
+],
+"PDMJEPAPER": [
+13,
+7
+],
+"PDSL": [
+13,
+8
+],
+"PEARLPOLY": [
+17,
+2
+],
+"PEL": [
+23,
+8
+],
+"PENIND": [
+21,
+10
+],
+"PENINLAND": [
+11,
+5
+],
+"PERSISTENT": [
+28,
+15
+],
+"PETRONET": [
+29,
+11
+],
+"PFC": [
+26,
+15
+],
+"PFIZER": [
+20,
+11
+],
+"PFOCUS": [
+25,
+7
+],
+"PFRL": [
+2,
+1
+],
+"PFS": [
+16,
+8
+],
+"PGEL": [
+19,
+12
+],
+"PGHH": [
+8,
+6
+],
+"PGHL": [
+22,
+10
+],
+"PGIL": [
+21,
+12
+],
+"PHILIPCARB": [
+17,
+9
+],
+"PHOENIXLTD": [
+32,
+14
+],
+"PIDILITIND": [
+38,
+17
+],
+"PIGL": [
+12,
+8
+],
+"PIIND": [
+27,
+13
+],
+"PILANIINVS": [
+16,
+6
+],
+"PILITA": [
+17,
+11
+],
+"PINCON": [
+0,
+0
+],
+"PIONEEREMB": [
+13,
+5
+],
+"PIPAVAVDOC": [
+4,
+1
+],
+"PIRGLASS": [
+2,
+1
+],
+"PITTIENG": [
+16,
+9
+],
+"PIXTRANS": [
+3,
+1
+],
+"PKTEA": [
+16,
+7
+],
+"PLASTIBLEN": [
+19,
+12
+],
+"PLATIND": [
+0,
+0
+],
+"PLAZACABLE": [
+1,
+0
+],
+"PLETHICO": [
+0,
+0
+],
+"PNB": [
+21,
+12
+],
+"PNBGILTS": [
+19,
+7
+],
+"PNBHOUSING": [
+12,
+6
+],
+"PNC": [
+13,
+5
+],
+"PNCINFRA": [
+16,
+8
+],
+"PNGJL": [
+1,
+0
+],
+"POCL": [
+17,
+9
+],
+"PODDARMENT": [
+7,
+3
+],
+"POKARNA": [
+9,
+7
+],
+"POLARIS": [
+9,
+4
+],
+"POLICYBZR": [
+8,
+3
+],
+"POLYCAB": [
+13,
+5
+],
+"POLYMED": [
+22,
+12
+],
+"POLYPLEX": [
+24,
+11
+],
+"PONNIERODE": [
+11,
+3
+],
+"POONAWALLA": [
+22,
+9
+],
+"POWERGRID": [
+31,
+16
+],
+"POWERINDIA": [
+4,
+3
+],
+"POWERMECH": [
+16,
+8
+],
+"PPAP": [
+15,
+5
+],
+"PPL": [
+10,
+5
+],
+"PPLPHARMA": [
+5,
+2
+],
+"PRABHAT": [
+4,
+2
+],
+"PRAENG": [
+17,
+3
+],
+"PRAJIND": [
+19,
+10
+],
+"PRAKASH": [
+19,
+11
+],
+"PRAKASHSTL": [
+17,
+8
+],
+"PRATIBHA": [
+1,
+1
+],
+"PRAXIS": [
+4,
+2
+],
+"PRECAM": [
+8,
+4
+],
+"PRECOT": [
+16,
+10
+],
+"PRECWIRE": [
+27,
+12
+],
+"PREMEXPLN": [
+16,
+8
+],
+"PREMIER": [
+9,
+4
+],
+"PREMIERENE": [
+2,
+0
+],
+"PREMIERPOL": [
+16,
+9
+],
+"PRESTIGE": [
+26,
+13
+],
+"PRICOL": [
+5,
+3
+],
+"PRICOLLTD": [
+23,
+13
+],
+"PRIMESECU": [
+16,
+9
+],
+"PRINCEPIPE": [
+5,
+2
+],
+"PRISMCEM": [
+9,
+3
+],
+"PRITI": [
+7,
+3
+],
+"PRITIKAUTO": [
+5,
+2
+],
+"PRIVISCL": [
+17,
+11
+],
+"PROZONER": [
+11,
+7
+],
+"PROZONINTU": [
+5,
+2
+],
+"PRSMJOHNSN": [
+15,
+6
+],
+"PRUDENT": [
+6,
+5
+],
+"PRUDMOULI": [
+0,
+0
+],
+"PSB": [
+9,
+6
+],
+"PSL": [
+2,
+0
+],
+"PSPPROJECT": [
+15,
+5
+],
+"PTC": [
+25,
+14
+],
+"PTCIL": [
+0,
+0
+],
+"PTL": [
+22,
+9
+],
+"PUNJABCHEM": [
+19,
+11
+],
+"PUNJLLOYD": [
+8,
+4
+],
+"PURVA": [
+15,
+10
+],
+"PVP": [
+11,
+3
+],
+"PVR": [
+18,
+8
+],
+"PVRINOX": [
+20,
+10
+],
+"PVSL": [
+0,
+0
+],
+"PYRAMID": [
+1,
+0
+],
+"QMSMEDI": [
+2,
+1
+],
+"QUESS": [
+12,
+4
+],
+"QUICKHEAL": [
+10,
+5
+],
+"QUINTEGRA": [
+12,
+4
+],
+"RACE": [
+2,
+1
+],
+"RADAAN": [
+10,
+4
+],
+"RADHIKAJWE": [
+5,
+3
+],
+"RADIANTCMS": [
+0,
+0
+],
+"RADICO": [
+27,
+14
+],
+"RADIOCITY": [
+6,
+4
+],
+"RAILTEL": [
+6,
+6
+],
+"RAIN": [
+23,
+8
+],
+"RAINBOW": [
+9,
+2
+],
+"RAINBOWPAP": [
+4,
+0
+],
+"RAJESHEXPO": [
+14,
+9
+],
+"RAJMET": [
+9,
+6
+],
+"RAJRATAN": [
+7,
+3
+],
+"RAJRILTD": [
+6,
+2
+],
+"RAJSREESUG": [
+12,
+4
+],
+"RAJTV": [
+11,
+6
+],
+"RALLIS": [
+23,
+8
+],
+"RAMANEWS": [
+10,
+5
+],
+"RAMAPHO": [
+4,
+3
+],
+"RAMASTEEL": [
+13,
+7
+],
+"RAMCOCEM": [
+25,
+7
+],
+"RAMCOIND": [
+21,
+10
+],
+"RAMCOSYS": [
+19,
+9
+],
+"RAMKY": [
+17,
+11
+],
+"RAMRAT": [
+6,
+3
+],
+"RANASUG": [
+15,
+7
+],
+"RANBAXY": [
+4,
+3
+],
+"RANEHOLDIN": [
+23,
+11
+],
+"RATEGAIN": [
+7,
+3
+],
+"RATNAMANI": [
+26,
+13
+],
+"RATNAVEER": [
+3,
+0
+],
+"RAYMOND": [
+19,
+10
+],
+"RAYMONDLSL": [
+0,
+0
+],
+"RBA": [
+2,
+0
+],
+"RBL": [
+18,
+8
+],
+"RBLBANK": [
+15,
+5
+],
+"RBZJEWEL": [
+2,
+0
+],
+"RCF": [
+22,
+9
+],
+"RCOM": [
+10,
+2
+],
+"RECLTD": [
+20,
+14
+],
+"REDINGTON": [
+25,
+14
+],
+"REDTAPE": [
+1,
+0
+],
+"REFEX": [
+22,
+9
+],
+"REGENCERAM": [
+17,
+8
+],
+"RELAXO": [
+23,
+13
+],
+"RELCAPITAL": [
+8,
+4
+],
+"RELCHEMQ": [
+1,
+1
+],
+"RELIABLE": [
+6,
+3
+],
+"RELIANCE": [
+36,
+12
+],
+"RELIGARE": [
+17,
+6
+],
+"RELIGAREGO": [
+6,
+1
+],
+"RELINFRA": [
+19,
+7
+],
+"RELTD": [
+1,
+0
+],
+"REMSONSIND": [
+21,
+8
+],
+"RENUKA": [
+8,
+3
+],
+"REPCOHOME": [
+18,
+7
+],
+"REPL": [
+8,
+4
+],
+"REPRO": [
+13,
+7
+],
+"RESPONIND": [
+18,
+8
+],
+"RETAIL": [
+0,
+0
+],
+"RGL": [
+17,
+7
+],
+"RHFL": [
+7,
+0
+],
+"RHIM": [
+20,
+12
+],
+"RHL": [
+2,
+0
+],
+"RICOAUTO": [
+21,
+9
+],
+"RIIL": [
+11,
+5
+],
+"RISHABH": [
+3,
+1
+],
+"RITCO": [
+6,
+2
+],
+"RITES": [
+11,
+5
+],
+"RKDL": [
+11,
+4
+],
+"RKEC": [
+6,
+0
+],
+"RKFORGE": [
+28,
+17
+],
+"RKSWAMY": [
+0,
+0
+],
+"RMDRIP": [
+17,
+10
+],
+"RML": [
+17,
+8
+],
+"RNAM": [
+2,
+2
+],
+"ROHLTD": [
+20,
+9
+],
+"ROLEXRINGS": [
+7,
+3
+],
+"ROLLT": [
+7,
+4
+],
+"ROLTA": [
+10,
+3
+],
+"ROML": [
+7,
+1
+],
+"ROSSARI": [
+3,
+1
+],
+"ROSSELLIND": [
+17,
+7
+],
+"ROTO": [
+5,
+2
+],
+"ROUTE": [
+4,
+2
+],
+"RPEL": [
+4,
+3
+],
+"RPGLIFE": [
+20,
+12
+],
+"RPOWER": [
+11,
+4
+],
+"RPPINFRA": [
+19,
+9
+],
+"RPPL": [
+7,
+5
+],
+"RPSGVENT": [
+8,
+6
+],
+"RPTECH": [
+3,
+2
+],
+"RRKABEL": [
+3,
+1
+],
+"RSSOFTWARE": [
+12,
+7
+],
+"RSWM": [
+18,
+8
+],
+"RSYSTEMS": [
+18,
+11
+],
+"RTNINDIA": [
+12,
+5
+],
+"RTNPOWER": [
+9,
+6
+],
+"RUBFILA": [
+0,
+0
+],
+"RUBYMILLS": [
+12,
+6
+],
+"RUCHI": [
+1,
+1
+],
+"RUCHINFRA": [
+6,
+3
+],
+"RUCHIRA": [
+20,
+10
+],
+"RUCHISOYA": [
+0,
+0
+],
+"RUPA": [
+16,
+6
+],
+"RUSHIL": [
+12,
+9
+],
+"RUSTOMJEE": [
+3,
+0
+],
+"RVHL": [
+6,
+1
+],
+"RVNL": [
+12,
+7
+],
+"RVTH": [
+0,
+0
+],
+"S&SPOWER": [
+13,
+4
+],
+"SABERORGAN": [
+3,
+1
+],
+"SABTN": [
+7,
+4
+],
+"SADBHAV": [
+11,
+6
+],
+"SADBHIN": [
+7,
+1
+],
+"SADHNANIQ": [
+0,
+0
+],
+"SAFARI": [
+14,
+5
+],
+"SAGARDEEP": [
+7,
+2
+],
+"SAGCEM": [
+16,
+7
+],
+"SAHYADRI": [
+1,
+1
+],
+"SAIL": [
+19,
+9
+],
+"SAKAR": [
+12,
+6
+],
+"SAKHTISUG": [
+12,
+3
+],
+"SAKSOFT": [
+18,
+10
+],
+"SAKUMA": [
+16,
+7
+],
+"SALASAR": [
+10,
+6
+],
+"SALONA": [
+20,
+8
+],
+"SALSTEEL": [
+20,
+7
+],
+"SALZERELEC": [
+13,
+8
+],
+"SAMBHAAV": [
+19,
+8
+],
+"SAMHI": [
+1,
+0
+],
+"SAMMAANCAP": [
+17,
+7
+],
+"SAMPANN": [
+13,
+5
+],
+"SANDESH": [
+12,
+11
+],
+"SANDHAR": [
+11,
+4
+],
+"SANDUMA": [
+5,
+1
+],
+"SANGAMIND": [
+16,
+7
+],
+"SANGHVIMOV": [
+16,
+9
+],
+"SANOFI": [
+20,
+8
+],
+"SANOFICONR": [
+0,
+0
+],
+"SANSERA": [
+9,
+4
+],
+"SANSTAR": [
+1,
+0
+],
+"SAPPHIRE": [
+6,
+2
+],
+"SARDAEN": [
+23,
+10
+],
+"SAREGAMA": [
+18,
+10
+],
+"SARLAPOLY": [
+17,
+9
+],
+"SARVESHWAR": [
+12,
+6
+],
+"SASKEN": [
+23,
+12
+],
+"SATIA": [
+5,
+1
+],
+"SATIN": [
+11,
+6
+],
+"SAURASHCEM": [
+0,
+0
+],
+"SBBJ": [
+5,
+4
+],
+"SBC": [
+10,
+6
+],
+"SBCL": [
+5,
+2
+],
+"SBFC": [
+2,
+1
+],
+"SBGLP": [
+4,
+1
+],
+"SBICARD": [
+8,
+2
+],
+"SBIGETS": [
+3,
+0
+],
+"SBILIFE": [
+14,
+9
+],
+"SBIN": [
+29,
+10
+],
+"SBT": [
+4,
+0
+],
+"SCHAEFFLER": [
+25,
+15
+],
+"SCHAND": [
+7,
+3
+],
+"SCHNEIDER": [
+19,
+8
+],
+"SCI": [
+19,
+6
+],
+"SCILAL": [
+0,
+0
+],
+"SCPL": [
+4,
+2
+],
+"SDBL": [
+14,
+6
+],
+"SEAMECLTD": [
+21,
+11
+],
+"SECMARK": [
+1,
+1
+],
+"SECURKLOUD": [
+8,
+5
+],
+"SEINV": [
+4,
+0
+],
+"SEJALLTD": [
+13,
+5
+],
+"SELAN": [
+15,
+6
+],
+"SEMAC": [
+18,
+10
+],
+"SENCO": [
+2,
+0
+],
+"SEPC": [
+10,
+4
+],
+"SEQUENT": [
+15,
+7
+],
+"SERVOTECH": [
+12,
+6
+],
+"SESHAPAPER": [
+19,
+7
+],
+"SETCO": [
+13,
+5
+],
+"SEYAIND": [
+2,
+0
+],
+"SFCL": [
+3,
+1
+],
+"SFL": [
+9,
+3
+],
+"SGIL": [
+13,
+4
+],
+"SGJHL": [
+0,
+0
+],
+"SGL": [
+16,
+5
+],
+"SHAH": [
+16,
+8
+],
+"SHAHALLOYS": [
+17,
+7
+],
+"SHAILY": [
+8,
+5
+],
+"SHAKTIPUMP": [
+16,
+10
+],
+"SHALBY": [
+7,
+2
+],
+"SHALPAINTS": [
+13,
+4
+],
+"SHANKARA": [
+6,
+4
+],
+"SHANTI": [
+6,
+1
+],
+"SHANTIGEAR": [
+19,
+10
+],
+"SHARDACROP": [
+18,
+5
+],
+"SHARDAMOTR": [
+16,
+9
+],
+"SHAREINDIA": [
+6,
+3
+],
+"SHARONBIO": [
+2,
+0
+],
+"SHASUNPHAR": [
+5,
+3
+],
+"SHEKHAWATI": [
+9,
+3
+],
+"SHEMAROO": [
+10,
+3
+],
+"SHIL": [
+3,
+2
+],
+"SHILPAMED": [
+20,
+8
+],
+"SHILPI": [
+8,
+3
+],
+"SHIRPUR-G": [
+6,
+2
+],
+"SHIV-VANI": [
+1,
+1
+],
+"SHIVALIK": [
+1,
+0
+],
+"SHIVAMAUTO": [
+19,
+11
+],
+"SHIVAMILLS": [
+6,
+4
+],
+"SHIVATEX": [
+15,
+8
+],
+"SHIVAUM": [
+4,
+3
+],
+"SHK": [
+7,
+4
+],
+"SHOPERSTOP": [
+16,
+8
+],
+"SHRADHA": [
+6,
+3
+],
+"SHREDIGCEM": [
+6,
+5
+],
+"SHREECEM": [
+2,
+1
+],
+"SHREEPUSHK": [
+18,
+5
+],
+"SHREERAMA": [
+21,
+4
+],
+"SHRENUJ": [
+1,
+0
+],
+"SHREYANIND": [
+21,
+10
+],
+"SHREYAS": [
+13,
+7
+],
+"SHRIPISTON": [
+11,
+6
+],
+"SHRIRAMCIT": [
+9,
+7
+],
+"SHRIRAMFIN": [
+27,
+10
+],
+"SHRIRAMPPS": [
+2,
+1
+],
+"SHYAMCENT": [
+9,
+1
+],
+"SHYAMMETL": [
+7,
+4
+],
+"SHYAMTEL": [
+9,
+4
+],
+"SICAGEN": [
+11,
+3
+],
+"SICAL": [
+8,
+3
+],
+"SICALLOG": [
+6,
+2
+],
+"SIEMENS": [
+31,
+14
+],
+"SIGACHI": [
+2,
+2
+],
+"SIGIND": [
+10,
+3
+],
+"SIGMA": [
+6,
+2
+],
+"SIGMAADV": [
+19,
+12
+],
+"SIGNATURE": [
+0,
+0
+],
+"SIGNET": [
+0,
+0
+],
+"SIGNETIND": [
+2,
+1
+],
+"SIGNPOST": [
+1,
+0
+],
+"SIKKO": [
+12,
+4
+],
+"SIL": [
+16,
+5
+],
+"SILGO": [
+10,
+5
+],
+"SILINV": [
+19,
+8
+],
+"SILVERTUC": [
+8,
+4
+],
+"SIMPLEXINF": [
+14,
+9
+],
+"SINCLAIR": [
+0,
+0
+],
+"SINDHUTRAD": [
+1,
+0
+],
+"SINTERCOM": [
+8,
+2
+],
+"SINTEX": [
+11,
+5
+],
+"SIRCA": [
+13,
+5
+],
+"SIS": [
+11,
+2
+],
+"SIYSIL": [
+20,
+13
+],
+"SJS": [
+10,
+5
+],
+"SJVN": [
+42,
+13
+],
+"SKFINDIA": [
+20,
+10
+],
+"SKIPPER": [
+17,
+6
+],
+"SKMEGGPROD": [
+19,
+11
+],
+"SKSMICRO": [
+6,
+2
+],
+"SKYGOLD": [
+6,
+4
+],
+"SMARTLINK": [
+12,
+5
+],
+"SMCGLOBAL": [
+7,
+3
+],
+"SMLISUZU": [
+16,
+6
+],
+"SMLMAH": [
+17,
+6
+],
+"SMLT": [
+4,
+2
+],
+"SMSPHARMA": [
+21,
+12
+],
+"SNOWMAN": [
+7,
+3
+],
+"SOBHA": [
+19,
+8
+],
+"SOFTTECH": [
+13,
+5
+],
+"SOLARA": [
+9,
+4
+],
+"SOLARINDS": [
+20,
+13
+],
+"SOLEX": [
+15,
+7
+],
+"SOMANYCERA": [
+23,
+15
+],
+"SOMATEX": [
+20,
+11
+],
+"SOMICONVEY": [
+11,
+4
+],
+"SONACOMS": [
+8,
+3
+],
+"SONAMLTD": [
+19,
+7
+],
+"SONASTEER": [
+7,
+4
+],
+"SONATSOFTW": [
+28,
+14
+],
+"SORILINFRA": [
+5,
+3
+],
+"SOTL": [
+18,
+8
+],
+"SOUTHBANK": [
+20,
+11
+],
+"SOUTHWEST": [
+12,
+4
+],
+"SP500": [
+40,
+27
+],
+"SPAL": [
+10,
+6
+],
+"SPANDANA": [
+3,
+2
+],
+"SPARC": [
+17,
+4
+],
+"SPCENET": [
+12,
+5
+],
+"SPECIALITY": [
+9,
+4
+],
+"SPECTRUM": [
+7,
+5
+],
+"SPENCERS": [
+6,
+4
+],
+"SPIC": [
+16,
+5
+],
+"SPICEJET": [
+3,
+0
+],
+"SPLIL": [
+18,
+5
+],
+"SPLPETRO": [
+26,
+11
+],
+"SPMLINFRA": [
+18,
+11
+],
+"SPORTKING": [
+5,
+2
+],
+"SQSBFSI": [
+2,
+1
+],
+"SRD": [
+0,
+0
+],
+"SREEL": [
+8,
+4
+],
+"SREINFRA": [
+6,
+4
+],
+"SRF": [
+32,
+14
+],
+"SRGHFL": [
+1,
+0
+],
+"SRHHYPOLTD": [
+17,
+6
+],
+"SRIPIPES": [
+7,
+2
+],
+"SRM": [
+2,
+2
+],
+"SRTRANSFIN": [
+9,
+2
+],
+"SSDL": [
+0,
+0
+],
+"SSWL": [
+21,
+9
+],
+"STANLEY": [
+0,
+0
+],
+"STAR": [
+22,
+12
+],
+"STARCEMENT": [
+10,
+5
+],
+"STARHEALTH": [
+4,
+2
+],
+"STARPAPER": [
+17,
+9
+],
+"STARTECK": [
+4,
+2
+],
+"STCINDIA": [
+9,
+3
+],
+"STEELCAS": [
+8,
+3
+],
+"STEELCITY": [
+11,
+1
+],
+"STEELXIND": [
+11,
+7
+],
+"STEL": [
+24,
+10
+],
+"STERTOOLS": [
+21,
+11
+],
+"STLTECH": [
+17,
+12
+],
+"STOREONE": [
+5,
+3
+],
+"STOVEKRAFT": [
+6,
+3
+],
+"STRTECH": [
+9,
+6
+],
+"STYABS": [
+4,
+2
+],
+"STYLAMIND": [
+6,
+3
+],
+"STYLEBAAZA": [
+1,
+0
+],
+"STYRENIX": [
+20,
+10
+],
+"SUBEXLTD": [
+13,
+5
+],
+"SUBROS": [
+20,
+9
+],
+"SUDAR": [
+3,
+0
+],
+"SUDARCOLOR": [
+14,
+7
+],
+"SUDARSCHEM": [
+24,
+12
+],
+"SUKHJITS": [
+3,
+1
+],
+"SULA": [
+0,
+0
+],
+"SUMEETINDS": [
+12,
+5
+],
+"SUMICHEM": [
+9,
+4
+],
+"SUMIT": [
+8,
+5
+],
+"SUMMITSEC": [
+19,
+11
+],
+"SUNCLAY": [
+0,
+0
+],
+"SUNDARAM": [
+10,
+4
+],
+"SUNDARMFIN": [
+22,
+15
+],
+"SUNDRMBRAK": [
+16,
+10
+],
+"SUNDRMFAST": [
+25,
+14
+],
+"SUNDROP": [
+19,
+8
+],
+"SUNFLAG": [
+20,
+6
+],
+"SUNILHITEC": [
+6,
+2
+],
+"SUNPHARMA": [
+32,
+15
+],
+"SUNTECK": [
+17,
+6
+],
+"SUNTV": [
+19,
+6
+],
+"SUPERHOUSE": [
+5,
+1
+],
+"SUPERSPIN": [
+15,
+6
+],
+"SUPPETRO": [
+14,
+7
+],
+"SUPRAJIT": [
+25,
+11
+],
+"SUPREMEIND": [
+25,
+10
+],
+"SUPREMEINF": [
+15,
+7
+],
+"SUPRIYA": [
+11,
+3
+],
+"SURAJEST": [
+0,
+0
+],
+"SURAJLTD": [
+0,
+0
+],
+"SURANASOL": [
+13,
+7
+],
+"SURANAT&P": [
+14,
+7
+],
+"SURYALAXMI": [
+12,
+5
+],
+"SURYAROSNI": [
+22,
+10
+],
+"SURYODAY": [
+5,
+3
+],
+"SUTLEJTEX": [
+22,
+8
+],
+"SUVEN": [
+26,
+16
+],
+"SUVENPHAR": [
+10,
+4
+],
+"SUVIDHAA": [
+1,
+1
+],
+"SUYOG": [
+1,
+0
+],
+"SUZLON": [
+16,
+7
+],
+"SVLL": [
+10,
+6
+],
+"SVPGLOB": [
+1,
+0
+],
+"SWANCORP": [
+17,
+9
+],
+"SWANDEF": [
+3,
+1
+],
+"SWANENERGY": [
+16,
+8
+],
+"SWARAJ": [
+10,
+5
+],
+"SWARAJENG": [
+26,
+14
+],
+"SWELECTES": [
+17,
+10
+],
+"SWSOLAR": [
+5,
+2
+],
+"SYMPHONY": [
+18,
+8
+],
+"SYNCOMF": [
+4,
+2
+],
+"SYNDIBANK": [
+6,
+1
+],
+"SYNGENE": [
+9,
+4
+],
+"SYRMA": [
+7,
+2
+],
+"TAINWALCHM": [
+14,
+7
+],
+"TAJGVK": [
+17,
+7
+],
+"TAKE": [
+11,
+7
+],
+"TALBROAUTO": [
+27,
+13
+],
+"TALWALKARS": [
+8,
+5
+],
+"TANLA": [
+19,
+10
+],
+"TARACHAND": [
+12,
+4
+],
+"TARAPUR": [
+14,
+4
+],
+"TARC": [
+7,
+4
+],
+"TARIL": [
+21,
+10
+],
+"TARMAT": [
+12,
+4
+],
+"TARSONS": [
+0,
+0
+],
+"TASTYBITE": [
+0,
+0
+],
+"TATACHEM": [
+24,
+10
+],
+"TATACOFFEE": [
+14,
+7
+],
+"TATACOMM": [
+29,
+10
+],
+"TATACONSUM": [
+33,
+14
+],
+"TATAELXSI": [
+16,
+10
+],
+"TATAGLOBAL": [
+17,
+6
+],
+"TATAINVEST": [
+26,
+13
+],
+"TATAMOTORS": [
+20,
+9
+],
+"TATAMTRDVR": [
+17,
+12
+],
+"TATAPOWER": [
+25,
+9
+],
+"TATASPONGE": [
+12,
+5
+],
+"TATASTEEL": [
+27,
+17
+],
+"TATASTLBSL": [
+4,
+2
+],
+"TATASTLLP": [
+4,
+4
+],
+"TATATECH": [
+1,
+1
+],
+"TATVA": [
+3,
+1
+],
+"TBOTEK": [
+2,
+1
+],
+"TBZ": [
+11,
+5
+],
+"TCI": [
+24,
+11
+],
+"TCIEXP": [
+8,
+4
+],
+"TCIFINANCE": [
+9,
+5
+],
+"TCPLPACK": [
+7,
+6
+],
+"TCS": [
+34,
+15
+],
+"TDPOWERSYS": [
+24,
+11
+],
+"TEAMGTY": [
+13,
+4
+],
+"TEAMLEASE": [
+5,
+4
+],
+"TECHM": [
+27,
+14
+],
+"TECHNO": [
+10,
+5
+],
+"TECHNOE": [
+22,
+11
+],
+"TECILCHEM": [
+4,
+0
+],
+"TECPRO": [
+1,
+1
+],
+"TEGA": [
+7,
+4
+],
+"TEJASNET": [
+11,
+6
+],
+"TEMBO": [
+15,
+5
+],
+"TERASOFT": [
+8,
+5
+],
+"TEXINFRA": [
+14,
+6
+],
+"TEXMOPIPES": [
+13,
+4
+],
+"TEXRAIL": [
+17,
+7
+],
+"TFCILTD": [
+19,
+11
+],
+"TFL": [
+12,
+6
+],
+"TGBHOTELS": [
+10,
+5
+],
+"THANGAMAYL": [
+16,
+11
+],
+"THEBYKE": [
+4,
+2
+],
+"THEINVEST": [
+6,
+4
+],
+"THEJO": [
+16,
+5
+],
+"THEMISMED": [
+16,
+9
+],
+"THERMAX": [
+23,
+10
+],
+"THINKSOFT": [
+4,
+3
+],
+"THOMASCOOK": [
+22,
+9
+],
+"THOMASCOTT": [
+21,
+9
+],
+"THYROCARE": [
+13,
+5
+],
+"TI": [
+17,
+6
+],
+"TICL": [
+7,
+3
+],
+"TIDEWATER": [
+11,
+7
+],
+"TIIL": [
+21,
+10
+],
+"TIINDIA": [
+19,
+12
+],
+"TIJARIA": [
+10,
+3
+],
+"TIKONA": [
+5,
+3
+],
+"TIL": [
+12,
+7
+],
+"TIMETECHNO": [
+24,
+13
+],
+"TIMKEN": [
+26,
+12
+],
+"TINPLATE": [
+16,
+8
+],
+"TIPSFILMS": [
+1,
+1
+],
+"TIPSINDLTD": [
+19,
+13
+],
+"TIPSMUSIC": [
+23,
+12
+],
+"TIRUMALCHM": [
+22,
+10
+],
+"TIRUPATIFL": [
+14,
+6
+],
+"TITAGARH": [
+21,
+15
+],
+"TITAN": [
+33,
+19
+],
+"TMB": [
+5,
+2
+],
+"TMPV": [
+21,
+11
+],
+"TNPETRO": [
+20,
+8
+],
+"TNPL": [
+20,
+9
+],
+"TNTELE": [
+12,
+6
+],
+"TOKYOPLAST": [
+11,
+5
+],
+"TOLINS": [
+0,
+0
+],
+"TORNTPHARM": [
+36,
+18
+],
+"TORNTPOWER": [
+30,
+13
+],
+"TOTAL": [
+7,
+3
+],
+"TOUCHWOOD": [
+10,
+4
+],
+"TPHQ": [
+9,
+3
+],
+"TPLPLASTEH": [
+10,
+5
+],
+"TRACXN": [
+2,
+1
+],
+"TRANSWORLD": [
+14,
+7
+],
+"TREEHOUSE": [
+13,
+4
+],
+"TREJHARA": [
+11,
+7
+],
+"TREL": [
+1,
+0
+],
+"TRENT": [
+25,
+15
+],
+"TRF": [
+13,
+5
+],
+"TRIDENT": [
+24,
+14
+],
+"TRIGYN": [
+15,
+6
+],
+"TRIL": [
+19,
+8
+],
+"TRITURBINE": [
+22,
+11
+],
+"TRIVENI": [
+27,
+12
+],
+"TRU": [
+2,
+0
+],
+"TSFINV": [
+14,
+8
+],
+"TTKHEALTH": [
+2,
+1
+],
+"TTKHLTCARE": [
+18,
+7
+],
+"TTKPRESTIG": [
+18,
+6
+],
+"TTL": [
+15,
+7
+],
+"TTML": [
+5,
+2
+],
+"TUBEINVEST": [
+6,
+3
+],
+"TV18BRDCST": [
+18,
+8
+],
+"TVSELECT": [
+18,
+7
+],
+"TVSHLTD": [
+16,
+12
+],
+"TVSMOTOR": [
+33,
+23
+],
+"TVSSCS": [
+0,
+0
+],
+"TVSSRICHAK": [
+11,
+6
+],
+"TVTODAY": [
+14,
+5
+],
+"TVVISION": [
+11,
+4
+],
+"TWL": [
+15,
+7
+],
+"UBHOLDINGS": [
+4,
+0
+],
+"UBL": [
+19,
+6
+],
+"UCAL": [
+14,
+6
+],
+"UCALFUEL": [
+9,
+3
+],
+"UCOBANK": [
+10,
+4
+],
+"UDS": [
+1,
+0
+],
+"UEL": [
+4,
+1
+],
+"UFBL": [
+2,
+1
+],
+"UFLEX": [
+19,
+8
+],
+"UFO": [
+8,
+0
+],
+"UGARSUGAR": [
+15,
+7
+],
+"UGROCAP": [
+2,
+1
+],
+"UJJIVAN": [
+8,
+5
+],
+"UJJIVANSFB": [
+9,
+5
+],
+"ULTRACEMCO": [
+20,
+9
+],
+"UMAEXPORTS": [
+4,
+3
+],
+"UMESLTD": [
+12,
+1
+],
+"UMIYA-MRO": [
+8,
+2
+],
+"UNICHEMLAB": [
+14,
+11
+],
+"UNIDT": [
+2,
+0
+],
+"UNIECOM": [
+0,
+0
+],
+"UNIENTER": [
+18,
+4
+],
+"UNIINFO": [
+5,
+1
+],
+"UNIONBANK": [
+17,
+7
+],
+"UNIPARTS": [
+5,
+4
+],
+"UNIPLY": [
+12,
+4
+],
+"UNITDSPR": [
+27,
+11
+],
+"UNITECH": [
+7,
+2
+],
+"UNITEDBNK": [
+1,
+0
+],
+"UNITEDPOLY": [
+14,
+5
+],
+"UNITEDTEA": [
+13,
+9
+],
+"UNIVASTU": [
+13,
+3
+],
+"UNIVCABLES": [
+18,
+8
+],
+"UNIVPHOTO": [
+5,
+3
+],
+"UNOMINDA": [
+34,
+18
+],
+"UPERGANGES": [
+6,
+2
+],
+"UPL": [
+21,
+11
+],
+"URAVIDEF": [
+10,
+7
+],
+"URJA": [
+8,
+5
+],
+"US10Y": [
+26,
+10
+],
+"USDINR": [
+79,
+29
+],
+"USHAMART": [
+20,
+12
+],
+"USHERAGRO": [
+3,
+0
+],
+"USK": [
+1,
+0
+],
+"USVIX": [
+3,
+0
+],
+"UTIAMC": [
+10,
+4
+],
+"UTKARSHBNK": [
+0,
+0
+],
+"UTTAMSTL": [
+4,
+1
+],
+"UTTAMSUGAR": [
+14,
+8
+],
+"UYFINCORP": [
+1,
+0
+],
+"V2RETAIL": [
+26,
+15
+],
+"VADILALIND": [
+13,
+7
+],
+"VAIBHAVGBL": [
+23,
+13
+],
+"VAISHALI": [
+7,
+3
+],
+"VAKRANGEE": [
+20,
+7
+],
+"VALECHAENG": [
+2,
+1
+],
+"VALIANTLAB": [
+1,
+0
+],
+"VALIANTORG": [
+1,
+0
+],
+"VARDHACRLC": [
+22,
+10
+],
+"VARDMNPOLY": [
+16,
+8
+],
+"VARROC": [
+9,
+5
+],
+"VASCONEQ": [
+15,
+9
+],
+"VASWANI": [
+19,
+7
+],
+"VBL": [
+23,
+13
+],
+"VCL": [
+2,
+1
+],
+"VEDL": [
+24,
+16
+],
+"VEEDOL": [
+17,
+8
+],
+"VENKEYS": [
+14,
+4
+],
+"VENUSPIPES": [
+8,
+4
+],
+"VENUSREM": [
+8,
+5
+],
+"VERANDA": [
+5,
+1
+],
+"VERTOZ": [
+10,
+6
+],
+"VESUVIUS": [
+25,
+14
+],
+"VETO": [
+9,
+6
+],
+"VGL": [
+16,
+6
+],
+"VGUARD": [
+25,
+11
+],
+"VHL": [
+15,
+8
+],
+"VHLTD": [
+10,
+3
+],
+"VIDEOIND": [
+6,
+2
+],
+"VIDHIING": [
+17,
+3
+],
+"VIJAYA": [
+9,
+4
+],
+"VIJAYABANK": [
+4,
+1
+],
+"VIJIFIN": [
+14,
+6
+],
+"VIKASECO": [
+12,
+6
+],
+"VIKASGLOB": [
+3,
+3
+],
+"VIKASLIFE": [
+4,
+1
+],
+"VIMTALABS": [
+18,
+9
+],
+"VINATIORGA": [
+27,
+12
+],
+"VINDHYATEL": [
+20,
+7
+],
+"VINEETLAB": [
+0,
+0
+],
+"VINNY": [
+6,
+3
+],
+"VINYLINDIA": [
+17,
+8
+],
+"VIPCLOTHNG": [
+17,
+8
+],
+"VIPIND": [
+19,
+8
+],
+"VIPULLTD": [
+15,
+6
+],
+"VIRINCHI": [
+0,
+0
+],
+"VISACHROME": [
+18,
+2
+],
+"VISAKAIND": [
+20,
+10
+],
+"VISHNU": [
+16,
+7
+],
+"VISHWARAJ": [
+8,
+1
+],
+"VITAL": [
+1,
+0
+],
+"VIVIANA": [
+5,
+4
+],
+"VIVIDHA": [
+8,
+3
+],
+"VIVIMEDLAB": [
+11,
+5
+],
+"VIYASH": [
+13,
+7
+],
+"VLEGOV": [
+2,
+1
+],
+"VLSFINANCE": [
+25,
+13
+],
+"VMART": [
+20,
+9
+],
+"VOLTAMP": [
+20,
+7
+],
+"VOLTAS": [
+32,
+14
+],
+"VPRPL": [
+1,
+0
+],
+"VRAJ": [
+0,
+0
+],
+"VRLLOG": [
+14,
+7
+],
+"VSSL": [
+23,
+12
+],
+"VSTIND": [
+24,
+10
+],
+"VSTL": [
+0,
+0
+],
+"VSTTILLERS": [
+25,
+12
+],
+"VTL": [
+28,
+17
+],
+"WAAREEINDO": [
+10,
+3
+],
+"WABAG": [
+20,
+12
+],
+"WABCOINDIA": [
+6,
+4
+],
+"WALCHANNAG": [
+19,
+7
+],
+"WANBURY": [
+16,
+7
+],
+"WCIL": [
+0,
+0
+],
+"WEALTH": [
+14,
+7
+],
+"WEBELSOLAR": [
+20,
+11
+],
+"WEIZMANIND": [
+21,
+8
+],
+"WEL": [
+14,
+5
+],
+"WELCORP": [
+24,
+11
+],
+"WELENT": [
+20,
+11
+],
+"WELINV": [
+23,
+9
+],
+"WELSPUNIND": [
+12,
+10
+],
+"WELSPUNLIV": [
+17,
+12
+],
+"WENDT": [
+10,
+3
+],
+"WESTLIFE": [
+8,
+4
+],
+"WEWIN": [
+8,
+4
+],
+"WHEELS": [
+14,
+7
+],
+"WHIRLPOOL": [
+20,
+11
+],
+"WILLAMAGOR": [
+11,
+4
+],
+"WINDLAS": [
+9,
+3
+],
+"WINDMACHIN": [
+18,
+12
+],
+"WIPL": [
+11,
+5
+],
+"WIPRO": [
+24,
+12
+],
+"WOCKPHARMA": [
+16,
+7
+],
+"WONDERLA": [
+13,
+5
+],
+"WORTHPERI": [
+9,
+5
+],
+"WSI": [
+10,
+4
+],
+"WSTCSTPAPR": [
+21,
+8
+],
+"WYETH": [
+2,
+1
+],
+"XCHANGING": [
+17,
+7
+],
+"XELPMOC": [
+7,
+3
+],
+"XPROINDIA": [
+13,
+7
+],
+"XTGLOBAL": [
+0,
+0
+],
+"YASHO": [
+0,
+0
+],
+"YATHARTH": [
+6,
+2
+],
+"YATRA": [
+2,
+0
+],
+"YESBANK": [
+21,
+11
+],
+"YUKEN": [
+6,
+2
+],
+"ZAGGLE": [
+2,
+1
+],
+"ZANDUREALT": [
+4,
+2
+],
+"ZEEL": [
+20,
+7
+],
+"ZEELEARN": [
+11,
+3
+],
+"ZEEMEDIA": [
+15,
+6
+],
+"ZENITHEXPO": [
+14,
+5
+],
+"ZENITHSTL": [
+14,
+3
+],
+"ZENSARTECH": [
+27,
+9
+],
+"ZENTEC": [
+17,
+9
+],
+"ZFCVINDIA": [
+28,
+13
+],
+"ZICOM": [
+3,
+2
+],
+"ZIMLAB": [
+2,
+0
+],
+"ZODIAC": [
+7,
+4
+],
+"ZODIACLOTH": [
+6,
+4
+],
+"ZOMATO": [
+7,
+4
+],
+"ZOTA": [
+13,
+7
+],
+"ZUARI": [
+14,
+6
+],
+"ZUARIGLOB": [
+9,
+5
+],
+"ZUARIIND": [
+13,
+7
+],
+"ZYDUSLIFE": [
+25,
+11
+],
+"ZYDUSWELL": [
+23,
+8
+],
+"ZYLOG": [
+1,
+0
+]
+}

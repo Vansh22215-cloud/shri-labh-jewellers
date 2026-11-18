@@ -74,8 +74,8 @@ def test_buy_message_format_once_and_sell_only_for_sent_buys(env, monkeypatch):
     assert r["buys"] == 1 and r["sells"] == 0                                   # ABC: no BUY was ever sent -> no SELL
     label, text = env[0]
     assert label == "vantage indicator"
-    assert text.startswith("#VANTAGE INDICATOR\n\n#TITAN\n\n🟢 BUY · Dip-buy A\nBuy at the next market open")
-    assert "📊 Past record of this signal type: 80% won" in text and "🏢 TITAN:" in text
+    assert text.startswith("#VANTAGE INDICATOR\n\n#TITAN\n\n🟢 BUY · Dip-buy A · likely win 80%\nBuy at the next market open")
+    assert "\n🛑 Stop-loss ₹92.00" in text and "\n\nNote : " in text and text.endswith("past Vantage signals won.")
     assert "Stop-loss ₹92.00" in text
     assert vantage.run(day)["buys"] == 0                                         # re-run: never sent twice
     sell = {"why": "Closed above the 5-day average (dip-buy exit)", "price": 104.0, "intrabar": False}
@@ -144,7 +144,7 @@ def test_live_alert_once_then_confirmed_or_cancelled(env, monkeypatch, tmp_path)
     r = vantage.live_step(Sc())
     assert r["live_buys"] == 2
     assert env[0][1].startswith("#VANTAGE INDICATOR\n\n#TITAN\n\n⚡ LIVE BUY signal · Dip-buy A")
-    assert "Price now ₹101.00" in env[0][1] and "confirm ✅ or cancel ❌" in env[0][1]
+    assert "Price now ₹101.00" in env[0][1] and "likely win 80% if it holds to the close" in env[0][1] and "confirm ✅ or cancel ❌" in env[0][1]
     assert vantage.live_step(Sc())["live_buys"] == 0                   # once per stock per day
     # close: TITAN held (normal BUY carries ✅ CONFIRMED), ABC did not (❌ CANCELLED)
     monkeypatch.setattr(vantage, "scan", lambda d, bars: [("TITAN", {"buy": _buy(now), "in_position": True}, 5e8)])
@@ -190,7 +190,7 @@ def test_index_without_volume_is_kept_in_the_snapshot(monkeypatch, tmp_path):
 def test_buy_messages_carry_the_quantity():
     from swing import safety
     s = {"capital": 45000, "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct": 25}}
-    assert "📦 Qty: 3 shares ≈ ₹4,272 · max loss ≈ ₹423 (1% of ₹45,000)" in vantage.qty_line(1424.0, 1283.0, s)
+    assert "📦 Qty: 3 shares ≈ ₹4,272 · \n🛘 max loss ≈ ₹423 (1% of ₹45,000)" in vantage.qty_line(1424.0, 1283.0, s)
     assert "Qty: 0" in vantage.qty_line(30000.0, 29000.0, s)            # one share > 25% of capital
     b = {"setup": "RCP", "tier": "", "score": 80, "close": 1424.0, "stop": 1283.0, "t2": float("nan")}
     assert "📦 Qty:" in vantage.buy_message("ICICIBANK", b, 46, 5510, False)

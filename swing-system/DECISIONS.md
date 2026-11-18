@@ -974,3 +974,14 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - "🏢 SYMBOL: x of y past VANTAGE signals won"
 - **Daily ranked list:** it shows the type next to each VANTAGE tip, plus a one-line note on what the % means.
 - No change to which tips are sent.
+
+## D131 - 2026-11-18 - VANTAGE message layout set by the owner
+- **Owner's exact layout:**
+  - The header line keeps "· likely win N%". For live alerts it reads "... if it holds to the close".
+  - "Price now ₹X (HH:MM) · " sits on its own line, then "🛑 Stop-loss ₹Y".
+  - "📦 Qty: N shares ≈ ₹Z · " is followed on the next line by "🛘 max loss ≈ ₹W (1% of ₹45,000)".
+  - The ⏳ line comes next.
+  - Last line: "Note : X of Y past Vantage signals won."
+- The "📊 Past record of this signal type" line (D130) is removed.
+- The same layout applies to the 3:20 pm buy-now and 3:40 pm BUY messages.
+- **The company record** (`vantage-ai/validation/company_record.json`, built by `company_record.py`) covers 2,351 NSE companies with at least 2 years of prices. It counts each company's VANTAGE signals over its whole history in the 13-year test, using the same logic, costs and data handling as round 1's all-stock run. Companies listed less than 2 years ago show "No past Vantage signals for this company yet."

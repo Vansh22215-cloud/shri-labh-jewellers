@@ -54,31 +54,30 @@ def company_record(sym):
     """(signals, wins) of this company in the 13-year test (vantage-ai/validation/trades_FINAL.csv) - information
     only: the pre-registered test (CALIB_RESULTS.md) found a company's own past record does NOT predict its next one."""
     if not _REC:
-        try:
-            T = pd.read_csv(REPLICA_DIR / "trades_FINAL.csv", usecols=["sym", "entry", "exit"])
-            T["win"] = (T["exit"] / T["entry"] - 1 - 0.0035) > 0
-            _REC.update({s: (int(len(g)), int(g["win"].sum())) for s, g in T.groupby("sym")})
+        try:                                           # all NSE stocks with >= 2 years of prices (company_record.py)
+            _REC.update({k: tuple(v) for k, v in json.load(open(REPLICA_DIR / "company_record.json")).items()})
         except Exception:
-            _REC["_"] = (0, 0)
+            pass
+    if not _REC:
+        # every stock's whole history (improve_trades_U.csv: all NSE stocks, not only while in the top 300) first,
+        # then the top-300 test for stocks missing there (e.g. delisted)
+        for f in ("trades_FINAL.csv", "improve_trades_U.csv"):
+            try:
+                T = pd.read_csv(REPLICA_DIR / f, usecols=["sym", "entry", "exit"])
+                T["win"] = (T["exit"] / T["entry"] - 1 - 0.0035) > 0
+                _REC.update({s: (int(len(g)), int(g["win"].sum())) for s, g in T.groupby("sym")})
+            except Exception:
+                pass
+        _REC.setdefault("_", (0, 0))
     return _REC.get(sym, (0, 0))
 
 
-def record_line(cal, sym, setup, tier, score):
-    """Owner 18 Nov: 'almost all tips show 46%'. The % is the record of the signal TYPE (no fact known on the signal
-    day separated winners within a type in the test, CALIB_RESULTS.md) - say so plainly, with the recent years, the
-    average result (wins are bigger than losses) and the company's own past signals."""
-    k = _cal_key(setup, tier, score)
-    v = cal.get(k) or cal.get(setup) or {}
-    if not v.get("win_pct"):
-        return ""
-    line = (f"\n📊 Past record of this signal type: {v['win_pct']}% won"
-            + (f" ({v['holdout_win_pct']}% in the last 3 years)" if v.get("holdout_win_pct") else "")
-            + (f", average {v['avg_pct']:+.1f}% per trade" if v.get("avg_pct") is not None else "")
-            + (" - fewer than half win, but winners are bigger than losers" if v["win_pct"] < 50 and (v.get("avg_pct") or 0) > 0
-               else ""))
+def note_line(sym):
+    """Owner 18 Nov: last line of every VANTAGE BUY - 'Note : X of X past Vantage signals won.' (this company's own
+    signals in the 13-year test; information only, see CALIB_RESULTS.md)."""
     n, w = company_record(sym)
-    line += (f"\n🏢 {sym}: {w} of {n} past VANTAGE signals won" if n else f"\n🏢 {sym}: no past VANTAGE signals in the test")
-    return line
+    return (f"\n\nNote : {w} of {n} past Vantage signals won." if n
+            else "\n\nNote : No past Vantage signals for this company yet.")
 
 
 def _cal_key(setup, tier, score):
@@ -248,7 +247,7 @@ def qty_line(entry, stop, settings=None, scale=1.0):
     if q < 1:
         return (f"\n📦 Qty: 0 - one share does not fit your limits (₹{cap:,.0f} capital, "
                 f"{L['risk_per_trade_pct']:g}% risk, max {L['max_order_pct']:g}% in one stock) - skip")
-    return (f"\n📦 Qty: {q} shares ≈ ₹{q * entry:,.0f} · max loss ≈ ₹{q * (entry - stop):,.0f} "
+    return (f"\n📦 Qty: {q} shares ≈ ₹{q * entry:,.0f} · \n🛘 max loss ≈ ₹{q * (entry - stop):,.0f} "
             f"({float(L['risk_per_trade_pct']) * scale:g}% of ₹{cap:,.0f})")
 
 
@@ -261,12 +260,13 @@ def min_turnover(s):
 def buy_message(sym, b, lk, n, thin, day=None):
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"🟢 BUY · {('Rolling Candle Profile' if b['setup'] == 'RCP' else b['setup'])}"
-            f"{(' ' + b['tier']) if b.get('tier') else ''}" +
-            f"\nBuy at the next market open ≈ ₹{_n(b['close'])} · Stop-loss ₹{_n(b['stop'])}"
-            + (f" · Target ₹{_n(b['t2'])}" if b.get("t2") == b.get("t2") and b.get("t2") else "")
+            f"{(' ' + b['tier']) if b.get('tier') else ''}" + (f" · likely win {lk}%" if lk else "") +
+            f"\nBuy at the next market open ≈ ₹{_n(b['close'])} · "
+            f"\n🛑 Stop-loss ₹{_n(b['stop'])}"
+            + (f"\n🎯 Target ₹{_n(b['t2'])}" if b.get("t2") == b.get("t2") and b.get("t2") else "")
             + _res_and_qty(sym, b["close"], b["stop"], day)
-            + record_line(calibration(), sym, b["setup"], b.get("tier", ""), b.get("score", 0))
-            + ("\n⚠️ Thinly traded stock - check the bid/ask before buying" if thin else ""))
+            + ("\n⚠️ Thinly traded stock - check the bid/ask before buying" if thin else "")
+            + note_line(sym))
 
 
 def sell_message(sym, s, entry):
@@ -490,12 +490,13 @@ def live_buy_message(sym, b, lk, n, price, t, thin):
     kind = "Rolling Candle Profile" if b["setup"] == "RCP" else b["setup"]
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"⚡ LIVE BUY signal · {kind}{(' ' + b['tier']) if b.get('tier') else ''}"
-            +
-            f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · Stop-loss ₹{_n(b['stop'])}"
+            + (f" · likely win {lk}% if it holds to the close" if lk else "") +
+            f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · "
+            f"\n🛑 Stop-loss ₹{_n(b['stop'])}"
             + _res_and_qty(sym, price, b["stop"], t)
-            + record_line(calibration(), sym, b["setup"], b.get("tier", ""), b.get("score", 0))
             + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
-            "\n⏳ Forming candle: I'll confirm ✅ or cancel ❌ right after the 3:30 pm close.")
+            "\n⏳ Forming candle: I'll confirm ✅ or cancel ❌ right after the 3:30 pm close."
+            + note_line(sym))
 
 
 def live_step(scanner, s=None):
@@ -568,12 +569,13 @@ def close_call_message(sym, b, lk, n, price, t, thin):
     kind = "Rolling Candle Profile" if b["setup"] == "RCP" else b["setup"]
     return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
             f"🔔 BUY NOW - before the 3:30 pm close · {kind}{(' ' + b['tier']) if b.get('tier') else ''}"
-            +
-            f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · Stop-loss ₹{_n(b['stop'])}"
+            + (f" · likely win {lk}%" if lk else "") +
+            f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · "
+            f"\n🛑 Stop-loss ₹{_n(b['stop'])}"
             + _res_and_qty(sym, price, b["stop"], t)
-            + record_line(calibration(), sym, b["setup"], b.get("tier", ""), b.get("score", 0))
             + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
-            "\nBuying now (not tomorrow morning) earned more in the 13-year test. I'll confirm ✅ after the close.")
+            "\nBuying now (not tomorrow morning) earned more in the 13-year test. I'll confirm ✅ after the close."
+            + note_line(sym))
 
 
 def close_call(day, t, res, s, cal):
