@@ -24,9 +24,14 @@ def months(start="2013-01-01"):
 
 def fetch(kind, a, b, s):
     f, t = f"{a:%d-%m-%Y}", f"{b:%d-%m-%Y}"
-    if kind == "bulk":
-        d = nf._get_json(s, f"{API}/historicalOR/bulk-block-short-deals?optionType=bulk_deals&from={f}&to={t}")
-        return pd.DataFrame(d.get("data") or [])
+    if kind == "bulk":           # the JSON form stops at 70 rows; the CSV form is complete
+        import io
+        r = s.get(f"{API}/historicalOR/bulk-block-short-deals?optionType=bulk_deals&from={f}&to={t}&csv=true",
+                  headers=nf.UA, timeout=120)
+        r.raise_for_status()
+        df = pd.read_csv(io.StringIO(r.content.decode("utf-8-sig", "ignore")), thousands=",")
+        df.columns = [c.strip() for c in df.columns]
+        return df
     if kind == "insider":
         d = nf._get_json(s, f"{API}/corporates-pit?index=equities&from_date={f}&to_date={t}")
         rows = d.get("data") or []
