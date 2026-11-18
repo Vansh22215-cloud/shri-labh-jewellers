@@ -1075,3 +1075,15 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - Then market falls (21–26%) and results during the trade (top-300: 26–31%).
   - The Learner compares the live mistake mix with this normal mix and flags gaps of 15+ points.
   - Round 20 (protecting profits) was started from it.
+
+## D140 - 2026-11-18 - Micro-inspection fix: splits and bonuses while a tip is open
+- **What was wrong:** after a split or bonus (82 NSE stocks in the last 12 months), the live price falls by the ratio while the stored buy price, stop-loss and targets stay in old rupees. That produced:
+  - false "stop-loss hit, exit now" alerts (VANTAGE live stop check and live-engine exits);
+  - fake losses in the tracker and Learner.
+
+  Signals were not affected, because Yahoo back-adjusts history for splits and the replica uses that history.
+- **The fix:** `swing/corp_actions.py`.
+  - **Evening re-scale:** open VANTAGE signals and open live-engine NORMAL tips are re-stated by Yahoo's split ratio, once per split (`split_done`).
+  - **Same-day guard:** a price below 75% of yesterday's close sends no stop alert until the evening re-scale. NSE price bands make that almost impossible without a corporate action, and a real 20% fall still triggers the stop.
+  - **Tracker:** zone tips recorded before a split are compared in today's rupees.
+- **Tests:** `tests/test_corp_actions.py`.

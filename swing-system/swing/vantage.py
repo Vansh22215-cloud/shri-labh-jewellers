@@ -596,6 +596,16 @@ def live_step(scanner, s=None):
             stop = float(r["stop"])
         except Exception:
             continue
+        prev = None
+        try:
+            prev = float(scanner.hist[r["sym"]]["close"].iloc[-1])
+        except Exception:
+            pass
+        from .corp_actions import looks_like_split
+        if b and prev and looks_like_split(b["low"], prev):
+            log.info("VANTAGE %s: today's low is below 75%% of yesterday's close - looks like a split/bonus; no stop "
+                     "alert until the evening re-scale", r["sym"])
+            continue
         if b and b["low"] <= stop and pd.Timestamp(r["signal"]) < scanner.day:
             sig.loc[i, ["status", "exit_date", "exit_why", "exit_price"]] = ["closed", str(scanner.day.date()),
                                                                              "Stop-loss (live)", f"{b['close']:.2f}"]

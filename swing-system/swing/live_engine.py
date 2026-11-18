@@ -784,6 +784,11 @@ def _exits(quotes, now, opt_quotes=None, candles=None):
             q = quotes.get(sym)
             if not q:
                 continue
+            from .corp_actions import looks_like_split
+            if looks_like_split(q.get("last"), q.get("prev")):
+                log.info("%s: price %.2f is below 75%% of yesterday's %.2f - looks like a split/bonus; no stop alert until "
+                         "the evening re-scale", sym, float(q["last"]), float(q["prev"]))
+                continue
             # ONLY prices AFTER the tip was sent count (bug fixed 12 Nov: the whole day's high/low was used, so a
             # dip from before the tip looked like a stop-loss hit). Candles after the tip time + the live price.
             px = q["last"]

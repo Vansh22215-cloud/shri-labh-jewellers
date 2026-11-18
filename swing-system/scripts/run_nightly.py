@@ -21,6 +21,11 @@ if __name__ == "__main__":
         archive.run_daily()
     except Exception as e:
         print("archive failed:", e)
+    try:   # splits / bonuses: open tips re-stated in today's rupees (no false stop alerts, true results)
+        from swing.corp_actions import rescale_open_tips
+        print("split re-scale:", rescale_open_tips())
+    except Exception as e:
+        print("split re-scale failed:", e)
     try:   # VANTAGE live scorecard (owner 18 Nov): every tip sent, scored; saved to GitHub for the research
         from swing import scorecard
         scorecard.run()

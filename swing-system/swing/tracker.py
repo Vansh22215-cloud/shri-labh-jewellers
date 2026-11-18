@@ -81,6 +81,10 @@ def collect(load):
             lo, hi, st, tg = _f(t.entry_low), _f(t.entry_high), _f(t.stop), _f(getattr(t, "target1", None))
             if d is None or None in (lo, hi, st):
                 continue
+            from .corp_actions import split_factor
+            f = split_factor(d, t.date)                              # prices recorded before a split/bonus
+            if f != 1.0:
+                lo, hi, st, tg = lo / f, hi / f, st / f, (tg / f if tg else tg)
             kind = str(getattr(t, "strategy", "scan")) + ("" if str(getattr(t, "kind", "tip")) == "tip" else " (shadow)")
             sent = "sent" if (str(getattr(t, "kind", "tip")) == "tip" and str(t.date)[:10] < MUTED_FROM) else "recorded only"
             rows.append(_row(src, kind, t.date, t.symbol, zone_trade(d, t.date, lo, hi, st, tg), stop=st, target=tg,
