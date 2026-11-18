@@ -21,6 +21,11 @@ if __name__ == "__main__":
         archive.run_daily()
     except Exception as e:
         print("archive failed:", e)
+    try:   # VANTAGE live scorecard (owner 18 Nov): every tip sent, scored; saved to GitHub for the research
+        from swing import scorecard
+        scorecard.run()
+    except Exception as e:
+        print("scorecard failed:", e)
     try:   # silent forward record of promoter buying (owner 18 Nov; no messages, no tip changes)
         from swing import shadow
         shadow.run()

@@ -1009,3 +1009,15 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Effect:** every quantity line now uses ₹51,000. Risk per trade is 1% = ₹510 at the stop-loss, and the maximum in one stock is 25% = ₹12,750.
 - The ADD MORE second lot is also capped at 1%.
 - The risk limits themselves are unchanged.
+
+## D135 - 2026-11-18 - VANTAGE live scorecard (owner: "track the tips you have been giving")
+- **What it does:** `swing/scorecard.py` runs in the evening job.
+  - Every VANTAGE BUY ever sent (`vantage_signals.csv`) is scored from its "buy ≈" price to its exit, or to today's close if still open.
+  - Each tip records: days held, whether the stop was touched, whether it got an ADD MORE, and whether the limit-entry test (D122) would have filled.
+  - Results are set against the 13-year test per signal type, together with the promoter shadow record (D132).
+- **Saved to GitHub:** `journal/vantage_scorecard.csv` and `.md`, so the research can read the live record.
+- **Contents:** market signals only. Nothing about the owner's trades, money or holdings.
+- **Seed:** the 17–18 Nov tips were replayed from official prices (`vantage-ai/validation/live_replay_17_18nov.csv`).
+  - 17 Nov: 9 trend tips.
+  - 18 Nov: 7 trend tips and 1 breakout.
+  - After one day, 3 of 9 were up, average +0.4%, and no stop was hit.
