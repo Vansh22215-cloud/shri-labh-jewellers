@@ -23,3 +23,22 @@
 1. Does "a3" keep underperforming while VANTAGE does better?
 2. Does the hourly scan add anything beyond the a3 tips? It mostly repeats them.
 3. Do skipped entries (opened outside the zone) do better or worse than the bought ones?
+
+## 18 Nov 2026 (later): 13-year mistake census (`mistake_census.json`)
+Share of all money lost on VANTAGE trades, holdout (all stocks / top-300):
+
+| Cause | All stocks | Top-300 |
+|---|---|---|
+| Gave back a profit (up ≥ 3% then lost) | 38% | 20% |
+| Market fell 3%+ | 21% | 23% |
+| Slow drift | 13% | 10% |
+| Never worked | 12% | 8% |
+| Results during the trade | 7% (results dates for 506 companies only) | 31% |
+| Gap through the stop | 7% | 5% |
+| Fast stop | 1% | 3% |
+
+**Checked, no fix:**
+- **Selling trend trades when NIFTY crosses below its 50-day average** (development): those trades average +2.15% instead of +4.72%.
+- **Selling before results:** the average results reaction is +0.1 to +0.3% (round 18 notes).
+
+**Testing:** round 20, protecting profits with a break-even stop after +5% or +8%.
