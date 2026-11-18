@@ -273,6 +273,11 @@ def opportunity(R, prof):
             slow = g[(g["per_day_pct"] < fresh) & (g["days"] >= 10)] if "per_day_pct" in g else g.iloc[0:0]
             L.append(f"- {kind}: a fresh tip of this type earns about {fresh:+.3f}% a day in the test; {len(slow)} of "
                      f"{len(g)} open/closed tips held 10+ days are earning less (money that could work harder)")
+    if "added" in V:
+        a, n = V[V["added"].astype(str) == "yes"], V[V["added"].astype(str) != "yes"]
+        if len(a):
+            L.append(f"- ADD MORE (a small edge in the test, 6 of 14 years better): {len(a)} tips got a second lot, average "
+                     f"{a['result_pct'].mean():+.2f}% vs {n['result_pct'].mean():+.2f}% for tips without")
     S = R[R["source"] == "blocked repeat"]
     if len(S):
         L.append(f"- Blocked repeats: {len(S)}, average {S['result_pct'].mean():+.2f}% since (if this is high, blocking "
