@@ -1,0 +1,97 @@
+{
+ "top300": {
+  "dev": {
+   "today": {
+    "cagr": 19.0,
+    "maxdd": -17.1,
+    "per_week": 4.2
+   },
+   "S1": {
+    "cagr": 19.6,
+    "maxdd": -20.4,
+    "per_week": 4.2
+   },
+   "S2": {
+    "cagr": 20.0,
+    "maxdd": -16.3,
+    "per_week": 4.6
+   },
+   "S3": {
+    "cagr": 20.5,
+    "maxdd": -18.2,
+    "per_week": 4.7
+   }
+  },
+  "holdout": {
+   "today": {
+    "cagr": 14.7,
+    "maxdd": -20.1,
+    "per_week": 2.7
+   },
+   "S1": {
+    "cagr": 13.4,
+    "maxdd": -23.7,
+    "per_week": 2.8
+   },
+   "S2": {
+    "cagr": 15.6,
+    "maxdd": -18.9,
+    "per_week": 2.7
+   },
+   "S3": {
+    "cagr": 11.3,
+    "maxdd": -25.4,
+    "per_week": 2.7
+   }
+  }
+ },
+ "all": {
+  "dev": {
+   "today": {
+    "cagr": 34.7,
+    "maxdd": -17.0,
+    "per_week": 12.6
+   },
+   "S1": {
+    "cagr": 36.1,
+    "maxdd": -18.8,
+    "per_week": 13.6
+   },
+   "S2": {
+    "cagr": 34.7,
+    "maxdd": -16.9,
+    "per_week": 13.2
+   },
+   "S3": {
+    "cagr": 35.5,
+    "maxdd": -18.0,
+    "per_week": 13.6
+   }
+  },
+  "holdout": {
+   "today": {
+    "cagr": 11.5,
+    "maxdd": -24.1,
+    "per_week": 3.3
+   },
+   "S1": {
+    "cagr": 12.0,
+    "maxdd": -28.0,
+    "per_week": 3.6
+   },
+   "S2": {
+    "cagr": 9.2,
+    "maxdd": -25.0,
+    "per_week": 3.2
+   },
+   "S3": {
+    "cagr": 3.8,
+    "maxdd": -24.9,
+    "per_week": 3.1
+   }
+  }
+ },
+ "S1_PASS": false,
+ "S2_PASS": false,
+ "S3_PASS": false
+}

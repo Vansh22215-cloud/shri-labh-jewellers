@@ -1,0 +1,18 @@
+# Round 14 results: champions' rules (18 Nov 2026): ❌ 0 of 3
+**Rules:** `IMPROVE14_PREREGISTRATION.md`. **Data:** `improve14_results.json`.
+
+## ₹45,000 account
+Each cell: yearly growth / worst fall.
+
+| | Top-300, development | Top-300, holdout | All stocks, development | All stocks, holdout |
+|---|---|---|---|---|
+| Today | 19.0 / −17.1 | 14.7 / −20.1 | 34.7 / −17.0 | 11.5 / −24.1 |
+| S1 leaders first | 19.6 / −20.4 | **13.4 / −23.7** | 36.1 / −18.8 | 12.0 / **−28.0** |
+| S2 breakouts on ≥ 3× volume | 20.0 / −16.3 | 15.6 / −18.9 | 34.7 / −16.9 | **9.2** / −25.0 |
+| S3 S1 + S2 | 20.5 / −18.2 | 11.3 / −25.4 | 35.5 / −18.0 | **3.8** / −24.9 |
+
+## Learning
+- **Leaders first:** the strongest stocks were the best buys up to 2023, but since then they also fell the most. Putting them first deepened the worst fall by 3.6–3.9 points in the holdout.
+- **Tight bases:** Minervini's rule does not hold on NSE in our data (development).
+- **Volume breakouts:** helped top-300 stocks, hurt all stocks.
+- Not adopted.
