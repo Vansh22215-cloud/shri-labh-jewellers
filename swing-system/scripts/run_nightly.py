@@ -26,6 +26,11 @@ if __name__ == "__main__":
         scorecard.run()
     except Exception as e:
         print("scorecard failed:", e)
+    try:   # EVERY tip from EVERY source tracked one by one (owner 18 Nov: "this mistake should not happen again")
+        from swing import tracker
+        tracker.run()
+    except Exception as e:
+        print("tracker failed:", e)
     try:   # silent forward record of promoter buying (owner 18 Nov; no messages, no tip changes)
         from swing import shadow
         shadow.run()

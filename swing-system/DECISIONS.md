@@ -1021,3 +1021,22 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - 17 Nov: 9 trend tips.
   - 18 Nov: 7 trend tips and 1 breakout.
   - After one day, 3 of 9 were up, average +0.4%, and no stop was hit.
+
+## D136 - 2026-11-18 - Every tip, tracked (owner: "this mistake should not happen again at all")
+- **What was wrong:** the strategy tips (journal/tips.csv since 2 Nov), hourly-scan ideas, company picks, VANTAGE tips, live-engine tips, buy-now alerts and the monthly basket were stored, but never followed and analysed together. Several strategy tips showed "open" with no buy price.
+- **The fix:** `swing/tracker.py` runs every evening.
+  - It follows every idea from every source with one rule set:
+    - **Zone tips:** bought at the next open only inside the zone; then the stop-loss or target 1, whichever comes first.
+    - **VANTAGE:** from the "buy ≈" price.
+    - **Live engine:** from its entry.
+    - **Company and basket picks:** price change only.
+  - Closed trades pay 0.35% costs.
+  - It writes `journal/all_tips.csv` (one row per idea) and `journal/all_tips.md` (by source and type, with the test next to it), both saved to GitHub. The research check-in reads them first.
+  - No owner data is written (quantity, /bought, money).
+- **First run (18 Nov):**
+  - Strategy tips (a3): 16 bought, open average −1.75%.
+  - Hourly scan: 18 bought, −1.07%.
+  - The a1 tips from 2–3 Nov: ICICIBANK reached target 1 (+13.1%); FEDERALBNK is +6.9%.
+  - Shadow a3 (not sent): +7.2%.
+  - VANTAGE (17–18 Nov): 16 trend tips, open average +0.2%.
+- **Rule from now on:** any new tip type must be added to the tracker in the same change that starts sending it.
