@@ -113,7 +113,8 @@ def enrich(R, load):
                     if len(w) >= 2:
                         x["nifty_same_days_pct"] = round((float(w.iloc[-1]) / float(w.iloc[0]) - 1) * 100, 2)
                         x["vs_nifty_pct"] = round(r.result_pct - x["nifty_same_days_pct"], 2)
-                dd = max(1, int(r.days)) if r.days == r.days and r.days else 1
+                dv = getattr(r, "days", None)
+                dd = max(1, int(dv)) if dv == dv and dv else 1
                 x["per_day_pct"] = round(r.result_pct / dd, 3)
         x["results_week"] = "yes" if _results_days(r.symbol, day) else "no"
         x["weekday"] = day.strftime("%a")
