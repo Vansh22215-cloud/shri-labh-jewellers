@@ -1003,3 +1003,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **No message** under the kill switch or safety stop, when capital is not set, or when one share does not fit.
 - **Results rule:** results within 5 days → half quantity (D123/D124).
 - **Switch:** `vantage_add_to_winners`.
+
+## D134 - 2026-11-18 - Capital set to ₹51,000 (owner: "from tomorrow I will start final trading... total money 51,000")
+- `settings.yaml` capital: 45,000 → 51,000.
+- **Effect:** every quantity line now uses ₹51,000. Risk per trade is 1% = ₹510 at the stop-loss, and the maximum in one stock is 25% = ₹12,750.
+- The ADD MORE second lot is also capped at 1%.
+- The risk limits themselves are unchanged.

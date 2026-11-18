@@ -3,7 +3,7 @@
 # ============================================================
 
 # Your trading capital in rupees.
-capital: 45000
+capital: 51000
 
 # KILL SWITCH: change "false" to "true" to stop ALL tips immediately.
 kill_switch: false
