@@ -46,7 +46,8 @@ def sim(T, seed, reserve=None, cap0=45000, risk=0.01, maxpct=0.25):
         q = min(int(cap0 * risk // (r.entry - r.init_stop)), int(cap0 * maxpct // r.entry))
         need = q * r.entry * 1.00175
         used_slow = sum(q_ * pe for (_, pe, _, q_, d_) in opn if not d_)
-        ok = q >= 1 and need <= cash and (dip or reserve is None or used_slow + need <= reserve * cap0)
+        # "the money" = the account's value now (cash + open trades at cost); fixed 45,000 was a bug (see results)
+        ok = q >= 1 and need <= cash and (dip or reserve is None or used_slow + need <= reserve * (cash + sum(q_ * pe for (_, pe, _, q_, _) in opn)))
         if not ok:
             if dip:
                 took["dip_skipped"] += 1
