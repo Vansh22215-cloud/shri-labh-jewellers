@@ -72,3 +72,18 @@ def test_live_stop_label_and_vantage_best_point():
     R = pd.DataFrame([dict(r, status="open", entry=100.0, exit=100.0, result_pct=0.0, exit_date="nan")])
     E = learning.enrich(R, lambda s: hot if s != "NIFTY50" else None)
     assert E.iloc[0]["best_pct"] == 1.0
+
+
+def test_opportunity_cost_columns():
+    idx = pd.bdate_range("2026-11-02", periods=6)
+    d = pd.DataFrame({"open": 100.0, "high": 101.0, "low": 99.0, "close": [100, 101, 102, 103, 104, 105], "volume": 1e6}, index=idx)
+    n = d.copy(); n["close"] = [100, 100, 100, 101, 101, 102]
+    R = pd.DataFrame([{"source": "VANTAGE", "type": "VANTAGE Rolling Candle Profile", "date": "2026-11-02", "symbol": "A",
+                       "status": "open", "entry_date": "2026-11-02", "exit_date": "nan", "entry": 100.0, "exit": 105.0,
+                       "result_pct": 5.0, "days": 5, "stop": 84.0},
+                      {"source": "VANTAGE", "type": "VANTAGE Rolling Candle Profile", "date": "2026-11-02", "symbol": "B",
+                       "status": "open", "entry_date": "2026-11-02", "exit_date": "nan", "entry": 100.0, "exit": 101.0,
+                       "result_pct": 1.0, "days": 5, "stop": 84.0}])
+    E = learning.same_day(learning.enrich(R, lambda s: n if s == "NIFTY50" else d))
+    a = E[E.symbol == "A"].iloc[0]
+    assert a["nifty_same_days_pct"] == 2.0 and a["vs_nifty_pct"] == 3.0 and a["per_day_pct"] == 1.0 and a["vs_same_day_pct"] == 4.0

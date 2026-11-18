@@ -60,14 +60,22 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip (retired list) | weekday | Tue | 1 | +13.13% | 100% |
 | strategy tip (retired list) | weekday | Wed | 3 | +11.18% | 100% |
 
+## 2b. Opportunity cost: could the same money have done better?
+- VANTAGE: 4 of 9 beat simply holding NIFTY over the same days (average +1.01 points)
+- hourly scan: 6 of 14 beat simply holding NIFTY over the same days (average -0.57 points)
+- strategy tip: 6 of 15 beat simply holding NIFTY over the same days (average -1.60 points)
+- strategy tip (retired list): 9 of 15 beat simply holding NIFTY over the same days (average +1.76 points)
+- VANTAGE Breakout: a fresh tip of this type earns about +0.036% a day in the test; 0 of 1 open/closed tips held 10+ days are earning less (money that could work harder)
+- VANTAGE Rolling Candle Profile: a fresh tip of this type earns about +0.069% a day in the test; 0 of 16 open/closed tips held 10+ days are earning less (money that could work harder)
+
 ## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)
-- [weak] hourly scan: when liquidity = 10-50 cr, ideas averaged +0.7% (n=4) vs -1.6% when over 50 cr (n=14)
-- [weak] strategy tip: when liquidity = over 50 cr, ideas averaged -1.1% (n=12) vs -3.6% when 10-50 cr (n=4)
-- [medium] strategy tip: when market mood = calm, ideas averaged -0.5% (n=9) vs -3.4% when jumpy (n=7)
-- [weak] strategy tip: when weekday = Fri, ideas averaged -0.5% (n=3) vs -3.4% when Wed (n=7)
-- [medium] strategy tip (retired list): when market = falling, ideas averaged +10.7% (n=5) vs -0.5% when rising (n=10)
-- [weak] strategy tip (retired list): when weekday = Wed, ideas averaged +11.2% (n=3) vs +1.2% when Mon (n=7)
-- [weak] strategy tip: 2 of 3 losing ideas - Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake)
+- [weak] hourly scan: when liquidity = 10-50 cr, ideas averaged +0.7% (n=4) vs -1.6% when over 50 cr (n=14) - to research (test on 13 years before any change)
+- [weak] strategy tip: when liquidity = over 50 cr, ideas averaged -1.1% (n=12) vs -3.6% when 10-50 cr (n=4) - to research (test on 13 years before any change)
+- [medium] strategy tip: when market mood = calm, ideas averaged -0.5% (n=9) vs -3.4% when jumpy (n=7) - to research (test on 13 years before any change)
+- [weak] strategy tip: when weekday = Fri, ideas averaged -0.5% (n=3) vs -3.4% when Wed (n=7) - to research (test on 13 years before any change)
+- [medium] strategy tip (retired list): when market = falling, ideas averaged +10.7% (n=5) vs -0.5% when rising (n=10) - to research (test on 13 years before any change)
+- [weak] strategy tip (retired list): when weekday = Wed, ideas averaged +11.2% (n=3) vs +1.2% when Mon (n=7) - to research (test on 13 years before any change)
+- [weak] strategy tip: 2 of 3 losing ideas - Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake) - known: tested twice (rounds 1 E1 and 20): break-even stops cost more than they save - the price of letting winners run
 
 ## 4. Mistakes: why each losing idea lost (plain diagnosis)
 | Mistake | Ideas | Average | Sources |

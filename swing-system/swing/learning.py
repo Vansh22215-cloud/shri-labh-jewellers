@@ -39,6 +39,7 @@ MIN_SIGN = 2                    # owner 18 Nov: "bare minimum - we can't wait": 
 def evidence(n):
     return "strong" if n >= 10 else "medium" if n >= 5 else "weak"
 _LAST = (pd.DataFrame(), [], pd.DataFrame(), [])
+_OPP = []
 
 
 def profile():
@@ -102,6 +103,18 @@ def enrich(R, load):
                 st = getattr(r, "stop", None)
                 if st == st and st and e > st and r.result_pct == r.result_pct:
                     x["result_R"] = round(r.result_pct / ((e - st) / e * 100), 2)
+            # OPPORTUNITY COST (owner 18 Nov): what else the same money could have done over the same days
+            if e == e and e and str(r.status) in ("open", "closed") and r.result_pct == r.result_pct:
+                n = load("NIFTY50")
+                if n is not None and len(n):
+                    a = pd.Timestamp(str(r.entry_date)[:10]) if str(r.entry_date) not in ("nan", "") else day
+                    b = pd.Timestamp(str(r.exit_date)[:10]) if str(getattr(r, "exit_date", "nan")) not in ("nan", "", "None") else n.index[-1]
+                    w = n[(n.index >= a) & (n.index <= b)]["close"]
+                    if len(w) >= 2:
+                        x["nifty_same_days_pct"] = round((float(w.iloc[-1]) / float(w.iloc[0]) - 1) * 100, 2)
+                        x["vs_nifty_pct"] = round(r.result_pct - x["nifty_same_days_pct"], 2)
+                dd = max(1, int(r.days)) if r.days == r.days and r.days else 1
+                x["per_day_pct"] = round(r.result_pct / dd, 3)
         x["results_week"] = "yes" if _results_days(r.symbol, day) else "no"
         x["weekday"] = day.strftime("%a")
         rows.append(x)
@@ -230,6 +243,42 @@ def skipped_review(R, load):
     return out
 
 
+def same_day(R):
+    """Each bought idea vs the average of the other ideas of the same source sent the same day (choice quality)."""
+    B = R[R["status"].isin(["open", "closed"]) & R["result_pct"].notna()].copy()
+    if not len(B):
+        return R
+    g = B.groupby(["source", "date"])["result_pct"]
+    B["vs_same_day_pct"] = (B["result_pct"] - (g.transform("sum") - B["result_pct"]) / (g.transform("count") - 1)).round(2)
+    B.loc[g.transform("count") < 2, "vs_same_day_pct"] = np.nan
+    R = R.drop(columns=[c for c in ("vs_same_day_pct",) if c in R.columns])
+    return R.merge(B[["source", "date", "symbol", "vs_same_day_pct"]], on=["source", "date", "symbol"], how="left")
+
+
+def opportunity(R, prof):
+    """Opportunity cost, in plain lines: vs NIFTY, money's speed vs a fresh tip, what skipped/blocked ideas did."""
+    L = []
+    B = R[R["status"].isin(["open", "closed"]) & R["result_pct"].notna()]
+    for src, g in B.groupby("source"):
+        if "vs_nifty_pct" in g and g["vs_nifty_pct"].notna().any():
+            v = g["vs_nifty_pct"].dropna()
+            L.append(f"- {src}: {int((v > 0).sum())} of {len(v)} beat simply holding NIFTY over the same days "
+                     f"(average {v.mean():+.2f} points)")
+    V = B[B["source"] == "VANTAGE"]
+    for kind, g in V.groupby("type"):
+        p = prof.get(TYPE_MAP.get(kind, ""), {})
+        if p and p.get("median_days"):
+            fresh = p["avg_pct"] / max(1.0, p["median_days"])
+            slow = g[(g["per_day_pct"] < fresh) & (g["days"] >= 10)] if "per_day_pct" in g else g.iloc[0:0]
+            L.append(f"- {kind}: a fresh tip of this type earns about {fresh:+.3f}% a day in the test; {len(slow)} of "
+                     f"{len(g)} open/closed tips held 10+ days are earning less (money that could work harder)")
+    S = R[R["source"] == "blocked repeat"]
+    if len(S):
+        L.append(f"- Blocked repeats: {len(S)}, average {S['result_pct'].mean():+.2f}% since (if this is high, blocking "
+                 "cost us; if low, it saved us)")
+    return L
+
+
 def expectation(R, prof):
     """-> list of (type, verdict, plain line) for VANTAGE types with a tested profile."""
     out = []
@@ -257,7 +306,8 @@ def expectation(R, prof):
 
 
 BUCKETS = ["market", "market_mood", "liquidity", "from_52w_high", "results_week", "weekday"]
-ENRICHED = BUCKETS + ["best_pct", "worst_pct", "result_R", "mistake"]
+ENRICHED = BUCKETS + ["best_pct", "worst_pct", "result_R", "mistake", "nifty_same_days_pct", "vs_nifty_pct",
+                      "per_day_pct", "vs_same_day_pct"]
 
 
 def when_it_works(R):
@@ -317,6 +367,7 @@ def write(R, E, W, Ls, today=None, extra=None):
           "| Source | Situation | Value | Ideas | Average | Won |", "|---|---|---|---|---|---|"]
     for r in W.itertuples():
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
+    L += ["", "## 2b. Opportunity cost: could the same money have done better?"] + (_OPP or ["- Not enough bought ideas yet."])
     L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
         ([f"- [{x.get('evidence', '?')}] {x['lesson']} - {x['status']}" for x in Ls] or ["- None yet."])
     if extra:
@@ -428,7 +479,10 @@ def build(load=None):
         R = tracker.build(load)
     R = enrich(R, load)
     R.to_csv(tracker.CSV, index=False)
+    R = same_day(R)
     E, W = expectation(R, profile()), when_it_works(R)
+    global _OPP
+    _OPP = opportunity(R, profile())
     M, lines = mistakes(R, load)
     Rp, Sk = repeats(R), skipped_review(R, load)
     Ls = lessons(W) + mistake_lessons(M)

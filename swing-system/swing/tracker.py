@@ -101,9 +101,14 @@ def collect(load):
             continue
         closed = str(t.status) == "closed" and _f(getattr(t, "exit_price", None))
         after = d[d.index > pd.Timestamp(t.signal)]
-        res = {"status": "closed" if closed else "open", "entry": ref, "entry_date": str(t.signal),
-               "exit": float(t.exit_price) if closed else float(d["close"].iloc[-1]), "days": int(len(after)),
-               "why": str(getattr(t, "exit_why", "")) if closed else ""}
+        xp, xd = (float(t.exit_price) if closed else float(d["close"].iloc[-1])), None
+        why = str(getattr(t, "exit_why", "")) if closed else ""
+        if closed and "live" not in why.lower() and str(getattr(t, "exit_date", "")) not in ("", "nan"):
+            nxt = d[d.index > pd.Timestamp(str(t.exit_date)[:10])]          # the SELL says "sell at the next open"
+            if len(nxt):
+                xp, xd = float(nxt["open"].iloc[0]), str(nxt.index[0].date())
+        res = {"status": "closed" if closed else "open", "entry": ref, "entry_date": str(t.signal), "exit": xp,
+               "exit_date": xd or (str(t.exit_date)[:10] if closed else None), "days": int(len(after)), "why": why}
         kind = "VANTAGE " + ("Rolling Candle Profile" if t.setup == "RCP" else str(t.setup)) + \
             (f" {t.tier}" if str(t.tier) not in ("", "nan") else "")
         nxt = round(float(after["open"].iloc[0]), 2) if len(after) else None
