@@ -35,4 +35,6 @@
 7. ~~**Tighter trend stop**~~ done (round 18): failed. Note: use `improve_trades_U2.csv` as the all-stock baseline from now on.: RCP stop at 4 or 3 ATR instead of 5, sized to keep the 1% risk.
 8. ~~**Idle money**~~ checked: 90–98% invested, not a weak spot.
 9. ~~**Sector cap**~~ done (round 19): failed. Falls are market-wide.
-10. **Next ideas:** the cost of 25% max per stock vs 15% (smaller positions mean more trades taken at the same risk); results of signals that came while the market was already 10% down from its high (re-check of round 6 with a different trigger).
+10. ~~**Per-stock cap 25% vs 15%**~~ checked: the median position is 5–7% of the money; the 25% cap binds on 0.2–0.9% of trades and a 15% cap would bind on 2.3%. No effect worth testing.
+11. ~~**Market already 10% below its high**~~ skipped: three market-weather rules already failed (rounds 6, 8, 12).
+12. **Now the most valuable item is the live record** (item 5): tips start on 19 Nov with ₹51,000. After 2–4 weeks, compare live tips with the test numbers (win %, profit per trade, buy-price slippage at 3:20 pm and at the next open).
