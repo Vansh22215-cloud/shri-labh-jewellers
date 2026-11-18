@@ -1,0 +1,147 @@
+{
+ "holdout": {
+  "S0 normal": {
+   "B": {
+    "cagr": 14.8,
+    "maxdd": -20.1
+   },
+   "C": {
+    "cagr": 15.8,
+    "maxdd": -20.2
+   },
+   "C+A": {
+    "cagr": 18.8,
+    "maxdd": -19.2
+   }
+  },
+  "S1 costs 0.6%": {
+   "B": {
+    "cagr": 12.9,
+    "maxdd": -20.8
+   },
+   "C": {
+    "cagr": 14.5,
+    "maxdd": -21.6
+   },
+   "C+A": {
+    "cagr": 15.5,
+    "maxdd": -21.1
+   }
+  },
+  "S2 buys 0.3% worse": {
+   "B": {
+    "cagr": 13.5,
+    "maxdd": -21.2
+   },
+   "C": {
+    "cagr": 15.5,
+    "maxdd": -20.4
+   },
+   "C+A": {
+    "cagr": 18.4,
+    "maxdd": -19.5
+   }
+  },
+  "S3 30% of tips missed": {
+   "B": {
+    "cagr": 14.2,
+    "maxdd": -20.4
+   },
+   "C": {
+    "cagr": 15.8,
+    "maxdd": -18.1
+   },
+   "C+A": {
+    "cagr": 18.8,
+    "maxdd": -18.5
+   }
+  },
+  "S4 all three": {
+   "B": {
+    "cagr": 11.0,
+    "maxdd": -21.4
+   },
+   "C": {
+    "cagr": 12.8,
+    "maxdd": -20.2
+   },
+   "C+A": {
+    "cagr": 15.4,
+    "maxdd": -20.1
+   }
+  }
+ },
+ "dev": {
+  "S0 normal": {
+   "B": {
+    "cagr": 18.9,
+    "maxdd": -17.2
+   },
+   "C": {
+    "cagr": 20.4,
+    "maxdd": -14.2
+   },
+   "C+A": {
+    "cagr": 20.5,
+    "maxdd": -14.7
+   }
+  },
+  "S1 costs 0.6%": {
+   "B": {
+    "cagr": 17.4,
+    "maxdd": -17.9
+   },
+   "C": {
+    "cagr": 18.7,
+    "maxdd": -15.7
+   },
+   "C+A": {
+    "cagr": 19.3,
+    "maxdd": -16.2
+   }
+  },
+  "S2 buys 0.3% worse": {
+   "B": {
+    "cagr": 17.6,
+    "maxdd": -18.2
+   },
+   "C": {
+    "cagr": 18.6,
+    "maxdd": -15.5
+   },
+   "C+A": {
+    "cagr": 18.9,
+    "maxdd": -17.0
+   }
+  },
+  "S3 30% of tips missed": {
+   "B": {
+    "cagr": 18.0,
+    "maxdd": -16.6
+   },
+   "C": {
+    "cagr": 18.9,
+    "maxdd": -15.1
+   },
+   "C+A": {
+    "cagr": 19.2,
+    "maxdd": -16.5
+   }
+  },
+  "S4 all three": {
+   "B": {
+    "cagr": 15.7,
+    "maxdd": -19.4
+   },
+   "C": {
+    "cagr": 16.0,
+    "maxdd": -19.2
+   },
+   "C+A": {
+    "cagr": 16.9,
+    "maxdd": -18.8
+   }
+  }
+ },
+ "flags": []
+}
