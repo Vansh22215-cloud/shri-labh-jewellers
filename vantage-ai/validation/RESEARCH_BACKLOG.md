@@ -1,19 +1,34 @@
-# Research backlog (push shortened by the owner to 24 hours on 18 Nov 2026)
-**Goal:** better trades (higher quality, less risk), more profit, and a good number of trades every week.
+# Research backlog: targeted (owner, 18 Nov 2026)
+**Owner's direction:**
+- "R&D in a targeted, focused area, not blind."
+- "Find insights from our system, where we are weak, where there is still space."
+- "Remember our goal": better trades, less risk, more profit, a good number of trades a week.
 
-**Method for every round:**
-1. Pre-register (rules and pass bar committed first).
-2. 13-year NSE test with delisted stocks, next-open fills and costs.
-3. Judge on the Nov 2023+ holdout.
-4. A crisp report to the owner.
-5. Apply only after the owner approves.
+**Method:**
+- Explore on development data only (signals before Nov 2023).
+- Write a pre-registration.
+- Judge once on the holdout, in the ₹45,000 account simulation.
+- The PASS bar: yearly growth +1 point, with the worst fall no more than 2 points deeper, in both periods and both trade sets.
+- The 1% risk limit is never raised.
+- Apply only with the owner's yes. Talk to the owner in plain words.
 
-| Round | Theme | Ideas | Why it could matter | Status |
-|---|---|---|---|---|
-| 1 | Filters on which signals to take | breadth, leaders, sector, delivery, meta-labeling, exits, wider dips, universe | quality | done: 1 of 9 passed (₹2 cr liquidity floor, applied) |
-| 2 | How each trade is taken | gap guard, limit entry, half profit at 2R, results-day guard, best-first slot ranking | quality, less risk | done: R4 passed (applied as half quantity + date, D123/D124); R2 forward test running (D122) |
-| 3 | Buy at the close instead of next open | the live alerts now make it possible to buy at 3:25 pm when the signal is about to confirm | removes overnight gap cost | done: PASSED, applied (3:20 pm buy-now alert, D125) |
-| 4 | Proven India momentum: monthly rotation | top 10–20 stocks by 6/12-month momentum, risk-adjusted, monthly rebalance (the idea behind NSE's Nifty200 Momentum 30 index) | regular trades every month; documented edge in India | done: M3 PASSED, applied (monthly basket, D126) |
-| 5 | New short-term families for more weekly trades | pocket pivot (O'Neil), NR7 / inside-day breakout in an uptrend, 3-day pullback in leaders (Connors) | more good trades a week | done: 0 of 3 passed (all ~zero profit after costs) |
-| 6 | Risk at the portfolio level | volatility-scaled size, a cap on open risk per sector, correlation | smaller drawdowns at equal profit | done: NIFTY-200-day rule for tips failed (round 6) |
-| 7 | Live-record check | compare the first live week of tips with the tested numbers | catch problems early | after a week of tips |
+## Known facts (from rounds 1–15)
+- Money is the binding limit: about 70% of signals are skipped with ₹45,000.
+- Dip-buys earn 5–10× more per day of money tied up, but they are rare.
+- Within a signal type, no fact known on the signal day picks winners in a way that lasts (rounds 1, 9, 12, 14, 15, calibration).
+- Filters that worked before 2023 often stop working afterwards. Always check the holdout and every year.
+- Winning trend trades keep winning: add-to-winners is live (D133).
+- The trend SELL is not leaving money behind (round 14 post-exit study).
+- Yahoo opening prices before Nov 2023 are unreliable. Intraday ideas must be checked on official NSE daily files (`swing-system/data/bhavcopy`, daily 2012–2026).
+
+## Queue (targeted)
+1. **Breakouts that tie up money:** path study of breakout trades, like the round-13 exploration. Is a breakout that has made no progress after N days dead money compared with a fresh signal?
+2. **More dip-buys of the same quality in all stocks:** the per-day value of dip-buys is huge. Test RSI(2) < 5 (D1) at the account level in both trade sets. D2 (< 10) failed.
+3. **Add-to-winners, second step:** a third lot at day 30 if up ≥ 15%. Turtles add up to 4 units. Always within the 1% limit per lot.
+4. **Trades in results weeks:** do open trend trades that cross a results date behave differently? Exit-before-results test.
+5. **Live record review**, weekly once tips exist:
+   - tips vs the tested numbers
+   - the R2 limit-entry record
+   - the promoter shadow record
+   - the close-call (3:20 pm) fills
+6. **Kite intraday candles:** the archive stores 5-minute data daily (`archive.run_daily`). After about 3 months, test the real fill price at 3:20 pm vs the close, and 9:15 vs the open.
