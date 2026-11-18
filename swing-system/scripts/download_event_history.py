@@ -39,6 +39,23 @@ def fetch(kind, a, b, s):
                 and "back" in (str(r.get("desc", "")) + str(r.get("attchmntText", ""))).lower()]
         return pd.DataFrame([{"symbol": r.get("symbol"), "an_dt": r.get("an_dt"), "desc": r.get("desc"),
                               "text": str(r.get("attchmntText", ""))[:300]} for r in rows])
+    if kind == "index":
+        d = nf._get_json(s, f"{API}/press-release-cms20?fromDate={f}&toDate={t}")
+        rows = []
+        for x in d or []:
+            c = x.get("content") or {}
+            body = str(c.get("body") or "")
+            att = (c.get("field_file_attachement") or {}).get("url")
+            if str(c.get("title", "")).strip().upper() == "NSE INDICES" and "eplacement" in body and att:
+                pdf = OUT / "index_pdfs" / att.rsplit("/", 1)[-1]
+                if not pdf.exists():
+                    pdf.parent.mkdir(parents=True, exist_ok=True)
+                    r = s.get(att.replace("in//", "in/"), headers=nf.UA, timeout=60)
+                    if r.status_code == 200 and r.content[:4] == b"%PDF":
+                        pdf.write_bytes(r.content)
+                    time.sleep(1.5)
+                rows.append({"date": x.get("changed"), "title": body[:200], "pdf": pdf.name if pdf.exists() else ""})
+        return pd.DataFrame(rows)
     raise ValueError(kind)
 
 
@@ -68,5 +85,5 @@ def run(kind):
 
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
-    for k in (["bulk", "insider", "buyback"] if which == "all" else [which]):
+    for k in (["bulk", "insider", "buyback", "index"] if which == "all" else [which]):
         run(k)
