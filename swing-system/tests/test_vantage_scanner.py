@@ -290,3 +290,34 @@ def test_broken_logic_is_reported_not_silent(env, monkeypatch):
     r = vantage.run("2026-11-17")
     assert not r["ok"] and "scan errors on 10 of 10" in r["why"]
     assert any(label == "system problem" for label, _ in env)
+
+
+def test_add_more_once_on_day_15_when_up_8_percent(env, monkeypatch, tmp_path):
+    """Round 13 (owner approved): open trend signal, 15 trading days after entry, up >= 8% -> one ADD MORE message."""
+    from swing import safety
+    monkeypatch.setattr(safety, "emergency_active", lambda: False)
+    sig_day = pd.Timestamp("2026-10-01")
+    idx = pd.bdate_range(sig_day, periods=17)                         # signal day + 16 bars after it
+    day = idx[16]                                                     # the 16th bar after the signal = close of day 15
+    d = pd.DataFrame({"open": 110.0, "high": 111.0, "low": 109.0, "close": 110.0, "volume": 1e6}, index=idx)
+    monkeypatch.setattr(vantage, "history", lambda sym, dd, bar: d[d.index <= dd])
+    pd.DataFrame([{"sym": "TITAN", "signal": str(sig_day.date()), "setup": "RCP", "tier": "", "score": "70",
+                   "close": "100.00", "stop": "84.00", "likely": "46", "status": "open", "sent_at": "x",
+                   "exit_date": "", "exit_why": "", "exit_price": "", "limit_test": ""}]).to_csv(vantage.SIGNALS_F, index=False)
+    s = {"capital": 45000, "risk_per_trade_pct": 1}
+    sig = vantage._load_signals()
+    assert vantage.add_to_winners(day - pd.Timedelta(days=1), {}, sig, s) == 0      # not day 15 yet
+    assert vantage.add_to_winners(day, {}, sig, s) == 1
+    msg = env[-1][1]
+    assert "📈 ADD MORE · Rolling Candle Profile · up 10.0% after 15 trading days" in msg
+    assert "🛑 Stop-loss stays ₹84.00 for both lots" in msg and "Sell both lots together" in msg
+    assert "Buy another 17 shares" in msg and "max loss on it ≈ ₹442" in msg      # within the 1% limit (Rs 450)
+    assert vantage.add_to_winners(day, {}, vantage._load_signals(), s) == 0          # once only
+    # below +8% or switched off: nothing
+    d["close"] = 107.0
+    sig2 = vantage._load_signals()
+    sig2["added"] = ""
+    assert vantage.add_to_winners(day, {}, sig2, s) == 0
+    d["close"] = 110.0
+    assert vantage.add_to_winners(day, {}, sig2, dict(s, vantage_add_to_winners=False)) == 0
+    assert vantage.add_to_winners(day, {}, sig2, dict(s, kill_switch=True)) == 0

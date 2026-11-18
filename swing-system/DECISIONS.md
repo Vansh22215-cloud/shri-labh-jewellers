@@ -991,3 +991,15 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **The record:** `swing/shadow.py`, run in the evening job after the price update. It records every new disclosure in `data/private/shadow_promoter.csv`, one per stock per day, and fills in the would-be trade once prices exist. It applies the same costs and the same ₹2 cr/day filter as the test.
 - **Effect on the owner:** no messages, no change to tips.
 - **Decision point:** after a few months of live events, the record shows whether the idea reaches the bar.
+
+## D133 - 2026-11-18 - Add to winning trend trades (round 13, owner: "Yes, do it")
+- **Rule:** an open VANTAGE trend (Rolling Candle Profile) signal that is up ≥ 8% at the close of its 15th trading day after entry gets one "📈 ADD MORE" message.
+  - The second lot is bought at the next open and exits together with the first lot.
+  - The check runs once only, on exactly that day, as tested. It is recorded in `vantage_signals.csv` (`added`) before sending.
+- **Safety change from the tested version:**
+  - The test sized the second lot from its own price, so a stop-out could lose ~3–4% of capital on it. That is above the owner's 1% per-trade limit.
+  - The live version sizes it to the REAL stop-loss (the first lot's), so the loss stays ≤ 1%.
+  - Re-tested (`improve13_riskcapped.py`): +1.0, +1.0, +0.9 and +0.4 points of yearly growth in the four cells (top-300 and all stocks × development and holdout), with the worst fall at most 1.5 points deeper. That is smaller than the +1–2 points of the tested version, but within the risk rules.
+- **No message** under the kill switch or safety stop, when capital is not set, or when one share does not fit.
+- **Results rule:** results within 5 days → half quantity (D123/D124).
+- **Switch:** `vantage_add_to_winners`.

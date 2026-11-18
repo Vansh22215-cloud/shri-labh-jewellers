@@ -77,4 +77,5 @@ vantage_close_call: true
 monthly_basket: true
 # Money for the basket (rupees). 0 = list without quantities. Telegram /basket 20000 also sets it.
 basket_capital: 0
-
+# Round 13 (18 Nov, owner approved): "ADD MORE" when a VANTAGE trend trade is up 8%+ after 15 trading days.
+vantage_add_to_winners: true

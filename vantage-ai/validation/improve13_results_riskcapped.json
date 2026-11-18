@@ -1,0 +1,57 @@
+{
+ "top300": {
+  "add_ons": 981,
+  "dev": {
+   "today": {
+    "cagr": 19.0,
+    "maxdd": -17.1,
+    "per_week": 4.2
+   },
+   "with_add_ons": {
+    "cagr": 20.0,
+    "maxdd": -17.1,
+    "per_week": 4.9
+   }
+  },
+  "holdout": {
+   "today": {
+    "cagr": 14.7,
+    "maxdd": -20.1,
+    "per_week": 2.7
+   },
+   "with_add_ons": {
+    "cagr": 15.7,
+    "maxdd": -20.3,
+    "per_week": 2.9
+   }
+  }
+ },
+ "all": {
+  "add_ons": 3660,
+  "dev": {
+   "today": {
+    "cagr": 34.7,
+    "maxdd": -17.0,
+    "per_week": 12.6
+   },
+   "with_add_ons": {
+    "cagr": 35.6,
+    "maxdd": -18.5,
+    "per_week": 15.2
+   }
+  },
+  "holdout": {
+   "today": {
+    "cagr": 11.5,
+    "maxdd": -24.1,
+    "per_week": 3.3
+   },
+   "with_add_ons": {
+    "cagr": 11.9,
+    "maxdd": -24.8,
+    "per_week": 3.9
+   }
+  }
+ },
+ "PASS": false
+}

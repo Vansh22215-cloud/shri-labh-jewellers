@@ -276,6 +276,67 @@ def sell_message(sym, s, entry):
             + ("" if s.get("intrabar") else "\nSell at the next market open."))
 
 
+# ============================================================================== ADD TO WINNERS (round 13, owner: "Yes")
+# 13-year test (vantage-ai/validation/IMPROVE13_RESULTS.md): a trend (Rolling Candle Profile) trade that is up >= 8% at
+# the close of its 15th trading day keeps earning more per day than a new signal. The second lot is sized to the REAL
+# stop-loss (the first lot's), so its loss stays within the 1% limit: +0.4 to +1.0 point of yearly growth in all four
+# test cells with about the same worst fall (the tested 'stop distance from the new price' sizing gave +1-2 points but
+# could lose ~3-4% of capital on the second lot - above the owner's 1% limit, so not used). Exactly as tested: checked once,
+# on day 15 (the 16th bar after the signal day); the second lot is bought at the next open and exits with the first.
+ADD_DAY, ADD_GAIN = 15, 0.08
+
+
+def add_message(sym, price, entry, gain, q, orig_stop, cap, rl):
+    return (f"#VANTAGE INDICATOR\n\n#{sym}\n\n"
+            f"📈 ADD MORE · Rolling Candle Profile · up {gain * 100:.1f}% after {ADD_DAY} trading days"
+            f"\nBuy another {q} shares at the next market open ≈ ₹{_n(price)} · "
+            f"\n🛑 Stop-loss stays ₹{_n(orig_stop)} for both lots"
+            f"\n📦 Second lot ≈ ₹{q * price:,.0f} · "
+            f"\n🛘 max loss on it ≈ ₹{q * max(price - orig_stop, 0):,.0f} if the stop-loss is hit"
+            + rl +
+            "\nSell both lots together when the SELL comes (one message covers both)."
+            f"\n\nNote : adding to trend trades that were up 8%+ after 15 days raised yearly growth by about 0.5-1% "
+            f"in the 13-year test (₹{cap:,.0f} account), with the same 1% risk limit.")
+
+
+def add_to_winners(day, bars, sig, s):
+    """At the close scan: every open trend signal on its 15th trading day and up >= 8% gets one ADD MORE message."""
+    from . import telegram, safety
+    if not s.get("vantage_add_to_winners", True) or s.get("kill_switch") or safety.emergency_active():
+        return 0
+    ok, _ = safety.configured(s)
+    if "added" not in sig.columns:
+        sig["added"] = ""
+    sent = 0
+    for i, r in sig[(sig["status"] == "open") & (sig["setup"] == "RCP")].iterrows():
+        if str(r.get("added", "")) not in ("", "nan"):
+            continue
+        d = history(r["sym"], day, bars.get(r["sym"]))
+        if d is None:
+            continue
+        after = d.index[d.index > pd.Timestamp(r["signal"])]
+        if len(after) != ADD_DAY + 1 or after[-1] != day:          # exactly the close of trading day 15
+            continue
+        entry, price = float(r["close"]), float(d["close"].iloc[-1])
+        gain = price / entry - 1
+        if gain < ADD_GAIN:
+            continue
+        stop0 = float(r["stop"])
+        rl, scale = results_line(r["sym"], day)
+        q = 0
+        if ok:   # sized to the REAL stop (the first lot's): a stop-out of the second lot loses at most the 1% limit
+            L = safety.limits(s)
+            q = safety.size(price, stop0, s, float(L["risk_per_trade_pct"]) * scale)
+        if q < 1:
+            continue                                                # no capital set / one share does not fit: no message
+        sig.loc[i, "added"] = f"{day.date()} {q} @ {price:.2f}"
+        _save_signals(sig)                                          # record first ...
+        telegram.send_reliable(s, add_message(r["sym"], price, entry, gain, q, stop0, float(s["capital"]), rl),
+                               label="vantage indicator")
+        sent += 1                                                   # ... then send
+    return sent
+
+
 def run(day=None, source="auto"):
     """The whole job. -> dict summary. Writes vantage_last.json (ok=True only when today's candle was available)."""
     from . import telegram, health
@@ -366,7 +427,12 @@ def run(day=None, source="auto"):
                 msg = msg.replace(f"#{sym}\n\n", f"#{sym}\n\n✅ CONFIRMED at the close (today's live signal held)\n", 1)
             telegram.send_reliable(s, msg, label="vantage indicator")
             sent_b += 1
-    summ.update(ok=True, source="Kite" if bars else "Yahoo", stocks=len(res), buys=sent_b, sells=sent_s)
+    try:
+        adds = add_to_winners(day, bars, sig, s)
+    except Exception as e:
+        adds = 0
+        log.warning("VANTAGE add-to-winners failed: %s", type(e).__name__)
+    summ.update(ok=True, source="Kite" if bars else "Yahoo", stocks=len(res), buys=sent_b, sells=sent_s, adds=adds)
     LAST_F.write_text(json.dumps(summ))
     log.info("VANTAGE scan %s: %d stocks, %d BUY and %d SELL sent (%s)", summ["day"], len(res), sent_b, sent_s,
              summ["source"])
