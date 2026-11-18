@@ -1087,3 +1087,14 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - **Same-day guard:** a price below 75% of yesterday's close sends no stop alert until the evening re-scale. NSE price bands make that almost impossible without a corporate action, and a real 20% fall still triggers the stop.
   - **Tracker:** zone tips recorded before a split are compared in today's rupees.
 - **Tests:** `tests/test_corp_actions.py`.
+
+## D141 - 2026-11-18 - Project ALPHA input applied (owner forwarded an architecture: "do work on that if it helps us")
+- **Built:**
+  - Truth Engine luck checks: the edge is stock choice, not timing.
+  - Experience memory (`experiments.json`, 75 experiments).
+  - Strategy register with lifecycle and live results.
+  - Market memory (12 day types × 13 years; panic days were best in both periods).
+  - Counterfactuals for rejected VANTAGE signals.
+  - All documented in `LEARNER.md`.
+- **Not built** (no value for us now): a multi-strategy capital allocator, because VANTAGE is the only proven strategy and correlation weighting needs several. Also a dashboard.
+- **No live tip changed.**

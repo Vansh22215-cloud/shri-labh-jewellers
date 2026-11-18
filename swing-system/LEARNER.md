@@ -42,3 +42,16 @@ Any new tip type must be added to `swing/tracker.py` in the same change that sta
 
 ## Privacy
 Market ideas only. Nothing about the owner's trades, quantities, money or holdings is written or saved.
+
+## Project ALPHA additions (18 Nov 2026, from the owner's input)
+- **Truth Engine (adversarial):** luck checks against random worlds (`vantage-ai/validation/luck_check*.py`).
+  - VANTAGE's edge is WHICH stocks it picks: it beats random stocks on random days in 100% of 200 worlds, every period.
+  - It is not WHEN: timing inside the same stocks adds little since 2023.
+  - Research now targets stock choice first.
+- **Experience memory:** `vantage-ai/validation/experiments.json` lists every experiment ever tested (75), with its verdict and reason, plus the cross-cutting lessons. Never re-test a failed idea without a new reason.
+- **Strategy lifecycle:** `swing-system/strategies/registry.json` lists every strategy (live / watch / shadow / candidate / retired) with its evidence. The Learner reports live results per strategy.
+- **Market memory:** `vantage-ai/validation/situation_memory.json` covers 12 day types (NIFTY trend × calm/jumpy × breadth) with how VANTAGE tips did on each over 13 years.
+  - The Learner tags every tip with its day type and names today's.
+  - Panic days (falling, jumpy, weak breadth) were the best days in both periods.
+- **Counterfactuals:** signals the scanner rejected (thin stock, kill switch) go to `data/private/vantage_rejected.csv` and are followed like every other idea ("rejected by VANTAGE"), as are blocked repeats and skipped zone tips.
+- **Holdout caution:** the Nov 2023+ period has been the exam for about 70 ideas. Passes also need development, year-by-year and stress checks. The live record is the truly unseen test.

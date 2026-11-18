@@ -337,6 +337,25 @@ def add_to_winners(day, bars, sig, s):
     return sent
 
 
+REJ_F = PRIVATE / "vantage_rejected.csv"
+
+
+def _record_rejected(sym, b, why):
+    """A VANTAGE BUY the scanner did NOT send - kept so the Learner can tell whether rejecting it was right."""
+    try:
+        row = pd.DataFrame([{"day": str(pd.Timestamp(b["signal"]).date()), "symbol": sym, "setup": b.get("setup"),
+                             "tier": b.get("tier", ""), "ref_price": round(float(b["close"]), 2),
+                             "stop": round(float(b["stop"]), 2), "why": why}])
+        if REJ_F.exists():
+            old = pd.read_csv(REJ_F, dtype=str)
+            if ((old["day"] == row["day"].iloc[0]) & (old["symbol"] == sym)).any():
+                return
+            row = pd.concat([old, row.astype(str)], ignore_index=True)
+        row.to_csv(REJ_F, index=False)
+    except Exception as e:
+        log.warning("could not record a rejected signal: %s", type(e).__name__)
+
+
 def _held_elsewhere(sym, channel, day, b, s):
     """D139 (owner: no repeat tips): True (and the repeat is recorded for the Learner) when the stock already has an
     open tip - from the live engine, or (for live / 3:20 pm alerts) an open VANTAGE tip from an earlier day."""
@@ -420,6 +439,8 @@ def run(day=None, source="auto"):
                 _save_signals(sig)                          # record first ...
                 telegram.send_reliable(s, sell_message(sym, sell, sig.loc[i, "close"]), label="vantage indicator")
                 sent_s += 1
+        if buy and (kill or tv < min_turnover(s)):          # Project ALPHA counterfactuals: rejected signals are followed too
+            _record_rejected(sym, buy, "kill switch / safety stop" if kill else f"thin stock (₹{tv / 1e7:.1f} cr/day < ₹2 cr)")
         if buy and not kill and tv >= min_turnover(s):
             key = (sym, str(pd.Timestamp(buy["signal"]).date()))
             if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():

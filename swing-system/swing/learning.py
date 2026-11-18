@@ -29,6 +29,7 @@ J = ROOT / "journal"
 MD, QUEUE = J / "learning.md", J / "learning_queue.csv"
 PROFILE = ROOT.parent / "vantage-ai" / "validation" / "tested_profile.json"
 CENSUS = ROOT.parent / "vantage-ai" / "validation" / "mistake_census.json"
+MEMORY = ROOT.parent / "vantage-ai" / "validation" / "situation_memory.json"
 STATE = PRIVATE / "learning_state.json"
 TYPE_MAP = {"VANTAGE Rolling Candle Profile": "RCP", "VANTAGE Breakout": "Breakout", "VANTAGE Dip-buy A": "Dip-buy A",
             "VANTAGE Dip-buy B": "Dip-buy B", "VANTAGE Dip-buy C": "Dip-buy C"}
@@ -40,6 +41,7 @@ def evidence(n):
     return "strong" if n >= 10 else "medium" if n >= 5 else "weak"
 _LAST = (pd.DataFrame(), [], pd.DataFrame(), [])
 _OPP = []
+BR, TODAY_KEY = None, None
 
 
 def profile():
@@ -47,6 +49,43 @@ def profile():
         return json.loads(PROFILE.read_text()).get("holdout", {})
     except Exception:
         return {}
+
+
+def _breadth(load, days=420):
+    """Share of the 300 most-traded stocks above their 200-day average, per day (market memory)."""
+    try:
+        u = pd.read_csv(DATA / "universe_history.csv")
+        syms = u[u["asof"] == u["asof"].max()].nsmallest(300, "rank")["symbol"].astype(str)
+    except Exception:
+        return None
+    cols = {}
+    for sym in syms:
+        d = load(sym)
+        if d is not None and len(d) > 220:
+            c = d["close"].astype(float).tail(days + 200)
+            cols[sym] = c > c.rolling(200).mean()
+    if not cols:
+        return None
+    A = pd.DataFrame(cols).sort_index().tail(days)
+    return A.mean(axis=1)
+
+
+def situation_key(trend_up, jumpy, breadth):
+    b = "weak" if breadth < 0.4 else "middle" if breadth <= 0.6 else "strong"
+    return f"{'rising' if trend_up else 'falling'} | {'jumpy' if jumpy else 'calm'} | breadth {b}"
+
+
+def memory_line(key):
+    try:
+        m = json.loads(MEMORY.read_text()).get(key)
+    except Exception:
+        m = None
+    if not m:
+        return f"{key}: no memory yet"
+    a = m["all"]
+    return (f"{key} - in 13 years VANTAGE tips on such days ({m['days_in_13y']} days) averaged {a['avg_pct']:+.1f}%, "
+            f"won {a['win_pct']:.0f}% ({a['n']} tips)" + (" - the best kind of day in the test (both periods)"
+                                                        if key == "falling | jumpy | breadth weak" else ""))
 
 
 def _market(load):
@@ -73,6 +112,11 @@ def enrich(R, load):
         return R
     R = R.drop(columns=[c for c in ENRICHED if c in R.columns])     # a re-run replaces, never duplicates, these columns
     M = _market(load)
+    global BR, TODAY_KEY
+    BR = _breadth(load)
+    TODAY_KEY = None
+    if M is not None and BR is not None and len(M) and len(BR):
+        TODAY_KEY = situation_key(M["trend_up"].iloc[-1], M["vol_high"].iloc[-1], float(BR.iloc[-1]))
     rows = []
     for r in R.itertuples():
         x = {}
@@ -83,6 +127,10 @@ def enrich(R, load):
             if len(m):
                 x["market"] = "rising" if bool(m["trend_up"].iloc[-1]) else "falling"
                 x["market_mood"] = "jumpy" if bool(m["vol_high"].iloc[-1]) else "calm"
+                if BR is not None:
+                    br = BR[BR.index <= day]
+                    if len(br):
+                        x["day_type"] = situation_key(m["trend_up"].iloc[-1], m["vol_high"].iloc[-1], float(br.iloc[-1]))
         if d is not None and len(d):
             h = d[d.index <= day]
             if len(h) >= 20:
@@ -338,7 +386,7 @@ def expectation(R, prof):
     return out
 
 
-BUCKETS = ["market", "market_mood", "liquidity", "from_52w_high", "results_week", "weekday"]
+BUCKETS = ["market", "market_mood", "day_type", "liquidity", "from_52w_high", "results_week", "weekday"]
 ENRICHED = BUCKETS + ["best_pct", "worst_pct", "result_R", "mistake", "nifty_same_days_pct", "vs_nifty_pct",
                       "per_day_pct", "vs_same_day_pct"]
 
@@ -400,6 +448,7 @@ def write(R, E, W, Ls, today=None, extra=None):
           "| Source | Situation | Value | Ideas | Average | Won |", "|---|---|---|---|---|---|"]
     for r in W.itertuples():
         L.append(f"| {r.source} | {r.situation.replace('_', ' ')} | {r.value} | {r.n} | {r.avg_pct:+.2f}% | {r.win_pct}% |")
+    L += ["", "## Today's market, from memory"] + [f"- {memory_line(TODAY_KEY)}" if TODAY_KEY else "- unknown"]
     L += ["", "## 0. Strategies and their status (strategies/registry.json)"] + strategies_live(R)
     L += ["", "## 2b. Opportunity cost: could the same money have done better?"] + (_OPP or ["- Not enough bought ideas yet."])
     L += ["", "## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)"] + \
@@ -455,6 +504,8 @@ def weekly_message(R, E, Ls, today=None):
         wk = wk[wk["sent"].astype(str) == "sent"]
     closed_wk = R[(R["status"] == "closed") & (pd.to_datetime(R["exit_date"], errors="coerce") >= today - pd.Timedelta(days=7))]
     L = ["📒 Weekly learning", "", f"Ideas sent this week: {len(wk)}"]
+    if TODAY_KEY:
+        L.append("🧠 Market memory: " + memory_line(TODAY_KEY))
     if len(closed_wk):
         L.append(f"Closed this week: {len(closed_wk)} - won {int((closed_wk['result_pct'] > 0).sum())}, "
                  f"average {closed_wk['result_pct'].mean():+.1f}%")

@@ -145,6 +145,18 @@ def collect(load):
         rows.append(_row("blocked repeat", f"{t.channel} (held by {t.held_by})", t.day, t.symbol,
                          {"status": "watch", "entry": ref, "exit": float(d["close"].iloc[-1]), "entry_date": t.day},
                          stop=_f(t.stop), sent="blocked"))
+    # 3c) VANTAGE signals the scanner rejected (thin stock, kill switch) - counterfactuals
+    try:
+        Q = pd.read_csv(PRIVATE / "vantage_rejected.csv", dtype=str)
+    except Exception:
+        Q = pd.DataFrame()
+    for t in Q.itertuples():
+        d, ref = load(t.symbol), _f(t.ref_price)
+        if d is None or ref is None:
+            continue
+        rows.append(_row("rejected by VANTAGE", f"{t.setup} - {str(t.why).split(' (')[0]}", t.day, t.symbol,
+                         {"status": "watch", "entry": ref, "exit": float(d["close"].iloc[-1]), "entry_date": t.day},
+                         stop=_f(t.stop), sent="rejected"))
     # 4) company of the day (research pick, not a trade)
     try:
         C = pd.read_csv(J / "company_picks.csv")

@@ -11,6 +11,7 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 |---|---|---|---|---|---|
 | VANTAGE | market | rising | 17 | +0.20% | 18% |
 | VANTAGE | market mood | calm | 17 | +0.20% | 18% |
+| VANTAGE | day type | rising | calm | breadth strong | 17 | +0.20% | 18% |
 | VANTAGE | liquidity | 10-50 cr | 4 | -0.05% | 25% |
 | VANTAGE | liquidity | over 50 cr | 8 | +0.64% | 25% |
 | VANTAGE | liquidity | under 10 cr | 5 | -0.31% | 0% |
@@ -22,6 +23,8 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | hourly scan | market | rising | 18 | -1.07% | 39% |
 | hourly scan | market mood | calm | 9 | -1.48% | 33% |
 | hourly scan | market mood | jumpy | 9 | -0.66% | 44% |
+| hourly scan | day type | rising | calm | breadth strong | 9 | -1.48% | 33% |
+| hourly scan | day type | rising | jumpy | breadth strong | 9 | -0.66% | 44% |
 | hourly scan | liquidity | 10-50 cr | 4 | +0.72% | 50% |
 | hourly scan | liquidity | over 50 cr | 14 | -1.58% | 36% |
 | hourly scan | from 52w high | 15%+ below | 13 | -1.10% | 46% |
@@ -34,6 +37,8 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip | market | rising | 16 | -1.75% | 44% |
 | strategy tip | market mood | calm | 9 | -0.47% | 44% |
 | strategy tip | market mood | jumpy | 7 | -3.40% | 43% |
+| strategy tip | day type | rising | calm | breadth strong | 9 | -0.47% | 44% |
+| strategy tip | day type | rising | jumpy | breadth strong | 7 | -3.40% | 43% |
 | strategy tip | liquidity | 10-50 cr | 4 | -3.56% | 50% |
 | strategy tip | liquidity | over 50 cr | 12 | -1.15% | 42% |
 | strategy tip | from 52w high | 15%+ below | 12 | -1.92% | 50% |
@@ -47,6 +52,9 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip (retired list) | market | falling | 5 | +10.72% | 100% |
 | strategy tip (retired list) | market | rising | 10 | -0.49% | 30% |
 | strategy tip (retired list) | market mood | jumpy | 15 | +3.24% | 53% |
+| strategy tip (retired list) | day type | falling | jumpy | breadth middle | 5 | +10.72% | 100% |
+| strategy tip (retired list) | day type | rising | jumpy | breadth middle | 2 | +1.29% | 50% |
+| strategy tip (retired list) | day type | rising | jumpy | breadth strong | 8 | -0.94% | 25% |
 | strategy tip (retired list) | liquidity | 10-50 cr | 8 | +2.67% | 50% |
 | strategy tip (retired list) | liquidity | over 50 cr | 7 | +3.90% | 57% |
 | strategy tip (retired list) | from 52w high | 15%+ below | 9 | +3.09% | 56% |
@@ -59,6 +67,9 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | strategy tip (retired list) | weekday | Thu | 2 | +1.29% | 50% |
 | strategy tip (retired list) | weekday | Tue | 1 | +13.13% | 100% |
 | strategy tip (retired list) | weekday | Wed | 3 | +11.18% | 100% |
+
+## Today's market, from memory
+- rising | calm | breadth strong - in 13 years VANTAGE tips on such days (1387 days) averaged +5.3%, won 49% (4028 tips)
 
 ## 0. Strategies and their status (strategies/registry.json)
 - V-RCP VANTAGE trend (Rolling Candle Profile) [live]: 16 ideas, open 16 (avg +0.21%)
@@ -90,9 +101,11 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 
 ## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)
 - [weak] hourly scan: when liquidity = 10-50 cr, ideas averaged +0.7% (n=4) vs -1.6% when over 50 cr (n=14) - to research (test on 13 years before any change)
+- [medium] strategy tip: when day type = rising | calm | breadth strong, ideas averaged -0.5% (n=9) vs -3.4% when rising | jumpy | breadth strong (n=7) - to research (test on 13 years before any change)
 - [weak] strategy tip: when liquidity = over 50 cr, ideas averaged -1.1% (n=12) vs -3.6% when 10-50 cr (n=4) - to research (test on 13 years before any change)
 - [medium] strategy tip: when market mood = calm, ideas averaged -0.5% (n=9) vs -3.4% when jumpy (n=7) - to research (test on 13 years before any change)
 - [weak] strategy tip: when weekday = Fri, ideas averaged -0.5% (n=3) vs -3.4% when Wed (n=7) - to research (test on 13 years before any change)
+- [medium] strategy tip (retired list): when day type = falling | jumpy | breadth middle, ideas averaged +10.7% (n=5) vs -0.9% when rising | jumpy | breadth strong (n=8) - to research (test on 13 years before any change)
 - [medium] strategy tip (retired list): when market = falling, ideas averaged +10.7% (n=5) vs -0.5% when rising (n=10) - to research (test on 13 years before any change)
 - [weak] strategy tip (retired list): when weekday = Wed, ideas averaged +11.2% (n=3) vs +1.2% when Mon (n=7) - to research (test on 13 years before any change)
 - [weak] strategy tip: 2 of 3 losing ideas - Gave back a profit - it was up 3%+ and then turned into a loss (an exit mistake) - known: tested twice (rounds 1 E1 and 20): break-even stops cost more than they save - the price of letting winners run

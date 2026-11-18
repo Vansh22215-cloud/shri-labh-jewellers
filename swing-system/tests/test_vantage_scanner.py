@@ -321,3 +321,11 @@ def test_add_more_once_on_day_15_when_up_8_percent(env, monkeypatch, tmp_path):
     d["close"] = 110.0
     assert vantage.add_to_winners(day, {}, sig2, dict(s, vantage_add_to_winners=False)) == 0
     assert vantage.add_to_winners(day, {}, sig2, dict(s, kill_switch=True)) == 0
+
+
+def test_rejected_signals_are_recorded(env, monkeypatch, tmp_path):
+    monkeypatch.setattr(vantage, "REJ_F", tmp_path / "rej.csv")
+    monkeypatch.setattr(vantage, "scan", lambda d, bars: [("THIN", {"buy": _buy(pd.Timestamp("2026-11-17")), "in_position": True}, 1e6)])
+    vantage.run("2026-11-17")
+    R = pd.read_csv(tmp_path / "rej.csv")
+    assert R.iloc[0]["symbol"] == "THIN" and "thin stock" in R.iloc[0]["why"]
