@@ -1,0 +1,3051 @@
+{
+ "possibilities": 230,
+ "base_dev": {
+  "top300": [
+   19.056850542560365,
+   -19.378209260817048
+  ],
+  "all": [
+   40.28779062813128,
+   -20.001278710948068
+  ]
+ },
+ "passed_dev": 2,
+ "luck_passes": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "survivors": [
+  {
+   "kind": "prefer_high",
+   "col": "ret_1w",
+   "name": "prefer high ret_1w",
+   "val": null,
+   "dev": {
+    "top300": {
+     "cagr": 20.32,
+     "maxdd": -18.67
+    },
+    "all": {
+     "cagr": 41.77,
+     "maxdd": -18.9
+    }
+   }
+  },
+  {
+   "kind": "skip",
+   "col": "price_rs",
+   "val": [
+    979.7500244140623,
+    Infinity
+   ],
+   "num": true,
+   "name": "skip price_rs 979.8..",
+   "dev": {
+    "top300": {
+     "cagr": 20.39,
+     "maxdd": -17.65
+    },
+    "all": {
+     "cagr": 41.5,
+     "maxdd": -18.65
+    }
+   }
+  }
+ ],
+ "all_rules_dev": [
+  {
+   "name": "skip turnover_cr ..8.971",
+   "dev": {
+    "top300": {
+     "cagr": 17.27,
+     "maxdd": -16.17
+    },
+    "all": {
+     "cagr": 18.54,
+     "maxdd": -15.78
+    }
+   }
+  },
+  {
+   "name": "skip turnover_cr 121.8..",
+   "dev": {
+    "top300": {
+     "cagr": 19.44,
+     "maxdd": -20.58
+    },
+    "all": {
+     "cagr": 40.09,
+     "maxdd": -22.48
+    }
+   }
+  },
+  {
+   "name": "skip turnover_cr ..23.58",
+   "dev": {
+    "top300": {
+     "cagr": 14.09,
+     "maxdd": -17.6
+    },
+    "all": {
+     "cagr": 14.99,
+     "maxdd": -16.26
+    }
+   }
+  },
+  {
+   "name": "skip turnover_cr 52.89..",
+   "dev": {
+    "top300": {
+     "cagr": 20.45,
+     "maxdd": -20.82
+    },
+    "all": {
+     "cagr": 41.53,
+     "maxdd": -22.32
+    }
+   }
+  },
+  {
+   "name": "half turnover_cr ..8.971",
+   "dev": {
+    "top300": {
+     "cagr": 19.5,
+     "maxdd": -14.99
+    },
+    "all": {
+     "cagr": 36.24,
+     "maxdd": -16.41
+    }
+   }
+  },
+  {
+   "name": "half turnover_cr 121.8..",
+   "dev": {
+    "top300": {
+     "cagr": 19.4,
+     "maxdd": -17.55
+    },
+    "all": {
+     "cagr": 39.84,
+     "maxdd": -20.61
+    }
+   }
+  },
+  {
+   "name": "prefer high turnover_cr",
+   "dev": {
+    "top300": {
+     "cagr": 19.08,
+     "maxdd": -16.86
+    },
+    "all": {
+     "cagr": 32.01,
+     "maxdd": -18.46
+    }
+   }
+  },
+  {
+   "name": "prefer low turnover_cr",
+   "dev": {
+    "top300": {
+     "cagr": 19.43,
+     "maxdd": -17.39
+    },
+    "all": {
+     "cagr": 42.86,
+     "maxdd": -14.77
+    }
+   }
+  },
+  {
+   "name": "skip from_52w_high ..-0.08657",
+   "dev": {
+    "top300": {
+     "cagr": 19.7,
+     "maxdd": -17.64
+    },
+    "all": {
+     "cagr": 40.53,
+     "maxdd": -13.64
+    }
+   }
+  },
+  {
+   "name": "skip from_52w_high 0..",
+   "dev": {
+    "top300": {
+     "cagr": 15.85,
+     "maxdd": -17.75
+    },
+    "all": {
+     "cagr": 34.95,
+     "maxdd": -24.24
+    }
+   }
+  },
+  {
+   "name": "skip from_52w_high ..-0.04993",
+   "dev": {
+    "top300": {
+     "cagr": 17.34,
+     "maxdd": -15.45
+    },
+    "all": {
+     "cagr": 37.88,
+     "maxdd": -12.9
+    }
+   }
+  },
+  {
+   "name": "skip from_52w_high -0.0123..",
+   "dev": {
+    "top300": {
+     "cagr": 15.05,
+     "maxdd": -17.92
+    },
+    "all": {
+     "cagr": 32.52,
+     "maxdd": -24.93
+    }
+   }
+  },
+  {
+   "name": "half from_52w_high ..-0.08657",
+   "dev": {
+    "top300": {
+     "cagr": 19.74,
+     "maxdd": -18.09
+    },
+    "all": {
+     "cagr": 40.65,
+     "maxdd": -15.02
+    }
+   }
+  },
+  {
+   "name": "half from_52w_high 0..",
+   "dev": {
+    "top300": {
+     "cagr": 18.33,
+     "maxdd": -15.69
+    },
+    "all": {
+     "cagr": 39.04,
+     "maxdd": -20.54
+    }
+   }
+  },
+  {
+   "name": "prefer high from_52w_high",
+   "dev": {
+    "top300": {
+     "cagr": 19.8,
+     "maxdd": -17.26
+    },
+    "all": {
+     "cagr": 40.47,
+     "maxdd": -18.61
+    }
+   }
+  },
+  {
+   "name": "prefer low from_52w_high",
+   "dev": {
+    "top300": {
+     "cagr": 17.46,
+     "maxdd": -18.43
+    },
+    "all": {
+     "cagr": 39.55,
+     "maxdd": -20.38
+    }
+   }
+  },
+  {
+   "name": "skip ret_6m ..0.09906",
+   "dev": {
+    "top300": {
+     "cagr": 18.77,
+     "maxdd": -17.56
+    },
+    "all": {
+     "cagr": 40.51,
+     "maxdd": -19.11
+    }
+   }
+  },
+  {
+   "name": "skip ret_6m 0.5988..",
+   "dev": {
+    "top300": {
+     "cagr": 16.43,
+     "maxdd": -17.76
+    },
+    "all": {
+     "cagr": 34.85,
+     "maxdd": -17.44
+    }
+   }
+  },
+  {
+   "name": "skip ret_6m ..0.2177",
+   "dev": {
+    "top300": {
+     "cagr": 17.96,
+     "maxdd": -21.95
+    },
+    "all": {
+     "cagr": 36.66,
+     "maxdd": -24.29
+    }
+   }
+  },
+  {
+   "name": "skip ret_6m 0.3603..",
+   "dev": {
+    "top300": {
+     "cagr": 14.05,
+     "maxdd": -15.95
+    },
+    "all": {
+     "cagr": 33.69,
+     "maxdd": -15.42
+    }
+   }
+  },
+  {
+   "name": "half ret_6m ..0.09906",
+   "dev": {
+    "top300": {
+     "cagr": 20.1,
+     "maxdd": -15.33
+    },
+    "all": {
+     "cagr": 40.0,
+     "maxdd": -18.67
+    }
+   }
+  },
+  {
+   "name": "half ret_6m 0.5988..",
+   "dev": {
+    "top300": {
+     "cagr": 18.71,
+     "maxdd": -16.23
+    },
+    "all": {
+     "cagr": 39.72,
+     "maxdd": -18.61
+    }
+   }
+  },
+  {
+   "name": "prefer high ret_6m",
+   "dev": {
+    "top300": {
+     "cagr": 19.77,
+     "maxdd": -21.66
+    },
+    "all": {
+     "cagr": 42.75,
+     "maxdd": -18.31
+    }
+   }
+  },
+  {
+   "name": "prefer low ret_6m",
+   "dev": {
+    "top300": {
+     "cagr": 17.16,
+     "maxdd": -19.15
+    },
+    "all": {
+     "cagr": 36.54,
+     "maxdd": -19.36
+    }
+   }
+  },
+  {
+   "name": "skip ret_1m ..0.03588",
+   "dev": {
+    "top300": {
+     "cagr": 17.22,
+     "maxdd": -19.79
+    },
+    "all": {
+     "cagr": 39.41,
+     "maxdd": -21.79
+    }
+   }
+  },
+  {
+   "name": "skip ret_1m 0.172..",
+   "dev": {
+    "top300": {
+     "cagr": 18.17,
+     "maxdd": -16.42
+    },
+    "all": {
+     "cagr": 35.87,
+     "maxdd": -15.73
+    }
+   }
+  },
+  {
+   "name": "skip ret_1m ..0.07362",
+   "dev": {
+    "top300": {
+     "cagr": 17.59,
+     "maxdd": -23.63
+    },
+    "all": {
+     "cagr": 36.63,
+     "maxdd": -28.26
+    }
+   }
+  },
+  {
+   "name": "skip ret_1m 0.1132..",
+   "dev": {
+    "top300": {
+     "cagr": 17.0,
+     "maxdd": -15.06
+    },
+    "all": {
+     "cagr": 33.93,
+     "maxdd": -14.25
+    }
+   }
+  },
+  {
+   "name": "half ret_1m ..0.03588",
+   "dev": {
+    "top300": {
+     "cagr": 17.66,
+     "maxdd": -18.26
+    },
+    "all": {
+     "cagr": 39.11,
+     "maxdd": -20.09
+    }
+   }
+  },
+  {
+   "name": "half ret_1m 0.172..",
+   "dev": {
+    "top300": {
+     "cagr": 18.86,
+     "maxdd": -18.09
+    },
+    "all": {
+     "cagr": 38.83,
+     "maxdd": -17.5
+    }
+   }
+  },
+  {
+   "name": "prefer high ret_1m",
+   "dev": {
+    "top300": {
+     "cagr": 19.83,
+     "maxdd": -19.64
+    },
+    "all": {
+     "cagr": 39.82,
+     "maxdd": -25.59
+    }
+   }
+  },
+  {
+   "name": "prefer low ret_1m",
+   "dev": {
+    "top300": {
+     "cagr": 18.69,
+     "maxdd": -21.12
+    },
+    "all": {
+     "cagr": 39.91,
+     "maxdd": -15.74
+    }
+   }
+  },
+  {
+   "name": "skip ret_1w ..0.02239",
+   "dev": {
+    "top300": {
+     "cagr": 18.2,
+     "maxdd": -17.85
+    },
+    "all": {
+     "cagr": 38.92,
+     "maxdd": -20.51
+    }
+   }
+  },
+  {
+   "name": "skip ret_1w 0.09017..",
+   "dev": {
+    "top300": {
+     "cagr": 17.97,
+     "maxdd": -15.31
+    },
+    "all": {
+     "cagr": 34.8,
+     "maxdd": -18.99
+    }
+   }
+  },
+  {
+   "name": "skip ret_1w ..0.04073",
+   "dev": {
+    "top300": {
+     "cagr": 16.59,
+     "maxdd": -20.13
+    },
+    "all": {
+     "cagr": 38.63,
+     "maxdd": -18.74
+    }
+   }
+  },
+  {
+   "name": "skip ret_1w 0.06018..",
+   "dev": {
+    "top300": {
+     "cagr": 15.31,
+     "maxdd": -14.69
+    },
+    "all": {
+     "cagr": 31.64,
+     "maxdd": -18.53
+    }
+   }
+  },
+  {
+   "name": "half ret_1w ..0.02239",
+   "dev": {
+    "top300": {
+     "cagr": 17.65,
+     "maxdd": -17.41
+    },
+    "all": {
+     "cagr": 40.2,
+     "maxdd": -17.62
+    }
+   }
+  },
+  {
+   "name": "half ret_1w 0.09017..",
+   "dev": {
+    "top300": {
+     "cagr": 19.1,
+     "maxdd": -15.87
+    },
+    "all": {
+     "cagr": 38.07,
+     "maxdd": -18.01
+    }
+   }
+  },
+  {
+   "name": "prefer high ret_1w",
+   "dev": {
+    "top300": {
+     "cagr": 20.32,
+     "maxdd": -18.67
+    },
+    "all": {
+     "cagr": 41.77,
+     "maxdd": -18.9
+    }
+   }
+  },
+  {
+   "name": "prefer low ret_1w",
+   "dev": {
+    "top300": {
+     "cagr": 18.68,
+     "maxdd": -15.5
+    },
+    "all": {
+     "cagr": 39.52,
+     "maxdd": -15.95
+    }
+   }
+  },
+  {
+   "name": "skip vol_surge ..0.876",
+   "dev": {
+    "top300": {
+     "cagr": 17.75,
+     "maxdd": -15.82
+    },
+    "all": {
+     "cagr": 39.86,
+     "maxdd": -18.56
+    }
+   }
+  },
+  {
+   "name": "skip vol_surge 3.471..",
+   "dev": {
+    "top300": {
+     "cagr": 18.08,
+     "maxdd": -16.28
+    },
+    "all": {
+     "cagr": 39.01,
+     "maxdd": -15.57
+    }
+   }
+  },
+  {
+   "name": "skip vol_surge ..1.328",
+   "dev": {
+    "top300": {
+     "cagr": 16.18,
+     "maxdd": -17.93
+    },
+    "all": {
+     "cagr": 38.48,
+     "maxdd": -21.28
+    }
+   }
+  },
+  {
+   "name": "skip vol_surge 2.04..",
+   "dev": {
+    "top300": {
+     "cagr": 16.44,
+     "maxdd": -15.88
+    },
+    "all": {
+     "cagr": 36.45,
+     "maxdd": -16.6
+    }
+   }
+  },
+  {
+   "name": "half vol_surge ..0.876",
+   "dev": {
+    "top300": {
+     "cagr": 19.12,
+     "maxdd": -17.98
+    },
+    "all": {
+     "cagr": 39.57,
+     "maxdd": -18.69
+    }
+   }
+  },
+  {
+   "name": "half vol_surge 3.471..",
+   "dev": {
+    "top300": {
+     "cagr": 19.81,
+     "maxdd": -14.71
+    },
+    "all": {
+     "cagr": 40.34,
+     "maxdd": -16.79
+    }
+   }
+  },
+  {
+   "name": "prefer high vol_surge",
+   "dev": {
+    "top300": {
+     "cagr": 18.32,
+     "maxdd": -16.83
+    },
+    "all": {
+     "cagr": 40.27,
+     "maxdd": -18.83
+    }
+   }
+  },
+  {
+   "name": "prefer low vol_surge",
+   "dev": {
+    "top300": {
+     "cagr": 18.47,
+     "maxdd": -22.84
+    },
+    "all": {
+     "cagr": 42.14,
+     "maxdd": -17.03
+    }
+   }
+  },
+  {
+   "name": "skip atr_pct ..0.02384",
+   "dev": {
+    "top300": {
+     "cagr": 19.76,
+     "maxdd": -19.35
+    },
+    "all": {
+     "cagr": 35.94,
+     "maxdd": -23.23
+    }
+   }
+  },
+  {
+   "name": "skip atr_pct 0.0426..",
+   "dev": {
+    "top300": {
+     "cagr": 17.34,
+     "maxdd": -18.03
+    },
+    "all": {
+     "cagr": 37.0,
+     "maxdd": -14.38
+    }
+   }
+  },
+  {
+   "name": "skip atr_pct ..0.02922",
+   "dev": {
+    "top300": {
+     "cagr": 17.42,
+     "maxdd": -27.26
+    },
+    "all": {
+     "cagr": 36.26,
+     "maxdd": -28.55
+    }
+   }
+  },
+  {
+   "name": "skip atr_pct 0.03499..",
+   "dev": {
+    "top300": {
+     "cagr": 15.84,
+     "maxdd": -13.29
+    },
+    "all": {
+     "cagr": 35.31,
+     "maxdd": -14.27
+    }
+   }
+  },
+  {
+   "name": "half atr_pct ..0.02384",
+   "dev": {
+    "top300": {
+     "cagr": 19.81,
+     "maxdd": -16.68
+    },
+    "all": {
+     "cagr": 37.93,
+     "maxdd": -19.16
+    }
+   }
+  },
+  {
+   "name": "half atr_pct 0.0426..",
+   "dev": {
+    "top300": {
+     "cagr": 18.66,
+     "maxdd": -18.39
+    },
+    "all": {
+     "cagr": 39.07,
+     "maxdd": -18.69
+    }
+   }
+  },
+  {
+   "name": "prefer high atr_pct",
+   "dev": {
+    "top300": {
+     "cagr": 20.18,
+     "maxdd": -16.61
+    },
+    "all": {
+     "cagr": 40.79,
+     "maxdd": -21.06
+    }
+   }
+  },
+  {
+   "name": "prefer low atr_pct",
+   "dev": {
+    "top300": {
+     "cagr": 17.07,
+     "maxdd": -15.51
+    },
+    "all": {
+     "cagr": 38.82,
+     "maxdd": -12.71
+    }
+   }
+  },
+  {
+   "name": "skip range_10d ..0.07702",
+   "dev": {
+    "top300": {
+     "cagr": 20.24,
+     "maxdd": -17.09
+    },
+    "all": {
+     "cagr": 38.1,
+     "maxdd": -18.98
+    }
+   }
+  },
+  {
+   "name": "skip range_10d 0.1667..",
+   "dev": {
+    "top300": {
+     "cagr": 16.47,
+     "maxdd": -17.13
+    },
+    "all": {
+     "cagr": 34.9,
+     "maxdd": -16.39
+    }
+   }
+  },
+  {
+   "name": "skip range_10d ..0.1007",
+   "dev": {
+    "top300": {
+     "cagr": 18.2,
+     "maxdd": -21.3
+    },
+    "all": {
+     "cagr": 39.12,
+     "maxdd": -24.18
+    }
+   }
+  },
+  {
+   "name": "skip range_10d 0.1274..",
+   "dev": {
+    "top300": {
+     "cagr": 15.12,
+     "maxdd": -18.15
+    },
+    "all": {
+     "cagr": 30.97,
+     "maxdd": -15.67
+    }
+   }
+  },
+  {
+   "name": "half range_10d ..0.07702",
+   "dev": {
+    "top300": {
+     "cagr": 18.3,
+     "maxdd": -17.22
+    },
+    "all": {
+     "cagr": 39.5,
+     "maxdd": -18.22
+    }
+   }
+  },
+  {
+   "name": "half range_10d 0.1667..",
+   "dev": {
+    "top300": {
+     "cagr": 19.1,
+     "maxdd": -17.35
+    },
+    "all": {
+     "cagr": 38.3,
+     "maxdd": -17.72
+    }
+   }
+  },
+  {
+   "name": "prefer high range_10d",
+   "dev": {
+    "top300": {
+     "cagr": 18.15,
+     "maxdd": -19.71
+    },
+    "all": {
+     "cagr": 39.52,
+     "maxdd": -22.15
+    }
+   }
+  },
+  {
+   "name": "prefer low range_10d",
+   "dev": {
+    "top300": {
+     "cagr": 17.54,
+     "maxdd": -16.25
+    },
+    "all": {
+     "cagr": 39.45,
+     "maxdd": -15.76
+    }
+   }
+  },
+  {
+   "name": "skip vs_200d ..0.1025",
+   "dev": {
+    "top300": {
+     "cagr": 19.1,
+     "maxdd": -17.58
+    },
+    "all": {
+     "cagr": 39.99,
+     "maxdd": -17.92
+    }
+   }
+  },
+  {
+   "name": "skip vs_200d 0.3957..",
+   "dev": {
+    "top300": {
+     "cagr": 16.02,
+     "maxdd": -16.65
+    },
+    "all": {
+     "cagr": 35.05,
+     "maxdd": -18.72
+    }
+   }
+  },
+  {
+   "name": "skip vs_200d ..0.168",
+   "dev": {
+    "top300": {
+     "cagr": 17.25,
+     "maxdd": -20.63
+    },
+    "all": {
+     "cagr": 38.07,
+     "maxdd": -20.05
+    }
+   }
+  },
+  {
+   "name": "skip vs_200d 0.2531..",
+   "dev": {
+    "top300": {
+     "cagr": 13.43,
+     "maxdd": -16.32
+    },
+    "all": {
+     "cagr": 33.13,
+     "maxdd": -18.39
+    }
+   }
+  },
+  {
+   "name": "half vs_200d ..0.1025",
+   "dev": {
+    "top300": {
+     "cagr": 19.55,
+     "maxdd": -15.78
+    },
+    "all": {
+     "cagr": 39.09,
+     "maxdd": -17.48
+    }
+   }
+  },
+  {
+   "name": "half vs_200d 0.3957..",
+   "dev": {
+    "top300": {
+     "cagr": 16.9,
+     "maxdd": -16.22
+    },
+    "all": {
+     "cagr": 37.79,
+     "maxdd": -18.73
+    }
+   }
+  },
+  {
+   "name": "prefer high vs_200d",
+   "dev": {
+    "top300": {
+     "cagr": 19.6,
+     "maxdd": -16.63
+    },
+    "all": {
+     "cagr": 41.18,
+     "maxdd": -19.59
+    }
+   }
+  },
+  {
+   "name": "prefer low vs_200d",
+   "dev": {
+    "top300": {
+     "cagr": 18.29,
+     "maxdd": -21.55
+    },
+    "all": {
+     "cagr": 38.75,
+     "maxdd": -18.36
+    }
+   }
+  },
+  {
+   "name": "skip signal_day_move ..0.0009567",
+   "dev": {
+    "top300": {
+     "cagr": 18.4,
+     "maxdd": -17.45
+    },
+    "all": {
+     "cagr": 39.84,
+     "maxdd": -15.02
+    }
+   }
+  },
+  {
+   "name": "skip signal_day_move 0.03846..",
+   "dev": {
+    "top300": {
+     "cagr": 18.0,
+     "maxdd": -17.79
+    },
+    "all": {
+     "cagr": 30.6,
+     "maxdd": -20.32
+    }
+   }
+  },
+  {
+   "name": "skip signal_day_move ..0.009168",
+   "dev": {
+    "top300": {
+     "cagr": 16.2,
+     "maxdd": -17.47
+    },
+    "all": {
+     "cagr": 39.62,
+     "maxdd": -20.08
+    }
+   }
+  },
+  {
+   "name": "skip signal_day_move 0.0195..",
+   "dev": {
+    "top300": {
+     "cagr": 16.32,
+     "maxdd": -14.15
+    },
+    "all": {
+     "cagr": 28.61,
+     "maxdd": -18.51
+    }
+   }
+  },
+  {
+   "name": "half signal_day_move ..0.0009567",
+   "dev": {
+    "top300": {
+     "cagr": 18.74,
+     "maxdd": -18.7
+    },
+    "all": {
+     "cagr": 39.62,
+     "maxdd": -20.31
+    }
+   }
+  },
+  {
+   "name": "half signal_day_move 0.03846..",
+   "dev": {
+    "top300": {
+     "cagr": 18.64,
+     "maxdd": -17.49
+    },
+    "all": {
+     "cagr": 37.15,
+     "maxdd": -18.85
+    }
+   }
+  },
+  {
+   "name": "prefer high signal_day_move",
+   "dev": {
+    "top300": {
+     "cagr": 19.07,
+     "maxdd": -17.39
+    },
+    "all": {
+     "cagr": 41.38,
+     "maxdd": -19.03
+    }
+   }
+  },
+  {
+   "name": "prefer low signal_day_move",
+   "dev": {
+    "top300": {
+     "cagr": 18.81,
+     "maxdd": -19.74
+    },
+    "all": {
+     "cagr": 38.74,
+     "maxdd": -21.23
+    }
+   }
+  },
+  {
+   "name": "skip price_rs ..126.9",
+   "dev": {
+    "top300": {
+     "cagr": 15.01,
+     "maxdd": -17.25
+    },
+    "all": {
+     "cagr": 26.97,
+     "maxdd": -18.22
+    }
+   }
+  },
+  {
+   "name": "skip price_rs 979.8..",
+   "dev": {
+    "top300": {
+     "cagr": 20.39,
+     "maxdd": -17.65
+    },
+    "all": {
+     "cagr": 41.5,
+     "maxdd": -18.65
+    }
+   }
+  },
+  {
+   "name": "skip price_rs ..254.7",
+   "dev": {
+    "top300": {
+     "cagr": 14.37,
+     "maxdd": -16.73
+    },
+    "all": {
+     "cagr": 21.78,
+     "maxdd": -15.11
+    }
+   }
+  },
+  {
+   "name": "skip price_rs 492.6..",
+   "dev": {
+    "top300": {
+     "cagr": 18.6,
+     "maxdd": -21.74
+    },
+    "all": {
+     "cagr": 41.79,
+     "maxdd": -22.82
+    }
+   }
+  },
+  {
+   "name": "half price_rs ..126.9",
+   "dev": {
+    "top300": {
+     "cagr": 17.66,
+     "maxdd": -17.62
+    },
+    "all": {
+     "cagr": 36.63,
+     "maxdd": -17.8
+    }
+   }
+  },
+  {
+   "name": "half price_rs 979.8..",
+   "dev": {
+    "top300": {
+     "cagr": 19.77,
+     "maxdd": -16.74
+    },
+    "all": {
+     "cagr": 40.78,
+     "maxdd": -18.17
+    }
+   }
+  },
+  {
+   "name": "prefer high price_rs",
+   "dev": {
+    "top300": {
+     "cagr": 17.49,
+     "maxdd": -17.98
+    },
+    "all": {
+     "cagr": 33.9,
+     "maxdd": -14.65
+    }
+   }
+  },
+  {
+   "name": "prefer low price_rs",
+   "dev": {
+    "top300": {
+     "cagr": 19.07,
+     "maxdd": -16.48
+    },
+    "all": {
+     "cagr": 44.01,
+     "maxdd": -18.2
+    }
+   }
+  },
+  {
+   "name": "skip nifty_1m ..-0.003135",
+   "dev": {
+    "top300": {
+     "cagr": 17.05,
+     "maxdd": -17.64
+    },
+    "all": {
+     "cagr": 32.88,
+     "maxdd": -23.09
+    }
+   }
+  },
+  {
+   "name": "skip nifty_1m 0.05868..",
+   "dev": {
+    "top300": {
+     "cagr": 17.29,
+     "maxdd": -16.2
+    },
+    "all": {
+     "cagr": 35.61,
+     "maxdd": -21.0
+    }
+   }
+  },
+  {
+   "name": "skip nifty_1m ..0.01789",
+   "dev": {
+    "top300": {
+     "cagr": 14.32,
+     "maxdd": -27.39
+    },
+    "all": {
+     "cagr": 30.53,
+     "maxdd": -29.42
+    }
+   }
+  },
+  {
+   "name": "skip nifty_1m 0.03715..",
+   "dev": {
+    "top300": {
+     "cagr": 14.37,
+     "maxdd": -16.7
+    },
+    "all": {
+     "cagr": 33.76,
+     "maxdd": -16.76
+    }
+   }
+  },
+  {
+   "name": "half nifty_1m ..-0.003135",
+   "dev": {
+    "top300": {
+     "cagr": 19.1,
+     "maxdd": -15.98
+    },
+    "all": {
+     "cagr": 38.74,
+     "maxdd": -21.23
+    }
+   }
+  },
+  {
+   "name": "half nifty_1m 0.05868..",
+   "dev": {
+    "top300": {
+     "cagr": 18.6,
+     "maxdd": -17.03
+    },
+    "all": {
+     "cagr": 38.49,
+     "maxdd": -20.64
+    }
+   }
+  },
+  {
+   "name": "prefer high nifty_1m",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.12,
+     "maxdd": -20.53
+    }
+   }
+  },
+  {
+   "name": "prefer low nifty_1m",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.16,
+     "maxdd": -20.0
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vs_200d ..0.02543",
+   "dev": {
+    "top300": {
+     "cagr": 14.18,
+     "maxdd": -18.99
+    },
+    "all": {
+     "cagr": 23.68,
+     "maxdd": -28.43
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vs_200d 0.1355..",
+   "dev": {
+    "top300": {
+     "cagr": 16.14,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 35.66,
+     "maxdd": -21.13
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vs_200d ..0.06136",
+   "dev": {
+    "top300": {
+     "cagr": 10.14,
+     "maxdd": -26.54
+    },
+    "all": {
+     "cagr": 25.58,
+     "maxdd": -27.12
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vs_200d 0.08855..",
+   "dev": {
+    "top300": {
+     "cagr": 13.6,
+     "maxdd": -17.11
+    },
+    "all": {
+     "cagr": 29.74,
+     "maxdd": -19.69
+    }
+   }
+  },
+  {
+   "name": "half nifty_vs_200d ..0.02543",
+   "dev": {
+    "top300": {
+     "cagr": 16.76,
+     "maxdd": -16.06
+    },
+    "all": {
+     "cagr": 38.22,
+     "maxdd": -20.42
+    }
+   }
+  },
+  {
+   "name": "half nifty_vs_200d 0.1355..",
+   "dev": {
+    "top300": {
+     "cagr": 18.1,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.1,
+     "maxdd": -20.36
+    }
+   }
+  },
+  {
+   "name": "prefer high nifty_vs_200d",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.21,
+     "maxdd": -20.68
+    }
+   }
+  },
+  {
+   "name": "prefer low nifty_vs_200d",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.73,
+     "maxdd": -19.87
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vol_20d ..0.08639",
+   "dev": {
+    "top300": {
+     "cagr": 16.27,
+     "maxdd": -19.69
+    },
+    "all": {
+     "cagr": 36.96,
+     "maxdd": -20.5
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vol_20d 0.1568..",
+   "dev": {
+    "top300": {
+     "cagr": 15.83,
+     "maxdd": -16.08
+    },
+    "all": {
+     "cagr": 31.96,
+     "maxdd": -23.29
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vol_20d ..0.1047",
+   "dev": {
+    "top300": {
+     "cagr": 15.39,
+     "maxdd": -16.43
+    },
+    "all": {
+     "cagr": 32.72,
+     "maxdd": -20.82
+    }
+   }
+  },
+  {
+   "name": "skip nifty_vol_20d 0.1275..",
+   "dev": {
+    "top300": {
+     "cagr": 11.03,
+     "maxdd": -23.18
+    },
+    "all": {
+     "cagr": 24.23,
+     "maxdd": -24.9
+    }
+   }
+  },
+  {
+   "name": "half nifty_vol_20d ..0.08639",
+   "dev": {
+    "top300": {
+     "cagr": 18.22,
+     "maxdd": -17.05
+    },
+    "all": {
+     "cagr": 39.15,
+     "maxdd": -21.81
+    }
+   }
+  },
+  {
+   "name": "half nifty_vol_20d 0.1568..",
+   "dev": {
+    "top300": {
+     "cagr": 18.82,
+     "maxdd": -16.05
+    },
+    "all": {
+     "cagr": 38.34,
+     "maxdd": -21.13
+    }
+   }
+  },
+  {
+   "name": "prefer high nifty_vol_20d",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 39.96,
+     "maxdd": -20.11
+    }
+   }
+  },
+  {
+   "name": "prefer low nifty_vol_20d",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.14,
+     "maxdd": -22.1
+    }
+   }
+  },
+  {
+   "name": "skip score ..73",
+   "dev": {
+    "top300": {
+     "cagr": 17.35,
+     "maxdd": -15.38
+    },
+    "all": {
+     "cagr": 36.95,
+     "maxdd": -20.28
+    }
+   }
+  },
+  {
+   "name": "skip score 92..",
+   "dev": {
+    "top300": {
+     "cagr": 17.97,
+     "maxdd": -17.33
+    },
+    "all": {
+     "cagr": 39.86,
+     "maxdd": -16.85
+    }
+   }
+  },
+  {
+   "name": "skip score ..82",
+   "dev": {
+    "top300": {
+     "cagr": 15.0,
+     "maxdd": -17.18
+    },
+    "all": {
+     "cagr": 31.68,
+     "maxdd": -21.75
+    }
+   }
+  },
+  {
+   "name": "skip score 87..",
+   "dev": {
+    "top300": {
+     "cagr": 17.94,
+     "maxdd": -17.54
+    },
+    "all": {
+     "cagr": 38.02,
+     "maxdd": -16.24
+    }
+   }
+  },
+  {
+   "name": "half score ..73",
+   "dev": {
+    "top300": {
+     "cagr": 18.66,
+     "maxdd": -17.82
+    },
+    "all": {
+     "cagr": 38.39,
+     "maxdd": -20.89
+    }
+   }
+  },
+  {
+   "name": "half score 92..",
+   "dev": {
+    "top300": {
+     "cagr": 18.1,
+     "maxdd": -18.34
+    },
+    "all": {
+     "cagr": 40.23,
+     "maxdd": -19.37
+    }
+   }
+  },
+  {
+   "name": "prefer high score",
+   "dev": {
+    "top300": {
+     "cagr": 18.48,
+     "maxdd": -16.49
+    },
+    "all": {
+     "cagr": 38.01,
+     "maxdd": -22.37
+    }
+   }
+  },
+  {
+   "name": "prefer low score",
+   "dev": {
+    "top300": {
+     "cagr": 19.07,
+     "maxdd": -19.75
+    },
+    "all": {
+     "cagr": 41.33,
+     "maxdd": -15.54
+    }
+   }
+  },
+  {
+   "name": "skip stop_dist ..0.1071",
+   "dev": {
+    "top300": {
+     "cagr": 18.68,
+     "maxdd": -19.86
+    },
+    "all": {
+     "cagr": 37.3,
+     "maxdd": -23.05
+    }
+   }
+  },
+  {
+   "name": "skip stop_dist 0.201..",
+   "dev": {
+    "top300": {
+     "cagr": 16.93,
+     "maxdd": -21.36
+    },
+    "all": {
+     "cagr": 35.87,
+     "maxdd": -16.91
+    }
+   }
+  },
+  {
+   "name": "skip stop_dist ..0.132",
+   "dev": {
+    "top300": {
+     "cagr": 16.52,
+     "maxdd": -22.3
+    },
+    "all": {
+     "cagr": 36.06,
+     "maxdd": -26.76
+    }
+   }
+  },
+  {
+   "name": "skip stop_dist 0.1601..",
+   "dev": {
+    "top300": {
+     "cagr": 14.01,
+     "maxdd": -15.25
+    },
+    "all": {
+     "cagr": 35.58,
+     "maxdd": -15.57
+    }
+   }
+  },
+  {
+   "name": "half stop_dist ..0.1071",
+   "dev": {
+    "top300": {
+     "cagr": 19.5,
+     "maxdd": -17.96
+    },
+    "all": {
+     "cagr": 38.75,
+     "maxdd": -20.29
+    }
+   }
+  },
+  {
+   "name": "half stop_dist 0.201..",
+   "dev": {
+    "top300": {
+     "cagr": 18.67,
+     "maxdd": -19.86
+    },
+    "all": {
+     "cagr": 38.42,
+     "maxdd": -18.4
+    }
+   }
+  },
+  {
+   "name": "prefer high stop_dist",
+   "dev": {
+    "top300": {
+     "cagr": 20.73,
+     "maxdd": -18.05
+    },
+    "all": {
+     "cagr": 42.25,
+     "maxdd": -22.1
+    }
+   }
+  },
+  {
+   "name": "prefer low stop_dist",
+   "dev": {
+    "top300": {
+     "cagr": 16.84,
+     "maxdd": -14.88
+    },
+    "all": {
+     "cagr": 40.54,
+     "maxdd": -13.93
+    }
+   }
+  },
+  {
+   "name": "skip day_of_month ..6",
+   "dev": {
+    "top300": {
+     "cagr": 18.29,
+     "maxdd": -19.88
+    },
+    "all": {
+     "cagr": 38.68,
+     "maxdd": -23.87
+    }
+   }
+  },
+  {
+   "name": "skip day_of_month 24..",
+   "dev": {
+    "top300": {
+     "cagr": 16.09,
+     "maxdd": -19.31
+    },
+    "all": {
+     "cagr": 36.74,
+     "maxdd": -18.85
+    }
+   }
+  },
+  {
+   "name": "skip day_of_month ..11",
+   "dev": {
+    "top300": {
+     "cagr": 18.85,
+     "maxdd": -16.25
+    },
+    "all": {
+     "cagr": 38.12,
+     "maxdd": -20.98
+    }
+   }
+  },
+  {
+   "name": "skip day_of_month 18..",
+   "dev": {
+    "top300": {
+     "cagr": 15.75,
+     "maxdd": -21.21
+    },
+    "all": {
+     "cagr": 34.47,
+     "maxdd": -17.73
+    }
+   }
+  },
+  {
+   "name": "half day_of_month ..6",
+   "dev": {
+    "top300": {
+     "cagr": 18.62,
+     "maxdd": -17.82
+    },
+    "all": {
+     "cagr": 39.43,
+     "maxdd": -22.35
+    }
+   }
+  },
+  {
+   "name": "half day_of_month 24..",
+   "dev": {
+    "top300": {
+     "cagr": 18.06,
+     "maxdd": -14.7
+    },
+    "all": {
+     "cagr": 39.68,
+     "maxdd": -17.86
+    }
+   }
+  },
+  {
+   "name": "prefer high day_of_month",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.15,
+     "maxdd": -20.1
+    }
+   }
+  },
+  {
+   "name": "prefer low day_of_month",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.21,
+     "maxdd": -20.36
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_trades ..1",
+   "dev": {
+    "top300": {
+     "cagr": 18.88,
+     "maxdd": -15.51
+    },
+    "all": {
+     "cagr": 40.6,
+     "maxdd": -20.68
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_trades 13..",
+   "dev": {
+    "top300": {
+     "cagr": 18.37,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 39.35,
+     "maxdd": -22.87
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_trades ..4",
+   "dev": {
+    "top300": {
+     "cagr": 16.01,
+     "maxdd": -12.48
+    },
+    "all": {
+     "cagr": 34.22,
+     "maxdd": -20.67
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_trades 7..",
+   "dev": {
+    "top300": {
+     "cagr": 17.6,
+     "maxdd": -24.29
+    },
+    "all": {
+     "cagr": 35.38,
+     "maxdd": -21.18
+    }
+   }
+  },
+  {
+   "name": "half stock_past_trades ..1",
+   "dev": {
+    "top300": {
+     "cagr": 19.0,
+     "maxdd": -15.45
+    },
+    "all": {
+     "cagr": 40.72,
+     "maxdd": -20.35
+    }
+   }
+  },
+  {
+   "name": "half stock_past_trades 13..",
+   "dev": {
+    "top300": {
+     "cagr": 18.74,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.16,
+     "maxdd": -19.65
+    }
+   }
+  },
+  {
+   "name": "prefer high stock_past_trades",
+   "dev": {
+    "top300": {
+     "cagr": 19.09,
+     "maxdd": -18.69
+    },
+    "all": {
+     "cagr": 38.76,
+     "maxdd": -15.21
+    }
+   }
+  },
+  {
+   "name": "prefer low stock_past_trades",
+   "dev": {
+    "top300": {
+     "cagr": 18.94,
+     "maxdd": -17.22
+    },
+    "all": {
+     "cagr": 40.7,
+     "maxdd": -22.59
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_win ..0.2857",
+   "dev": {
+    "top300": {
+     "cagr": 19.46,
+     "maxdd": -15.94
+    },
+    "all": {
+     "cagr": 38.61,
+     "maxdd": -16.07
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_win 0.6667..",
+   "dev": {
+    "top300": {
+     "cagr": 18.76,
+     "maxdd": -17.18
+    },
+    "all": {
+     "cagr": 39.71,
+     "maxdd": -19.69
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_win ..0.4286",
+   "dev": {
+    "top300": {
+     "cagr": 17.7,
+     "maxdd": -15.73
+    },
+    "all": {
+     "cagr": 35.05,
+     "maxdd": -14.53
+    }
+   }
+  },
+  {
+   "name": "skip stock_past_win 0.5..",
+   "dev": {
+    "top300": {
+     "cagr": 16.52,
+     "maxdd": -18.82
+    },
+    "all": {
+     "cagr": 36.4,
+     "maxdd": -22.56
+    }
+   }
+  },
+  {
+   "name": "half stock_past_win ..0.2857",
+   "dev": {
+    "top300": {
+     "cagr": 19.09,
+     "maxdd": -16.08
+    },
+    "all": {
+     "cagr": 38.94,
+     "maxdd": -17.51
+    }
+   }
+  },
+  {
+   "name": "half stock_past_win 0.6667..",
+   "dev": {
+    "top300": {
+     "cagr": 19.2,
+     "maxdd": -16.72
+    },
+    "all": {
+     "cagr": 40.54,
+     "maxdd": -18.33
+    }
+   }
+  },
+  {
+   "name": "prefer high stock_past_win",
+   "dev": {
+    "top300": {
+     "cagr": 19.49,
+     "maxdd": -15.72
+    },
+    "all": {
+     "cagr": 40.21,
+     "maxdd": -16.94
+    }
+   }
+  },
+  {
+   "name": "prefer low stock_past_win",
+   "dev": {
+    "top300": {
+     "cagr": 18.18,
+     "maxdd": -20.59
+    },
+    "all": {
+     "cagr": 41.07,
+     "maxdd": -20.48
+    }
+   }
+  },
+  {
+   "name": "skip setup = RCP",
+   "dev": {
+    "top300": {
+     "cagr": 13.67,
+     "maxdd": -24.29
+    },
+    "all": {
+     "cagr": 21.95,
+     "maxdd": -34.15
+    }
+   }
+  },
+  {
+   "name": "half setup = RCP",
+   "dev": {
+    "top300": {
+     "cagr": 16.95,
+     "maxdd": -17.36
+    },
+    "all": {
+     "cagr": 36.68,
+     "maxdd": -21.48
+    }
+   }
+  },
+  {
+   "name": "skip setup = Breakout",
+   "dev": {
+    "top300": {
+     "cagr": 18.78,
+     "maxdd": -15.56
+    },
+    "all": {
+     "cagr": 40.59,
+     "maxdd": -18.22
+    }
+   }
+  },
+  {
+   "name": "half setup = Breakout",
+   "dev": {
+    "top300": {
+     "cagr": 19.59,
+     "maxdd": -15.99
+    },
+    "all": {
+     "cagr": 40.87,
+     "maxdd": -18.38
+    }
+   }
+  },
+  {
+   "name": "skip setup = Dip-buy",
+   "dev": {
+    "top300": {
+     "cagr": 18.0,
+     "maxdd": -18.09
+    },
+    "all": {
+     "cagr": 39.97,
+     "maxdd": -19.21
+    }
+   }
+  },
+  {
+   "name": "half setup = Dip-buy",
+   "dev": {
+    "top300": {
+     "cagr": 18.64,
+     "maxdd": -18.2
+    },
+    "all": {
+     "cagr": 40.2,
+     "maxdd": -19.94
+    }
+   }
+  },
+  {
+   "name": "skip mkt_trend = rising",
+   "dev": {
+    "top300": {
+     "cagr": 6.12,
+     "maxdd": -12.45
+    },
+    "all": {
+     "cagr": 19.3,
+     "maxdd": -10.88
+    }
+   }
+  },
+  {
+   "name": "half mkt_trend = rising",
+   "dev": {
+    "top300": {
+     "cagr": 18.53,
+     "maxdd": -16.39
+    },
+    "all": {
+     "cagr": 37.3,
+     "maxdd": -19.17
+    }
+   }
+  },
+  {
+   "name": "skip mkt_trend = falling",
+   "dev": {
+    "top300": {
+     "cagr": 15.32,
+     "maxdd": -16.95
+    },
+    "all": {
+     "cagr": 31.53,
+     "maxdd": -26.82
+    }
+   }
+  },
+  {
+   "name": "half mkt_trend = falling",
+   "dev": {
+    "top300": {
+     "cagr": 17.61,
+     "maxdd": -16.34
+    },
+    "all": {
+     "cagr": 38.21,
+     "maxdd": -19.83
+    }
+   }
+  },
+  {
+   "name": "skip mkt_mood = calm",
+   "dev": {
+    "top300": {
+     "cagr": 3.47,
+     "maxdd": -11.08
+    },
+    "all": {
+     "cagr": 9.59,
+     "maxdd": -9.38
+    }
+   }
+  },
+  {
+   "name": "half mkt_mood = calm",
+   "dev": {
+    "top300": {
+     "cagr": 16.91,
+     "maxdd": -16.93
+    },
+    "all": {
+     "cagr": 36.3,
+     "maxdd": -19.51
+    }
+   }
+  },
+  {
+   "name": "skip mkt_mood = jumpy",
+   "dev": {
+    "top300": {
+     "cagr": 17.13,
+     "maxdd": -21.78
+    },
+    "all": {
+     "cagr": 36.77,
+     "maxdd": -27.35
+    }
+   }
+  },
+  {
+   "name": "half mkt_mood = jumpy",
+   "dev": {
+    "top300": {
+     "cagr": 19.46,
+     "maxdd": -17.09
+    },
+    "all": {
+     "cagr": 38.89,
+     "maxdd": -20.53
+    }
+   }
+  },
+  {
+   "name": "skip mkt_breadth = breadth strong",
+   "dev": {
+    "top300": {
+     "cagr": 8.95,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 23.01,
+     "maxdd": -22.21
+    }
+   }
+  },
+  {
+   "name": "half mkt_breadth = breadth strong",
+   "dev": {
+    "top300": {
+     "cagr": 17.52,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 38.22,
+     "maxdd": -19.81
+    }
+   }
+  },
+  {
+   "name": "skip mkt_breadth = breadth weak",
+   "dev": {
+    "top300": {
+     "cagr": 13.21,
+     "maxdd": -19.62
+    },
+    "all": {
+     "cagr": 29.84,
+     "maxdd": -28.17
+    }
+   }
+  },
+  {
+   "name": "half mkt_breadth = breadth weak",
+   "dev": {
+    "top300": {
+     "cagr": 17.72,
+     "maxdd": -15.67
+    },
+    "all": {
+     "cagr": 37.5,
+     "maxdd": -22.15
+    }
+   }
+  },
+  {
+   "name": "skip mkt_breadth = breadth middle",
+   "dev": {
+    "top300": {
+     "cagr": 17.39,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 38.24,
+     "maxdd": -17.7
+    }
+   }
+  },
+  {
+   "name": "half mkt_breadth = breadth middle",
+   "dev": {
+    "top300": {
+     "cagr": 19.25,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 39.61,
+     "maxdd": -17.62
+    }
+   }
+  },
+  {
+   "name": "skip weekday = Mon",
+   "dev": {
+    "top300": {
+     "cagr": 18.78,
+     "maxdd": -14.36
+    },
+    "all": {
+     "cagr": 38.1,
+     "maxdd": -18.99
+    }
+   }
+  },
+  {
+   "name": "half weekday = Mon",
+   "dev": {
+    "top300": {
+     "cagr": 18.38,
+     "maxdd": -15.42
+    },
+    "all": {
+     "cagr": 39.52,
+     "maxdd": -18.93
+    }
+   }
+  },
+  {
+   "name": "skip weekday = Tue",
+   "dev": {
+    "top300": {
+     "cagr": 19.11,
+     "maxdd": -15.36
+    },
+    "all": {
+     "cagr": 38.84,
+     "maxdd": -18.15
+    }
+   }
+  },
+  {
+   "name": "half weekday = Tue",
+   "dev": {
+    "top300": {
+     "cagr": 19.47,
+     "maxdd": -17.64
+    },
+    "all": {
+     "cagr": 39.05,
+     "maxdd": -20.63
+    }
+   }
+  },
+  {
+   "name": "skip weekday = Thu",
+   "dev": {
+    "top300": {
+     "cagr": 18.1,
+     "maxdd": -19.14
+    },
+    "all": {
+     "cagr": 39.97,
+     "maxdd": -17.48
+    }
+   }
+  },
+  {
+   "name": "half weekday = Thu",
+   "dev": {
+    "top300": {
+     "cagr": 19.06,
+     "maxdd": -16.31
+    },
+    "all": {
+     "cagr": 40.5,
+     "maxdd": -18.11
+    }
+   }
+  },
+  {
+   "name": "skip weekday = Fri",
+   "dev": {
+    "top300": {
+     "cagr": 16.75,
+     "maxdd": -18.69
+    },
+    "all": {
+     "cagr": 37.65,
+     "maxdd": -21.66
+    }
+   }
+  },
+  {
+   "name": "half weekday = Fri",
+   "dev": {
+    "top300": {
+     "cagr": 18.5,
+     "maxdd": -15.76
+    },
+    "all": {
+     "cagr": 38.71,
+     "maxdd": -20.54
+    }
+   }
+  },
+  {
+   "name": "skip weekday = Wed",
+   "dev": {
+    "top300": {
+     "cagr": 18.55,
+     "maxdd": -20.98
+    },
+    "all": {
+     "cagr": 37.99,
+     "maxdd": -18.49
+    }
+   }
+  },
+  {
+   "name": "half weekday = Wed",
+   "dev": {
+    "top300": {
+     "cagr": 18.91,
+     "maxdd": -19.37
+    },
+    "all": {
+     "cagr": 38.85,
+     "maxdd": -18.77
+    }
+   }
+  },
+  {
+   "name": "skip month = 7",
+   "dev": {
+    "top300": {
+     "cagr": 16.8,
+     "maxdd": -18.02
+    },
+    "all": {
+     "cagr": 38.45,
+     "maxdd": -18.0
+    }
+   }
+  },
+  {
+   "name": "half month = 7",
+   "dev": {
+    "top300": {
+     "cagr": 19.13,
+     "maxdd": -16.42
+    },
+    "all": {
+     "cagr": 39.3,
+     "maxdd": -20.74
+    }
+   }
+  },
+  {
+   "name": "skip month = 1",
+   "dev": {
+    "top300": {
+     "cagr": 20.93,
+     "maxdd": -12.5
+    },
+    "all": {
+     "cagr": 39.06,
+     "maxdd": -18.6
+    }
+   }
+  },
+  {
+   "name": "half month = 1",
+   "dev": {
+    "top300": {
+     "cagr": 20.43,
+     "maxdd": -14.85
+    },
+    "all": {
+     "cagr": 39.87,
+     "maxdd": -19.52
+    }
+   }
+  },
+  {
+   "name": "skip month = 9",
+   "dev": {
+    "top300": {
+     "cagr": 19.15,
+     "maxdd": -18.36
+    },
+    "all": {
+     "cagr": 37.24,
+     "maxdd": -18.81
+    }
+   }
+  },
+  {
+   "name": "half month = 9",
+   "dev": {
+    "top300": {
+     "cagr": 19.0,
+     "maxdd": -18.85
+    },
+    "all": {
+     "cagr": 40.19,
+     "maxdd": -18.38
+    }
+   }
+  },
+  {
+   "name": "skip month = 10",
+   "dev": {
+    "top300": {
+     "cagr": 19.09,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 37.37,
+     "maxdd": -22.48
+    }
+   }
+  },
+  {
+   "name": "half month = 10",
+   "dev": {
+    "top300": {
+     "cagr": 18.83,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 39.95,
+     "maxdd": -20.15
+    }
+   }
+  },
+  {
+   "name": "skip month = 4",
+   "dev": {
+    "top300": {
+     "cagr": 18.63,
+     "maxdd": -18.34
+    },
+    "all": {
+     "cagr": 38.91,
+     "maxdd": -22.31
+    }
+   }
+  },
+  {
+   "name": "half month = 4",
+   "dev": {
+    "top300": {
+     "cagr": 18.61,
+     "maxdd": -17.68
+    },
+    "all": {
+     "cagr": 39.93,
+     "maxdd": -19.38
+    }
+   }
+  },
+  {
+   "name": "skip month = 6",
+   "dev": {
+    "top300": {
+     "cagr": 17.47,
+     "maxdd": -19.02
+    },
+    "all": {
+     "cagr": 36.83,
+     "maxdd": -18.48
+    }
+   }
+  },
+  {
+   "name": "half month = 6",
+   "dev": {
+    "top300": {
+     "cagr": 18.89,
+     "maxdd": -16.97
+    },
+    "all": {
+     "cagr": 39.08,
+     "maxdd": -19.6
+    }
+   }
+  },
+  {
+   "name": "skip month = 8",
+   "dev": {
+    "top300": {
+     "cagr": 17.91,
+     "maxdd": -18.64
+    },
+    "all": {
+     "cagr": 36.63,
+     "maxdd": -19.39
+    }
+   }
+  },
+  {
+   "name": "half month = 8",
+   "dev": {
+    "top300": {
+     "cagr": 18.86,
+     "maxdd": -18.63
+    },
+    "all": {
+     "cagr": 40.12,
+     "maxdd": -19.69
+    }
+   }
+  },
+  {
+   "name": "skip month = 5",
+   "dev": {
+    "top300": {
+     "cagr": 18.4,
+     "maxdd": -16.48
+    },
+    "all": {
+     "cagr": 37.79,
+     "maxdd": -18.42
+    }
+   }
+  },
+  {
+   "name": "half month = 5",
+   "dev": {
+    "top300": {
+     "cagr": 19.05,
+     "maxdd": -17.53
+    },
+    "all": {
+     "cagr": 39.99,
+     "maxdd": -20.48
+    }
+   }
+  },
+  {
+   "name": "skip month = 3",
+   "dev": {
+    "top300": {
+     "cagr": 17.09,
+     "maxdd": -20.21
+    },
+    "all": {
+     "cagr": 38.82,
+     "maxdd": -23.09
+    }
+   }
+  },
+  {
+   "name": "half month = 3",
+   "dev": {
+    "top300": {
+     "cagr": 18.6,
+     "maxdd": -18.03
+    },
+    "all": {
+     "cagr": 39.43,
+     "maxdd": -20.81
+    }
+   }
+  },
+  {
+   "name": "skip month = 11",
+   "dev": {
+    "top300": {
+     "cagr": 17.76,
+     "maxdd": -23.51
+    },
+    "all": {
+     "cagr": 38.9,
+     "maxdd": -23.14
+    }
+   }
+  },
+  {
+   "name": "half month = 11",
+   "dev": {
+    "top300": {
+     "cagr": 19.07,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.02,
+     "maxdd": -22.43
+    }
+   }
+  },
+  {
+   "name": "skip month = 12",
+   "dev": {
+    "top300": {
+     "cagr": 18.25,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 39.18,
+     "maxdd": -25.42
+    }
+   }
+  },
+  {
+   "name": "half month = 12",
+   "dev": {
+    "top300": {
+     "cagr": 18.5,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.19,
+     "maxdd": -21.4
+    }
+   }
+  },
+  {
+   "name": "skip month = 2",
+   "dev": {
+    "top300": {
+     "cagr": 20.31,
+     "maxdd": -17.75
+    },
+    "all": {
+     "cagr": 38.57,
+     "maxdd": -21.75
+    }
+   }
+  },
+  {
+   "name": "half month = 2",
+   "dev": {
+    "top300": {
+     "cagr": 19.62,
+     "maxdd": -18.42
+    },
+    "all": {
+     "cagr": 39.19,
+     "maxdd": -20.59
+    }
+   }
+  },
+  {
+   "name": "skip sector = Financial Services",
+   "dev": {
+    "top300": {
+     "cagr": 18.7,
+     "maxdd": -17.66
+    },
+    "all": {
+     "cagr": 40.01,
+     "maxdd": -22.37
+    }
+   }
+  },
+  {
+   "name": "half sector = Financial Services",
+   "dev": {
+    "top300": {
+     "cagr": 18.78,
+     "maxdd": -17.4
+    },
+    "all": {
+     "cagr": 40.32,
+     "maxdd": -19.82
+    }
+   }
+  },
+  {
+   "name": "skip sector = Healthcare",
+   "dev": {
+    "top300": {
+     "cagr": 18.58,
+     "maxdd": -18.69
+    },
+    "all": {
+     "cagr": 40.23,
+     "maxdd": -20.46
+    }
+   }
+  },
+  {
+   "name": "half sector = Healthcare",
+   "dev": {
+    "top300": {
+     "cagr": 18.46,
+     "maxdd": -19.21
+    },
+    "all": {
+     "cagr": 40.28,
+     "maxdd": -21.44
+    }
+   }
+  },
+  {
+   "name": "skip sector = Capital Goods",
+   "dev": {
+    "top300": {
+     "cagr": 19.05,
+     "maxdd": -16.42
+    },
+    "all": {
+     "cagr": 39.71,
+     "maxdd": -20.23
+    }
+   }
+  },
+  {
+   "name": "half sector = Capital Goods",
+   "dev": {
+    "top300": {
+     "cagr": 18.65,
+     "maxdd": -16.88
+    },
+    "all": {
+     "cagr": 40.56,
+     "maxdd": -19.81
+    }
+   }
+  },
+  {
+   "name": "skip sector = Fast Moving Consumer Goods",
+   "dev": {
+    "top300": {
+     "cagr": 19.24,
+     "maxdd": -19.35
+    },
+    "all": {
+     "cagr": 40.03,
+     "maxdd": -21.67
+    }
+   }
+  },
+  {
+   "name": "half sector = Fast Moving Consumer Goods",
+   "dev": {
+    "top300": {
+     "cagr": 18.93,
+     "maxdd": -17.56
+    },
+    "all": {
+     "cagr": 40.27,
+     "maxdd": -19.7
+    }
+   }
+  },
+  {
+   "name": "skip sector = Automobile and Auto Components",
+   "dev": {
+    "top300": {
+     "cagr": 18.52,
+     "maxdd": -18.41
+    },
+    "all": {
+     "cagr": 39.75,
+     "maxdd": -19.82
+    }
+   }
+  },
+  {
+   "name": "half sector = Automobile and Auto Components",
+   "dev": {
+    "top300": {
+     "cagr": 19.24,
+     "maxdd": -18.54
+    },
+    "all": {
+     "cagr": 39.55,
+     "maxdd": -20.06
+    }
+   }
+  },
+  {
+   "name": "skip sector = Information Technology",
+   "dev": {
+    "top300": {
+     "cagr": 18.99,
+     "maxdd": -17.72
+    },
+    "all": {
+     "cagr": 39.92,
+     "maxdd": -22.07
+    }
+   }
+  },
+  {
+   "name": "half sector = Information Technology",
+   "dev": {
+    "top300": {
+     "cagr": 19.72,
+     "maxdd": -15.58
+    },
+    "all": {
+     "cagr": 40.36,
+     "maxdd": -21.33
+    }
+   }
+  },
+  {
+   "name": "skip sector = Oil Gas & Consumable Fuels",
+   "dev": {
+    "top300": {
+     "cagr": 20.5,
+     "maxdd": -16.65
+    },
+    "all": {
+     "cagr": 40.03,
+     "maxdd": -21.65
+    }
+   }
+  },
+  {
+   "name": "half sector = Oil Gas & Consumable Fuels",
+   "dev": {
+    "top300": {
+     "cagr": 19.23,
+     "maxdd": -17.21
+    },
+    "all": {
+     "cagr": 39.99,
+     "maxdd": -20.28
+    }
+   }
+  },
+  {
+   "name": "skip sector = Consumer Durables",
+   "dev": {
+    "top300": {
+     "cagr": 18.72,
+     "maxdd": -17.32
+    },
+    "all": {
+     "cagr": 40.13,
+     "maxdd": -21.52
+    }
+   }
+  },
+  {
+   "name": "half sector = Consumer Durables",
+   "dev": {
+    "top300": {
+     "cagr": 19.38,
+     "maxdd": -19.06
+    },
+    "all": {
+     "cagr": 39.85,
+     "maxdd": -20.15
+    }
+   }
+  },
+  {
+   "name": "skip sector = Metals & Mining",
+   "dev": {
+    "top300": {
+     "cagr": 18.97,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.1,
+     "maxdd": -20.45
+    }
+   }
+  },
+  {
+   "name": "half sector = Metals & Mining",
+   "dev": {
+    "top300": {
+     "cagr": 18.83,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.71,
+     "maxdd": -19.78
+    }
+   }
+  },
+  {
+   "name": "skip sector = Chemicals",
+   "dev": {
+    "top300": {
+     "cagr": 19.32,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 40.19,
+     "maxdd": -20.7
+    }
+   }
+  },
+  {
+   "name": "half sector = Chemicals",
+   "dev": {
+    "top300": {
+     "cagr": 18.55,
+     "maxdd": -19.38
+    },
+    "all": {
+     "cagr": 39.97,
+     "maxdd": -22.45
+    }
+   }
+  },
+  {
+   "name": "skip results_soon = no",
+   "dev": {
+    "top300": {
+     "cagr": 14.0,
+     "maxdd": -24.2
+    },
+    "all": {
+     "cagr": 39.7,
+     "maxdd": -25.53
+    }
+   }
+  },
+  {
+   "name": "half results_soon = no",
+   "dev": {
+    "top300": {
+     "cagr": 17.4,
+     "maxdd": -17.98
+    },
+    "all": {
+     "cagr": 39.43,
+     "maxdd": -21.1
+    }
+   }
+  },
+  {
+   "name": "skip results_soon = yes",
+   "dev": {
+    "top300": {
+     "cagr": 19.79,
+     "maxdd": -18.76
+    },
+    "all": {
+     "cagr": 40.34,
+     "maxdd": -21.8
+    }
+   }
+  },
+  {
+   "name": "half results_soon = yes",
+   "dev": {
+    "top300": {
+     "cagr": 19.26,
+     "maxdd": -16.95
+    },
+    "all": {
+     "cagr": 39.61,
+     "maxdd": -21.1
+    }
+   }
+  }
+ ]
+}
