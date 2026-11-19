@@ -1224,3 +1224,18 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - It first gives every tracked stock today's bar: Yahoo, else Kite quotes, else Yahoo's 5-minute data.
   - Then it runs the scorecard, tip tracker, Learner and why-engine, and saves them to GitHub.
 - It sends no tips and changes no rules. The 6:40 pm nightly job still runs the same steps again with the official day prices (final numbers), because Yahoo's daily bar replaces the early one.
+
+## D153 - 2026-11-19 - Kite Connect used to the full (owner: "are we using it at maximum utilisation?")
+- **Audit:**
+  - Used: live quotes (scans, VANTAGE live and 3:20 / 3:40 pm, 4 pm review), order-book pressure, instrument list, and a little 5-minute history.
+  - Unused: years of intraday history.
+  - The 5-minute archive came from Yahoo, for only 150 stocks.
+- **New `swing/kite_history.py`** (research job, every evening on GitHub, read-only market data, about 2,000 requests a night at Kite's 3-a-second limit):
+  - backfills 15-minute candles of the top-300 + NIFTY from 2019, and 5-minute candles of the last 2 years for 9:15-9:45 and 15:00-15:30;
+  - stores daily summaries (open, 3:15 pm price, close, VWAP, first-30-minute and last-hour moves, close vs VWAP) and those window bars in `data/kite_hist` (GitHub's private cache).
+- Kite data is never committed to the public repository. Only the research results are (`journal/kite_research.md`).
+- At 80% coverage (about 4 evenings) it runs automatically:
+  - **the 3:20 pm reality check** (the 3:15 pm price vs the close on every VANTAGE signal day, which the tests assumed equal);
+  - whether intraday facts on the signal day predict VANTAGE results.
+- **Safety fix:** a Kite "403" for a data permission no longer deletes the day's login. Only an expired-login answer does.
+- **Not used, on purpose:** the owner's account (holdings, positions, funds), under the privacy rule. Orders: never.

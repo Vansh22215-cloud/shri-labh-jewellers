@@ -136,6 +136,12 @@ def _get(path, params=None, timeout=20):
                      headers={"X-Kite-Version": "3", "Authorization": f"token {k}:{t}"})
     if r.status_code == 403:
         try:
+            etype = r.json().get("error_type", "")
+        except Exception:
+            etype = ""
+        if etype and etype != "TokenException":     # e.g. a data permission: the login itself is still fine
+            raise PermissionError(f"Kite refused this data ({etype})")
+        try:
             TOKEN_F.unlink()           # token rejected (expired / logged out): stop using it
         except Exception:
             pass

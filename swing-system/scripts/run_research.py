@@ -16,6 +16,11 @@ if __name__ == "__main__":
         sys.exit(0)
     s = load_settings()
     notes = []
+    try:   # Kite historical candles to the full (owner 19 Nov): ~900 requests a night until years of 15-minute
+        from swing import kite_history            # history exist for the top-300; then the 3:20 pm reality check
+        print("kite history:", kite_history.run())
+    except Exception as e:
+        print("kite history skipped:", type(e).__name__)
     try:   # AUTO-RESEARCH (owner 19 Nov: research must keep running without Claude) - once a week, Friday night
         import subprocess, datetime as _dt
         from swing.config import DATA

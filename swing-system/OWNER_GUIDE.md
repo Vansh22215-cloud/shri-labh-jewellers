@@ -6,7 +6,7 @@ The system only READS prices from Kite: it can never buy, sell or touch your mon
 ## Your day
 | Time | What you do |
 |---|---|
-| **8:45 am** | Tap the 🔑 Kite login link on Telegram, log in, tap Start (Zerodha needs a human login daily). Missed it? send `/kite` |
+| **8:45 am** | Tap the 🔑 Kite login link on Telegram, log in, tap Start (Zerodha needs a human login daily). Missed it? send `/kite`. The login feeds live prices all day AND the evening download of Kite's intraday history (research) |
 | 9:15 am - 3:15 pm | Nothing. "⚡ LIVE BUY … if it holds to the close" = early warning only, **don't buy**. 🛑 stop-loss alert on a stock you hold = **sell** |
 | **3:22 pm** | **🧭 ATLAS plan**: all of today's opportunities ranked, money needed, what to avoid - or "No trade today" |
 | **3:15 - 3:29 pm** | **The "buy now" (3:20 pm) VANTAGE message = buy.** Exact quantity shown. Then set a GTT stop-loss in Kite at the 🛑 price. Send `/bought SYMBOL` |
