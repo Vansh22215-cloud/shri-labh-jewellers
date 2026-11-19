@@ -36,9 +36,9 @@ def _delisted():
         return {}
 
 
-def universe(include_delisted=True):
+def universe(include_delisted=True, top=300):
     u = pd.read_csv(f"{ROOT}/data/universe_history.csv", parse_dates=["asof"])
-    u = u[u["rank"] <= 300]
+    u = u[u["rank"] <= top]
     members = {a: set(g["symbol"]) for a, g in u.groupby("asof")}
     months = sorted(members)
     dl = _delisted() if include_delisted else {}

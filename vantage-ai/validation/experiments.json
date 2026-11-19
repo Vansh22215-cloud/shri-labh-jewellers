@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 82,
+ "count": 84,
  "passed": 11,
  "experiments": [
   {
@@ -821,6 +821,26 @@
    "verdict": "PASS - proposed to owner (holdout seen before; 6 of 9 years since 2018)",
    "why": "holdout 14.8% vs 7.2% a year, fall -20.6% vs -27.5%; development favours all stocks (survivorship-inflated)",
    "files": "IMPROVE26_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R27",
+   "round": 27,
+   "family": "adversarial",
+   "hypothesis": "Top-300 is robust to the universe size (100-500)",
+   "verdict": "fragile - top-300 kept (best near both periods)",
+   "why": "holdout 9.1/15.5/15.7/11.5/10.9 for top 100-500; development rises with size",
+   "files": "IMPROVE27_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R28",
+   "round": 28,
+   "family": "selection",
+   "hypothesis": "Take tips in a published order when money is short (momentum, 52w high, low vol, score, mix)",
+   "verdict": "near miss (P1 momentum) - fresh-data check",
+   "why": "P1 +1.2/+1.7 points both periods, smaller falls, but 7 of 14 years",
+   "files": "IMPROVE28_RESULTS.md",
    "area": "finder"
   }
  ],

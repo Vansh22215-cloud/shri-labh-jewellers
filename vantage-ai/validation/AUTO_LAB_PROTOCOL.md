@@ -39,3 +39,6 @@ Account simulation, ₹51,000, 1% risk, 25% cap, 0.35% costs.
 
 ## Added 19 Nov 2026 (before the first automatic run): step 5, fresh trades
 Signals from 20 Nov 2026 on were never seen by anyone. Once 150+ such top-300 trades exist, a candidate must not be worse on them than the current system (15 random orders), and approved rules are re-checked on them weekly. The weekly run (autoresearch.py) uses 3 luck worlds.
+
+## Added 19 Nov 2026 (round 28): "take first" rules
+A "take first when money is short" rule is proposed only after passing every step INCLUDING step 5 on the fresh trades (150+). If approved, VANTAGE messages show the rule's fact as a priority, so the owner takes the higher ones first when money is short. Risk is unchanged.

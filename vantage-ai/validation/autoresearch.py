@@ -199,7 +199,10 @@ def run(send=True, procs=4, luck_worlds=3):
     new = []
     for r in res:
         r["plain"] = plain(r)
-        if r["CANDIDATE"] and r["live_ok"] and r["kind"] in ("skip", "half"):
+        # "take first" rules (R28: momentum order was the best near miss) are proposed only after they also hold on
+        # the fresh trades (step 5 must have run and passed); they change the order advice, never the risk
+        prefer_ok = r["kind"] in ("prefer_high", "prefer_low") and r.get("fresh_pass") is True
+        if r["CANDIDATE"] and r["live_ok"] and (r["kind"] in ("skip", "half") or prefer_ok):
             old = known.get(r["id"])
             if old is None:
                 r["status"], r["proposed_on"] = "proposed", str(pd.Timestamp.now().date())
