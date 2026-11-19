@@ -1,5 +1,7 @@
 # ATLAS - map of the system (19 Nov 2026)
 
+Permanent mission: **MISSION.md** (profit is the objective, capital protection the constraint, evidence the authority, continuous improvement the engine).
+
 ATLAS = the owner's goal: a system that **finds, analyses, tests, challenges, recommends, tracks, learns, evolves,
 manages capital and improves itself**, while protecting capital. It is read-only towards Kite and never places,
 modifies or cancels an order. The owner places every order himself.
@@ -13,6 +15,7 @@ modifies or cancels an order. The owner places every order himself.
 | **Research without Claude** | Every Friday night on GitHub: rebuild all trades from new prices, all facts, all possibilities, 4 steps + fresh trades since 20 Nov 2026; a full pass -> Telegram proposal; `/approve LAB-x` makes VANTAGE apply it (skip or half only) | `vantage-ai/validation/autoresearch.py`, `swing/lab_rules.py`, `strategies/lab_rules.json`, `journal/auto_research.md` |
 | **Context (which rule, which stock, which market)** | ATLAS discovers behaviour groups itself, finds which similarities predict (behaviour yes, sector no), builds rules per group walk-forward, re-learns yearly, re-tests weekly; a pass -> `/approve CTX-x` | `vantage-ai/validation/context_engine.py`, `CONTEXT_*`, `strategies/context_model.json` |
 | **Challenge** | Luck checks, fingerprint, prosecutor tests (round 23), crash scenario (round 24), beliefs + daily question | `luck_check*.json`, `fingerprint`, `beliefs.json`, `swing/learning.py` |
+| **Select (daily brief)** | 3:22 pm: today's opportunities ranked by tested evidence per ₹1 risked, entry / stop / exit / quantity / money / max loss, avoid list, or "No trade today" | `swing/brief.py` |
 | **Recommend** | Telegram tips with stop-loss and 1%-risk quantity; no repeats across channels | `swing/telegram.py`, `swing/registry.py`, `swing/safety.py` |
 | **Track** | Every idea ever produced, sent or not, one table | `swing/tracker.py` -> `journal/all_tips.csv/.md`; `swing/scorecard.py` |
 | **Remember** | Append-only hash-chained idea history | `swing/ledger.py` -> `journal/ledger.jsonl` |

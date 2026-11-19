@@ -66,3 +66,13 @@ def _isolate_runtime_state(tmp_path, monkeypatch):
     monkeypatch.setattr(telegram, "_outbox", lambda: tmp_path / "outbox.jsonl")
     monkeypatch.setattr(autopilot, "STATE_F", tmp_path / "autopilot.json")
     yield
+
+
+@pytest.fixture(autouse=True)
+def _never_touch_real_private_records(tmp_path, monkeypatch):
+    """19 Nov 2026: a test wrote fake signals into data/private/vantage_rejected.csv - every test now writes the
+    rejected / blocked-repeat / research-rule records into its own temporary folder."""
+    from swing import vantage, registry, lab_rules
+    monkeypatch.setattr(vantage, "REJ_F", tmp_path / "_rejected.csv")
+    monkeypatch.setattr(registry, "SUPP", tmp_path / "_suppressed.csv")
+    monkeypatch.setattr(lab_rules, "RULES_F", tmp_path / "_lab_rules.json")

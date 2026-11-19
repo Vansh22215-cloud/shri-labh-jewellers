@@ -740,6 +740,7 @@ def close_call(day, t, res, s, cal):
     if not s.get("vantage_close_call", True) or t is None or not (CALL_FROM <= t.hour * 60 + t.minute <= CALL_TO):
         return 0
     if s.get("kill_switch") or safety.emergency_active():
+        _brief(day, t, res, s, cal)                   # "No trade today - safety stop on"
         return 0
     calls, d, sent = _load_calls(), str(day.date()), 0
     for sym, st, tv in res:
@@ -759,7 +760,17 @@ def close_call(day, t, res, s, cal):
         tmp.replace(CALL_F)                                   # record first ...
         telegram.send_reliable(s, close_call_message(sym, b, lk, n, b["close"], t, tv < 1e7), label="vantage indicator")
         sent += 1                                             # ... then send
+    _brief(day, t, res, s, cal)
     return sent
+
+
+def _brief(day, t, res, s, cal):
+    """The ATLAS daily brief (one message, 3:22 pm): ranked opportunities, avoid list or 'No trade today'."""
+    try:
+        from . import brief
+        brief.maybe_send(day, t, res, s, cal)
+    except Exception as e:
+        log.warning("ATLAS brief failed: %s", type(e).__name__)
 
 
 def close_call_followups(day, confirmed, s=None):

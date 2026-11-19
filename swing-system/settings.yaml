@@ -59,6 +59,7 @@ breakout_tips: true          # D118: 52-week-high + tight-range breakouts (passe
 vantage_scanner: true        # owner 17 Nov: VANTAGE INDICATOR signals for every NSE stock -> Telegram (3:40 pm)
 vantage_min_turnover_cr: 2    # D121: VANTAGE BUYs only for stocks trading >= Rs 2 crore/day (tested: thinner stocks weaker)
 vantage_universe: top300      # round 26 + D144 (owner yes 19 Nov): VANTAGE BUYs only for the monthly top-300 by money traded
+atlas_brief: true            # one ATLAS plan at 3:22 pm: ranked opportunities, avoid list, or "No trade today"
 auto_research: true          # weekly automatic research on GitHub (Friday night); proposals need your /approve
 vantage_live: true           # D120: live VANTAGE alerts during market hours (every ~3 min, confirmed/cancelled at the close)
 positional_max_new: 0        # 0 = no limit (owner's choice D106)

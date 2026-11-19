@@ -1190,3 +1190,15 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - Current-behaviour membership beats sticky membership.
   - On the account it fails the bar on top-300 development (+0.2 points). The top-300 holdout gains +3.4 points and beats luck.
   - Research lead only.
+
+## D150 - 2026-11-19 - ATLAS mission locked (MISSION.md) and the daily ATLAS brief
+- `MISSION.md`: the owner's permanent mission and its principle. "Profit is the objective, capital protection is the constraint, evidence is the authority, continuous improvement is the engine." It maps each part of the mission to where it lives.
+- **The daily brief** (`swing/brief.py`, setting `atlas_brief: true`): one message at 3:22 pm inside the buy window. It contains:
+  - today's VANTAGE buy-now calls and live-engine tips;
+  - for each, entry, stop, exit plan, quantity, money, max loss and the type's 13-year evidence;
+  - ranking by evidence per ₹1 risked. It says honestly that no order passed the tests, so take all if money allows;
+  - total money and total max loss;
+  - the avoid list (signals the rules rejected today);
+  - **"No trade today"** when nothing qualified or the safety stop is on.
+- The brief only reports what the tested rules already decided: no new trading rule. Message format only.
+- Also fixed: a test had written three fake signals into the local `data/private/vantage_rejected.csv`. They were removed, and every test now writes those records into a temporary folder (`tests/conftest.py`). The GitHub record was never affected.
