@@ -76,8 +76,10 @@ def note_line(sym):
     """Owner 18 Nov: last line of every VANTAGE BUY - 'Note : X of X past Vantage signals won.' (this company's own
     signals in the 13-year test; information only, see CALIB_RESULTS.md)."""
     n, w = company_record(sym)
-    return (f"\n\nNote : {w} of {n} past Vantage signals won." if n
-            else "\n\nNote : No past Vantage signals for this company yet.")
+    # owner 19 Nov: kept in every tip, labelled information only - context run 2 found the company's own record does
+    # NOT predict its next trades; it is never used for ranking, the likely-win figure, rules or approvals
+    return (f"\n\nNote (information only, not a signal): {w} of {n} past Vantage signals for this company won." if n
+            else "\n\nNote (information only): no past Vantage signals for this company yet.")
 
 
 def _cal_key(setup, tier, score):

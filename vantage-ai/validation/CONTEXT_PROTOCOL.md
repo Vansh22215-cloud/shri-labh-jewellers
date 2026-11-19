@@ -41,3 +41,14 @@ Passing rules go to the owner for a yes. Nothing changes live without it.
   only. Its luck test shuffles the facts within each year. The three best groupings (that matter in both sets)
   are tested as rules. Same bar.
 - Reported also: trades behind each group, and how often a stock stays in its behaviour group.
+
+## Addendum 2, 19 Nov 2026 (owner: "does group membership help when it uses only information before each trade?")
+Run 1-2 fitted the group centres once on all development trades, so a 2014 trade's group used centres that had
+seen 2015-2023 behaviour (the facts were trailing, the group definition was not). Strict test (strict_groups.py):
+- For every year Y: standardize and fit k-means (k=10) ONLY on trades signalled before Y; assign the trades of Y and
+  all earlier trades with that model; score groups with trades CLOSED before Y (shrunk, n/(n+50)); predict year Y.
+- Three memberships, all from the past only: DYNAMIC (behaviour at the signal), PREVIOUS (the group of the stock's
+  previous trade), MODAL (the stock's most common group in its earlier trades). Plus the dev-fitted groups of run 2.
+- Reported: walk-forward spread (top third - bottom third, points per trade, before tax) and years positive, both
+  sets; and the C-ORDER rule on the account with verified real costs + 20.8% tax, 15 random orders, dev and holdout,
+  both sets, 3 luck worlds (labels shuffled within each year). Same bar. Nothing changes live.

@@ -27,19 +27,20 @@ def load():
 
 
 REAL_COSTS = True        # 19 Nov 2026 (owner: "after brokerage, taxes, slippage?"): Zerodha delivery charges, DP fee,
-TAX = True               # 0.1% slippage each side and 20% short-term tax on each year's net profit (costs_real.py)
+TAX = True               # 0.1% slippage each side and 20% short-term tax + 4% cess per financial year (costs_real.py)
+TAX_RATE = 0.208         # verified 19 Nov 2026: STCG s.111A 20% (from 23 Jul 2024) + 4% health & education cess
 
 
 def _buy_cost(v):
     if not REAL_COSTS:
         return v * HALF_COST
-    return v * (0.001 + 0.001 + 0.0000297 + 0.000001 + 0.00015) + v * (0.0000297 + 0.000001) * 0.18
+    return v * (0.001 + 0.001 + 0.0000307 + 0.000001 + 0.00015) + v * (0.0000307 + 0.000001) * 0.18
 
 
 def _sell_cost(v):
     if not REAL_COSTS:
         return v * HALF_COST
-    return v * (0.001 + 0.001 + 0.0000297 + 0.000001) + v * (0.0000297 + 0.000001) * 0.18 + 15.93
+    return v * (0.001 + 0.001 + 0.0000307 + 0.000001) + v * (0.0000307 + 0.000001) * 0.18 + 15.34
 
 
 def sim(entry_date, exit_date, entry, stop, exitp, mult, order, seed):
@@ -52,7 +53,10 @@ def sim(entry_date, exit_date, entry, stop, exitp, mult, order, seed):
     ed_l = entry_date.astype("datetime64[D]").astype(np.int64).tolist()
     xd_l = exit_date.astype("datetime64[D]").astype(np.int64).tolist()
     en_l, st_l, ex_l, mu_l = entry.tolist(), stop.tolist(), exitp.tolist(), mult.tolist()
-    yr_of = lambda day: int(np.datetime64(int(day), "D").astype("datetime64[Y]").astype(int)) + 1970
+    def yr_of(day):            # Indian financial year (April-March), e.g. 15 Feb 2024 -> FY 2023
+        d = np.datetime64(int(day), "D").astype("datetime64[M]").astype(int)
+        y, m = d // 12 + 1970, d % 12 + 1
+        return int(y if m >= 4 else y - 1)
     cash, opn, hist, n = float(CAP0), [], [], 0
     year, pnl_y, carry, at_cost = None, 0.0, 0.0, 0.0
 
@@ -62,7 +66,7 @@ def sim(entry_date, exit_date, entry, stop, exitp, mult, order, seed):
         y = yr_of(xd)
         if TAX and year is not None and y != year:
             t = pnl_y + carry
-            cash -= 0.2 * t if t > 0 else 0.0
+            cash -= TAX_RATE * t if t > 0 else 0.0
             carry, pnl_y = (t if t < 0 else 0.0), 0.0
         year = y
         sc = _sell_cost(q * px)
@@ -91,7 +95,7 @@ def sim(entry_date, exit_date, entry, stop, exitp, mult, order, seed):
         close(heapq.heappop(opn))
     if TAX:
         t = pnl_y + carry
-        cash -= 0.2 * t if t > 0 else 0.0
+        cash -= TAX_RATE * t if t > 0 else 0.0
     v = np.array([x[1] for x in sorted(hist)])
     dd = float((v / np.maximum.accumulate(v) - 1).min() * 100) if len(v) else 0.0
     yrs = max((entry_date.max() - entry_date.min()) / np.timedelta64(1, "D") / 365.25, 0.5)

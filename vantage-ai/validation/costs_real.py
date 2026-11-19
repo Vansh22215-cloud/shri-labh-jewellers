@@ -1,8 +1,9 @@
 """Real-cost check (19 Nov 2026, owner: "after brokerage, taxes, slippage and other costs?").
-Zerodha equity delivery: brokerage 0; STT 0.1% on buy and on sell; NSE transaction 0.00297% each side; SEBI
-₹10/crore each side; stamp duty 0.015% on buy; GST 18% on (exchange + SEBI); DP charge ₹15.93 per stock sold;
+Zerodha equity delivery (zerodha.com/charges, checked 19 Nov 2026): brokerage 0; STT 0.1% on buy and on sell; NSE
+transaction 0.00307% each side; SEBI ₹10/crore each side; stamp 0.015% on buy; GST 18% on (exchange + SEBI);
+DP charge ₹15.34 once per stock per day it is sold (lots of one stock sold together pay it once);
 slippage 0.1% each side (market orders near the close / open). Tax: 20% short-term capital gains on each
-calendar year's net realized profit (losses offset gains in the same year; carried forward). Same trades and
+financial year's (April-March) net realized profit (20% + 4% cess) (losses offset gains in the same year; carried forward). Same trades and
 account rules as every round (₹51,000, 1% risk, 25% cap, 15 random orders)."""
 import heapq
 import json
@@ -12,15 +13,20 @@ from improve import HERE, OOS
 import improve21 as r21
 import improve29 as r29
 
-SLIP, STT, EXCH, SEBI, STAMP, GST, DP = 0.001, 0.001, 0.0000297, 0.000001, 0.00015, 0.18, 15.93
+SLIP, STT, EXCH, SEBI, STAMP, GST, DP = 0.001, 0.001, 0.0000307, 0.000001, 0.00015, 0.18, 15.34
+TAX_RATE = 0.208   # 20% STCG + 4% cess; financial year April-March (verified 19 Nov 2026, zerodha.com/charges)
 
 
 def buy_cost(v):
     return v * (SLIP + STT + EXCH + SEBI + STAMP) + v * (EXCH + SEBI) * GST
 
 
-def sell_cost(v):
-    return v * (SLIP + STT + EXCH + SEBI) + v * (EXCH + SEBI) * GST + DP
+def sell_cost(v, dp=True):
+    return v * (SLIP + STT + EXCH + SEBI) + v * (EXCH + SEBI) * GST + (DP if dp else 0.0)
+
+
+def fy(d):
+    return d.year if d.month >= 4 else d.year - 1
 
 
 def sim(T, seed, mode="fixed", tax=True, cap0=51000, risk=0.01, maxpct=0.25):
@@ -29,19 +35,22 @@ def sim(T, seed, mode="fixed", tax=True, cap0=51000, risk=0.01, maxpct=0.25):
     cash, opn, n, base, month = float(cap0), [], 0, float(cap0), None
     year, pnl_y, carry, hist = None, 0.0, 0.0, []
     fees = 0.0
+    dp_paid = set()
+    invested = []
     def settle_tax(c, y_pnl, cf):
         taxable = y_pnl + cf
-        t = 0.2 * taxable if (tax and taxable > 0) else 0.0
+        t = TAX_RATE * taxable if (tax and taxable > 0) else 0.0
         return c - t, (taxable if taxable < 0 else 0.0), t
     taxes = 0.0
     for r in T.itertuples():
         ed = r.entry_date
         while opn and opn[0][0] <= ed:
-            xd, _, pe, px, q, bc = heapq.heappop(opn)
-            if year is not None and xd.year != year:
+            xd, _, pe, px, q, bc, sym = heapq.heappop(opn)
+            if year is not None and fy(xd) != year:
                 cash, carry, t = settle_tax(cash, pnl_y, carry); taxes += t; pnl_y = 0.0
-            year = xd.year
-            sc = sell_cost(q * px)
+            year = fy(xd)
+            sc = sell_cost(q * px, dp=(sym, xd) not in dp_paid)
+            dp_paid.add((sym, xd))
             cash += q * px - sc
             pnl_y += q * (px - pe) - sc - bc
             fees += sc
@@ -59,11 +68,14 @@ def sim(T, seed, mode="fixed", tax=True, cap0=51000, risk=0.01, maxpct=0.25):
             continue
         cash -= q * e + bc
         fees += bc
+        held = sum(o[2] * o[4] for o in opn) + q * e
+        invested.append(held / (held + cash))
         n += 1
-        heapq.heappush(opn, (r.exit_date, n, e, r.exit, q, bc))
+        heapq.heappush(opn, (r.exit_date, n, e, r.exit, q, bc, r.sym))
     while opn:
-        xd, _, pe, px, q, bc = heapq.heappop(opn)
-        sc = sell_cost(q * px)
+        xd, _, pe, px, q, bc, sym = heapq.heappop(opn)
+        sc = sell_cost(q * px, dp=(sym, xd) not in dp_paid)
+        dp_paid.add((sym, xd))
         cash += q * px - sc
         pnl_y += q * (px - pe) - sc - bc
         fees += sc
@@ -71,14 +83,18 @@ def sim(T, seed, mode="fixed", tax=True, cap0=51000, risk=0.01, maxpct=0.25):
     cash, carry, t = settle_tax(cash, pnl_y, carry); taxes += t
     hist.sort()
     v = np.array([x[1] for x in hist])
-    yrs = (T["entry_date"].max() - T["entry_date"].min()).days / 365.25
-    return ((cash / cap0) ** (1 / yrs) - 1) * 100, float((v / np.maximum.accumulate(v) - 1).min() * 100), fees, taxes, n
+    start, end = T["entry_date"].min(), pd.Timestamp(max(T["exit_date"].max(), T["entry_date"].max()))
+    yrs = (end - start).days / 365.25                      # first buy to the last sale (the money is back in cash)
+    inv = float(np.mean(invested)) if invested else 0.0
+    return ((cash / cap0) ** (1 / yrs) - 1) * 100, float((v / np.maximum.accumulate(v) - 1).min() * 100), fees, taxes, n, \
+        inv, start, end, cash
 
 
 def med(T, **kw):
     R = [sim(T, s, **kw) for s in range(15)]
     m = lambda i: float(np.median([x[i] for x in R]))
-    return {"cagr": round(m(0), 1), "maxdd": round(m(1), 1), "fees_rs": int(m(2)), "tax_rs": int(m(3)), "trades": int(m(4))}
+    return {"cagr": round(m(0), 1), "maxdd": round(m(1), 1), "fees_rs": int(m(2)), "tax_rs": int(m(3)), "trades": int(m(4)),
+            "invested_share": round(m(5), 2), "start": str(R[0][6].date()), "end": str(R[0][7].date()), "end_rs": int(m(8))}
 
 
 if __name__ == "__main__":

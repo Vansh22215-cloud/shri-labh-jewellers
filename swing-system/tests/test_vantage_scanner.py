@@ -76,7 +76,7 @@ def test_buy_message_format_once_and_sell_only_for_sent_buys(env, monkeypatch):
     label, text = env[0]
     assert label == "vantage indicator"
     assert text.startswith("#VANTAGE INDICATOR\n\n#TITAN\n\n🟢 BUY · Dip-buy A · likely win 80%\nBuy at the next market open")
-    assert "\n🛑 Stop-loss ₹92.00" in text and "\n\nNote : " in text and text.endswith("past Vantage signals won.")
+    assert "\n🛑 Stop-loss ₹92.00" in text and "\n\nNote (information only, not a signal): " in text and text.endswith("past Vantage signals for this company won.")
     assert "Stop-loss ₹92.00" in text
     assert vantage.run(day)["buys"] == 0                                         # re-run: never sent twice
     sell = {"why": "Closed above the 5-day average (dip-buy exit)", "price": 104.0, "intrabar": False}
