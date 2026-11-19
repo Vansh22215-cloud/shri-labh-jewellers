@@ -701,7 +701,7 @@ def weekly_message(R, E, Ls, today=None, settings=None):
     if "sent" in wk:
         wk = wk[wk["sent"].astype(str) == "sent"]
     closed_wk = R[(R["status"] == "closed") & (pd.to_datetime(R["exit_date"], errors="coerce") >= today - pd.Timedelta(days=7))]
-    L = ["📒 Weekly learning", "", f"Ideas sent this week: {len(wk)}"]
+    L = ["📒 ATLAS weekly learning", "", f"Ideas sent this week: {len(wk)}"]
     if TODAY_KEY:
         L.append("🧠 Market memory: " + memory_line(TODAY_KEY))
     q = daily_question(_CHECKS)

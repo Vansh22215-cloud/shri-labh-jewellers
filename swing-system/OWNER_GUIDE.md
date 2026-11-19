@@ -1,4 +1,4 @@
-# Owner's guide - running the system without Claude (updated 19 Nov 2026)
+# ATLAS - owner's guide, running without Claude (updated 19 Nov 2026)
 
 Everything runs by itself on GitHub (free) and talks to you on Telegram. You place every order yourself.
 The system only READS prices from Kite: it can never buy, sell or touch your money.
@@ -52,6 +52,10 @@ The system only READS prices from Kite: it can never buy, sell or touch your mon
 - `/research` shows the last run. Full report: `journal/auto_research.md`.
 - **Every finished tip is asked 'why'** (`journal/why_log.md`): what history expected, what happened, the surprise, the
   main reason, and whether its unusual facts mattered in 13 years. Real patterns go into the weekly research.
+
+## Which rule works on which kind of stock (weekly)
+- ATLAS groups stocks by how they actually trade (not just by sector), checks every week which groups' past predicts
+  their future, and tests rules per group. A rule that passes is proposed to you (`/approve CTX-xxxx`).
 
 ## Emergency stop
 github.com -> repository -> branch `claude/nse-swing-trading-system-sqncpt` -> `swing-system/settings.yaml` -> pencil ->

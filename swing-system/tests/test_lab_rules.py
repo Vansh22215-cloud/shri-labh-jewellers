@@ -49,3 +49,13 @@ def test_bot_routes_lab_ids(tmp_path, monkeypatch):
     from swing import bot
     src = inspect.getsource(bot)
     assert 'startswith("LAB-")' in src and '"/decline"' in src and '"/research"' in src
+
+
+def test_context_line_only_when_approved(tmp_path, monkeypatch):
+    _setup(tmp_path, monkeypatch, [{"id": "CTX-1A2B", "name": "C-ORDER by behaviour10", "kind": "context-order",
+                                    "grouping": "behaviour10", "status": "proposed"}])
+    assert lab_rules.context_line("X", {"signal": "2026-11-20"}, "2026-11-20") == ""
+    lab_rules.set_status("CTX-1A2B", "approved")
+    # approved but no model / data -> never raises, empty line
+    monkeypatch.setattr(lab_rules, "ROOT", tmp_path)
+    assert lab_rules.context_line("X", {"signal": "2026-11-20"}, "2026-11-20") == ""

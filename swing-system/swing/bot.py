@@ -370,7 +370,7 @@ def handle(token, owner, msg, capital):
         st = lab_rules._state()
         last = (st.get("runs") or [{}])[-1]
         rules = "\n".join(f"• {r['id']} [{r.get('status')}] {r.get('plain', r['name'])}" for r in st.get("rules", [])) or "• none yet"
-        reply = (f"🔬 Automatic research - last run {last.get('on', 'not yet')}: {last.get('possibilities', 0)} ideas tested, "
+        reply = (f"🔬 ATLAS automatic research - last run {last.get('on', 'not yet')}: {last.get('possibilities', 0)} ideas tested, "
                  f"{len(last.get('candidates', []))} passed every test. Fresh trades so far: {last.get('fresh_top300', 0)}.\n"
                  f"Rules:\n{rules}")
     elif text.lower().startswith("/capital"):

@@ -150,7 +150,7 @@ def save_state(state):
 
 def message(r):
     h, f = r["holdout"], r.get("fresh", {})
-    return ("🔬 Research result - a rule passed every test\n\n"
+    return ("🔬 ATLAS research result - a rule passed every test\n\n"
             f"{r['id']}: {r['plain']}\n\n"
             f"Recent years (Nov 2023+): top-300 {h['top300']['cagr']:.1f}% a year, all stocks {h['all']['cagr']:.1f}% "
             f"(worst fall {h['top300']['maxdd']:.0f}% / {h['all']['maxdd']:.0f}%) - better than without it in both.\n"
@@ -231,12 +231,29 @@ def run(send=True, procs=4, luck_worlds=3):
                 new.append(r)
             elif old.get("status") == "proposed":
                 old.update({k: r[k] for k in ("holdout", "years_better", "fresh") if k in r})
+    try:   # ATLAS Context Engine (CONTEXT_PROTOCOL.md): which rule works on which kind of stock, re-learned weekly
+        import context_engine as ce
+        C = ce.main()
+        for name, r in C["rules"].items():
+            cid = "CTX-" + hashlib.sha1(name.encode()).hexdigest()[:4].upper()
+            if r.get("PASS") and name.startswith("C-ORDER") and cid not in known:
+                rec = {"id": cid, "name": name, "kind": "context-order", "grouping": name.split(" by ", 1)[1],
+                       "status": "proposed", "proposed_on": str(pd.Timestamp.now().date()),
+                       "plain": f"When money is short, take first the tips whose behaviour group has the best record ({name})",
+                       "holdout": {k: {"cagr": r[k]["holdout"]["rule"][0], "maxdd": r[k]["holdout"]["rule"][1]} for k in ("top300", "all")},
+                       "years_better": r["top300"]["years_better"], "fresh": {}}
+                state["rules"].append(rec)
+                new.append(rec)
+        summary_ctx = {"matters": C["matters"], "passed": [n for n, r in C["rules"].items() if r.get("PASS")]}
+    except Exception as e:
+        summary_ctx = {"error": type(e).__name__}
+        print("context engine failed:", type(e).__name__)
     warns = recheck_approved(X, state)
     n_fresh = int(((X["set"] == "top300") & (X["period"] == "fresh")).sum())
     summary = {"on": str(pd.Timestamp.now(tz="Asia/Kolkata"))[:16], "trades": int(len(X)), "fresh_top300": n_fresh,
                "possibilities": len(rules), "passed_dev": len(passed), "luck_passes": luck,
                "candidates": [r["id"] for r in res if r["CANDIDATE"]], "new_proposals": [r["id"] for r in new],
-               "minutes": round((time.time() - t0) / 60, 1)}
+               "context": summary_ctx, "minutes": round((time.time() - t0) / 60, 1)}
     state["runs"] = (state.get("runs", []) + [summary])[-52:]
     save_state(state)
     write_report(summary, base_dev, base_h, fbase, res, state, warns)

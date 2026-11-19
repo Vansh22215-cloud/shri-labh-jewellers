@@ -624,6 +624,7 @@ def _res_and_qty(sym, entry, stop, day, b=None):
         if act == "half":
             rl += f"\n🔬 Half quantity: research rule {rid} (approved by you)"
             scale *= 0.5
+        rl += lab_rules.context_line(sym, b, day)
     return rl + qty_line(entry, stop, scale=scale)
 
 

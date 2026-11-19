@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 85,
+ "count": 86,
  "passed": 11,
  "experiments": [
   {
@@ -851,6 +851,16 @@
    "verdict": "fail (order); both channels together beat VANTAGE alone",
    "why": "both random 22.1/20.0 vs VANTAGE alone 20.5/18.8; dips-first 6/14 years, VANTAGE-first 8/14",
    "files": "IMPROVE29_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "CTX-1",
+   "round": "context 1",
+   "family": "discovery",
+   "hypothesis": "Rules by discovered behaviour groups (order / skip), walk-forward",
+   "verdict": "fail (strong lead in all stocks)",
+   "why": "behaviour groups predict, sector does not; C-ORDER all-stocks holdout 16.5% vs 8.2% but top-300 +0.8 and below one luck world",
+   "files": "CONTEXT_RESULTS.md",
    "area": "finder"
   }
  ],

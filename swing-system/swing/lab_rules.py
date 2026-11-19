@@ -118,3 +118,40 @@ def decision(sym, b, day):
         log.warning("research rules could not be checked for a signal: %s", type(e).__name__)
     _CACHE[key] = out
     return out
+
+
+def context_line(sym, b, day):
+    """Approved context-order rule (ATLAS Context Engine) -> one message line with the stock's behaviour group and its
+    rank, so the owner takes higher-ranked tips first when money is short. '' when none is approved or on any error."""
+    rules = [r for r in _state().get("rules", []) if r.get("status") == "approved" and r.get("kind") == "context-order"]
+    if not rules:
+        return ""
+    try:
+        M = json.loads((ROOT / "strategies" / "context_model.json").read_text())
+        vd = os.path.join(os.path.dirname(str(ROOT)), "vantage-ai", "validation")
+        if vd not in sys.path:
+            sys.path.insert(0, vd)
+        import context_engine as ce
+        from . import data_prices
+        d0 = data_prices.load(sym)
+        f = (d0["adj_close"] / d0["close"]).fillna(1.0) if "adj_close" in d0 else 1.0
+        d = pd.DataFrame({"open": d0["open"] * f, "close": d0.get("adj_close", d0["close"])}).dropna()
+        sig = pd.Timestamp(str(b.get("signal") or day)[:10])
+        B = ce.behaviour(d)
+        B = B[B.index <= sig].iloc[-1].to_dict()
+        x = _features(sym, b, day) or {}
+        B.update({k: x.get(k) for k in ("atr_pct", "from_52w_high", "ret_6m")})
+        B["log_turnover"] = float(np.log10(max(float(x.get("turnover_cr") or 0.01), 0.01)))
+        z = np.array([(float(B[k]) - M["mu"][k]) / (M["sd"][k] or 1) for k in M["features"]]).clip(-4, 4)
+        g = "B" + str(int(np.argmin(((np.array(M["centres"]) - z) ** 2).sum(axis=1))))
+        name = rules[0].get("grouping", "behaviour10")
+        key = g if name == "behaviour10" else f"{g}~{b.get('setup', '')}"
+        sc = M["scores"].get(name, {})
+        if key not in sc:
+            return ""
+        rank = 1 + sum(v > sc[key] for v in sc.values())
+        return (f"\n🧭 ATLAS context: behaviour group {g} ranks {rank} of {len(sc)} (past {sc[key] * 100:+.1f}% a trade) - "
+                f"when money is short, take higher-ranked tips first ({rules[0]['id']})")
+    except Exception as e:
+        log.warning("context line failed: %s", type(e).__name__)
+        return ""

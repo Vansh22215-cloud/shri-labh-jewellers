@@ -1,4 +1,4 @@
-# Personal NSE Swing-Trading Research System
+# ATLAS - personal NSE trading research system (VANTAGE = its indicator)
 
 > **Research, not advice.** No system can guarantee profit. You decide and place every order yourself.
 > The system never places orders: it sends risk-checked order *tickets* that you place in the Kite app.

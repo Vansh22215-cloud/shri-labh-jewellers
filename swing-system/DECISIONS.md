@@ -1148,3 +1148,16 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - A pattern confirmed in both periods, in the direction that explains the result, becomes a **lead** (`strategies/why_leads.json`). The research list shows it, and the weekly automatic research tests it on the account as an exact skip / half rule, with the full bar.
 - Outputs: `journal/why_log.md/.csv`. The weekly message lists the latest surprises.
 - **Proof run** (`scripts/why_proof.py`): 113 real test trades from June-October 2026, judged blind. Result: 60 lost with a known cause, 21 lost with an unknown cause, 23 as expected, 5 won much bigger, 4 won against the odds. 6 leads were confirmed on history, for example "the ~30 most-traded stocks" (RCP recent +0.5% vs +4.5% a trade) and "calm market" (worse). The weekly research tested all 6 as 12 account rules: none passed the older years in both trade sets. Patterns that are visible trade by trade did not add money at the account level.
+
+## D147 - 2026-11-19 - ATLAS Context Engine: which rule works on which kind of stock (owner's conditional-edge idea)
+- The system is named **ATLAS**; **VANTAGE** is its indicator.
+- `vantage-ai/validation/context_engine.py` (protocol `CONTEXT_PROTOCOL.md`, committed before the run):
+  - every trade gets its stock's behaviour from the 250 days before the signal: swing, beta and correlation to NIFTY, up-weeks, weekly trend persistence, gap frequency, worst fall, distance from the high, 6-month return, size;
+  - ATLAS **discovers its own groups** (k-means fitted on development only), then measures walk-forward, every year from 2016, which groupings predict the next year.
+- **Result:**
+  - **Behaviour groups matter in both stock lists** (top vs bottom third 1.7-2.4 points a trade); behaviour x setup and behaviour x market also matter.
+  - **Sector does not**, and neither does market type alone. Stocks that trade alike matter more than stocks in the same industry.
+- **Rules (walk-forward, re-learned every year):**
+  - "When money is short, take the best-behaving groups first": all stocks holdout 16.5% vs 8.2% a year, development +2 points in both sets. But top-300 (what is traded) holdout is only +0.8, and one luck world reached 17.5%. **Not passed.**
+  - "Skip bad groups" almost never acts.
+- **Runs every week inside the automatic research.** The first time a context rule passes every step, it is proposed to the owner (`/approve CTX-xxxx`). If approved, every VANTAGE tip then shows its behaviour group and rank (`strategies/context_model.json`, checked on SBIN, BAJFINANCE, MARICO). Risk is unchanged.
