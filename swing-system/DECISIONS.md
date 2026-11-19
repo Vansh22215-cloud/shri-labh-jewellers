@@ -1173,3 +1173,20 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - Sector alone does not, but sector x setup and size x sector do.
   - No rule beats luck on the top-300.
 - **Group facts** (top-300): about 5 behaviour groups hold almost all the trades, with 92-1,668 trades per group in development and 39-769 in the holdout. A stock stays in the same group for 64% of its trades less than 4 months apart, but only 39% year to year. The groups describe a stock's current state, not a fixed identity.
+
+## D149 - 2026-11-19 - Owner's three investigations (findings recorded; NO live change; waiting for approval)
+- Full evidence: `vantage-ai/validation/INVESTIGATION_19NOV.md`.
+- **Company record line:** kept in every tip, now labelled "information only, not a signal". It is used nowhere else: not in the likely-win figure, ranking, rules or approvals.
+- **Charges:**
+  - Checked against zerodha.com/charges. Two corrections: NSE transaction 0.00307% (was 0.00297%), and DP ₹15.34 once per stock per sale day (was ₹15.93 per lot).
+  - Tax is now 20% + 4% cess per financial year (April-March), with losses carried forward.
+  - Applied in `auto_lab.sim` (weekly research) and `costs_real.py`.
+- **NIFTY on identical terms** (same ₹51,000, same first-buy and last-sale dates, total return with a dividend assumption of 1.1-1.5%, fund fee, long-term tax at the sale):
+  - 2013 - Feb 2024: system (VANTAGE + dip-buy) 15.1% a year after costs and tax vs NIFTY fund 13.5%.
+  - Nov 2023 - Oct 2026: 11.5% vs 7.8%.
+  - Earlier NIFTY figures were price-only, with different end dates.
+- **Strict behaviour groups** (re-fitted every year on the past only):
+  - The predictive value survives (top-300 1.42 points a trade, 9 of 11 years).
+  - Current-behaviour membership beats sticky membership.
+  - On the account it fails the bar on top-300 development (+0.2 points). The top-300 holdout gains +3.4 points and beats luck.
+  - Research lead only.

@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 88,
+ "count": 90,
  "passed": 11,
  "experiments": [
   {
@@ -881,6 +881,26 @@
    "verdict": "fail",
    "why": "company record does not predict; sector x setup and size x sector do; no rule beats luck on top-300",
    "files": "CONTEXT_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "BENCH-FAIR",
+   "round": "benchmark",
+   "family": "adversarial",
+   "hypothesis": "System vs NIFTY on identical dates, capital, costs, tax, total return",
+   "verdict": "measured",
+   "why": "VANTAGE+dip after tax 15.1% vs NIFTY fund 13.5% (2013-Feb 2024); 11.5% vs 7.8% (Nov 2023-Oct 2026)",
+   "files": "INVESTIGATION_19NOV.md",
+   "area": "finder"
+  },
+  {
+   "id": "CTX-STRICT",
+   "round": "context strict",
+   "family": "discovery",
+   "hypothesis": "Behaviour groups with membership and scores from before each trade only (dynamic / previous / modal)",
+   "verdict": "fail (predictive value survives; account bar not met on top-300 development)",
+   "why": "DYNAMIC top-300 dev +0.2, holdout +3.4 beating luck; all stocks +5.4 / +10.9",
+   "files": "INVESTIGATION_19NOV.md",
    "area": "finder"
   }
  ],
