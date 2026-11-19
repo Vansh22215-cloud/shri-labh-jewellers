@@ -48,7 +48,7 @@ def test_bot_routes_lab_ids(tmp_path, monkeypatch):
     import inspect
     from swing import bot
     src = inspect.getsource(bot)
-    assert 'startswith("LAB-")' in src and '"/decline"' in src and '"/research"' in src
+    assert '"LAB-", "CTX-", "FND-", "FTP-"' in src and '"/decline"' in src and '"/research"' in src
 
 
 def test_context_line_only_when_approved(tmp_path, monkeypatch):
