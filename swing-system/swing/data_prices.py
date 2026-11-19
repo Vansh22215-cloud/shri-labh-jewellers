@@ -106,6 +106,20 @@ def sanitize(df):
 
 
 def load(symbol):
+    """Daily prices. SWING_PRICE_SOURCE=kite -> Kite exchange candles first (kite_daily.frame), Yahoo otherwise."""
+    import os
+    if os.environ.get("SWING_PRICE_SOURCE", "").lower() == "kite":
+        try:
+            from .kite_daily import frame
+            k = frame(symbol)
+            if k is not None and len(k):
+                return sanitize(k)
+        except Exception as e:
+            log.warning("Kite prices for %s unavailable (%s) - Yahoo used", symbol, type(e).__name__)
+    return _load_yahoo(symbol)
+
+
+def _load_yahoo(symbol):
     f = _path(symbol)
     if not f.exists():
         return None

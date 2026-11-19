@@ -1239,3 +1239,17 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - whether intraday facts on the signal day predict VANTAGE results.
 - **Safety fix:** a Kite "403" for a data permission no longer deletes the day's login. Only an expired-login answer does.
 - **Not used, on purpose:** the owner's account (holdings, positions, funds), under the privacy rule. Orders: never.
+
+## D154 - 2026-11-19 - Were the tests on Kite data? No - they are now re-run on Kite exchange prices
+- **Audit:** every 13-year test (VANTAGE trades, rounds 1-29, auto-lab, context engine, Foundry, cost and NIFTY checks) used Yahoo daily prices. Delisted stocks used NSE bhavcopy rebuilds. Kite was used only for live prices and a little recent 5-minute history.
+- **New `swing/kite_daily.py`:** Kite daily candles for every NSE stock since 2011. It runs in the research job on GitHub, about 4,000 requests a night until complete (about 2 nights), then tops up the last 10 days nightly, into the private cache.
+  - Splits/bonuses: Yahoo's split factors are applied only if the data shows Kite is unadjusted.
+  - Dividends: the same total-return adjustment as before.
+  - `SWING_PRICE_SOURCE=kite` makes every price read use Kite first.
+- **Once 90% complete, all automatic:**
+  - `journal/kite_data_audit.md` (Kite vs Yahoo, close by close);
+  - `journal/kite_recheck.md` (top-300 next-open, top-300 3:20 pm buy and all-stocks trade sets rebuilt on Kite prices, side by side with Yahoo, after costs and tax);
+  - a Telegram note to the owner;
+  - from then on, the weekly automatic research (lab, context engine, Foundry) runs on Kite prices.
+- **Live tips** stay on the current price feed until the audit is read. Live quotes during the day are already Kite.
+- **The owner's account value:** the owner said yes to reading it for sizing. Adding code that reads the broker account (funds/holdings) was blocked by this session's safety controls, so it was not built. `/capital` monthly remains the way.
