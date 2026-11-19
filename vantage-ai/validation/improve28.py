@@ -60,21 +60,22 @@ def med(S, prio, mode="fixed", seeds=15):
     return round(float(np.median([a for a, b in R])), 1), round(float(np.median([b for a, b in R])), 1)
 
 
-out = {}
-for prio in (None, "P1", "P2", "P3", "P4", "P5"):
-    k = prio or "random (now)"
-    row = {}
-    for nm, S in (("dev", C[C["signal"] < OOS]), ("holdout", C[C["signal"] >= OOS])):
-        row[f"{nm} fixed"], row[f"{nm} monthly"] = med(S, prio), med(S, prio, "monthly")
-    row["years"] = {y: med(C[C["signal"].dt.year == y], prio, seeds=7)[0] for y in range(2013, 2027)}
-    out[k] = row
-    print(k, {a: b for a, b in row.items() if a != "years"}, flush=True)
-b = out["random (now)"]
-for k in ("P1", "P2", "P3", "P4", "P5"):
-    r = out[k]
-    yrs = sum(r["years"][y] >= b["years"][y] for y in r["years"])
-    r["years_better"] = f"{yrs} of {len(r['years'])}"
-    r["PASS"] = all(r[f"{p} fixed"][0] >= b[f"{p} fixed"][0] + 1 and r[f"{p} fixed"][1] >= b[f"{p} fixed"][1] - 2
-                    for p in ("dev", "holdout")) and yrs >= 0.6 * len(r["years"])
-    print(k, r["years_better"], "PASS" if r["PASS"] else "fail")
-json.dump(out, open(f"{HERE}/improve28_results.json", "w"), indent=1, default=str)
+if __name__ == "__main__":
+    out = {}
+    for prio in (None, "P1", "P2", "P3", "P4", "P5"):
+        k = prio or "random (now)"
+        row = {}
+        for nm, S in (("dev", C[C["signal"] < OOS]), ("holdout", C[C["signal"] >= OOS])):
+            row[f"{nm} fixed"], row[f"{nm} monthly"] = med(S, prio), med(S, prio, "monthly")
+        row["years"] = {y: med(C[C["signal"].dt.year == y], prio, seeds=7)[0] for y in range(2013, 2027)}
+        out[k] = row
+        print(k, {a: b for a, b in row.items() if a != "years"}, flush=True)
+    b = out["random (now)"]
+    for k in ("P1", "P2", "P3", "P4", "P5"):
+        r = out[k]
+        yrs = sum(r["years"][y] >= b["years"][y] for y in r["years"])
+        r["years_better"] = f"{yrs} of {len(r['years'])}"
+        r["PASS"] = all(r[f"{p} fixed"][0] >= b[f"{p} fixed"][0] + 1 and r[f"{p} fixed"][1] >= b[f"{p} fixed"][1] - 2
+                        for p in ("dev", "holdout")) and yrs >= 0.6 * len(r["years"])
+        print(k, r["years_better"], "PASS" if r["PASS"] else "fail")
+    json.dump(out, open(f"{HERE}/improve28_results.json", "w"), indent=1, default=str)

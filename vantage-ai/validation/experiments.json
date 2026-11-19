@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 84,
+ "count": 85,
  "passed": 11,
  "experiments": [
   {
@@ -841,6 +841,16 @@
    "verdict": "near miss (P1 momentum) - fresh-data check",
    "why": "P1 +1.2/+1.7 points both periods, smaller falls, but 7 of 14 years",
    "files": "IMPROVE28_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R29",
+   "round": 29,
+   "family": "portfolio",
+   "hypothesis": "Order between VANTAGE and live dip-buys when money is short",
+   "verdict": "fail (order); both channels together beat VANTAGE alone",
+   "why": "both random 22.1/20.0 vs VANTAGE alone 20.5/18.8; dips-first 6/14 years, VANTAGE-first 8/14",
+   "files": "IMPROVE29_RESULTS.md",
    "area": "finder"
   }
  ],
