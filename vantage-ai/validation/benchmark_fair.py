@@ -6,6 +6,7 @@ the free price data has no dividends) - 0.05% a year fund fee. Costs: stamp 0.01
 Tax: long-term (held > 1 year) 12.5% + 4% cess on the gain above ₹1.25 lakh, paid once at the sale.
 Cash: the system's unused money earns nothing (as in every test); NIFTY is fully invested from day 1."""
 import json
+import os
 import numpy as np
 import pandas as pd
 from improve import HERE, OOS, iv
@@ -36,6 +37,8 @@ if __name__ == "__main__":
                    "system after costs + tax (capital updated monthly)": med(S, mode="monthly"),
                    "system after costs, before tax": med(S, tax=False)}
             a, b = row["system after costs + tax (fixed ₹51,000 sizing)"]["start"], row["system after costs + tax (fixed ₹51,000 sizing)"]["end"]
+            if os.environ.get("SWING_PRICE_SOURCE") == "kite_strict":   # stocks are price-only -> NIFTY price-only too
+                row["NIFTY price only, after tax (strict Kite, like-for-like)"] = nifty(a, b, div=0.0, fee=0.0)
             for d in (0.011, 0.013, 0.015):
                 row[f"NIFTY fund, dividends {d*100:.1f}%, after tax"] = nifty(a, b, div=d)
             row["NIFTY fund, dividends 1.3%, before tax"] = nifty(a, b, tax=False)

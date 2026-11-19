@@ -1,0 +1,933 @@
+{
+ "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
+ "count": 92,
+ "passed": 11,
+ "experiments": [
+  {
+   "id": "R1-F1",
+   "round": 1,
+   "family": "filter",
+   "hypothesis": "Market breadth >= 50%",
+   "verdict": "fail",
+   "why": "helped before 2023, not in holdout",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-F2",
+   "round": 1,
+   "family": "filter",
+   "hypothesis": "Leader filter RS >= 70",
+   "verdict": "fail",
+   "why": "worse in holdout",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-F3",
+   "round": 1,
+   "family": "filter",
+   "hypothesis": "Sector in top third",
+   "verdict": "fail",
+   "why": "worse in holdout",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-F4",
+   "round": 1,
+   "family": "filter",
+   "hypothesis": "Delivery % above own average",
+   "verdict": "fail",
+   "why": "more winners, smaller profits",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-M",
+   "round": 1,
+   "family": "selection",
+   "hypothesis": "Meta-labeling personal likely %",
+   "verdict": "fail",
+   "why": "not calibrated",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-E1",
+   "round": 1,
+   "family": "exit",
+   "hypothesis": "Break-even after +1R",
+   "verdict": "fail",
+   "why": "cuts winners",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-E2",
+   "round": 1,
+   "family": "exit",
+   "hypothesis": "Time stop after 20 bars",
+   "verdict": "fail",
+   "why": "less profit",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-D1",
+   "round": 1,
+   "family": "entry",
+   "hypothesis": "Dip-buy RSI(2)<5 (per trade)",
+   "verdict": "fail",
+   "why": "below bar",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-D2",
+   "round": 1,
+   "family": "entry",
+   "hypothesis": "Dip-buy RSI(2)<10 (per trade)",
+   "verdict": "fail",
+   "why": "below bar",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R1-U",
+   "round": 1,
+   "family": "universe",
+   "hypothesis": "All stocks >= Rs 2 cr/day",
+   "verdict": "PASS - live (D121)",
+   "why": "thin stocks weaker",
+   "files": "IMPROVE_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R2-R1",
+   "round": 2,
+   "family": "entry",
+   "hypothesis": "Gap guard (skip big gap-ups)",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE2_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R2-R2",
+   "round": 2,
+   "family": "entry",
+   "hypothesis": "Limit entry 0.25 ATR below",
+   "verdict": "near miss - forward test (D122)",
+   "why": "holdout +3.13% vs +2.91%",
+   "files": "IMPROVE2_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R2-R3",
+   "round": 2,
+   "family": "exit",
+   "hypothesis": "Half profit at 2R",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE2_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R2-R4",
+   "round": 2,
+   "family": "event",
+   "hypothesis": "Results within 5 days",
+   "verdict": "PASS - live as half quantity (D123/D124)",
+   "why": "about half the profit",
+   "files": "IMPROVE2_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R2-R5",
+   "round": 2,
+   "family": "selection",
+   "hypothesis": "Best-first slot ranking",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE2_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R3-C1",
+   "round": 3,
+   "family": "entry",
+   "hypothesis": "Buy at the 3:20 pm close",
+   "verdict": "PASS - live (D125)",
+   "why": "+2.91 -> +3.24% holdout; 9 of 14 years better",
+   "files": "IMPROVE3_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R4-M1",
+   "round": 4,
+   "family": "portfolio",
+   "hypothesis": "Monthly momentum 12-1",
+   "verdict": "fail",
+   "why": "fall too deep",
+   "files": "IMPROVE3_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R4-M2",
+   "round": 4,
+   "family": "portfolio",
+   "hypothesis": "NSE momentum style",
+   "verdict": "fail",
+   "why": "fall too deep",
+   "files": "IMPROVE3_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R4-M3",
+   "round": 4,
+   "family": "portfolio",
+   "hypothesis": "Momentum + cash when NIFTY < 200d",
+   "verdict": "PASS - live monthly basket (D126)",
+   "why": "19.5% vs 7.4% holdout",
+   "files": "IMPROVE3_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R5-P1",
+   "round": 5,
+   "family": "new setup",
+   "hypothesis": "Pocket pivot",
+   "verdict": "fail",
+   "why": "no profit after costs",
+   "files": "IMPROVE5_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R5-P2",
+   "round": 5,
+   "family": "new setup",
+   "hypothesis": "NR7 breakout",
+   "verdict": "fail",
+   "why": "no profit after costs",
+   "files": "IMPROVE5_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R5-P3",
+   "round": 5,
+   "family": "new setup",
+   "hypothesis": "3-day pullback in leaders",
+   "verdict": "fail",
+   "why": "no profit after costs",
+   "files": "IMPROVE5_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R6-G",
+   "round": 6,
+   "family": "filter",
+   "hypothesis": "Skip BUYs when NIFTY < 200d",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE6_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R7-X2",
+   "round": 7,
+   "family": "exit",
+   "hypothesis": "Trend time limit 120 days",
+   "verdict": "passed - owner declined (not long term)",
+   "why": "",
+   "files": "IMPROVE7_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R7-X1",
+   "round": 7,
+   "family": "exit",
+   "hypothesis": "No RCP SELL",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE7_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R7-X3",
+   "round": 7,
+   "family": "exit",
+   "hypothesis": "No SELL + 120 days",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE7_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R7-X4",
+   "round": 7,
+   "family": "exit",
+   "hypothesis": "SELL only after 20 days",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE7_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R7-X5",
+   "round": 7,
+   "family": "exit",
+   "hypothesis": "Trailing stop 5 ATR",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE7_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R8-1",
+   "round": 8,
+   "family": "research idea",
+   "hypothesis": "Turn of the month",
+   "verdict": "fail",
+   "why": "too small after costs",
+   "files": "IMPROVE8_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R8-2",
+   "round": 8,
+   "family": "research idea",
+   "hypothesis": "Upper-circuit continuation",
+   "verdict": "fail",
+   "why": "too small after costs",
+   "files": "IMPROVE8_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R8-3",
+   "round": 8,
+   "family": "research idea",
+   "hypothesis": "Results-day reaction (3 parts)",
+   "verdict": "fail",
+   "why": "too small after costs",
+   "files": "IMPROVE8_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R8-6",
+   "round": 8,
+   "family": "research idea",
+   "hypothesis": "Half size in panic",
+   "verdict": "fail",
+   "why": "too small after costs",
+   "files": "IMPROVE8_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-4",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Promoter buying 5-day trade",
+   "verdict": "near miss - silent record (D132)",
+   "why": "+0.8% per trade both periods",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-5",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Bulk-deal buys",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-9",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Buyback announcements",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-8",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Index inclusion",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-4b",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Promoter-buy boost",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-5b",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Bulk-deal boost",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R9-10",
+   "round": 9,
+   "family": "event",
+   "hypothesis": "Pledge warning",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE9_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R10-V1",
+   "round": 10,
+   "family": "money",
+   "hypothesis": "Keep 30% cash for dip-buys",
+   "verdict": "fail (trade-off; owner skipped)",
+   "why": "less risk, less profit",
+   "files": "IMPROVE10_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R10-V2",
+   "round": 10,
+   "family": "money",
+   "hypothesis": "More dip-buys RSI<10",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE10_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R10-V3",
+   "round": 10,
+   "family": "money",
+   "hypothesis": "V1+V2",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE10_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R10-V4",
+   "round": 10,
+   "family": "money",
+   "hypothesis": "No breakouts",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE10_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R11-E1",
+   "round": 11,
+   "family": "research idea",
+   "hypothesis": "Pre-results run-up",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE11_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R11-E3",
+   "round": 11,
+   "family": "research idea",
+   "hypothesis": "Bonus announcements",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE11_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R11-E5",
+   "round": 11,
+   "family": "research idea",
+   "hypothesis": "Intraday short after gap up",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE11_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R11-E4",
+   "round": 11,
+   "family": "research idea",
+   "hypothesis": "Intraday buy after gap down",
+   "verdict": "fail after verification",
+   "why": "official prices: 5 losing years 2019-2023",
+   "files": "IMPROVE11_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R12-F1",
+   "round": 12,
+   "family": "filter",
+   "hypothesis": "Skip when FIIs bearish",
+   "verdict": "fail",
+   "why": "reversed after 2023",
+   "files": "IMPROVE12_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R12-F2",
+   "round": 12,
+   "family": "filter",
+   "hypothesis": "Skip when FIIs bullish",
+   "verdict": "fail",
+   "why": "reversed after 2023",
+   "files": "IMPROVE12_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R13-P1",
+   "round": 13,
+   "family": "money",
+   "hypothesis": "Add to winners (day 15, +8%)",
+   "verdict": "PASS - live risk-capped (D133); watch",
+   "why": "+0.4-1 pt; 6 of 14 years",
+   "files": "IMPROVE13_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R14-S1",
+   "round": 14,
+   "family": "champion rule",
+   "hypothesis": "Leaders first",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE14_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R14-S2",
+   "round": 14,
+   "family": "champion rule",
+   "hypothesis": "Breakouts on 3x volume",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE14_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R14-S3",
+   "round": 14,
+   "family": "champion rule",
+   "hypothesis": "S1+S2",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE14_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R15-T1",
+   "round": 15,
+   "family": "champion rule",
+   "hypothesis": "Minervini template on breakouts",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE15_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R15-T2",
+   "round": 15,
+   "family": "champion rule",
+   "hypothesis": "Template on breakouts and trend",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE15_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R16-D1",
+   "round": 16,
+   "family": "entry",
+   "hypothesis": "Dip-buys RSI<5 at account level",
+   "verdict": "fail",
+   "why": "",
+   "files": "IMPROVE16_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R17-P2",
+   "round": 17,
+   "family": "money",
+   "hypothesis": "Third lot at day 30 +15%",
+   "verdict": "near miss",
+   "why": "holdout only",
+   "files": "IMPROVE17_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R18-Z1",
+   "round": 18,
+   "family": "exit",
+   "hypothesis": "Trend stop 4 ATR",
+   "verdict": "fail",
+   "why": "stopped by noise",
+   "files": "IMPROVE18_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R18-Z2",
+   "round": 18,
+   "family": "exit",
+   "hypothesis": "Trend stop 3 ATR",
+   "verdict": "fail",
+   "why": "stopped by noise",
+   "files": "IMPROVE18_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R19-K3",
+   "round": 19,
+   "family": "risk",
+   "hypothesis": "Max 3 trades per sector",
+   "verdict": "fail",
+   "why": "falls are market-wide",
+   "files": "IMPROVE19_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R19-K2",
+   "round": 19,
+   "family": "risk",
+   "hypothesis": "Max 2 per sector",
+   "verdict": "fail",
+   "why": "falls are market-wide",
+   "files": "IMPROVE19_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R20-G1",
+   "round": 20,
+   "family": "exit",
+   "hypothesis": "Break-even after +5%",
+   "verdict": "fail",
+   "why": "cuts winners",
+   "files": "IMPROVE20_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R20-G2",
+   "round": 20,
+   "family": "exit",
+   "hypothesis": "Break-even after +8%",
+   "verdict": "fail",
+   "why": "cuts winners",
+   "files": "IMPROVE20_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R21",
+   "round": 21,
+   "family": "stress",
+   "hypothesis": "Live setup under costs/slippage/missed tips",
+   "verdict": "PASS - robust",
+   "why": "",
+   "files": "IMPROVE21_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R22-SW1",
+   "round": 22,
+   "family": "money",
+   "hypothesis": "Swap weakest for a dip",
+   "verdict": "fail",
+   "why": "sold trades were still working",
+   "files": "IMPROVE22_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R22-SW2",
+   "round": 22,
+   "family": "money",
+   "hypothesis": "Swap oldest",
+   "verdict": "fail",
+   "why": "sold trades were still working",
+   "files": "IMPROVE22_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R22-SW3",
+   "round": 22,
+   "family": "money",
+   "hypothesis": "Swap strongest",
+   "verdict": "fail",
+   "why": "sold trades were still working",
+   "files": "IMPROVE22_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "CAL",
+   "round": 0,
+   "family": "selection",
+   "hypothesis": "Per-signal likely % from 10 facts",
+   "verdict": "fail",
+   "why": "no better than type average",
+   "files": "CALIB_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-results",
+   "round": 0,
+   "family": "exploration",
+   "hypothesis": "Exit before results",
+   "verdict": "no fix needed / not worth a test",
+   "why": "",
+   "files": "LIVE_REVIEW.md / RESEARCH_BACKLOG.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-market-break",
+   "round": 0,
+   "family": "exploration",
+   "hypothesis": "Exit when NIFTY < 50d",
+   "verdict": "no fix needed / not worth a test",
+   "why": "",
+   "files": "LIVE_REVIEW.md / RESEARCH_BACKLOG.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-idle",
+   "round": 0,
+   "family": "exploration",
+   "hypothesis": "Idle money",
+   "verdict": "no fix needed / not worth a test",
+   "why": "",
+   "files": "LIVE_REVIEW.md / RESEARCH_BACKLOG.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-cap",
+   "round": 0,
+   "family": "exploration",
+   "hypothesis": "25% vs 15% per-stock cap",
+   "verdict": "no fix needed / not worth a test",
+   "why": "",
+   "files": "LIVE_REVIEW.md / RESEARCH_BACKLOG.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-breakout-dead",
+   "round": 0,
+   "family": "exploration",
+   "hypothesis": "Stalled breakouts",
+   "verdict": "no fix needed / not worth a test",
+   "why": "",
+   "files": "LIVE_REVIEW.md / RESEARCH_BACKLOG.md",
+   "area": "finder"
+  },
+  {
+   "id": "LUCK-1",
+   "round": 23,
+   "family": "adversarial",
+   "hypothesis": "VANTAGE timing beats random days in the same stocks",
+   "verdict": "mixed",
+   "why": "older years yes (96-100%); last 3 years no (72% top-300, 5.5% all stocks)",
+   "files": "luck_check.py/.json",
+   "area": "truth engine"
+  },
+  {
+   "id": "LUCK-2",
+   "round": 23,
+   "family": "adversarial",
+   "hypothesis": "VANTAGE stock choice beats random stocks on random days",
+   "verdict": "PASS - the real edge",
+   "why": "100% of 200 random worlds in every period; +2-6 points a trade",
+   "files": "luck_check2.py/.json",
+   "area": "truth engine"
+  },
+  {
+   "id": "R23",
+   "round": 23,
+   "family": "adversarial",
+   "hypothesis": "The Rs 2 cr floor is robust (1/2/3/5 cr, none)",
+   "verdict": "fragile - kept for execution safety, watched live",
+   "why": "no floor better at account level; after +1% thin-stock costs about equal in holdout with a smaller fall",
+   "files": "IMPROVE23_RESULTS.md",
+   "area": "truth engine"
+  },
+  {
+   "id": "FP",
+   "round": 23,
+   "family": "discovery",
+   "hypothesis": "VANTAGE's choice = strong, near-high stocks",
+   "verdict": "PASS - explains ~3/4 of the edge",
+   "why": "fingerprint-matched random +3.3/+2.1 vs VANTAGE +4.1/+2.9",
+   "files": "fingerprint.py/.json",
+   "area": "discovery"
+  },
+  {
+   "id": "R24",
+   "round": 24,
+   "family": "stress",
+   "hypothesis": "Account survives a 5/10/20% market gap on the worst day",
+   "verdict": "PASS - survives (risk measured, no rule)",
+   "why": "10% gap = about 15% one-morning loss, growth stays positive; stops do not protect against gaps",
+   "files": "IMPROVE24_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "X-missed",
+   "round": "exploration",
+   "family": "exploration",
+   "hypothesis": "Missed big risers are predictable: strong stock 10-30% below its 52-week high breaks a 20-day high on 2x volume",
+   "verdict": "no fix needed / not worth a test",
+   "why": "development only: 7,057 cases, 20-day result +1.2% vs +1.5% for any stock, worse in 10 of 12 years; big risers are found in hindsight",
+   "files": "LIVE_REVIEW.md 19 Nov 03:30",
+   "area": "finder"
+  },
+  {
+   "id": "LAB-1",
+   "round": "auto-lab 1",
+   "family": "auto-lab",
+   "hypothesis": "230 automatic rules from 40 situation facts (stock, history, market, sector, results, time)",
+   "verdict": "fail",
+   "why": "2 passed development (0 in each of 5 luck worlds), both failed the holdout in the all-stocks set; skip price > Rs 980 = near miss (top-300 only)",
+   "files": "AUTO_LAB_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R25",
+   "round": 25,
+   "family": "money",
+   "hypothesis": "Size trades on the current account value (compounding)",
+   "verdict": "fail",
+   "why": "+1-1.7 points for top-300 but deeper falls in development and no gain for all stocks; fixed-size tests understate later risk",
+   "files": "IMPROVE25_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R26",
+   "round": 26,
+   "family": "universe",
+   "hypothesis": "VANTAGE on the top-300 instead of all stocks >= Rs 2 cr",
+   "verdict": "PASS - proposed to owner (holdout seen before; 6 of 9 years since 2018)",
+   "why": "holdout 14.8% vs 7.2% a year, fall -20.6% vs -27.5%; development favours all stocks (survivorship-inflated)",
+   "files": "IMPROVE26_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R27",
+   "round": 27,
+   "family": "adversarial",
+   "hypothesis": "Top-300 is robust to the universe size (100-500)",
+   "verdict": "fragile - top-300 kept (best near both periods)",
+   "why": "holdout 9.1/15.5/15.7/11.5/10.9 for top 100-500; development rises with size",
+   "files": "IMPROVE27_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R28",
+   "round": 28,
+   "family": "selection",
+   "hypothesis": "Take tips in a published order when money is short (momentum, 52w high, low vol, score, mix)",
+   "verdict": "near miss (P1 momentum) - fresh-data check",
+   "why": "P1 +1.2/+1.7 points both periods, smaller falls, but 7 of 14 years",
+   "files": "IMPROVE28_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R29",
+   "round": 29,
+   "family": "portfolio",
+   "hypothesis": "Order between VANTAGE and live dip-buys when money is short",
+   "verdict": "fail (order); both channels together beat VANTAGE alone",
+   "why": "both random 22.1/20.0 vs VANTAGE alone 20.5/18.8; dips-first 6/14 years, VANTAGE-first 8/14",
+   "files": "IMPROVE29_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "CTX-1",
+   "round": "context 1",
+   "family": "discovery",
+   "hypothesis": "Rules by discovered behaviour groups (order / skip), walk-forward",
+   "verdict": "fail (strong lead in all stocks)",
+   "why": "behaviour groups predict, sector does not; C-ORDER all-stocks holdout 16.5% vs 8.2% but top-300 +0.8 and below one luck world",
+   "files": "CONTEXT_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "COST-REAL",
+   "round": "cost check",
+   "family": "stress",
+   "hypothesis": "Live setup after real Zerodha charges, DP fee, slippage and 20% short-term tax",
+   "verdict": "measured - lower than the flat-0.35% tests",
+   "why": "VANTAGE + dip-buy: older 15.1%, recent 12.0% a year (17.4 / 14.7 with monthly capital); DP fee ~Rs 3,700 a year on Rs 51,000",
+   "files": "costs_real_results.json",
+   "area": "finder"
+  },
+  {
+   "id": "CTX-2",
+   "round": "context 2",
+   "family": "discovery",
+   "hypothesis": "Company / sector / behaviour / market / setup / combinations / discovered tree, real costs + tax",
+   "verdict": "fail",
+   "why": "company record does not predict; sector x setup and size x sector do; no rule beats luck on top-300",
+   "files": "CONTEXT_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "BENCH-FAIR",
+   "round": "benchmark",
+   "family": "adversarial",
+   "hypothesis": "System vs NIFTY on identical dates, capital, costs, tax, total return",
+   "verdict": "measured",
+   "why": "VANTAGE+dip after tax 15.1% vs NIFTY fund 13.5% (2013-Feb 2024); 11.5% vs 7.8% (Nov 2023-Oct 2026)",
+   "files": "INVESTIGATION_19NOV.md",
+   "area": "finder"
+  },
+  {
+   "id": "CTX-STRICT",
+   "round": "context strict",
+   "family": "discovery",
+   "hypothesis": "Behaviour groups with membership and scores from before each trade only (dynamic / previous / modal)",
+   "verdict": "fail (predictive value survives; account bar not met on top-300 development)",
+   "why": "DYNAMIC top-300 dev +0.2, holdout +3.4 beating luck; all stocks +5.4 / +10.9",
+   "files": "INVESTIGATION_19NOV.md",
+   "area": "finder"
+  },
+  {
+   "id": "FOUNDRY-1",
+   "round": "foundry 1",
+   "family": "new setup",
+   "hypothesis": "336 new strategies (short exits)",
+   "verdict": "fail",
+   "why": "0 passed development: short trades cannot beat Rs 51k costs + tax",
+   "files": "FOUNDRY_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "FOUNDRY-2",
+   "round": "foundry 2",
+   "family": "new setup",
+   "hypothesis": "640 new strategies incl. long holds",
+   "verdict": "fail",
+   "why": "1 passed development + stock-luck (52w-high strength, 5R/120d); holdout 4.5% alone vs NIFTY 7.8%, hurts the live system",
+   "files": "FOUNDRY_RESULTS.md",
+   "area": "finder"
+  }
+ ],
+ "lessons": [
+  "VANTAGE's edge is WHICH stocks it picks, not WHEN inside those stocks (luck checks 1 and 2). Timing/exit tweaks mostly failed for this reason - research stock choice first.",
+  "The Nov 2023+ holdout has been reused for ~70 ideas: a pass there can be luck. Require development too, year-by-year, stress; the real unseen test is the live record (the Learner).",
+  "'Gave back a profit' is the biggest cause of lost money but its cures (break-even stops) cost more: it is the price of letting winners run.",
+  "Market-wide falls cause ~1/5 of losses; no market-weather rule helped (rounds 6, 8, 12, 19)."
+ ]
+}

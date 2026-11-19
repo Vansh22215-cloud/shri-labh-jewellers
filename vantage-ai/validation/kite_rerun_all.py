@@ -1,4 +1,7 @@
-"""EVERYTHING AGAIN ON KITE DATA (owner 19 Nov: "do all work again, tests, runs, each and everything, with Kite
+"""STRICT KITE MODE (owner 19 Nov): Kite historical candles for listed stocks ONLY - never filled from Yahoo; delisted
+stocks from NSE official bhavcopies, labelled 'nse'; missing Kite stock-days are reported, not substituted; Yahoo
+only in the separate verification audit. Step 0 verifies Kite coverage before anything else.
+EVERYTHING AGAIN ON KITE DATA (owner 19 Nov: "do all work again, tests, runs, each and everything, with Kite
 Connect data"). Runs on GitHub (Kite keys live only there) once Kite daily history is complete.
 Every input that comes from prices is rebuilt from Kite exchange candles (SWING_PRICE_SOURCE=kite); stocks Kite does
 not list (delisted) keep NSE's official bhavcopy rebuilds. Every result goes to a separate folder
@@ -17,7 +20,8 @@ RUN = os.path.join(SW, "data", "kite_rerun")
 OUT = os.path.join(SW, "journal", "kite_rerun")
 os.makedirs(RUN, exist_ok=True)
 os.makedirs(OUT, exist_ok=True)
-os.environ.update(SWING_PRICE_SOURCE="kite", ATLAS_RUN_DIR=RUN, ATLAS_FEATURES=os.path.join(RUN, "lab_features.csv.gz"),
+os.environ.update(SWING_PRICE_SOURCE="kite_strict", ATLAS_RUN_DIR=RUN,   # STRICT KITE (owner 19 Nov)
+                   ATLAS_FEATURES=os.path.join(RUN, "lab_features.csv.gz"),
                   ATLAS_CONTEXT_TRADES=os.path.join(RUN, "context_trades.csv.gz"))
 sys.path.insert(0, HERE0)
 sys.path.insert(0, SW)
@@ -80,13 +84,29 @@ def generate():
 
 def main():
     t0 = time.time()
-    log = {"started": time.strftime("%Y-%m-%d %H:%M"), "steps": []}
+    log = {"started": __import__("pandas").Timestamp.now(tz="Asia/Kolkata").strftime("%Y-%m-%d %H:%M IST"), "mode": "STRICT KITE", "steps": []}
+    from swing import kite_daily
+    log["coverage"] = kite_daily.coverage_report()          # step 0: verify coverage + quality first
+    try:
+        kite_daily.audit()                                  # Kite vs Yahoo, verification only
+    except Exception as e:
+        log["audit_error"] = repr(e)[:200]
+    if not log["coverage"].get("on_kite"):
+        log["stopped"] = "no Kite history yet - nothing re-run"
+        json.dump(log, open(os.path.join(OUT, "run_log.json"), "w"), indent=1, default=str)
+        report(log)
+        return log
+    os.environ["ATLAS_PROVENANCE_FILE"] = os.path.join(RUN, "prov_generate.json")
     try:
         log["generate"] = generate()
+        from swing.data_prices import _dump_provenance
+        _dump_provenance()
+        log["generate"]["provenance"] = json.load(open(os.environ["ATLAS_PROVENANCE_FILE"]))
     except Exception as e:
         log["generate"] = {"error": repr(e)[:300]}
-    for label, cmd, out in STEPS:
+    for i, (label, cmd, out) in enumerate(STEPS):
         t = time.time()
+        os.environ["ATLAS_PROVENANCE_FILE"] = os.path.join(RUN, f"prov_{i:02d}.json")
         args = [sys.executable] + ([cmd[0]] if cmd[0] == "-c" else [os.path.join(HERE0, cmd[0])]) + cmd[1:]
         try:
             r = subprocess.run(args, cwd=RUN, env=os.environ.copy(), timeout=5400, capture_output=True, text=True)
@@ -94,7 +114,12 @@ def main():
             err = "" if ok else (r.stderr or "")[-400:]
         except Exception as e:
             ok, err = False, repr(e)[:300]
-        log["steps"].append({"step": label, "ok": ok, "minutes": round((time.time() - t) / 60, 1), "error": err})
+        try:
+            prov = json.load(open(os.environ["ATLAS_PROVENANCE_FILE"]))
+        except Exception:
+            prov = {}
+        log["steps"].append({"step": label, "ok": ok, "minutes": round((time.time() - t) / 60, 1), "error": err,
+                             "data": prov})
         if ok and out.endswith(".json"):
             shutil.copy(os.path.join(RUN, out), os.path.join(OUT, out))
         print(label, "OK" if ok else "FAILED", flush=True)
@@ -116,7 +141,8 @@ def _get(d, *path):
 def report(log):
     """Side-by-side headline numbers, Yahoo (earlier files) vs Kite (this run)."""
     def both(f, *path):
-        y, k = (json.load(open(os.path.join(d, f))) if os.path.exists(os.path.join(d, f)) else {} for d in (HERE0, OUT))
+        y, k = (json.load(open(os.path.join(d, f))) if os.path.exists(os.path.join(d, f)) else {}
+                for d in (os.path.join(HERE0, "yahoo_baseline"), OUT))
         return _get(y, *path), _get(k, *path)
     rows = [("Live setup C+A top-300, recent years (round 21 normal)", "improve21_results.json", ("holdout", "S0 normal", "C+A", "cagr")),
             ("Live setup C+A top-300, older years", "improve21_results.json", ("dev", "S0 normal", "C+A", "cagr")),
@@ -129,15 +155,34 @@ def report(log):
             ("Foundry: strategies passing development", "foundry_results.json", ("dev_survivors",)),
             ("Momentum-first order (P1), recent", "improve28_results.json", ("P1", "holdout fixed")),
             ("Strict behaviour groups DYNAMIC pass?", "strict_groups_results.json", ("DYNAMIC", "PASS"))]
-    L = ["# Everything re-run on Kite data", "", f"Run started {log['started']} on GitHub, {log['minutes']} minutes.", "",
-         "## Data used", ""]
+    cov = log.get("coverage", {})
+    L = ["# Everything re-run on Kite data - STRICT KITE MODE", "",
+         f"Run started {log['started']} on GitHub, {log.get('minutes', '-')} minutes. Kite only for listed stocks (never "
+         "filled from Yahoo); delisted stocks from NSE official bhavcopies ('nse'); Yahoo only in the verification audit.", "",
+         "## 1. Data coverage (verified first - full report: journal/kite_coverage.md, journal/kite_data_audit.md)", "",
+         f"- Stocks on Kite: {cov.get('on_kite')} of {cov.get('stocks')}; Kite days {cov.get('kite_first_day')} to {cov.get('kite_last_day')}",
+         f"- Stocks with Kite data from Jan 2013 or earlier: {cov.get('stocks_from_2013')}; missing stock-days inside Kite spans: {cov.get('missing_stock_days')}",
+         f"- Past top-300 members: {cov.get('top300_ever')} - on Kite {cov.get('top300_on_kite')}, NSE bhavcopy (delisted) {cov.get('top300_delisted_nse')}, on neither {cov.get('top300_missing_both')}",
+         f"- Splits/bonuses: {'adjusted by Kite' if cov.get('kite_adjusted') else 'detected from Kite prices'}; prices are price-only (no dividends), NIFTY too",
+         f"- 13 years complete on Kite: {'verified' if cov.get('thirteen_years_ok') else 'NOT verified'}", ""]
+    if log.get("stopped"):
+        L += [f"**Stopped: {log['stopped']}**"]
+        open(os.path.join(SW, "journal", "kite_rerun.md"), "w").write("\n".join(L) + "\n")
+        return
+    L += ["## 2. Data used by each experiment", ""]
     g = log.get("generate", {})
     L += [f"- {g.get('line', 'generation failed: ' + str(g.get('error')))}",
           f"- Trades rebuilt from Kite prices: {g.get('trades')}; live dip-buy trades: {g.get('dip_trades')}",
           f"- Of those, trades in delisted stocks (NSE bhavcopy, Kite does not list them): {g.get('trades_from_nse_bhavcopy_(delisted)')}",
-          "", "## Every step", "", "| Step | Result | Minutes |", "|---|---|---|"]
-    L += [f"| {s['step']} | {'done' if s['ok'] else 'FAILED: ' + s['error'][-120:].replace('|', '/')} | {s['minutes']} |" for s in log["steps"]]
-    L += ["", "## Headline numbers: Yahoo (earlier) vs Kite (now)", "", "| What | Yahoo | Kite |", "|---|---|---|"]
+          "", "| Step | Result | Kite stocks | Not on Kite (delisted -> NSE, rest dropped) | Yahoo stocks | Date range | Corporate actions | Minutes |",
+          "|---|---|---|---|---|---|---|---|"]
+    for s_ in log["steps"]:
+        d = s_.get("data", {})
+        L.append(f"| {s_['step']} | {'done' if s_['ok'] else 'FAILED: ' + s_['error'][-100:].replace('|', '/')} | "
+                 f"{d.get('kite_stocks', '-')} | {len(d.get('missing_on_kite', []))} | {d.get('yahoo_stocks', '-')} | "
+                 f"{d.get('first_day', '-')} to {d.get('last_day', '-')} | {d.get('corporate_actions', '-')} | {s_['minutes']} |")
+    L += ["", "## 3. Results: Yahoo (earlier, preserved in vantage-ai/validation/yahoo_baseline/) vs strict Kite (now)", "",
+          "| What | Yahoo | Kite |", "|---|---|---|"]
     for name, f, path in rows:
         y, k = both(f, *path)
         L.append(f"| {name} | {y} | {k} |")

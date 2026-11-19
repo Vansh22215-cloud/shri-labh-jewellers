@@ -105,7 +105,35 @@ def sanitize(df):
     return df
 
 
-PROVENANCE = {"kite": set(), "kite+yahoo": set(), "yahoo": set()}   # which source each stock's prices came from
+PROVENANCE = {"kite": set(), "kite+yahoo": set(), "yahoo": set(), "missing": set()}   # source of each stock's prices
+SPAN = {"first": None, "last": None, "ca": {}}
+
+
+def _record_strict(sym, k):
+    a = k.attrs
+    SPAN["first"] = min(filter(None, [SPAN["first"], a.get("first")]))
+    SPAN["last"] = max(filter(None, [SPAN["last"], a.get("last")]))
+    SPAN["ca"][a.get("ca", "?").split(" (")[0]] = SPAN["ca"].get(a.get("ca", "?").split(" (")[0], 0) + 1
+
+
+def _dump_provenance():
+    """ATLAS_PROVENANCE_FILE: every experiment records exactly which data it read."""
+    import json, os
+    f = os.environ.get("ATLAS_PROVENANCE_FILE")
+    if not f:
+        return
+    try:
+        json.dump({"mode": os.environ.get("SWING_PRICE_SOURCE", "kite"),
+                   "kite_stocks": len(PROVENANCE["kite"]), "kite_plus_yahoo_stocks": len(PROVENANCE["kite+yahoo"]),
+                   "yahoo_stocks": len(PROVENANCE["yahoo"]), "missing_on_kite": sorted(PROVENANCE["missing"]),
+                   "first_day": SPAN["first"], "last_day": SPAN["last"], "corporate_actions": SPAN["ca"]},
+                  open(f, "w"), indent=1)
+    except Exception:
+        pass
+
+
+import atexit as _atexit  # noqa: E402
+_atexit.register(_dump_provenance)
 
 
 def load(symbol):
@@ -113,7 +141,21 @@ def load(symbol):
     (kite_daily), Yahoo only for days or stocks Kite has not given us (e.g. before the Kite download finished, or
     delisted stocks). SWING_PRICE_SOURCE=yahoo forces the old source (for comparisons only)."""
     import os
-    if os.environ.get("SWING_PRICE_SOURCE", "kite").lower() != "yahoo":
+    mode = os.environ.get("SWING_PRICE_SOURCE", "kite").lower()
+    if mode == "kite_strict":                 # owner 19 Nov: Kite only, never filled from Yahoo; gaps are reported
+        try:
+            from .kite_daily import frame_strict
+            k = frame_strict(symbol)
+        except Exception as e:
+            log.warning("Kite prices for %s unreadable (%s)", symbol, type(e).__name__)
+            k = None
+        if k is None or not len(k):
+            PROVENANCE["missing"].add(symbol)  # delisted stocks are then taken from NSE bhavcopies by the caller
+            return None
+        PROVENANCE["kite"].add(symbol)
+        _record_strict(symbol, k)
+        return sanitize(k)
+    if mode != "yahoo":
         try:
             from .kite_daily import frame
             k = frame(symbol)
@@ -130,6 +172,12 @@ def load(symbol):
 
 def provenance_line():
     """'Data used' line for every report: how many stocks came from Kite, Kite+Yahoo, Yahoo."""
+    import os
+    if os.environ.get("SWING_PRICE_SOURCE", "").lower() == "kite_strict":
+        return (f"Data used (STRICT KITE): {len(PROVENANCE['kite']):,} stocks from Kite exchange candles only "
+                f"({SPAN['first']} to {SPAN['last']}); {len(PROVENANCE['missing']):,} requested stocks not on Kite "
+                f"(delisted ones taken from NSE official bhavcopies, labelled 'nse'); Yahoo: none. "
+                f"Corporate actions: {SPAN['ca']}. Prices are price-only (no dividends), NIFTY too.")
     k, ky, y = (len(PROVENANCE[x]) for x in ("kite", "kite+yahoo", "yahoo"))
     n = k + ky + y
     if not n:

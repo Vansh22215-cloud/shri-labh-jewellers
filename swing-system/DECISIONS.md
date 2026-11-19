@@ -1267,3 +1267,17 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - writes results to a separate folder, so Yahoo vs Kite sit side by side in `journal/kite_rerun.md` (results only, no prices), and tells the owner on Telegram.
 - **Tonight the Kite daily download has no nightly limit** (until complete, about 3 requests a second). Every test script is now portable (no machine-specific paths) and can run in the re-run folder (`ATLAS_RUN_DIR`). A Kite re-run never replaces the live behaviour-group model.
 - Kite does not list delisted stocks; those stay on NSE official bhavcopies, and the report counts them.
+
+## D157 - 2026-11-19 - Tonight's re-run switched to STRICT KITE mode (owner's yes and 7 rules)
+- `SWING_PRICE_SOURCE=kite_strict` (`data_prices.load` + `kite_daily.frame_strict`):
+  - listed stocks come from Kite historical candles only. A stock or day Kite does not have is never filled from Yahoo; it is recorded as missing.
+  - Delisted stocks come from NSE official bhavcopies, labelled 'nse'.
+  - Splits/bonuses: none if the data shows Kite is already adjusted; otherwise detected from Kite's own prices (clear ratios only; the audit flags anything missed).
+  - Price-only (no dividends), NIFTY too, so NIFTY comparisons are like-for-like.
+- **Step 0 of the re-run verifies coverage first** (`journal/kite_coverage.md`): every NSE stock and every past top-300 member, on Kite or not, date range, missing stock-days, and whether 13 years are really there.
+  - The Kite-vs-Yahoo audit (`journal/kite_data_audit.md`) is the only place Yahoo is used: verification.
+  - With no Kite history, the run stops and claims nothing (rehearsed).
+- **Every experiment records its data** (`ATLAS_PROVENANCE_FILE`): Kite stocks, stocks not on Kite, Yahoo stocks (must be 0), date range and corporate-action method, shown per step in `journal/kite_rerun.md`.
+- The Kite re-check and the weekly automatic research also use strict mode once Kite history is complete.
+- **Yahoo-based results preserved** unchanged in `vantage-ai/validation/yahoo_baseline/` (18 result files) for the side-by-side comparison.
+- **Not changed (needs the owner's approval):** live tips still read prices Kite-first with Yahoo filling gaps (D155); live trading rules; strategies.

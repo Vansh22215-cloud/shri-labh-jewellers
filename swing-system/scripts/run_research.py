@@ -55,7 +55,7 @@ if __name__ == "__main__":
         if due and s.get("auto_research", True):
             ar = Path(__file__).resolve().parents[2] / "vantage-ai" / "validation" / "autoresearch.py"
             import os as _os
-            env = dict(_os.environ, SWING_PRICE_SOURCE="kite") if kite_ready else None   # Kite prices once complete
+            env = dict(_os.environ, SWING_PRICE_SOURCE="kite_strict") if kite_ready else None   # strict Kite once complete
             r = subprocess.run([sys.executable, str(ar), "--send"], timeout=3600, capture_output=True, text=True, env=env)
             print("auto-research:", (r.stdout or "").strip().splitlines()[-1:] or r.returncode)
             if r.returncode == 0:

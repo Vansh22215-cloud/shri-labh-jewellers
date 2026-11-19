@@ -156,6 +156,52 @@ def kite_is_adjusted():
     return _ADJ["v"]
 
 
+STD_RATIOS = (2.0, 3.0, 4.0, 5.0, 10.0, 1.5, 5 / 3, 2.5)   # clear split/bonus ratios only (1:4, 1:5 bonuses could be
+                                                      # confused with a real 17-20% crash - left to the audit to flag)
+
+
+def split_factors_from_prices(k):
+    """Kite-only corporate-action detection (strict mode; no Yahoo): an overnight drop whose open AND close both sit
+    within 4% of a standard split/bonus ratio of the previous close, with volume not collapsing -> a split/bonus on
+    that day (the same idea NSE's own adjusted previous close uses). -> {date: factor}"""
+    out = {}
+    pc = k["close"].shift()
+    for d in k.index[1:]:
+        p = pc.get(d)
+        if not p or p != p:
+            continue
+        o, c = k.at[d, "open"], k.at[d, "close"]
+        for r in STD_RATIOS:
+            if abs(o * r / p - 1) < 0.04 and abs(c * r / p - 1) < 0.06:
+                out[d] = r
+                break
+    return out
+
+
+def frame_strict(sym):
+    """STRICT KITE (owner 19 Nov): Kite exchange candles only - no Yahoo days, no Yahoo adjustments. Splits/bonuses:
+    none if Kite is already adjusted (decided from the data), else detected from Kite's own prices. Price-only
+    (no dividends), the same for NIFTY. attrs: source, first/last day, corporate-action method, splits found."""
+    k = _raw(sym)
+    if k is None or not len(k):
+        return None
+    k = k[["open", "high", "low", "close", "volume"]].astype(float).sort_index().copy()
+    adj = kite_is_adjusted()
+    found = {} if adj else split_factors_from_prices(k)
+    if found:
+        f = pd.Series(1.0, index=k.index)
+        for d, r in found.items():
+            f[k.index < d] *= r
+        for c in ("open", "high", "low", "close"):
+            k[c] = k[c] / f
+        k["volume"] = k["volume"] * f
+    k["adj_close"] = k["close"]
+    k["dividends"], k["splits"] = 0.0, 0.0
+    k.attrs.update(source="kite", first=str(k.index[0].date()), last=str(k.index[-1].date()),
+                   ca=("kite-adjusted" if adj else f"detected from Kite prices ({len(found)} split/bonus)"), pure_kite=True)
+    return k
+
+
 def frame(sym):
     """Kite prices shaped like a Yahoo price file (split/bonus- and dividend-adjusted the same way)."""
     from . import data_prices
@@ -192,7 +238,7 @@ def audit():
     rows = []
     for f in sorted(BASE.glob("*.csv")):
         sym = f.stem
-        k, y = frame(sym), data_prices._load_yahoo(sym)
+        k, y = frame_strict(sym), data_prices._load_yahoo(sym)     # verify exactly what strict research uses
         if k is None or y is None:
             continue
         j = pd.concat([k["close"].rename("k"), y["close"].rename("y")], axis=1).dropna()
@@ -240,3 +286,85 @@ def todays_bars_from_quotes(day=None):
         n += 1
     log.info("Kite daily: today's bar written for %d stocks from quotes", n)
     return n
+
+
+
+COVERAGE = ROOT / "journal" / "kite_coverage.md"
+
+
+def coverage_report():
+    """FIRST STEP of the strict re-run: is Kite's history complete enough? Nothing is claimed before this.
+    Calendar = the days Kite has for NIFTY 50. Checked for every stock that was ever in the top-300 and every
+    stock on today's NSE list: on Kite or not, first and last Kite day, missing days inside its own Kite span."""
+    import json as _j
+    st = _state()
+    cal = _raw("NIFTY50")
+    out = {"made": str(pd.Timestamp.now(tz="Asia/Kolkata"))[:16]}
+    L = [f"# Kite data coverage ({out['made']} IST)", "",
+         "Verified before any result is reported (owner 19 Nov). Strict Kite mode: no Yahoo days, no Yahoo adjustments.", ""]
+    if cal is None or not len(cal):
+        L.append("Kite NIFTY 50 history not downloaded yet - coverage cannot be verified.")
+        COVERAGE.write_text("\n".join(L) + "\n")
+        return {"ok": False}
+    days = cal.index[cal.index >= START]
+    try:
+        u = pd.read_csv(DATA / "universe_history.csv", parse_dates=["asof"])
+        top_ever = u[u["rank"] <= 300].groupby("symbol")["asof"].min()
+    except Exception:
+        top_ever = pd.Series(dtype="datetime64[ns]")
+    try:
+        dl = set(pd.read_csv(DATA / "delisted_prices.csv.gz", usecols=["symbol"])["symbol"])
+    except Exception:
+        dl = set()
+    rows = []
+    for sym in sorted(set(all_symbols()) | set(top_ever.index)):
+        k = _raw(sym)
+        r = {"sym": sym, "top300_ever": sym in top_ever.index, "on_kite": k is not None and len(k) > 0,
+             "delisted_nse": sym in dl}
+        if r["on_kite"]:
+            kd = k.index[k.index >= START]
+            span = days[(days >= kd.min()) & (days <= kd.max())] if len(kd) else days[:0]
+            r.update(first=kd.min(), last=kd.max(), n=len(kd), missing=int(len(span.difference(kd))),
+                     covers_top300_start=(kd.min() <= top_ever.get(sym, pd.Timestamp("2100-01-01"))) if sym in top_ever.index else None)
+        rows.append(r)
+    C = pd.DataFrame(rows)
+    K = C[C["on_kite"]]
+    T = C[C["top300_ever"]]
+    tk = T[T["on_kite"]]
+    out.update(stocks=len(C), on_kite=int(C["on_kite"].sum()), top300_ever=len(T), top300_on_kite=len(tk),
+               top300_delisted_nse=int((~T["on_kite"] & T["delisted_nse"]).sum()),
+               top300_missing_both=int((~T["on_kite"] & ~T["delisted_nse"]).sum()),
+               kite_first_day=str(K["first"].min().date()) if len(K) else None,
+               kite_last_day=str(K["last"].max().date()) if len(K) else None,
+               stocks_from_2013=int((K["first"] <= pd.Timestamp("2013-01-31")).sum()) if len(K) else 0,
+               missing_stock_days=int(K["missing"].sum()) if len(K) else 0,
+               days_on_kite=int(K["n"].sum()) if len(K) else 0,
+               top300_kite_covers_membership=int(tk["covers_top300_start"].fillna(False).sum()),
+               kite_adjusted=bool(kite_is_adjusted()), calendar_days=len(days))
+    pct = lambda a, b: f"{a / b * 100:.1f}%" if b else "-"
+    L += ["| Check | Result |", "|---|---|",
+          f"| Stocks checked (today's NSE list + every past top-300 member) | {out['stocks']:,} |",
+          f"| On Kite | {out['on_kite']:,} ({pct(out['on_kite'], out['stocks'])}) |",
+          f"| Kite date range | {out['kite_first_day']} to {out['kite_last_day']} ({out['calendar_days']:,} NIFTY trading days since 2011) |",
+          f"| Stocks with Kite data from Jan 2013 or earlier | {out['stocks_from_2013']:,} |",
+          f"| Missing stock-days inside each stock's own Kite span | {out['missing_stock_days']:,} of {out['days_on_kite'] + out['missing_stock_days']:,} ({pct(out['missing_stock_days'], out['days_on_kite'] + out['missing_stock_days'])}) |",
+          f"| Past top-300 members | {out['top300_ever']:,} |",
+          f"| ... on Kite | {out['top300_on_kite']:,} (Kite data reaches back to their first top-300 month: {out['top300_kite_covers_membership']:,}) |",
+          f"| ... not on Kite, taken from NSE official bhavcopies (delisted, labelled 'nse') | {out['top300_delisted_nse']:,} |",
+          f"| ... on neither (dropped and listed) | {out['top300_missing_both']:,} |",
+          f"| Splits/bonuses | {'Kite data is already adjusted (checked against Yahoo split dates)' if out['kite_adjusted'] else 'Kite data is NOT adjusted: detected from Kite prices (clear ratios only)'} |", ""]
+    miss = C[C["top300_ever"] & ~C["on_kite"] & ~C["delisted_nse"]]["sym"].tolist()
+    if miss:
+        L += ["Past top-300 members with no data from either source: " + ", ".join(miss[:60]), ""]
+    worst = K.sort_values("missing", ascending=False).head(15)
+    L += ["Most missing days inside a stock's own Kite span:", ""] + \
+         [f"- {r.sym}: {r.missing} of {r.n + r.missing} days ({r.first.date()} to {r.last.date()})" for r in worst.itertuples() if r.missing]
+    complete = out["stocks_from_2013"] and out["top300_kite_covers_membership"] >= 0.9 * max(1, out["top300_on_kite"])
+    L += ["", f"**13 years complete on Kite: {'yes for ' + str(out['stocks_from_2013']) + ' stocks' if complete else 'NOT verified'}** "
+              "(the claim is made only for what this table shows)."]
+    out["thirteen_years_ok"] = bool(complete)
+    COVERAGE.parent.mkdir(parents=True, exist_ok=True)
+    COVERAGE.write_text("\n".join(L) + "\n")
+    C.to_csv(BASE / "coverage_by_stock.csv", index=False)
+    _j.dump(out, open(BASE / "coverage.json", "w"), indent=1, default=str)
+    return out

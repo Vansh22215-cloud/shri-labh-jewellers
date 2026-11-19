@@ -6,7 +6,7 @@ changes: Kite first; stocks Kite does not have (delisted) keep the official NSE 
 import os
 import sys
 
-os.environ["SWING_PRICE_SOURCE"] = "kite"
+os.environ["SWING_PRICE_SOURCE"] = "kite_strict"   # owner 19 Nov: strict Kite, no Yahoo filling
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 

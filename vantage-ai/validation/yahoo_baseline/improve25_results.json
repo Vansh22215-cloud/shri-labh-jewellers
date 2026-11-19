@@ -1,0 +1,112 @@
+{
+ "dev": {
+  "B top300": {
+   "fixed": {
+    "cagr": 18.9,
+    "maxdd": -17.5,
+    "rupees_end": 330506
+   },
+   "current": {
+    "cagr": 21.6,
+    "maxdd": -21.9,
+    "rupees_end": 418622
+   },
+   "monthly": {
+    "cagr": 20.4,
+    "maxdd": -19.2,
+    "rupees_end": 375661
+   }
+  },
+  "C+A top300 (live)": {
+   "fixed": {
+    "cagr": 20.5,
+    "maxdd": -14.7,
+    "rupees_end": 384588
+   },
+   "current": {
+    "cagr": 21.4,
+    "maxdd": -22.1,
+    "rupees_end": 417117
+   },
+   "monthly": {
+    "cagr": 21.6,
+    "maxdd": -20.5,
+    "rupees_end": 423720
+   }
+  },
+  "all stocks": {
+   "fixed": {
+    "cagr": 40.1,
+    "maxdd": -19.8,
+    "rupees_end": 1950204
+   },
+   "current": {
+    "cagr": 46.1,
+    "maxdd": -33.9,
+    "rupees_end": 3077932
+   },
+   "monthly": {
+    "cagr": 42.5,
+    "maxdd": -37.8,
+    "rupees_end": 2346659
+   }
+  }
+ },
+ "holdout": {
+  "B top300": {
+   "fixed": {
+    "cagr": 14.8,
+    "maxdd": -20.6,
+    "rupees_end": 76400
+   },
+   "current": {
+    "cagr": 16.9,
+    "maxdd": -20.4,
+    "rupees_end": 80487
+   },
+   "monthly": {
+    "cagr": 16.5,
+    "maxdd": -18.9,
+    "rupees_end": 79700
+   }
+  },
+  "C+A top300 (live)": {
+   "fixed": {
+    "cagr": 18.8,
+    "maxdd": -19.8,
+    "rupees_end": 84504
+   },
+   "current": {
+    "cagr": 20.5,
+    "maxdd": -19.1,
+    "rupees_end": 88033
+   },
+   "monthly": {
+    "cagr": 20.1,
+    "maxdd": -18.7,
+    "rupees_end": 87176
+   }
+  },
+  "all stocks": {
+   "fixed": {
+    "cagr": 11.3,
+    "maxdd": -22.2,
+    "rupees_end": 70420
+   },
+   "current": {
+    "cagr": 11.0,
+    "maxdd": -24.0,
+    "rupees_end": 69827
+   },
+   "monthly": {
+    "cagr": 6.5,
+    "maxdd": -25.0,
+    "rupees_end": 61610
+   }
+  }
+ },
+ "PASS": {
+  "current": false,
+  "monthly": false
+ }
+}
