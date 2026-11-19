@@ -93,12 +93,47 @@ def add_groupings(X):
          "market": X["market"], "behaviour6": X["cluster6"], "behaviour10": X["cluster10"],
          "behaviour10 x market": X["cluster10"] + "~" + X["market"], "sector x market": X["sector"].astype(str) + "~" + X["market"],
          "size x swing": X["size5"] + "~" + X["swing5"], "behaviour10 x setup": X["cluster10"] + "~" + X["setup"].astype(str),
-         "behaviour6 x market x setup": X["cluster6"] + "~" + X["market"] + "~" + X["setup"].astype(str)}
+         "behaviour6 x market x setup": X["cluster6"] + "~" + X["market"] + "~" + X["setup"].astype(str),
+         # owner 19 Nov: never depend on one view - compare company, sector, behaviour, market, setup, combinations
+         "company": X["sym"].astype(str), "company x setup": X["sym"].astype(str) + "~" + X["setup"].astype(str),
+         "sector x setup": X["sector"].astype(str) + "~" + X["setup"].astype(str),
+         "sector x behaviour10": X["sector"].astype(str) + "~" + X["cluster10"],
+         "market x setup": X["market"] + "~" + X["setup"].astype(str),
+         "size x sector": X["size5"] + "~" + X["sector"].astype(str),
+         "discovered tree (all facts)": pd.Series("TREE", index=X.index)}
     return pd.DataFrame(G, index=X.index)
+
+
+TREE_FACTS = BEH + ["vol_surge", "range_10d", "vs_200d", "signal_day_move", "up_days_10", "nifty_1m", "nifty_vs_200d",
+                    "nifty_vol_20d", "stop_dist"]
+
+
+def tree_scores(X, years=range(2014, 2027)):
+    """ATLAS discovers its own segments: a small decision tree (any combination of facts, setup and market) is fitted
+    every year on trades CLOSED before that year only, and predicts that year's trades."""
+    from sklearn.tree import DecisionTreeRegressor
+    F = X[[c for c in TREE_FACTS if c in X]].copy()
+    F["setup_c"] = X["setup"].astype("category").cat.codes
+    F["market_c"] = X["market"].astype("category").cat.codes
+    F = F.fillna(F.median())
+    sc = pd.Series(np.nan, index=X.index)
+    pn = pd.Series(0, index=X.index)
+    for y in years:
+        P = X["exit_date"] < pd.Timestamp(f"{y}-01-01")
+        idx = X.index[X["signal"].dt.year == y]
+        if P.sum() < 1000 or not len(idx):
+            continue
+        t = DecisionTreeRegressor(max_depth=4, min_samples_leaf=max(150, int(P.sum() / 40)), random_state=0)
+        t.fit(F[P], X.loc[P, "net"].clip(-0.5, 1.0))
+        sc[idx] = t.predict(F.loc[idx])
+        pn[idx] = MIN_PAST
+    return sc, pn
 
 
 def walk_scores(X, labels, years=range(2014, 2027)):
     """Each trade's context score = shrunk average result of past trades (closed before its year) in its group."""
+    if len(labels) and (labels == "TREE").all():
+        return tree_scores(X, years)
     sc = pd.Series(np.nan, index=X.index)
     past_n = pd.Series(0, index=X.index)
     for y in years:
@@ -172,8 +207,22 @@ def test_rule(X, labels, kind, sets=("top300", "all")):
 
 
 def luck(X, labels, kind, worlds=3):
-    """Same rule with the group labels shuffled within each year -> holdout growth (top-300) per world."""
+    """Same rule with the group labels shuffled within each year -> holdout growth (top-300) per world.
+    For the discovered tree the trades' facts are shuffled within each year instead."""
     res = []
+    if len(labels) and (labels == "TREE").all():
+        for w in range(worlds):
+            rng = np.random.default_rng(100 + w)
+            Y = X.copy()
+            yr = Y["signal"].dt.year
+            for y in yr.unique():
+                i = Y.index[yr == y]
+                p = rng.permutation(len(i))
+                for c in TREE_FACTS + ["setup", "market"]:
+                    if c in Y:
+                        Y.loc[i, c] = Y.loc[i, c].values[p]
+            res.append(test_rule(Y, labels, kind, sets=("top300",))["top300"]["holdout"]["rule"][0])
+        return res
     for w in range(worlds):
         rng = np.random.default_rng(100 + w)
         L = labels.copy()
@@ -198,7 +247,7 @@ def main():
         power[name] = {s: grouping_power(X[X["set"] == s], G.loc[X["set"] == s, name]) for s in ("top300", "all")}
         print(name, power[name], flush=True)
     ok = [n for n in G.columns if all(power[n][s]["matters"] for s in ("top300", "all"))]
-    best = sorted(ok, key=lambda n: -min(power[n][s]["spread_pts"] for s in ("top300", "all")))[:2]
+    best = sorted(ok, key=lambda n: -min(power[n][s]["spread_pts"] for s in ("top300", "all")))[:3]
     print("groupings that matter (both sets):", ok, "-> tested:", best, flush=True)
     rules = {}
     for n in best:

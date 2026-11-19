@@ -30,3 +30,14 @@ Bar (as always): +1 point a year and the worst fall no more than 2 points deeper
 holdout), in the top-300 set and the all-stocks set; better in at least 60% of years; and luck worlds: the same
 rule with group labels shuffled within each year (3 worlds) must do clearly worse (the real rule beats all 3).
 Passing rules go to the owner for a yes. Nothing changes live without it.
+
+## Addendum, 19 Nov 2026 (owner's questions, before run 2)
+- **Costs:** from run 2 on, every account test uses real Zerodha delivery charges (STT 0.1% each side, exchange,
+  SEBI, stamp 0.015%, GST, ₹15.93 DP charge per sale), 0.1% slippage each side, and 20% short-term tax on each
+  year's net profit (auto_lab.sim; costs_real.py). The per-trade "spread" numbers stay before tax (0.35% cost).
+- **More ways of understanding stocks, compared side by side every run:** company (the stock's own past record),
+  company x setup, sector x setup, sector x behaviour, market x setup, size x sector, and a **discovered tree**:
+  a small decision tree (depth 4, any combination of facts, setup and market) re-fitted every year on past trades
+  only. Its luck test shuffles the facts within each year. The three best groupings (that matter in both sets)
+  are tested as rules. Same bar.
+- Reported also: trades behind each group, and how often a stock stays in its behaviour group.
