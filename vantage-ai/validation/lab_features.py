@@ -7,13 +7,16 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 from improve import HERE, SW, all_stocks  # noqa: E402
 
 SETS = {"top300": "trades_FINAL.csv", "all": "improve_trades_U2.csv"}
-T = pd.concat([pd.read_csv(f"{HERE}/{f}", parse_dates=["signal", "entry_date", "exit_date"]).assign(set=k)
-               for k, f in SETS.items()], ignore_index=True)
-NEED = set(T["sym"])
+NEED = set()
+
+
+def default_trades():
+    return pd.concat([pd.read_csv(f"{HERE}/{f}", parse_dates=["signal", "entry_date", "exit_date"]).assign(set=k)
+                      for k, f in SETS.items()], ignore_index=True)
 
 
 def stock_features(d):
@@ -45,13 +48,14 @@ def one(args):
     return F.reset_index(names="signal")
 
 
-def market():
+def market(S=None):
     from swing import data_prices
     n = data_prices.benchmark()
     c = n["close"] if "close" in n else n.iloc[:, 0]
     M = pd.DataFrame({"nifty_1m": c / c.shift(21) - 1, "nifty_vs_200d": c / c.rolling(200).mean() - 1,
                       "nifty_vol_20d": c.pct_change().rolling(20).std() * np.sqrt(252)})
-    S = pd.read_csv(f"{HERE}/situation_days.csv", parse_dates=["date"]).set_index("date")["key"]
+    if S is None:
+        S = pd.read_csv(f"{HERE}/situation_days.csv", parse_dates=["date"]).set_index("date")["key"]
     k = S.astype(str).str.split(" \\| ", expand=True)
     M = M.join(pd.DataFrame({"mkt_trend": k[0], "mkt_mood": k[1], "mkt_breadth": k[2]}, index=S.index), how="left")
     M.index.name = "signal"
@@ -67,20 +71,22 @@ def results_near():
     return E.sort_values("date")
 
 
-if __name__ == "__main__":
-    with Pool(4) as p:
-        parts = [x for x in p.imap_unordered(one, all_stocks(), chunksize=8) if x is not None]
+def build(T, S=None, data=None, procs=4):
+    """T: trades (with a 'set' column). S: situation key per day (None = situation_days.csv).
+    data: iterable of (sym, d, mask, src) like improve.all_stocks() (None = all_stocks()). -> feature table."""
+    global NEED
+    NEED = set(T["sym"])
+    with Pool(procs) as p:
+        parts = [x for x in p.imap_unordered(one, data if data is not None else all_stocks(), chunksize=8) if x is not None]
     F = pd.concat(parts, ignore_index=True)
-    X = T.merge(F, on=["sym", "signal"], how="left").merge(market(), on="signal", how="left")
-    # time
+    X = T.merge(F, on=["sym", "signal"], how="left").merge(market(S), on="signal", how="left")
     X["weekday"] = X["signal"].dt.day_name().str[:3]
     X["month"] = X["signal"].dt.month
     X["day_of_month"] = X["signal"].dt.day
-    # sector (NIFTY 500 list; others unknown)
     sec = pd.read_csv(f"{SW}/data/events/nifty500.csv")
     X["sector"] = X["sym"].map(dict(zip(sec["Symbol"].astype(str), sec["Industry"].astype(str)))).fillna("unknown")
-    # results within the next 10 trading days (where dates are known)
     E = results_near()
+    X["results_soon"] = "unknown"
     if E is not None:
         X = X.sort_values("signal")
         m = pd.merge_asof(X[["signal", "sym"]].reset_index(), E.rename(columns={"date": "res"}), left_on="signal",
@@ -88,7 +94,6 @@ if __name__ == "__main__":
         gap = (m.set_index("index")["res"] - m.set_index("index")["signal"]).dt.days
         known = X["sym"].isin(set(E["sym"]))
         X["results_soon"] = np.where(~known, "unknown", np.where(gap.reindex(X.index) <= 14, "yes", "no"))
-    # how the stock's own earlier VANTAGE trades did (history), using only trades closed before this signal
     X = X.sort_values("signal").reset_index(drop=True)
     X["net"] = X["exit"] / X["entry"] - 1 - 0.0035
     past = []
@@ -98,6 +103,10 @@ if __name__ == "__main__":
             m = ex[:i] < sig[i]
             past.append((idx[i], m.sum(), (net[:i][m] > 0).mean() if m.any() else np.nan))
     P = pd.DataFrame(past, columns=["i", "stock_past_trades", "stock_past_win"]).set_index("i")
-    X = X.join(P)
+    return X.join(P)
+
+
+if __name__ == "__main__":
+    X = build(default_trades())
     X.to_csv(f"{HERE}/lab_features.csv.gz", index=False)
     print(len(X), "trades;", X.isna().mean().round(3).to_dict())

@@ -38,6 +38,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/tips - every open tip the system sent you (entry, SL, how to exit)\n"
         "/health - is everything running? what ran today and why there were (no) tips\n"
         "/approve S1 - let a strategy the system discovered and proved start sending tips\n"
+        "/research - the automatic weekly research: what it tested, what passed; /approve LAB-xxxx or /decline LAB-xxxx\n"
         "/status - is Kite connected, live test price, last alert check\n/kite - get a Kite login link now\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
@@ -342,7 +343,11 @@ def handle(token, owner, msg, capital):
     elif text.lower().startswith("/approve"):
         from . import discovery
         parts = text.split()
-        reply = discovery.approve(parts[1]) if len(parts) > 1 else "Use: /approve S1"
+        if len(parts) > 1 and parts[1].upper().startswith("LAB-"):
+            from . import lab_rules
+            reply = lab_rules.set_status(parts[1], "approved")
+        else:
+            reply = discovery.approve(parts[1]) if len(parts) > 1 else "Use: /approve S1 or /approve LAB-1234"
     elif text.lower().startswith("/health"):
         from .monitor import status_text
         reply = status_text(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))
@@ -356,6 +361,18 @@ def handle(token, owner, msg, capital):
         reply = _score_text()
     elif text.lower().startswith(("/bought", "/sold", "/trades", "/skip")):
         reply = trade_command(text)
+    elif text.lower().startswith("/decline"):
+        from . import lab_rules
+        parts = text.split()
+        reply = lab_rules.set_status(parts[1], "declined") if len(parts) > 1 else "Use: /decline LAB-1234"
+    elif text.lower().startswith("/research"):
+        from . import lab_rules
+        st = lab_rules._state()
+        last = (st.get("runs") or [{}])[-1]
+        rules = "\n".join(f"• {r['id']} [{r.get('status')}] {r.get('plain', r['name'])}" for r in st.get("rules", [])) or "• none yet"
+        reply = (f"🔬 Automatic research - last run {last.get('on', 'not yet')}: {last.get('possibilities', 0)} ideas tested, "
+                 f"{len(last.get('candidates', []))} passed every test. Fresh trades so far: {last.get('fresh_top300', 0)}.\n"
+                 f"Rules:\n{rules}")
     elif text.lower().startswith("/capital"):
         reply = capital_command(text)
     elif text.lower().startswith("/basket"):

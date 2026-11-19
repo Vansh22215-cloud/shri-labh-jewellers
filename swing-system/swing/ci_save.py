@@ -14,7 +14,7 @@ from .config import ROOT
 
 log = logging.getLogger("swing.ci_save")
 
-SAVE = ["journal/ledger.jsonl", "journal/research_queue.md", "journal/learning.md", "journal/learning_queue.csv", "journal/all_tips.csv", "journal/all_tips.md", "journal/vantage_scorecard.csv", "journal/vantage_scorecard.md", "journal/tips.csv", "journal/company_picks.csv", "journal/scan_signals.csv", "journal/tips_retired.csv", "validation", "strategies", "stocks", "library",
+SAVE = ["journal/auto_research.md", "journal/ledger.jsonl", "journal/research_queue.md", "journal/learning.md", "journal/learning_queue.csv", "journal/all_tips.csv", "journal/all_tips.md", "journal/vantage_scorecard.csv", "journal/vantage_scorecard.md", "journal/tips.csv", "journal/company_picks.csv", "journal/scan_signals.csv", "journal/tips_retired.csv", "validation", "strategies", "stocks", "library",
         "IMPROVEMENTS.md", "CHANGELOG.md", "settings.yaml", "data/universe_history.csv",
         "data/quarantine.json", "data/no_yahoo_data.json"]
 

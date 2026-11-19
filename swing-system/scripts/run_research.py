@@ -16,6 +16,26 @@ if __name__ == "__main__":
         sys.exit(0)
     s = load_settings()
     notes = []
+    try:   # AUTO-RESEARCH (owner 19 Nov: research must keep running without Claude) - once a week, Friday night
+        import subprocess, datetime as _dt
+        from swing.config import DATA
+        last_f = DATA / "auto_research" / "last_run.txt"
+        last = _dt.date.fromisoformat(last_f.read_text().strip()) if last_f.exists() else _dt.date(2000, 1, 1)
+        today = _dt.date.today()
+        due = (today - last).days >= 6 and (today.weekday() == 4 or (today - last).days >= 9)
+        if due and s.get("auto_research", True):
+            ar = Path(__file__).resolve().parents[2] / "vantage-ai" / "validation" / "autoresearch.py"
+            r = subprocess.run([sys.executable, str(ar), "--send"], timeout=3600, capture_output=True, text=True)
+            print("auto-research:", (r.stdout or "").strip().splitlines()[-1:] or r.returncode)
+            if r.returncode == 0:
+                last_f.parent.mkdir(parents=True, exist_ok=True)
+                last_f.write_text(str(today))
+            else:
+                print("auto-research failed:", (r.stderr or "")[-300:].replace("\n", " | "))
+                telegram.send(s, "⚠️ The weekly automatic research could not run tonight (it tries again within a few days). "
+                                 "Your tips are not affected.", label="system problem")
+    except Exception as e:
+        print("auto-research skipped:", type(e).__name__)
     from swing.idea_factory import top_up
     n_per_run = int(s.get("research_ideas_per_run", 2))
     top_up(min_open=n_per_run + 2, n_new=n_per_run + 2)   # make sure ideas written on EARLIER runs are waiting

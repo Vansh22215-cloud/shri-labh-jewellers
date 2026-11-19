@@ -36,3 +36,6 @@ Account simulation, ₹51,000, 1% risk, 25% cap, 0.35% costs.
 ## Honest limits
 - The holdout has been used for about 80 earlier tests; a pass here is weaker evidence than a first look.
 - Live tips feed the same situation columns. Every live lesson is matched to its lab result in `AUTO_LAB_RESULTS.md`.
+
+## Added 19 Nov 2026 (before the first automatic run): step 5, fresh trades
+Signals from 20 Nov 2026 on were never seen by anyone. Once 150+ such top-300 trades exist, a candidate must not be worse on them than the current system (15 random orders), and approved rules are re-checked on them weekly. The weekly run (autoresearch.py) uses 3 luck worlds.

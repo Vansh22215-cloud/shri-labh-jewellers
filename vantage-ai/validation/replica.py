@@ -17,7 +17,7 @@ P = dict(capital=50000.0, riskPct=1.0, maxAllocPct=25.0, useBreakout=True, usePu
          dipRsi=2.0, beAtR=None, timeStopBars=None,
          gapGuardAtr=None, limitAtr=None, scaleOutR=None, earnings=None, earnDays=5, entryAtClose=False,
          rcpSellMinDays=0, rcpTrailAtr=None)        # research switches (defaults = the live logic)
-SW = "/home/user/shri-labh-jewellers/swing-system"
+SW = __import__("os").path.join(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__)))), "swing-system")
 
 
 def ema(x, n):

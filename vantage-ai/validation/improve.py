@@ -9,14 +9,16 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
-SW = "/home/user/shri-labh-jewellers/swing-system"
+import os as _os
+_REPO = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+SW = _os.path.join(_REPO, "swing-system")
 sys.path.insert(0, SW)
 sys.path.insert(0, f"{SW}/validation")
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
+sys.path.insert(0, _os.path.join(_REPO, "vantage-ai", "validation"))
 import independent_validation as iv  # noqa: E402
 import replica  # noqa: E402
 
-HERE = "/home/user/shri-labh-jewellers/vantage-ai/validation"
+HERE = _os.path.join(_REPO, "vantage-ai", "validation")
 OOS = pd.Timestamp("2023-11-01")
 COST = 0.0035
 BASE_P = {"exitMode": "Fixed risk/reward", "usePullback": False}

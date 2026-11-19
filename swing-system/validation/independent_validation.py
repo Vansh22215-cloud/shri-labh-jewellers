@@ -20,7 +20,7 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
-ROOT = "/home/user/shri-labh-jewellers/swing-system"
+ROOT = __import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from swing import data_prices  # noqa: E402
 

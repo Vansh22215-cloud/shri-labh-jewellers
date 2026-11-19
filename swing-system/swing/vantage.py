@@ -270,6 +270,16 @@ def outside_universe(sym, s):
         return False                                   # list unreadable -> never block on a broken file
 
 
+def lab_skip(sym, b, day):
+    """An owner-approved research rule (strategies/lab_rules.json) says skip this BUY -> its id, else ''."""
+    try:
+        from . import lab_rules
+        act, rid = lab_rules.decision(sym, b, day)
+        return rid if act == "skip" else ""
+    except Exception:
+        return ""
+
+
 def min_turnover(s):
     """D121 (owner-approved 17 Nov): BUY signals only for stocks trading >= Rs 2 crore a day on average (20 days).
     Pre-registered test: thinner stocks were clearly weaker in the 2023-26 holdout (PF 1.20 vs 1.48)."""
@@ -283,7 +293,7 @@ def buy_message(sym, b, lk, n, thin, day=None):
             f"\nBuy at the next market open ≈ ₹{_n(b['close'])} · "
             f"\n🛑 Stop-loss ₹{_n(b['stop'])}"
             + (f"\n🎯 Target ₹{_n(b['t2'])}" if b.get("t2") == b.get("t2") and b.get("t2") else "")
-            + _res_and_qty(sym, b["close"], b["stop"], day)
+            + _res_and_qty(sym, b["close"], b["stop"], day, b)
             + ("\n⚠️ Thinly traded stock - check the bid/ask before buying" if thin else "")
             + note_line(sym))
 
@@ -459,10 +469,12 @@ def run(day=None, source="auto"):
                 telegram.send_reliable(s, sell_message(sym, sell, sig.loc[i, "close"]), label="vantage indicator")
                 sent_s += 1
         out_u = bool(buy) and outside_universe(sym, s)
-        if buy and (kill or tv < min_turnover(s) or out_u):   # Project ALPHA counterfactuals: rejected signals are followed too
+        lab = lab_skip(sym, buy, day) if buy and not kill and tv >= min_turnover(s) and not out_u else ""
+        if buy and (kill or tv < min_turnover(s) or out_u or lab):   # Project ALPHA counterfactuals: rejected signals are followed too
             _record_rejected(sym, buy, "kill switch / safety stop" if kill else
-                             (f"thin stock (₹{tv / 1e7:.1f} cr/day < ₹2 cr)" if tv < min_turnover(s) else "outside the top 300"))
-        if buy and not kill and tv >= min_turnover(s) and not out_u:
+                             (f"thin stock (₹{tv / 1e7:.1f} cr/day < ₹2 cr)" if tv < min_turnover(s) else
+                              "outside the top 300" if out_u else f"research rule {lab}"))
+        if buy and not kill and tv >= min_turnover(s) and not out_u and not lab:
             key = (sym, str(pd.Timestamp(buy["signal"]).date()))
             if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():
                 continue                                    # already sent (re-run) - never twice
@@ -604,8 +616,14 @@ def _load_live():
         return pd.DataFrame(columns=["day", "sym", "setup", "tier", "time", "price", "stop", "outcome"])
 
 
-def _res_and_qty(sym, entry, stop, day):
+def _res_and_qty(sym, entry, stop, day, b=None):
     rl, scale = results_line(sym, day) if day is not None else ("", 1.0)
+    if b is not None:
+        from . import lab_rules
+        act, rid = lab_rules.decision(sym, b, day)
+        if act == "half":
+            rl += f"\n🔬 Half quantity: research rule {rid} (approved by you)"
+            scale *= 0.5
     return rl + qty_line(entry, stop, scale=scale)
 
 
@@ -616,7 +634,7 @@ def live_buy_message(sym, b, lk, n, price, t, thin):
             + (f" · likely win {lk}% if it holds to the close" if lk else "") +
             f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · "
             f"\n🛑 Stop-loss ₹{_n(b['stop'])}"
-            + _res_and_qty(sym, price, b["stop"], t)
+            + _res_and_qty(sym, price, b["stop"], t, b)
             + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
             "\n⏳ Forming candle: I'll confirm ✅ or cancel ❌ right after the 3:30 pm close."
             + note_line(sym))
@@ -664,7 +682,7 @@ def live_step(scanner, s=None):
     sent = 0
     for sym, st, tv in res:
         b = st.get("buy") if isinstance(st, dict) else None
-        if not b or isinstance(tv, str) or tv < min_turnover(s) or outside_universe(sym, s):
+        if not b or isinstance(tv, str) or tv < min_turnover(s) or outside_universe(sym, s) or lab_skip(sym, b, day):
             continue
         if ((live["day"] == day) & (live["sym"] == sym)).any():
             continue                                          # one live alert per stock per day
@@ -707,7 +725,7 @@ def close_call_message(sym, b, lk, n, price, t, thin):
             + (f" · likely win {lk}%" if lk else "") +
             f"\nPrice now ₹{_n(price)} ({t:%H:%M}) · "
             f"\n🛑 Stop-loss ₹{_n(b['stop'])}"
-            + _res_and_qty(sym, price, b["stop"], t)
+            + _res_and_qty(sym, price, b["stop"], t, b)
             + ("\n⚠️ Thinly traded stock - check the bid/ask" if thin else "") +
             "\nBuying now (not tomorrow morning) earned more in the 13-year test. I'll confirm ✅ after the close."
             + note_line(sym))
@@ -723,7 +741,7 @@ def close_call(day, t, res, s, cal):
     calls, d, sent = _load_calls(), str(day.date()), 0
     for sym, st, tv in res:
         b = st.get("buy") if isinstance(st, dict) else None
-        if not b or isinstance(tv, str) or tv < min_turnover(s) or outside_universe(sym, s):
+        if not b or isinstance(tv, str) or tv < min_turnover(s) or outside_universe(sym, s) or lab_skip(sym, b, day):
             continue
         if ((calls["day"] == d) & (calls["sym"] == sym)).any():
             continue

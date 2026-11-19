@@ -1127,3 +1127,13 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - Built and tested: setting `vantage_universe: top300` (default `all`, no change until yes). If the list file is unreadable, nothing is blocked.
 - Also (round 25): updating the capital setting once a month adds about 1-1.5 points a year for top-300 stocks. This is advice, not a rule.
 - **Owner's yes on 19 Nov:** `vantage_universe: top300` is live from the next scan. Open tips are unchanged.
+
+## D145 - 2026-11-19 - Research runs by itself every week (owner: "nobody will run the tests" must not happen)
+- `vantage-ai/validation/autoresearch.py` runs every Friday night inside the research job on GitHub (setting `auto_research: true`). One run on 4 cores takes about 8 minutes. Each run:
+  - rebuilds all VANTAGE trades from the newest prices, for the top-300 and all stocks (36,413 today);
+  - rebuilds the market-type calendar and the ~40 facts per trade;
+  - tests all 230+ possibilities with the AUTO_LAB_PROTOCOL bar (older years, luck worlds, recent years, year by year, random-skip placebo).
+- **New step 5:** the trades signalled from 20 Nov 2026 onward have never been seen by anyone. Once there are 150 of them in the top-300, a rule must not be worse on them, and approved rules are re-checked on them every week.
+- **A full pass that the live system can apply** (skip or half quantity) sends one "🔬 Research result" Telegram message. `/approve LAB-x` or `/decline LAB-x`; `/research` shows the state. Nothing acts without the owner's yes.
+- **Live use:** `swing/lab_rules.py` computes the same facts with the same code. Checked on 25 real trades: all 22 facts identical. If anything fails, no rule acts.
+- First run (19 Nov): 230 tested, 3 passed the older years, luck worlds 0/0/1, none passed every step. Nearest: "take the strongest 6-month risers first when money is short". It was better for top-300 (18.6% vs 16.2% a year, 11 of 14 years) but not for all stocks, and is re-checked weekly on fresh trades.

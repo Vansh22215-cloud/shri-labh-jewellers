@@ -30,7 +30,7 @@ The system only READS prices from Kite: it can never buy, sell or touch your mon
   for `sure`. `/capital` alone shows the current figure.
 
 ## Bot commands
-`/tips` open tips · `/bought SYMBOL` · `/sold SYMBOL PRICE` · `/trades` · `/capital` · `/health` · `/kite`
+`/tips` open tips · `/bought SYMBOL` · `/sold SYMBOL PRICE` · `/trades` · `/capital` · `/research` · `/health` · `/kite`
 
 ## What runs by itself every day (no Claude needed)
 - **Finder:** VANTAGE live scan, 3:20 pm buy call, 3:40 pm close scan, ADD MORE, live-engine tips.
@@ -40,6 +40,16 @@ The system only READS prices from Kite: it can never buy, sell or touch your mon
 - **Self-checks:** a broken scan, stale prices, live results below the tested range or a tampered history
   -> one "system problem" message. The top-300 list rebuilds itself every night.
 - Nothing changes your tips by itself: every change needs a passed test **and** your yes.
+
+## Research keeps running by itself (every Friday night)
+- GitHub rebuilds all 13 years of VANTAGE trades from the newest prices, describes every trade by ~40 facts and tests
+  every possible rule (230+) with the same strict 4 steps used all along, plus the new trades since 20 Nov 2026 that
+  nobody has ever looked at.
+- Only a rule that passes everything sends you a **🔬 Research result** message with the numbers.
+  Reply `/approve LAB-xxxx` to use it, or `/decline LAB-xxxx` to drop it. Nothing changes without your yes.
+- Rules can only skip a tip or halve its quantity - never more risk. An approved rule that stops working on the
+  new trades is reported to you; `/decline` switches it off.
+- `/research` shows the last run. Full report: `journal/auto_research.md`.
 
 ## Emergency stop
 github.com -> repository -> branch `claude/nse-swing-trading-system-sqncpt` -> `swing-system/settings.yaml` -> pencil ->

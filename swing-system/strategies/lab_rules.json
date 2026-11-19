@@ -1,0 +1,21 @@
+{
+ "note": "AUTO-RESEARCH rules (vantage-ai/validation/autoresearch.py). status: proposed -> approved / declined only by the owner (/approve, /decline). Approved rules are applied by VANTAGE.",
+ "rules": [],
+ "runs": [
+  {
+   "on": "2026-11-19 11:33",
+   "trades": 36413,
+   "fresh_top300": 0,
+   "possibilities": 230,
+   "passed_dev": 3,
+   "luck_passes": [
+    0,
+    0,
+    1
+   ],
+   "candidates": [],
+   "new_proposals": [],
+   "minutes": 7.5
+  }
+ ]
+}
