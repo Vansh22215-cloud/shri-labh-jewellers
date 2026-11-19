@@ -36,3 +36,18 @@ def test_build_writes_no_owner_data(monkeypatch, tmp_path):
     assert len(R) == 1 and R.iloc[0]["result_pct"] > 0
     out = (tmp_path / "j" / "all.csv").read_text() + (tmp_path / "j" / "all.md").read_text()
     assert "qty" not in out and "taken" not in out and "capital" not in out.lower()
+
+
+def test_tracker_never_drops_earlier_ideas(tmp_path, monkeypatch):
+    import pandas as pd
+    from swing import tracker
+    monkeypatch.setattr(tracker, "CSV", tmp_path / "all.csv")
+    monkeypatch.setattr(tracker, "MD", tmp_path / "all.md")
+    monkeypatch.setattr(tracker, "J", tmp_path)
+    old = pd.DataFrame([{"source": "VANTAGE", "type": "VANTAGE Breakout", "sent": "sent", "date": "2026-11-17",
+                         "symbol": "ABC", "status": "open", "entry": 100, "stop": 90, "exit": 101, "result_pct": 1.0}])
+    old.to_csv(tracker.CSV, index=False)
+    monkeypatch.setattr(tracker, "collect", lambda load: pd.DataFrame())
+    monkeypatch.setattr(tracker, "report", lambda R: "x")
+    R = tracker.build(load=lambda s: None)
+    assert len(R) == 1 and R.iloc[0]["symbol"] == "ABC"

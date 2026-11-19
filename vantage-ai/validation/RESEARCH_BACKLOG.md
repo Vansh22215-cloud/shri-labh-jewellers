@@ -44,3 +44,4 @@
     (c) Does holding the chosen stocks with simpler timing (fewer timing rules) keep the edge at lower cost?
 14. **NEXT:** from the first live evenings, the Learner's belief checks (B2: 3:20 pm vs next open; B6: rejected thin stocks; B7: blocked repeats) and expectation bands. Research whatever is 'at risk'.
 15. ~~**Missed big risers** (ATLAS missed-movers, 18 of the top 20 risers never detected)~~ explored 19 Nov on development data: their starting pattern is worse than a random stock in 10 of 12 years. Closed.
+16. **Company of the day as a trade:** live 12 picks average -1.1% (5 up), worst -13%. Never tested on history as a buy. Test whether these picks beat a random stock over 5 and 20 days (development first). Until then it stays a research pick, not a tip.

@@ -243,6 +243,30 @@ def report(R, today=None):
     return "\n".join(L) + "\n"
 
 
+def keep_history(R, cols):
+    """Never silently drop a tracked idea (owner: "never delete historical signals"). If an idea tracked before is
+    missing now (its source file lost or unreadable), its last known row is kept and a warning is logged."""
+    try:
+        old = pd.read_csv(CSV, dtype=str)
+    except Exception:
+        return R
+    if not len(old):
+        return R
+    key = ["source", "type", "date", "symbol"]
+    new_keys = set(map(tuple, R[key].astype(str).values)) if len(R) else set()
+    lost = old[[tuple(x) not in new_keys for x in old[key].astype(str).values]]
+    if not len(lost):
+        return R
+    log.warning("Tracker: %d earlier ideas missing from their source now - kept as last seen", len(lost))
+    lost = lost.reindex(columns=cols)
+    tag = "kept as last seen (not in its source now - check)"
+    w = lost["why"].fillna("").astype(str)
+    lost["why"] = [x if tag in x else (f"{x} · {tag}" if x and x != "nan" else tag) for x in w]
+    for c in ("entry", "stop", "target", "exit", "result_pct", "days", "next_open", "next_open_vs_buy_pct"):
+        lost[c] = pd.to_numeric(lost[c], errors="coerce")
+    return pd.concat([R, lost], ignore_index=True) if len(R) else lost
+
+
 def build(load=None):
     from . import data_prices
     load = load or data_prices.load
@@ -252,6 +276,7 @@ def build(load=None):
             "exit_date", "exit", "result_pct", "days", "added", "next_open", "next_open_vs_buy_pct"]
     if len(R):
         R = R.reindex(columns=cols)
+    R = keep_history(R, cols)
     R.to_csv(CSV, index=False)
     MD.write_text(report(R))
     return R

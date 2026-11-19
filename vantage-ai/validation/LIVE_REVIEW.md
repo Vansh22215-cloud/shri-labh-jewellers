@@ -68,3 +68,14 @@ Share of all money lost on VANTAGE trades, holdout (all stocks / top-300):
 - ATLAS parts added since the last check-in: idea ledger, missed-movers section, ranked research queue, 7-stage promotion, weekly portfolio risk, crash scenario (round 24, survives; a 10% market gap = about 15% loss in one morning).
 - **Backlog 15 (missed big risers, top of the new research queue) explored on development data only:** the missed risers' look at the start (strong, 10-30% below the 52-week high, 20-day high on 2x volume) gives 7,057 cases with a 20-day result of +1.2% vs +1.5% for any stock, and is worse in 10 of 12 years. The big risers are only "obvious" in hindsight. Closed, no test (holdout not looked at). The research queue now pushes it down.
 - Next: backlog 14 (live belief checks) from the first live evening.
+
+## 19 Nov 2026, 09:30 IST - every tip sent so far, one by one (owner: "track them and see")
+Prices: 18 Nov close (today's session had just opened). 44 tips were sent to the owner from 2 Nov to 18 Nov.
+- **All sent tips:** 14 of 44 up, average +0.04% (+0.35% better than NIFTY over the same days). Only 1 closed: ICICIBANK hit target 1, +13.1%. The rest are open.
+- **VANTAGE (17, sent 17-18 Nov):** average +0.2%, 3 of the 9 one-day-old tips up. Best GREAVESCOT +9.5%, worst BAJFINANCE -2.4%. The 8 from 18 Nov have no day yet. Far too early to judge (the test needs about 100 closed tips).
+- **Company of the day (12 research picks, no stop-loss):** 5 up, average -1.06%. Best ACE +13.2%, worst JSLL -13.4%, ARROWGREEN -7.0%, CMPDI -6.1%, HINDCOPPER -6.0%. It is the weakest channel so far and it was never tested on history as a trade. Research item 16: test whether "company of the day" picks beat a random stock over 5/20 days before treating them as buys.
+- **Old evening strategy tips (sent before muting on 11 Nov, 10):** average +1.25% (ICICIBANK +13.1%, FEDERALBNK +6.9%), worst ANTELOPUS -7.0% (never worked).
+- **Old hourly-scan tips (sent, 5):** average -0.3%: GESHIP +7.0%, GMMPFAUDLR +3.6%, SHANTIGOLD -11.2% (slow bleed).
+- **Buying at 3:20 pm vs the next morning (belief B2):** on the 9 VANTAGE tips with a next day, the next open was 0.4% lower on average, so waiting would have been cheaper. 9 is far too few. Watch to 30.
+- **Fault found and fixed:** a tracker rebuild on a machine without the private signals file dropped all 17 VANTAGE tips from the record. The tracker now never drops an idea it tracked before. It keeps the last known row and labels it "kept as last seen".
+- The first live evening run of the tracker and Learner on GitHub is tonight at about 18:40 IST. That record replaces this local replay.
