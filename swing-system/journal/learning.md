@@ -2,6 +2,8 @@
 
 Every idea tracked by swing/tracker.py, with its situation and journey (swing/learning.py). Lessons go to research; live tips change only after a passed test and the owner's yes.
 
+**Data used: daily prices of 2,685 stocks - Kite only 0 (0%), Kite + Yahoo for missing days 2,401 (89%), Yahoo only 284 (11%; Kite history not downloaded yet or not on Kite). Delisted stocks: NSE official bhavcopies.**
+
 ## 1. Live vs the 13-year test
 - VANTAGE Breakout: 0 closed of 1 (need 20 to judge); 0 of 1 open tips are deeper than 90% of tested trades -> too early
 - VANTAGE Rolling Candle Profile: 0 closed of 18 (need 20 to judge); 0 of 18 open tips are deeper than 90% of tested trades -> too early
@@ -35,15 +37,16 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | hourly scan | weekday | Mon | 8 | -1.20% | 38% |
 | hourly scan | weekday | Tue | 4 | -2.12% | 50% |
 | hourly scan | weekday | Wed | 13 | +0.42% | 69% |
-| live engine | market | rising | 16 | +0.86% | 69% |
-| live engine | market mood | calm | 16 | +0.86% | 69% |
-| live engine | day type | rising | calm | breadth strong | 16 | +0.86% | 69% |
+| live engine | market | rising | 17 | +0.81% | 65% |
+| live engine | market mood | calm | 17 | +0.81% | 65% |
+| live engine | day type | rising | calm | breadth strong | 17 | +0.81% | 65% |
 | live engine | liquidity | 10-50 cr | 1 | +2.62% | 100% |
-| live engine | liquidity | over 50 cr | 15 | +0.74% | 67% |
+| live engine | liquidity | over 50 cr | 16 | +0.69% | 62% |
 | live engine | from 52w high | 5-15% below | 7 | +1.42% | 86% |
-| live engine | from 52w high | within 5% | 9 | +0.42% | 56% |
-| live engine | results week | no | 16 | +0.86% | 69% |
+| live engine | from 52w high | within 5% | 10 | +0.38% | 50% |
+| live engine | results week | no | 17 | +0.81% | 65% |
 | live engine | weekday | Mon | 4 | +1.10% | 75% |
+| live engine | weekday | Thu | 1 | +0.00% | 0% |
 | live engine | weekday | Tue | 8 | +0.62% | 62% |
 | live engine | weekday | Wed | 4 | +1.09% | 75% |
 | strategy tip | market | rising | 21 | -0.90% | 57% |
@@ -83,7 +86,7 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 - rising | calm | breadth strong - in 13 years VANTAGE tips on such days (1387 days) averaged +5.3%, won 49% (4028 tips); by type: Breakout +4.4% (n=838); Dip-buy +2.8% (n=291); RCP +5.8% (n=2899)
 
 ## Today's question (what might we be wrong about?)
-- Could we be wrong that "Blocking repeat tips protects money" (assumption (not tested), live: waiting - 0 of 10)? It is wrong if after 10+ blocked repeats, they average clearly better than sent tips.
+- Could we be wrong that "Blocking repeat tips protects money" (assumption (not tested), live: waiting - 1 of 10)? It is wrong if after 10+ blocked repeats, they average clearly better than sent tips.
 
 ## Beliefs and their live checks (vantage-ai/validation/beliefs.json)
 | Belief | Evidence | Live | Detail |
@@ -94,7 +97,7 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 | Tips just before results earn about half -> half quantity | proven | waiting | 0 of 20 |
 | Panic days (falling, jumpy, weak breadth) give the best VANTAGE tips | promising | waiting | 0 of 10 panic-day tips |
 | Thin stocks (< Rs 2 cr/day) give weaker tips | contested (round 23: at account level the floor is not better; after +1% thin-stock costs about equal in the holdout, smaller fall without it) | waiting | 3 of 20 |
-| Blocking repeat tips protects money | assumption (not tested) | waiting | 0 of 10 |
+| Blocking repeat tips protects money | assumption (not tested) | waiting | 1 of 10 |
 | Live VANTAGE tips will match the 13-year profile per type | expected | holding | no type below its tested range |
 | 'Gave back a profit' is the price of letting winners run | proven | no live check |  |
 | Market-weather rules don't help VANTAGE | proven | no live check |  |
@@ -105,6 +108,7 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 - Discovery productivity: 92 ideas tested, 11 passed (12%) - failures are kept so none is retested blindly
 - Execution: the next morning opened -0.48% vs the 3:20 pm buy price on average (18 tips)
 - Opportunity capture: rejected by VANTAGE ideas +0.00% on average (3) - high = we are leaving money; low = the rules protect us
+- Opportunity capture: blocked repeat ideas +0.00% on average (1) - high = we are leaving money; low = the rules protect us
 - Edge decay watch: 0 type(s) flagged; beliefs at risk or broken: 0
 
 ## Opportunities we never detected (biggest risers)
@@ -121,16 +125,16 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 - RULE-RESULTS Half quantity before results: live · stage 6/7 controlled live (1% risk per trade)
 - RULE-320 Buy at 3:20 pm before the close: live · stage 6/7 controlled live (1% risk per trade)
 - RULE-ADD ADD MORE at day 15 if up 8%+ (1% risk cap) [live - watch · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 0 ideas
-- RULE-NOREPEAT No repeat tips across channels [live · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 0 ideas
+- RULE-NOREPEAT No repeat tips across channels [live · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 1 ideas, open 1 (avg +0.00%)
 - BASKET-M3 Monthly basket of 20 strongest (cash when NIFTY < 200d) [live · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 20 ideas, open 20 (avg +0.45%)
-- LE-DIP Live engine: high-probability dip-buy [live · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 16 ideas, open 16 (avg +0.86%)
+- LE-DIP Live engine: high-probability dip-buy [live · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 17 ideas, open 17 (avg +0.81%)
 - LE-INTRADAY Live engine: intraday [live (auto/shadow mode) · stage 4/7 shadow record · ready for review: 0/30 closed]: 0 ideas
 - LE-FNO Live engine: F&O option buying [live · stage 6/7 controlled live (1% risk per trade) · ready for review: 0/100 closed]: 0 ideas
 - SH-PROMOTER Promoter buying 5-day trade: shadow (silent record) · stage 4/7 shadow record
 - SH-LIMIT Limit entry 0.25 ATR below: shadow (forward test) · stage 4/7 shadow record
 - CAND-THIRD Third lot at day 30 if up 15%: candidate (near miss) · stage 2/7 historical validation
 - RET-AI AI picks: retired · stage 0 retired
-- RET-A3 Older a3 evening swing tips [retired (normal_a3_tips off; log-only since 11 Nov) · stage 0 retired]: 22 ideas, open 21 (avg -0.90%)
+- RET-A3 Older a3 evening swing tips [retired (normal_a3_tips off; log-only since 11 Nov) · stage 0 retired]: 30 ideas, open 21 (avg -0.90%)
 - RET-HOURLY Hourly scan ideas [log-only since 11 Nov (D95) · stage 0 retired]: 38 ideas, open 27 (avg -0.44%)
 
 ## 2b. Opportunity cost: could the same money have done better?
@@ -141,6 +145,7 @@ Every idea tracked by swing/tracker.py, with its situation and journey (swing/le
 - strategy tip (retired list): 8 of 15 beat simply holding NIFTY over the same days (average +0.73 points)
 - VANTAGE Breakout: a fresh tip of this type earns about +0.036% a day in the test; 0 of 1 open/closed tips held 10+ days are earning less (money that could work harder)
 - VANTAGE Rolling Candle Profile: a fresh tip of this type earns about +0.069% a day in the test; 0 of 18 open/closed tips held 10+ days are earning less (money that could work harder)
+- Blocked repeats: 1, average +0.00% since (if this is high, blocking cost us; if low, it saved us)
 
 ## 3. Lessons to research (evidence: weak = 2-4 cases, medium = 5-9, strong = 10+)
 - [weak] hourly scan: when weekday = Wed, ideas averaged +0.4% (n=13) vs -2.1% when Tue (n=4) - to research (test on 13 years before any change)

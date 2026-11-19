@@ -6,16 +6,17 @@ Every idea the system sent, followed with the same rules (see swing/tracker.py).
 |---|---|---|---|---|---|---|---|---|
 | VANTAGE | VANTAGE Breakout | sent | 1 | 1 | - | - | 0 of 1 | -0.11% |
 | VANTAGE | VANTAGE Rolling Candle Profile | sent | 18 | 18 | - | - | 8 of 18 | +0.31% |
-| company of the day | research pick | sent | 12 | 12 | - | - | 4 of 12 | -0.60% |
+| blocked repeat | live engine NORMAL (held by VANTAGE) | blocked | 1 | 1 | - | - | 0 of 1 | +0.00% |
+| company of the day | research pick | sent | 13 | 13 | - | - | 4 of 13 | -0.55% |
 | hourly scan | scan | recorded only | 33 | 22 | - | - | 13 of 22 | -0.34% |
 | hourly scan | scan | sent | 5 | 5 | - | - | 2 of 5 | -0.86% |
 | live engine | NORMAL BRK | sent | 2 | 2 | - | - | 2 of 2 | +1.59% |
-| live engine | NORMAL RCP | sent | 14 | 14 | - | - | 9 of 14 | +0.75% |
+| live engine | NORMAL RCP | sent | 15 | 15 | - | - | 9 of 15 | +0.70% |
 | monthly basket | 2026-10 | nan | 20 | 20 | - | - | 12 of 20 | +0.45% |
 | rejected by VANTAGE | Breakout - outside the top 300 | rejected | 1 | 1 | - | - | 0 of 1 | +0.00% |
 | rejected by VANTAGE | RCP - outside the top 300 | rejected | 1 | 1 | - | - | 0 of 1 | +0.00% |
 | rejected by VANTAGE | RCP - thin stock | rejected | 1 | 1 | - | - | 0 of 1 | +0.00% |
-| strategy tip | a3 | recorded only | 22 | 21 | - | - | 12 of 21 | -0.90% |
+| strategy tip | a3 | recorded only | 30 | 21 | - | - | 12 of 21 | -0.90% |
 | strategy tip (retired list) | a1 | sent | 2 | 2 | 1 of 1 | +13.13% | 1 of 1 | +8.16% |
 | strategy tip (retired list) | a3 | sent | 8 | 8 | - | - | 2 of 8 | -1.54% |
 | strategy tip (retired list) | a3 (shadow) | recorded only | 6 | 5 | - | - | 4 of 5 | +8.04% |
