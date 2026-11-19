@@ -8,7 +8,7 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
-HERE = __import__("os").path.dirname(__import__("os").path.abspath(__file__))
+HERE = __import__("os").environ.get("ATLAS_RUN_DIR") or __import__("os").path.dirname(__import__("os").path.abspath(__file__))
 OOS = pd.Timestamp("2023-11-01")
 CAP0, RISK, MAXPCT, HALF_COST = 51000, 0.01, 0.25, 0.00175
 NUM = ["turnover_cr", "from_52w_high", "ret_6m", "ret_1m", "ret_1w", "vol_surge", "atr_pct", "range_10d", "vs_200d",

@@ -5,15 +5,15 @@ import json
 import sys
 import numpy as np
 import pandas as pd
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
-sys.path.insert(0, "/home/user/shri-labh-jewellers/swing-system")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+sys.path.insert(0, __import__("os").path.join(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__)))), "swing-system"))
 import improve as im  # noqa: E402
 from improve import iv, OOS, COST  # noqa: E402
 from swing.learning import CODES  # noqa: E402
 import glob, os  # noqa: E402
 
 E = {os.path.basename(f)[:-4]: pd.to_datetime(pd.read_csv(f)["date"], errors="coerce").dropna().values
-     for f in glob.glob("/home/user/shri-labh-jewellers/swing-system/data/events/earnings/*.csv")}
+     for f in glob.glob(__import__("os").path.join(__import__("os").path.join(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__)))), "swing-system"), "data", "events", "earnings", "*.csv"))}
 nifty = iv.nifty()["close"]
 out, rows = {}, []
 for st, f, gen in (("top300", "trades_FINAL.csv", lambda: iv.universe(include_delisted=True)),

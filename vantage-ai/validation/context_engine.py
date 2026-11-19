@@ -9,7 +9,7 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = __import__("os").environ.get("ATLAS_RUN_DIR") or os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import improve as im  # noqa: E402
 import auto_lab as al  # noqa: E402
@@ -237,7 +237,7 @@ def luck(X, labels, kind, worlds=3):
 
 
 def main():
-    X = pd.read_csv(os.path.join(im.SW, "data", "auto_research", "features.csv.gz"),
+    X = pd.read_csv(os.environ.get("ATLAS_FEATURES") or os.path.join(im.SW, "data", "auto_research", "features.csv.gz"),
                     parse_dates=["signal", "entry_date", "exit_date"], low_memory=False)
     X = X[(X["entry"] > X["init_stop"]) & (X["entry"] > 0)].copy()
     X = build_behaviour(X)
@@ -271,10 +271,11 @@ def main():
     model = {"made": str(pd.Timestamp.now(tz="Asia/Kolkata"))[:16], "features": BEH, "k": 10,
              "mu": groups[10]["mu"], "sd": groups[10]["sd"],
              "centres": [[groups[10]["centres"][i][f] for f in BEH] for i in range(10)], "scores": sc}
-    json.dump(model, open(os.path.join(im.SW, "strategies", "context_model.json"), "w"), indent=1, default=str)
+    if not os.environ.get("ATLAS_RUN_DIR"):           # a Kite re-run never replaces the live model
+        json.dump(model, open(os.path.join(im.SW, "strategies", "context_model.json"), "w"), indent=1, default=str)
     json.dump(out, open(os.path.join(HERE, "context_results.json"), "w"), indent=1, default=str)
     X[["set", "sym", "signal", "net"] + BEH + ["cluster6", "cluster10"]].to_csv(
-        os.path.join(im.SW, "data", "auto_research", "context_trades.csv.gz"), index=False)
+        os.environ.get("ATLAS_CONTEXT_TRADES") or os.path.join(im.SW, "data", "auto_research", "context_trades.csv.gz"), index=False)
     return out
 
 

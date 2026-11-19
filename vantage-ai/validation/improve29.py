@@ -8,7 +8,8 @@ from improve import HERE, OOS, SW
 from improve28 import sim
 
 V = r21.SETUPS["C+A"][["sym", "signal", "entry_date", "exit_date", "entry", "exit", "init_stop"]].assign(src_="V")
-D = pd.read_csv(os.path.join(SW, "validation", "independent_trades_DIP.csv"), parse_dates=["signal", "entry_date", "exit_date"])
+D = pd.read_csv(os.path.join(os.environ.get("ATLAS_RUN_DIR") or os.path.join(SW, "validation"), "independent_trades_DIP.csv"),
+                parse_dates=["signal", "entry_date", "exit_date"])
 D = D.assign(init_stop=D["entry"] * (1 - D["stop_pct"]), src_="D")[["sym", "signal", "entry_date", "exit_date", "entry", "exit", "init_stop", "src_"]]
 B = pd.concat([V, D], ignore_index=True)
 B["dipfirst"], B["vfirst"] = (B["src_"] == "D").astype(float), (B["src_"] == "V").astype(float)

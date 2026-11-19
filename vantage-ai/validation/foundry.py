@@ -13,7 +13,7 @@ from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = __import__("os").environ.get("ATLAS_RUN_DIR") or os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import improve as im  # noqa: E402
 from improve import OOS, iv  # noqa: E402

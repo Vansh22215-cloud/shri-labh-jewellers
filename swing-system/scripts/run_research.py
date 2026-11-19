@@ -19,7 +19,8 @@ if __name__ == "__main__":
     kite_ready = False
     try:   # Kite exchange DAILY prices for every NSE stock since 2011 (owner 19 Nov: re-do the tests on Kite data)
         from swing import kite_daily
-        print("kite daily:", kite_daily.download())
+        # until complete: no nightly limit (owner 19 Nov: use Kite to the full) - Kite allows 3 requests a second
+        print("kite daily:", kite_daily.download(max_requests=20000 if kite_daily.coverage() < 0.9 else 4000))
         kite_ready = kite_daily.coverage() >= 0.9
         if kite_ready:
             from swing.config import DATA as _D

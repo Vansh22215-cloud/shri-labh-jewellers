@@ -4,7 +4,7 @@ import json
 import sys
 import numpy as np
 import pandas as pd
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 from improve import HERE, OOS, SW  # noqa: E402
 from improve8 import load, SETS, g  # noqa: E402
 from improve10 import sim  # noqa: E402

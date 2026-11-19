@@ -4,7 +4,7 @@ compared with what a fresh trend signal earns per day? Writes recycle_paths.csv 
 import sys
 import numpy as np
 import pandas as pd
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 import improve as im  # noqa: E402
 from improve import iv, OOS, COST  # noqa: E402
 

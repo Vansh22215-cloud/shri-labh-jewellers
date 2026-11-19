@@ -1259,3 +1259,11 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Today's bar for every NSE stock** comes from Kite quotes at the 4 pm review and before the 6:40 pm nightly job (`kite_daily.todays_bars_from_quotes`, about 6 requests for all stocks).
 - **History:** Kite daily since 2011 (about 2 nights to complete), 15-minute since 2019, and 5-minute around the open and 3:20 pm (D153/D154). Delisted stocks: NSE official bhavcopies. Kite does not list them.
 - **Provenance in every report:** `data_prices.provenance_line()` adds "Data used: daily prices of N stocks - Kite only / Kite + Yahoo / Yahoo only" to the Learner, why-log, weekly automatic research, Foundry record and Kite re-check. Claude's answers to the owner state the data source every time.
+
+## D156 - 2026-11-19 - Everything re-run on Kite data (owner: "do all work again ... with Kite Connect data")
+- `vantage-ai/validation/kite_rerun_all.py` (daemon job `kite_rerun`, after the research job, once Kite daily history is 90% complete):
+  - rebuilds every price-based input from Kite exchange candles: VANTAGE top-300 next-open, 3:20 pm buy, all stocks, live dip-buy trades, market-mood calendar, ADD MORE paths, the 40 facts per trade;
+  - re-runs 19 steps: luck checks, fingerprint, rounds 21 / 24-29, real costs + tax, NIFTY on identical terms, auto-lab steps 1-2, context engine, strict groups, Strategy Foundry;
+  - writes results to a separate folder, so Yahoo vs Kite sit side by side in `journal/kite_rerun.md` (results only, no prices), and tells the owner on Telegram.
+- **Tonight the Kite daily download has no nightly limit** (until complete, about 3 requests a second). Every test script is now portable (no machine-specific paths) and can run in the re-run folder (`ATLAS_RUN_DIR`). A Kite re-run never replaces the live behaviour-group model.
+- Kite does not list delisted stocks; those stay on NSE official bhavcopies, and the report counts them.

@@ -1,7 +1,7 @@
 """Round 6 (IMPROVE6_PREREGISTRATION.md)."""
 import json
 import sys
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 from improve import iv, HERE, stats, split, frame  # noqa: E402
 
 T = frame(f"{HERE}/trades_FINAL.csv")

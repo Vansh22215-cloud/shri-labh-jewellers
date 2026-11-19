@@ -6,8 +6,8 @@ import re
 import pandas as pd
 import pdfplumber
 
-SRC = "/home/user/shri-labh-jewellers/swing-system/data/events/history/index_pdfs"
-OUT = "/home/user/shri-labh-jewellers/vantage-ai/validation/index_changes.csv"
+SRC = __import__("os").path.join(__import__("os").path.join(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__)))), "swing-system"), "data", "events", "history", "index_pdfs")
+OUT = __import__("os").path.join(__import__("os").path.dirname(__import__("os").path.abspath(__file__)), "index_changes.csv")
 MONTHS = r"(January|February|March|April|May|June|July|August|September|October|November|December)"
 
 

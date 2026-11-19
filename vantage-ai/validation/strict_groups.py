@@ -7,8 +7,8 @@ from sklearn.cluster import KMeans
 import context_engine as ce
 from improve import HERE, OOS, SW
 
-C = pd.read_csv(os.path.join(SW, "data", "auto_research", "context_trades.csv.gz"), parse_dates=["signal"])
-X = pd.read_csv(os.path.join(SW, "data", "auto_research", "features.csv.gz"), parse_dates=["signal", "entry_date", "exit_date"],
+C = pd.read_csv(os.environ.get("ATLAS_CONTEXT_TRADES") or os.path.join(SW, "data", "auto_research", "context_trades.csv.gz"), parse_dates=["signal"])
+X = pd.read_csv(os.environ.get("ATLAS_FEATURES") or os.path.join(SW, "data", "auto_research", "features.csv.gz"), parse_dates=["signal", "entry_date", "exit_date"],
                 low_memory=False)
 X = X[(X["entry"] > X["init_stop"]) & (X["entry"] > 0)].copy()
 X = X.merge(C.drop(columns=["net", "cluster6", "cluster10"]).drop_duplicates(["set", "sym", "signal"]),

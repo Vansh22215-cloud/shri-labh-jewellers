@@ -18,7 +18,7 @@ sys.path.insert(0, _os.path.join(_REPO, "vantage-ai", "validation"))
 import independent_validation as iv  # noqa: E402
 import replica  # noqa: E402
 
-HERE = _os.path.join(_REPO, "vantage-ai", "validation")
+HERE = _os.environ.get("ATLAS_RUN_DIR") or _os.path.join(_REPO, "vantage-ai", "validation")   # Kite re-run folder
 OOS = pd.Timestamp("2023-11-01")
 COST = 0.0035
 BASE_P = {"exitMode": "Fixed risk/reward", "usePullback": False}

@@ -3,8 +3,8 @@ import json
 import sys
 import numpy as np
 import pandas as pd
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
-sys.path.insert(0, "/home/user/shri-labh-jewellers/swing-system")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+sys.path.insert(0, __import__("os").path.join(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__)))), "swing-system"))
 from improve import HERE, OOS  # noqa: E402
 import improve21 as r21  # noqa: E402
 from swing import data_prices  # noqa: E402

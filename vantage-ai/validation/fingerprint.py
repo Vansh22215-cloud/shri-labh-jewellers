@@ -9,7 +9,7 @@ import json
 import sys
 import numpy as np
 import pandas as pd
-sys.path.insert(0, "/home/user/shri-labh-jewellers/vantage-ai/validation")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 from improve import iv, OOS, COST  # noqa: E402
 
 data = list(iv.universe(include_delisted=True))

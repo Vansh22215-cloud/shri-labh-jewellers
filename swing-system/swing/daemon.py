@@ -67,6 +67,8 @@ def key(job, t=None):
         return None
     if job == "review" and (t.weekday() >= 5 or t.hour < 16):
         return None
+    if job == "kite_rerun" and t.hour < 21:
+        return None
     if job == "weekly" and (t.weekday() != 5 or t.hour < 10):
         return None
     return f"{job} {t:%Y-%m-%d}"
@@ -141,6 +143,14 @@ def due(t=None):
     if wd < 5 and t >= t.replace(hour=18, minute=45, second=0) and not st.get(key("company", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=19, minute=30)) and "nightly" not in out:
         out.append("company")
+    if t >= t.replace(hour=21, minute=0, second=0) and not st.get(key("kite_rerun", t)) and st.get(key("research", t)) \
+            and not (DATA / "kite_rerun" / "done.txt").exists():
+        try:
+            from .kite_daily import coverage
+            if coverage() >= 0.9:
+                out.append("kite_rerun")           # owner 19 Nov: every test again on Kite data, once complete
+        except Exception:
+            pass
     if wd < 5 and t >= t.replace(hour=20, minute=17, second=0) and not st.get(key("research", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=21, minute=30)):
         out.append("research")
@@ -169,7 +179,7 @@ def jobs_today_line(t=None):
             + (f" (missed {', '.join(missed)} - GitHub did not start a run in time)" if missed else "") + ".")
 
 
-SCRIPTS = {"review": "run_review.py", "vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py", "basket": "run_basket.py"}
+SCRIPTS = {"kite_rerun": "run_kite_rerun.py", "review": "run_review.py", "vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py", "basket": "run_basket.py"}
 
 
 _JOB = {"thread": None, "name": None}
