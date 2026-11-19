@@ -1218,3 +1218,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   2. After 100+ fresh trades still passing: "ready for real tips" (`/approve FTP-xxxx`). Then evening tips (buy at the next open) come with stop, target, quantity at 1% risk and exit alerts.
 - Tips are tracked ("ATLAS strategy" in the tracker, the why-engine and money-at-risk). They follow the no-repeat rule, the kill switch / safety stop, and are never sent when one share would break the 1% limit.
 - Tested end to end on real data (two signals of 18 Nov found, correct message).
+
+## D152 - 2026-11-19 - Evening review at about 4:00 pm (owner: "I want this to be around 4")
+- New daemon job `review` (`scripts/run_review.py`). It runs on weekdays from 4:00 pm, right after the 3:40 pm VANTAGE scan, at the latest by 4:20 pm.
+  - It first gives every tracked stock today's bar: Yahoo, else Kite quotes, else Yahoo's 5-minute data.
+  - Then it runs the scorecard, tip tracker, Learner and why-engine, and saves them to GitHub.
+- It sends no tips and changes no rules. The 6:40 pm nightly job still runs the same steps again with the official day prices (final numbers), because Yahoo's daily bar replaces the early one.

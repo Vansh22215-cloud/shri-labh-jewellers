@@ -10,7 +10,7 @@ def _t(s):
 def test_due_jobs_follow_the_ist_clock(monkeypatch, tmp_path):
     monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs.json")
     assert daemon.due(_t("2026-11-04T10:47")) == ["scan"]            # Wednesday morning
-    assert daemon.due(_t("2026-11-04T16:30")) == ["vantage"]         # VANTAGE INDICATOR scan after the close
+    assert daemon.due(_t("2026-11-04T16:30")) == ["vantage", "review"]   # VANTAGE scan + the 4 pm review (owner 19 Nov)
     assert daemon.due(_t("2026-11-04T18:45")) == ["vantage", "nightly"]
     assert "research" in daemon.due(_t("2026-11-04T21:40"))
     assert daemon.due(_t("2026-11-07T10:30")) == ["weekly"]          # Saturday
@@ -66,3 +66,14 @@ def test_new_program_code_ends_the_run(monkeypatch):
     assert daemon.update_waiting("new|x") is False
     monkeypatch.delenv("GITHUB_ACTIONS")
     assert daemon.update_waiting("old|x") is False                   # never on the owner's own computer
+
+
+def test_four_pm_review_after_the_close_scan(monkeypatch, tmp_path):
+    monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs.json")
+    assert "review" not in daemon.due(_t("2026-11-04T15:59"))
+    assert "review" not in daemon.due(_t("2026-11-04T16:05"))           # waits for the 3:40 pm scan ...
+    monkeypatch.setattr(daemon, "now", lambda: _t("2026-11-04T16:01"))
+    assert daemon.claim("vantage")
+    assert "review" in daemon.due(_t("2026-11-04T16:05"))               # ... then runs about 4 pm
+    assert daemon.claim("review") and "review" not in daemon.due(_t("2026-11-04T16:30"))
+    assert "review" not in daemon.due(_t("2026-11-07T16:30"))           # not on Saturday

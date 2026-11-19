@@ -65,6 +65,8 @@ def key(job, t=None):
         return None
     if job == "research" and (t.weekday() >= 5 or t.hour < 20):
         return None
+    if job == "review" and (t.weekday() >= 5 or t.hour < 16):
+        return None
     if job == "weekly" and (t.weekday() != 5 or t.hour < 10):
         return None
     return f"{job} {t:%Y-%m-%d}"
@@ -126,6 +128,9 @@ def due(t=None):
     wd = t.weekday()
     if wd < 5 and t >= t.replace(hour=15, minute=40, second=0) and not st.get(key("vantage", t)):
         out.append("vantage")                      # VANTAGE INDICATOR scan of every NSE stock (today's candle: Kite)
+    if wd < 5 and t >= t.replace(hour=16, minute=0, second=0) and not st.get(key("review", t)) \
+            and (st.get(key("vantage", t)) or t >= t.replace(hour=16, minute=20)) and t.hour < 18:
+        out.append("review")                       # owner 19 Nov: tracker + Learner + why-engine at about 4 pm
     if wd < 5 and t >= t.replace(hour=18, minute=40, second=0) and not st.get(key("nightly", t)):
         out.append("nightly")
     if wd < 5 and t >= t.replace(hour=18, minute=50, second=0) and not st.get(key("vantage2", t)) \
@@ -164,7 +169,7 @@ def jobs_today_line(t=None):
             + (f" (missed {', '.join(missed)} - GitHub did not start a run in time)" if missed else "") + ".")
 
 
-SCRIPTS = {"vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py", "basket": "run_basket.py"}
+SCRIPTS = {"review": "run_review.py", "vantage": "run_vantage.py", "vantage2": "run_vantage.py", "scan": "run_scan.py", "nightly": "run_nightly.py", "company": "company_of_day.py", "research": "run_research.py", "weekly": "run_weekly.py", "basket": "run_basket.py"}
 
 
 _JOB = {"thread": None, "name": None}
