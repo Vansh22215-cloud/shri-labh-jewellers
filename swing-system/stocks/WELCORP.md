@@ -16,3 +16,10 @@ Research, not advice. No system can guarantee profit; you can lose money. You de
 - Risks: Stop is 19.5% below the last close; a gap down can cause a bigger loss; Volatile stock (wide stop); Next results date unknown - check on NSE/Zerodha before buying; Promoter pledge data not available from a free automatable source - check on Zerodha/Tijori
 - Shown as: TIP
 
+## 2026-11-19
+- Setup: **Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend**, score 73/100
+- Plan: entry 2164.06-2284.94, stop 1861.86, T1 2949.77, T2 3675.04, qty 1
+- Reasons: Stronger than 94% of the top-500 stocks vs Nifty over 6 months; Industry strength is below average (rank 37/100); Healthy uptrend: price above rising 50- and 200-day averages; Entry signal: Stochastic %K crosses above %D from below 20 (oversold turn) in a long-term uptrend; Fundamentals: ROCE 19%; Fundamentals: revenue growing 20%/yr; Fundamentals: profit growing 98%/yr; Fundamentals: low debt
+- Risks: Stop is 16.3% below the last close; a gap down can cause a bigger loss; Volatile stock (wide stop); Next results date unknown - check on NSE/Zerodha before buying; Promoter pledge data not available from a free automatable source - check on Zerodha/Tijori
+- Shown as: TIP
+
