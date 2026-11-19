@@ -341,6 +341,90 @@
     "years_positive": "9 of 11",
     "matters": true
    }
+  },
+  "company": {
+   "top300": {
+    "spread_pts": -0.66,
+    "years_positive": "5 of 11",
+    "matters": false
+   },
+   "all": {
+    "spread_pts": -0.06,
+    "years_positive": "5 of 11",
+    "matters": false
+   }
+  },
+  "company x setup": {
+   "top300": {
+    "spread_pts": -1.07,
+    "years_positive": "1 of 11",
+    "matters": false
+   },
+   "all": {
+    "spread_pts": -0.23,
+    "years_positive": "4 of 11",
+    "matters": false
+   }
+  },
+  "sector x setup": {
+   "top300": {
+    "spread_pts": 1.34,
+    "years_positive": "8 of 11",
+    "matters": true
+   },
+   "all": {
+    "spread_pts": 2.01,
+    "years_positive": "9 of 11",
+    "matters": true
+   }
+  },
+  "sector x behaviour10": {
+   "top300": {
+    "spread_pts": 1.0,
+    "years_positive": "5 of 11",
+    "matters": false
+   },
+   "all": {
+    "spread_pts": 2.96,
+    "years_positive": "9 of 11",
+    "matters": true
+   }
+  },
+  "market x setup": {
+   "top300": {
+    "spread_pts": -0.81,
+    "years_positive": "5 of 11",
+    "matters": false
+   },
+   "all": {
+    "spread_pts": 0.07,
+    "years_positive": "7 of 11",
+    "matters": false
+   }
+  },
+  "size x sector": {
+   "top300": {
+    "spread_pts": 1.46,
+    "years_positive": "7 of 11",
+    "matters": true
+   },
+   "all": {
+    "spread_pts": 2.69,
+    "years_positive": "10 of 11",
+    "matters": true
+   }
+  },
+  "discovered tree (all facts)": {
+   "top300": {
+    "spread_pts": 0.62,
+    "years_positive": "6 of 11",
+    "matters": false
+   },
+   "all": {
+    "spread_pts": 1.27,
+    "years_positive": "7 of 11",
+    "matters": true
+   }
   }
  },
  "matters": [
@@ -348,33 +432,36 @@
   "behaviour10",
   "behaviour10 x market",
   "size x swing",
-  "behaviour10 x setup"
+  "behaviour10 x setup",
+  "sector x setup",
+  "size x sector"
  ],
  "tested": [
   "behaviour10 x setup",
-  "behaviour10"
+  "behaviour10",
+  "size x sector"
  ],
  "rules": {
   "C-ORDER by behaviour10 x setup": {
    "top300": {
     "dev": {
      "rule": [
-      19.5,
-      -16.1
+      13.9,
+      -21.5
      ],
      "base": [
-      18.4,
-      -16.3
+      12.8,
+      -22.6
      ]
     },
     "holdout": {
      "rule": [
-      16.6,
-      -21.6
+      8.1,
+      -29.4
      ],
      "base": [
-      14.6,
-      -20.1
+      6.9,
+      -27.4
      ]
     },
     "years_better": "4 of 13",
@@ -383,32 +470,32 @@
    "all": {
     "dev": {
      "rule": [
-      42.6,
-      -18.2
+      35.3,
+      -24.8
      ],
      "base": [
-      40.0,
-      -18.7
+      30.7,
+      -29.0
      ]
     },
     "holdout": {
      "rule": [
-      11.9,
-      -21.0
+      6.3,
+      -25.5
      ],
      "base": [
-      8.2,
-      -23.8
+      1.9,
+      -31.1
      ]
     },
-    "years_better": "10 of 13",
+    "years_better": "11 of 13",
     "years_ok": true
    },
    "pass_bar": false,
    "luck_holdout_top300": [
-    13.5,
-    12.4,
-    16.6
+    7.3,
+    7.6,
+    9.3
    ],
    "beats_luck": false,
    "PASS": false
@@ -417,56 +504,56 @@
    "top300": {
     "dev": {
      "rule": [
-      18.3,
-      -18.0
+      12.9,
+      -22.5
      ],
      "base": [
-      18.4,
-      -16.3
+      12.8,
+      -22.6
      ]
     },
     "holdout": {
      "rule": [
-      14.6,
-      -20.1
+      6.9,
+      -27.4
      ],
      "base": [
-      14.6,
-      -20.1
-     ]
-    },
-    "years_better": "11 of 13",
-    "years_ok": true
-   },
-   "all": {
-    "dev": {
-     "rule": [
-      40.8,
-      -18.5
-     ],
-     "base": [
-      40.0,
-      -18.7
-     ]
-    },
-    "holdout": {
-     "rule": [
-      8.2,
-      -23.8
-     ],
-     "base": [
-      8.2,
-      -23.8
+      6.9,
+      -27.4
      ]
     },
     "years_better": "12 of 13",
     "years_ok": true
    },
+   "all": {
+    "dev": {
+     "rule": [
+      30.5,
+      -28.2
+     ],
+     "base": [
+      30.7,
+      -29.0
+     ]
+    },
+    "holdout": {
+     "rule": [
+      1.9,
+      -31.1
+     ],
+     "base": [
+      1.9,
+      -31.1
+     ]
+    },
+    "years_better": "13 of 13",
+    "years_ok": true
+   },
    "pass_bar": false,
    "luck_holdout_top300": [
-    14.6,
-    14.6,
-    14.6
+    6.9,
+    6.9,
+    6.9
    ],
    "beats_luck": false,
    "PASS": false
@@ -475,56 +562,56 @@
    "top300": {
     "dev": {
      "rule": [
-      19.4,
-      -16.1
+      13.3,
+      -21.8
      ],
      "base": [
-      18.4,
-      -16.3
+      12.8,
+      -22.6
      ]
     },
     "holdout": {
      "rule": [
-      15.4,
-      -20.5
+      8.0,
+      -28.4
      ],
      "base": [
-      14.6,
-      -20.1
+      6.9,
+      -27.4
      ]
     },
-    "years_better": "8 of 13",
-    "years_ok": true
+    "years_better": "6 of 13",
+    "years_ok": false
    },
    "all": {
     "dev": {
      "rule": [
-      42.0,
-      -17.5
+      34.7,
+      -23.5
      ],
      "base": [
-      40.0,
-      -18.7
+      30.7,
+      -29.0
      ]
     },
     "holdout": {
      "rule": [
-      16.5,
-      -17.8
+      8.0,
+      -23.8
      ],
      "base": [
-      8.2,
-      -23.8
+      1.9,
+      -31.1
      ]
     },
-    "years_better": "9 of 13",
-    "years_ok": true
+    "years_better": "7 of 13",
+    "years_ok": false
    },
    "pass_bar": false,
    "luck_holdout_top300": [
-    14.7,
-    13.4,
-    17.5
+    6.1,
+    7.8,
+    10.4
    ],
    "beats_luck": false,
    "PASS": false
@@ -533,46 +620,46 @@
    "top300": {
     "dev": {
      "rule": [
-      17.8,
-      -18.0
+      12.5,
+      -22.3
      ],
      "base": [
-      18.4,
-      -16.3
+      12.8,
+      -22.6
      ]
     },
     "holdout": {
      "rule": [
-      14.6,
-      -20.1
+      6.9,
+      -27.4
      ],
      "base": [
-      14.6,
-      -20.1
+      6.9,
+      -27.4
      ]
     },
-    "years_better": "12 of 13",
+    "years_better": "13 of 13",
     "years_ok": true
    },
    "all": {
     "dev": {
      "rule": [
-      40.0,
-      -18.7
+      30.7,
+      -29.0
      ],
      "base": [
-      40.0,
-      -18.7
+      30.7,
+      -29.0
      ]
     },
     "holdout": {
      "rule": [
-      8.2,
-      -23.8
+      1.9,
+      -31.1
      ],
      "base": [
-      8.2,
-      -23.8
+      1.9,
+      -31.1
      ]
     },
     "years_better": "13 of 13",
@@ -580,9 +667,125 @@
    },
    "pass_bar": false,
    "luck_holdout_top300": [
-    14.6,
-    14.6,
-    14.6
+    6.9,
+    6.9,
+    6.9
+   ],
+   "beats_luck": false,
+   "PASS": false
+  },
+  "C-ORDER by size x sector": {
+   "top300": {
+    "dev": {
+     "rule": [
+      13.9,
+      -22.7
+     ],
+     "base": [
+      12.8,
+      -22.6
+     ]
+    },
+    "holdout": {
+     "rule": [
+      8.8,
+      -25.4
+     ],
+     "base": [
+      6.9,
+      -27.4
+     ]
+    },
+    "years_better": "7 of 13",
+    "years_ok": false
+   },
+   "all": {
+    "dev": {
+     "rule": [
+      35.5,
+      -28.2
+     ],
+     "base": [
+      30.7,
+      -29.0
+     ]
+    },
+    "holdout": {
+     "rule": [
+      -0.9,
+      -28.6
+     ],
+     "base": [
+      1.9,
+      -31.1
+     ]
+    },
+    "years_better": "9 of 13",
+    "years_ok": true
+   },
+   "pass_bar": false,
+   "luck_holdout_top300": [
+    6.1,
+    9.2,
+    13.9
+   ],
+   "beats_luck": false,
+   "PASS": false
+  },
+  "C-SKIP by size x sector": {
+   "top300": {
+    "dev": {
+     "rule": [
+      12.8,
+      -22.6
+     ],
+     "base": [
+      12.8,
+      -22.6
+     ]
+    },
+    "holdout": {
+     "rule": [
+      6.9,
+      -27.4
+     ],
+     "base": [
+      6.9,
+      -27.4
+     ]
+    },
+    "years_better": "13 of 13",
+    "years_ok": true
+   },
+   "all": {
+    "dev": {
+     "rule": [
+      30.7,
+      -29.0
+     ],
+     "base": [
+      30.7,
+      -29.0
+     ]
+    },
+    "holdout": {
+     "rule": [
+      1.9,
+      -31.1
+     ],
+     "base": [
+      1.9,
+      -31.1
+     ]
+    },
+    "years_better": "13 of 13",
+    "years_ok": true
+   },
+   "pass_bar": false,
+   "luck_holdout_top300": [
+    6.9,
+    6.9,
+    6.9
    ],
    "beats_luck": false,
    "PASS": false

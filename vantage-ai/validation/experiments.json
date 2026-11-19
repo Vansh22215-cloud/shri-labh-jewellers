@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 86,
+ "count": 88,
  "passed": 11,
  "experiments": [
   {
@@ -860,6 +860,26 @@
    "hypothesis": "Rules by discovered behaviour groups (order / skip), walk-forward",
    "verdict": "fail (strong lead in all stocks)",
    "why": "behaviour groups predict, sector does not; C-ORDER all-stocks holdout 16.5% vs 8.2% but top-300 +0.8 and below one luck world",
+   "files": "CONTEXT_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "COST-REAL",
+   "round": "cost check",
+   "family": "stress",
+   "hypothesis": "Live setup after real Zerodha charges, DP fee, slippage and 20% short-term tax",
+   "verdict": "measured - lower than the flat-0.35% tests",
+   "why": "VANTAGE + dip-buy: older 15.1%, recent 12.0% a year (17.4 / 14.7 with monthly capital); DP fee ~Rs 3,700 a year on Rs 51,000",
+   "files": "costs_real_results.json",
+   "area": "finder"
+  },
+  {
+   "id": "CTX-2",
+   "round": "context 2",
+   "family": "discovery",
+   "hypothesis": "Company / sector / behaviour / market / setup / combinations / discovered tree, real costs + tax",
+   "verdict": "fail",
+   "why": "company record does not predict; sector x setup and size x sector do; no rule beats luck on top-300",
    "files": "CONTEXT_RESULTS.md",
    "area": "finder"
   }

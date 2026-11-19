@@ -115,7 +115,8 @@ def tree_scores(X, years=range(2014, 2027)):
     F = X[[c for c in TREE_FACTS if c in X]].copy()
     F["setup_c"] = X["setup"].astype("category").cat.codes
     F["market_c"] = X["market"].astype("category").cat.codes
-    F = F.fillna(F.median())
+    F = F.replace([np.inf, -np.inf], np.nan)
+    F = F.fillna(F.median()).clip(-1e6, 1e6)
     sc = pd.Series(np.nan, index=X.index)
     pn = pd.Series(0, index=X.index)
     for y in years:

@@ -1161,3 +1161,15 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - "When money is short, take the best-behaving groups first": all stocks holdout 16.5% vs 8.2% a year, development +2 points in both sets. But top-300 (what is traded) holdout is only +0.8, and one luck world reached 17.5%. **Not passed.**
   - "Skip bad groups" almost never acts.
 - **Runs every week inside the automatic research.** The first time a context rule passes every step, it is proposed to the owner (`/approve CTX-xxxx`). If approved, every VANTAGE tip then shows its behaviour group and rank (`strategies/context_model.json`, checked on SBIN, BAJFINANCE, MARICO). Risk is unchanged.
+
+## D148 - 2026-11-19 - Real costs and tax in every test; every way of understanding stocks compared
+- **Real costs + tax** (`vantage-ai/validation/costs_real.py`; now inside `auto_lab.sim`, so the weekly research uses them too):
+  - Zerodha delivery charges, ₹15.93 DP fee per sale, 0.1% slippage each side, and 20% short-term tax on each year's net profit.
+  - The live setup (VANTAGE + dip-buy, top-300) makes **15.1% a year in the older years and 12.0% in the recent years** (17.4% / 14.7% with monthly capital). The earlier 18-23% figures used a flat 0.35% cost and no tax.
+  - Worst fall -21% to -28%.
+  - The DP fee alone is about ₹3,700 a year on ₹51,000.
+- **Context engine run 2:** company, company x setup, sector x setup, sector x behaviour, market x setup, size x sector, and a discovered decision tree were added beside behaviour groups.
+  - The company's own past record does not predict.
+  - Sector alone does not, but sector x setup and size x sector do.
+  - No rule beats luck on the top-300.
+- **Group facts** (top-300): about 5 behaviour groups hold almost all the trades, with 92-1,668 trades per group in development and 39-769 in the holdout. A stock stays in the same group for 64% of its trades less than 4 months apart, but only 39% year to year. The groups describe a stock's current state, not a fixed identity.
