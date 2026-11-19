@@ -1,63 +1,63 @@
-# Owner's guide - running the system without Claude
+# Owner's guide - running the system without Claude (updated 19 Nov 2026)
 
-Everything runs by itself on GitHub (free) and talks to you on Telegram. You place every order yourself;
-the system never touches your money or your Zerodha account.
+Everything runs by itself on GitHub (free) and talks to you on Telegram. You place every order yourself.
+The system only READS prices from Kite: it can never buy, sell or touch your money.
 
-## Your only daily job
-- **8:45 am (market days): tap the "🔑 Log in to Kite" link** on Telegram, log in, tap **Start**.
-  Zerodha requires a human login every day. Late login = intraday/F&O scanning starts only after you log in.
+## Your day
+| Time | What you do |
+|---|---|
+| **8:45 am** | Tap the 🔑 Kite login link on Telegram, log in, tap Start (Zerodha needs a human login daily). Missed it? send `/kite` |
+| 9:15 am - 3:15 pm | Nothing. "⚡ LIVE BUY … if it holds to the close" = early warning only, **don't buy**. 🛑 stop-loss alert on a stock you hold = **sell** |
+| **3:15 - 3:29 pm** | **The "buy now" (3:20 pm) VANTAGE message = buy.** Exact quantity shown. Then set a GTT stop-loss in Kite at the 🛑 price. Send `/bought SYMBOL` |
+| After 3:40 pm | 🔴 SELL message on a stock you hold = sell at the **next morning's open** |
 
-## What comes on Telegram
+## Messages
 | Message | What to do |
 |---|---|
-| **Intraday trade** (instantly, 9:35 am - 2:30 pm) | Optional. Small quantity, always use the stop-loss, square off by 3:15 pm |
-| **F&O trade** (option buying) | Buy the option shown; exit on the alert |
-| **Normal trade (dip-buy)** in the evening, rank 8-10/10 | Buy at next morning's open; sell on the exit alert (~4 days) |
-| **Positional trade** in the evening, rank 6/10 | Buy at next open; hold until the SELL alert (weeks); expect several small losses before a big win |
-| **AI pick** in the evening, rank 6/10 | Buy at next open; sell after 10 trading days (alert). ~half win, but winners beat the market on average |
-| **Discovered strategy Sx** in the evening, rank 7/10 | A rule the system invented, tested on 13 years AND proved on live data itself. Buy at next open, sell on the alert |
-| **🧪 New strategy promoted / retired** | Information only - the system found (or dropped) a strategy by itself |
-| **Exit alert** (✅ ⛔️ ⏰ 🔻 ⌛) | Do what it says |
-| **Company of the day** | Read if you like |
-| **⚠️ System problem / 🤖 Autopilot** | Usually nothing to do - it explains itself. Repeating every day for a week? see "When to get help" |
+| **VANTAGE BUY (3:20 pm)** | Buy the quantity shown (max loss ≈ 1% of your money). Only top-300 stocks (D144) |
+| **➕ ADD MORE** | Buy the extra quantity shown (winner up 8%+, still within 1% risk) |
+| **🛑 Stop-loss / 🔴 SELL / exit alerts** | Do what it says, the same day or the next open as written |
+| Live-engine dip-buy / F&O tip | Follow the entry, stop-loss and exit shown |
+| **Company of the day** | Reading only - not a buy tip (never tested as a trade) |
+| **📒 Weekly learning (Saturday)** | Read: results, main mistake, money at risk. Nothing to do |
+| **⚠️ System problem** | Usually fixes itself. Every day for a week -> see "When to get help" |
 
-Forward any tip, chart picture or watchlist album to the bot - it answers with a score and reasons.
+## Money rules
+- Never buy more than the quantity shown. Never move a stop-loss lower.
+- Money used up (about 15 trades on ₹51,000)? Skip new tips - don't sell good trades to make room (tested: it loses).
+- Expect to lose more than half the trades; winners are about twice the size of losers. 6-8 losses in a row happen.
+- **Once a month send `/capital 60000`** (your account value that day). New tips are sized on it. Big changes ask
+  for `sure`. `/capital` alone shows the current figure.
 
-## The autopilot (it watches itself)
-- Every closed tip's real result is recorded. If a strategy loses money live over its last 20-30 tips, it is
-  throttled (dip-buy: only 10/10), paused for 60 days (positional) or paused until its followed setups turn
-  positive (intraday). You get one Telegram message each time, with the numbers.
-- Intraday becomes a little less strict (rank 7) for setups whose followed results are clearly good.
-- If a GitHub run fails, prices are stale, self-tests fail or Zerodha stops sending prices: one "System problem"
-  message (at most once a day / 6 hours). It retries by itself.
+## Bot commands
+`/tips` open tips · `/bought SYMBOL` · `/sold SYMBOL PRICE` · `/trades` · `/capital` · `/health` · `/kite`
 
-## It invents new strategies by itself
-Every week it combines market building blocks into hundreds of new rules, keeps only those that won in 3 separate
-periods of 13 years, follows them silently on live data, and lets them send tips only after ~20 live trades prove
-them. Losing ones are retired automatically.
+## What runs by itself every day (no Claude needed)
+- **Finder:** VANTAGE live scan, 3:20 pm buy call, 3:40 pm close scan, ADD MORE, live-engine tips.
+- **Learner (6:40 pm):** every tip tracked to the end (`journal/all_tips.md`), each loss explained, patterns found,
+  live results compared with the 13-year test, missed big risers, money-at-risk, an un-editable history
+  (`journal/ledger.jsonl`), the ranked research list (`journal/research_queue.md`).
+- **Self-checks:** a broken scan, stale prices, live results below the tested range or a tampered history
+  -> one "system problem" message. The top-300 list rebuilds itself every night.
+- Nothing changes your tips by itself: every change needs a passed test **and** your yes.
 
-## Changing settings (no code needed)
-On github.com open the repository → branch `claude/nse-swing-trading-system-sqncpt` → `swing-system/settings.yaml`
-→ pencil icon → edit → **Commit changes**. The system picks it up within ~10 minutes.
-| Setting | Meaning |
-|---|---|
-| `kill_switch: true` | STOP all tips (emergency) - set back to `false` to resume |
-| `capital: 45000` | Your trading capital (quantities are sized from it) |
-| `intraday_mode: on` / `off` | Intraday tips on/off |
-| `positional_tips: true/false` | Positional tips on/off |
-| `ai_picks: true/false`, `ai_top: 5` | AI picks on/off, how many per evening |
-| `min_rank: 8` | Lowest rank sent (9 = fewer, stronger tips) |
-| `risk_limits` | 1% risk per trade, 25% max per order, 2% daily-loss stop |
+## Emergency stop
+github.com -> repository -> branch `claude/nse-swing-trading-system-sqncpt` -> `swing-system/settings.yaml` -> pencil ->
+change `kill_switch: false` to `kill_switch: true` -> Commit changes. All tips stop. Set back to `false` to resume.
+
+## If nothing arrives for a whole market day
+github.com -> repository -> **Actions** -> **swing-system** -> **Run workflow** -> task `bot` -> Run. That restarts the
+chain (it also restarts itself every hour). Then send `/health`.
 
 ## Keep these alive
-- **Kite Connect subscription** (Rs 500/month at developers.kite.trade) - if it lapses, Yahoo prices are used and
-  you get a "System problem" message.
-- **GitHub account + this repository + the branch** - never delete them. **Telegram bot** - don't delete it.
-- The API key/secret live only in GitHub → Settings → Secrets. Never paste them anywhere else.
+- **Kite Connect** subscription (₹500/month, developers.kite.trade). If it lapses, Yahoo prices are used.
+- GitHub account, this repository and the branch above - never delete. The Telegram bot - never delete.
+- API keys live only in GitHub -> Settings -> Secrets. Never paste them anywhere else. If one leaks: create a new
+  key on developers.kite.trade, replace it in GitHub Secrets, delete the old one.
 
 ## When to get help (Claude or any developer)
-- "System problem" every day for a week, or no messages at all for 2 market days.
-- Zerodha / Yahoo / GitHub announce big changes to their services.
-- You want new features. Point them to `DECISIONS.md` (every decision and test result) and this guide.
+- "System problem" every day for a week, or no messages for 2 market days after the restart above.
+- The weekly message says a type is "below expected" for several weeks (the live record disagrees with the test).
+- You want a change. Point them to `ATLAS.md` (map), `DECISIONS.md` (every decision) and this guide.
 
-Research, not investment advice. Past test results do not guarantee future profits.
+Research, not investment advice. Past results do not guarantee future profits.

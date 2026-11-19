@@ -16,7 +16,7 @@ import re
 import requests
 
 from . import tipcheck
-from .config import DATA, PRIVATE, DISCLAIMER, REPORTS, get_logger, load_settings, load_state
+from .config import DATA, PRIVATE, DISCLAIMER, REPORTS, ROOT, get_logger, load_settings, load_state
 
 log = get_logger()
 OFFSET = DATA / "bot_offset.txt"
@@ -30,6 +30,7 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
         "/bought SYMBOL - you bought the system's tip (only bought tips count toward your risk limits)\n"
         "/skip SYMBOL - you did not take that tip\n"
+        "/capital - your trading money now; /capital 60000 - update it (do this once a month, quantities follow)\n"
         "/basket - this month's basket of the 20 strongest stocks; /basket 20000 - money for it (adds quantities)\n"
         "/bought SYMBOL QTY PRICE [STOP] - record your own trade (e.g. /bought ICICIBANK 5 1425 1340)\n"
         "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
@@ -40,6 +41,35 @@ HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll che
         "/status - is Kite connected, live test price, last alert check\n/kite - get a Kite login link now\n"
         "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
         + DISCLAIMER)
+
+
+def capital_command(text):
+    """/capital -> show; /capital 60000 -> set the trading money in settings.yaml (owner, monthly). Bounds keep a typo
+    from creating huge quantities; the 1% risk and 25% cap stay unchanged."""
+    import re
+    from .config import load_settings
+    parts = text.replace(",", "").split()
+    cur = float(load_settings().get("capital") or 0)
+    if len(parts) < 2:
+        return f"Trading money now: ₹{cur:,.0f}. To change it: /capital 60000 (your account value today)."
+    try:
+        amt = int(float(parts[1].replace("₹", "")))
+    except ValueError:
+        return "Use: /capital 60000"
+    if not 10000 <= amt <= 10_000_000:
+        return "Please give an amount between ₹10,000 and ₹1 crore."
+    if cur and not 0.5 * cur <= amt <= 2 * cur:
+        if len(parts) < 3 or parts[2].lower() != "sure":
+            return (f"That is a big change from ₹{cur:,.0f} to ₹{amt:,.0f}. If it is right, send: /capital {amt} sure")
+    p = ROOT / "settings.yaml"
+    txt = p.read_text(encoding="utf-8")
+    new, n = re.subn(r"(?m)^capital:\s*[0-9.]+", f"capital: {amt}", txt, count=1)
+    if n != 1:
+        return "Could not find the capital line in settings.yaml - nothing changed."
+    p.write_text(new, encoding="utf-8")
+    log.info("Capital updated by the owner")
+    return (f"✅ Trading money set to ₹{amt:,.0f} (was ₹{cur:,.0f}). New tips are sized on it: max loss per trade "
+            f"≈ ₹{amt * 0.01:,.0f} (1%). Open tips keep their quantities.")
 
 
 def _api(token, method, **params):
@@ -326,6 +356,8 @@ def handle(token, owner, msg, capital):
         reply = _score_text()
     elif text.lower().startswith(("/bought", "/sold", "/trades", "/skip")):
         reply = trade_command(text)
+    elif text.lower().startswith("/capital"):
+        reply = capital_command(text)
     elif text.lower().startswith("/basket"):
         reply = basket_command(text)
     else:
