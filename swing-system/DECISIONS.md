@@ -1121,8 +1121,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Crash scenario** (round 24, `vantage-ai/validation/IMPROVE24_*`): survives. A 10% market gap on the worst day costs about 15% in one morning (stops cannot help a gap), and growth stays positive (recent years 18.8% → 14.5%). Found: the "worst fall" in all rounds is measured when trades close, so the real daily fall is deeper. Added to the blind spots.
 - Nothing changes a live tip, the 1% risk limit or any order behaviour. Map of all parts: `ATLAS.md`.
 
-## D144 - 2026-11-19 - Proposed (waiting for the owner's yes): VANTAGE scans only the top-300 stocks
+## D144 - 2026-11-19 - APPROVED by the owner (19 Nov: "yes"): VANTAGE scans only the top-300 stocks
 - Round 26: in the recent years, top-300 gave 14.8% a year with a worst fall of -20.6%. All stocks >= ₹2 cr/day, which the live system scans now, gave 7.2% and -27.5%. Top-300 also had the higher growth in 6 of 9 years since 2018, with the biggest gaps in the bad years (2018, 2022, 2025).
 - Caveat: the older years favour all stocks, but they are inflated by missing delisted small caps, and the recent years had been seen before. The live record checks the decision: signals outside the top 300 are still followed silently.
 - Built and tested: setting `vantage_universe: top300` (default `all`, no change until yes). If the list file is unreadable, nothing is blocked.
 - Also (round 25): updating the capital setting once a month adds about 1-1.5 points a year for top-300 stocks. This is advice, not a rule.
+- **Owner's yes on 19 Nov:** `vantage_universe: top300` is live from the next scan. Open tips are unchanged.

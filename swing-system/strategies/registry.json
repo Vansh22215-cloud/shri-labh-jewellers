@@ -54,6 +54,20 @@
    "stage_note": "round 23: fragile (belief B6 contested); kept for execution safety, live record decides"
   },
   {
+   "id": "RULE-TOP300",
+   "name": "VANTAGE only for the monthly top-300 by money traded",
+   "status": "live",
+   "since": "2026-11-19",
+   "hypothesis": "Big, heavily traded stocks give better VANTAGE results and smaller falls",
+   "evidence": "vantage-ai/validation/IMPROVE26_RESULTS.md (D144)",
+   "stage": 6,
+   "stage_note": "holdout seen before the test; the silent record of rejected 'outside the top 300' signals decides",
+   "track": {
+    "source": "rejected by VANTAGE",
+    "type_prefix": "RCP - outside the top 300"
+   }
+  },
+  {
    "id": "RULE-RESULTS",
    "name": "Half quantity before results",
    "status": "live",

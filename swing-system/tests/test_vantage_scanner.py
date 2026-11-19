@@ -57,6 +57,7 @@ def env(monkeypatch, tmp_path):
     monkeypatch.setattr(vantage, "_last_close", lambda sym, day: 105.0)
     monkeypatch.setattr(vantage, "CALL_F", tmp_path / "calls.csv")
     monkeypatch.setattr(vantage, "CALL_FROM", 9999)            # buy-before-close window off unless a test opens it
+    monkeypatch.setattr(vantage, "outside_universe", lambda sym, s: False)   # stock-list rule tested on its own
     return sent
 
 
