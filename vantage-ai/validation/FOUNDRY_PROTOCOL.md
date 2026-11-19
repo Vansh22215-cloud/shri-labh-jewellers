@@ -32,3 +32,12 @@ Complete strategies = ENTRY x FILTER x EXIT, assembled automatically from buildi
 A strategy passing 1-3 is proposed to the owner (as a SHADOW strategy first - silent live record), never sent as tips
 without passing 4 and the owner's yes. Multiple testing is the main risk: the luck test and the untouched holdout
 exist for that, and the number of strategies tried is always reported next to the number that passed.
+
+## Addendum 1 (19 Nov 2026, after run 1; same bar)
+Run 1: 336 strategies, 0 passed development. Lesson: short trades (10-20 days, +0.5-0.9% a trade before tax) cannot
+beat the round-trip cost of a ₹51,000 account (about 0.75%: DP ₹15.34 on ₹3-10k positions, STT 0.2%, slippage 0.2%)
+plus 20.8% tax. Run 2 adds building blocks built for long holds / big moves (same universe, bar, luck and holdout):
+- ENTRY: 50-day average crossing above the 200-day; new 52-week high after a 60-day base (range < 25%); top-10%
+  6-month strength turning up (5-day return > 0 after a 5-day dip); close above the 100-day high.
+- EXIT: trail below the 50-day average + 5 x ATR stop + 120 days; trail below the 20-day average only after +10%
+  (else 3 x ATR stop) + 120 days; 4 x ATR stop + target 5R + 120 days.
