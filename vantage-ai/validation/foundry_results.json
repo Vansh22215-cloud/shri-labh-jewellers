@@ -1,12 +1,145 @@
 {
- "on": "2026-11-19 15:12",
- "tried": 336,
- "dev_survivors": 0,
+ "on": "2026-11-19 15:14",
+ "tried": 640,
+ "dev_survivors": 1,
  "luck_passed": 0,
  "holdout_tested": 0,
  "passed": [],
- "minutes": 1.1,
+ "minutes": 1.6,
  "all": [
+  {
+   "name": "within 2% of 52-week high, top-20% strength | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 8352,
+   "win_pct": 45.1,
+   "avg_pct": 7.96,
+   "dev_alone": [
+    17.33,
+    -29.79
+   ],
+   "dev_with_current": [
+    18.29,
+    -23.61
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": true,
+   "luck_dev": [
+    37.51,
+    38.04,
+    37.78,
+    39.9,
+    38.09,
+    37.2,
+    37.19,
+    36.69,
+    36.63,
+    38.27,
+    37.38,
+    37.06,
+    37.09,
+    37.8,
+    36.79,
+    37.18,
+    36.35,
+    36.47,
+    37.06,
+    37.88
+   ],
+   "luck_pass": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11901,
+   "win_pct": 48.0,
+   "avg_pct": 8.29,
+   "dev_alone": [
+    9.97,
+    -41.75
+   ],
+   "dev_with_current": [
+    17.25,
+    -21.23
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 10415,
+   "win_pct": 47.2,
+   "avg_pct": 7.58,
+   "dev_alone": [
+    14.13,
+    -32.74
+   ],
+   "dev_with_current": [
+    17.22,
+    -20.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 7699,
+   "win_pct": 46.5,
+   "avg_pct": 8.8,
+   "dev_alone": [
+    12.62,
+    -33.31
+   ],
+   "dev_with_current": [
+    17.19,
+    -27.36
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 12449,
+   "win_pct": 46.8,
+   "avg_pct": 7.76,
+   "dev_alone": [
+    10.57,
+    -44.79
+   ],
+   "dev_with_current": [
+    16.92,
+    -24.43
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
   {
    "name": "gap-up 3%+ closing strong on 2x volume | no filter | target 3R, stop 2 ATR, 20 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
@@ -22,6 +155,28 @@
    "dev_with_current": [
     16.55,
     -24.4
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 531,
+   "win_pct": 37.9,
+   "avg_pct": 1.37,
+   "dev_alone": [
+    0.34,
+    -38.68
+   ],
+   "dev_with_current": [
+    16.55,
+    -22.05
    ],
    "dev_current": [
     15.47,
@@ -74,6 +229,50 @@
    "screen": false
   },
   {
+   "name": "strength leader pulling back 3 days | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 3756,
+   "win_pct": 48.3,
+   "avg_pct": 10.16,
+   "dev_alone": [
+    15.03,
+    -35.11
+   ],
+   "dev_with_current": [
+    16.5,
+    -25.42
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 16591,
+   "win_pct": 46.7,
+   "avg_pct": 7.41,
+   "dev_alone": [
+    12.09,
+    -40.71
+   ],
+   "dev_with_current": [
+    16.39,
+    -26.6
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | NIFTY above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "NIFTY above 200-day",
@@ -118,6 +317,28 @@
    "screen": false
   },
   {
+   "name": "within 2% of 52-week high, top-20% strength | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 7699,
+   "win_pct": 40.2,
+   "avg_pct": 5.18,
+   "dev_alone": [
+    8.26,
+    -41.64
+   ],
+   "dev_with_current": [
+    15.9,
+    -29.23
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | no filter | stop 2 ATR, 20 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "no filter",
@@ -132,6 +353,160 @@
    "dev_with_current": [
     15.83,
     -25.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 899,
+   "win_pct": 53.1,
+   "avg_pct": 2.44,
+   "dev_alone": [
+    3.08,
+    -41.93
+   ],
+   "dev_with_current": [
+    15.8,
+    -24.13
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 4802,
+   "win_pct": 48.5,
+   "avg_pct": 9.38,
+   "dev_alone": [
+    15.34,
+    -42.94
+   ],
+   "dev_with_current": [
+    15.79,
+    -32.54
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 8352,
+   "win_pct": 39.8,
+   "avg_pct": 4.75,
+   "dev_alone": [
+    10.82,
+    -37.9
+   ],
+   "dev_with_current": [
+    15.75,
+    -28.56
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 519,
+   "win_pct": 47.2,
+   "avg_pct": 6.71,
+   "dev_alone": [
+    8.02,
+    -31.99
+   ],
+   "dev_with_current": [
+    15.68,
+    -21.68
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 10802,
+   "win_pct": 46.3,
+   "avg_pct": 7.22,
+   "dev_alone": [
+    14.46,
+    -34.97
+   ],
+   "dev_with_current": [
+    15.65,
+    -26.75
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 519,
+   "win_pct": 38.9,
+   "avg_pct": 2.34,
+   "dev_alone": [
+    1.89,
+    -31.97
+   ],
+   "dev_with_current": [
+    15.64,
+    -23.63
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 531,
+   "win_pct": 42.6,
+   "avg_pct": 3.82,
+   "dev_alone": [
+    6.29,
+    -44.85
+   ],
+   "dev_with_current": [
+    15.64,
+    -25.05
    ],
    "dev_current": [
     15.47,
@@ -184,6 +559,50 @@
    "screen": false
   },
   {
+   "name": "gap-up 3%+ closing strong on 2x volume | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 573,
+   "win_pct": 36.5,
+   "avg_pct": 0.84,
+   "dev_alone": [
+    -0.24,
+    -41.45
+   ],
+   "dev_with_current": [
+    15.56,
+    -22.59
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 519,
+   "win_pct": 50.3,
+   "avg_pct": 1.57,
+   "dev_alone": [
+    3.25,
+    -34.65
+   ],
+   "dev_with_current": [
+    15.56,
+    -21.1
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | breadth above 50% | stop 2 ATR, 10 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "breadth above 50%",
@@ -228,6 +647,28 @@
    "screen": false
   },
   {
+   "name": "strength leader pulling back 3 days | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 4818,
+   "win_pct": 48.4,
+   "avg_pct": 9.33,
+   "dev_alone": [
+    15.26,
+    -43.19
+   ],
+   "dev_with_current": [
+    15.5,
+    -30.88
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | stock above 200-day | target 3R, stop 2 ATR, 20 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "stock above 200-day",
@@ -242,6 +683,94 @@
    "dev_with_current": [
     15.49,
     -21.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 13723,
+   "win_pct": 47.6,
+   "avg_pct": 7.03,
+   "dev_alone": [
+    13.15,
+    -41.84
+   ],
+   "dev_with_current": [
+    15.46,
+    -37.75
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 13723,
+   "win_pct": 47.6,
+   "avg_pct": 7.03,
+   "dev_alone": [
+    13.15,
+    -41.84
+   ],
+   "dev_with_current": [
+    15.46,
+    -37.75
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 899,
+   "win_pct": 41.5,
+   "avg_pct": 1.84,
+   "dev_alone": [
+    1.45,
+    -43.69
+   ],
+   "dev_with_current": [
+    15.44,
+    -22.65
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 13091,
+   "win_pct": 47.3,
+   "avg_pct": 7.8,
+   "dev_alone": [
+    12.5,
+    -43.52
+   ],
+   "dev_with_current": [
+    15.35,
+    -25.98
    ],
    "dev_current": [
     15.47,
@@ -286,6 +815,72 @@
    "dev_with_current": [
     15.29,
     -25.3
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 1650,
+   "win_pct": 37.6,
+   "avg_pct": 2.66,
+   "dev_alone": [
+    3.15,
+    -35.08
+   ],
+   "dev_with_current": [
+    15.29,
+    -24.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 1571,
+   "win_pct": 40.6,
+   "avg_pct": 0.21,
+   "dev_alone": [
+    -6.55,
+    -70.53
+   ],
+   "dev_with_current": [
+    15.28,
+    -23.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11218,
+   "win_pct": 47.7,
+   "avg_pct": 7.28,
+   "dev_alone": [
+    11.73,
+    -31.54
+   ],
+   "dev_with_current": [
+    15.27,
+    -26.05
    ],
    "dev_current": [
     15.47,
@@ -360,6 +955,72 @@
    "screen": false
   },
   {
+   "name": "strength leader pulling back 3 days | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 3905,
+   "win_pct": 47.5,
+   "avg_pct": 9.44,
+   "dev_alone": [
+    14.85,
+    -45.04
+   ],
+   "dev_with_current": [
+    15.22,
+    -28.5
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 899,
+   "win_pct": 48.8,
+   "avg_pct": 8.12,
+   "dev_alone": [
+    5.68,
+    -46.53
+   ],
+   "dev_with_current": [
+    15.2,
+    -26.68
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 1650,
+   "win_pct": 48.9,
+   "avg_pct": 1.89,
+   "dev_alone": [
+    3.71,
+    -38.61
+   ],
+   "dev_with_current": [
+    15.19,
+    -24.85
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | stock above 200-day | stop 2 ATR, 10 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "stock above 200-day",
@@ -374,6 +1035,28 @@
    "dev_with_current": [
     15.17,
     -22.98
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 12449,
+   "win_pct": 41.7,
+   "avg_pct": 4.35,
+   "dev_alone": [
+    6.45,
+    -45.95
+   ],
+   "dev_with_current": [
+    15.14,
+    -24.09
    ],
    "dev_current": [
     15.47,
@@ -426,6 +1109,50 @@
    "screen": false
   },
   {
+   "name": "50-day average crosses above 200-day | breadth above 50% | target 3R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 1571,
+   "win_pct": 41.1,
+   "avg_pct": 0.19,
+   "dev_alone": [
+    -7.57,
+    -70.06
+   ],
+   "dev_with_current": [
+    15.04,
+    -26.45
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 10415,
+   "win_pct": 41.9,
+   "avg_pct": 4.45,
+   "dev_alone": [
+    7.31,
+    -38.8
+   ],
+   "dev_with_current": [
+    15.03,
+    -26.46
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | NIFTY above 200-day | stop 2 ATR, 10 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "NIFTY above 200-day",
@@ -448,6 +1175,72 @@
    "screen": false
   },
   {
+   "name": "gap-up 3%+ closing strong on 2x volume | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 531,
+   "win_pct": 46.9,
+   "avg_pct": 0.59,
+   "dev_alone": [
+    1.5,
+    -45.12
+   ],
+   "dev_with_current": [
+    15.02,
+    -24.28
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 573,
+   "win_pct": 40.0,
+   "avg_pct": 2.04,
+   "dev_alone": [
+    4.66,
+    -52.81
+   ],
+   "dev_with_current": [
+    14.99,
+    -25.06
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 4671,
+   "win_pct": 44.9,
+   "avg_pct": 5.06,
+   "dev_alone": [
+    11.63,
+    -29.41
+   ],
+   "dev_with_current": [
+    14.98,
+    -23.2
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | stock above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "stock above 200-day",
@@ -462,6 +1255,28 @@
    "dev_with_current": [
     14.97,
     -26.8
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | target 2R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 1571,
+   "win_pct": 41.9,
+   "avg_pct": -0.08,
+   "dev_alone": [
+    -4.66,
+    -66.54
+   ],
+   "dev_with_current": [
+    14.92,
+    -23.72
    ],
    "dev_current": [
     15.47,
@@ -536,6 +1351,28 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 12449,
+   "win_pct": 48.2,
+   "avg_pct": 2.34,
+   "dev_alone": [
+    6.26,
+    -45.08
+   ],
+   "dev_with_current": [
+    14.88,
+    -27.87
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | breadth above 50% | target 3R, stop 2 ATR, 20 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "breadth above 50%",
@@ -550,6 +1387,72 @@
    "dev_with_current": [
     14.87,
     -22.92
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 9084,
+   "win_pct": 46.1,
+   "avg_pct": 8.13,
+   "dev_alone": [
+    16.71,
+    -32.08
+   ],
+   "dev_with_current": [
+    14.87,
+    -28.86
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 9084,
+   "win_pct": 46.1,
+   "avg_pct": 8.13,
+   "dev_alone": [
+    16.71,
+    -32.08
+   ],
+   "dev_with_current": [
+    14.87,
+    -28.86
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11218,
+   "win_pct": 53.7,
+   "avg_pct": 2.79,
+   "dev_alone": [
+    3.26,
+    -47.97
+   ],
+   "dev_with_current": [
+    14.86,
+    -25.25
    ],
    "dev_current": [
     15.47,
@@ -580,6 +1483,50 @@
    "screen": false
   },
   {
+   "name": "50-day average crosses above 200-day | breadth above 50% | stop 2 ATR, 10 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 1571,
+   "win_pct": 41.4,
+   "avg_pct": -0.51,
+   "dev_alone": [
+    -9.89,
+    -81.9
+   ],
+   "dev_with_current": [
+    14.84,
+    -25.33
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 16084,
+   "win_pct": 40.2,
+   "avg_pct": 3.7,
+   "dev_alone": [
+    4.36,
+    -44.84
+   ],
+   "dev_with_current": [
+    14.82,
+    -26.58
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "gap-up 3%+ closing strong on 2x volume | stock above 200-day | stop 3 ATR, 20 days",
    "entry": "gap-up 3%+ closing strong on 2x volume",
    "filter": "stock above 200-day",
@@ -594,6 +1541,116 @@
    "dev_with_current": [
     14.81,
     -22.98
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 1650,
+   "win_pct": 41.1,
+   "avg_pct": 0.22,
+   "dev_alone": [
+    -2.21,
+    -58.01
+   ],
+   "dev_with_current": [
+    14.81,
+    -24.68
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 16084,
+   "win_pct": 45.3,
+   "avg_pct": 6.84,
+   "dev_alone": [
+    11.73,
+    -43.82
+   ],
+   "dev_with_current": [
+    14.8,
+    -26.87
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "gap-up 3%+ closing strong on 2x volume | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "gap-up 3%+ closing strong on 2x volume",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 573,
+   "win_pct": 45.9,
+   "avg_pct": 0.01,
+   "dev_alone": [
+    0.26,
+    -50.29
+   ],
+   "dev_with_current": [
+    14.79,
+    -25.26
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 13157,
+   "win_pct": 47.3,
+   "avg_pct": 7.79,
+   "dev_alone": [
+    12.48,
+    -43.37
+   ],
+   "dev_with_current": [
+    14.78,
+    -25.09
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 13091,
+   "win_pct": 42.0,
+   "avg_pct": 4.38,
+   "dev_alone": [
+    7.08,
+    -43.81
+   ],
+   "dev_with_current": [
+    14.78,
+    -25.84
    ],
    "dev_current": [
     15.47,
@@ -646,6 +1703,182 @@
    "screen": false
   },
   {
+   "name": "52-week high after a 60-day base | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 4339,
+   "win_pct": 46.5,
+   "avg_pct": 5.56,
+   "dev_alone": [
+    9.92,
+    -28.88
+   ],
+   "dev_with_current": [
+    14.75,
+    -21.07
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 4671,
+   "win_pct": 41.2,
+   "avg_pct": 2.68,
+   "dev_alone": [
+    6.29,
+    -27.69
+   ],
+   "dev_with_current": [
+    14.73,
+    -22.42
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | stop 3 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 1571,
+   "win_pct": 47.1,
+   "avg_pct": 0.64,
+   "dev_alone": [
+    -2.86,
+    -57.73
+   ],
+   "dev_with_current": [
+    14.7,
+    -23.88
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 1571,
+   "win_pct": 37.9,
+   "avg_pct": 2.86,
+   "dev_alone": [
+    2.51,
+    -31.3
+   ],
+   "dev_with_current": [
+    14.67,
+    -21.48
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11486,
+   "win_pct": 46.7,
+   "avg_pct": 6.72,
+   "dev_alone": [
+    9.38,
+    -31.8
+   ],
+   "dev_with_current": [
+    14.66,
+    -29.92
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 1650,
+   "win_pct": 41.5,
+   "avg_pct": 0.24,
+   "dev_alone": [
+    -1.72,
+    -57.07
+   ],
+   "dev_with_current": [
+    14.66,
+    -24.49
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1571,
+   "win_pct": 32.2,
+   "avg_pct": 0.02,
+   "dev_alone": [
+    -3.22,
+    -48.64
+   ],
+   "dev_with_current": [
+    14.63,
+    -21.98
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11901,
+   "win_pct": 42.4,
+   "avg_pct": 4.66,
+   "dev_alone": [
+    7.25,
+    -37.3
+   ],
+   "dev_with_current": [
+    14.62,
+    -28.69
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | stock above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "stock above 200-day",
@@ -668,6 +1901,28 @@
    "screen": false
   },
   {
+   "name": "volume surge 3x up-day 4%+ near the high | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 6140,
+   "win_pct": 43.1,
+   "avg_pct": 6.15,
+   "dev_alone": [
+    7.34,
+    -39.88
+   ],
+   "dev_with_current": [
+    14.58,
+    -26.15
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | breadth above 50% | stop 2 ATR, 10 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "breadth above 50%",
@@ -682,6 +1937,226 @@
    "dev_with_current": [
     14.56,
     -22.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1749,
+   "win_pct": 33.3,
+   "avg_pct": 0.31,
+   "dev_alone": [
+    -2.02,
+    -43.6
+   ],
+   "dev_with_current": [
+    14.56,
+    -25.0
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11402,
+   "win_pct": 46.8,
+   "avg_pct": 7.31,
+   "dev_alone": [
+    13.63,
+    -36.63
+   ],
+   "dev_with_current": [
+    14.55,
+    -31.81
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11402,
+   "win_pct": 46.8,
+   "avg_pct": 7.31,
+   "dev_alone": [
+    13.63,
+    -36.63
+   ],
+   "dev_with_current": [
+    14.55,
+    -31.81
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 7498,
+   "win_pct": 36.7,
+   "avg_pct": 3.08,
+   "dev_alone": [
+    3.94,
+    -35.47
+   ],
+   "dev_with_current": [
+    14.55,
+    -25.69
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 1952,
+   "win_pct": 37.7,
+   "avg_pct": 2.84,
+   "dev_alone": [
+    3.5,
+    -33.89
+   ],
+   "dev_with_current": [
+    14.54,
+    -23.91
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 3905,
+   "win_pct": 36.0,
+   "avg_pct": 3.36,
+   "dev_alone": [
+    5.96,
+    -36.22
+   ],
+   "dev_with_current": [
+    14.5,
+    -25.88
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1650,
+   "win_pct": 32.9,
+   "avg_pct": 0.06,
+   "dev_alone": [
+    -2.78,
+    -46.39
+   ],
+   "dev_with_current": [
+    14.49,
+    -22.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 1749,
+   "win_pct": 42.7,
+   "avg_pct": 0.37,
+   "dev_alone": [
+    -3.36,
+    -64.78
+   ],
+   "dev_with_current": [
+    14.48,
+    -28.23
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 15223,
+   "win_pct": 46.7,
+   "avg_pct": 7.55,
+   "dev_alone": [
+    8.94,
+    -46.99
+   ],
+   "dev_with_current": [
+    14.39,
+    -24.29
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 1571,
+   "win_pct": 49.7,
+   "avg_pct": 2.28,
+   "dev_alone": [
+    2.38,
+    -41.89
+   ],
+   "dev_with_current": [
+    14.39,
+    -21.65
    ],
    "dev_current": [
     15.47,
@@ -734,6 +2209,292 @@
    "screen": false
   },
   {
+   "name": "50-day average crosses above 200-day | no filter | target 3R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 1952,
+   "win_pct": 42.0,
+   "avg_pct": 0.3,
+   "dev_alone": [
+    -4.74,
+    -68.15
+   ],
+   "dev_with_current": [
+    14.35,
+    -29.46
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1571,
+   "win_pct": 30.2,
+   "avg_pct": -0.46,
+   "dev_alone": [
+    -8.84,
+    -68.88
+   ],
+   "dev_with_current": [
+    14.33,
+    -22.98
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 4892,
+   "win_pct": 45.9,
+   "avg_pct": 5.38,
+   "dev_alone": [
+    12.36,
+    -24.03
+   ],
+   "dev_with_current": [
+    14.32,
+    -20.57
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 4892,
+   "win_pct": 45.9,
+   "avg_pct": 5.38,
+   "dev_alone": [
+    12.36,
+    -24.03
+   ],
+   "dev_with_current": [
+    14.32,
+    -20.57
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 10802,
+   "win_pct": 41.6,
+   "avg_pct": 4.28,
+   "dev_alone": [
+    8.21,
+    -35.75
+   ],
+   "dev_with_current": [
+    14.3,
+    -25.85
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 15223,
+   "win_pct": 41.2,
+   "avg_pct": 4.12,
+   "dev_alone": [
+    2.12,
+    -45.74
+   ],
+   "dev_with_current": [
+    14.27,
+    -28.85
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 9521,
+   "win_pct": 47.2,
+   "avg_pct": 7.11,
+   "dev_alone": [
+    8.49,
+    -30.63
+   ],
+   "dev_with_current": [
+    14.27,
+    -25.21
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 9367,
+   "win_pct": 47.3,
+   "avg_pct": 9.0,
+   "dev_alone": [
+    11.46,
+    -49.32
+   ],
+   "dev_with_current": [
+    14.27,
+    -43.7
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 7073,
+   "win_pct": 44.0,
+   "avg_pct": 7.8,
+   "dev_alone": [
+    12.06,
+    -40.07
+   ],
+   "dev_with_current": [
+    14.26,
+    -35.16
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 21313,
+   "win_pct": 47.3,
+   "avg_pct": 7.09,
+   "dev_alone": [
+    12.06,
+    -35.67
+   ],
+   "dev_with_current": [
+    14.2,
+    -29.15
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 6035,
+   "win_pct": 38.5,
+   "avg_pct": 3.68,
+   "dev_alone": [
+    7.7,
+    -50.87
+   ],
+   "dev_with_current": [
+    14.18,
+    -26.83
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 4671,
+   "win_pct": 46.9,
+   "avg_pct": 1.71,
+   "dev_alone": [
+    5.89,
+    -28.64
+   ],
+   "dev_with_current": [
+    14.12,
+    -22.7
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 1952,
+   "win_pct": 50.0,
+   "avg_pct": 2.15,
+   "dev_alone": [
+    5.81,
+    -39.19
+   ],
+   "dev_with_current": [
+    14.11,
+    -27.12
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | NIFTY above 200-day | stop 2 ATR, 10 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "NIFTY above 200-day",
@@ -748,6 +2509,248 @@
    "dev_with_current": [
     14.05,
     -22.68
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 1749,
+   "win_pct": 42.3,
+   "avg_pct": 0.37,
+   "dev_alone": [
+    -2.04,
+    -63.93
+   ],
+   "dev_with_current": [
+    14.05,
+    -25.57
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1749,
+   "win_pct": 30.8,
+   "avg_pct": -0.4,
+   "dev_alone": [
+    -9.25,
+    -75.0
+   ],
+   "dev_with_current": [
+    14.05,
+    -24.67
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 4892,
+   "win_pct": 41.8,
+   "avg_pct": 2.83,
+   "dev_alone": [
+    5.98,
+    -26.41
+   ],
+   "dev_with_current": [
+    14.04,
+    -24.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 4892,
+   "win_pct": 41.8,
+   "avg_pct": 2.83,
+   "dev_alone": [
+    5.98,
+    -26.41
+   ],
+   "dev_with_current": [
+    14.04,
+    -24.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 3905,
+   "win_pct": 55.4,
+   "avg_pct": 2.91,
+   "dev_alone": [
+    8.81,
+    -46.79
+   ],
+   "dev_with_current": [
+    14.02,
+    -26.75
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 6140,
+   "win_pct": 38.0,
+   "avg_pct": 3.43,
+   "dev_alone": [
+    6.19,
+    -41.66
+   ],
+   "dev_with_current": [
+    14.0,
+    -26.63
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | stop 3 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 1650,
+   "win_pct": 47.0,
+   "avg_pct": 0.54,
+   "dev_alone": [
+    -2.07,
+    -62.87
+   ],
+   "dev_with_current": [
+    14.0,
+    -24.78
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 4339,
+   "win_pct": 47.3,
+   "avg_pct": 1.83,
+   "dev_alone": [
+    3.68,
+    -33.84
+   ],
+   "dev_with_current": [
+    13.99,
+    -24.56
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 3756,
+   "win_pct": 35.3,
+   "avg_pct": 3.31,
+   "dev_alone": [
+    5.18,
+    -41.25
+   ],
+   "dev_with_current": [
+    13.95,
+    -24.21
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 9084,
+   "win_pct": 40.4,
+   "avg_pct": 4.71,
+   "dev_alone": [
+    9.95,
+    -34.63
+   ],
+   "dev_with_current": [
+    13.94,
+    -27.8
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 9084,
+   "win_pct": 40.4,
+   "avg_pct": 4.71,
+   "dev_alone": [
+    9.95,
+    -34.63
+   ],
+   "dev_with_current": [
+    13.94,
+    -27.8
    ],
    "dev_current": [
     15.47,
@@ -778,6 +2781,468 @@
    "screen": false
   },
   {
+   "name": "3 down days then strong close (uptrend) | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 10031,
+   "win_pct": 51.4,
+   "avg_pct": 2.4,
+   "dev_alone": [
+    6.58,
+    -39.41
+   ],
+   "dev_with_current": [
+    13.92,
+    -24.87
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 7498,
+   "win_pct": 44.8,
+   "avg_pct": 2.01,
+   "dev_alone": [
+    5.62,
+    -31.74
+   ],
+   "dev_with_current": [
+    13.89,
+    -27.63
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1952,
+   "win_pct": 31.2,
+   "avg_pct": -0.44,
+   "dev_alone": [
+    -12.8,
+    -80.51
+   ],
+   "dev_with_current": [
+    13.89,
+    -24.03
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 10031,
+   "win_pct": 46.1,
+   "avg_pct": 6.4,
+   "dev_alone": [
+    9.07,
+    -34.97
+   ],
+   "dev_with_current": [
+    13.87,
+    -23.53
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | target 2R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 4339,
+   "win_pct": 42.2,
+   "avg_pct": 0.02,
+   "dev_alone": [
+    -3.18,
+    -54.56
+   ],
+   "dev_with_current": [
+    13.87,
+    -23.17
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | stop 2 ATR, 10 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 1749,
+   "win_pct": 44.2,
+   "avg_pct": -0.32,
+   "dev_alone": [
+    -9.89,
+    -80.57
+   ],
+   "dev_with_current": [
+    13.83,
+    -27.09
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 8706,
+   "win_pct": 45.1,
+   "avg_pct": 1.98,
+   "dev_alone": [
+    8.68,
+    -43.78
+   ],
+   "dev_with_current": [
+    13.82,
+    -25.73
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 25759,
+   "win_pct": 47.1,
+   "avg_pct": 6.78,
+   "dev_alone": [
+    11.51,
+    -45.83
+   ],
+   "dev_with_current": [
+    13.81,
+    -48.26
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 25759,
+   "win_pct": 47.1,
+   "avg_pct": 6.78,
+   "dev_alone": [
+    11.51,
+    -45.83
+   ],
+   "dev_with_current": [
+    13.81,
+    -48.26
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 1749,
+   "win_pct": 50.7,
+   "avg_pct": 2.37,
+   "dev_alone": [
+    4.9,
+    -34.01
+   ],
+   "dev_with_current": [
+    13.81,
+    -26.34
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4671,
+   "win_pct": 35.3,
+   "avg_pct": -0.19,
+   "dev_alone": [
+    -7.81,
+    -67.02
+   ],
+   "dev_with_current": [
+    13.8,
+    -24.72
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 4339,
+   "win_pct": 40.4,
+   "avg_pct": 0.06,
+   "dev_alone": [
+    -5.56,
+    -58.2
+   ],
+   "dev_with_current": [
+    13.78,
+    -24.74
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 1650,
+   "win_pct": 42.3,
+   "avg_pct": -0.01,
+   "dev_alone": [
+    -4.01,
+    -62.47
+   ],
+   "dev_with_current": [
+    13.77,
+    -27.66
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 6416,
+   "win_pct": 46.0,
+   "avg_pct": 9.36,
+   "dev_alone": [
+    10.68,
+    -35.87
+   ],
+   "dev_with_current": [
+    13.77,
+    -28.32
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 7169,
+   "win_pct": 43.0,
+   "avg_pct": 6.07,
+   "dev_alone": [
+    12.07,
+    -28.28
+   ],
+   "dev_with_current": [
+    13.76,
+    -29.59
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 4802,
+   "win_pct": 35.7,
+   "avg_pct": 3.21,
+   "dev_alone": [
+    6.87,
+    -47.97
+   ],
+   "dev_with_current": [
+    13.76,
+    -25.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 1650,
+   "win_pct": 44.2,
+   "avg_pct": 5.7,
+   "dev_alone": [
+    3.98,
+    -35.12
+   ],
+   "dev_with_current": [
+    13.73,
+    -29.53
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 12449,
+   "win_pct": 40.3,
+   "avg_pct": 0.4,
+   "dev_alone": [
+    -5.16,
+    -77.79
+   ],
+   "dev_with_current": [
+    13.71,
+    -29.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 17548,
+   "win_pct": 46.5,
+   "avg_pct": 7.25,
+   "dev_alone": [
+    12.08,
+    -44.33
+   ],
+   "dev_with_current": [
+    13.7,
+    -28.46
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4339,
+   "win_pct": 36.7,
+   "avg_pct": 0.27,
+   "dev_alone": [
+    -1.09,
+    -36.75
+   ],
+   "dev_with_current": [
+    13.7,
+    -22.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 8706,
+   "win_pct": 36.8,
+   "avg_pct": 2.99,
+   "dev_alone": [
+    8.4,
+    -37.07
+   ],
+   "dev_with_current": [
+    13.64,
+    -26.18
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | stock above 200-day | stop 2 ATR, 10 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "stock above 200-day",
@@ -792,6 +3257,336 @@
    "dev_with_current": [
     13.64,
     -25.37
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 16591,
+   "win_pct": 41.3,
+   "avg_pct": 4.04,
+   "dev_alone": [
+    5.08,
+    -46.05
+   ],
+   "dev_with_current": [
+    13.63,
+    -30.33
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 11901,
+   "win_pct": 36.6,
+   "avg_pct": 0.71,
+   "dev_alone": [
+    -0.87,
+    -57.27
+   ],
+   "dev_with_current": [
+    13.62,
+    -29.09
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | stop 2 ATR, 10 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 1952,
+   "win_pct": 43.3,
+   "avg_pct": -0.35,
+   "dev_alone": [
+    -13.1,
+    -86.59
+   ],
+   "dev_with_current": [
+    13.61,
+    -27.29
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | target 3R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 4339,
+   "win_pct": 40.8,
+   "avg_pct": 0.11,
+   "dev_alone": [
+    -3.76,
+    -56.35
+   ],
+   "dev_with_current": [
+    13.61,
+    -22.93
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 13157,
+   "win_pct": 41.9,
+   "avg_pct": 4.36,
+   "dev_alone": [
+    7.43,
+    -44.02
+   ],
+   "dev_with_current": [
+    13.6,
+    -26.54
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1650,
+   "win_pct": 30.8,
+   "avg_pct": -0.41,
+   "dev_alone": [
+    -9.16,
+    -68.87
+   ],
+   "dev_with_current": [
+    13.58,
+    -23.32
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 1952,
+   "win_pct": 41.6,
+   "avg_pct": 0.29,
+   "dev_alone": [
+    -7.69,
+    -71.98
+   ],
+   "dev_with_current": [
+    13.56,
+    -30.48
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 7169,
+   "win_pct": 37.7,
+   "avg_pct": 3.35,
+   "dev_alone": [
+    7.74,
+    -38.14
+   ],
+   "dev_with_current": [
+    13.51,
+    -27.14
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 1952,
+   "win_pct": 33.6,
+   "avg_pct": 0.22,
+   "dev_alone": [
+    -1.57,
+    -48.86
+   ],
+   "dev_with_current": [
+    13.51,
+    -26.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 4339,
+   "win_pct": 41.6,
+   "avg_pct": 2.91,
+   "dev_alone": [
+    3.56,
+    -27.49
+   ],
+   "dev_with_current": [
+    13.49,
+    -26.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 20996,
+   "win_pct": 45.0,
+   "avg_pct": 5.71,
+   "dev_alone": [
+    7.33,
+    -34.33
+   ],
+   "dev_with_current": [
+    13.48,
+    -31.28
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 23750,
+   "win_pct": 44.2,
+   "avg_pct": 6.24,
+   "dev_alone": [
+    6.54,
+    -47.42
+   ],
+   "dev_with_current": [
+    13.47,
+    -26.57
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | stop 3 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 4671,
+   "win_pct": 46.9,
+   "avg_pct": 0.28,
+   "dev_alone": [
+    -4.54,
+    -57.12
+   ],
+   "dev_with_current": [
+    13.47,
+    -24.15
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 1749,
+   "win_pct": 38.0,
+   "avg_pct": 3.23,
+   "dev_alone": [
+    4.05,
+    -29.82
+   ],
+   "dev_with_current": [
+    13.44,
+    -23.73
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11901,
+   "win_pct": 48.7,
+   "avg_pct": 2.51,
+   "dev_alone": [
+    5.32,
+    -42.54
+   ],
+   "dev_with_current": [
+    13.44,
+    -29.16
    ],
    "dev_current": [
     15.47,
@@ -822,6 +3617,72 @@
    "screen": false
   },
   {
+   "name": "52-week high after a 60-day base | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4892,
+   "win_pct": 35.4,
+   "avg_pct": -0.19,
+   "dev_alone": [
+    -11.64,
+    -78.51
+   ],
+   "dev_with_current": [
+    13.43,
+    -24.39
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4892,
+   "win_pct": 35.4,
+   "avg_pct": -0.19,
+   "dev_alone": [
+    -11.64,
+    -78.51
+   ],
+   "dev_with_current": [
+    13.43,
+    -24.39
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 23750,
+   "win_pct": 37.4,
+   "avg_pct": 3.21,
+   "dev_alone": [
+    2.29,
+    -44.91
+   ],
+   "dev_with_current": [
+    13.41,
+    -31.95
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "within 2% of 52-week high, top-20% strength | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "within 2% of 52-week high, top-20% strength",
    "filter": "breadth above 50%",
@@ -844,6 +3705,28 @@
    "screen": false
   },
   {
+   "name": "squeeze then 20-day breakout | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 7169,
+   "win_pct": 45.2,
+   "avg_pct": 2.15,
+   "dev_alone": [
+    8.66,
+    -37.43
+   ],
+   "dev_with_current": [
+    13.39,
+    -30.92
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "breadth above 50%",
@@ -858,6 +3741,28 @@
    "dev_with_current": [
     13.39,
     -24.18
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 1952,
+   "win_pct": 45.4,
+   "avg_pct": 5.92,
+   "dev_alone": [
+    6.44,
+    -35.94
+   ],
+   "dev_with_current": [
+    13.36,
+    -27.35
    ],
    "dev_current": [
     15.47,
@@ -910,6 +3815,72 @@
    "screen": false
   },
   {
+   "name": "50-day average crosses above 200-day | stock above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 1749,
+   "win_pct": 43.5,
+   "avg_pct": 0.14,
+   "dev_alone": [
+    -3.0,
+    -62.96
+   ],
+   "dev_with_current": [
+    13.27,
+    -24.66
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 24618,
+   "win_pct": 45.0,
+   "avg_pct": 6.59,
+   "dev_alone": [
+    11.26,
+    -41.63
+   ],
+   "dev_with_current": [
+    13.24,
+    -33.76
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 4671,
+   "win_pct": 41.0,
+   "avg_pct": 0.17,
+   "dev_alone": [
+    -8.71,
+    -72.77
+   ],
+   "dev_with_current": [
+    13.24,
+    -24.34
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | NIFTY above 200-day | stop 3 ATR, 20 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "NIFTY above 200-day",
@@ -932,6 +3903,50 @@
    "screen": false
   },
   {
+   "name": "52-week high after a 60-day base | breadth above 50% | stop 2 ATR, 10 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 4339,
+   "win_pct": 43.4,
+   "avg_pct": -0.3,
+   "dev_alone": [
+    -13.03,
+    -78.99
+   ],
+   "dev_with_current": [
+    13.21,
+    -26.03
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 7691,
+   "win_pct": 36.4,
+   "avg_pct": 2.87,
+   "dev_alone": [
+    4.16,
+    -41.67
+   ],
+   "dev_with_current": [
+    13.19,
+    -25.17
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | breadth above 50% | stop 3 ATR, 20 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "breadth above 50%",
@@ -946,6 +3961,28 @@
    "dev_with_current": [
     13.15,
     -28.53
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 1749,
+   "win_pct": 46.4,
+   "avg_pct": 6.37,
+   "dev_alone": [
+    6.65,
+    -29.91
+   ],
+   "dev_with_current": [
+    13.15,
+    -26.86
    ],
    "dev_current": [
     15.47,
@@ -1020,6 +4057,50 @@
    "screen": false
   },
   {
+   "name": "50-day average crosses above 200-day | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 1571,
+   "win_pct": 45.6,
+   "avg_pct": 6.36,
+   "dev_alone": [
+    2.98,
+    -27.96
+   ],
+   "dev_with_current": [
+    13.11,
+    -23.11
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | target 2R, stop 2 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 1952,
+   "win_pct": 42.9,
+   "avg_pct": 0.07,
+   "dev_alone": [
+    -9.21,
+    -80.61
+   ],
+   "dev_with_current": [
+    13.06,
+    -27.59
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "within 2% of 52-week high, top-20% strength | NIFTY above 200-day | target 3R, stop 2 ATR, 20 days",
    "entry": "within 2% of 52-week high, top-20% strength",
    "filter": "NIFTY above 200-day",
@@ -1064,6 +4145,28 @@
    "screen": false
   },
   {
+   "name": "breakout 52-week high | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 10802,
+   "win_pct": 47.9,
+   "avg_pct": 2.35,
+   "dev_alone": [
+    5.22,
+    -38.82
+   ],
+   "dev_with_current": [
+    13.01,
+    -27.84
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 52-week high | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "breakout 52-week high",
    "filter": "NIFTY above 200-day",
@@ -1086,6 +4189,72 @@
    "screen": false
   },
   {
+   "name": "50-day average crosses above 200-day | NIFTY above 200-day | stop 2 ATR, 10 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 1650,
+   "win_pct": 42.2,
+   "avg_pct": -0.42,
+   "dev_alone": [
+    -13.88,
+    -85.17
+   ],
+   "dev_with_current": [
+    12.98,
+    -24.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | stop 2 ATR, 10 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 4671,
+   "win_pct": 43.7,
+   "avg_pct": -0.27,
+   "dev_alone": [
+    -18.41,
+    -90.35
+   ],
+   "dev_with_current": [
+    12.98,
+    -25.33
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 10415,
+   "win_pct": 48.1,
+   "avg_pct": 2.42,
+   "dev_alone": [
+    4.54,
+    -44.78
+   ],
+   "dev_with_current": [
+    12.96,
+    -27.9
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "3 down days then strong close (uptrend) | breadth above 50% | stop 3 ATR, 20 days",
    "entry": "3 down days then strong close (uptrend)",
    "filter": "breadth above 50%",
@@ -1100,6 +4269,182 @@
    "dev_with_current": [
     12.96,
     -25.17
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 4671,
+   "win_pct": 40.6,
+   "avg_pct": 0.12,
+   "dev_alone": [
+    -5.08,
+    -60.22
+   ],
+   "dev_with_current": [
+    12.96,
+    -25.7
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 13091,
+   "win_pct": 48.6,
+   "avg_pct": 2.42,
+   "dev_alone": [
+    4.01,
+    -46.5
+   ],
+   "dev_with_current": [
+    12.95,
+    -30.79
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | stop 2 ATR, 10 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 4892,
+   "win_pct": 43.9,
+   "avg_pct": -0.27,
+   "dev_alone": [
+    -18.26,
+    -90.27
+   ],
+   "dev_with_current": [
+    12.94,
+    -26.76
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | stop 2 ATR, 10 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 4892,
+   "win_pct": 43.9,
+   "avg_pct": -0.27,
+   "dev_alone": [
+    -18.26,
+    -90.27
+   ],
+   "dev_with_current": [
+    12.94,
+    -26.76
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 7073,
+   "win_pct": 51.3,
+   "avg_pct": 1.86,
+   "dev_alone": [
+    4.27,
+    -48.39
+   ],
+   "dev_with_current": [
+    12.93,
+    -33.77
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 40.7,
+   "avg_pct": 0.11,
+   "dev_alone": [
+    -8.22,
+    -76.73
+   ],
+   "dev_with_current": [
+    12.92,
+    -24.12
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 40.7,
+   "avg_pct": 0.11,
+   "dev_alone": [
+    -8.22,
+    -76.73
+   ],
+   "dev_with_current": [
+    12.92,
+    -24.12
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4339,
+   "win_pct": 35.1,
+   "avg_pct": -0.21,
+   "dev_alone": [
+    -6.77,
+    -62.86
+   ],
+   "dev_with_current": [
+    12.92,
+    -24.73
    ],
    "dev_current": [
     15.47,
@@ -1144,6 +4489,204 @@
    "dev_with_current": [
     12.91,
     -30.14
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 4818,
+   "win_pct": 55.5,
+   "avg_pct": 2.9,
+   "dev_alone": [
+    9.49,
+    -49.72
+   ],
+   "dev_with_current": [
+    12.89,
+    -30.66
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | stock above 200-day | stop 3 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "stock above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 1749,
+   "win_pct": 48.3,
+   "avg_pct": 0.75,
+   "dev_alone": [
+    0.92,
+    -54.26
+   ],
+   "dev_with_current": [
+    12.89,
+    -26.23
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 15223,
+   "win_pct": 47.9,
+   "avg_pct": 2.27,
+   "dev_alone": [
+    1.46,
+    -44.36
+   ],
+   "dev_with_current": [
+    12.87,
+    -29.43
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 4892,
+   "win_pct": 47.6,
+   "avg_pct": 1.84,
+   "dev_alone": [
+    5.65,
+    -31.55
+   ],
+   "dev_with_current": [
+    12.87,
+    -26.24
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4671,
+   "win_pct": 36.7,
+   "avg_pct": 0.26,
+   "dev_alone": [
+    -2.73,
+    -49.42
+   ],
+   "dev_with_current": [
+    12.87,
+    -23.2
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 4892,
+   "win_pct": 47.6,
+   "avg_pct": 1.84,
+   "dev_alone": [
+    5.65,
+    -31.55
+   ],
+   "dev_with_current": [
+    12.87,
+    -26.24
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 8352,
+   "win_pct": 48.6,
+   "avg_pct": 2.51,
+   "dev_alone": [
+    8.43,
+    -38.72
+   ],
+   "dev_with_current": [
+    12.85,
+    -28.81
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 9521,
+   "win_pct": 51.9,
+   "avg_pct": 2.57,
+   "dev_alone": [
+    3.79,
+    -36.01
+   ],
+   "dev_with_current": [
+    12.84,
+    -24.25
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 7691,
+   "win_pct": 42.0,
+   "avg_pct": 5.52,
+   "dev_alone": [
+    10.18,
+    -40.3
+   ],
+   "dev_with_current": [
+    12.8,
+    -26.6
    ],
    "dev_current": [
     15.47,
@@ -1218,6 +4761,28 @@
    "screen": false
   },
   {
+   "name": "2-day RSI below 10 in uptrend | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 21842,
+   "win_pct": 46.3,
+   "avg_pct": 6.46,
+   "dev_alone": [
+    11.1,
+    -37.46
+   ],
+   "dev_with_current": [
+    12.71,
+    -33.47
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | no filter | stop 2 ATR, 20 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "no filter",
@@ -1240,6 +4805,28 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | breadth above 50% | target 3R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 11901,
+   "win_pct": 40.6,
+   "avg_pct": 0.33,
+   "dev_alone": [
+    -7.16,
+    -73.76
+   ],
+   "dev_with_current": [
+    12.66,
+    -30.49
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | no filter | stop 2 ATR, 10 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "no filter",
@@ -1254,6 +4841,50 @@
    "dev_with_current": [
     12.61,
     -27.9
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 3756,
+   "win_pct": 55.2,
+   "avg_pct": 3.02,
+   "dev_alone": [
+    8.16,
+    -41.71
+   ],
+   "dev_with_current": [
+    12.61,
+    -25.8
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 25334,
+   "win_pct": 42.8,
+   "avg_pct": 5.54,
+   "dev_alone": [
+    8.62,
+    -47.07
+   ],
+   "dev_with_current": [
+    12.6,
+    -32.69
    ],
    "dev_current": [
     15.47,
@@ -1320,6 +4951,116 @@
    "dev_with_current": [
     12.57,
     -27.63
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | target 3R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 41.2,
+   "avg_pct": 0.17,
+   "dev_alone": [
+    -8.2,
+    -71.14
+   ],
+   "dev_with_current": [
+    12.57,
+    -24.37
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 41.2,
+   "avg_pct": 0.17,
+   "dev_alone": [
+    -8.2,
+    -71.14
+   ],
+   "dev_with_current": [
+    12.57,
+    -24.37
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 7498,
+   "win_pct": 42.8,
+   "avg_pct": 5.85,
+   "dev_alone": [
+    7.29,
+    -31.61
+   ],
+   "dev_with_current": [
+    12.56,
+    -23.58
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "50-day average crosses above 200-day | no filter | stop 3 ATR, 20 days",
+   "entry": "50-day average crosses above 200-day",
+   "filter": "no filter",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 1952,
+   "win_pct": 47.4,
+   "avg_pct": 0.58,
+   "dev_alone": [
+    -1.74,
+    -62.39
+   ],
+   "dev_with_current": [
+    12.54,
+    -32.15
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 16084,
+   "win_pct": 47.0,
+   "avg_pct": 1.99,
+   "dev_alone": [
+    3.46,
+    -46.91
+   ],
+   "dev_with_current": [
+    12.51,
+    -28.66
    ],
    "dev_current": [
     15.47,
@@ -1438,6 +5179,50 @@
    "screen": false
   },
   {
+   "name": "squeeze then 20-day breakout | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 7691,
+   "win_pct": 44.6,
+   "avg_pct": 1.93,
+   "dev_alone": [
+    4.91,
+    -45.81
+   ],
+   "dev_with_current": [
+    12.46,
+    -24.43
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 11901,
+   "win_pct": 35.3,
+   "avg_pct": 0.01,
+   "dev_alone": [
+    -5.72,
+    -67.77
+   ],
+   "dev_with_current": [
+    12.46,
+    -26.26
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | NIFTY above 200-day | stop 2 ATR, 20 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "NIFTY above 200-day",
@@ -1452,6 +5237,182 @@
    "dev_with_current": [
     12.45,
     -27.31
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 6601,
+   "win_pct": 37.7,
+   "avg_pct": 2.97,
+   "dev_alone": [
+    2.27,
+    -58.26
+   ],
+   "dev_with_current": [
+    12.44,
+    -26.83
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 12449,
+   "win_pct": 35.4,
+   "avg_pct": 0.0,
+   "dev_alone": [
+    -6.62,
+    -76.66
+   ],
+   "dev_with_current": [
+    12.42,
+    -24.9
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11402,
+   "win_pct": 41.8,
+   "avg_pct": 4.26,
+   "dev_alone": [
+    6.37,
+    -39.76
+   ],
+   "dev_with_current": [
+    12.39,
+    -27.84
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11402,
+   "win_pct": 41.8,
+   "avg_pct": 4.26,
+   "dev_alone": [
+    6.37,
+    -39.76
+   ],
+   "dev_with_current": [
+    12.39,
+    -27.84
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 21313,
+   "win_pct": 52.6,
+   "avg_pct": 2.5,
+   "dev_alone": [
+    4.28,
+    -41.17
+   ],
+   "dev_with_current": [
+    12.39,
+    -25.97
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 16591,
+   "win_pct": 48.1,
+   "avg_pct": 2.28,
+   "dev_alone": [
+    4.69,
+    -50.32
+   ],
+   "dev_with_current": [
+    12.38,
+    -33.08
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 12449,
+   "win_pct": 36.6,
+   "avg_pct": 0.67,
+   "dev_alone": [
+    -0.2,
+    -59.09
+   ],
+   "dev_with_current": [
+    12.28,
+    -27.29
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 23750,
+   "win_pct": 46.3,
+   "avg_pct": 1.81,
+   "dev_alone": [
+    -0.76,
+    -51.6
+   ],
+   "dev_with_current": [
+    12.27,
+    -29.87
    ],
    "dev_current": [
     15.47,
@@ -1526,6 +5487,28 @@
    "screen": false
   },
   {
+   "name": "breakout 20-day high | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 25334,
+   "win_pct": 36.4,
+   "avg_pct": 2.83,
+   "dev_alone": [
+    2.05,
+    -49.11
+   ],
+   "dev_with_current": [
+    12.25,
+    -29.54
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | breadth above 50% | stop 2 ATR, 10 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "breadth above 50%",
@@ -1592,6 +5575,28 @@
    "screen": false
   },
   {
+   "name": "strength leader pulling back 3 days | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 4818,
+   "win_pct": 35.6,
+   "avg_pct": 3.17,
+   "dev_alone": [
+    6.41,
+    -45.54
+   ],
+   "dev_with_current": [
+    12.23,
+    -29.01
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "within 2% of 52-week high, top-20% strength | breadth above 50% | target 2R, stop 2 ATR, 20 days",
    "entry": "within 2% of 52-week high, top-20% strength",
    "filter": "breadth above 50%",
@@ -1606,6 +5611,28 @@
    "dev_with_current": [
     12.23,
     -30.48
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 12449,
+   "win_pct": 42.2,
+   "avg_pct": 0.16,
+   "dev_alone": [
+    -4.35,
+    -70.35
+   ],
+   "dev_with_current": [
+    12.19,
+    -31.84
    ],
    "dev_current": [
     15.47,
@@ -1650,6 +5677,28 @@
    "dev_with_current": [
     12.18,
     -28.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 7699,
+   "win_pct": 49.2,
+   "avg_pct": 2.73,
+   "dev_alone": [
+    5.81,
+    -40.91
+   ],
+   "dev_with_current": [
+    12.18,
+    -29.11
    ],
    "dev_current": [
     15.47,
@@ -1724,6 +5773,50 @@
    "screen": false
   },
   {
+   "name": "3 down days then strong close (uptrend) | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 10031,
+   "win_pct": 34.3,
+   "avg_pct": 1.54,
+   "dev_alone": [
+    3.17,
+    -42.37
+   ],
+   "dev_with_current": [
+    12.15,
+    -23.18
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 6416,
+   "win_pct": 35.4,
+   "avg_pct": 2.77,
+   "dev_alone": [
+    3.73,
+    -49.92
+   ],
+   "dev_with_current": [
+    12.14,
+    -29.73
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "squeeze then 20-day breakout | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "squeeze then 20-day breakout",
    "filter": "no filter",
@@ -1790,6 +5883,28 @@
    "screen": false
   },
   {
+   "name": "52-week high after a 60-day base | breadth above 50% | stop 3 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "breadth above 50%",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 4339,
+   "win_pct": 46.9,
+   "avg_pct": 0.24,
+   "dev_alone": [
+    -3.68,
+    -55.41
+   ],
+   "dev_with_current": [
+    12.12,
+    -25.88
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 55-day high | NIFTY above 200-day | stop 2 ATR, 20 days",
    "entry": "breakout 55-day high",
    "filter": "NIFTY above 200-day",
@@ -1804,6 +5919,28 @@
    "dev_with_current": [
     12.11,
     -31.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | NIFTY above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 4671,
+   "win_pct": 42.3,
+   "avg_pct": 0.05,
+   "dev_alone": [
+    -6.64,
+    -69.1
+   ],
+   "dev_with_current": [
+    12.11,
+    -23.62
    ],
    "dev_current": [
     15.47,
@@ -1848,6 +5985,28 @@
    "dev_with_current": [
     12.1,
     -32.33
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | NIFTY above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 12449,
+   "win_pct": 40.7,
+   "avg_pct": 0.34,
+   "dev_alone": [
+    -5.5,
+    -76.57
+   ],
+   "dev_with_current": [
+    12.05,
+    -30.23
    ],
    "dev_current": [
     15.47,
@@ -1922,6 +6081,50 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 6416,
+   "win_pct": 52.0,
+   "avg_pct": 2.16,
+   "dev_alone": [
+    4.08,
+    -48.21
+   ],
+   "dev_with_current": [
+    12.02,
+    -32.35
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 13157,
+   "win_pct": 48.5,
+   "avg_pct": 2.41,
+   "dev_alone": [
+    5.79,
+    -45.35
+   ],
+   "dev_with_current": [
+    12.02,
+    -30.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "3 down days then strong close (uptrend) | breadth above 50% | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "3 down days then strong close (uptrend)",
    "filter": "breadth above 50%",
@@ -1944,6 +6147,28 @@
    "screen": false
   },
   {
+   "name": "pullback to 50-day average in uptrend | breadth above 50% | target 5R, stop 4 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 19998,
+   "win_pct": 45.7,
+   "avg_pct": 6.25,
+   "dev_alone": [
+    9.56,
+    -29.91
+   ],
+   "dev_with_current": [
+    11.96,
+    -32.15
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | breadth above 50% | stop 3 ATR, 20 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "breadth above 50%",
@@ -1958,6 +6183,116 @@
    "dev_with_current": [
     11.94,
     -29.18
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 9296,
+   "win_pct": 47.3,
+   "avg_pct": 9.03,
+   "dev_alone": [
+    10.91,
+    -46.98
+   ],
+   "dev_with_current": [
+    11.91,
+    -47.09
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "squeeze then 20-day breakout | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "squeeze then 20-day breakout",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 8706,
+   "win_pct": 42.5,
+   "avg_pct": 5.69,
+   "dev_alone": [
+    11.48,
+    -33.6
+   ],
+   "dev_with_current": [
+    11.9,
+    -26.58
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | target 2R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 42.5,
+   "avg_pct": 0.06,
+   "dev_alone": [
+    -9.07,
+    -71.65
+   ],
+   "dev_with_current": [
+    11.85,
+    -25.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 42.5,
+   "avg_pct": 0.06,
+   "dev_alone": [
+    -9.07,
+    -71.65
+   ],
+   "dev_with_current": [
+    11.85,
+    -25.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 17548,
+   "win_pct": 40.9,
+   "avg_pct": 3.86,
+   "dev_alone": [
+    4.11,
+    -50.76
+   ],
+   "dev_with_current": [
+    11.83,
+    -30.92
    ],
    "dev_current": [
     15.47,
@@ -2046,6 +6381,50 @@
    "dev_with_current": [
     11.8,
     -28.49
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | stop 3 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 47.1,
+   "avg_pct": 0.29,
+   "dev_alone": [
+    -5.63,
+    -66.29
+   ],
+   "dev_with_current": [
+    11.8,
+    -25.89
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | stop 3 ATR, 20 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 4892,
+   "win_pct": 47.1,
+   "avg_pct": 0.29,
+   "dev_alone": [
+    -5.63,
+    -66.29
+   ],
+   "dev_with_current": [
+    11.8,
+    -25.89
    ],
    "dev_current": [
     15.47,
@@ -2186,6 +6565,28 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | NIFTY above 200-day | stop 2 ATR, 10 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 12449,
+   "win_pct": 43.3,
+   "avg_pct": -0.08,
+   "dev_alone": [
+    -14.92,
+    -89.17
+   ],
+   "dev_with_current": [
+    11.77,
+    -30.22
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "2-day RSI below 5 in uptrend | NIFTY above 200-day | stop 2 ATR, 20 days",
    "entry": "2-day RSI below 5 in uptrend",
    "filter": "NIFTY above 200-day",
@@ -2252,6 +6653,72 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | NIFTY above 200-day | stop 3 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 12449,
+   "win_pct": 47.4,
+   "avg_pct": 0.72,
+   "dev_alone": [
+    -2.6,
+    -66.72
+   ],
+   "dev_with_current": [
+    11.75,
+    -29.77
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11747,
+   "win_pct": 47.1,
+   "avg_pct": 6.81,
+   "dev_alone": [
+    11.5,
+    -36.99
+   ],
+   "dev_with_current": [
+    11.72,
+    -40.53
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 11747,
+   "win_pct": 47.1,
+   "avg_pct": 6.81,
+   "dev_alone": [
+    11.5,
+    -36.99
+   ],
+   "dev_with_current": [
+    11.72,
+    -40.53
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | breadth above 50% | target 3R, stop 2 ATR, 20 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "breadth above 50%",
@@ -2296,6 +6763,50 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | breadth above 50% | stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 11901,
+   "win_pct": 40.2,
+   "avg_pct": 0.41,
+   "dev_alone": [
+    -6.95,
+    -78.62
+   ],
+   "dev_with_current": [
+    11.7,
+    -32.16
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11486,
+   "win_pct": 53.3,
+   "avg_pct": 2.61,
+   "dev_alone": [
+    8.69,
+    -44.63
+   ],
+   "dev_with_current": [
+    11.68,
+    -30.03
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | NIFTY above 200-day | target 2R, stop 2 ATR, 20 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "NIFTY above 200-day",
@@ -2310,6 +6821,28 @@
    "dev_with_current": [
     11.67,
     -27.31
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | target 2R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 11901,
+   "win_pct": 42.1,
+   "avg_pct": 0.14,
+   "dev_alone": [
+    -3.18,
+    -59.06
+   ],
+   "dev_with_current": [
+    11.6,
+    -28.62
    ],
    "dev_current": [
     15.47,
@@ -2384,6 +6917,28 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | breadth above 50% | stop 3 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 11901,
+   "win_pct": 47.4,
+   "avg_pct": 0.74,
+   "dev_alone": [
+    -3.36,
+    -66.47
+   ],
+   "dev_with_current": [
+    11.53,
+    -31.45
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "2-day RSI below 5 in uptrend | breadth above 50% | stop 3 ATR, 20 days",
    "entry": "2-day RSI below 5 in uptrend",
    "filter": "breadth above 50%",
@@ -2420,6 +6975,28 @@
    "dev_with_current": [
     11.48,
     -29.37
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | stop 2 ATR, 10 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 6416,
+   "win_pct": 44.0,
+   "avg_pct": -0.16,
+   "dev_alone": [
+    -17.84,
+    -89.96
+   ],
+   "dev_with_current": [
+    11.47,
+    -26.09
    ],
    "dev_current": [
     15.47,
@@ -2582,6 +7159,72 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 7073,
+   "win_pct": 35.3,
+   "avg_pct": 2.5,
+   "dev_alone": [
+    3.43,
+    -50.03
+   ],
+   "dev_with_current": [
+    11.39,
+    -27.57
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | breadth above 50% | stop 2 ATR, 10 days",
+   "entry": "close above the 100-day high",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 11901,
+   "win_pct": 43.2,
+   "avg_pct": -0.09,
+   "dev_alone": [
+    -15.48,
+    -91.16
+   ],
+   "dev_with_current": [
+    11.39,
+    -25.36
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | stop 2 ATR, 10 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 7073,
+   "win_pct": 44.2,
+   "avg_pct": -0.16,
+   "dev_alone": [
+    -24.56,
+    -95.84
+   ],
+   "dev_with_current": [
+    11.34,
+    -31.78
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 52-week high | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "breakout 52-week high",
    "filter": "breadth above 50%",
@@ -2706,6 +7349,72 @@
    "dev_with_current": [
     11.25,
     -38.87
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 9521,
+   "win_pct": 34.3,
+   "avg_pct": 1.54,
+   "dev_alone": [
+    3.49,
+    -44.32
+   ],
+   "dev_with_current": [
+    11.2,
+    -24.83
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 29347,
+   "win_pct": 44.5,
+   "avg_pct": 6.18,
+   "dev_alone": [
+    8.24,
+    -49.03
+   ],
+   "dev_with_current": [
+    11.18,
+    -39.76
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 6035,
+   "win_pct": 44.3,
+   "avg_pct": 6.91,
+   "dev_alone": [
+    10.3,
+    -41.17
+   ],
+   "dev_with_current": [
+    11.17,
+    -31.84
    ],
    "dev_current": [
     15.47,
@@ -2890,6 +7599,28 @@
    "screen": false
   },
   {
+   "name": "volume surge 3x up-day 4%+ near the high | NIFTY above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 6601,
+   "win_pct": 41.4,
+   "avg_pct": 4.98,
+   "dev_alone": [
+    3.99,
+    -58.13
+   ],
+   "dev_with_current": [
+    11.01,
+    -40.09
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | breadth above 50% | stop 2 ATR, 10 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "breadth above 50%",
@@ -2912,6 +7643,28 @@
    "screen": false
   },
   {
+   "name": "strength leader pulling back 3 days | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 4802,
+   "win_pct": 55.6,
+   "avg_pct": 2.94,
+   "dev_alone": [
+    9.92,
+    -46.78
+   ],
+   "dev_with_current": [
+    11.0,
+    -29.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "3 down days then strong close (uptrend) | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "3 down days then strong close (uptrend)",
    "filter": "NIFTY above 200-day",
@@ -2926,6 +7679,50 @@
    "dev_with_current": [
     10.99,
     -26.54
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11486,
+   "win_pct": 39.3,
+   "avg_pct": 1.05,
+   "dev_alone": [
+    -2.73,
+    -58.84
+   ],
+   "dev_with_current": [
+    10.98,
+    -28.01
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 13091,
+   "win_pct": 40.5,
+   "avg_pct": 0.42,
+   "dev_alone": [
+    -9.76,
+    -85.46
+   ],
+   "dev_with_current": [
+    10.97,
+    -35.89
    ],
    "dev_current": [
     15.47,
@@ -2978,6 +7775,116 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 7073,
+   "win_pct": 32.1,
+   "avg_pct": 0.03,
+   "dev_alone": [
+    -26.07,
+    -96.19
+   ],
+   "dev_with_current": [
+    10.89,
+    -32.45
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 24829,
+   "win_pct": 45.7,
+   "avg_pct": 5.92,
+   "dev_alone": [
+    8.55,
+    -38.85
+   ],
+   "dev_with_current": [
+    10.87,
+    -41.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | stock above 200-day | target 5R, stop 4 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 24829,
+   "win_pct": 45.7,
+   "avg_pct": 5.92,
+   "dev_alone": [
+    8.55,
+    -38.85
+   ],
+   "dev_with_current": [
+    10.87,
+    -41.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 13723,
+   "win_pct": 53.9,
+   "avg_pct": 2.75,
+   "dev_alone": [
+    9.65,
+    -47.62
+   ],
+   "dev_with_current": [
+    10.86,
+    -46.84
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 13723,
+   "win_pct": 53.9,
+   "avg_pct": 2.75,
+   "dev_alone": [
+    9.65,
+    -47.62
+   ],
+   "dev_with_current": [
+    10.86,
+    -46.84
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 55-day high | breadth above 50% | stop 2 ATR, 10 days",
    "entry": "breakout 55-day high",
    "filter": "breadth above 50%",
@@ -3014,6 +7921,28 @@
    "dev_with_current": [
     10.84,
     -32.52
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11218,
+   "win_pct": 39.1,
+   "avg_pct": 1.07,
+   "dev_alone": [
+    3.16,
+    -54.33
+   ],
+   "dev_with_current": [
+    10.83,
+    -26.44
    ],
    "dev_current": [
     15.47,
@@ -3088,6 +8017,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 6416,
+   "win_pct": 32.5,
+   "avg_pct": 0.09,
+   "dev_alone": [
+    -16.35,
+    -88.18
+   ],
+   "dev_with_current": [
+    10.82,
+    -25.9
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | NIFTY above 200-day | stop 2 ATR, 10 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "NIFTY above 200-day",
@@ -3154,6 +8105,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 7073,
+   "win_pct": 32.3,
+   "avg_pct": 0.25,
+   "dev_alone": [
+    -17.43,
+    -90.76
+   ],
+   "dev_with_current": [
+    10.76,
+    -29.3
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 52-week high | breadth above 50% | stop 2 ATR, 10 days",
    "entry": "breakout 52-week high",
    "filter": "breadth above 50%",
@@ -3168,6 +8141,28 @@
    "dev_with_current": [
     10.75,
     -27.08
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 9367,
+   "win_pct": 54.3,
+   "avg_pct": 2.72,
+   "dev_alone": [
+    5.43,
+    -66.54
+   ],
+   "dev_with_current": [
+    10.72,
+    -55.67
    ],
    "dev_current": [
     15.47,
@@ -3234,6 +8229,28 @@
    "dev_with_current": [
     10.63,
     -31.97
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 21842,
+   "win_pct": 52.0,
+   "avg_pct": 2.25,
+   "dev_alone": [
+    4.11,
+    -48.97
+   ],
+   "dev_with_current": [
+    10.63,
+    -36.04
    ],
    "dev_current": [
     15.47,
@@ -3330,6 +8347,94 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | stop 3 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 7073,
+   "win_pct": 46.6,
+   "avg_pct": 0.49,
+   "dev_alone": [
+    -0.36,
+    -65.23
+   ],
+   "dev_with_current": [
+    10.54,
+    -31.04
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | no filter | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4892,
+   "win_pct": 36.9,
+   "avg_pct": 0.31,
+   "dev_alone": [
+    -3.08,
+    -55.08
+   ],
+   "dev_with_current": [
+    10.51,
+    -24.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "52-week high after a 60-day base | stock above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "52-week high after a 60-day base",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 4892,
+   "win_pct": 36.9,
+   "avg_pct": 0.31,
+   "dev_alone": [
+    -3.08,
+    -55.08
+   ],
+   "dev_with_current": [
+    10.51,
+    -24.94
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 6416,
+   "win_pct": 32.1,
+   "avg_pct": 0.3,
+   "dev_alone": [
+    -8.88,
+    -80.97
+   ],
+   "dev_with_current": [
+    10.49,
+    -26.83
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "3 down days then strong close (uptrend) | NIFTY above 200-day | target 2R, stop 2 ATR, 20 days",
    "entry": "3 down days then strong close (uptrend)",
    "filter": "NIFTY above 200-day",
@@ -3396,6 +8501,116 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 7073,
+   "win_pct": 41.5,
+   "avg_pct": 0.37,
+   "dev_alone": [
+    -9.19,
+    -72.86
+   ],
+   "dev_with_current": [
+    10.38,
+    -31.77
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | target 3R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 6416,
+   "win_pct": 41.5,
+   "avg_pct": 0.22,
+   "dev_alone": [
+    -2.14,
+    -65.16
+   ],
+   "dev_with_current": [
+    10.37,
+    -28.09
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 7073,
+   "win_pct": 41.8,
+   "avg_pct": 0.3,
+   "dev_alone": [
+    -4.39,
+    -66.51
+   ],
+   "dev_with_current": [
+    10.31,
+    -29.93
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11402,
+   "win_pct": 48.2,
+   "avg_pct": 2.39,
+   "dev_alone": [
+    4.12,
+    -50.97
+   ],
+   "dev_with_current": [
+    10.3,
+    -33.02
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 52-week high | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 52-week high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11402,
+   "win_pct": 48.2,
+   "avg_pct": 2.39,
+   "dev_alone": [
+    4.12,
+    -50.97
+   ],
+   "dev_with_current": [
+    10.3,
+    -33.02
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "2-day RSI below 5 in uptrend | breadth above 50% | target 2R, stop 2 ATR, 20 days",
    "entry": "2-day RSI below 5 in uptrend",
    "filter": "breadth above 50%",
@@ -3410,6 +8625,72 @@
    "dev_with_current": [
     10.3,
     -29.43
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 25334,
+   "win_pct": 45.5,
+   "avg_pct": 1.51,
+   "dev_alone": [
+    0.88,
+    -52.48
+   ],
+   "dev_with_current": [
+    10.29,
+    -31.62
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11747,
+   "win_pct": 34.5,
+   "avg_pct": 1.37,
+   "dev_alone": [
+    0.51,
+    -52.51
+   ],
+   "dev_with_current": [
+    10.29,
+    -32.49
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 11747,
+   "win_pct": 34.5,
+   "avg_pct": 1.37,
+   "dev_alone": [
+    0.51,
+    -52.51
+   ],
+   "dev_with_current": [
+    10.29,
+    -32.49
    ],
    "dev_current": [
     15.47,
@@ -3528,6 +8809,50 @@
    "screen": false
   },
   {
+   "name": "pullback to 50-day average in uptrend | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 20996,
+   "win_pct": 49.7,
+   "avg_pct": 1.94,
+   "dev_alone": [
+    5.71,
+    -35.7
+   ],
+   "dev_with_current": [
+    10.16,
+    -30.51
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | target 2R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 6416,
+   "win_pct": 42.6,
+   "avg_pct": 0.1,
+   "dev_alone": [
+    -9.54,
+    -77.12
+   ],
+   "dev_with_current": [
+    10.16,
+    -28.27
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 55-day high | NIFTY above 200-day | stop 3 ATR, 20 days",
    "entry": "breakout 55-day high",
    "filter": "NIFTY above 200-day",
@@ -3594,6 +8919,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | NIFTY above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "NIFTY above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 7073,
+   "win_pct": 42.9,
+   "avg_pct": 0.13,
+   "dev_alone": [
+    -15.04,
+    -87.53
+   ],
+   "dev_with_current": [
+    10.09,
+    -30.57
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | breadth above 50% | target 2R, stop 2 ATR, 20 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "breadth above 50%",
@@ -3608,6 +8955,28 @@
    "dev_with_current": [
     10.08,
     -31.62
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 24618,
+   "win_pct": 47.2,
+   "avg_pct": 1.98,
+   "dev_alone": [
+    3.52,
+    -49.29
+   ],
+   "dev_with_current": [
+    10.07,
+    -33.98
    ],
    "dev_current": [
     15.47,
@@ -3660,6 +9029,50 @@
    "screen": false
   },
   {
+   "name": "pullback to 50-day average in uptrend | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 19998,
+   "win_pct": 50.0,
+   "avg_pct": 2.1,
+   "dev_alone": [
+    3.45,
+    -38.01
+   ],
+   "dev_with_current": [
+    10.02,
+    -28.01
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | stop 2 ATR, 10 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 13091,
+   "win_pct": 43.4,
+   "avg_pct": -0.09,
+   "dev_alone": [
+    -21.82,
+    -93.7
+   ],
+   "dev_with_current": [
+    10.02,
+    -32.95
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "pullback to 50-day average in uptrend | breadth above 50% | target 3R, stop 2 ATR, 20 days",
    "entry": "pullback to 50-day average in uptrend",
    "filter": "breadth above 50%",
@@ -3682,6 +9095,72 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | stock above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 13091,
+   "win_pct": 35.4,
+   "avg_pct": 0.01,
+   "dev_alone": [
+    -14.02,
+    -81.98
+   ],
+   "dev_with_current": [
+    10.01,
+    -28.56
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | breadth above 50% | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "breadth above 50%",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 6140,
+   "win_pct": 47.5,
+   "avg_pct": 1.61,
+   "dev_alone": [
+    -0.08,
+    -47.95
+   ],
+   "dev_with_current": [
+    9.98,
+    -28.74
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 13091,
+   "win_pct": 42.3,
+   "avg_pct": 0.15,
+   "dev_alone": [
+    -13.74,
+    -87.46
+   ],
+   "dev_with_current": [
+    9.97,
+    -34.26
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 20-day high | breadth above 50% | target 2R, stop 2 ATR, 20 days",
    "entry": "breakout 20-day high",
    "filter": "breadth above 50%",
@@ -3696,6 +9175,160 @@
    "dev_with_current": [
     9.95,
     -32.41
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 19998,
+   "win_pct": 24.4,
+   "avg_pct": 1.26,
+   "dev_alone": [
+    2.27,
+    -48.24
+   ],
+   "dev_with_current": [
+    9.95,
+    -27.4
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 6416,
+   "win_pct": 41.2,
+   "avg_pct": 0.3,
+   "dev_alone": [
+    0.37,
+    -49.22
+   ],
+   "dev_with_current": [
+    9.95,
+    -29.13
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 13157,
+   "win_pct": 40.4,
+   "avg_pct": 0.4,
+   "dev_alone": [
+    -7.19,
+    -82.6
+   ],
+   "dev_with_current": [
+    9.95,
+    -35.11
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 13157,
+   "win_pct": 35.4,
+   "avg_pct": -0.0,
+   "dev_alone": [
+    -13.75,
+    -82.95
+   ],
+   "dev_with_current": [
+    9.94,
+    -29.8
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 9296,
+   "win_pct": 54.3,
+   "avg_pct": 2.73,
+   "dev_alone": [
+    4.33,
+    -64.49
+   ],
+   "dev_with_current": [
+    9.89,
+    -55.31
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 20996,
+   "win_pct": 24.4,
+   "avg_pct": 1.15,
+   "dev_alone": [
+    3.49,
+    -41.92
+   ],
+   "dev_with_current": [
+    9.86,
+    -31.49
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 7958,
+   "win_pct": 38.3,
+   "avg_pct": 2.88,
+   "dev_alone": [
+    0.69,
+    -63.05
+   ],
+   "dev_with_current": [
+    9.86,
+    -36.06
    ],
    "dev_current": [
     15.47,
@@ -3784,6 +9417,28 @@
    "dev_with_current": [
     9.76,
     -31.4
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 29347,
+   "win_pct": 37.2,
+   "avg_pct": 3.03,
+   "dev_alone": [
+    3.27,
+    -52.87
+   ],
+   "dev_with_current": [
+    9.73,
+    -37.24
    ],
    "dev_current": [
     15.47,
@@ -3894,6 +9549,28 @@
    "dev_with_current": [
     9.68,
     -35.95
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 55-day high | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 55-day high",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 17548,
+   "win_pct": 47.9,
+   "avg_pct": 2.18,
+   "dev_alone": [
+    1.42,
+    -48.44
+   ],
+   "dev_with_current": [
+    9.66,
+    -32.51
    ],
    "dev_current": [
     15.47,
@@ -4166,6 +9843,116 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | stock above 200-day | stop 3 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 13091,
+   "win_pct": 47.5,
+   "avg_pct": 0.73,
+   "dev_alone": [
+    -7.81,
+    -80.5
+   ],
+   "dev_with_current": [
+    9.48,
+    -32.55
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | target 3R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 9367,
+   "win_pct": 44.0,
+   "avg_pct": 0.75,
+   "dev_alone": [
+    -2.72,
+    -78.52
+   ],
+   "dev_with_current": [
+    9.46,
+    -52.96
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 13091,
+   "win_pct": 36.8,
+   "avg_pct": 0.72,
+   "dev_alone": [
+    -4.89,
+    -75.76
+   ],
+   "dev_with_current": [
+    9.46,
+    -35.98
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 24618,
+   "win_pct": 38.2,
+   "avg_pct": 3.39,
+   "dev_alone": [
+    3.67,
+    -50.86
+   ],
+   "dev_with_current": [
+    9.44,
+    -37.8
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 9367,
+   "win_pct": 36.6,
+   "avg_pct": 2.47,
+   "dev_alone": [
+    1.55,
+    -70.11
+   ],
+   "dev_with_current": [
+    9.43,
+    -42.5
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | stock above 200-day | stop 2 ATR, 10 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "stock above 200-day",
@@ -4254,6 +10041,28 @@
    "screen": false
   },
   {
+   "name": "close above the 100-day high | no filter | stop 2 ATR, 10 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 13157,
+   "win_pct": 43.4,
+   "avg_pct": -0.09,
+   "dev_alone": [
+    -19.57,
+    -92.76
+   ],
+   "dev_with_current": [
+    9.36,
+    -31.66
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "pullback to 50-day average in uptrend | NIFTY above 200-day | stop 3 ATR, 20 days",
    "entry": "pullback to 50-day average in uptrend",
    "filter": "NIFTY above 200-day",
@@ -4276,6 +10085,28 @@
    "screen": false
   },
   {
+   "name": "2-day RSI below 10 in uptrend | breadth above 50% | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "breadth above 50%",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 21313,
+   "win_pct": 36.5,
+   "avg_pct": 1.22,
+   "dev_alone": [
+    -2.21,
+    -54.71
+   ],
+   "dev_with_current": [
+    9.27,
+    -30.75
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | stock above 200-day | stop 3 ATR, 20 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "stock above 200-day",
@@ -4290,6 +10121,28 @@
    "dev_with_current": [
     9.26,
     -34.69
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 6035,
+   "win_pct": 48.3,
+   "avg_pct": 1.81,
+   "dev_alone": [
+    -0.9,
+    -53.58
+   ],
+   "dev_with_current": [
+    9.26,
+    -34.23
    ],
    "dev_current": [
     15.47,
@@ -4474,6 +10327,50 @@
    "screen": false
   },
   {
+   "name": "within 2% of 52-week high, top-20% strength | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 9084,
+   "win_pct": 49.4,
+   "avg_pct": 2.62,
+   "dev_alone": [
+    2.5,
+    -56.75
+   ],
+   "dev_with_current": [
+    9.15,
+    -34.4
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "within 2% of 52-week high, top-20% strength | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "within 2% of 52-week high, top-20% strength",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 9084,
+   "win_pct": 49.4,
+   "avg_pct": 2.62,
+   "dev_alone": [
+    2.5,
+    -56.75
+   ],
+   "dev_with_current": [
+    9.15,
+    -34.4
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "pullback to 50-day average in uptrend | breadth above 50% | target 2R, stop 2 ATR, 20 days",
    "entry": "pullback to 50-day average in uptrend",
    "filter": "breadth above 50%",
@@ -4518,6 +10415,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | breadth above 50% | stop 3 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "breadth above 50%",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 6416,
+   "win_pct": 46.2,
+   "avg_pct": 0.43,
+   "dev_alone": [
+    -4.74,
+    -71.59
+   ],
+   "dev_with_current": [
+    9.04,
+    -29.36
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 55-day high | stock above 200-day | stop 2 ATR, 10 days",
    "entry": "breakout 55-day high",
    "filter": "stock above 200-day",
@@ -4554,6 +10473,50 @@
    "dev_with_current": [
     9.03,
     -28.1
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | target 2R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 9296,
+   "win_pct": 45.0,
+   "avg_pct": 0.6,
+   "dev_alone": [
+    -8.04,
+    -82.68
+   ],
+   "dev_with_current": [
+    9.03,
+    -50.27
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | target 3R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 13157,
+   "win_pct": 40.9,
+   "avg_pct": 0.32,
+   "dev_alone": [
+    -12.27,
+    -87.07
+   ],
+   "dev_with_current": [
+    9.03,
+    -34.63
    ],
    "dev_current": [
     15.47,
@@ -4694,6 +10657,72 @@
    "screen": false
   },
   {
+   "name": "3 down days then strong close (uptrend) | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11747,
+   "win_pct": 52.5,
+   "avg_pct": 2.64,
+   "dev_alone": [
+    6.35,
+    -38.26
+   ],
+   "dev_with_current": [
+    8.91,
+    -42.31
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "3 down days then strong close (uptrend) | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "3 down days then strong close (uptrend)",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 11747,
+   "win_pct": 52.5,
+   "avg_pct": 2.64,
+   "dev_alone": [
+    6.35,
+    -38.26
+   ],
+   "dev_with_current": [
+    8.91,
+    -42.31
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | stop 3 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 13157,
+   "win_pct": 47.5,
+   "avg_pct": 0.71,
+   "dev_alone": [
+    -6.78,
+    -77.8
+   ],
+   "dev_with_current": [
+    8.9,
+    -35.29
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "3 down days then strong close (uptrend) | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "3 down days then strong close (uptrend)",
    "filter": "no filter",
@@ -4818,6 +10847,28 @@
    "dev_with_current": [
     8.83,
     -39.89
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | target 2R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 13157,
+   "win_pct": 42.3,
+   "avg_pct": 0.14,
+   "dev_alone": [
+    -8.7,
+    -80.68
+   ],
+   "dev_with_current": [
+    8.83,
+    -37.25
    ],
    "dev_current": [
     15.47,
@@ -4980,6 +11031,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | no filter | stop 2 ATR, 10 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 9367,
+   "win_pct": 45.7,
+   "avg_pct": 0.04,
+   "dev_alone": [
+    -26.87,
+    -96.92
+   ],
+   "dev_with_current": [
+    8.65,
+    -49.01
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "3 down days then strong close (uptrend) | no filter | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "3 down days then strong close (uptrend)",
    "filter": "no filter",
@@ -5038,6 +11111,28 @@
    "dev_with_current": [
     8.58,
     -31.95
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "breakout 20-day high | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "breakout 20-day high",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 29347,
+   "win_pct": 47.0,
+   "avg_pct": 1.82,
+   "dev_alone": [
+    -0.68,
+    -63.9
+   ],
+   "dev_with_current": [
+    8.56,
+    -43.0
    ],
    "dev_current": [
     15.47,
@@ -5134,6 +11229,94 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 9296,
+   "win_pct": 36.6,
+   "avg_pct": 2.5,
+   "dev_alone": [
+    -0.33,
+    -67.24
+   ],
+   "dev_with_current": [
+    8.48,
+    -44.49
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | stock above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "close above the 100-day high",
+   "filter": "stock above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 13091,
+   "win_pct": 40.9,
+   "avg_pct": 0.33,
+   "dev_alone": [
+    -11.47,
+    -84.69
+   ],
+   "dev_with_current": [
+    8.48,
+    -35.11
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | NIFTY above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 6601,
+   "win_pct": 47.0,
+   "avg_pct": 1.22,
+   "dev_alone": [
+    -5.35,
+    -74.02
+   ],
+   "dev_with_current": [
+    8.43,
+    -34.13
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 9296,
+   "win_pct": 43.8,
+   "avg_pct": 0.8,
+   "dev_alone": [
+    -2.98,
+    -73.71
+   ],
+   "dev_with_current": [
+    8.43,
+    -53.34
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "volume surge 3x up-day 4%+ near the high | stock above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "volume surge 3x up-day 4%+ near the high",
    "filter": "stock above 200-day",
@@ -5148,6 +11331,28 @@
    "dev_with_current": [
     8.41,
     -38.32
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "close above the 100-day high | no filter | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "close above the 100-day high",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 13157,
+   "win_pct": 36.7,
+   "avg_pct": 0.7,
+   "dev_alone": [
+    -4.72,
+    -70.72
+   ],
+   "dev_with_current": [
+    8.39,
+    -31.91
    ],
    "dev_current": [
     15.47,
@@ -5258,6 +11463,28 @@
    "dev_with_current": [
     8.35,
     -35.59
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | NIFTY above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "NIFTY above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 21842,
+   "win_pct": 36.7,
+   "avg_pct": 1.19,
+   "dev_alone": [
+    -2.79,
+    -57.05
+   ],
+   "dev_with_current": [
+    8.34,
+    -31.97
    ],
    "dev_current": [
     15.47,
@@ -5420,6 +11647,50 @@
    "screen": false
   },
   {
+   "name": "2-day RSI below 10 in uptrend | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 25759,
+   "win_pct": 52.7,
+   "avg_pct": 2.45,
+   "dev_alone": [
+    8.0,
+    -58.18
+   ],
+   "dev_with_current": [
+    8.18,
+    -43.28
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 25759,
+   "win_pct": 52.7,
+   "avg_pct": 2.45,
+   "dev_alone": [
+    8.0,
+    -58.18
+   ],
+   "dev_with_current": [
+    8.18,
+    -43.28
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | no filter | stop 2 ATR, 20 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "no filter",
@@ -5530,6 +11801,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | no filter | stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "stop 2 ATR, 20 days",
+   "dev_trades": 9367,
+   "win_pct": 43.7,
+   "avg_pct": 0.81,
+   "dev_alone": [
+    -5.43,
+    -74.71
+   ],
+   "dev_with_current": [
+    7.96,
+    -57.8
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "within 2% of 52-week high, top-20% strength | no filter | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "within 2% of 52-week high, top-20% strength",
    "filter": "no filter",
@@ -5566,6 +11859,28 @@
    "dev_with_current": [
     7.94,
     -40.33
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | target 2R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "target 2R, stop 2 ATR, 20 days",
+   "dev_trades": 9367,
+   "win_pct": 44.9,
+   "avg_pct": 0.61,
+   "dev_alone": [
+    -7.0,
+    -82.29
+   ],
+   "dev_with_current": [
+    7.94,
+    -56.77
    ],
    "dev_current": [
     15.47,
@@ -5654,6 +11969,28 @@
    "dev_with_current": [
     7.76,
     -29.72
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 9367,
+   "win_pct": 33.5,
+   "avg_pct": 0.14,
+   "dev_alone": [
+    -29.89,
+    -97.86
+   ],
+   "dev_with_current": [
+    7.74,
+    -46.11
    ],
    "dev_current": [
     15.47,
@@ -5838,6 +12175,50 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | no filter | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 9367,
+   "win_pct": 33.7,
+   "avg_pct": 0.35,
+   "dev_alone": [
+    -29.74,
+    -97.81
+   ],
+   "dev_with_current": [
+    7.6,
+    -43.74
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 9296,
+   "win_pct": 33.7,
+   "avg_pct": 0.35,
+   "dev_alone": [
+    -29.76,
+    -97.81
+   ],
+   "dev_with_current": [
+    7.52,
+    -42.76
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "pullback to 50-day average in uptrend | NIFTY above 200-day | trail below 20-day avg, stop 3 ATR, 60 days",
    "entry": "pullback to 50-day average in uptrend",
    "filter": "NIFTY above 200-day",
@@ -5852,6 +12233,28 @@
    "dev_with_current": [
     7.46,
     -33.58
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | target 3R, stop 2 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "target 3R, stop 2 ATR, 20 days",
+   "dev_trades": 9296,
+   "win_pct": 44.0,
+   "avg_pct": 0.75,
+   "dev_alone": [
+    -4.92,
+    -80.54
+   ],
+   "dev_with_current": [
+    7.44,
+    -54.42
    ],
    "dev_current": [
     15.47,
@@ -5962,6 +12365,50 @@
    "dev_with_current": [
     7.39,
     -35.43
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 13723,
+   "win_pct": 39.5,
+   "avg_pct": 0.87,
+   "dev_alone": [
+    -13.7,
+    -88.23
+   ],
+   "dev_with_current": [
+    7.39,
+    -41.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 5 in uptrend | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 5 in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 13723,
+   "win_pct": 39.5,
+   "avg_pct": 0.87,
+   "dev_alone": [
+    -13.7,
+    -88.23
+   ],
+   "dev_with_current": [
+    7.39,
+    -41.19
    ],
    "dev_current": [
     15.47,
@@ -6168,6 +12615,50 @@
    "screen": false
   },
   {
+   "name": "pullback to 50-day average in uptrend | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 24829,
+   "win_pct": 50.4,
+   "avg_pct": 2.07,
+   "dev_alone": [
+    6.53,
+    -44.95
+   ],
+   "dev_with_current": [
+    7.16,
+    -50.38
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 24829,
+   "win_pct": 50.4,
+   "avg_pct": 2.07,
+   "dev_alone": [
+    6.53,
+    -44.95
+   ],
+   "dev_with_current": [
+    7.16,
+    -50.38
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "strength leader pulling back 3 days | no filter | stop 2 ATR, 10 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "no filter",
@@ -6226,6 +12717,94 @@
    "dev_with_current": [
     7.09,
     -48.03
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | stop 3 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 9296,
+   "win_pct": 48.7,
+   "avg_pct": 0.98,
+   "dev_alone": [
+    -9.2,
+    -80.67
+   ],
+   "dev_with_current": [
+    7.03,
+    -50.95
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 24829,
+   "win_pct": 24.8,
+   "avg_pct": 1.16,
+   "dev_alone": [
+    2.37,
+    -62.23
+   ],
+   "dev_with_current": [
+    6.82,
+    -49.02
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "pullback to 50-day average in uptrend | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "pullback to 50-day average in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 24829,
+   "win_pct": 24.8,
+   "avg_pct": 1.16,
+   "dev_alone": [
+    2.37,
+    -62.23
+   ],
+   "dev_with_current": [
+    6.82,
+    -49.02
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "top-10% strength turning up after a dip | no filter | stop 3 ATR, 20 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "no filter",
+   "exit": "stop 3 ATR, 20 days",
+   "dev_trades": 9367,
+   "win_pct": 48.7,
+   "avg_pct": 0.98,
+   "dev_alone": [
+    -7.39,
+    -77.6
+   ],
+   "dev_with_current": [
+    6.75,
+    -52.23
    ],
    "dev_current": [
     15.47,
@@ -6322,6 +12901,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "trail below 10-day avg, stop 3 ATR, 60 days",
+   "dev_trades": 9296,
+   "win_pct": 33.4,
+   "avg_pct": 0.14,
+   "dev_alone": [
+    -29.61,
+    -97.83
+   ],
+   "dev_with_current": [
+    6.57,
+    -46.39
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "2-day RSI below 10 in uptrend | no filter | stop 2 ATR, 20 days",
    "entry": "2-day RSI below 10 in uptrend",
    "filter": "no filter",
@@ -6410,6 +13011,28 @@
    "screen": false
   },
   {
+   "name": "top-10% strength turning up after a dip | stock above 200-day | stop 2 ATR, 10 days",
+   "entry": "top-10% strength turning up after a dip",
+   "filter": "stock above 200-day",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 9296,
+   "win_pct": 45.8,
+   "avg_pct": 0.05,
+   "dev_alone": [
+    -26.55,
+    -96.42
+   ],
+   "dev_with_current": [
+    6.2,
+    -54.37
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 20-day high | stock above 200-day | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "breakout 20-day high",
    "filter": "stock above 200-day",
@@ -6446,6 +13069,28 @@
    "dev_with_current": [
     6.09,
     -47.14
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "volume surge 3x up-day 4%+ near the high | no filter | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "no filter",
+   "exit": "trail below 20-day avg after +10%, stop 3 ATR, 120 days",
+   "dev_trades": 7958,
+   "win_pct": 48.5,
+   "avg_pct": 1.43,
+   "dev_alone": [
+    -4.11,
+    -66.51
+   ],
+   "dev_with_current": [
+    6.08,
+    -39.09
    ],
    "dev_current": [
     15.47,
@@ -6806,6 +13451,28 @@
    "screen": false
   },
   {
+   "name": "volume surge 3x up-day 4%+ near the high | no filter | target 5R, stop 4 ATR, 120 days",
+   "entry": "volume surge 3x up-day 4%+ near the high",
+   "filter": "no filter",
+   "exit": "target 5R, stop 4 ATR, 120 days",
+   "dev_trades": 7958,
+   "win_pct": 43.6,
+   "avg_pct": 5.74,
+   "dev_alone": [
+    1.42,
+    -64.3
+   ],
+   "dev_with_current": [
+    5.39,
+    -53.24
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
    "name": "breakout 20-day high | no filter | trail below 10-day avg, stop 3 ATR, 60 days",
    "entry": "breakout 20-day high",
    "filter": "no filter",
@@ -7018,6 +13685,50 @@
    "dev_with_current": [
     3.86,
     -51.65
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | no filter | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "no filter",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 25759,
+   "win_pct": 36.8,
+   "avg_pct": 1.04,
+   "dev_alone": [
+    -1.04,
+    -67.52
+   ],
+   "dev_with_current": [
+    3.47,
+    -51.86
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "2-day RSI below 10 in uptrend | stock above 200-day | trail below 50-day avg, stop 5 ATR, 120 days",
+   "entry": "2-day RSI below 10 in uptrend",
+   "filter": "stock above 200-day",
+   "exit": "trail below 50-day avg, stop 5 ATR, 120 days",
+   "dev_trades": 25759,
+   "win_pct": 36.8,
+   "avg_pct": 1.04,
+   "dev_alone": [
+    -1.04,
+    -67.52
+   ],
+   "dev_with_current": [
+    3.47,
+    -51.86
    ],
    "dev_current": [
     15.47,

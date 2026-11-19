@@ -41,3 +41,11 @@ plus 20.8% tax. Run 2 adds building blocks built for long holds / big moves (sam
   6-month strength turning up (5-day return > 0 after a 5-day dip); close above the 100-day high.
 - EXIT: trail below the 50-day average + 5 x ATR stop + 120 days; trail below the 20-day average only after +10%
   (else 3 x ATR stop) + 120 days; 4 x ATR stop + target 5R + 120 days.
+
+## Addendum 2 (19 Nov 2026, before re-judging run 2's survivor; same bar otherwise)
+The luck test of step 2 ("random days in the same stock and year") quietly uses the future: a stock enters the luck
+pool because it gave a signal at some point in that year, i.e. it was strong that year. That can beat any
+stock-choice strategy unfairly. From now on step 2 has two luck tests, both 20 worlds, development:
+- LUCK-STOCK (decides): the same number of entries on the SAME signal days, but in random OTHER top-300 members of
+  that day, same exit rule. The strategy must beat at least 18 of 20 - its choice of stock must add value.
+- LUCK-TIMING (reported, informative): the original same-stock / same-year test.

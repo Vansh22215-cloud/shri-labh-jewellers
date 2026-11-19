@@ -256,6 +256,26 @@ def luck_worlds(T, ex, worlds=20, seed=0):
     return out
 
 
+def luck_stock(T, ex, worlds=20, seed=1):
+    """LUCK-STOCK: same signal days and count, random OTHER top-300 members of that day, same exits."""
+    p = load()
+    M = p["M"].values
+    rng = np.random.default_rng(seed)
+    D = period(T, "dev")
+    members = {}
+    out = []
+    for w in range(worlds):
+        ss = np.empty(len(D), int)
+        for i, (t, s) in enumerate(zip(D["t"].values, D["s"].values)):
+            if t not in members:
+                members[t] = np.nonzero(M[t])[0]
+            c = members[t]
+            ss[i] = c[rng.integers(len(c))]
+        R = trades(None, ex, t_s=(D["t"].values, ss))
+        out.append(account(period(R, "dev"), seeds=3)[0])
+    return out
+
+
 def years_better(T, base, per_years):
     b = 0
     n = 0
@@ -285,9 +305,11 @@ def main(procs=4):
         sig = _E[r["entry"]] if _F[r["filter"]] is None else (_E[r["entry"]] & _F[r["filter"]].fillna(False).astype(bool))
         T = trades(sig, ex)
         L = luck_worlds(T, ex)
-        r["luck_dev"] = L
-        r["luck_pass"] = sum(r["dev_alone"][0] > x for x in L) >= 18
-        print("luck", r["name"], r["dev_alone"][0], "beats", sum(r["dev_alone"][0] > x for x in L), "of 20", flush=True)
+        LS = luck_stock(T, ex)
+        r["luck_timing_dev"], r["luck_stock_dev"] = L, LS
+        r["luck_pass"] = sum(r["dev_alone"][0] > x for x in LS) >= 18        # addendum 2: stock-choice luck decides
+        print("luck", r["name"], r["dev_alone"][0], "beats stock-luck", sum(r["dev_alone"][0] > x for x in LS),
+              "timing-luck", sum(r["dev_alone"][0] > x for x in L), "of 20", flush=True)
     lucky = [r for r in surv[:25] if r.get("luck_pass")]
     base_all = current_system()
     for r in lucky[:10]:
