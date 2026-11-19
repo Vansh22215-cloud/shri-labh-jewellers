@@ -17,6 +17,7 @@ from .config import ROOT, get_logger
 log = get_logger()
 VAL = ROOT.parent / "vantage-ai" / "validation"
 OUT = ROOT / "journal" / "research_queue.md"
+LEADS_F = ROOT / "strategies" / "why_leads.json"
 BUDGET = 2
 # already-tested ideas by the situation a live lesson is about (so a lesson is not retested blindly)
 TESTED_BY_SITUATION = {   # LAB-1 = the auto-lab tested every bucket of these facts on 13 years (AUTO_LAB_RESULTS.md)
@@ -25,7 +26,7 @@ TESTED_BY_SITUATION = {   # LAB-1 = the auto-lab tested every bucket of these fa
     "mistake": ["R1-E1", "R20-G1", "R20-G2"], "weekday": ["LAB-1"], "from_52w_high": ["FP", "LAB-1"],
     "results_week": ["R2-R4", "LAB-1"],
 }
-FAMILY_OF = {"belief": "adversarial", "lesson": "filter", "mistake": "exit", "missed": "discovery", "unknown": "exploration"}
+FAMILY_OF = {"why-lead": "discovery", "belief": "adversarial", "lesson": "filter", "mistake": "exit", "missed": "discovery", "unknown": "exploration"}
 VALUE = {"broken": 4.0, "at risk": 3.0, "strong": 2.0, "medium": 1.0, "weak": 0.5, "missed": 2.0, "unknown": 1.0}
 
 
@@ -70,6 +71,13 @@ def candidates(checks=(), queue=None, missed_n=0, unknowns=()):
     if missed_n >= 10:
         C.append({"kind": "missed", "idea": f"{missed_n} of the top 20 risers were never detected: is there a testable "
                   "pattern in them (most started far from their 52-week high)?", "value": VALUE["missed"], "tested": "FP, X-missed"})
+    try:   # why-engine leads: live surprises confirmed on 13 years -> the weekly research tests them
+        L = json.loads(LEADS_F.read_text())["leads"]
+    except Exception:
+        L = []
+    for x in L:
+        C.append({"kind": "why-lead", "idea": f"Why-engine: {x['col']} {x['side']} ({x['setup']}) - {x['verdict']}; seen in "
+                  f"{', '.join(x['seen_in'][:4])} (tested every week as a rule)", "value": 2.0, "tested": ""})
     for u in unknowns:
         C.append({"kind": "unknown", "idea": f"Blind spot: {u}", "value": VALUE["unknown"], "tested": ""})
     return C

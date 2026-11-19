@@ -1,6 +1,13 @@
 import pandas as pd
 
+import pytest
+
 from swing import research_queue as rq
+
+
+@pytest.fixture(autouse=True)
+def _no_leads(tmp_path, monkeypatch):
+    monkeypatch.setattr(rq, "LEADS_F", tmp_path / "none.json")
 
 
 def test_family_rates_smoothed_and_skips_explorations():

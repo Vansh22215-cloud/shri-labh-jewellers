@@ -732,6 +732,11 @@ def weekly_message(R, E, Ls, today=None, settings=None):
             L.append(f"⚠️ {x[2]}")
     if Ls:
         L.append(f"🔎 {len(Ls)} lesson(s) sent to research, e.g.: {Ls[0]['lesson']}")
+    try:
+        from .why_engine import weekly_lines
+        L += weekly_lines()
+    except Exception:
+        pass
     if settings is not None:
         L += portfolio_risk(R, settings)
     L.append("Nothing changes in your tips without a passed test and your yes.")

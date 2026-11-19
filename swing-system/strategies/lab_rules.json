@@ -16,6 +16,21 @@
    "candidates": [],
    "new_proposals": [],
    "minutes": 7.5
+  },
+  {
+   "on": "2026-11-19 13:02",
+   "trades": 36413,
+   "fresh_top300": 0,
+   "possibilities": 238,
+   "passed_dev": 2,
+   "luck_passes": [
+    0,
+    0,
+    0
+   ],
+   "candidates": [],
+   "new_proposals": [],
+   "minutes": 9.7
   }
  ]
 }

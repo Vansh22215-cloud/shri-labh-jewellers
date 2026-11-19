@@ -1137,3 +1137,14 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **A full pass that the live system can apply** (skip or half quantity) sends one "🔬 Research result" Telegram message. `/approve LAB-x` or `/decline LAB-x`; `/research` shows the state. Nothing acts without the owner's yes.
 - **Live use:** `swing/lab_rules.py` computes the same facts with the same code. Checked on 25 real trades: all 22 facts identical. If anything fails, no rule acts.
 - First run (19 Nov): 230 tested, 3 passed the older years, luck worlds 0/0/1, none passed every step. Nearest: "take the strongest 6-month risers first when money is short". It was better for top-300 (18.6% vs 16.2% a year, 11 of 14 years) but not for all stocks, and is re-checked weekly on fresh trades.
+
+## D146 - 2026-11-19 - The why-engine (owner: "ask 'why' for everything - dig deep - test - again")
+- `swing/why_engine.py` runs every evening after the Learner. Each finished tip (sent VANTAGE and live-engine tips, plus silently rejected signals) goes through five steps:
+  1. **Expected:** what 13 years of similar trades said (same setup, strength, distance from the high, market trend).
+  2. **Actual:** what happened.
+  3. **Surprise:** as expected / won differently / won much bigger / won against the odds / lost with a known cause / lost with an unknown cause.
+  4. **Why:** the main driver (market, results, gap, the stock itself, drift).
+  5. **Unusual facts:** for every surprise, the entry facts where this tip sat in the top or bottom 10% are checked on history at once.
+- A pattern confirmed in both periods, in the direction that explains the result, becomes a **lead** (`strategies/why_leads.json`). The research list shows it, and the weekly automatic research tests it on the account as an exact skip / half rule, with the full bar.
+- Outputs: `journal/why_log.md/.csv`. The weekly message lists the latest surprises.
+- **Proof run** (`scripts/why_proof.py`): 113 real test trades from June-October 2026, judged blind. Result: 60 lost with a known cause, 21 lost with an unknown cause, 23 as expected, 5 won much bigger, 4 won against the odds. 6 leads were confirmed on history, for example "the ~30 most-traded stocks" (RCP recent +0.5% vs +4.5% a trade) and "calm market" (worse). The weekly research tested all 6 as 12 account rules: none passed the older years in both trade sets. Patterns that are visible trade by trade did not add money at the account level.

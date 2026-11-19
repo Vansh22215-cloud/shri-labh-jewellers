@@ -181,6 +181,27 @@ def plain(r):
     return f"{'Skip' if k == 'skip' else 'Half quantity on'} VANTAGE buys when {nm} = {r.get('val')}"
 
 
+def lead_rules():
+    """Patterns the why-engine found in live (or proof-run) tips and confirmed in both history periods
+    (strategies/why_leads.json) -> exact-bucket skip / half rules, tested with the same bar as every possibility."""
+    try:
+        L = json.load(open(os.path.join(SW, "strategies", "why_leads.json")))["leads"]
+    except Exception:
+        return []
+    out, seen = [], set()
+    for x in L:
+        lo, hi = (float(v) for v in x["range"])
+        kind = "skip" if "worse" in x["verdict"] else None
+        if kind is None:            # a 'better' tail: test skipping everything outside it is too blunt - half the rest
+            continue
+        for k in ("skip", "half"):
+            name = f"{k} {x['col']} {'' if lo == -np.inf else f'{lo:.4g}'}..{'' if hi == np.inf else f'{hi:.4g}'} (why-lead)"
+            if name not in seen:
+                seen.add(name)
+                out.append({"kind": k, "col": x["col"], "val": [lo, hi], "num": True, "name": name, "lead": x["key"]})
+    return out
+
+
 def run(send=True, procs=4, luck_worlds=3):
     t0 = time.time()
     os.makedirs(WORK, exist_ok=True)
@@ -190,7 +211,7 @@ def run(send=True, procs=4, luck_worlds=3):
     S = sm.situations()["key"]
     X = prepare(lf.build(T, S, procs=procs))
     X.to_csv(os.path.join(WORK, "features.csv.gz"), index=False)
-    rules = al.possibilities(X)
+    rules = al.possibilities(X) + lead_rules()
     base_dev, passed = al.screen(X, rules, procs=procs)
     luck = [len(al.screen(al.shuffled(X, s), [dict(r) for r in rules], procs=procs)[1]) for s in range(1, luck_worlds + 1)]
     base_h, fbase, res = judge(X, passed)

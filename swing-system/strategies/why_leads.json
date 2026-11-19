@@ -1,0 +1,208 @@
+{
+ "note": "Patterns the why-engine found in finished tips AND confirmed in both history periods. The weekly automatic research tests each as a skip / half-quantity rule on the account (vantage-ai/validation/autoresearch.py lead_rules).",
+ "leads": [
+  {
+   "key": "RCP|vol_surge|high",
+   "setup": "RCP",
+   "col": "vol_surge",
+   "side": "high",
+   "range": [
+    4.116014083521826,
+    Infinity
+   ],
+   "verdict": "confirmed: better in both periods",
+   "history": {
+    "dev": {
+     "n": 446,
+     "tail_pct": 5.88,
+     "rest_pct": 3.99
+    },
+    "holdout": {
+     "n": 95,
+     "tail_pct": 8.96,
+     "rest_pct": 3.13
+    }
+   },
+   "first_seen": "2026-11-19",
+   "seen_in": [
+    "PARAS"
+   ],
+   "source": "proof run on real 2026 test trades (19 Nov)"
+  },
+  {
+   "key": "RCP|price_rs|high",
+   "setup": "RCP",
+   "col": "price_rs",
+   "side": "high",
+   "range": [
+    1761.4962158203136,
+    Infinity
+   ],
+   "verdict": "confirmed: worse in both periods",
+   "history": {
+    "dev": {
+     "n": 369,
+     "tail_pct": 2.5,
+     "rest_pct": 4.34
+    },
+    "holdout": {
+     "n": 172,
+     "tail_pct": 1.44,
+     "rest_pct": 4.08
+    }
+   },
+   "first_seen": "2026-11-19",
+   "seen_in": [
+    "ASIANPAINT",
+    "ZENTEC",
+    "SIEMENS",
+    "PHOENIXLTD",
+    "LUPIN",
+    "TORNTPHARM",
+    "NUVAMA",
+    "LLOYDSME",
+    "GODREJPROP",
+    "M&M",
+    "BHARATFORG",
+    "SHAILY",
+    "LT",
+    "COFORGE",
+    "GLENMARK"
+   ],
+   "source": "proof run on real 2026 test trades (19 Nov)"
+  },
+  {
+   "key": "RCP|turnover_cr|high",
+   "setup": "RCP",
+   "col": "turnover_cr",
+   "side": "high",
+   "range": [
+    304.95039153311416,
+    Infinity
+   ],
+   "verdict": "confirmed: worse in both periods",
+   "history": {
+    "dev": {
+     "n": 315,
+     "tail_pct": 2.81,
+     "rest_pct": 4.29
+    },
+    "holdout": {
+     "n": 226,
+     "tail_pct": 0.49,
+     "rest_pct": 4.51
+    }
+   },
+   "first_seen": "2026-11-19",
+   "seen_in": [
+    "AXISBANK",
+    "SHRIRAMFIN",
+    "BAJFINANCE",
+    "BHARTIARTL",
+    "COFORGE",
+    "HSCL"
+   ],
+   "source": "proof run on real 2026 test trades (19 Nov)"
+  },
+  {
+   "key": "RCP|vs_200d|low",
+   "setup": "RCP",
+   "col": "vs_200d",
+   "side": "low",
+   "range": [
+    -Infinity,
+    0.05726918688733032
+   ],
+   "verdict": "confirmed: worse in both periods",
+   "history": {
+    "dev": {
+     "n": 403,
+     "tail_pct": 2.43,
+     "rest_pct": 4.37
+    },
+    "holdout": {
+     "n": 138,
+     "tail_pct": 2.26,
+     "rest_pct": 3.86
+    }
+   },
+   "first_seen": "2026-11-19",
+   "seen_in": [
+    "DELHIVERY",
+    "BHARTIARTL",
+    "360ONE",
+    "M&M"
+   ],
+   "source": "proof run on real 2026 test trades (19 Nov)"
+  },
+  {
+   "key": "RCP|vs_200d|high",
+   "setup": "RCP",
+   "col": "vs_200d",
+   "side": "high",
+   "range": [
+    0.5295327233014302,
+    Infinity
+   ],
+   "verdict": "confirmed: better in both periods",
+   "history": {
+    "dev": {
+     "n": 458,
+     "tail_pct": 7.86,
+     "rest_pct": 3.75
+    },
+    "holdout": {
+     "n": 83,
+     "tail_pct": 6.59,
+     "rest_pct": 3.41
+    }
+   },
+   "first_seen": "2026-11-19",
+   "seen_in": [
+    "WELCORP",
+    "CUPID"
+   ],
+   "source": "proof run on real 2026 test trades (19 Nov)"
+  },
+  {
+   "key": "RCP|nifty_vol_20d|low",
+   "setup": "RCP",
+   "col": "nifty_vol_20d",
+   "side": "low",
+   "range": [
+    -Infinity,
+    0.074884848552052
+   ],
+   "verdict": "confirmed: worse in both periods",
+   "history": {
+    "dev": {
+     "n": 413,
+     "tail_pct": 2.18,
+     "rest_pct": 4.4
+    },
+    "holdout": {
+     "n": 124,
+     "tail_pct": 2.39,
+     "rest_pct": 3.82
+    }
+   },
+   "first_seen": "2026-11-19",
+   "seen_in": [
+    "HSCL",
+    "IIFL",
+    "POLICYBZR",
+    "AEROFLEX",
+    "IFCI",
+    "LODHA",
+    "SYRMA",
+    "TEJASNET",
+    "LICHSGFIN",
+    "FINCABLES",
+    "COALINDIA",
+    "RBLBANK",
+    "BELRISE"
+   ],
+   "source": "proof run on real 2026 test trades (19 Nov)"
+  }
+ ]
+}

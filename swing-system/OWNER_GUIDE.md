@@ -50,6 +50,8 @@ The system only READS prices from Kite: it can never buy, sell or touch your mon
 - Rules can only skip a tip or halve its quantity - never more risk. An approved rule that stops working on the
   new trades is reported to you; `/decline` switches it off.
 - `/research` shows the last run. Full report: `journal/auto_research.md`.
+- **Every finished tip is asked 'why'** (`journal/why_log.md`): what history expected, what happened, the surprise, the
+  main reason, and whether its unusual facts mattered in 13 years. Real patterns go into the weekly research.
 
 ## Emergency stop
 github.com -> repository -> branch `claude/nse-swing-trading-system-sqncpt` -> `swing-system/settings.yaml` -> pencil ->

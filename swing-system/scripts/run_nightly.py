@@ -41,6 +41,11 @@ if __name__ == "__main__":
         learning.run()
     except Exception as e:
         print("learner failed:", e)
+    try:   # THE WHY-ENGINE (owner 19 Nov): expected vs actual for every finished tip, surprises, why, history check
+        from swing import why_engine
+        why_engine.run()
+    except Exception as e:
+        print("why-engine failed:", e)
     try:   # silent forward record of promoter buying (owner 18 Nov; no messages, no tip changes)
         from swing import shadow
         shadow.run()
