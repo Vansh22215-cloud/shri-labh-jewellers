@@ -689,7 +689,7 @@ def portfolio_risk(R, settings, gap=0.10):
         return []
     return [f"🧮 If you bought every open tip as advised: {n} positions, money needed ≈ ₹{need:,.0f} "
             f"({need / cap * 100:.0f}% of ₹{cap:,.0f})"
-            + (" - more than your money: you can only take some, take the newest/strongest" if need > cap else ""),
+            + (" - more than your money: take tips as they come and skip new ones when money runs out (selling open trades to make room was tested and lost)" if need > cap else ""),
             f"   Loss if all hit their stop-loss from today's prices ≈ ₹{at_stop:,.0f} ({at_stop / cap * 100:.1f}%); "
             f"if the whole market opened {gap * 100:.0f}% lower one morning ≈ ₹{at_gap:,.0f} "
             f"({at_gap / cap * 100:.1f}%; {jumped} of {n} would open below their stop)"]
