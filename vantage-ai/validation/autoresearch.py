@@ -344,6 +344,7 @@ def run(send=True, procs=4, luck_worlds=3):
 def write_report(summary, base_dev, base_h, fbase, res, state, warns):
     L = [f"# Automatic research ({summary['on']} IST)", "",
          "Runs every week on GitHub by itself (vantage-ai/validation/autoresearch.py, rulebook AUTO_LAB_PROTOCOL.md).",
+         "", "**" + __import__("swing.data_prices", fromlist=["x"]).provenance_line() + "**",
          "", f"- Trades rebuilt from today's prices: {summary['trades']:,} (fresh top-300 trades since 20 Nov 2026: "
          f"{summary['fresh_top300']}; step 5 starts at {FRESH_MIN})",
          f"- Possibilities tested: {summary['possibilities']}; passed the older years: {summary['passed_dev']}; "

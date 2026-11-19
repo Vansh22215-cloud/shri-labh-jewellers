@@ -154,6 +154,8 @@ def run(send=True):
                     if send:
                         telegram.send_reliable(s, f"🧪 ATLAS STRATEGY {r['id']} - EXIT\n\n#{tips.loc[i, 'sym']}\n\n{hit[1]}",
                                                label="exit alert")
+        from .data_prices import provenance_line
+        L += ["", "**" + provenance_line() + "**"]
         REPORT.parent.mkdir(parents=True, exist_ok=True)
         REPORT.write_text("\n".join(L) + "\n")
         return len(shadows)

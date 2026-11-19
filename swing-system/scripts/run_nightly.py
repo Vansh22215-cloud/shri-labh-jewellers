@@ -10,6 +10,11 @@ if __name__ == "__main__":
     if on_github() and not claim("nightly"):
         print("nightly: already done (skipped)")
         sys.exit(0)
+    try:   # KITE FIRST (owner 19 Nov): today's exchange bar for every NSE stock before anything reads prices
+        from swing import kite_daily
+        print("kite today's bars:", kite_daily.todays_bars_from_quotes())
+    except Exception as e:
+        print("kite today's bars failed:", type(e).__name__)
     main()
     try:   # company of the day (all NSE companies, deep fundamental analysis) - its own job, so a problem in the
         import subprocess   # trades part can never stop it; it is retried if Telegram did not take the message

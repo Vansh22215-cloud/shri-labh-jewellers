@@ -23,7 +23,7 @@ def tracked_symbols():
 
 
 def todays_closes(syms, day):
-    """Add today's bar where it is missing: Kite quotes first (exact after 3:30 pm), else Yahoo 5-minute data."""
+    """Leftovers only (Kite already wrote today's bars): Yahoo daily, then Kite quotes again, then Yahoo 5-minute data."""
     from swing import data_prices, kite
     day = pd.Timestamp(day).normalize()
     try:
@@ -60,7 +60,12 @@ def todays_closes(syms, day):
 def main():
     from swing.daemon import now
     t = now()
-    todays_closes(tracked_symbols(), t.date())
+    try:   # KITE FIRST: today's bar for every NSE stock from Kite quotes (exchange prices; ~6 requests)
+        from swing import kite_daily
+        print("kite today's bars:", kite_daily.todays_bars_from_quotes(t.date()))
+    except Exception as e:
+        print("kite today's bars failed:", type(e).__name__)
+    todays_closes(tracked_symbols(), t.date())          # Yahoo only for stocks Kite did not give today
     for name, fn in (("scorecard", lambda: __import__("swing.scorecard", fromlist=["x"]).run()),
                      ("tracker", lambda: __import__("swing.tracker", fromlist=["x"]).run()),
                      ("learner", lambda: __import__("swing.learning", fromlist=["x"]).run()),

@@ -592,6 +592,7 @@ def write(R, E, W, Ls, today=None, extra=None):
     today = today or pd.Timestamp.now(tz="Asia/Kolkata").strftime("%d %b %Y")
     L = [f"# The Learner ({today})", "", "Every idea tracked by swing/tracker.py, with its situation and journey "
          "(swing/learning.py). Lessons go to research; live tips change only after a passed test and the owner's yes.", "",
+         "**" + __import__("swing.data_prices", fromlist=["x"]).provenance_line() + "**", "",
          "## 1. Live vs the 13-year test"] + [f"- {x[2]}" for x in E] + (["- No VANTAGE tips yet."] if not E else [])
     L += ["", "## 2. When it works and when not (bought ideas; open ones at today's value)",
           "| Source | Situation | Value | Ideas | Average | Won |", "|---|---|---|---|---|---|"]

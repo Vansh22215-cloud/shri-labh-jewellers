@@ -1253,3 +1253,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - from then on, the weekly automatic research (lab, context engine, Foundry) runs on Kite prices.
 - **Live tips** stay on the current price feed until the audit is read. Live quotes during the day are already Kite.
 - **The owner's account value:** the owner said yes to reading it for sizing. Adding code that reads the broker account (funds/holdings) was blocked by this session's safety controls, so it was not built. `/capital` monthly remains the way.
+
+## D155 - 2026-11-19 - KITE FIRST everywhere, and every report says which data it used (owner: "Kite Connect is what we are paying - use it")
+- `data_prices.load()` now reads **Kite exchange prices first** for every stock, live and in tests. Yahoo is used only for days or stocks Kite has not given yet: before the nightly Kite download completes, and for stocks not on Kite. `SWING_PRICE_SOURCE=yahoo` forces the old source, for comparisons only.
+- **Today's bar for every NSE stock** comes from Kite quotes at the 4 pm review and before the 6:40 pm nightly job (`kite_daily.todays_bars_from_quotes`, about 6 requests for all stocks).
+- **History:** Kite daily since 2011 (about 2 nights to complete), 15-minute since 2019, and 5-minute around the open and 3:20 pm (D153/D154). Delisted stocks: NSE official bhavcopies. Kite does not list them.
+- **Provenance in every report:** `data_prices.provenance_line()` adds "Data used: daily prices of N stocks - Kite only / Kite + Yahoo / Yahoo only" to the Learner, why-log, weekly automatic research, Foundry record and Kite re-check. Claude's answers to the owner state the data source every time.

@@ -59,6 +59,8 @@ def main():
                 s = stats(T, per)
                 if s:
                     L.append(f"| {k} | {per} | {src} | {s['trades']:,} | {s['win']} | {s['avg']:+.2f}% | {s['cagr']}% | {s['fall']}% |")
+    from swing.data_prices import provenance_line
+    L += ["", "**" + provenance_line() + "** (the 'Yahoo (old)' rows are the earlier test files.)"]
     L += ["", "If Kite and Yahoo agree within about a point a year, every earlier conclusion stands; any bigger gap is "
               "listed and the affected decisions are re-checked."]
     out = os.path.join(im.SW, "journal", "kite_recheck.md")

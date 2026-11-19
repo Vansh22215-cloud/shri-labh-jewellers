@@ -176,8 +176,14 @@ def frame(sym):
         else pd.Series(1.0, index=k.index)
     k["adj_close"] = k["close"] * div
     k["dividends"], k["splits"] = 0.0, 0.0
-    if y is not None and len(y) and y.index[-1] > k.index[-1]:      # days after Kite's last day: Yahoo
-        k = pd.concat([k, y[y.index > k.index[-1]]])
+    pure = True
+    if y is not None and len(y):
+        before, after = y[y.index < k.index[0]], y[y.index > k.index[-1]]   # only days Kite has not given us
+        if len(before) or len(after):
+            pure = False
+            k = pd.concat([before[k.columns.intersection(before.columns)], k, after[k.columns.intersection(after.columns)]])
+    k = k.sort_index()
+    k.attrs["pure_kite"] = pure
     return k
 
 
@@ -212,3 +218,25 @@ def audit():
     AUDIT.parent.mkdir(parents=True, exist_ok=True)
     AUDIT.write_text("\n".join(L) + "\n")
     return A
+
+
+
+def todays_bars_from_quotes(day=None):
+    """After 3:30 pm: today's OHLCV for every NSE stock from Kite quotes (500 stocks per request) into the Kite
+    daily files, so the evening jobs use exchange prices for today too. -> number of stocks written."""
+    from . import kite
+    if not kite.logged_in():
+        return 0
+    day = pd.Timestamp(day or pd.Timestamp.now().normalize()).normalize()
+    syms = all_symbols()
+    q = kite.quotes(syms)
+    n = 0
+    for sym, v in q.items():
+        if not v.get("volume"):
+            continue
+        row = pd.DataFrame({"open": [v["open"]], "high": [max(v["high"], v["last"])], "low": [min(v["low"], v["last"])],
+                            "close": [v["last"]], "volume": [float(v["volume"])]}, index=pd.DatetimeIndex([day], name="date"))
+        _store(sym, row)
+        n += 1
+    log.info("Kite daily: today's bar written for %d stocks from quotes", n)
+    return n

@@ -105,18 +105,38 @@ def sanitize(df):
     return df
 
 
+PROVENANCE = {"kite": set(), "kite+yahoo": set(), "yahoo": set()}   # which source each stock's prices came from
+
+
 def load(symbol):
-    """Daily prices. SWING_PRICE_SOURCE=kite -> Kite exchange candles first (kite_daily.frame), Yahoo otherwise."""
+    """Daily prices - KITE FIRST (owner 19 Nov: "Kite Connect is what we are paying - use it"): Kite exchange candles
+    (kite_daily), Yahoo only for days or stocks Kite has not given us (e.g. before the Kite download finished, or
+    delisted stocks). SWING_PRICE_SOURCE=yahoo forces the old source (for comparisons only)."""
     import os
-    if os.environ.get("SWING_PRICE_SOURCE", "").lower() == "kite":
+    if os.environ.get("SWING_PRICE_SOURCE", "kite").lower() != "yahoo":
         try:
             from .kite_daily import frame
             k = frame(symbol)
             if k is not None and len(k):
+                PROVENANCE["kite" if getattr(k, "attrs", {}).get("pure_kite") else "kite+yahoo"].add(symbol)
                 return sanitize(k)
         except Exception as e:
             log.warning("Kite prices for %s unavailable (%s) - Yahoo used", symbol, type(e).__name__)
-    return _load_yahoo(symbol)
+    y = _load_yahoo(symbol)
+    if y is not None:
+        PROVENANCE["yahoo"].add(symbol)
+    return y
+
+
+def provenance_line():
+    """'Data used' line for every report: how many stocks came from Kite, Kite+Yahoo, Yahoo."""
+    k, ky, y = (len(PROVENANCE[x]) for x in ("kite", "kite+yahoo", "yahoo"))
+    n = k + ky + y
+    if not n:
+        return "Data used: no daily price files were read."
+    return (f"Data used: daily prices of {n:,} stocks - Kite only {k:,} ({k / n * 100:.0f}%), Kite + Yahoo for missing "
+            f"days {ky:,} ({ky / n * 100:.0f}%), Yahoo only {y:,} ({y / n * 100:.0f}%; Kite history not downloaded yet "
+            "or not on Kite). Delisted stocks: NSE official bhavcopies.")
 
 
 def _load_yahoo(symbol):

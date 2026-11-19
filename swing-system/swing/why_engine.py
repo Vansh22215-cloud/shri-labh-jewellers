@@ -282,7 +282,8 @@ def write(W, title="Why-log"):
     W.to_csv(LOG_CSV, index=False)
     L = [f"# {title} ({pd.Timestamp.now(tz='Asia/Kolkata'):%d %b %Y})", "",
          "Every finished tip: what 13 years of similar trades expected, what happened, the surprise, why, and what "
-         "history says about the unusual facts. Confirmed patterns become leads for the weekly research.", ""]
+         "history says about the unusual facts. Confirmed patterns become leads for the weekly research.", "",
+         "**" + __import__("swing.data_prices", fromlist=["x"]).provenance_line() + "**", ""]
     if not len(W):
         return LOG_MD.write_text("\n".join(L + ["No finished tips yet."]) + "\n")
     vc = W["surprise"].str.split(" \\(").str[0].value_counts()
