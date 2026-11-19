@@ -43,6 +43,14 @@ def set_status(rid, status):
             _save(st)
             log.info("Research rule %s %s by the owner", r["id"], status)
             if status == "approved":
+                k = r.get("kind")
+                if k == "foundry-shadow":
+                    return (f"✅ {r['id']} approved: ATLAS now follows this new strategy SILENTLY on live prices "
+                            "(journal/foundry_shadow.md). No tips until it proves itself and you approve again.")
+                if k == "foundry-tips":
+                    return f"✅ {r['id']} approved: its tips start from this evening (buy at the next open), with exit alerts."
+                if k == "context-order":
+                    return f"✅ {r['id']} approved: VANTAGE tips now show their behaviour-group rank."
                 return f"✅ {r['id']} approved: {r.get('plain', r['name'])}. It acts on VANTAGE buys from the next scan."
             return f"🚫 {r['id']} switched off: {r.get('plain', r['name'])}."
     return f"No research rule {rid}. Proposals arrive as '🔬 Research result' messages."

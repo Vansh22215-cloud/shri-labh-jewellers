@@ -343,7 +343,7 @@ def handle(token, owner, msg, capital):
     elif text.lower().startswith("/approve"):
         from . import discovery
         parts = text.split()
-        if len(parts) > 1 and parts[1].upper().startswith("LAB-"):
+        if len(parts) > 1 and parts[1].upper().startswith(("LAB-", "CTX-", "FND-", "FTP-")):
             from . import lab_rules
             reply = lab_rules.set_status(parts[1], "approved")
         else:

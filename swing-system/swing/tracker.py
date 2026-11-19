@@ -133,6 +133,26 @@ def collect(load):
             res["exit"] = float(d["close"].iloc[-1])
         rows.append(_row("live engine", f"{t.type} {'' if str(t.setup) == 'nan' else t.setup}".strip(), t.day, t.symbol, res,
                          stop=_f(t.stop), sent="sent"))
+    # 3a) ATLAS Foundry strategy tips (sent only after two owner approvals) - owner rule: every tip type is tracked
+    try:
+        Ft = pd.read_csv(PRIVATE / "foundry_tips.csv", dtype=str)
+    except Exception:
+        Ft = pd.DataFrame()
+    for t in Ft.itertuples():
+        d = load(t.sym)
+        if d is None or not len(d):
+            continue
+        after = d[d.index > pd.Timestamp(str(t.signal)[:10])]
+        if not len(after):
+            continue
+        e = float(after["open"].iloc[0])
+        closed = str(t.status) == "closed" and str(t.exit_day) not in ("", "nan")
+        upto = after[after.index <= pd.Timestamp(str(t.exit_day))] if closed else after
+        res = {"status": "closed" if closed else "open", "entry": e, "entry_date": str(after.index[0].date()),
+               "exit": float(upto["close"].iloc[-1]) if len(upto) else e, "days": int(len(upto)),
+               "why": str(t.exit_why) if closed else ""}
+        rows.append(_row("ATLAS strategy", str(t.id), t.signal, t.sym, res,
+                         stop=e - float(t.k) * float(t.atr), sent="sent"))
     # 3b) repeats blocked by D139 - followed as if bought, to learn whether blocking them was right
     try:
         P = pd.read_csv(PRIVATE / "suppressed_repeats.csv", dtype=str)

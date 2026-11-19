@@ -41,6 +41,11 @@ if __name__ == "__main__":
         learning.run()
     except Exception as e:
         print("learner failed:", e)
+    try:   # ATLAS Foundry strategies the owner approved: silent live record, or tips + exit alerts (second yes)
+        from swing import foundry_shadow
+        foundry_shadow.run()
+    except Exception as e:
+        print("foundry strategies failed:", e)
     try:   # THE WHY-ENGINE (owner 19 Nov): expected vs actual for every finished tip, surprises, why, history check
         from swing import why_engine
         why_engine.run()

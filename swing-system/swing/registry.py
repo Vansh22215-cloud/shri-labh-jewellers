@@ -30,6 +30,12 @@ def open_stocks():
                     out.setdefault(s, f"live engine {t}")
     except Exception:
         pass
+    try:   # ATLAS Foundry strategy tips (D151)
+        F = pd.read_csv(PRIVATE / "foundry_tips.csv", dtype=str)
+        for sy, i in zip(F.loc[F["status"] == "open", "sym"].astype(str), F.loc[F["status"] == "open", "id"].astype(str)):
+            out.setdefault(sy, f"ATLAS strategy {i}")
+    except Exception:
+        pass
     return out
 
 

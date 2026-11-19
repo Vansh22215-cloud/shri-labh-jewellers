@@ -1202,3 +1202,19 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - **"No trade today"** when nothing qualified or the safety stop is on.
 - The brief only reports what the tested rules already decided: no new trading rule. Message format only.
 - Also fixed: a test had written three fake signals into the local `data/private/vantage_rejected.csv`. They were removed, and every test now writes those records into a temporary folder (`tests/conftest.py`). The GitHub record was never affected.
+
+## D151 - 2026-11-19 - ATLAS Strategy Foundry: ATLAS designs new strategies itself (owner: "do this at full capacity")
+- `vantage-ai/validation/foundry.py` (protocol `FOUNDRY_PROTOCOL.md` + 2 addenda, each committed before its run) builds complete strategies (entry x filter x exit) from building blocks:
+  - 16 entry families, 4 filters, 10 exits;
+  - gap-adjusted stops, targets, trailing and time exits;
+  - top-300 point-in-time universe with delisted stocks;
+  - next-open entries;
+  - verified costs + 20.8% tax on the ₹51,000 account, judged alone AND next to the live system.
+- **Run 1** (336 strategies, short exits): 0 passed. Short trades cannot beat the costs and tax of a ₹51,000 account.
+- **Run 2** (640): 1 passed development and the fair stock-choice luck test (20/20), then failed the holdout (4.5% alone vs NIFTY fund 7.8%).
+- Lesson: at this account size the long exit (4 ATR stop, 5R target, 120 days) matters more than the entry.
+- **Runs by itself every Friday** inside the automatic research. A full pass leads to two separate yeses:
+  1. "🧪 ATLAS designed a NEW strategy" (`/approve FND-xxxx`): ATLAS follows it silently on live prices (`swing/foundry_shadow.py`, `journal/foundry_shadow.md`).
+  2. After 100+ fresh trades still passing: "ready for real tips" (`/approve FTP-xxxx`). Then evening tips (buy at the next open) come with stop, target, quantity at 1% risk and exit alerts.
+- Tips are tracked ("ATLAS strategy" in the tracker, the why-engine and money-at-risk). They follow the no-repeat rule, the kill switch / safety stop, and are never sent when one share would break the 1% limit.
+- Tested end to end on real data (two signals of 18 Nov found, correct message).

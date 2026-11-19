@@ -58,6 +58,11 @@ The system only READS prices from Kite: it can never buy, sell or touch your mon
 - ATLAS groups stocks by how they actually trade (not just by sector), checks every week which groups' past predicts
   their future, and tests rules per group. A rule that passes is proposed to you (`/approve CTX-xxxx`).
 
+## New strategies ATLAS designs itself (weekly)
+- "🧪 ATLAS designed a NEW strategy" -> `/approve FND-xxxx` starts a SILENT live record (no tips, no money).
+- After 100+ live trades it asks again: "ready for real tips" -> `/approve FTP-xxxx` (or `/decline`).
+  Its tips come in the evening: buy at the next open, with stop-loss, target, quantity and exit alerts.
+
 ## Emergency stop
 github.com -> repository -> branch `claude/nse-swing-trading-system-sqncpt` -> `swing-system/settings.yaml` -> pencil ->
 change `kill_switch: false` to `kill_switch: true` -> Commit changes. All tips stop. Set back to `false` to resume.

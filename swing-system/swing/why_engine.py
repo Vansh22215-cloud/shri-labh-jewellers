@@ -223,7 +223,7 @@ def explain(R, facts=_facts):
     """R = tracker rows -> why-log rows for finished tips."""
     H = history()
     rows = []
-    done = R[(R["status"] == "closed") & R["source"].isin(["VANTAGE", "live engine", "rejected by VANTAGE"])]
+    done = R[(R["status"] == "closed") & R["source"].isin(["VANTAGE", "live engine", "rejected by VANTAGE", "ATLAS strategy"])]
     for _, r in done.iterrows():
         r = r.to_dict()
         setup = _setup_of(r)

@@ -150,6 +150,23 @@ def save_state(state):
 
 def message(r):
     h, f = r["holdout"], r.get("fresh", {})
+    if r.get("kind") == "foundry-shadow":
+        return ("🧪 ATLAS designed a NEW strategy that passed every test\n\n"
+                f"{r['id']}: {r['name']}\n\n"
+                f"Recent years (Nov 2023+), after all costs and tax: {h['top300']['cagr']:.1f}% a year on its own "
+                f"(worst fall {h['top300']['maxdd']:.0f}%); next to your current tips the account made "
+                f"{h['all']['cagr']:.1f}% a year. Year by year: better in {r['years_better']}.\n"
+                "Next step is a SILENT live record (no tips, no money): ATLAS follows its signals on real prices. "
+                f"After 100+ live trades it asks you again before any tip is sent.\n\n/approve {r['id']} or /decline {r['id']}")
+    if r.get("kind") == "foundry-tips":
+        fr = r.get("fresh", {})
+        return ("🧪 ATLAS strategy ready for real tips\n\n"
+                f"{r['id']}: {r['name']}\n\n"
+                f"Its silent live record: {fr.get('n', 0)} trades since 20 Nov 2026; on those, alone "
+                f"{fr.get('alone', [0])[0]:.1f}% a year, next to your current tips {fr.get('with_current', [0])[0]:.1f}% vs "
+                f"{fr.get('current', [0])[0]:.1f}% without it (after costs and tax).\n"
+                "If you approve, its tips come in the evening (buy at the next open) with stop-loss, target, quantity "
+                f"(1% risk) and exit alerts.\n\n/approve {r['id']} or /decline {r['id']}")
     return ("🔬 ATLAS research result - a rule passed every test\n\n"
             f"{r['id']}: {r['plain']}\n\n"
             f"Recent years (Nov 2023+): top-300 {h['top300']['cagr']:.1f}% a year, all stocks {h['all']['cagr']:.1f}% "
@@ -202,6 +219,36 @@ def lead_rules():
     return out
 
 
+def foundry_promotions(state, foundry, min_fresh=100):
+    """Approved shadow strategies with 100+ fresh closed trades: still beating the NIFTY fund and adding to the live
+    system on the fresh trades? -> a second proposal: send its tips (FTP-xxxx). Nothing is sent without that yes."""
+    out, stats = [], {}
+    known = {r["id"] for r in state["rules"]}
+    for r in state["rules"]:
+        if r.get("kind") != "foundry-shadow" or r.get("status") != "approved":
+            continue
+        foundry._E.update(foundry.entries()) if not foundry._E else None
+        foundry._F.update(foundry.filters()) if not foundry._F else None
+        E, F = foundry._E[r["entry"]], foundry._F[r["filter"]]
+        T = foundry.trades(E if F is None else (E & F.fillna(False).astype(bool)), foundry.EXITS[r["exit"]])
+        Fr, B = foundry.period(T, "fresh"), foundry.period(foundry.current_system(), "fresh")
+        r["fresh"] = {"n": int(len(Fr))}
+        if len(Fr) < min_fresh or not len(B):
+            continue
+        alone, comb, base = foundry.account(Fr, 15), foundry.account(Fr, 15, base=B), foundry.account(B, 15)
+        r["fresh"].update(alone=alone, with_current=comb, current=base)
+        pid = "FTP-" + r["id"][4:]
+        if comb[0] >= base[0] + 1 and comb[1] >= base[1] - 2 and alone[0] > 0 and pid not in known:
+            rec = {"id": pid, "name": r["name"], "kind": "foundry-tips", "status": "proposed", "parent": r["id"],
+                   "entry": r["entry"], "filter": r["filter"], "exit": r["exit"],
+                   "plain": f"Start sending tips for {r['id']} (its silent live record passed): {r['name']}",
+                   "holdout": {"top300": {"cagr": alone[0], "maxdd": alone[1]}, "all": {"cagr": comb[0], "maxdd": comb[1]}},
+                   "years_better": f"fresh {len(Fr)} trades", "fresh": r["fresh"], "proposed_on": str(pd.Timestamp.now().date())}
+            state["rules"].append(rec)
+            out.append(rec)
+    return out, stats
+
+
 def run(send=True, procs=4, luck_worlds=3):
     t0 = time.time()
     os.makedirs(WORK, exist_ok=True)
@@ -248,12 +295,34 @@ def run(send=True, procs=4, luck_worlds=3):
     except Exception as e:
         summary_ctx = {"error": type(e).__name__}
         print("context engine failed:", type(e).__name__)
+    try:   # ATLAS Strategy Foundry (FOUNDRY_PROTOCOL.md): new strategies designed from building blocks, every week
+        import foundry
+        Fo = foundry.main(procs=procs)
+        for name in Fo["passed"]:
+            fid = "FND-" + hashlib.sha1(name.encode()).hexdigest()[:4].upper()
+            if fid not in known:
+                r = next(x for x in Fo["all"] if x["name"] == name)
+                rec = {"id": fid, "name": name, "kind": "foundry-shadow", "status": "proposed",
+                       "entry": r["entry"], "filter": r["filter"], "exit": r["exit"],
+                       "proposed_on": str(pd.Timestamp.now().date()),
+                       "plain": f"New strategy (silent live record first, no tips): {name}",
+                       "holdout": {"top300": {"cagr": r["hold_alone"][0], "maxdd": r["hold_alone"][1]},
+                                   "all": {"cagr": r["hold_with_current"][0], "maxdd": r["hold_with_current"][1]}},
+                       "years_better": r["years_better"], "fresh": {}}
+                state["rules"].append(rec)
+                new.append(rec)
+        summary_fnd = {k: Fo[k] for k in ("tried", "dev_survivors", "luck_passed", "passed")}
+        promos, fstats = foundry_promotions(state, foundry)
+        new += promos
+    except Exception as e:
+        summary_fnd = {"error": type(e).__name__}
+        print("foundry failed:", type(e).__name__)
     warns = recheck_approved(X, state)
     n_fresh = int(((X["set"] == "top300") & (X["period"] == "fresh")).sum())
     summary = {"on": str(pd.Timestamp.now(tz="Asia/Kolkata"))[:16], "trades": int(len(X)), "fresh_top300": n_fresh,
                "possibilities": len(rules), "passed_dev": len(passed), "luck_passes": luck,
                "candidates": [r["id"] for r in res if r["CANDIDATE"]], "new_proposals": [r["id"] for r in new],
-               "context": summary_ctx, "minutes": round((time.time() - t0) / 60, 1)}
+               "context": summary_ctx, "foundry": summary_fnd, "minutes": round((time.time() - t0) / 60, 1)}
     state["runs"] = (state.get("runs", []) + [summary])[-52:]
     save_state(state)
     write_report(summary, base_dev, base_h, fbase, res, state, warns)

@@ -276,7 +276,7 @@ def mistakes(R, load):
 
 def repeats(R):
     """The same stock sent again and again (several channels or days) - concentration and repeat-mistake risk."""
-    B = R[R["source"].isin(["strategy tip", "strategy tip (retired list)", "hourly scan", "VANTAGE", "live engine"])]
+    B = R[R["source"].isin(["strategy tip", "strategy tip (retired list)", "hourly scan", "VANTAGE", "live engine", "ATLAS strategy"])]
     if "sent" in B:
         B = B[B["sent"].astype(str) == "sent"]                   # only what actually reached the owner
     g = B.groupby("symbol").agg(times=("symbol", "size"), sources=("source", lambda x: ", ".join(sorted(set(x)))),
@@ -667,7 +667,7 @@ def portfolio_risk(R, settings, gap=0.10):
     if not ok or cap <= 0:
         return []
     o = R[(R["status"] == "open") & (R["sent"].astype(str) == "sent")
-          & R["source"].isin(["VANTAGE", "live engine"])] if "sent" in R else R.iloc[0:0]   # channels that send now
+          & R["source"].isin(["VANTAGE", "live engine", "ATLAS strategy"])] if "sent" in R else R.iloc[0:0]   # channels that send now
     need = at_stop = at_gap = 0.0
     n = jumped = 0
     for r in o.itertuples():
