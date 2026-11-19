@@ -31,6 +31,39 @@
    "candidates": [],
    "new_proposals": [],
    "minutes": 9.7
+  },
+  {
+   "on": "2026-11-19 20:39",
+   "trades": 33227,
+   "fresh_top300": 0,
+   "possibilities": 238,
+   "passed_dev": 6,
+   "luck_passes": [
+    3,
+    2,
+    4
+   ],
+   "candidates": [],
+   "new_proposals": [],
+   "context": {
+    "matters": [
+     "swing",
+     "behaviour10",
+     "behaviour10 x market",
+     "size x swing",
+     "behaviour10 x setup",
+     "sector x setup",
+     "size x sector"
+    ],
+    "passed": []
+   },
+   "foundry": {
+    "tried": 640,
+    "dev_survivors": 3,
+    "luck_passed": 3,
+    "passed": []
+   },
+   "minutes": 22.3
   }
  ]
 }
