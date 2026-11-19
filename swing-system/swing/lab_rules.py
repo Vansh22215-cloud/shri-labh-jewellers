@@ -120,10 +120,12 @@ def decision(sym, b, day):
     return out
 
 
-def context_line(sym, b, day):
+def context_line(sym, b, day, group_only=False):
     """Approved context-order rule (ATLAS Context Engine) -> one message line with the stock's behaviour group and its
     rank, so the owner takes higher-ranked tips first when money is short. '' when none is approved or on any error."""
     rules = [r for r in _state().get("rules", []) if r.get("status") == "approved" and r.get("kind") == "context-order"]
+    if group_only:
+        rules = [{"_group_only": True}]
     if not rules:
         return ""
     try:
@@ -145,6 +147,8 @@ def context_line(sym, b, day):
         z = np.array([(float(B[k]) - M["mu"][k]) / (M["sd"][k] or 1) for k in M["features"]]).clip(-4, 4)
         g = "B" + str(int(np.argmin(((np.array(M["centres"]) - z) ** 2).sum(axis=1))))
         name = rules[0].get("grouping", "behaviour10")
+        if rules[0].get("_group_only"):
+            return g
         key = g if name == "behaviour10" else f"{g}~{b.get('setup', '')}"
         sc = M["scores"].get(name, {})
         if key not in sc:
@@ -155,3 +159,8 @@ def context_line(sym, b, day):
     except Exception as e:
         log.warning("context line failed: %s", type(e).__name__)
         return ""
+
+
+def behaviour_group(sym, b, day):
+    """The stock's discovered behaviour group (B0..B9) at the signal, '' if unknown (used by the why-engine)."""
+    return context_line(sym, b, day, group_only=True)

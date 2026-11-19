@@ -52,6 +52,13 @@ def history():
             if "stop_dist" not in H:
                 H["stop_dist"] = (H["entry"] - H["init_stop"]) / H["entry"]
             H["exit_kind"] = H["why"].map(exit_kind)
+            try:   # discovered behaviour groups (Context Engine) -> look-alikes by how stocks trade, not by sector
+                C = pd.read_csv(DATA / "auto_research" / "context_trades.csv.gz", usecols=["set", "sym", "signal", "cluster10"],
+                                parse_dates=["signal"])
+                C = C[C["set"] == "top300"].drop_duplicates(["sym", "signal"]).drop(columns="set")
+                H = H.merge(C, on=["sym", "signal"], how="left")
+            except Exception:
+                pass
             _H["h"] = H
             return H
         except Exception:
@@ -82,7 +89,8 @@ def _setup_of(r):
 
 
 def expected(H, setup, x):
-    """Similar trades of 13 years -> dict (n, win, median, days, usual exit, exits share)."""
+    """Similar trades of 13 years (same setup, same behaviour group, similar strength and height, same market trend)
+    -> dict (n, win, median, days, usual exit, exits share)."""
     if H is None:
         return None
     S = H[H["setup"] == setup] if setup else H
@@ -96,6 +104,11 @@ def expected(H, setup, x):
             cand = sim[(sim[c] >= lo) & (sim[c] < hi)]
             if len(cand) >= 40:
                 sim = cand
+    g = (x or {}).get("group")
+    if g and "cluster10" in sim:
+        cand = sim[sim["cluster10"] == g]
+        if len(cand) >= 40:
+            sim = cand
     if x and str(x.get("mkt_trend", "")) in ("rising", "falling"):
         cand = sim[sim["mkt_trend"] == x["mkt_trend"]]
         if len(cand) >= 40:
@@ -198,7 +211,10 @@ def _facts(r):
     from . import lab_rules
     b = {"signal": r.get("date"), "setup": _setup_of(r) or "", "close": r.get("entry"), "stop": r.get("stop"), "score": 0}
     try:
-        return lab_rules._features(str(r["symbol"]), b, r.get("date"))
+        x = lab_rules._features(str(r["symbol"]), b, r.get("date"))
+        if x is not None:
+            x["group"] = lab_rules.behaviour_group(str(r["symbol"]), b, r.get("date"))
+        return x
     except Exception:
         return None
 
