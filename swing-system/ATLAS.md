@@ -9,6 +9,7 @@ modifies or cancels an order. The owner places every order himself.
 | **Find** (Finder) | VANTAGE live scan, 3:20 pm close call, 3:40 pm close scan, ADD MORE; live engine (dip-buy, breakout, intraday, F&O) | `swing/vantage.py`, `swing/live_engine.py`, `swing/daemon.py` |
 | **Analyse** | Company record ("X of Y past signals won"), likely-win %, results week, market type | `swing/vantage.py`, `vantage-ai/validation/company_record.json` |
 | **Test** | Pre-registered rounds: development before Nov 2023, holdout after; account simulation ₹51k, 1% risk | `vantage-ai/validation/IMPROVE*` (rounds 1-24), `experiments.json` |
+| **Test everything** (AUTO-LAB) | Describes all 36,387 past trades by 40 facts (stock, its history, market, sector, results, time), builds every rule from them (230 in run 1) and tests each: older years, luck worlds, recent years, year by year, random-skip placebo. Only a 4-step pass goes to the owner | `vantage-ai/validation/auto_lab.py`, `lab_features.py`, `AUTO_LAB_*` |
 | **Challenge** | Luck checks, fingerprint, prosecutor tests (round 23), crash scenario (round 24), beliefs + daily question | `luck_check*.json`, `fingerprint`, `beliefs.json`, `swing/learning.py` |
 | **Recommend** | Telegram tips with stop-loss and 1%-risk quantity; no repeats across channels | `swing/telegram.py`, `swing/registry.py`, `swing/safety.py` |
 | **Track** | Every idea ever produced, sent or not, one table | `swing/tracker.py` -> `journal/all_tips.csv/.md`; `swing/scorecard.py` |

@@ -19,9 +19,11 @@ VAL = ROOT.parent / "vantage-ai" / "validation"
 OUT = ROOT / "journal" / "research_queue.md"
 BUDGET = 2
 # already-tested ideas by the situation a live lesson is about (so a lesson is not retested blindly)
-TESTED_BY_SITUATION = {
-    "market": ["R1-F1", "R6-G", "X-market-break"], "market_mood": ["R8-6", "R6-G", "X-market-break"],
-    "day_type": ["R1-F1", "R6-G", "R8-6"], "liquidity": ["R1-U", "R23"], "mistake": ["R1-E1", "R20-G1", "R20-G2"],
+TESTED_BY_SITUATION = {   # LAB-1 = the auto-lab tested every bucket of these facts on 13 years (AUTO_LAB_RESULTS.md)
+    "market": ["R1-F1", "R6-G", "X-market-break", "LAB-1"], "market_mood": ["R8-6", "R6-G", "X-market-break", "LAB-1"],
+    "day_type": ["R1-F1", "R6-G", "R8-6", "LAB-1"], "liquidity": ["R1-U", "R23", "LAB-1"],
+    "mistake": ["R1-E1", "R20-G1", "R20-G2"], "weekday": ["LAB-1"], "from_52w_high": ["FP", "LAB-1"],
+    "results_week": ["R2-R4", "LAB-1"],
 }
 FAMILY_OF = {"belief": "adversarial", "lesson": "filter", "mistake": "exit", "missed": "discovery", "unknown": "exploration"}
 VALUE = {"broken": 4.0, "at risk": 3.0, "strong": 2.0, "medium": 1.0, "weak": 0.5, "missed": 2.0, "unknown": 1.0}

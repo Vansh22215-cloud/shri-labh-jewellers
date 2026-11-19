@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 79,
+ "count": 80,
  "passed": 10,
  "experiments": [
   {
@@ -791,6 +791,16 @@
    "verdict": "no fix needed / not worth a test",
    "why": "development only: 7,057 cases, 20-day result +1.2% vs +1.5% for any stock, worse in 10 of 12 years; big risers are found in hindsight",
    "files": "LIVE_REVIEW.md 19 Nov 03:30",
+   "area": "finder"
+  },
+  {
+   "id": "LAB-1",
+   "round": "auto-lab 1",
+   "family": "auto-lab",
+   "hypothesis": "230 automatic rules from 40 situation facts (stock, history, market, sector, results, time)",
+   "verdict": "fail",
+   "why": "2 passed development (0 in each of 5 luck worlds), both failed the holdout in the all-stocks set; skip price > Rs 980 = near miss (top-300 only)",
+   "files": "AUTO_LAB_RESULTS.md",
    "area": "finder"
   }
  ],
