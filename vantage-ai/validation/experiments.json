@@ -1,6 +1,6 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 90,
+ "count": 92,
  "passed": 11,
  "experiments": [
   {
@@ -901,6 +901,26 @@
    "verdict": "fail (predictive value survives; account bar not met on top-300 development)",
    "why": "DYNAMIC top-300 dev +0.2, holdout +3.4 beating luck; all stocks +5.4 / +10.9",
    "files": "INVESTIGATION_19NOV.md",
+   "area": "finder"
+  },
+  {
+   "id": "FOUNDRY-1",
+   "round": "foundry 1",
+   "family": "new setup",
+   "hypothesis": "336 new strategies (short exits)",
+   "verdict": "fail",
+   "why": "0 passed development: short trades cannot beat Rs 51k costs + tax",
+   "files": "FOUNDRY_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "FOUNDRY-2",
+   "round": "foundry 2",
+   "family": "new setup",
+   "hypothesis": "640 new strategies incl. long holds",
+   "verdict": "fail",
+   "why": "1 passed development + stock-luck (52w-high strength, 5R/120d); holdout 4.5% alone vs NIFTY 7.8%, hurts the live system",
+   "files": "FOUNDRY_RESULTS.md",
    "area": "finder"
   }
  ],

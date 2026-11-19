@@ -1,9 +1,9 @@
 {
- "on": "2026-11-19 15:14",
+ "on": "2026-11-19 15:17",
  "tried": 640,
  "dev_survivors": 1,
- "luck_passed": 0,
- "holdout_tested": 0,
+ "luck_passed": 1,
+ "holdout_tested": 1,
  "passed": [],
  "minutes": 1.6,
  "all": [
@@ -28,7 +28,7 @@
     -22.49
    ],
    "screen": true,
-   "luck_dev": [
+   "luck_timing_dev": [
     37.51,
     38.04,
     37.78,
@@ -50,7 +50,43 @@
     37.06,
     37.88
    ],
-   "luck_pass": false
+   "luck_stock_dev": [
+    4.73,
+    7.58,
+    4.7,
+    2.65,
+    6.06,
+    2.82,
+    8.11,
+    7.58,
+    8.29,
+    3.94,
+    7.18,
+    8.97,
+    6.11,
+    6.18,
+    8.12,
+    2.11,
+    6.23,
+    4.17,
+    7.84,
+    3.83
+   ],
+   "luck_pass": true,
+   "hold_alone": [
+    4.5,
+    -23.87
+   ],
+   "hold_with_current": [
+    8.87,
+    -23.83
+   ],
+   "hold_current": [
+    12.45,
+    -23.53
+   ],
+   "years_better": "6 of 14",
+   "PASS": false
   },
   {
    "name": "close above the 100-day high | breadth above 50% | target 5R, stop 4 ATR, 120 days",
@@ -7621,28 +7657,6 @@
    "screen": false
   },
   {
-   "name": "strength leader pulling back 3 days | breadth above 50% | stop 2 ATR, 10 days",
-   "entry": "strength leader pulling back 3 days",
-   "filter": "breadth above 50%",
-   "exit": "stop 2 ATR, 10 days",
-   "dev_trades": 3756,
-   "win_pct": 44.8,
-   "avg_pct": -0.19,
-   "dev_alone": [
-    -24.76,
-    -96.19
-   ],
-   "dev_with_current": [
-    11.0,
-    -31.39
-   ],
-   "dev_current": [
-    15.47,
-    -22.49
-   ],
-   "screen": false
-  },
-  {
    "name": "strength leader pulling back 3 days | stock above 200-day | trail below 20-day avg after +10%, stop 3 ATR, 120 days",
    "entry": "strength leader pulling back 3 days",
    "filter": "stock above 200-day",
@@ -7657,6 +7671,28 @@
    "dev_with_current": [
     11.0,
     -29.19
+   ],
+   "dev_current": [
+    15.47,
+    -22.49
+   ],
+   "screen": false
+  },
+  {
+   "name": "strength leader pulling back 3 days | breadth above 50% | stop 2 ATR, 10 days",
+   "entry": "strength leader pulling back 3 days",
+   "filter": "breadth above 50%",
+   "exit": "stop 2 ATR, 10 days",
+   "dev_trades": 3756,
+   "win_pct": 44.8,
+   "avg_pct": -0.19,
+   "dev_alone": [
+    -24.76,
+    -96.19
+   ],
+   "dev_with_current": [
+    11.0,
+    -31.39
    ],
    "dev_current": [
     15.47,
