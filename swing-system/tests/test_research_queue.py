@@ -15,7 +15,7 @@ def test_rank_puts_broken_belief_first_and_pushes_down_retests(tmp_path, monkeyp
     checks = [("B2", "3:20 pm beats next open", "proven", "broken", "next open +0.5%", "x"),
               ("B1", "stock choice", "proven", "holding", "", "y")]
     q = pd.DataFrame([{"situation": "market_mood", "lesson": "calm better", "evidence": "strong", "status": "to research"},
-                      {"situation": "weekday", "lesson": "Fri better", "evidence": "strong", "status": "to research"},
+                      {"situation": "new_fact", "lesson": "Fri better", "evidence": "strong", "status": "to research"},
                       {"situation": "weekday", "lesson": "old", "evidence": "strong", "status": "tested"}])
     rates = {"adversarial": (3, 2, 0.6), "filter": (7, 0, 0.11)}
     C = rq.rank(rq.candidates(checks, q, missed_n=5), rates)
