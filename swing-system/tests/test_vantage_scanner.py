@@ -329,3 +329,19 @@ def test_rejected_signals_are_recorded(env, monkeypatch, tmp_path):
     vantage.run("2026-11-17")
     R = pd.read_csv(tmp_path / "rej.csv")
     assert R.iloc[0]["symbol"] == "THIN" and "thin stock" in R.iloc[0]["why"]
+
+
+def test_universe_switch_off_by_default_and_top300_when_on(monkeypatch):
+    import pandas as pd
+    from swing import vantage, universe
+    h = pd.DataFrame({"symbol": ["BIG", "SMALL", "OLD"], "med_value": [9e9, 1e8, 9e9], "rank": [1, 301, 1],
+                      "asof": pd.to_datetime(["2026-11-01", "2026-11-01", "2026-10-01"])})
+    monkeypatch.setattr(universe, "load_history", lambda: h)
+    vantage._TOP.clear()
+    assert vantage.outside_universe("SMALL", {}) is False                         # default 'all': nothing changes
+    s = {"vantage_universe": "top300"}
+    assert vantage.outside_universe("BIG", s) is False
+    assert vantage.outside_universe("SMALL", s) is True and vantage.outside_universe("OLD", s) is True
+    vantage._TOP.clear()
+    monkeypatch.setattr(universe, "load_history", lambda: (_ for _ in ()).throw(OSError()))
+    assert vantage.outside_universe("SMALL", s) is False                        # broken list never blocks

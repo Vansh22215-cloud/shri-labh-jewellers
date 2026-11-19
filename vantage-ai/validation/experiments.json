@@ -1,7 +1,7 @@
 {
  "note": "Every idea ever tested (Project ALPHA 'experience memory'). Never re-test a failed idea without a NEW reason.",
- "count": 80,
- "passed": 10,
+ "count": 82,
+ "passed": 11,
  "experiments": [
   {
    "id": "R1-F1",
@@ -801,6 +801,26 @@
    "verdict": "fail",
    "why": "2 passed development (0 in each of 5 luck worlds), both failed the holdout in the all-stocks set; skip price > Rs 980 = near miss (top-300 only)",
    "files": "AUTO_LAB_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R25",
+   "round": 25,
+   "family": "money",
+   "hypothesis": "Size trades on the current account value (compounding)",
+   "verdict": "fail",
+   "why": "+1-1.7 points for top-300 but deeper falls in development and no gain for all stocks; fixed-size tests understate later risk",
+   "files": "IMPROVE25_RESULTS.md",
+   "area": "finder"
+  },
+  {
+   "id": "R26",
+   "round": 26,
+   "family": "universe",
+   "hypothesis": "VANTAGE on the top-300 instead of all stocks >= Rs 2 cr",
+   "verdict": "PASS - proposed to owner (holdout seen before; 6 of 9 years since 2018)",
+   "why": "holdout 14.8% vs 7.2% a year, fall -20.6% vs -27.5%; development favours all stocks (survivorship-inflated)",
+   "files": "IMPROVE26_RESULTS.md",
    "area": "finder"
   }
  ],

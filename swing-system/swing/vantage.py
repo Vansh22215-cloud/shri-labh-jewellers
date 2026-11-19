@@ -251,6 +251,25 @@ def qty_line(entry, stop, settings=None, scale=1.0):
             f"({float(L['risk_per_trade_pct']) * scale:g}% of ₹{cap:,.0f})")
 
 
+_TOP = {}
+
+
+def outside_universe(sym, s):
+    """Round 26 (needs the owner's yes; setting vantage_universe: top300): VANTAGE BUYs only for the monthly top-300 stocks
+    by money traded (data/universe_history.csv, the same list the 13-year test used). Default 'all' = no change."""
+    if str(s.get("vantage_universe", "all")).lower() != "top300":
+        return False
+    try:
+        from .universe import load_history
+        if "asof" not in _TOP or _TOP.get("day") != pd.Timestamp.now().date():
+            h = load_history()
+            last = h[h["asof"] == h["asof"].max()]
+            _TOP.update(asof=h["asof"].max(), day=pd.Timestamp.now().date(), syms=set(last.loc[last["rank"] <= 300, "symbol"]))
+        return str(sym) not in _TOP["syms"]
+    except Exception:
+        return False                                   # list unreadable -> never block on a broken file
+
+
 def min_turnover(s):
     """D121 (owner-approved 17 Nov): BUY signals only for stocks trading >= Rs 2 crore a day on average (20 days).
     Pre-registered test: thinner stocks were clearly weaker in the 2023-26 holdout (PF 1.20 vs 1.48)."""
@@ -439,9 +458,11 @@ def run(day=None, source="auto"):
                 _save_signals(sig)                          # record first ...
                 telegram.send_reliable(s, sell_message(sym, sell, sig.loc[i, "close"]), label="vantage indicator")
                 sent_s += 1
-        if buy and (kill or tv < min_turnover(s)):          # Project ALPHA counterfactuals: rejected signals are followed too
-            _record_rejected(sym, buy, "kill switch / safety stop" if kill else f"thin stock (₹{tv / 1e7:.1f} cr/day < ₹2 cr)")
-        if buy and not kill and tv >= min_turnover(s):
+        out_u = bool(buy) and outside_universe(sym, s)
+        if buy and (kill or tv < min_turnover(s) or out_u):   # Project ALPHA counterfactuals: rejected signals are followed too
+            _record_rejected(sym, buy, "kill switch / safety stop" if kill else
+                             (f"thin stock (₹{tv / 1e7:.1f} cr/day < ₹2 cr)" if tv < min_turnover(s) else "outside the top 300"))
+        if buy and not kill and tv >= min_turnover(s) and not out_u:
             key = (sym, str(pd.Timestamp(buy["signal"]).date()))
             if ((sig["sym"] == key[0]) & (sig["signal"] == key[1])).any():
                 continue                                    # already sent (re-run) - never twice
@@ -643,7 +664,7 @@ def live_step(scanner, s=None):
     sent = 0
     for sym, st, tv in res:
         b = st.get("buy") if isinstance(st, dict) else None
-        if not b or isinstance(tv, str) or tv < min_turnover(s):
+        if not b or isinstance(tv, str) or tv < min_turnover(s) or outside_universe(sym, s):
             continue
         if ((live["day"] == day) & (live["sym"] == sym)).any():
             continue                                          # one live alert per stock per day
@@ -702,7 +723,7 @@ def close_call(day, t, res, s, cal):
     calls, d, sent = _load_calls(), str(day.date()), 0
     for sym, st, tv in res:
         b = st.get("buy") if isinstance(st, dict) else None
-        if not b or isinstance(tv, str) or tv < min_turnover(s):
+        if not b or isinstance(tv, str) or tv < min_turnover(s) or outside_universe(sym, s):
             continue
         if ((calls["day"] == d) & (calls["sym"] == sym)).any():
             continue
