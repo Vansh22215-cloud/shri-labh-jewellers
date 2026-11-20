@@ -1,7 +1,7 @@
 """Re-run of the main tests on Kite exchange prices (owner 19 Nov: "check if the tests used accurate Kite data - if not,
 do it again"). Runs on GitHub once Kite daily history is complete (kite_daily.coverage() >= 90%).
 Same VANTAGE code, same rules, same account simulation (verified Zerodha costs + 20.8% tax), only the price source
-changes: Kite first; stocks Kite does not have (delisted) keep the official NSE bhavcopy rebuilds.
+changes: strict Kite; delisted stocks are left out (owner 20 Nov).
 -> swing-system/journal/kite_recheck.md (results only; Kite data stays in the private cache)."""
 import os
 import sys
@@ -49,7 +49,7 @@ def main():
             "all stocks, next open (U)": build(allx, {})}
     L = ["# The main tests re-run on Kite exchange prices", "",
          f"Run {pd.Timestamp.now(tz='Asia/Kolkata'):%d %b %Y %H:%M} IST. Same VANTAGE code and rules; only the price source "
-         "changed (Kite first, NSE bhavcopy rebuilds for delisted stocks Kite does not list). Account: ₹51,000, 1% risk, "
+         "changed (strict Kite; delisted stocks left out by the owner's choice). Account: ₹51,000, 1% risk, "
          "25% cap, verified Zerodha costs + 20.8% tax, 15 random orders.", "",
          "| Trade set | Period | Source | Trades | Win % | Avg / trade (before tax) | Account growth a year | Worst fall |",
          "|---|---|---|---|---|---|---|---|"]

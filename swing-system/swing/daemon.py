@@ -69,8 +69,8 @@ def key(job, t=None):
         return None
     if job == "kite_rerun" and t.hour < 21:
         return None
-    if job == "kite_download" and (t.weekday() >= 5 or t.hour < 18):
-        return None
+    if job == "kite_download" and t.weekday() < 5 and 8 * 60 + 45 <= t.hour * 60 + t.minute <= 15 * 60 + 50:
+        return None                                # never during market hours (scans and VANTAGE come first)
     if job == "weekly" and (t.weekday() != 5 or t.hour < 10):
         return None
     return f"{job} {t:%Y-%m-%d}"
@@ -145,10 +145,16 @@ def due(t=None):
     if wd < 5 and t >= t.replace(hour=18, minute=45, second=0) and not st.get(key("company", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=19, minute=30)) and "nightly" not in out:
         out.append("company")
-    if wd < 5 and t >= t.replace(hour=18, minute=55, second=0) and not st.get(key("kite_download", t)) \
-            and (st.get(key("nightly", t)) or t >= t.replace(hour=19, minute=30)) and "nightly" not in out \
-            and not _waiting(st, "kite_download", t):
-        out.append("kite_download")                # Kite history, while the day's login is still valid
+    if key("kite_download", t) and not st.get(key("kite_download", t)) and not _waiting(st, "kite_download", t) \
+            and not out:
+        try:                                       # owner 20 Nov: Kite history in small chunks whenever logged in
+            from . import kite
+            from .kite_daily import coverage
+            from .kite_candles import progress
+            if kite.logged_in() and not (coverage() >= 0.999 and progress()["complete"]):
+                out.append("kite_download")
+        except Exception:
+            pass
     if t >= t.replace(hour=21, minute=0, second=0) and not st.get(key("kite_rerun", t)) and st.get(key("research", t)) \
             and not (DATA / "kite_rerun" / "done.txt").exists():
         try:

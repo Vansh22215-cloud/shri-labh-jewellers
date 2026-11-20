@@ -1299,3 +1299,17 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Research** runs nothing price-based until Kite history is complete. The weekly research run of 19 Nov 8:39 pm used mixed Kite+Yahoo data; it is marked INVALID in `journal/auto_research.md` and `lab_rules.json`, kept for the record. It made no proposals.
 - **Unchanged:** every entry, exit, ranking, confidence and risk rule.
 - **Still on Yahoo, not tips or prices for tips:** company fundamentals and results dates (Kite has none), global markets (non-Indian), the Yahoo comparison copies, and `kite_is_adjusted()`, which uses Yahoo split dates only to verify whether Kite's candles are already split-adjusted (the prices stay Kite).
+
+## D159 - 2026-11-20 - Everything Kite has: the full candle library; delisted stocks out of research (owner 20 Nov)
+- **Delisted stocks are left out of all research** (owner: "remove delisted and suspended stocks' history"). `independent_validation._delisted()` returns nothing unless `ATLAS_INCLUDE_DELISTED=1` (kept only for a one-off comparison). Reports now say "delisted stocks left out". Honest effect: stocks that later failed are missing, so backtest results can look a little better than reality (survivorship). The old NSE bhavcopy files stay on disk unused (nothing deleted).
+- **Expired F&O contract history: not collected** (Kite does not keep it and the owner does not want it).
+- **Daily candles (`kite_daily`)**: every NSE stock + NIFTY 50 + NIFTY BANK + INDIA VIX, from 2000-01-01, or as far back as Kite has. Stocks first downloaded from 2011 are read further back (`backfill`) until Kite returns nothing.
+- **Intraday candles (`kite_candles`, new)**: current top-300 + NIFTY 50 + NIFTY BANK:
+  - 60-, 15- and 5-minute: all Kite has (read backwards from today until two empty chunks);
+  - 1-minute: the last 2 years, then kept going forward;
+  - 3-, 10- and 30-minute are built exactly from the 1-, 5- and 15-minute files (no extra requests);
+  - parquet files in the private GitHub cache (`data/kite_candles/`), never in git; `journal/kite_candles.md` reports progress, the earliest day per interval, stocks not on Kite, and size.
+- **When**: the `kite_download` job now runs in ~10-minute chunks whenever the day's Kite login is valid, any day, but **never 8:45 am - 3:50 pm on weekdays**. Jobs run one at a time, so live scans, the buy window and VANTAGE always come first. Daily history first, then intraday. It repeats every minute until complete, then tops up once a day.
+- **Safety**: read-only Kite historical API only (no order endpoints); about 3 requests a second; downloads pause if the data folder passes 4 GB (GitHub keeps 10 GB of cache in all). Estimated ~37,000 requests (~3.5 hours) and ~1.4 GB in total.
+- **New package**: `pyarrow` (free, open source) for parquet files.
+- **Unchanged**: every live entry, exit, ranking, confidence and risk rule. The full re-run of all backtests on Kite starts only when daily history is complete (coverage report first, then results vs the Yahoo baseline); any live change waits for the owner's yes.

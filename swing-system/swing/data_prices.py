@@ -183,7 +183,7 @@ def provenance_line():
     if os.environ.get("SWING_PRICE_SOURCE", "kite_strict").lower() == "kite_strict":
         return (f"Data used (STRICT KITE): {len(PROVENANCE['kite']):,} stocks from Kite exchange candles only "
                 f"({SPAN['first']} to {SPAN['last']}); {len(PROVENANCE['missing']):,} requested stocks not on Kite "
-                f"(delisted ones taken from NSE official bhavcopies, labelled 'nse'); Yahoo: none. "
+                f"(left out - delisted stocks are excluded by the owner's choice); Yahoo: none. "
                 f"Corporate actions: {SPAN['ca']}. Prices are price-only (no dividends), NIFTY too.")
     k, ky, y = (len(PROVENANCE[x]) for x in ("kite", "kite+yahoo", "yahoo"))
     n = k + ky + y

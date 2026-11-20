@@ -1,10 +1,10 @@
 """STRICT KITE MODE (owner 19 Nov): Kite historical candles for listed stocks ONLY - never filled from Yahoo; delisted
-stocks from NSE official bhavcopies, labelled 'nse'; missing Kite stock-days are reported, not substituted; Yahoo
+stocks are LEFT OUT (owner 20 Nov: "remove delisted stocks' history"; ATLAS_INCLUDE_DELISTED=1 for a one-off
+survivorship comparison); missing Kite stock-days are reported, not substituted; Yahoo
 only in the separate verification audit. Step 0 verifies Kite coverage before anything else.
 EVERYTHING AGAIN ON KITE DATA (owner 19 Nov: "do all work again, tests, runs, each and everything, with Kite
 Connect data"). Runs on GitHub (Kite keys live only there) once Kite daily history is complete.
-Every input that comes from prices is rebuilt from Kite exchange candles (SWING_PRICE_SOURCE=kite); stocks Kite does
-not list (delisted) keep NSE's official bhavcopy rebuilds. Every result goes to a separate folder
+Every input that comes from prices is rebuilt from Kite exchange candles (SWING_PRICE_SOURCE=kite_strict). Every result goes to a separate folder
 (swing-system/data/kite_rerun), so the Yahoo originals stay for the side-by-side comparison:
   swing-system/journal/kite_rerun.md  +  swing-system/journal/kite_rerun/*.json  (results only - no Kite prices)."""
 import json
@@ -158,11 +158,12 @@ def report(log):
     cov = log.get("coverage", {})
     L = ["# Everything re-run on Kite data - STRICT KITE MODE", "",
          f"Run started {log['started']} on GitHub, {log.get('minutes', '-')} minutes. Kite only for listed stocks (never "
-         "filled from Yahoo); delisted stocks from NSE official bhavcopies ('nse'); Yahoo only in the verification audit.", "",
+         "filled from Yahoo); delisted stocks left out by the owner's choice (20 Nov) - so results can be a little "
+         "better than reality (stocks that later failed are missing); Yahoo only in the verification audit.", "",
          "## 1. Data coverage (verified first - full report: journal/kite_coverage.md, journal/kite_data_audit.md)", "",
          f"- Stocks on Kite: {cov.get('on_kite')} of {cov.get('stocks')}; Kite days {cov.get('kite_first_day')} to {cov.get('kite_last_day')}",
          f"- Stocks with Kite data from Jan 2013 or earlier: {cov.get('stocks_from_2013')}; missing stock-days inside Kite spans: {cov.get('missing_stock_days')}",
-         f"- Past top-300 members: {cov.get('top300_ever')} - on Kite {cov.get('top300_on_kite')}, NSE bhavcopy (delisted) {cov.get('top300_delisted_nse')}, on neither {cov.get('top300_missing_both')}",
+         f"- Past top-300 members: {cov.get('top300_ever')} - on Kite {cov.get('top300_on_kite')}, delisted (left out) {cov.get('top300_delisted_nse')}, on neither {cov.get('top300_missing_both')}",
          f"- Splits/bonuses: {'adjusted by Kite' if cov.get('kite_adjusted') else 'detected from Kite prices'}; prices are price-only (no dividends), NIFTY too",
          f"- 13 years complete on Kite: {'verified' if cov.get('thirteen_years_ok') else 'NOT verified'}", ""]
     if log.get("stopped"):
@@ -173,8 +174,8 @@ def report(log):
     g = log.get("generate", {})
     L += [f"- {g.get('line', 'generation failed: ' + str(g.get('error')))}",
           f"- Trades rebuilt from Kite prices: {g.get('trades')}; live dip-buy trades: {g.get('dip_trades')}",
-          f"- Of those, trades in delisted stocks (NSE bhavcopy, Kite does not list them): {g.get('trades_from_nse_bhavcopy_(delisted)')}",
-          "", "| Step | Result | Kite stocks | Not on Kite (delisted -> NSE, rest dropped) | Yahoo stocks | Date range | Corporate actions | Minutes |",
+          f"- Of those, trades in delisted stocks: {g.get('trades_from_nse_bhavcopy_(delisted)')} (0 expected - left out)",
+          "", "| Step | Result | Kite stocks | Not on Kite (left out) | Yahoo stocks | Date range | Corporate actions | Minutes |",
           "|---|---|---|---|---|---|---|---|"]
     for s_ in log["steps"]:
         d = s_.get("data", {})

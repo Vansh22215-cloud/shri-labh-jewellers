@@ -1,4 +1,4 @@
-"""Kite (exchange) daily candles for every NSE stock since 2011 (owner 19 Nov: "did the tests use accurate Kite data?
+"""Kite (exchange) daily candles for every NSE stock + NIFTY 50 / NIFTY BANK / INDIA VIX, all Kite has (back to 2000) (owner 19 Nov: "did the tests use accurate Kite data?
 If not, do it again" - they did not: every test used Yahoo daily prices + NSE bhavcopies for delisted stocks).
   download()  - research job on GitHub, ~4,000 requests a night (3 a second) until every stock is complete,
                 then the last 10 days nightly. Files: data/kite_daily/<SYM>.csv (private cache, never in git).
@@ -20,7 +20,7 @@ log = get_logger()
 BASE = DATA / "kite_daily"
 STATE_F = BASE / "state.json"
 AUDIT = ROOT / "journal" / "kite_data_audit.md"
-START = pd.Timestamp("2011-01-01")
+START = pd.Timestamp("2000-01-01")    # owner 20 Nov: all Kite has, not just 13 years
 CHUNK_DAYS = 1990                     # Kite allows 2,000 days of daily candles per request
 GAP = 0.36
 
@@ -40,15 +40,18 @@ def _save_state(st):
 def all_symbols():
     try:
         from .vantage import symbols
-        return ["NIFTY50"] + symbols()
+        return ["NIFTY50"] + symbols() + ["BANKNIFTY", "INDIAVIX"]
     except Exception:
-        return ["NIFTY50"]
+        return ["NIFTY50", "BANKNIFTY", "INDIAVIX"]
+
+
+EXTRA_INDEX = {"INDIAVIX": "INDIA VIX"}         # daily history only (owner 20 Nov: indices + VIX too)
 
 
 def _day_candles(sym, fr, to):
     from . import kite
     ins = kite.instruments()
-    name = kite.INDEX.get(sym, sym)
+    name = {**kite.INDEX, **EXTRA_INDEX}.get(sym, sym)
     row = ins[ins["tradingsymbol"] == name]
     if not len(row):
         return None
@@ -105,10 +108,40 @@ def download(max_requests=4000, today=None):
             st[sym] = str(to.date())
         if used >= max_requests:
             break
+    used += backfill(st, syms, max_requests - used) if used < max_requests else 0
     _save_state(st)
     done = sum(1 for s in syms if pd.Timestamp(st.get(s, "2000-01-01")) >= today - timedelta(days=3))
     log.info("Kite daily: %d requests, %d of %d stocks complete", used, done, len(syms))
     return {"requests": used, "complete": done, "of": len(syms)}
+
+
+def backfill(st, syms, budget):
+    """Owner 20 Nov ("all available, not just 13 years"): stocks first downloaded from 2011 are read further back,
+    chunk by chunk, until Kite returns nothing or 2000-01-01 is reached. State: st["back|SYM"] = True when done."""
+    used = 0
+    for sym in syms:
+        if used >= budget or st.get("back|" + sym) or sym not in st:
+            continue
+        k = _raw(sym)
+        while used < budget:
+            first = k.index.min() if k is not None and len(k) else None
+            if first is None or first <= START + timedelta(days=7):
+                st["back|" + sym] = True
+                break
+            to = first - timedelta(days=1)
+            fr = max(START, to - timedelta(days=CHUNK_DAYS))
+            try:
+                d = _day_candles(sym, fr, to)
+                used += 1
+            except Exception as e:
+                log.warning("Kite daily backfill %s: %s", sym, type(e).__name__)
+                return used
+            if d is None or not len(d):
+                st["back|" + sym] = True                   # nothing older on Kite = the start of its history
+                break
+            _store(sym, d)
+            k = _raw(sym)
+    return used
 
 
 def coverage(today=None):
@@ -345,12 +378,12 @@ def coverage_report():
     L += ["| Check | Result |", "|---|---|",
           f"| Stocks checked (today's NSE list + every past top-300 member) | {out['stocks']:,} |",
           f"| On Kite | {out['on_kite']:,} ({pct(out['on_kite'], out['stocks'])}) |",
-          f"| Kite date range | {out['kite_first_day']} to {out['kite_last_day']} ({out['calendar_days']:,} NIFTY trading days since 2011) |",
+          f"| Kite date range | {out['kite_first_day']} to {out['kite_last_day']} ({out['calendar_days']:,} NIFTY trading days) |",
           f"| Stocks with Kite data from Jan 2013 or earlier | {out['stocks_from_2013']:,} |",
           f"| Missing stock-days inside each stock's own Kite span | {out['missing_stock_days']:,} of {out['days_on_kite'] + out['missing_stock_days']:,} ({pct(out['missing_stock_days'], out['days_on_kite'] + out['missing_stock_days'])}) |",
           f"| Past top-300 members | {out['top300_ever']:,} |",
           f"| ... on Kite | {out['top300_on_kite']:,} (Kite data reaches back to their first top-300 month: {out['top300_kite_covers_membership']:,}) |",
-          f"| ... not on Kite, taken from NSE official bhavcopies (delisted, labelled 'nse') | {out['top300_delisted_nse']:,} |",
+          f"| ... not on Kite because delisted (left out of research - owner 20 Nov) | {out['top300_delisted_nse']:,} |",
           f"| ... on neither (dropped and listed) | {out['top300_missing_both']:,} |",
           f"| Splits/bonuses | {'Kite data is already adjusted (checked against Yahoo split dates)' if out['kite_adjusted'] else 'Kite data is NOT adjusted: detected from Kite prices (clear ratios only)'} |", ""]
     miss = C[C["top300_ever"] & ~C["on_kite"] & ~C["delisted_nse"]]["sym"].tolist()

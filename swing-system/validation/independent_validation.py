@@ -29,6 +29,11 @@ DELISTED_F = f"{ROOT}/data/delisted_prices.csv.gz"
 
 
 def _delisted():
+    """Delisted stocks' NSE bhavcopy rebuilds - OFF by default (owner 20 Nov: "remove delisted stocks' history").
+    ATLAS_INCLUDE_DELISTED=1 brings them back for a one-off survivorship comparison."""
+    import os
+    if os.environ.get("ATLAS_INCLUDE_DELISTED") != "1":
+        return {}
     try:
         d = pd.read_csv(DELISTED_F, parse_dates=["date"])
         return {s: g.set_index("date").sort_index() for s, g in d.groupby("symbol")}

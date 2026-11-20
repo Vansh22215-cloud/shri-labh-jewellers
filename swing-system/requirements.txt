@@ -14,3 +14,4 @@ onnxruntime>=1.32,<2
 opencv-python>=5.0,<6
 scikit-learn>=1.9,<2   # D110 AI picks (machine-learning ranker)
 cryptography>=50,<60   # encrypts the daily Kite login pass
+pyarrow>=20,<30           # Kite candle library (parquet files)
