@@ -1,12 +1,12 @@
-# Kite candle library (20 Nov 2026 16:12 IST)
+# Kite candle library (20 Nov 2026 16:23 IST)
 
 Source: Kite Connect historical API only (no other price source). Every NSE stock Kite lists + indices. 3/10/30-minute candles are built from the 1/5/15-minute ones.
 
 | Interval | Stocks complete | Earliest day Kite gave | Median first day | Not on Kite | Size on disk |
 |---|---|---|---|---|---|
-| day | 468/3121 | 2000-01-01 | 2018-04-11 | 0 | 29 MB |
+| day | 703/3121 | 2000-01-01 | 2018-02-12 | 0 | 44 MB |
 | 60minute | 0/3120 | - | - | 0 | 0 MB |
 | 15minute | 0/3120 | - | - | 0 | 0 MB |
 | 5minute | 0/3120 | - | - | 0 | 0 MB |
 
-Data folder total: 0.04 GB (smaller intervals pause above 8 GB).
+Data folder total: 0.05 GB (smaller intervals pause above 8 GB).
