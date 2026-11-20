@@ -47,8 +47,13 @@ def _write(st):
     tmp.replace(STATE)
 
 
+def trading_day(t):
+    from .market_days import is_trading_day
+    return is_trading_day(t.date() if hasattr(t, "date") else t)
+
+
 def market_minutes(t):
-    return t.weekday() < 5 and 8 * 60 + 45 <= t.hour * 60 + t.minute <= 15 * 60 + 50
+    return trading_day(t) and 8 * 60 + 45 <= t.hour * 60 + t.minute <= 15 * 60 + 50
 
 
 def key(job, t=None):
@@ -186,7 +191,7 @@ _FEED = {"feed": None, "day": None, "starts": 0}
 
 
 def feed_window(t):
-    return t.weekday() < 5 and 9 * 60 + 8 <= t.hour * 60 + t.minute <= 15 * 60 + 32
+    return trading_day(t) and 9 * 60 + 8 <= t.hour * 60 + t.minute <= 15 * 60 + 32
 
 
 def ensure_feed(t=None):
@@ -253,7 +258,7 @@ def day_status(t):
 def minute_tasks(t=None):
     import html as _html
     t = t or now()
-    wd = t.weekday() < 5
+    wd = trading_day(t)                            # weekday and not an NSE holiday
     s = load_settings()
     try:
         from . import telegram

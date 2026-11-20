@@ -132,3 +132,14 @@ def test_replay_runs_once_outside_market_hours(monkeypatch):
     assert "replay" not in daemon.due(datetime(2026, 11, 20, 11, 0, tzinfo=IST))
     (daemon.DATA / "replay_wait.txt").write_text("1")                       # failed a moment ago: waits 30 min
     assert "replay" not in daemon.due(datetime(2026, 11, 20, 19, 0, tzinfo=IST))
+
+
+def test_nse_holiday_is_not_a_market_day(monkeypatch):
+    from swing import market_days, candles
+    monkeypatch.setattr(market_days, "holidays", lambda: {"2026-11-24"})
+    assert not market_days.is_trading_day("2026-11-24") and market_days.is_trading_day("2026-11-23")
+    tue = datetime(2026, 11, 24, 10, 0, tzinfo=IST)
+    assert not daemon.feed_window(tue) and not daemon.market_minutes(tue)
+    assert daemon.key("candles", tue)                                 # downloads may run on the holiday
+    assert not candles.in_market_hours(pd.Timestamp("2026-11-24 10:00", tz="Asia/Kolkata"))
+    assert daemon.feed_window(datetime(2026, 11, 23, 10, 0, tzinfo=IST))

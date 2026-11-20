@@ -202,7 +202,10 @@ def in_market_hours(now=None):
     """8:45 am - 3:50 pm on weekdays: no history downloads (live scanning first)."""
     now = now or pd.Timestamp.now(tz="Asia/Kolkata")
     m = now.hour * 60 + now.minute
-    return now.weekday() < 5 and 8 * 60 + 45 <= m <= 15 * 60 + 50
+    if not (8 * 60 + 45 <= m <= 15 * 60 + 50) or now.weekday() >= 5:
+        return False
+    from .market_days import is_trading_day
+    return is_trading_day(now.date())                    # NSE holidays: downloads may run all day
 
 
 def step(max_requests=1500, today=None, intervals=None):

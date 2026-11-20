@@ -1416,3 +1416,8 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - every entry and exit goes instantly to Telegram;
   - the dashboard picture (Zerodha's 'Closed positions' layout) after 3:30 pm.
 - **Not tested on long history yet**: the stock rule can be, once the 5-minute library is complete. The option rule cannot (Kite has no expired option candles), so only the replay and live results judge it.
+
+## D166 - 2026-11-20 - NSE holidays (owner: "Tuesday 24 Nov 2026 is a holiday, so the weekly expiry is on Monday")
+- `swing/market_days.py` reads NSE's official trading-holiday list (confirmed: 24 Nov 2026, Prakash Gurpurb Sri Guru Nanak Dev), with a built-in copy of the 2026 holidays if NSE cannot be reached.
+- On a holiday: no Kite login message, no live feed or practice trading, and history downloads may run all day.
+- The weekly expiry moving to Monday needs no code: option contracts and their expiry dates come from Kite's own NFO list. On expiry day after 1:30 pm the trader uses the next weekly expiry.
