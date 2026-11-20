@@ -26,7 +26,9 @@ HELP = ("ATLAS - your strategies, tested on Kite data, scanned live on every NSE
         "/status - is everything running\n/kite - Kite login link\n/capital - your trading money; /capital 60000 to change\n"
         "/stop - no new tips; /resume - tips again\n/tips - open tips\n/strategies - your strategies: tested? live?\n"
         "/test NAME - test a strategy on Kite history\n/learn NAME - where and why it works or fails\n"
-        "/approve NAME - let a tested strategy send live tips; /unapprove NAME - stop it\n\n" + DISCLAIMER)
+        "/approve NAME - let a tested strategy send live tips; /unapprove NAME - stop it\n"
+        "/proof - every practice trade of the 5-day replay (times, prices) to check on Kite charts; /proof live - the live ones\n\n"
+        + DISCLAIMER)
 TOKEN_REFUSED_SINCE = None
 _READ_FAIL_SINCE = None
 
@@ -172,6 +174,42 @@ def learn_text(text):
     return "\n".join(L)
 
 
+def proof_file(which="replay"):
+    """Every practice trade with its exact times, prices and reason, as a CSV the owner can check against Kite's
+    own charts (Kite app -> the instrument -> 1-minute chart at that date and time)."""
+    import csv
+    from .config import PRIVATE
+    f = PRIVATE / ("paper_replay.json" if which == "replay" else "paper.json")
+    if not f.exists():
+        return None
+    acc = json.loads(f.read_text())
+    out = DATA / f"atlas-{which}-trades.csv"
+    cols = ["entry_time", "exit_time", "name", "symbol", "side", "qty", "buy_avg", "sell_avg", "pnl", "charges", "net",
+            "why", "strategy"]
+    with open(out, "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
+        w.writeheader()
+        for c in acc.get("closed", []):
+            w.writerow(c)
+    return out, len(acc.get("closed", [])), acc.get("start"), acc.get("cash")
+
+
+def proof_command(text):
+    from . import telegram
+    which = "live" if "live" in text.lower() else "replay"
+    r = proof_file(which)
+    if not r:
+        return f"No {which} practice trades yet."
+    f, n, start, cash = r
+    telegram.send_document(load_settings(), f, caption=f"{n} {which} practice trades: exact times, buy and sell prices, "
+                                                       "reason. Check any of them on Kite's 1-minute chart.",
+                           mime="text/csv", label="dashboard")
+    f.unlink(missing_ok=True)
+    return (f"Sent: {n} trades. Start ₹{start:,.0f} → now ₹{cash:,.0f}. How to check one: open the instrument in Kite, "
+            "choose the 1-minute chart, go to the date and time in 'entry_time' - the buy price must be inside that "
+            "minute's high-low range (plus ~0.05-0.3% slippage), and the same for the sell at 'exit_time'.")
+
+
 def open_tips_text():
     from .tips import load_tips
     T = load_tips()
@@ -259,6 +297,8 @@ def handle(token, owner, msg):
         reply = kill_command(True)
     elif low.startswith("/resume"):
         reply = kill_command(False)
+    elif low.startswith("/proof"):
+        reply = proof_command(text)
     elif low.startswith("/tips"):
         reply = open_tips_text()
     elif low.startswith("/strategies"):

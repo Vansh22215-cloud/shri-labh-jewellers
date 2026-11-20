@@ -1451,3 +1451,4 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - Replaces the D167 shortcut. Download order: day (done), 5-minute (the tests need it), then 60, 30 and 15-minute. All are Kite's own candles; only 3- and 10-minute would be built.
 - Storage: all of these together are estimated at ~9-10 GB against the 8.5 GB limit. If the limit is reached, the last one (15-minute) pauses and the owner is told.
 - Weekend/holiday Kite login message moved from 9 am to 6 am (owner: "don't want to waste 3 hours" - a login lasts until 6 am the next day).
+- /proof (owner 20 Nov: "what's the proof you traded honestly?"): every practice trade (replay or live) as a CSV with exact entry/exit times, buy/sell prices and reason, so each can be checked on Kite's own 1-minute chart.

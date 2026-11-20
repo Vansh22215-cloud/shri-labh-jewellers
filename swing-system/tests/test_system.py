@@ -143,3 +143,17 @@ def test_nse_holiday_is_not_a_market_day(monkeypatch):
     assert daemon.key("candles", tue)                                 # downloads may run on the holiday
     assert not candles.in_market_hours(pd.Timestamp("2026-11-24 10:00", tz="Asia/Kolkata"))
     assert daemon.feed_window(datetime(2026, 11, 23, 10, 0, tzinfo=IST))
+
+
+def test_proof_file_lists_every_trade(tmp_path, monkeypatch):
+    import csv
+    from swing import config
+    monkeypatch.setattr(config, "PRIVATE", tmp_path)
+    monkeypatch.setattr(bot, "DATA", tmp_path)
+    (tmp_path / "paper_replay.json").write_text(json.dumps({"start": 50800, "cash": 52000, "open": {}, "closed": [
+        {"entry_time": "2026-11-16 09:40:00", "exit_time": "2026-11-16 10:05:00", "name": "NIFTY 24 NOV 26000 CALL",
+         "symbol": "NFO:X", "side": "LONG", "qty": 130, "buy_avg": 80.2, "sell_avg": 96.0, "pnl": 2054, "charges": 60,
+         "net": 1994, "why": "target", "strategy": "NIFTY options"}]}))
+    f, n, start, cash = bot.proof_file("replay")
+    rows = list(csv.DictReader(open(f)))
+    assert n == 1 and rows[0]["entry_time"] == "2026-11-16 09:40:00" and rows[0]["buy_avg"] == "80.2"
