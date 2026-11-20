@@ -1453,3 +1453,8 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - Weekend/holiday Kite login message moved from 9 am to 6 am (owner: "don't want to waste 3 hours" - a login lasts until 6 am the next day).
 - /proof (owner 20 Nov: "what's the proof you traded honestly?"): every practice trade (replay or live) as a CSV with exact entry/exit times, buy/sell prices and reason, so each can be checked on Kite's own 1-minute chart.
 - Intraday stock margin in the practice account: 25% (4x) instead of 20% (5x) - owner noticed a ₹1.5 lakh trade on ₹50,800; Zerodha gives up to 5x only on the most liquid stocks, so the cautious figure is used (practice trader and long test).
+
+## D170 - 2026-11-21 - Kite's margin calculator allowed (owner, in writing: "Yes, allow Kite's margin calculator (/margins/orders)")
+- `kite.order_margin()` / `kite.mis_ratio()`: Kite's margin CALCULATOR, the only Kite address besides market data and the daily login. It computes the margin for a hypothetical order and places nothing.
+- The practice trader uses Zerodha's own intraday margin per stock, once a day per stock. If Kite cannot say, the cautious 25% is used. Each entry message shows the margin used.
+- The safety tests allow ONLY this exact address. Every order, GTT, holdings, positions and funds address stays blocked, and a new test checks this.

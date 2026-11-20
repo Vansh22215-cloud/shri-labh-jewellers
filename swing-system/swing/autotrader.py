@@ -207,12 +207,16 @@ class Engine:
             stop = px * (1 - self.p["stk_stop"]) if side == "LONG" else px * (1 + self.p["stk_stop"])
             tgt = px * (1 + self.p["stk_target"]) if side == "LONG" else px * (1 - self.p["stk_target"])
             from .paper import MIS_MARGIN
-            qty = int(min(self.p["stk_risk"] / (px * self.p["stk_stop"]), self.b.available() * 0.95 / (px * MIS_MARGIN)))
+            mr = None
+            if hasattr(self.m, "margin_ratio"):
+                mr = self.m.margin_ratio(sym, px, "BUY" if side == "LONG" else "SELL")
+            mr = mr if mr and 0.05 <= mr <= 1.0 else MIS_MARGIN          # Kite's own figure, else the cautious 25%
+            qty = int(min(self.p["stk_risk"] / (px * self.p["stk_stop"]), self.b.available() * 0.95 / (px * mr)))
             if qty < 1:
                 continue
             pos = self.b.open_position(f"EQ-{sym}-{t:%H%M}", sym, sym, "EQ", side, qty, px, stop, tgt, "stocks", t,
                                        note=f"broke the 9:15-9:30 range {'up' if side == 'LONG' else 'down'} with "
-                                            f"{strength:.1f}x volume")
+                                            f"{strength:.1f}x volume · margin {mr * 100:.0f}%", margin=mr)
             if pos:
                 self.notify("entry", self.entry_text(pos))
 

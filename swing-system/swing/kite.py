@@ -150,6 +150,43 @@ def _get(path, params=None, timeout=20):
     return r
 
 
+MARGIN_CALC = "/margins/orders"     # Kite's margin CALCULATOR - allowed by the owner on 21 Nov 2026; it only
+                                    # computes the margin for a hypothetical order, it places nothing
+_MARGIN = {}
+
+
+def order_margin(symbol, qty, price, side="BUY", product="MIS"):
+    """The margin Zerodha would block for a HYPOTHETICAL order - nothing is placed or changed. -> rupees or None."""
+    k, _ = keys()
+    t = token()
+    if not (k and t) or qty < 1 or not price > 0:
+        return None
+    body = [{"exchange": "NSE", "tradingsymbol": symbol, "transaction_type": side, "variety": "regular",
+             "product": product, "order_type": "LIMIT", "quantity": int(qty), "price": round(float(price), 2),
+             "trigger_price": 0}]
+    try:
+        r = requests.post(f"{API}{MARGIN_CALC}", json=body, timeout=20,
+                          headers={"X-Kite-Version": "3", "Authorization": f"token {k}:{t}"})
+        if r.status_code != 200:
+            return None
+        d = r.json().get("data") or []
+        return float(d[0]["total"]) if d and d[0].get("total") else None
+    except Exception:
+        return None
+
+
+def mis_ratio(symbol, price, side="BUY"):
+    """Intraday margin as a share of the trade value for this stock today, from Kite's calculator (cached for the
+    day). None if Kite cannot say - callers then use the cautious 25%."""
+    day = datetime.now(IST).strftime("%Y-%m-%d")
+    key = (symbol, side, day)
+    if key not in _MARGIN:
+        qty = max(1, int(100000 / price)) if price > 0 else 1
+        m = order_margin(symbol, qty, price, side)
+        _MARGIN[key] = (m / (qty * price)) if m else None
+    return _MARGIN[key]
+
+
 def _instrument(sym):
     if ":" in str(sym):
         return sym                                     # already "NFO:NIFTY26NOV26200CE" style

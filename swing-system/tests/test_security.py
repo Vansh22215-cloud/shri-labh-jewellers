@@ -29,6 +29,7 @@ def test_no_order_placing_code_anywhere():
     hits = []
     for f in list((ROOT / "swing").glob("*.py")) + list((ROOT / "scripts").glob("*.py")):
         for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
+            line = line.replace('"/margins/orders"', "")  # Kite's margin CALCULATOR only - allowed by the owner 21 Nov 2026
             if bad.search(line) and "test" not in f.name:
                 hits.append(f"{f.name}:{i}: {line.strip()[:100]}")
     assert not hits, hits

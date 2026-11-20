@@ -57,6 +57,10 @@ class LiveMarket:
     def prev_close(self, sym, t):
         return self.feed.builder.prev.get(sym)
 
+    def margin_ratio(self, sym, price, side):
+        """Zerodha's own intraday margin for this stock today (Kite's margin calculator; places nothing)."""
+        return kite.mis_ratio(sym, price, side)
+
     def prev_day(self, sym, t):
         from . import candles
         d = candles.load(sym, "day", adjusted=False)

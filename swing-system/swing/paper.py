@@ -41,6 +41,7 @@ class Position:
     best: float = 0.0
     lots: int = 0
     note: str = ""
+    margin: float = 0.25            # share of the value blocked (stocks: Kite's own figure when available)
 
 
 @dataclass
@@ -74,7 +75,7 @@ class Broker:
 
     # ---- money
     def blocked(self):
-        return sum(p.qty * p.avg * (1 if p.kind == "OPT" else MIS_MARGIN) for p in self.acc.open.values())
+        return sum(p.qty * p.avg * (1 if p.kind == "OPT" else p.margin) for p in self.acc.open.values())
 
     def available(self):
         return self.acc.cash - self.blocked()
@@ -86,15 +87,17 @@ class Broker:
         return sum(c["net" if net else "pnl"] for c in self.day_closed(day))
 
     # ---- orders
-    def open_position(self, key, name, symbol, kind, side, qty, price, stop, target, strategy, t, lots=0, note=""):
+    def open_position(self, key, name, symbol, kind, side, qty, price, stop, target, strategy, t, lots=0, note="",
+                      margin=None):
         if key in self.acc.open or qty < 1:
             return None
         fill = price + slip(price, kind) if side == "LONG" else price - slip(price, kind)
-        need = qty * fill * (1 if kind == "OPT" else MIS_MARGIN)
+        margin = MIS_MARGIN if margin is None else margin
+        need = qty * fill * (1 if kind == "OPT" else margin)
         if need > self.available():
             return None
         p = Position(key, name, symbol, kind, side, int(qty), round(fill, 2), round(stop, 2), round(target, 2), strategy,
-                     str(pd.Timestamp(t))[:19], ltp=fill, best=fill, lots=lots, note=note)
+                     str(pd.Timestamp(t))[:19], ltp=fill, best=fill, lots=lots, note=note, margin=margin)
         self.acc.open[key] = p
         self.save()
         return p

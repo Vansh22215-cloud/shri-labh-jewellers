@@ -18,7 +18,8 @@ def test_no_yahoo_and_no_order_endpoints_in_the_code():
     for f in list((ROOT / "swing").rglob("*.py")) + list((ROOT / "scripts").glob("*.py")):
         s = f.read_text()
         assert "yfinance" not in s and "import yf" not in s, f
-        assert not re.search(r"/orders|/gtt|place_order|/portfolio", s), f
+        # the one exception, approved in writing by the owner (21 Nov 2026): Kite's margin calculator, which places nothing
+        assert not re.search(r"/orders|/gtt|place_order|/portfolio", s.replace('"/margins/orders"', "")), f
     assert "yfinance" not in (ROOT / "requirements.txt").read_text()
     assert kite.READ_ONLY_PREFIXES == ("/quote", "/instruments")
     with pytest.raises(PermissionError):
@@ -157,3 +158,27 @@ def test_proof_file_lists_every_trade(tmp_path, monkeypatch):
     f, n, start, cash = bot.proof_file("replay")
     rows = list(csv.DictReader(open(f)))
     assert n == 1 and rows[0]["entry_time"] == "2026-11-16 09:40:00" and rows[0]["buy_avg"] == "80.2"
+
+
+def test_margin_calculator_is_the_only_extra_kite_call(monkeypatch):
+    """Owner 21 Nov 2026: 'Yes, allow Kite's margin calculator (/margins/orders)'. It computes only; every order,
+    GTT, holdings, positions and funds address stays blocked."""
+    import inspect
+    calls = []
+
+    class R:
+        status_code = 200
+
+        def json(self):
+            return {"data": [{"total": 25000.0}]}
+    monkeypatch.setattr(kite, "keys", lambda: ("k", "s"))
+    monkeypatch.setattr(kite, "token", lambda now=None: "t")
+    monkeypatch.setattr(kite.requests, "post", lambda url, **kw: calls.append((url, kw["json"])) or R())
+    kite._MARGIN.clear()
+    assert kite.mis_ratio("RELIANCE", 1000.0, "BUY") == 25000 / (100 * 1000.0)
+    assert calls[0][0].endswith("/margins/orders") and calls[0][1][0]["product"] == "MIS"
+    src = inspect.getsource(kite)
+    assert src.count("requests.post(") == 2                       # the daily login + the calculator, nothing else
+    for bad in ("/orders", "/orders/regular", "/gtt/triggers", "/user/margins", "/portfolio/holdings"):
+        with pytest.raises(PermissionError):
+            kite._get(bad)
