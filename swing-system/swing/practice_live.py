@@ -57,6 +57,22 @@ class LiveMarket:
     def prev_close(self, sym, t):
         return self.feed.builder.prev.get(sym)
 
+    def prev_day(self, sym, t):
+        from . import candles
+        d = candles.load(sym, "day", adjusted=False)
+        if d is None:
+            return None
+        d = d[d.index < pd.Timestamp(t).normalize()]
+        return (float(d["high"].iloc[-1]), float(d["low"].iloc[-1])) if len(d) else None
+
+    def vix_prev(self, t):
+        from . import candles
+        v = candles.load("INDIAVIX", "day", adjusted=False)
+        if v is None:
+            return None
+        v = v[v.index < pd.Timestamp(t).normalize()]
+        return float(v["close"].iloc[-1]) if len(v) else None
+
     def universe(self, t):
         day = pd.Timestamp(t).normalize()
         if day not in self._uni:
@@ -85,6 +101,15 @@ class LiveMarket:
             time.sleep(2)
 
 
+def practice_params():
+    """Settings the long test switched on (data/practice_params.json), else the defaults in autotrader.P."""
+    import json
+    try:
+        return json.loads((DATA / "practice_params.json").read_text())
+    except Exception:
+        return {}
+
+
 class PracticeLive:
     def __init__(self):
         s = load_settings()
@@ -101,7 +126,7 @@ class PracticeLive:
     def on_close(self, interval, minute, feed, now=None):
         if self.market is None:
             self.market = LiveMarket(feed)
-            self.engine = Engine(self.broker, self.market, notify=self.notify)
+            self.engine = Engine(self.broker, self.market, params=practice_params(), notify=self.notify)
             threading.Thread(target=self.market.poll_options, args=(self.broker,), daemon=True).start()
         if interval == "minute":
             if load_settings().get("kill_switch") and self.engine.locked is None:

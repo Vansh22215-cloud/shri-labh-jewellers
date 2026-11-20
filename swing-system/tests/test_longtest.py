@@ -38,6 +38,33 @@ def test_run_on_small_library(monkeypatch):
     monkeypatch.setattr(lt, "REPORT", lt.RESULTS / "_t.md")
     monkeypatch.setattr(lt, "DATA", candles.BASE)
     rows, orow, data = lt.run(send=False, workers=1)
-    assert len(rows) == len(lt.SIG) * len(lt.EXI) and len(orow) == 18 and data["stocks"] == 2
+    assert len(rows) == len(lt.SIG) * len(lt.EXI) and len(orow) == 18 * len(lt.NMASKS) and data["stocks"] == 2
     assert any(r["dev"] for r in rows) and "Kite 5-minute candles only" in lt.REPORT.read_text()
     lt.REPORT.unlink()
+
+
+def _s(avg, fall=-5000):
+    return {"avg_day": avg, "max_fall": fall, "days": 100, "trade_days": 90, "win_days_pct": 55, "days_10k_pct": 2,
+            "worst_day": -3000, "best_day": 9000, "total": avg * 100}
+
+
+def test_switch_only_when_better_in_both_periods(tmp_path, monkeypatch):
+    monkeypatch.setattr(lt, "DATA", tmp_path)
+    live = dict(lt.LIVE_STK, dev=_s(500), recent=_s(300))
+    better_dev_only = dict(lt.LIVE_STK, vol=2.0, dev=_s(900), recent=_s(100))
+    rec = lt.recommend([live, better_dev_only], [], [])
+    assert rec["changes"] == [] and not (tmp_path / "practice_params.json").exists()
+    both = dict(lt.LIVE_STK, vol=2.0, dev=_s(900), recent=_s(700))
+    rec = lt.recommend([live, both], [], [])
+    assert rec["changes"] == ["stocks"] and rec["params"]["stk_vol_mult"] == 2.0
+    assert (tmp_path / "practice_params.json").exists() and rec["stocks_scale_for_10k"] == round(10000 / 700, 1)
+
+
+def test_live_trader_uses_switched_on_settings(tmp_path, monkeypatch):
+    import json
+    from swing import practice_live, autotrader, paper
+    (tmp_path / "practice_params.json").write_text(json.dumps({"stk_sides": "long", "stk_factors": 2}))
+    monkeypatch.setattr(practice_live, "DATA", tmp_path)
+    p = practice_live.practice_params()
+    e = autotrader.Engine(paper.Broker(None), None, params=p)
+    assert e.p["stk_sides"] == "long" and e.p["stk_factors"] == 2 and e.p["opt_stop"] == autotrader.P["opt_stop"]

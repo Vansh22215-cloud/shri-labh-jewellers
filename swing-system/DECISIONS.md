@@ -1435,3 +1435,14 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - **Fair check**: settings are chosen on the years before 2024, and 2024 onwards is shown separately; a setting is used only if it also wins there.
   - The fast exit maths equals the step-by-step rules on 300 random cases (test).
 - **Weekends/holidays**: one Kite login message a day at 9 am while history is incomplete (downloads need the day's login).
+
+## D168 - 2026-11-20 - Extra factors tested, winners switched on by the system (owner: "you have freedom; make the most profit; goal ₹10,000 a day")
+- **Long test factors**, each tried INSIDE the signal (it waits for the first breakout that passes them), alone and in 13 combinations, on the live stock setting with all 9 stop/target pairs:
+  - beyond yesterday's high/low (support/resistance);
+  - NIFTY moving the same way;
+  - stronger than NIFTY today;
+  - India VIX below 20;
+  - no resistance (yesterday's high/low) within 1%.
+- **NIFTY options**: beyond yesterday's high/low, VIX below 20, and both, on all 18 settings (estimate).
+- **Switching on**: a setting replaces the live one ONLY if it wins both before 2024 (where it was chosen) and in 2024 onwards, with a recent worst fall at most 1.5x deeper. Winners are written to `data/practice_params.json`, and the live practice trader uses them from the next start. The Telegram summary says what changed.
+- **₹10,000 a day**: the report shows how many times today's risk per trade would be needed to average ₹10,000, against what ₹50,800 allows (~1.6x stocks, ~4.8x options), with losses growing by the same factor. Raising the risk is NOT switched on by itself; it is shown for the owner.

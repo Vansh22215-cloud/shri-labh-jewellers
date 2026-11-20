@@ -31,7 +31,11 @@ log = get_logger()
 P = dict(opt_risk=3000.0, opt_stop=0.30, opt_target=0.60, opt_be=0.30, opt_max_trades=2, opt_last_entry="14:30",
          stk_risk=1500.0, stk_stop=0.01, stk_target=0.02, stk_be=0.01, stk_max_trades=3, stk_max_open=2,
          stk_last_entry="11:30", stk_vol_mult=1.5, stk_max_gap=0.03, universe=100,
-         day_target=10000.0, day_max_loss=7500.0, square_off="15:15", first_entry="09:35")
+         day_target=10000.0, day_max_loss=7500.0, square_off="15:15", first_entry="09:35",
+         stk_sides="both", stk_factors=0, opt_factors=0)
+# extra factors (bit flags, chosen by the long test - longtest.py FILTERS / NMASKS):
+#   1 beyond yesterday's high/low · 2 NIFTY moving the same way · 4 stronger than NIFTY today ·
+#   8 India VIX below 20 · 16 no resistance (yesterday's high/low) within 1%
 
 
 def resample5(m):
@@ -46,6 +50,8 @@ class Engine:
     def __init__(self, broker, market, params=None, notify=None):
         self.b, self.m = broker, market
         self.p = dict(P, **(params or {}))
+        for k in ("stk_last_entry", "opt_last_entry"):
+            self.p[k] = str(self.p[k])
         self.notify = notify or (lambda kind, text: None)
         self.day = None
         self.locked = None
@@ -125,6 +131,15 @@ class Engine:
         if len(orng) < 10:
             return
         hi, lo, day_open = orng["high"].max(), orng["low"].min(), float(m["open"].iloc[0])
+        of = int(self.p["opt_factors"])
+        if of & 8:
+            vx = self.m.vix_prev(t)
+            if vx is None or vx >= 20:
+                return
+        if of & 1:
+            pdh = self.m.prev_day("NIFTY50", t)
+            if pdh:
+                hi, lo = max(hi, pdh[0]), min(lo, pdh[1])
         f = resample5(m)
         if len(f) < 4:
             return
@@ -181,10 +196,9 @@ class Engine:
             strength = v / avgv if avgv > 0 else 0
             if strength < self.p["stk_vol_mult"]:
                 continue
-            if c > hi and c > vwap:
-                cands.append((strength, sym, "LONG", c))
-            elif c < lo and c < vwap:
-                cands.append((strength, sym, "SHORT", c))
+            side = "LONG" if (c > hi and c > vwap) else "SHORT" if (c < lo and c < vwap and self.p["stk_sides"] == "both") else None
+            if side and self.factors_ok(sym, side, c, float(m["open"].iloc[0]), t):
+                cands.append((strength, sym, side, c))
         for strength, sym, side, c in sorted(cands, reverse=True):
             opened = self._open("stocks")
             if len(opened) >= self.p["stk_max_open"] or len(opened) + len(self._today_closed("stocks")) >= self.p["stk_max_trades"]:
@@ -200,6 +214,33 @@ class Engine:
                                             f"{strength:.1f}x volume")
             if pos:
                 self.notify("entry", self.entry_text(pos))
+
+    def factors_ok(self, sym, side, c, open0, t):
+        f = int(self.p["stk_factors"])
+        if not f:
+            return True
+        lng = side == "LONG"
+        pdh = self.m.prev_day(sym, t)
+        if f & 1 and pdh and not ((lng and c > pdh[0]) or (not lng and c < pdh[1])):
+            return False
+        if f & 16 and pdh:
+            res = pdh[0] if lng else pdh[1]
+            if (lng and c < res < c * 1.01) or (not lng and c * 0.99 < res < c):
+                return False
+        if f & (2 | 4):
+            n = self.m.minutes("NIFTY50", t)
+            if n is None or not len(n):
+                return False
+            nopen, nc = float(n["open"].iloc[0]), float(n["close"].iloc[-1])
+            if f & 2 and not ((lng and nc > nopen) or (not lng and nc < nopen)):
+                return False
+            if f & 4 and not ((lng and c / open0 > nc / nopen) or (not lng and c / open0 < nc / nopen)):
+                return False
+        if f & 8:
+            vx = self.m.vix_prev(t)
+            if vx is None or vx >= 20:
+                return False
+        return True
 
     # ---------------------------------------------------------------- messages
     @staticmethod

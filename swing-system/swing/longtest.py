@@ -32,8 +32,62 @@ STK_GRID = dict(vol=[1.5, 2.0], last=["11:30", "13:00"], sides=["both", "long"],
 SIG = list(itertools.product(STK_GRID["vol"], STK_GRID["last"], STK_GRID["sides"]))
 EXI = list(itertools.product(STK_GRID["stop"], STK_GRID["target"]))
 OPT_GRID = dict(stop=[0.2, 0.3, 0.4], target=[0.4, 0.6, 1.0], last=["12:30", "14:30"])
+# extra factors (owner 20 Nov: "support, resistance, high, low, open, close, volume and so many things matter"),
+# each tested on its own and together, INSIDE the signal (it waits for the first breakout that passes them):
+FILTERS = {1: "beyond yesterday's high/low", 2: "NIFTY moving the same way", 4: "stronger than NIFTY today",
+           8: "India VIX below 20", 16: "no resistance within 1%"}
+MASKS = [0, 1, 2, 4, 8, 16, 1 | 2, 2 | 4, 1 | 4, 2 | 8, 1 | 2 | 4, 2 | 4 | 16, 1 | 2 | 4 | 8, 31]
+LIVE_SIG = SIG.index((1.5, "11:30", "both"))
+_CTX = {}
+
+
+def _ctx():
+    """NIFTY 5-minute (day open + close at each candle end) and India VIX daily, once per worker."""
+    if not _CTX:
+        n = candles.load("NIFTY50", "5minute", adjusted=False)
+        nd = {}
+        if n is not None:
+            for day, g in _days(n):
+                nd[day] = (float(g["open"].iloc[0]), dict(zip([t.hour * 60 + t.minute + 5 for t in g.index], g["close"].values)))
+        vix = candles.load("INDIAVIX", "day", adjusted=False)
+        vs = vix["close"] if vix is not None else pd.Series(dtype=float, index=pd.DatetimeIndex([]))
+        _CTX.update(nifty=nd, vix=vs, vixprev=dict(zip(vs.index[1:], vs.values[:-1])) if len(vs) > 1 else {})
+    return _CTX
+
+
+def vix_before(day):
+    """India VIX at the close of the trading day before `day` (known before the day starts)."""
+    ctx = _ctx()
+    if day in ctx["vixprev"]:
+        return float(ctx["vixprev"][day])
+    v = ctx["vix"]
+    v = v[v.index < day]
+    return float(v.iloc[-1]) if len(v) else None
+
+
+def factor_flags(day, lng, c_i, open0, end_i, px, prev_hi, prev_lo):
+    ctx = _ctx()
+    f = 0
+    if prev_hi is not None and ((lng and c_i > prev_hi) or (not lng and c_i < prev_lo)):
+        f |= 1
+    nopen, ncl = ctx["nifty"].get(day, (None, {}))
+    nc = ncl.get(end_i)
+    if nopen and nc is not None:
+        if (lng and nc > nopen) or (not lng and nc < nopen):
+            f |= 2
+        if (lng and c_i / open0 - 1 > nc / nopen - 1) or (not lng and c_i / open0 - 1 < nc / nopen - 1):
+            f |= 4
+    vx = vix_before(day)
+    if vx is not None and vx < 20:
+        f |= 8
+    if prev_hi is not None:
+        res = prev_hi if lng else prev_lo
+        if not ((lng and px < res < px * 1.01) or (not lng and px * 0.99 < res < px)):
+            f |= 16
+    return f
 LIVE_STK = dict(stop=0.01, target=0.02, vol=1.5, last="11:30", sides="both")
-LIVE_OPT = dict(stop=0.3, target=0.6, last="14:30")
+LIVE_OPT = dict(stop=0.3, target=0.6, last="14:30", factors=0)
+MAX_SCALE = {"stocks": 1.6, "nifty": 4.8}    # how much bigger the risk per trade can get with ₹50,800 (margin/premium)
 
 
 def _days(d):
@@ -117,9 +171,12 @@ def stock_trades(args):
     if d is None or not days:
         return out
     days = set(days)
-    prev_close = None
+    prev_close = prev_hi = prev_lo = None
     for day, g in _days(d):
         last_close = float(g["close"].iloc[-1]) if len(g) else prev_close
+        p_hi, p_lo = prev_hi, prev_lo
+        if len(g):
+            prev_hi, prev_lo = float(g["high"].max()), float(g["low"].min())
         if day not in days or len(g) < 10:
             prev_close = last_close
             continue
@@ -137,14 +194,27 @@ def stock_trades(args):
         idx = np.arange(len(v))
         prior = np.where(idx > 0, (cvol - v) / np.maximum(idx, 1), np.nan)
         strength = np.where(prior > 0, v / prior, 0)
-        for si, (vol_m, last, sides) in enumerate(SIG):
+        jobs = [(si, 0) for si in range(len(SIG))] + [(LIVE_SIG, m) for m in MASKS if m]
+        flag_cache = {}
+        for si, mask in jobs:
+            vol_m, last, sides = SIG[si]
             ok = (end_m >= 575) & (end_m <= _hm(last)) & (strength >= vol_m)
             up = ok & (c > hi) & (c > vwap)
             dn = ok & (c < lo) & (c < vwap) if sides == "both" else np.zeros(len(c), bool)
-            sig = np.flatnonzero(up | dn)
-            if not len(sig) or sig[0] + 1 >= len(o):
+            cand = np.flatnonzero(up | dn)
+            i = None
+            for k in cand:
+                if k + 1 >= len(o):
+                    break
+                if mask:
+                    if k not in flag_cache:
+                        flag_cache[k] = factor_flags(day, bool(up[k]), c[k], o[0], int(end_m[k]), o[k + 1], p_hi, p_lo)
+                    if flag_cache[k] & mask != mask:
+                        continue
+                i = k
+                break
+            if i is None:
                 continue
-            i = sig[0]
             lng = bool(up[i])
             px = o[i + 1]
             for ei, (stop_f, tgt_f) in enumerate(EXI):
@@ -155,7 +225,8 @@ def stock_trades(args):
                 if qty < 1:
                     continue
                 net = qty * (sell - buy) - costs.intraday_cost(qty * buy, qty * sell)
-                out.append((day, sym, int(end_m[i]), int(end_m[j]), si * len(EXI) + ei, float(net), float(strength[i])))
+                combo = si * len(EXI) + ei if not mask else 1000 + mask * 16 + ei
+                out.append((day, sym, int(end_m[i]), int(end_m[j]), combo, float(net), float(strength[i])))
     return out
 
 
@@ -174,23 +245,33 @@ def stock_portfolio(T, combo_id):
     return pd.DataFrame(out, columns=["day", "net", "trades"])
 
 
+NMASKS = {0: "none", 1: "beyond yesterday's high/low", 8: "India VIX below 20", 9: "both"}
+
+
 def nifty_test():
-    """The NIFTY option rule as an estimate on NIFTY 50 5-minute candles. -> {combo: daily DataFrame}."""
+    """The NIFTY option rule as an estimate on NIFTY 50 5-minute candles. -> {(stop, target, last, mask): daily}."""
     d = candles.load("NIFTY50", "5minute")
     res = {}
     if d is None or len(d) < 1000:
         return res
-    days = list(_days(d))
-    for stop_f, tgt_f, last in itertools.product(OPT_GRID["stop"], OPT_GRID["target"], OPT_GRID["last"]):
+    days, prev = [], None
+    for day, g in _days(d):
+        if len(g) >= 20:
+            days.append((day, g, prev, vix_before(day)))
+        prev = (float(g["high"].max()), float(g["low"].min())) if len(g) else prev
+    for stop_f, tgt_f, last, mask in itertools.product(OPT_GRID["stop"], OPT_GRID["target"], OPT_GRID["last"], NMASKS):
         rows = []
-        for day, g in days:
-            if len(g) < 20:
+        for day, g, pd_hl, vx in days:
+            if mask & 8 and (vx is None or vx >= 20):
+                rows.append((day, 0.0, 0))
                 continue
             o, h, l, c = (g[k].values.astype(float) for k in ("open", "high", "low", "close"))
             starts = g.index.strftime("%H:%M").values
             ends = (g.index + pd.Timedelta(minutes=5)).strftime("%H:%M").values
             first = starts < "09:30"
             hi, lo, dopen = h[first].max(), l[first].min(), o[0]
+            if mask & 1 and pd_hl:
+                hi, lo = max(hi, pd_hl[0]), min(lo, pd_hl[1])      # must also clear yesterday's high / low
             ema = pd.Series(c).ewm(span=20, adjust=False).mean().values
             net, n, i = 0.0, 0, 0
             while n < 2:
@@ -204,7 +285,6 @@ def nifty_test():
                 s0 = o[k + 1]
                 p0 = 0.0035 * s0
                 sgn = 1 if up[k] else -1
-                # option price path: p0 + 0.5 * (index move in the option's favour)
                 po = p0 + 0.5 * sgn * (o - s0)
                 ph = p0 + 0.5 * np.where(sgn > 0, h - s0, s0 - l)
                 pl = p0 + 0.5 * np.where(sgn > 0, l - s0, s0 - h)
@@ -219,7 +299,7 @@ def nifty_test():
                 n += 1
                 i = j + 1
             rows.append((day, net, n))
-        res[(stop_f, tgt_f, last)] = pd.DataFrame(rows, columns=["day", "net", "trades"])
+        res[(stop_f, tgt_f, last, mask)] = pd.DataFrame(rows, columns=["day", "net", "trades"])
     return res
 
 
@@ -255,44 +335,102 @@ def run(send=True, workers=None):
             D = stock_portfolio(T, si * len(EXI) + ei)
             rows.append({"vol": vol_m, "last": last, "sides": sides, "stop": stop_f, "target": tgt_f,
                          "dev": summary(D[D["day"] < CUT]), "recent": summary(D[D["day"] >= CUT])})
+    frows = []
+    for m in MASKS:
+        if not m:
+            continue
+        for ei, (stop_f, tgt_f) in enumerate(EXI):
+            D = stock_portfolio(T, 1000 + m * 16 + ei)
+            frows.append({"factors": m, "stop": stop_f, "target": tgt_f, "dev": summary(D[D["day"] < CUT]),
+                          "recent": summary(D[D["day"] >= CUT])})
     O = nifty_test()
-    orow = [{"stop": k[0], "target": k[1], "last": k[2], "dev": summary(D[D["day"] < CUT]),
+    orow = [{"stop": k[0], "target": k[1], "last": k[2], "factors": k[3], "dev": summary(D[D["day"] < CUT]),
              "recent": summary(D[D["day"] >= CUT])} for k, D in O.items()]
     data = {"stocks": int(V["sym"].nunique()) if len(V) else 0, "days": int(V["day"].nunique()) if len(V) else 0,
             "first": str(V["day"].min().date()) if len(V) else None, "last": str(V["day"].max().date()) if len(V) else None}
-    json.dump({"data": data, "stocks": rows, "nifty": orow}, open(DATA / "long_test.json", "w"), default=str)
-    L = report(rows, orow, data)
+    rec = recommend(rows, frows, orow)
+    json.dump({"data": data, "stocks": rows, "factors": frows, "nifty": orow, "recommended": rec},
+              open(DATA / "long_test.json", "w"), default=str)
+    L = report(rows, orow, data, frows, rec)
     if send:
         from . import telegram
         telegram.send(load_settings(), "\n".join(L[:40]), label="test result")
     return rows, orow, data
 
 
-def _best(rows, live):
-    ok = [r for r in rows if r["dev"] and r["recent"]]
-    best = max(ok, key=lambda r: r["dev"]["avg_day"]) if ok else None
-    cur = next((r for r in ok if all(r[k] == v for k, v in live.items())), None)
-    return best, cur
+def _better(cand, cur):
+    """A setting replaces the live one only if it wins BEFORE 2024 (where it was chosen) AND in the recent years,
+    and its worst fall in the recent years is not much deeper."""
+    if not (cand and cur and cand["dev"] and cand["recent"] and cur["recent"]):
+        return False
+    return (cand["dev"]["avg_day"] > cur["dev"]["avg_day"] and cand["recent"]["avg_day"] > cur["recent"]["avg_day"]
+            and cand["recent"]["avg_day"] > 0 and cand["recent"]["max_fall"] >= 1.5 * min(cur["recent"]["max_fall"], -1))
 
 
-def report(rows, orow, data):
+def recommend(rows, frows, orow):
+    cur_s = next((r for r in rows if all(r[k] == v for k, v in LIVE_STK.items())), None)
+    cands = [r for r in rows + [dict(f, vol=1.5, last="11:30", sides="both") for f in frows] if r["dev"] and r["recent"]]
+    best_s = max(cands, key=lambda r: r["dev"]["avg_day"]) if cands else None
+    cur_o = next((r for r in orow if all(r[k] == v for k, v in LIVE_OPT.items())), None)
+    oc = [r for r in orow if r["dev"] and r["recent"]]
+    best_o = max(oc, key=lambda r: r["dev"]["avg_day"]) if oc else None
+    out = {"params": {}, "changes": [], "stocks_now": cur_s, "stocks_best": best_s, "nifty_now": cur_o, "nifty_best": best_o}
+    if _better(best_s, cur_s):
+        out["params"].update(stk_stop=best_s["stop"], stk_target=best_s["target"], stk_vol_mult=best_s["vol"],
+                             stk_last_entry=best_s["last"], stk_sides=best_s["sides"], stk_factors=best_s.get("factors", 0))
+        out["changes"].append("stocks")
+    if _better(best_o, cur_o):
+        out["params"].update(opt_stop=best_o["stop"], opt_target=best_o["target"], opt_last_entry=best_o["last"],
+                             opt_factors=best_o.get("factors", 0))
+        out["changes"].append("NIFTY options")
+    for part, r in (("stocks", best_s if "stocks" in out["changes"] else cur_s),
+                    ("nifty", best_o if "NIFTY options" in out["changes"] else cur_o)):
+        if r and r["recent"] and r["recent"]["avg_day"] > 0:
+            k = 10000 / r["recent"]["avg_day"]
+            out[f"{part}_scale_for_10k"] = round(k, 1)
+            out[f"{part}_max_scale"] = MAX_SCALE[part]
+    if out["params"]:
+        (DATA / "practice_params.json").write_text(json.dumps(out["params"]))
+    return out
+
+
+def _name(r):
+    keys = [k for k in r if k not in ("dev", "recent")]
+    txt = ", ".join(f"{k} {r[k]}" for k in keys if k != "factors")
+    f = r.get("factors", 0)
+    if f:
+        names = FILTERS if "vol" in r or "sides" in r else NMASKS
+        txt += " + " + ("; ".join(n for b, n in FILTERS.items() if f & b) if names is FILTERS else NMASKS.get(f, str(f)))
+    return txt
+
+
+def report(rows, orow, data, frows=None, rec=None):
+    rec = rec or {}
     L = [f"# Long test of the practice rules ({pd.Timestamp.now(tz='Asia/Kolkata'):%d %b %Y %H:%M} IST)", "",
          f"**Data: Kite 5-minute candles only - {data['stocks']:,} stocks, {data['days']:,} trading days, {data['first']} to "
-         f"{data['last']}. Settings chosen on days before {CUT:%b %Y}; 'recent' = {CUT:%b %Y} onwards, not used for the choice.**", ""]
-    for title, R, live in (("Stocks (real Kite candles)", rows, LIVE_STK), ("NIFTY options (ESTIMATE - no expired option candles on Kite)", orow, LIVE_OPT)):
-        best, cur = _best(R, live)
-        L += [f"## {title}", "", "| Setting | Period | Avg / day | Days in profit | Days ₹10k+ | Worst day | Worst fall | Total |",
-              "|---|---|---|---|---|---|---|---|"]
-        for lab, r in (("now live", cur), ("best before 2024", best)):
+         f"{data['last']}. Settings chosen on days before {CUT:%b %Y}; 'recent' = {CUT:%b %Y} onwards, not used for the choice.**", "",
+         "| Rule | Setting | Period | Avg / day | Days in profit | Days ₹10k+ | Worst day | Worst fall |", "|---|---|---|---|---|---|---|---|"]
+    for part, now, best in (("Stocks", rec.get("stocks_now"), rec.get("stocks_best")),
+                            ("NIFTY options (estimate)", rec.get("nifty_now"), rec.get("nifty_best"))):
+        for lab, r in (("now live", now), ("best", best)):
             if not r:
                 continue
-            name = ", ".join(f"{k} {v}" for k, v in r.items() if k not in ("dev", "recent"))
             for per in ("dev", "recent"):
-                s = r[per]
-                L.append(f"| {lab}: {name} | {'before 2024' if per == 'dev' else 'recent'} | ₹{s['avg_day']:+,.0f} | "
-                         f"{s['win_days_pct']}% | {s['days_10k_pct']}% | ₹{s['worst_day']:,.0f} | ₹{s['max_fall']:,.0f} | ₹{s['total']:+,.0f} |")
-        L.append("")
-    L.append("A setting is worth switching to only if it is also better in the 'recent' rows.")
+                x = r[per]
+                L.append(f"| {part} | {lab}: {_name(r)} | {'before 2024' if per == 'dev' else 'recent'} | ₹{x['avg_day']:+,.0f} | "
+                         f"{x['win_days_pct']}% | {x['days_10k_pct']}% | ₹{x['worst_day']:,.0f} | ₹{x['max_fall']:,.0f} |")
+    L += ["", "**Switched on for the practice trader:** " + (", ".join(rec["changes"]) if rec.get("changes") else
+                                                            "nothing - no setting beat the live one in BOTH periods"), ""]
+    for part in ("stocks", "nifty"):
+        if f"{part}_scale_for_10k" in rec:
+            L.append(f"- {part}: averaging ₹10,000 a day would need {rec[part + '_scale_for_10k']}x today's risk per trade; "
+                     f"₹50,800 allows at most ~{rec[part + '_max_scale']}x (and losses grow by the same factor).")
+    if frows:
+        L += ["", "## Extra factors on the live stock setting (stop 1%, target 2%)", "",
+              "| Factors | Before 2024 avg/day | Recent avg/day | Recent worst fall |", "|---|---|---|---|"]
+        for f in [x for x in frows if x["stop"] == 0.01 and x["target"] == 0.02 and x["dev"] and x["recent"]]:
+            L.append(f"| {'; '.join(n for b, n in FILTERS.items() if f['factors'] & b)} | ₹{f['dev']['avg_day']:+,.0f} | "
+                     f"₹{f['recent']['avg_day']:+,.0f} | ₹{f['recent']['max_fall']:,.0f} |")
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text("\n".join(L) + "\n")
     return L

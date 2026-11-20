@@ -92,6 +92,24 @@ class Market:
         p = d[d.index < self.day]
         return float(p["close"].iloc[-1]) if len(p) else None
 
+    def prev_day(self, sym, t):
+        d = self._df(sym)
+        if d is None:
+            return None
+        p = d[d.index < self.day]
+        if not len(p):
+            return None
+        last = p[p.index >= p.index[-1].normalize()]
+        return float(last["high"].max()), float(last["low"].min())
+
+    def vix_prev(self, t):
+        from . import candles
+        v = candles.load("INDIAVIX", "day", adjusted=False)
+        if v is None:
+            return None
+        v = v[v.index < self.day]
+        return float(v["close"].iloc[-1]) if len(v) else None
+
     def universe(self, t):
         if self.day not in self._uni:
             cut = self.day + timedelta(hours=9, minutes=30)
