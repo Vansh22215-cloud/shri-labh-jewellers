@@ -145,22 +145,12 @@ def due(t=None):
     if wd < 5 and t >= t.replace(hour=18, minute=45, second=0) and not st.get(key("company", t)) \
             and (st.get(key("nightly", t)) or t >= t.replace(hour=19, minute=30)) and "nightly" not in out:
         out.append("company")
-    if key("kite_download", t) and not st.get(key("kite_download", t)) and not _waiting(st, "kite_download", t) \
-            and not out:
-        try:                                       # owner 20 Nov: Kite history in small chunks whenever logged in
-            from . import kite
-            from .kite_daily import coverage
-            from .kite_candles import progress
-            if kite.logged_in() and not (coverage() >= 0.999 and progress()["complete"]):
-                out.append("kite_download")
-        except Exception:
-            pass
-    if t >= t.replace(hour=21, minute=0, second=0) and not st.get(key("kite_rerun", t)) and st.get(key("research", t)) \
-            and not (DATA / "kite_rerun" / "done.txt").exists():
+    if t >= t.replace(hour=21, minute=0, second=0) and not st.get(key("kite_rerun", t)) \
+            and (wd >= 5 or st.get(key("research", t))) and not (DATA / "kite_rerun" / "done.txt").exists():
         try:
-            from .kite_daily import coverage
-            if coverage() >= 0.9:
-                out.append("kite_rerun")           # owner 19 Nov: every test again on Kite data, once complete
+            from .kite_daily import history_complete
+            if history_complete():                 # owner 20 Nov: only after ALL Kite daily history is downloaded
+                out.append("kite_rerun")           # owner 19 Nov: every test again on Kite data
         except Exception:
             pass
     if wd < 5 and t >= t.replace(hour=20, minute=17, second=0) and not st.get(key("research", t)) \
@@ -173,6 +163,16 @@ def due(t=None):
             out.append("basket")                   # monthly basket of the 20 strongest stocks (round 4, M3)
     if wd == 5 and t >= t.replace(hour=10, minute=17, second=0) and not st.get(key("weekly", t)):
         out.append("weekly")
+    if key("kite_download", t) and not st.get(key("kite_download", t)) and not _waiting(st, "kite_download", t) \
+            and not out:
+        try:                                       # owner 20 Nov: Kite history in small chunks whenever logged in
+            from . import kite
+            from .kite_daily import history_complete
+            from .kite_candles import progress
+            if kite.logged_in() and not (history_complete() and progress()["complete"]):
+                out.append("kite_download")
+        except Exception:
+            pass
     return out
 
 

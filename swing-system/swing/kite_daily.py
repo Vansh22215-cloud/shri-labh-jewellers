@@ -144,6 +144,14 @@ def backfill(st, syms, budget):
     return used
 
 
+def history_complete(today=None):
+    """All Kite has, for (almost) every stock: up to date AND read back as far as Kite goes (owner 20 Nov: start
+    the backtests only once everything is downloaded)."""
+    st = _state()
+    syms = [s for s in all_symbols() if s in st]
+    return coverage(today) >= 0.999 and all(st.get("back|" + s) for s in syms)
+
+
 def coverage(today=None):
     today = pd.Timestamp(today or pd.Timestamp.now().normalize())
     st = _state()

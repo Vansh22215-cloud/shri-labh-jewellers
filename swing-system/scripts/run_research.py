@@ -19,7 +19,7 @@ if __name__ == "__main__":
     kite_ready = False
     try:   # owner 19-20 Nov: research only on STRICT Kite data. The downloads run in their own job ('kite_download',
         from swing import kite_daily          # 6:55 pm); here: wait until Kite history is complete, then re-check
-        kite_ready = kite_daily.coverage() >= 0.9
+        kite_ready = kite_daily.history_complete()   # owner 20 Nov: all Kite history first, then backtests
         if kite_ready:
             from swing.config import DATA as _D
             flag = _D / "kite_daily" / "recheck_done.txt"

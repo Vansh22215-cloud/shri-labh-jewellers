@@ -1335,3 +1335,9 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - NSE filings have no "gross profit" or business description, so those stay empty, and the Piotroski "gross margin" test counts as not passed.
 - **Same rules**: the quality screen's thresholds are unchanged (loss-making, debt/equity > 2, negative equity or cash flow, P/E > 120). Only the data source changed, which can change which tips the screen removes.
 - **Still Yahoo, not financial statements**: results DATES and the EPS-surprise history. Moving them to NSE's board-meeting calendar is the next step.
+
+## D161 - 2026-11-20 - The full re-run waits for ALL Kite daily history (owner: "once we get all ... then start backtests")
+- `kite_daily.history_complete()`: every stock is up to date AND read back as far as Kite goes.
+- The full re-run of every past backtest (`kite_rerun`, all 19 steps, strict Kite, delisted left out, compared with the preserved Yahoo baseline), the weekly research and the Kite re-check start only when it is true. Weekends are allowed for the re-run.
+- The download job is now the lowest-priority daemon job: every other job (re-run, research, nightly, basket, weekly) goes first.
+- The re-run report shows the data coverage first, then the results. Nothing live changes without the owner's yes.

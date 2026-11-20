@@ -21,7 +21,7 @@ if __name__ == "__main__":
     if not kite.logged_in():
         kite.report_unavailable(s, "Kite history download", why="Kite is not logged in")
         sys.exit(0)
-    if kite_daily.coverage() < 0.999:
+    if not kite_daily.history_complete():
         r = kite_daily.download(max_requests=CHUNK)
         print("kite daily:", r)
         if kite_daily.coverage() >= 0.9:
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     else:
         print("kite candles:", kite_candles.step(max_requests=CHUNK))
         kite_candles.report()
-    if not (kite_daily.coverage() >= 0.999 and kite_candles.progress()["complete"]):
+    if not (kite_daily.history_complete() and kite_candles.progress()["complete"]):
         retry_later("kite_download", minutes=1, max_tries=400)        # next chunk in the next minute
     try:
         from swing.ci_save import save

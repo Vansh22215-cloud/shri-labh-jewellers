@@ -123,3 +123,14 @@ def test_daemon_never_downloads_in_market_hours():
     assert daemon.key("kite_download", pd.Timestamp("2026-11-20 15:30", tz=ist)) is None
     assert daemon.key("kite_download", pd.Timestamp("2026-11-20 19:00", tz=ist))
     assert daemon.key("kite_download", pd.Timestamp("2026-11-21 11:00", tz=ist))     # Saturday: fine
+
+
+def test_rerun_waits_for_all_history(tmp_path, monkeypatch):
+    monkeypatch.setattr(kd, "STATE_F", tmp_path / "st.json")
+    monkeypatch.setattr(kd, "all_symbols", lambda: ["AAA", "BBB"])
+    today = pd.Timestamp.now().normalize()
+    (tmp_path / "st.json").write_text('{"AAA": "%s", "BBB": "%s"}' % (today.date(), today.date()))
+    assert kd.coverage() == 1 and not kd.history_complete()           # up to date but not read back yet
+    (tmp_path / "st.json").write_text('{"AAA": "%s", "BBB": "%s", "back|AAA": true, "back|BBB": true}'
+                                      % (today.date(), today.date()))
+    assert kd.history_complete()
