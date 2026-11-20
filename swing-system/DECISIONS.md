@@ -1450,3 +1450,4 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 ## D169 - 2026-11-20 - Every interval downloaded from Kite as it is (owner: "download 5, 15, 30, 1 hour and 1 day separately")
 - Replaces the D167 shortcut. Download order: day (done), 5-minute (the tests need it), then 60, 30 and 15-minute. All are Kite's own candles; only 3- and 10-minute would be built.
 - Storage: all of these together are estimated at ~9-10 GB against the 8.5 GB limit. If the limit is reached, the last one (15-minute) pauses and the owner is told.
+- Weekend/holiday Kite login message moved from 9 am to 6 am (owner: "don't want to waste 3 hours" - a login lasts until 6 am the next day).

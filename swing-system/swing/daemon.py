@@ -293,7 +293,7 @@ def minute_tasks(t=None):
     try:                                           # weekends/holidays: downloads need the day's Kite login too
         from . import kite
         from .candles import progress
-        if not wd and kite.configured() and not kite.logged_in() and 9 <= t.hour < 20 and not progress()["complete"] \
+        if not wd and kite.configured() and not kite.logged_in() and 6 <= t.hour < 20 and not progress()["complete"] \
                 and claim_once("kite login weekend", t):
             _send(f"🔑 <b>Kite login for the history download</b> - no market today, but Kite history downloads only while "
                   f"you are logged in. <a href=\"{_html.escape(kite.login_url())}\">Tap here to log in</a>, then Start.",
