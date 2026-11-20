@@ -1,4 +1,4 @@
-# Kite candle library (21 Nov 2026 00:03 IST)
+# Kite candle library (21 Nov 2026 00:26 IST)
 
 Source: Kite Connect historical API only (no other price source). Every NSE stock Kite lists + indices. Day, 5, 15, 30 and 60-minute candles are downloaded from Kite as they are; only 3- and 10-minute are built (from 1- and 5-minute).
 
