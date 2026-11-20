@@ -212,7 +212,9 @@ def record_fundamentals(max_age_days=2):
         changed = False
         for y, row in ann.items():
             if row.get("revenue") and (y not in kept or kept[y] != row):
-                if y in kept and kept[y] != row:
+                if y in kept and kept[y].get("source") != row.get("source"):
+                    kept.setdefault("_other_source", {})[y] = kept[y]  # e.g. an old Yahoo year: kept apart, not mixed
+                elif y in kept and kept[y] != row:
                     kept.setdefault("_restated", {})[y] = kept[y]      # keep the earlier version too
                 kept[y] = row
                 changed = True

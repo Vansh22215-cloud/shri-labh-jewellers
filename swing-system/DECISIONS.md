@@ -1313,3 +1313,25 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Safety**: read-only Kite historical API only (no order endpoints); about 3 requests a second; downloads pause if the data folder passes 4 GB (GitHub keeps 10 GB of cache in all). Estimated ~37,000 requests (~3.5 hours) and ~1.4 GB in total.
 - **New package**: `pyarrow` (free, open source) for parquet files.
 - **Unchanged**: every live entry, exit, ranking, confidence and risk rule. The full re-run of all backtests on Kite starts only when daily history is complete (coverage report first, then results vs the Yahoo baseline); any live change waits for the owner's yes.
+
+## D160 - 2026-11-20 - Company financials come from NSE filings, not Yahoo (owner 20 Nov)
+- **New `swing/nse_financials.py`** reads each company's own annual results from NSE (free, public, read-only):
+  - the annual-results list (2019-2024 XBRL files) and, from 2025, NSE's "integrated filings" (the year-end quarter's file holds the full year and the balance sheet);
+  - from each official XBRL file: sales, profit (owners' share), profit before tax, finance costs, operating cash flow, capital spending, EPS, total assets, current assets and liabilities, equity, borrowings, and share count;
+  - promoter holding from the latest shareholding-pattern filing;
+  - industry and name from NSE's Nifty-500 list.
+- **Point-in-time is now exact**: a year counts only from its REAL filing date, not "period end + 60 days".
+- **Consolidated** figures when filed, else standalone (marked on each year). Parsed files are cached by NSE's filing number, so each is read once.
+- **P/E, P/B and market value** come from the latest **Kite** close × the filed share count. If Kite has no price, they stay empty (strict Kite).
+- **Never mixed**:
+  - NSE failing keeps the last NSE copy, never a Yahoo one;
+  - old Yahoo snapshots are ignored and refetched;
+  - the lifelong store keeps Yahoo years apart (`_other_source`), and company research only joins years of the same source;
+  - the old Yahoo reader stays as `fetch_fundamentals_yahoo` for comparison only; nothing live calls it.
+- **Checked** on TCS, Reliance, HDFC Bank, Dixon and IRFC against the published results (e.g. TCS FY24 sales ₹2,40,893 crore, Dixon FY25 ₹38,860 crore).
+- **Honest limits**:
+  - about 7 years per company (NSE has no XBRL before ~2019);
+  - banks' older files use another layout, so fewer years and no equity figure;
+  - NSE filings have no "gross profit" or business description, so those stay empty, and the Piotroski "gross margin" test counts as not passed.
+- **Same rules**: the quality screen's thresholds are unchanged (loss-making, debt/equity > 2, negative equity or cash flow, P/E > 120). Only the data source changed, which can change which tips the screen removes.
+- **Still Yahoo, not financial statements**: results DATES and the EPS-surprise history. Moving them to NSE's board-meeting calendar is the next step.

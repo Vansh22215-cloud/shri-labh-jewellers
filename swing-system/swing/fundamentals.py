@@ -1,8 +1,9 @@
-"""Fundamentals and results dates (free source: Yahoo Finance via yfinance).
+"""Fundamentals and results dates.
+Company financials: the companies' own NSE filings (owner 20 Nov; nse_financials.py - annual XBRL statements,
+promoter holding; P/E and P/B from the Kite close). Results DATES and EPS history: still Yahoo (see D160).
 
-POINT-IN-TIME RULE: a financial number is treated as known only from its
-"assumed publish date" = period end + 60 days for annual figures and + 45 days for
-quarterly ones (SEBI LODR deadlines). Before that date the number is not used.
+POINT-IN-TIME RULE: a financial number is treated as known only from its publish date - for NSE filings the
+REAL filing date (field "published_assumed" keeps its old name so every reader works unchanged).
 Every snapshot is saved with the date WE downloaded it, so over time the local
 cache becomes a true point-in-time record.
 
@@ -46,8 +47,35 @@ def _safe(x):
 
 
 def fetch_fundamentals(symbol, max_age_days=30):
-    """Download (or read cached) fundamentals snapshot for one stock."""
+    """Company financials from the company's own NSE filings (owner 20 Nov; nse_financials.py) - no Yahoo.
+    Cached snapshot if fresh; if NSE cannot be reached, the last NSE snapshot is kept (never a Yahoo one)."""
     f = FUND / f"{symbol}.json"
+    old = None
+    try:
+        old = json.loads(f.read_text()) if f.exists() else None
+    except Exception:
+        old = None
+    if old and old.get("v") == 3 and (time.time() - f.stat().st_mtime) < max_age_days * 86400:
+        return old
+    from . import nse_financials
+    try:
+        snap = nse_financials.snapshot(symbol)
+    except Exception as e:
+        snap = {"symbol": symbol, "downloaded": str(date.today()), "ok": False, "v": 3, "error": type(e).__name__,
+                "source": "NSE filings"}
+        log.warning("NSE financials failed for %s: %s", symbol, type(e).__name__)
+    if not snap.get("ok") and old and old.get("v") == 3 and old.get("ok"):
+        return old                                   # keep the last good NSE copy
+    FUND.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(snap, indent=1))
+    time.sleep(0.3)
+    return snap
+
+
+def fetch_fundamentals_yahoo(symbol, max_age_days=30):
+    """OLD source (Yahoo), kept only for a side-by-side comparison; nothing live calls it."""
+    f = FUND / "yahoo" / f"{symbol}.json"
+    f.parent.mkdir(parents=True, exist_ok=True)
     if f.exists() and (time.time() - f.stat().st_mtime) < max_age_days * 86400:
         old = json.loads(f.read_text())
         if old.get("v") == 2 or not old.get("ok"):

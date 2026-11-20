@@ -68,7 +68,7 @@ def _years(snap):
     try:
         from .archive import fundamentals_years
         for k, row in fundamentals_years(snap.get("symbol", "")).items():
-            if not k.startswith("_") and k not in y:
+            if not k.startswith("_") and k not in y and row.get("source") == next(iter(y.values()), {}).get("source"):
                 y[k] = row
     except Exception:
         pass
