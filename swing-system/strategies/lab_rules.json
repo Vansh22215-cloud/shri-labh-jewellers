@@ -63,7 +63,8 @@
     "luck_passed": 3,
     "passed": []
    },
-   "minutes": 22.3
+   "minutes": 22.3,
+   "INVALID": "mixed Kite+Yahoo data (19 Nov) - not used for decisions"
   }
  ]
 }

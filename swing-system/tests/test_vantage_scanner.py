@@ -58,6 +58,8 @@ def env(monkeypatch, tmp_path):
     monkeypatch.setattr(vantage, "CALL_F", tmp_path / "calls.csv")
     monkeypatch.setattr(vantage, "CALL_FROM", 9999)            # buy-before-close window off unless a test opens it
     monkeypatch.setattr(vantage, "outside_universe", lambda sym, s: False)   # stock-list rule tested on its own
+    from swing import kite_daily
+    monkeypatch.setattr(kite_daily, "coverage", lambda *a: 1.0)            # Kite history complete (tested separately)
     return sent
 
 

@@ -27,7 +27,8 @@ def test_ranked_by_evidence_per_rupee_risked_with_avoid_list():
 
 
 def test_sent_once_and_kill_switch_says_no_trade(tmp_path, monkeypatch):
-    from swing import telegram, vantage
+    from swing import telegram, vantage, kite_daily
+    monkeypatch.setattr(kite_daily, "coverage", lambda *a: 1.0)
     monkeypatch.setattr(brief, "SENT_F", tmp_path / "sent.txt")
     monkeypatch.setattr(vantage, "CALL_F", tmp_path / "calls.csv")
     out = []
@@ -37,3 +38,16 @@ def test_sent_once_and_kill_switch_says_no_trade(tmp_path, monkeypatch):
     assert "No trade today" in out[0] and "safety stop" in out[0]
     assert not brief.maybe_send(t, t, [], S, CAL)                       # once a day
     assert not brief.maybe_send(pd.Timestamp("2026-11-21 15:10"), pd.Timestamp("2026-11-21 15:10"), [], S, CAL)
+
+
+
+def test_no_trade_when_kite_data_incomplete(tmp_path, monkeypatch):
+    from swing import telegram, vantage, kite_daily
+    monkeypatch.setattr(kite_daily, "coverage", lambda *a: 0.1)
+    monkeypatch.setattr(brief, "SENT_F", tmp_path / "sent.txt")
+    monkeypatch.setattr(vantage, "CALL_F", tmp_path / "calls.csv")
+    out = []
+    monkeypatch.setattr(telegram, "send_reliable", lambda s, text, label="": out.append(text))
+    t = pd.Timestamp("2026-11-20 15:22")
+    assert brief.maybe_send(t, t, [("AAA", {"buy": {"setup": "RCP", "close": 100.0, "stop": 90.0}}, 5e8)], S, CAL)
+    assert "No trade today" in out[0] and "Kite price data is not complete" in out[0]

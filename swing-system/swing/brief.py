@@ -110,7 +110,16 @@ def maybe_send(day, t, res, s, cal):
     if _sent_today(d):
         return False
     why = ""
-    if s.get("kill_switch") or safety.emergency_active():
+    try:
+        from .kite_daily import coverage
+        if coverage() < 0.9:
+            why = ("Kite price data is not complete yet - ATLAS makes no tips from incomplete or other data "
+                   "(owner's Kite-only rule). Tips resume by themselves once Kite data is complete.")
+    except Exception:
+        pass
+    if why:
+        cands = []
+    elif s.get("kill_switch") or safety.emergency_active():
         why = "The safety stop / kill switch is on - no new trades until it is cleared."
         cands = []
     else:

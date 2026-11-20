@@ -10,6 +10,14 @@ if __name__ == "__main__":
     if on_github() and not claim("nightly"):
         print("nightly: already done (skipped)")
         sys.exit(0)
+    try:   # owner 20 Nov: evening tips only from complete Kite data - otherwise none, and the owner is told
+        from swing import kite_daily as _kd, kite as _kt
+        from swing.config import load_settings as _ls
+        if _kd.coverage() < 0.9:
+            _kt.report_unavailable(_ls(), "Evening tips (dip-buy, positional, breakout)",
+                                   why=f"Kite price history is not complete yet ({_kd.coverage() * 100:.0f}% of stocks)")
+    except Exception as e:
+        print("kite coverage check failed:", type(e).__name__)
     try:   # KITE FIRST (owner 19 Nov): today's exchange bar for every NSE stock before anything reads prices
         from swing import kite_daily
         print("kite today's bars:", kite_daily.todays_bars_from_quotes())

@@ -157,6 +157,9 @@ def bars_today(symbols, now):
                 return res
     except Exception:
         out = {}
+    from .data_prices import yahoo_allowed
+    if not yahoo_allowed():                    # owner 19 Nov: Kite only - no Kite bars, no intraday data, no tips
+        return {}
     import yfinance as yf
     from .data_prices import yahoo_ticker
     tick = {yahoo_ticker(s): s for s in symbols}

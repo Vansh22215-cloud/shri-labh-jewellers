@@ -261,24 +261,42 @@ def historical(sym, interval="5minute", days=30):
 
 
 def live_prices(symbols):
-    """Best available live prices: Kite when logged in, else Yahoo 1-minute data. {sym: {...}}, source."""
+    """Live prices from Kite ONLY (owner 19 Nov: no Yahoo fallback for live tips or alerts). -> ({sym: quote}, source).
+    Missing Kite quotes stay missing: the caller sends no tip / alert for those stocks."""
     q = quotes(symbols)
-    missing = [s for s in symbols if s not in q]
-    if not missing:
-        return q, "Zerodha"
+    if not q:
+        return {}, "unavailable"
+    return q, "Zerodha"
+
+
+UNAVAIL_F = None   # set below (data/kite_unavailable.json)
+
+
+def report_unavailable(settings, what, why="Kite data unavailable (not logged in, expired or no data)"):
+    """Once a day per job: tell the owner that no tip / alert was produced because Kite data is missing."""
+    import json as _j
+    f = UNAVAIL_F
+    today = datetime.now(IST).strftime("%Y-%m-%d")
     try:
-        import yfinance as yf
-        from .data_prices import yahoo_ticker
-        tick = {yahoo_ticker(s): s for s in missing}
-        raw = yf.download(list(tick), period="1d", interval="1m", group_by="ticker", progress=False, threads=True)
-        for t, s in tick.items():
-            try:
-                d = (raw[t] if len(tick) > 1 else raw).dropna(subset=["Close"])
-            except KeyError:
-                continue
-            if len(d):
-                q[s] = {"last": float(d["Close"].iloc[-1]), "open": float(d["Open"].iloc[0]),
-                        "high": float(d["High"].max()), "low": float(d["Low"].min()), "prev": None}
-    except Exception as e:
-        log.warning("Yahoo live prices failed: %s", type(e).__name__)
-    return q, ("Zerodha + Yahoo" if len(q) > len(missing) and missing else "Yahoo" if missing else "Zerodha")
+        st = _j.loads(f.read_text())
+    except Exception:
+        st = {}
+    if st.get(what) == today:
+        return False
+    st[what] = today
+    try:
+        f.write_text(_j.dumps(st))
+    except Exception:
+        pass
+    log.warning("%s: %s - no tips from it", what, why)
+    try:
+        from . import telegram
+        telegram.send(settings, f"⚠️ {why}.\n{what}: NO tips or alerts were made from other data.\n"
+                                "Log in with /kite - it resumes by itself once Kite data is back.", label="system problem")
+    except Exception:
+        pass
+    return True
+
+
+from .config import DATA as _DATA  # noqa: E402
+UNAVAIL_F = _DATA / "kite_unavailable.json"

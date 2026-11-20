@@ -72,7 +72,11 @@ def _isolate_runtime_state(tmp_path, monkeypatch):
 def _never_touch_real_private_records(tmp_path, monkeypatch):
     """19 Nov 2026: a test wrote fake signals into data/private/vantage_rejected.csv - every test now writes the
     rejected / blocked-repeat / research-rule records into its own temporary folder."""
-    from swing import vantage, registry, lab_rules
+    from swing import vantage, registry, lab_rules, kite, telegram
     monkeypatch.setattr(vantage, "REJ_F", tmp_path / "_rejected.csv")
+    monkeypatch.setattr(kite, "UNAVAIL_F", tmp_path / "_kite_unavailable.json")
+    if not hasattr(kite, "_real_report_unavailable"):
+        kite._real_report_unavailable = kite.report_unavailable
+    monkeypatch.setattr(kite, "report_unavailable", lambda *a, **k: False)   # 20 Nov: never reaches Telegram
     monkeypatch.setattr(registry, "SUPP", tmp_path / "_suppressed.csv")
     monkeypatch.setattr(lab_rules, "RULES_F", tmp_path / "_lab_rules.json")

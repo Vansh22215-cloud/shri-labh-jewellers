@@ -1,3 +1,5 @@
+> **INVALID FOR DECISIONS (marked 20 Nov 2026):** this run (19 Nov, 8:39 pm) used MIXED data - 91% of stocks Kite + Yahoo gap-filling, 9% Yahoo only, 0% Kite only - before the strict-Kite rule reached the research job. Kept for the record; its numbers are not used. The next run is strict Kite only, once Kite history is complete.
+
 # Automatic research (2026-11-19 20:39 IST)
 
 Runs every week on GitHub by itself (vantage-ai/validation/autoresearch.py, rulebook AUTO_LAB_PROTOCOL.md).

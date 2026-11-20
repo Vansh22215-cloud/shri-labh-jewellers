@@ -25,18 +25,18 @@ def test_frame_unadjusted_kite_gets_split_factors(tmp_path, monkeypatch):
     assert abs(f["close"].iloc[0] - 100.0) < 1e-9 and abs(f["adj_close"].iloc[0] - 98.0) < 1e-9
 
 
-def test_load_is_kite_first_by_default(tmp_path, monkeypatch):
+def test_load_is_strict_kite_by_default(tmp_path, monkeypatch):
     monkeypatch.setattr(data_prices, "_load_yahoo", lambda s: _yahoo())
-    monkeypatch.setattr(kd, "frame", lambda s: _yahoo() * 0 + 5)
+    k = _yahoo() * 0 + 5
+    k.attrs.update(first="2024-01-01", last="2024-02-23", ca="kite-adjusted")
+    monkeypatch.setattr(kd, "frame_strict", lambda s: k)
     monkeypatch.delenv("SWING_PRICE_SOURCE", raising=False)
-    assert data_prices.load("X")["close"].iloc[0] == 5.0                 # Kite by default
+    assert data_prices.load("X")["close"].iloc[0] == 5.0                 # Kite by default (strict)
+    monkeypatch.setattr(kd, "frame_strict", lambda s: None)
+    assert data_prices.load("Y") is None                                  # no Kite -> nothing, NOT Yahoo
+    assert not data_prices.yahoo_allowed()
     monkeypatch.setenv("SWING_PRICE_SOURCE", "yahoo")
-    assert data_prices.load("X")["close"].iloc[0] == 100.0               # forced old source (comparisons only)
-    monkeypatch.delenv("SWING_PRICE_SOURCE")
-    monkeypatch.setattr(kd, "frame", lambda s: None)                      # Kite has nothing -> Yahoo, and it says so
-    data_prices.PROVENANCE["yahoo"].clear()
-    assert data_prices.load("Y")["close"].iloc[0] == 100.0 and "Y" in data_prices.PROVENANCE["yahoo"]
-    assert "Yahoo only 1" in data_prices.provenance_line()
+    assert data_prices.load("X")["close"].iloc[0] == 100.0 and data_prices.yahoo_allowed()   # explicit comparison only
 
 
 def test_frame_fills_only_missing_days_from_yahoo(tmp_path, monkeypatch):

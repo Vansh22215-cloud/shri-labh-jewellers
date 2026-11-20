@@ -1042,17 +1042,12 @@ class Engine:
     def refresh_quotes(self):
         from . import kite
         q = kite.quotes(self.uni)
-        if not q and not kite.logged_in():   # D111: not logged in yet (late morning) - still watch open tips' stops
-            if time.time() - getattr(self, "_yq_t", 0) >= 120:
-                self._yq_t = time.time()
-                try:
-                    t0 = load_tips()
-                    syms = list(t0.loc[t0["status"] == "open", "symbol"].astype(str).unique()) if len(t0) else []
-                    if syms:
-                        yq, _src = kite.live_prices(syms)
-                        self.quotes.update(yq)
-                except Exception as e:
-                    log.warning("Yahoo fallback for open tips failed: %s", type(e).__name__)
+        if not q and not kite.logged_in():   # owner 19 Nov: Kite only - no Yahoo fallback, tell the owner once a day
+            try:
+                from .config import load_settings
+                kite.report_unavailable(load_settings(), "Live engine (tips and stop-loss alerts)")
+            except Exception:
+                pass
         try:   # D109: logged in but Zerodha sends nothing for 30 min -> one alert a day
             from .autopilot import kite_watch
             kite_watch(bool(q), kite.logged_in(), now_ist())

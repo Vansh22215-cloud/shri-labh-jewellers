@@ -134,6 +134,16 @@ def parse(text, eq=None):
 
 # ----------------------------------------------------------------------------- evaluation
 def live_price(symbol):
+    """Kite only for Indian stocks (owner 19 Nov); Yahoo only in an explicit comparison run."""
+    try:
+        from . import kite
+        q = kite.quotes([symbol]).get(symbol)
+        if q and q.get("last"):
+            return float(q["last"])
+    except Exception:
+        pass
+    if not data_prices.yahoo_allowed():
+        return None
     try:
         import yfinance as yf
         fi = yf.Ticker(data_prices.yahoo_ticker(symbol)).fast_info
@@ -146,10 +156,9 @@ def live_price(symbol):
 
 
 def history(symbol):
-    df = data_prices.load(symbol)
-    if df is None or (pd.Timestamp.today() - df.index[-1]).days > 5:
-        data_prices.download_full([symbol], start=str((pd.Timestamp.today() - pd.DateOffset(years=6)).date()))
-        df = data_prices.load(symbol)
+    df = data_prices.load(symbol)                       # strict Kite history (None when Kite has none)
+    if df is not None and (pd.Timestamp.today() - df.index[-1]).days > 5:
+        return None                                      # stale -> no verdict rather than another source
     return df
 
 
@@ -189,7 +198,10 @@ def evaluate(tip, capital=45000.0):
     row = eq[eq["SYMBOL"] == sym]
     series = str(row[" SERIES"].iloc[0] if " SERIES" in row else row["SERIES"].iloc[0]).strip() if len(row) else "?"
     df = history(sym)
-    if df is None or len(df) < 150:
+    if df is None:
+        return "UNKNOWN", [("missing", f"Kite price data for {sym} is not available right now (Kite history not "
+                            "complete or not logged in) - no verdict from other data.")], {}
+    if len(df) < 150:
         return "AVOID", [("con", f"{sym} has too little reliable price history (new or rarely traded stock) - it can't be checked, and that alone is a risk.")], {}
     a = data_prices.adjusted(df)
     last_close = float(df["close"].iloc[-1])

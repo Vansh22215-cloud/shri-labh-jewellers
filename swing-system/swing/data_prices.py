@@ -141,7 +141,7 @@ def load(symbol):
     (kite_daily), Yahoo only for days or stocks Kite has not given us (e.g. before the Kite download finished, or
     delisted stocks). SWING_PRICE_SOURCE=yahoo forces the old source (for comparisons only)."""
     import os
-    mode = os.environ.get("SWING_PRICE_SOURCE", "kite").lower()
+    mode = os.environ.get("SWING_PRICE_SOURCE", "kite_strict").lower()   # owner 19 Nov: Kite only, live AND research
     if mode == "kite_strict":                 # owner 19 Nov: Kite only, never filled from Yahoo; gaps are reported
         try:
             from .kite_daily import frame_strict
@@ -170,10 +170,17 @@ def load(symbol):
     return y
 
 
+def yahoo_allowed():
+    """Yahoo prices may be read ONLY for an explicit comparison run (SWING_PRICE_SOURCE=yahoo). Live tips, alerts and
+    research never use them (owner 19 Nov). Every live module that could download from Yahoo checks this first."""
+    import os
+    return os.environ.get("SWING_PRICE_SOURCE", "kite_strict").lower() == "yahoo"
+
+
 def provenance_line():
     """'Data used' line for every report: how many stocks came from Kite, Kite+Yahoo, Yahoo."""
     import os
-    if os.environ.get("SWING_PRICE_SOURCE", "").lower() == "kite_strict":
+    if os.environ.get("SWING_PRICE_SOURCE", "kite_strict").lower() == "kite_strict":
         return (f"Data used (STRICT KITE): {len(PROVENANCE['kite']):,} stocks from Kite exchange candles only "
                 f"({SPAN['first']} to {SPAN['last']}); {len(PROVENANCE['missing']):,} requested stocks not on Kite "
                 f"(delisted ones taken from NSE official bhavcopies, labelled 'nse'); Yahoo: none. "

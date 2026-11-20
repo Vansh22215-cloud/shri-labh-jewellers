@@ -1281,3 +1281,21 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - The Kite re-check and the weekly automatic research also use strict mode once Kite history is complete.
 - **Yahoo-based results preserved** unchanged in `vantage-ai/validation/yahoo_baseline/` (18 result files) for the side-by-side comparison.
 - **Not changed (needs the owner's approval):** live tips still read prices Kite-first with Yahoo filling gaps (D155); live trading rules; strategies.
+
+## D158 - 2026-11-20 - Live tips and alerts are KITE ONLY (owner: "no live tip can silently use Yahoo")
+- **Price history** for every live strategy (VANTAGE, live engine, Foundry, basket, the forwarded-tip checker): `data_prices.load` is strict Kite by default. No Kite candles means nothing; Yahoo only with an explicit `SWING_PRICE_SOURCE=yahoo` comparison run (`yahoo_allowed()`).
+- **Live prices:** `kite.live_prices` has no Yahoo fallback. The live engine's "not logged in, use Yahoo for open tips' stops" path was removed.
+- **Blocked Yahoo downloads:** intraday scanner (5-minute), hourly scan snapshot, F&O 5-minute fallback, the forwarded-tip checker's live price, and alerts on Indian index tickers.
+- **No Kite means no tip, and the owner is told:** `kite.report_unavailable()` sends one Telegram note a day per job, and work resumes by itself once Kite data is back. It covers:
+  - the VANTAGE 3:40 pm scan, VANTAGE live alerts and the evening VANTAGE scan;
+  - the evening tips;
+  - the live engine;
+  - the 3:22 pm plan, which says "No trade today - Kite price data is not complete" instead of the risk sentence.
+- VANTAGE and the evening tips wait until Kite history covers 90% of stocks.
+- **Proof** (`tests/test_no_yahoo_in_live.py`, 23 checks):
+  - static: every Yahoo call in 20 live modules must sit behind the `yahoo_allowed()` guard; 4 such calls found and guarded, and a deliberately unguarded call is caught;
+  - dynamic: with Yahoo made to fail and no Kite data, history, live prices, the hourly snapshot and the tip checker return nothing, and VANTAGE sends no tip and reports.
+- **Kite downloads** got their own job (`kite_download`, weekdays from 6:55 pm, right after the nightly job), because on 19 Nov the research job found no valid login at 8:17 pm and later hit its time limit.
+- **Research** runs nothing price-based until Kite history is complete. The weekly research run of 19 Nov 8:39 pm used mixed Kite+Yahoo data; it is marked INVALID in `journal/auto_research.md` and `lab_rules.json`, kept for the record. It made no proposals.
+- **Unchanged:** every entry, exit, ranking, confidence and risk rule.
+- **Still on Yahoo, not tips or prices for tips:** company fundamentals and results dates (Kite has none), global markets (non-Indian), the Yahoo comparison copies, and `kite_is_adjusted()`, which uses Yahoo split dates only to verify whether Kite's candles are already split-adjusted (the prices stay Kite).

@@ -27,8 +27,10 @@ E = html.escape
 
 
 def snapshot(symbols):
-    """Today's open/high/low/last/volume so far, from 5-minute bars."""
+    """Today's open/high/low/last/volume so far, from 5-minute bars (Yahoo - comparison runs only, owner 19 Nov)."""
     out = {k: {} for k in ("open", "high", "low", "close", "volume")}
+    if not data_prices.yahoo_allowed():         # live: Kite only - no Yahoo snapshot, so this scan makes no tips
+        return {k: pd.Series(v, dtype=float) for k, v in out.items()}, None
     last_ts = None
     for i in range(0, len(symbols), 250):
         chunk = symbols[i:i + 250]

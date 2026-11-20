@@ -423,9 +423,24 @@ def run(day=None, source="auto"):
         data_prices.update(syms + ["NIFTY50"])
     except Exception as e:
         log.warning("VANTAGE: price update failed: %s", type(e).__name__)
+    # owner 19 Nov: KITE ONLY. History = Kite exchange candles (data_prices strict); today's candle = Kite quotes
+    # (3:40 pm) or the Kite bar the 4 pm / 6:40 pm jobs stored (evening scan). No Kite -> no scan, no tips, a report.
+    try:
+        from .kite_daily import coverage
+        cov = coverage()
+    except Exception:
+        cov = 0.0
+    if cov < 0.9:
+        summ["why"] = f"Kite history not complete yet ({cov * 100:.0f}% of stocks) - no VANTAGE tips from incomplete data"
+        from . import kite as _k
+        _k.report_unavailable(s, "VANTAGE scan", why=f"Kite price history is not complete yet ({cov * 100:.0f}% of "
+                              "stocks downloaded)")
+        return summ
     bars = today_bars(syms + ["NIFTY50"], day) if source in ("auto", "kite") else {}
     if not bars and source == "kite":
         summ["why"] = "Kite not logged in"
+        from . import kite as _k
+        _k.report_unavailable(s, "VANTAGE 3:40 pm scan")
         return summ
     try:
         res = scan(day, bars)
@@ -581,7 +596,13 @@ class LiveScanner:
             # (3% slack on the 200-day average: today's average can be a little lower than yesterday's)
             self.pre[s] = (1.10 * 0.97 * float(c.tail(200).mean()), 0.9 * float(c.tail(249).max()),
                            float(d["high"].tail(50).max()))
-        b = data_prices.load("NIFTY50")["close"]
+        n = data_prices.load("NIFTY50")
+        if n is None or not len(n):                           # owner 19 Nov: no Kite NIFTY history -> no live scan
+            self.hist, self.pre = {}, {}
+            self.bench = pd.Series(dtype=float)
+            log.info("VANTAGE live: Kite history for NIFTY 50 missing - live scan paused (no tips)")
+            return
+        b = n["close"]
         self.bench = b[b.index < self.day]
         log.info("VANTAGE live: %d stocks ready", len(self.hist))
 
@@ -647,8 +668,14 @@ def live_step(scanner, s=None):
     """One live cycle: instant stop-loss alerts for BUYs already sent, then new live BUY alerts (once per stock/day)."""
     from . import telegram, safety
     s = s or load_settings()
+    if hasattr(scanner, "hist") and not scanner.hist:              # Kite history incomplete: nothing to scan
+        from . import kite as _k
+        _k.report_unavailable(s, "VANTAGE live alerts", why="Kite price history is not complete yet")
+        return {"ok": False, "why": "Kite history incomplete - live VANTAGE paused"}
     t, res = scanner.cycle()
     if t is None:
+        from . import kite as _k
+        _k.report_unavailable(s, "VANTAGE live alerts")
         return {"ok": False, "why": "no fresh live prices (Kite not logged in or engine not running)"}
     _, bars = read_snapshot()
     sig = _load_signals()

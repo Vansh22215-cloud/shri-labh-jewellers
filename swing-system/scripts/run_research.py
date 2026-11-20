@@ -17,34 +17,30 @@ if __name__ == "__main__":
     s = load_settings()
     notes = []
     kite_ready = False
-    try:   # Kite exchange DAILY prices for every NSE stock since 2011 (owner 19 Nov: re-do the tests on Kite data)
-        from swing import kite_daily
-        # until complete: no nightly limit (owner 19 Nov: use Kite to the full) - Kite allows 3 requests a second
-        print("kite daily:", kite_daily.download(max_requests=20000 if kite_daily.coverage() < 0.9 else 4000))
+    try:   # owner 19-20 Nov: research only on STRICT Kite data. The downloads run in their own job ('kite_download',
+        from swing import kite_daily          # 6:55 pm); here: wait until Kite history is complete, then re-check
         kite_ready = kite_daily.coverage() >= 0.9
         if kite_ready:
             from swing.config import DATA as _D
             flag = _D / "kite_daily" / "recheck_done.txt"
             import datetime as _dt
+            kite_daily.coverage_report()
             if not flag.exists() or _dt.date.today().weekday() == 4:
-                kite_daily.audit()                                   # Kite vs Yahoo, close by close
-            if not flag.exists():                                    # once: every main test again on Kite prices
+                kite_daily.audit()                                   # Kite vs Yahoo, verification only
+            if not flag.exists():
                 import subprocess
                 rc = Path(__file__).resolve().parents[2] / "vantage-ai" / "validation" / "kite_recheck.py"
                 r = subprocess.run([sys.executable, str(rc)], timeout=5400, capture_output=True, text=True)
                 if r.returncode == 0:
                     flag.write_text(str(_dt.date.today()))
-                    telegram.send(s, "📊 ATLAS re-ran its main tests on Kite's official exchange prices. "
-                                     "Results: journal/kite_recheck.md and journal/kite_data_audit.md.", label="research result")
                 else:
                     print("kite re-check failed:", (r.stderr or "")[-300:].replace("\n", " | "))
+        else:
+            print("research: Kite history not complete yet - no price-based research tonight (strict Kite rule)")
     except Exception as e:
-        print("kite daily skipped:", type(e).__name__)
-    try:   # Kite historical candles to the full (owner 19 Nov): ~900 requests a night until years of 15-minute
-        from swing import kite_history            # history exist for the top-300; then the 3:20 pm reality check
-        print("kite history:", kite_history.run())
-    except Exception as e:
-        print("kite history skipped:", type(e).__name__)
+        print("kite check skipped:", type(e).__name__)
+    if not kite_ready:
+        sys.exit(0)
     try:   # AUTO-RESEARCH (owner 19 Nov: research must keep running without Claude) - once a week, Friday night
         import subprocess, datetime as _dt
         from swing.config import DATA

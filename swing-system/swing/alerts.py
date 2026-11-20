@@ -157,6 +157,8 @@ def check(send=True, now=None, quote_fn=None):
     stocks = sorted({i["name"] for i in its if not i["ticker"]})
     q, src = (quote_fn(stocks) if quote_fn else kite.live_prices(stocks))
     for tk in sorted({i["ticker"] for i in its if i["ticker"]}):
+        if str(tk).upper().startswith(("^NSE", "^BSE", "^CNX")) or str(tk).upper().endswith((".NS", ".BO")):
+            continue                        # owner 19 Nov: Indian prices only from Kite (no Yahoo for them)
         try:
             if quote_fn:
                 q.update(quote_fn([tk])[0])

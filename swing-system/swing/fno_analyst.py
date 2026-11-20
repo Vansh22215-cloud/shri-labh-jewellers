@@ -32,7 +32,8 @@ def _spot_and_bars(sym):
     if q.get(sym):
         spot = q[sym]["last"]
     bars = kite.historical(sym, "5minute", days=30) if kite.logged_in() else None
-    if bars is None:
+    from .data_prices import yahoo_allowed
+    if bars is None and yahoo_allowed():          # owner 19 Nov: live F&O analysis on Kite candles only
         try:
             import yfinance as yf
             from .data_prices import yahoo_ticker
