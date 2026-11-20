@@ -3,7 +3,7 @@ import json
 
 import pandas as pd
 
-from swing import fundamentals, nse_financials as nf
+from swing import nse_financials as nf
 
 HEAD = ('<?xml version="1.0"?><xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance" '
         'xmlns:f="http://www.bseindia.com/xbrl/fin" xmlns:xbrldi="http://xbrl.org/2006/xbrldi">')
@@ -58,25 +58,3 @@ def test_missing_fields_stay_none():
     r = nf.parse_xbrl(HEAD + ctx("FourD", "2025-04-01", "2026-03-31") + fact("RevenueFromOperations", "FourD", "5")
                       + "</xbrli:xbrl>", *FY)
     assert r["revenue"] == 5 and r["equity"] is None and r["ocf"] is None
-
-
-def test_fundamentals_never_fall_back_to_yahoo(tmp_path, monkeypatch):
-    monkeypatch.setattr(fundamentals, "FUND", tmp_path)
-    import yfinance
-    monkeypatch.setattr(yfinance, "Ticker", lambda *a, **k: (_ for _ in ()).throw(AssertionError("Yahoo used")))
-    monkeypatch.setattr(nf, "snapshot", lambda s: (_ for _ in ()).throw(ConnectionError()))
-    snap = fundamentals.fetch_fundamentals("AAA", max_age_days=0)
-    assert not snap["ok"] and snap["v"] == 3
-    good = {"symbol": "AAA", "ok": True, "v": 3, "annual": {"2026-03-31": {"revenue": 1}}}
-    (tmp_path / "AAA.json").write_text(json.dumps(good))
-    assert fundamentals.fetch_fundamentals("AAA", max_age_days=0)["ok"]       # NSE down -> last good NSE copy kept
-    (tmp_path / "BBB.json").write_text(json.dumps({"symbol": "BBB", "ok": True, "v": 2, "annual": {}}))
-    assert fundamentals.fetch_fundamentals("BBB", max_age_days=30)["v"] == 3  # an old Yahoo copy is not used
-
-
-def test_quality_screen_reads_nse_rows():
-    snap = {"annual": {"2025-03-31": {"published_assumed": "2025-04-20", "revenue": 800, "net_income": -5, "ebit": 1,
-                                      "total_assets": 10, "current_liabilities": 1, "equity": 5, "debt": 1, "ocf": 1}},
-            "pe": None}
-    assert "loss-making in latest year" in fundamentals.quality_summary(snap, asof="2025-05-01")["flags"]
-    assert fundamentals.quality_summary(snap, asof="2025-04-10")["years_available"] == 0   # not filed yet

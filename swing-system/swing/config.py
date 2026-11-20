@@ -1,4 +1,4 @@
-"""Loads settings.yaml and strategy versions; defines folder paths.
+"""Settings (settings.yaml) and folder paths of the ATLAS rebuild (owner 20 Nov: start again, Kite data only).
 
 Everything is relative to the project folder, so the system works wherever
 the folder is copied (Windows or Linux).
@@ -22,31 +22,15 @@ except AttributeError:      # Windows has no tzset (the owner's own PC is alread
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
-PRICES = DATA / "prices"
-BHAV = DATA / "bhavcopy"
-FUND = DATA / "fundamentals"
-EVENTS = DATA / "events"
-QUARANTINE = DATA / "quarantine.json"
-REPORTS = ROOT / "reports"
-STOCKS = ROOT / "stocks"
-JOURNAL = ROOT / "journal"
+DATA = ROOT / "data"                 # private GitHub cache only (never in git)
+PRIVATE = DATA / "private"           # personal records: tips, trades, Kite login pass
+FUND = DATA / "fundamentals"         # NSE filings (company financials)
 LOGS = ROOT / "logs"
-STRATEGIES = ROOT / "strategies"
+RESULTS = ROOT / "results"           # public, non-personal results (test reports, learner reports) - saved to git
 STATE = DATA / "state.json"
-# Personal files (your trades, forwarded tips). The GitHub repository is PUBLIC: these live only in the private
-# Actions cache and your own Telegram backups, never in git, logs or public artifacts.
-PRIVATE = DATA / "private"
-ARCHIVE = DATA / "archive"     # lifelong append-only store of everything collected (swing/archive.py)
-
-DISCLAIMER = ("Research, not advice. No system can guarantee profit; you can lose money. "
-              "You decide and place every order yourself.")
-
-for _d in (DATA, PRICES, BHAV, FUND, EVENTS, REPORTS, STOCKS, JOURNAL, LOGS, PRIVATE, ARCHIVE):
+DISCLAIMER = "Research, not advice. You decide and place every order yourself."
+for _d in (DATA, PRIVATE, FUND, LOGS, RESULTS):
     _d.mkdir(parents=True, exist_ok=True)
-for _f in ("my_trades.csv", "closed_trades.csv", "forwarded_tips.csv"):   # one-time move from the old place
-    if (DATA / _f).exists() and not (PRIVATE / _f).exists():
-        (DATA / _f).rename(PRIVATE / _f)
 
 
 def on_github():
@@ -63,39 +47,27 @@ def public_print(text, label="message"):
 
 
 def load_settings(path=None):
-    """Read settings.yaml. Missing keys fall back to safe defaults."""
-    defaults = {
-        "capital": 45000, "kill_switch": False, "mode": "paper",
-        "paper_start_date": "2026-11-02", "paper_weeks": 8,
-
-        "telegram_bot_token": "", "telegram_chat_id": "", "live_strategy": "v1",
-        "tips_mode": "validated", "aggressive_strategy": "a1", "aggressive_hard_stop_pct": 20,
-    }
+    """Read settings.yaml. Missing keys fall back to safe defaults; an unreadable file turns the kill switch ON."""
+    defaults = {"capital": 0, "kill_switch": False, "stop_loss_pct": 1.0, "telegram_bot_token": "",
+                "telegram_chat_id": "", "risk_limits": {"risk_per_trade_pct": 1, "max_order_pct": 25, "daily_loss_pct": 2}}
     p = Path(path) if path else ROOT / "settings.yaml"
     try:
         user = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
-    except Exception as e:  # broken file -> safest behaviour: no tips
+    except Exception as e:
         logging.getLogger("swing").error("settings.yaml unreadable (%s); kill switch forced ON", e)
         user = {"kill_switch": True}
     defaults.update(user)
-    # On GitHub Actions the private values come from environment variables (repository secrets), never a file.
-    import os
     for env_key, key in (("TELEGRAM_BOT_TOKEN", "telegram_bot_token"), ("TELEGRAM_CHAT_ID", "telegram_chat_id")):
         if os.environ.get(env_key):
             defaults[key] = os.environ[env_key]
     defaults["telegram_bot_token"] = clean_bot_token(defaults.get("telegram_bot_token"))
-    # Private values (e.g. Telegram token) live in my_secrets.yaml, which is never uploaded to GitHub.
-    sec = ROOT / "my_secrets.yaml"
+    sec = ROOT / "my_secrets.yaml"           # local PC only, never uploaded
     if path is None and sec.exists():
         try:
             defaults.update({k: v for k, v in (yaml.safe_load(sec.read_text(encoding="utf-8")) or {}).items() if v})
         except Exception as e:
             logging.getLogger("swing").error("my_secrets.yaml unreadable: %s", e)
     return defaults
-
-
-def load_strategy(name):
-    return json.loads((STRATEGIES / f"{name}.json").read_text(encoding="utf-8"))
 
 
 def load_state():

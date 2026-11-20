@@ -1,41 +1,32 @@
-# ATLAS - personal NSE trading research system (VANTAGE = its indicator)
+# ATLAS - rebuilt 20 Nov 2026
 
-> **Research, not advice.** No system can guarantee profit. You decide and place every order yourself.
-> The system never places orders: it sends risk-checked order *tickets* that you place in the Kite app.
+The owner's NSE research and alert system, started again from zero (owner 20 Nov: "we will re-write everything
+from start ... I will hold power into this completely"). Runs on GitHub Actions, talks on Telegram, uses Kite
+Connect (read-only market data) as its only price source. It never places, changes or cancels an order.
 
-## How it runs (fully automatic - no laptop, no Claude)
-Everything runs on **GitHub's free computers** (`.github/workflows/swing.yml`). One always-on run does every job on
-time, picks up new code within ~10 minutes, and starts the next run when it ends (an hourly schedule is only a safety
-net). Your Telegram bot is **@Vsjshsjsbaksnsjsh_bot**.
+## How it works
 
-| When (IST) | What you get on Telegram |
-|---|---|
-| ~8:45 am, market days | 🔑 Kite login link - one tap gives live Zerodha prices until 6 am next day (else Yahoo) |
-| 9:00 am | 🌅 morning brief: results due, company filings, insider trades for your stocks (only if any) |
-| 9:15 am - 3:30 pm, every minute | 🔔 instant alerts: entry reached, near stop, stop hit, target hit, big moves |
-| 10:20 am - 3:20 pm, hourly | ⏱ Tips update: every tip of the last 60 days - profit/loss, distance to stop/target, what to do |
-| during the day | 📢 new important filings for stocks you follow |
-| 6:40 pm | 📋 tomorrow's trades with Time Machine odds + 🎫 order tickets (✅ I placed it / ⏭ Skip), then 🏢 company of the day |
-| 8:17 pm | research (silent unless an upgrade is adopted) |
-| Saturday | 🗓 weekly summary: channel scorecards, every tip of the week, intraday paper result, report file |
-| any time | replies to any tip, setup or chart picture you forward |
+| Part | File | What it does |
+|---|---|---|
+| Candle library | `swing/candles.py` | Downloads every NSE stock + NIFTY 50 / NIFTY BANK / INDIA VIX from Kite: 1 day, 60, 15, 5, 1 minute, everything Kite has; 3/10/30 minutes built from them. Only outside market hours, ~10-minute chunks. |
+| Live feed | `swing/live_feed.py` | Kite's streaming feed for every stock, 9:15-3:30: live 1/3/5/10/15/30/60-minute and day candles. |
+| Strategies | `swing/strategy.py`, `swing/strategies/` | Each strategy = entry rule (+ optional exit rule). Default stop-loss 1% below entry, targets in multiples of the risk. Written only from the owner's own descriptions. Empty today. |
+| Tester | `swing/backtest.py` | Runs a strategy on the Kite library of every stock: 1% stop, target, gaps, 3:20 pm square-off, Zerodha costs + slippage, account simulation. Report starts with the data used. |
+| Learner | `swing/learner.py` | Every trade (test and live): did it work, where it works and where it fails (time, weekday, trend, market, VIX, gap, volume, volatility...), why losers lost, ideas to test. Suggests only - never changes anything. |
+| Live tips | `swing/tips.py` | Approved strategies on every closed live candle -> BUY tip (entry, stop, target, quantity) -> SELL alert at stop / target / exit rule / 3:20 pm. |
+| Runner | `swing/daemon.py` | The always-on GitHub run: login link 8:45 am, live feed, downloads, tests, weekly Learner, nightly private backup. |
+| Bot | `swing/bot.py` | /status /kite /capital /stop /resume /tips /strategies /test /learn /approve /unapprove |
 
-## Bot commands
-`/bought SYMBOL QTY PRICE [STOP]` · `/sold SYMBOL [PRICE]` · `/trades` · `/score` · `/status` (Kite + live price
-check) · `/report` · forward any tip, view, setup or chart picture (stocks, Nifty/Bank Nifty, forex, gold, crypto).
+## The owner's procedure for every strategy
 
-## One-time setup (done)
-GitHub -> Settings -> Secrets and variables -> Actions: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `KITE_API_KEY`,
-`KITE_API_SECRET`. Kite Connect app redirect URL:
-`https://vansh22215-cloud.github.io/shri-labh-jewellers/kite-login.html`. Keys live only in GitHub Secrets.
+1. The owner describes the strategy -> it is written in `swing/strategies/<name>.py`.
+2. `/test <name>` -> tested on Kite history of every NSE stock -> results + Learner report on Telegram.
+3. `/approve <name>` (the owner's decision only) -> it sends live tips.
+4. The Learner watches every test and live trade and suggests improvements; each change is tested again and goes
+   live only with the owner's yes.
 
-## Safety
-- Risk limits (settings.yaml `risk_limits`): 1% loss per trade, 2% daily loss stop, 3 new trades a day, 25% max order.
-- **Kill switch:** `kill_switch: true` in `settings.yaml` stops all tips.
-- Personal files (your trades, forwarded tips, tickets, Kite login pass - encrypted) stay out of this public repository.
-- Intraday trading is paper-only; it can only ever send tips after passing walk-forward tests and your yes.
+## Data rules
 
-## Files
-`settings.yaml` settings | `journal/tips.csv` every tip and its outcome | `strategies/` strategy versions |
-`validation/` tests | `DECISIONS.md` why every choice was made | `IMPROVEMENTS.md` tested ideas |
-`CHANGELOG.md` history | `ARCHITECTURE.md` how the parts fit together.
+Kite candles only (Yahoo removed). Delisted stocks are not included (Kite lists only today's stocks). Every test
+report and message states the data used. Kite candles and personal records stay in GitHub's private cache, never
+in this public repository; `results/` holds only results.

@@ -3,7 +3,7 @@
 The workflow's own save step (on the default branch) did `git pull --rebase` with unstaged files present, which
 fails, so the push was rejected and results were lost between runs. This runs first, from the branch code:
 commit the fixed list of non-personal files, rebase onto the remote with --autostash (other changes kept aside),
-push with retries. Trades, forwarded tips, reports and price data are never committed (they stay private).
+push with retries. Tips, trades and Kite candles are never committed (they stay in the private cache).
 Does nothing outside GitHub Actions."""
 import logging
 import os
@@ -14,9 +14,7 @@ from .config import ROOT
 
 log = logging.getLogger("swing.ci_save")
 
-SAVE = ["journal/kite_candles.md", "journal/kite_coverage.md", "journal/kite_rerun.md", "journal/kite_rerun", "journal/kite_recheck.md", "journal/kite_data_audit.md", "journal/kite_research.md", "journal/foundry_shadow.md", "journal/why_log.md", "journal/why_log.csv", "journal/auto_research.md", "journal/ledger.jsonl", "journal/research_queue.md", "journal/learning.md", "journal/learning_queue.csv", "journal/all_tips.csv", "journal/all_tips.md", "journal/vantage_scorecard.csv", "journal/vantage_scorecard.md", "journal/tips.csv", "journal/company_picks.csv", "journal/scan_signals.csv", "journal/tips_retired.csv", "validation", "strategies", "stocks", "library",
-        "IMPROVEMENTS.md", "CHANGELOG.md", "settings.yaml", "data/universe_history.csv",
-        "data/quarantine.json", "data/no_yahoo_data.json"]
+SAVE = ["results", "settings.yaml"]      # public results (no prices, no personal data) + your settings
 
 
 def _git(*a, check=False):

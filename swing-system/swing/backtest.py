@@ -1,253 +1,311 @@
-"""Event-driven daily portfolio backtest with realistic Zerodha costs.
+"""The tester: one strategy on Kite candles of every NSE stock (owner 20 Nov: "all tests on Kite data, not Yahoo").
 
-Rules simulated (identical to what the live report tells you to do):
-  * Signals are computed at the close of day t; orders execute at the OPEN of day t+1.
-  * Do-not-buy rule: skip the trade if day t+1 opens above (signal close + 0.5 x ATR)
-    or at/below the stop.
-  * Stop-loss: if a day OPENS below the stop, we exit at that (worse) open price
-    (gap-through-stop). Otherwise if the day's low touches the stop we exit at the stop.
-    If the stop and a target are both inside the same day's range we assume the
-    STOP happened first (conservative).
-  * Target 1 (+1.5R): sell half, move stop to entry (breakeven). Target 2 (+3R): sell rest.
-  * Time stop: after 25 trading days, sell at the next open.
-  * Max 4 open positions; risk 1% of equity per trade; max 25% of equity per position.
-  * If equity falls 10% below its peak, no new trades for 20 trading days.
-  * No new trades when the market regime filter is off (weak market).
-  * Idle cash earns the liquid-fund return (applied daily).
-  * Every buy/sell pays Zerodha delivery charges + 0.15% slippage.
-"""
-from dataclasses import dataclass, field
+Rules of the simulation (the same for every strategy, so results are comparable):
+  - entry: the signal candle's close (or the next candle's open, if the strategy says so);
+  - stop-loss: 1% below the entry by default (settings.yaml stop_loss_pct); if a candle opens below the stop the
+    trade is sold at that open (a gap is never hidden);
+  - target: the last target in targets_r; if the stop and the target are both inside one candle, the STOP is
+    assumed first (the cautious answer);
+  - the strategy's own exit rule at a candle's close; max_bars; intraday trades are sold by 3:20 pm;
+  - one trade at a time per stock;
+  - costs: Zerodha's real charges (delivery or intraday) + 0.15% slippage each side, on the quantity the
+    owner's settings give (capital, 1% risk, 25% cap);
+  - every trade keeps its context at entry (time, weekday, trend, market, VIX, gap, volume, volatility) for the
+    Learner, and its best/worst move while open.
+Results: results/tests/<strategy>.md (public, no prices) + the trade list in data/tests/ (private cache).
+Data: Kite candles only - every report starts with the data line (which interval, stocks, dates, stocks missing)."""
+import json
+import os
+from datetime import timedelta
 
 import numpy as np
 import pandas as pd
 
-from . import costs
-from .strategy import position_size
+from . import candles, costs
+from .config import DATA, RESULTS, get_logger, load_settings
+
+log = get_logger()
+TESTS = DATA / "tests"
+OUT = RESULTS / "tests"
+HOLDOUT_YEARS = 2            # the most recent 2 years are reported separately ("recent", the fair check)
 
 
-@dataclass
-class Position:
-    symbol: str
-    setup: str
-    signal_date: pd.Timestamp
-    entry_date: pd.Timestamp
-    entry: float          # fill price incl. slippage
-    qty: int
-    stop: float
-    t1: float
-    t2: float
-    r: float              # initial risk per share
-    cost_paid: float
-    days: int = 0
-    atr_e: float = 0.0
-    hc: float = 0.0
-    exit_next: bool = False
-    t1_done: bool = False
-    realised: float = 0.0  # net rupees from partial exits
-    exits: list = field(default_factory=list)
+# ----------------------------------------------------------------------------- context (known at entry)
+def daily_context(sym, nifty_d=None, vix_d=None):
+    """Per day: values KNOWN at that day's close (stock trend, volatility, turnover, market, VIX)."""
+    d = candles.load(sym, "day")
+    if d is None or len(d) < 30:
+        return None
+    c = d["close"]
+    tr = pd.concat([d["high"] - d["low"], (d["high"] - c.shift()).abs(), (d["low"] - c.shift()).abs()], axis=1).max(axis=1)
+    x = pd.DataFrame(index=d.index)
+    x["above_50d"] = c > c.rolling(50).mean()
+    x["above_200d"] = c > c.rolling(200).mean()
+    x["atr_pct"] = tr.rolling(14).mean() / c * 100
+    x["turnover_cr"] = (c * d["volume"]).rolling(20).mean() / 1e7
+    x["day_change_pct"] = c.pct_change() * 100
+    x["close"] = c
+    x["open"] = d["open"]
+    if nifty_d is not None and len(nifty_d):
+        n = nifty_d["close"]
+        x["nifty_above_50d"] = (n > n.rolling(50).mean()).reindex(x.index)
+        x["nifty_change_pct"] = (n.pct_change() * 100).reindex(x.index)
+    if vix_d is not None and len(vix_d):
+        x["vix"] = vix_d["close"].reindex(x.index)
+    return x
 
 
-def run(P, sig, params, start, end, capital=45000.0, liquid_nav=None, max_candidates=8, qty_override=None):
-    """Simulate the strategy between start and end. Returns (equity Series, trades DataFrame, daily exposure)."""
-    p = params
-    style = p.get("exit_style", "targets")   # targets | trail | signal
-    dates = P["close"].loc[start:end].index
-    o, h, l, c = (P[k] for k in ("open", "high", "low", "close"))
-    score, elig, setup, atrv, regime = sig["score"], sig["eligible"], sig["setup"], sig["atr"], sig["regime_ok"]
-
-    if liquid_nav is not None:
-        lf = liquid_nav.reindex(liquid_nav.index.union(dates)).ffill().reindex(dates)
-        lf_ret = lf.pct_change().fillna(0).clip(-0.01, 0.01)
-    else:
-        lf_ret = pd.Series(0.0, index=dates)
-    sma5 = c.rolling(5, min_periods=5).mean() if style == "signal" else None
-
-    cash, peak = capital, capital
-    pause_until = -1
-    positions, trades, eq, expo = [], [], [], []
-    pending = []  # candidates from previous close
-
-    for i, d in enumerate(dates):
-        # 1) idle cash earns liquid fund return (credited for the day)
-        cash *= (1 + lf_ret.iloc[i])
-        equity_prev = eq[-1] if eq else capital
-
-        # 2) entries at today's open from yesterday's ranked candidates
-        eb = sig.get("entry_block")
-        if eb is not None and bool(eb.get(d, False)):
-            pending = []          # e.g. big overnight fall in the US: no new entries today
-        if pending and i > pause_until:
-            held = {ps.symbol for ps in positions}
-            for cand in pending:
-                if len(positions) >= p["max_open_positions"]:
-                    break
-                s = cand["symbol"]
-                if s in held:
-                    continue
-                cap_ind = p.get("max_per_industry")
-                if cap_ind:   # diversification: limit open trades in the same industry (ROADMAP P2)
-                    ind_map = sig.get("industry") or {}
-                    ind = ind_map.get(s)
-                    if ind and sum(1 for ps_ in positions if ind_map.get(ps_.symbol) == ind) >= cap_ind:
-                        continue
-                op = o.at[d, s]
-                if not np.isfinite(op) or op <= 0:
-                    continue
-                if op > cand["close"] + p["do_not_buy_gap_atr"] * cand["atr"] or op <= cand["stop"]:
-                    continue  # do-not-buy rule
-                fill = costs.fill_price(op, "buy")
-                qty = cand.get("qty") or position_size(equity_prev, cash, fill, cand["stop"], p)
-                if qty < 1:
-                    continue
-                value = qty * fill
-                fee = costs.buy_cost(value)
-                if value + fee > cash:
-                    continue
-                cash -= value + fee
-                r = fill - cand["stop"]
-                positions.append(Position(s, cand["setup"], cand["date"], d, fill, qty, cand["stop"],
-                                          fill + p["target1_r"] * r, fill + p["target2_r"] * r, r, fee,
-                                          atr_e=cand["atr"], hc=fill))
-                held.add(s)
-
-        # 3) manage open positions with today's bar
-        still = []
-        for ps in positions:
-            od, hd, ld, cd = o.at[d, ps.symbol], h.at[d, ps.symbol], l.at[d, ps.symbol], c.at[d, ps.symbol]
-            if not np.isfinite(cd):
-                still.append(ps)  # no trade today (suspension/holiday for this stock)
-                continue
-            new_today = ps.entry_date == d
-            if not new_today:
-                ps.days += 1
-            closed = False
-
-            def sell(q, px, why):
-                nonlocal cash
-                fill = costs.fill_price(px, "sell")
-                value = q * fill
-                fee = costs.sell_cost(value)
-                cash += value - fee
-                ps.realised += value - fee
-                ps.exits.append((d, q, fill, why))
-                ps.qty -= q
-
-            # time stop: sell at the open after max_hold_days; exit signal from last close
-            if not new_today and ps.days > p["max_hold_days"]:
-                sell(ps.qty, od, "time")
-                closed = True
-            elif not new_today and ps.exit_next:
-                sell(ps.qty, od, "signal")
-                closed = True
-            # gap through stop
-            elif not new_today and od <= ps.stop:
-                sell(ps.qty, od, "stop_gap")
-                closed = True
-            elif ld <= ps.stop:
-                sell(ps.qty, ps.stop, "stop")
-                closed = True
-            elif style in ("targets", "targets_trail"):
-                if not ps.t1_done and hd >= ps.t1:
-                    px = od if (not new_today and od >= ps.t1) else ps.t1
-                    half = ps.qty // 2
-                    if half >= 1:
-                        sell(half, px, "target1")
-                    ps.t1_done = True
-                    ps.stop = max(ps.stop, ps.entry)  # breakeven from now on
-                if ps.qty > 0 and style == "targets" and hd >= ps.t2:
-                    px = od if (not new_today and od >= ps.t2) else ps.t2
-                    sell(ps.qty, px, "target2")
-                    closed = True
-            if closed or ps.qty == 0:
-                gross_in = ps.entry * sum(q for _, q, _, _ in ps.exits)
-                pnl = ps.realised - gross_in - ps.cost_paid
-                trades.append({
-                    "symbol": ps.symbol, "setup": ps.setup, "signal_date": ps.signal_date,
-                    "entry_date": ps.entry_date, "entry": round(ps.entry, 2),
-                    "qty": sum(q for _, q, _, _ in ps.exits), "exit_date": d,
-                    "exit_reason": ps.exits[-1][3], "days": ps.days,
-                    "pnl": round(pnl, 2), "r_multiple": round(pnl / (ps.r * sum(q for _, q, _, _ in ps.exits)), 3),
-                    "init_r": round(ps.r, 2),
-                })
-            else:
-                if style == "trail" or (style == "targets_trail" and ps.t1_done):   # chandelier stop: highest close minus k x ATR (only moves up)
-                    ps.hc = max(ps.hc, cd)
-                    ps.stop = max(ps.stop, ps.hc - p.get("trail_atr_mult", 3.0) * ps.atr_e)
-                elif style == "signal" and sma5 is not None and cd > sma5.at[d, ps.symbol]:
-                    ps.exit_next = True    # bounced above 5-day average: sell at next open
-                still.append(ps)
-        positions = still
-
-        # 4) mark to market
-        mv = 0.0
-        for ps in positions:
-            px = c.at[d, ps.symbol]
-            if not np.isfinite(px):
-                px = c[ps.symbol].loc[:d].dropna().iloc[-1]
-            mv += ps.qty * px
-        equity = cash + mv
-        eq.append(equity)
-        expo.append(mv / equity if equity > 0 else 0)
-        peak = max(peak, equity)
-        if i > pause_until and equity <= peak * (1 - p["drawdown_pause_pct"] / 100):
-            pause_until = i + p["drawdown_pause_days"]
-        if i == pause_until:
-            peak = equity  # restart the drawdown clock after the pause
-
-        # 5) tonight's candidates for tomorrow
-        pending = []
-        if bool(regime.get(d, False)) and i >= pause_until:
-            row = elig.loc[d]
-            names = row[row].index
-            if len(names):
-                sc = score.loc[d, names].sort_values(ascending=False).head(max_candidates)
-                for s in sc.index:
-                    cl, av = c.at[d, s], atrv.at[d, s]
-                    pending.append({"symbol": s, "date": d, "close": cl, "atr": av, "setup": setup.at[d, s],
-                                    "stop": cl - p["stop_atr_mult"] * av, "qty": qty_override})
-
-    equity = pd.Series(eq, index=dates, name="equity")
-    return equity, pd.DataFrame(trades), pd.Series(expo, index=dates, name="exposure")
+def _bucket(v, edges, labels):
+    if v is None or v != v:
+        return "unknown"
+    for e, lab in zip(edges, labels):
+        if v < e:
+            return lab
+    return labels[-1]
 
 
-def buy_and_hold(price, start, end, capital=45000.0):
-    """Benchmark: put all capital into one instrument at the first open, pay costs once."""
-    px = price.loc[start:end].dropna()
-    if px.empty:
-        return pd.Series(dtype=float)
-    first = costs.fill_price(px.iloc[0], "buy")
-    qty = np.floor(capital / (first * 1.003))
-    leftover = capital - qty * first - costs.buy_cost(qty * first)
-    return qty * px + leftover
-
-
-def exposure_matched(index_price, exposure, liquid_nav, capital=45000.0):
-    """Benchmark: hold the index with the SAME daily exposure as the strategy; idle cash in liquid fund.
-    (Costs ignored for this benchmark, which slightly flatters it.)"""
-    r_idx = index_price.reindex(exposure.index).ffill().pct_change().fillna(0)
-    lf = liquid_nav.reindex(liquid_nav.index.union(exposure.index)).ffill().reindex(exposure.index)
-    r_lf = lf.pct_change().fillna(0)
-    w = exposure.shift(1).fillna(0)
-    return capital * (1 + w * r_idx + (1 - w) * r_lf).cumprod()
-
-
-def stats(equity, trades=None):
-    if equity is None or len(equity) < 2:
-        return {}
-    ret = equity.iloc[-1] / equity.iloc[0] - 1
-    yrs = max((equity.index[-1] - equity.index[0]).days / 365.25, 1e-9)
-    cagr = (1 + ret) ** (1 / yrs) - 1 if ret > -1 else -1
-    dd = (equity / equity.cummax() - 1).min()
-    d = equity.pct_change().dropna()
-    sharpe = d.mean() / d.std() * np.sqrt(252) if d.std() > 0 else 0
-    out = {"total_return_pct": round(ret * 100, 2), "cagr_pct": round(cagr * 100, 2),
-           "max_drawdown_pct": round(dd * 100, 2), "sharpe": round(float(sharpe), 2)}
-    if trades is not None and len(trades):
-        out.update({"trades": int(len(trades)), "win_rate_pct": round((trades["pnl"] > 0).mean() * 100, 1),
-                    "avg_r": round(trades["r_multiple"].mean(), 3),
-                    "avg_days": round(trades["days"].mean(), 1),
-                    "profit_factor": round(trades.loc[trades.pnl > 0, "pnl"].sum()
-                                           / max(1e-9, -trades.loc[trades.pnl <= 0, "pnl"].sum()), 2)})
-    elif trades is not None:
-        out["trades"] = 0
+def context_at(t, interval, dctx, d):
+    """Context of a trade entered at candle time t. Intraday: yesterday's daily values (today's are not known
+    yet) + today's gap; day candles: that day's values (known at its close)."""
+    out = {"weekday": t.strftime("%a"), "month": t.strftime("%b"), "year": t.year}
+    if interval != "day":
+        m = t.hour * 60 + t.minute
+        out["time_of_day"] = _bucket(m, [600, 660, 720, 780, 840, 930],
+                                     ["9:15-10", "10-11", "11-12", "12-13", "13-14", "14-15:30", "14-15:30"])
+    i = d.index.get_loc(t) if t in d.index else None
+    if i is not None and i >= 20:
+        v = d["volume"].iloc[i - 20:i].mean()
+        out["rel_volume"] = _bucket(d["volume"].iloc[i] / v if v else None, [0.7, 1.5, 3], ["low", "normal", "high", "very high"])
+    if dctx is not None and len(dctx):
+        day = t.normalize()
+        known = dctx[dctx.index < day] if interval != "day" else dctx[dctx.index <= day]
+        if len(known):
+            r = known.iloc[-1]
+            out["stock_trend"] = ("above 50 & 200-day avg" if r.get("above_50d") and r.get("above_200d") else
+                                  "below 50 & 200-day avg" if not r.get("above_50d") and not r.get("above_200d") else "mixed")
+            out["volatility"] = _bucket(r.get("atr_pct"), [2, 3.5, 5], ["calm (<2%)", "normal (2-3.5%)", "wild (3.5-5%)", "very wild (>5%)"])
+            out["turnover"] = _bucket(r.get("turnover_cr"), [1, 10, 100], ["< ₹1 cr", "₹1-10 cr", "₹10-100 cr", "> ₹100 cr"])
+            if "nifty_above_50d" in r:
+                out["market"] = "NIFTY above 50-day avg" if r["nifty_above_50d"] else "NIFTY below 50-day avg"
+            if "vix" in r:
+                out["vix"] = _bucket(r["vix"], [13, 18, 25], ["< 13", "13-18", "18-25", "> 25"])
+        if interval != "day" and day in dctx.index and len(known):
+            prev = known["close"].iloc[-1]
+            gap = (dctx.at[day, "open"] / prev - 1) * 100 if prev else None
+            out["gap"] = _bucket(gap, [-1, -0.2, 0.2, 1], ["gap down > 1%", "small gap down", "flat open", "small gap up", "gap up > 1%"])
     return out
+
+
+# ----------------------------------------------------------------------------- one stock
+def simulate(sym, d, strat, settings, dctx=None):
+    """All trades of one strategy on one stock's candles -> list of dicts."""
+    if d is None or len(d) < 3:
+        return []
+    ent = strat.entries(d).fillna(False).astype(bool).values
+    ex = strat.exits(d).fillna(False).astype(bool).values
+    o, h, l, c = (d[k].values.astype(float) for k in ("open", "high", "low", "close"))
+    idx = d.index
+    intraday = strat.kind == "intraday"
+    cap = float(settings.get("capital") or 0) or 51000.0
+    lim = settings.get("risk_limits") or {}
+    trades, i, n = [], 0, len(d)
+    while i < n - 1:
+        if not ent[i] or (intraday and idx[i].strftime("%H:%M") > strat.last_entry_time):
+            i += 1
+            continue
+        if strat.entry_at == "next_open":
+            j0, px = i + 1, o[i + 1]
+            if intraday and idx[j0].normalize() != idx[i].normalize():
+                i += 1
+                continue
+        else:
+            j0, px = i + 1, c[i]
+        if not px > 0:
+            i += 1
+            continue
+        stop, tg = strat.levels(px, settings)
+        tgt = tg[-1] if tg else None
+        hi, lo, why, exit_px, j = px, px, None, None, j0
+        t1 = False
+        while j < n:
+            if intraday and (idx[j].normalize() != idx[i].normalize() or idx[j].strftime("%H:%M") >= strat.square_off_time):
+                if idx[j].normalize() != idx[i].normalize():
+                    j -= 1
+                    why, exit_px = "square-off 3:20 pm", c[j]
+                else:
+                    why, exit_px = "square-off 3:20 pm", o[j]
+                break
+            if strat.entry_at == "next_open" and j == j0:
+                pass                                       # the entry candle itself can still hit the stop/target
+            if l[j] <= stop:
+                why, exit_px = "stop-loss", min(o[j], stop)
+                lo = min(lo, l[j])
+                break
+            if tgt is not None and h[j] >= tgt:
+                why, exit_px = "target", max(o[j], tgt)
+                hi = max(hi, h[j])
+                break
+            hi, lo = max(hi, h[j]), min(lo, l[j])
+            if tg and h[j] >= tg[0]:
+                t1 = True
+            if ex[j]:
+                why, exit_px = "exit rule", c[j]
+                break
+            if strat.max_bars and j - i >= strat.max_bars:
+                why, exit_px = f"time ({strat.max_bars} candles)", c[j]
+                break
+            j += 1
+        if why is None:                                    # still open at the end of the data: not counted
+            break
+        value = min(cap * float(lim.get("risk_per_trade_pct", 1)) / 100 / max(px - stop, 1e-9) * px,
+                    cap * float(lim.get("max_order_pct", 25)) / 100)
+        qty = int(value // px)
+        cost = costs.round_trip_pct(max(qty, 1) * px, "intraday" if intraday else "delivery")
+        gross = exit_px / px - 1
+        tr = {"sym": sym, "signal": idx[i], "entry_time": idx[i] if strat.entry_at == "close" else idx[j0],
+              "entry": round(px, 2), "stop": round(stop, 2), "target": tgt, "exit_time": idx[j], "exit": round(exit_px, 2),
+              "why": why, "bars": int(j - i), "gross_pct": round(gross * 100, 3), "net_pct": round((gross - cost) * 100, 3),
+              "cost_pct": round(cost * 100, 3), "best_pct": round((hi / px - 1) * 100, 3),
+              "worst_pct": round((lo / px - 1) * 100, 3), "t1_hit": t1, "qty": qty}
+        tr.update(context_at(idx[i], strat.interval, dctx, d))
+        trades.append(tr)
+        i = j + 1
+    return trades
+
+
+def _one(args):
+    sym, name, start, end = args
+    from .strategy import load_all
+    strat = load_all()[name]
+    s = load_settings()
+    d = candles.load(sym, strat.interval, start=start, end=end)
+    if d is None or len(d) < 3:
+        return sym, None, []
+    try:
+        if getattr(strat, "needs_nifty", False):
+            d.attrs["nifty"] = candles.load("NIFTY50", strat.interval, start=start, end=end)
+        dctx = daily_context(sym, candles.load("NIFTY50", "day"), candles.load("INDIAVIX", "day"))
+        return sym, (str(d.index[0])[:16], str(d.index[-1])[:16], len(d)), simulate(sym, d, strat, s, dctx)
+    except Exception as e:
+        log.warning("Test %s %s: %s", name, sym, type(e).__name__)
+        return sym, None, []
+
+
+# ----------------------------------------------------------------------------- whole market
+def run(name, symbols=None, start=None, end=None, workers=None):
+    """Test one strategy on every stock -> (trades DataFrame, data line dict). Also writes the report."""
+    from .strategy import load_all
+    strat = load_all()[name]
+    syms = symbols or [s for s in candles.symbols(strat.interval) if s not in candles.INDICES]
+    workers = workers or max(1, min(4, os.cpu_count() or 1))
+    jobs = [(s, name, start, end) for s in syms]
+    if workers > 1:
+        from multiprocessing import get_context
+        with get_context("spawn").Pool(workers) as p:
+            res = p.map(_one, jobs, chunksize=8)
+    else:
+        res = [_one(j) for j in jobs]
+    rows, spans, missing = [], [], []
+    for sym, span, tr in res:
+        if span is None:
+            missing.append(sym)
+        else:
+            spans.append(span)
+        rows += tr
+    T = pd.DataFrame(rows)
+    data = {"source": "Kite Connect historical candles (nothing else)", "interval": strat.interval,
+            "stocks_tested": len(spans), "stocks_without_kite_candles": len(missing),
+            "first": min((s[0] for s in spans), default=None), "last": max((s[1] for s in spans), default=None),
+            "candles": int(sum(s[2] for s in spans)), "splits": "clear splits/bonuses found in Kite's own daily candles",
+            "delisted": "not included (Kite lists only today's stocks)"}
+    TESTS.mkdir(parents=True, exist_ok=True)
+    if len(T):
+        T.to_parquet(TESTS / f"{name}.parquet")
+    report(name, strat, T, data)
+    return T, data
+
+
+def stats(T):
+    if T is None or not len(T):
+        return None
+    n = T["net_pct"]
+    w, ls = n[n > 0], n[n <= 0]
+    return {"trades": int(len(T)), "win_pct": round(float((n > 0).mean() * 100), 1),
+            "avg_net_pct": round(float(n.mean()), 3), "avg_win_pct": round(float(w.mean()), 2) if len(w) else None,
+            "avg_loss_pct": round(float(ls.mean()), 2) if len(ls) else None,
+            "profit_factor": round(float(w.sum() / -ls.sum()), 2) if len(ls) and ls.sum() < 0 else None,
+            "stop_hit_pct": round(float((T["why"] == "stop-loss").mean() * 100), 1),
+            "target_hit_pct": round(float((T["why"] == "target").mean() * 100), 1),
+            "avg_bars": round(float(T["bars"].mean()), 1)}
+
+
+def account(T, settings=None):
+    """Money result if every trade had been taken in order, with the owner's sizing and cash limit."""
+    s = settings or load_settings()
+    cap0 = float(s.get("capital") or 0) or 51000.0
+    if T is None or not len(T):
+        return None
+    E = T.sort_values("entry_time")
+    cash, open_, eq_pts, taken, skipped = cap0, [], [], 0, 0
+    for r in E.itertuples():
+        for x in [x for x in open_ if x[0] <= r.entry_time]:
+            cash += x[1]
+            open_.remove(x)
+        value = r.qty * r.entry
+        if r.qty < 1 or value > cash:
+            skipped += 1
+            continue
+        cash -= value
+        open_.append((r.exit_time, value * (1 + r.net_pct / 100)))
+        taken += 1
+        eq_pts.append(cash + sum(x[1] for x in open_))
+    end = cash + sum(x[1] for x in open_)
+    eq = pd.Series(eq_pts) if eq_pts else pd.Series([cap0])
+    dd = float((eq / eq.cummax() - 1).min() * 100)
+    years = max((E["exit_time"].max() - E["entry_time"].min()).days / 365.25, 0.01)
+    return {"start": cap0, "end": round(end), "taken": taken, "skipped_no_cash": skipped,
+            "per_year_pct": round(((end / cap0) ** (1 / years) - 1) * 100, 1) if end > 0 else -100.0,
+            "worst_fall_pct": round(dd, 1), "years": round(years, 1)}
+
+
+def data_line(data):
+    return (f"Data: {data['source']} - {data['interval']} candles, {data['stocks_tested']:,} stocks, "
+            f"{data['first']} to {data['last']}, {data['candles']:,} candles; {data['stocks_without_kite_candles']:,} "
+            f"stocks had no Kite candles; splits/bonuses: {data['splits']}; delisted stocks: {data['delisted']}. "
+            "Yahoo: not used.")
+
+
+def report(name, strat, T, data):
+    OUT.mkdir(parents=True, exist_ok=True)
+    L = [f"# Test: {name} (v{strat.version}) - {pd.Timestamp.now(tz='Asia/Kolkata'):%d %b %Y %H:%M} IST", "",
+         f"**{data_line(data)}**", "",
+         f"Rules: {strat.description or '(see swing/strategies/' + name + '.py)'}", "",
+         f"Interval {strat.interval}, {strat.kind}; entry at the {'signal candle close' if strat.entry_at == 'close' else 'next open'}; "
+         f"stop {strat.stop_fraction() * 100:.1f}% below entry; targets {', '.join(f'{r}R' for r in strat.targets_r) or 'none'}; "
+         f"costs: Zerodha {strat.kind} charges + 0.15% slippage each side.", ""]
+    if T is None or not len(T):
+        L.append("No trades.")
+    else:
+        cut = T["entry_time"].max() - pd.DateOffset(years=HOLDOUT_YEARS)
+        parts = [("All", T), (f"Before {cut:%b %Y}", T[T["entry_time"] < cut]), (f"Recent {HOLDOUT_YEARS} years", T[T["entry_time"] >= cut])]
+        L += ["| Period | Trades | Win % | Avg after costs | Avg win | Avg loss | Profit factor | Stop hit | Target hit | Avg candles |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
+        for lab, P in parts:
+            s = stats(P)
+            if s:
+                L.append(f"| {lab} | {s['trades']:,} | {s['win_pct']} | {s['avg_net_pct']:+.2f}% | {s['avg_win_pct']}% | "
+                         f"{s['avg_loss_pct']}% | {s['profit_factor']} | {s['stop_hit_pct']}% | {s['target_hit_pct']}% | {s['avg_bars']} |")
+        a = account(T)
+        if a:
+            L += ["", f"Account (every trade in order, ₹{a['start']:,.0f}, owner's sizing, cash limit): ₹{a['end']:,.0f} after "
+                      f"{a['years']} years ({a['per_year_pct']:+.1f}% a year), worst fall {a['worst_fall_pct']}%, "
+                      f"{a['taken']:,} trades taken, {a['skipped_no_cash']:,} skipped (no free cash). Before tax."]
+        y = T.groupby(T["entry_time"].dt.year)["net_pct"].agg(["count", "mean", lambda x: (x > 0).mean() * 100])
+        L += ["", "| Year | Trades | Avg after costs | Win % |", "|---|---|---|---|"] + \
+             [f"| {k} | {int(r['count']):,} | {r['mean']:+.2f}% | {r['<lambda_0>']:.0f} |" for k, r in y.iterrows()]
+        L += ["", "Why trades ended: " + ", ".join(f"{k} {v}" for k, v in T["why"].value_counts().items()),
+              "", "The Learner's breakdown (where it works and where it does not): results/learner/" + name + ".md"]
+    (OUT / f"{name}.md").write_text("\n".join(L) + "\n")
+    json.dump({"name": name, "version": strat.version, "data": data, "all": stats(T), "account": account(T) if len(T) else None},
+              open(OUT / f"{name}.json", "w"), indent=1, default=str)
+    return L

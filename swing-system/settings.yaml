@@ -1,86 +1,26 @@
 # ============================================================
-#  YOUR SETTINGS  (safe to edit in Notepad; keep the spacing)
+#  ATLAS SETTINGS (rebuilt 20 Nov 2026 - owner: start again, Kite data only)
 # ============================================================
 
-# Your trading capital in rupees.
+# Your trading money in rupees (change with /capital in Telegram). 0 = no quantities are suggested.
 capital: 51000
 
-# KILL SWITCH: change "false" to "true" to stop ALL tips immediately.
+# KILL SWITCH: true stops ALL tips immediately (also /stop and /resume in Telegram).
 kill_switch: false
 
-# TIPS MODE
-#   validated  = tips only when a strategy passes the strict validation gate (safest; currently none passes)
-#   aggressive = you asked for daily ideas anyway: uses the best strategy the system can find today,
-#                clearly labelled NOT validated, with hard safety brakes (see DECISIONS.md D52-D55)
-# Owner's reset on 2026-11-11: system tips before this day are retired (archived in journal/tips_retired.csv).
-tips_start_date: "2026-11-11"
-tips_mode: aggressive
-# Live engine (D95): only trades ranked at least this (1-10) are sent; no daily cap (owner's choice).
-# D98 (owner wants 7-8 of 10 tips in profit): main tips = high-probability dip buy (about 70% winners in tests).
-# Intraday tips only once a setup PROVES >= 65% winners over >= 40 live results ("auto"); "off" = never.
-# D100: the bot replies to forwarded tips/messages (F&O: probability /10 + reasons; others: short note)
-reply_to_forwarded: true
-intraday_mode: auto   # audit 17 Nov (owner's mission: experimental strategies stay in shadow until proven): a setup
-                      # sends intraday/F&O tips only after >= 40 live followed results with >= 65% winners and a
-                      # positive average. Set 'on' to receive them anyway (EXPERIMENTAL, unproven after costs).
-normal_a3_tips: false   # the older a3 swing tips won only ~53% of trades
-min_rank: 8   # raise to 9 for even fewer, stronger tips
-# Owner's choice 2026-11-11: live intraday tips (aggressive). Only setups passing the Kite-history test keep
-# sending (DECISIONS D94). Max tips a day, none after 2:30 pm.
-intraday_tips: true    # owner's choice 2026-11-14 (D106)
-intraday_max_tips: 0    # 0 = no daily limit
-aggressive_strategy: a3
-# Stop ALL aggressive tips if their total result reaches this loss (% of capital).
-aggressive_hard_stop_pct: 20
+# Default stop-loss for every strategy: 1% below the entry (owner 20 Nov). A strategy can only change it if
+# the owner says so.
+stop_loss_pct: 1.0
 
-# "paper" = tips are recorded and tracked but you should NOT trade real money yet.
-# The system stays in paper mode for at least paper_weeks after paper_start_date.
-mode: live
-paper_start_date: 2026-11-02
-paper_weeks: 0
-
-# Optional: Telegram alerts. Paste your bot token and chat id between the quotes.
-telegram_bot_token: ""
-telegram_chat_id: ""
-
-# Which strategy version is live (managed by the weekly improvement job).
-live_strategy: v1
-
-# Safety limits for order tickets and recorded trades (owner's choice: standard).
+# Quantity limits (unchanged from before): the loss at the stop is at most risk_per_trade_pct of capital and one
+# position at most max_order_pct of capital - whichever gives the smaller quantity.
 risk_limits:
-  risk_per_trade_pct: 1      # max loss at the stop per trade (% of capital)
-  daily_loss_pct: 2          # no new trades after losing this much in a day
-  max_trades_per_day: 0      # 0 = no limit on the number of trades (owner's choice D106)
-  max_order_pct: 25          # no single order above this share of capital
+  risk_per_trade_pct: 1
+  max_order_pct: 25
+  daily_loss_pct: 2
 
-# D104 positional trades (Rolling Candle Profile BUY near the 52-week high; exit on its SELL signal)
-positional_tips: true
-breakout_tips: true          # D118: 52-week-high + tight-range breakouts (passed the pre-registered 13-year test)
-vantage_scanner: true        # owner 17 Nov: VANTAGE INDICATOR signals for every NSE stock -> Telegram (3:40 pm)
-vantage_min_turnover_cr: 2    # D121: VANTAGE BUYs only for stocks trading >= Rs 2 crore/day (tested: thinner stocks weaker)
-vantage_universe: top300      # round 26 + D144 (owner yes 19 Nov): VANTAGE BUYs only for the monthly top-300 by money traded
-atlas_brief: true            # one ATLAS plan at 3:22 pm: ranked opportunities, avoid list, or "No trade today"
-auto_research: true          # weekly automatic research on GitHub (Friday night); proposals need your /approve
-vantage_live: true           # D120: live VANTAGE alerts during market hours (every ~3 min, confirmed/cancelled at the close)
-positional_max_new: 0        # 0 = no limit (owner's choice D106)
-positional_max_open: 0       # 0 = no limit
+# Strategies that may send live tips. A strategy is added here only after its Kite test and the owner's yes.
+live_strategies: []
 
-# Audit 17 Nov: the learning loops may only PROPOSE strategy switches; true = apply them automatically.
-allow_auto_promotion: false
-
-# D110 AI picks (market-wide machine-learning ranker, 10-day hold; retrained weekly)
-ai_picks: false     # owner 17 Nov: switched off (small edge after costs, BACKTEST_VALIDATION.md); open AI tips still get exit alerts
-ai_top: 5            # new AI picks per evening at most
-ai_max_open: 10      # open AI picks at once at most
-
-# Round 3 (18 Nov): ~3:20 pm "BUY NOW - before the close" alert for VANTAGE signals (buying at the close earned more
-# than buying the next morning in the 13-year test).
-vantage_close_call: true
-# Round 4 (18 Nov): monthly basket of the 20 strongest NSE stocks, sent after the last trading day of each month.
-monthly_basket: true
-# Money for the basket (rupees). 0 = list without quantities. Telegram /basket 20000 also sets it.
-basket_capital: 0
-# Round 13 (18 Nov, owner approved): "ADD MORE" when a VANTAGE trend trade is up 8%+ after 15 trading days.
-vantage_add_to_winners: true
-# D139 (18 Nov, owner approved): never send a stock again while it already has an open tip from any channel.
-no_repeat_tips: true
+# Keep the GitHub runs going all day (scripts/keep_alive.py).
+keep_alive: true

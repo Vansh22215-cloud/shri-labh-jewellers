@@ -1341,3 +1341,28 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - The full re-run of every past backtest (`kite_rerun`, all 19 steps, strict Kite, delisted left out, compared with the preserved Yahoo baseline), the weekly research and the Kite re-check start only when it is true. Weekends are allowed for the re-run.
 - The download job is now the lowest-priority daemon job: every other job (re-run, research, nightly, basket, weekly) goes first.
 - The re-run report shows the data coverage first, then the results. Nothing live changes without the owner's yes.
+
+## D162 - 2026-11-20 - ATLAS rebuilt from zero (owner: "remove all other things... we will rewrite everything from start")
+- **Removed** (git history keeps the code):
+  - VANTAGE (indicator, Pine files, every scan and alert), RCP, dip-buy, breakout, pullback;
+  - the live engine, evening tips, intraday paper trading, F&O tips, basket, company of the day;
+  - the forwarded-tip checker, chart reader, morning brief and filings alerts;
+  - the Foundry, the lab and auto-research, the old Learner and why-engine, scorecards;
+  - every old research script and result, all old documents (~600 files);
+  - Yahoo from the code and requirements.
+- **Old data on GitHub's cache** is deleted once by `swing/reset.py`: Yahoo prices, NSE bhavcopy rebuilds, delisted stocks, old research data, quote-built daily files.
+  - Kept: Kite candles already downloaded, the Kite login pass, the Telegram message position, NSE filings.
+  - Old personal records (old tips, VANTAGE signals, trades) are moved to `data/private/old_system`, not deleted, until the owner says so.
+- **Kept**: Kite login and read-only data access, Telegram, the always-on runner and keep-alive, the kill switch, Zerodha costs, NSE company financials (D160, not used by anything yet).
+- **New**:
+  - candle library for EVERY NSE stock at 1 day, 60, 15, 5 and 1 minute, all Kite has (3/10/30-minute derived);
+  - the live streaming feed of every stock with live candles at every interval;
+  - the strategy framework with the owner's default 1% stop-loss;
+  - the tester (Kite only);
+  - the Learner (where, how and why each strategy works or fails; suggestions only);
+  - live tips with exit alerts for approved strategies only;
+  - bot commands /test /learn /approve /unapprove /stop /resume.
+- **Sizing unchanged**: at most 1% of capital lost at the stop and at most 25% of capital in one position. With a 1% stop the 25% cap decides (₹12,750 of ₹51,000, max loss ≈ ₹128 before costs).
+- **Storage limit**: the free GitHub cache holds 10 GB per repository. Downloads pause at 4 GB and the owner is shown "storage limit reached". All NSE stocks at 1-minute for every year Kite has will very likely not fit; where to keep more is the owner's decision (anything paid needs his approval).
+- **Live feed**: Kite WebSocket, read-only. Quote mode, IST receive time for the minute; the evening download replaces today's live candles with Kite's official ones. A new GitHub run during the day refills missed minutes from Kite's own 1-minute candles.
+- **Not yet proven on GitHub**: the live feed and the full-market download have only been tested with simulated Kite data here (the Kite keys exist only on GitHub). The first market day is the real check; /status and the 3:45 pm message show it.

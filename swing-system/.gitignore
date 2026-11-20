@@ -6,7 +6,4 @@ __pycache__/
 .pytest_cache/
 logs/*.out
 my_secrets.yaml
-!data/universe_history.csv
-!data/quarantine.json
-!data/no_yahoo_data.json
 reports/

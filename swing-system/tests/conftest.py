@@ -8,75 +8,55 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import logging  # noqa: E402
-# Tests must never write into the real logs/system.log (the daily report summarises that file).
 logging.getLogger("swing").addHandler(logging.NullHandler())
-
-from swing.config import load_strategy  # noqa: E402
-
-
-@pytest.fixture
-def params():
-    return load_strategy("v1")
-
-
-def synthetic_panel(n_sym=30, n_days=420, seed=1):
-    rng = np.random.default_rng(seed)
-    idx = pd.bdate_range("2020-01-01", periods=n_days)
-    syms = [f"S{i}" for i in range(n_sym)]
-    drift = rng.normal(0.0006, 0.0006, n_sym)
-    rets = rng.normal(drift, 0.018, (n_days, n_sym))
-    close = pd.DataFrame(100 * np.exp(np.cumsum(rets, axis=0)), index=idx, columns=syms)
-    op = close.shift(1).fillna(close) * (1 + rng.normal(0, 0.004, close.shape))
-    high = np.maximum(op, close) * (1 + np.abs(rng.normal(0, 0.006, close.shape)))
-    low = np.minimum(op, close) * (1 - np.abs(rng.normal(0, 0.006, close.shape)))
-    vol = pd.DataFrame(rng.integers(1e5, 5e5, close.shape), index=idx, columns=syms).astype(float)
-    deliv = pd.DataFrame(rng.uniform(20, 80, close.shape), index=idx, columns=syms)
-    P = {"open": op, "high": high, "low": low, "close": close, "volume": vol, "raw_close": close, "deliv": deliv,
-         "results_day": pd.DataFrame(rng.random(close.shape) < 0.02, index=idx, columns=syms),
-         "eps_growth": pd.DataFrame(rng.normal(0.2, 0.3, close.shape), index=idx, columns=syms)}
-    nifty = close.mean(axis=1)
-    mask = pd.DataFrame(True, index=idx, columns=syms)
-    return P, nifty, mask
-
-
-@pytest.fixture
-def panel():
-    return synthetic_panel()
-import pytest
 
 
 @pytest.fixture(autouse=True)
 def _clean_job_environment(monkeypatch):
     """The self-tests run inside a GitHub job: never let that job's own settings change test results."""
-    for k in ("SWING_CLAIMED", "SWING_RESEARCH_BUDGET", "SWING_DAEMON_MINUTES", "GITHUB_ACTIONS", "GH_TOKEN",
-              "GITHUB_RUN_ID", "GITHUB_REF_NAME", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
+    for k in ("SWING_CLAIMED", "SWING_DAEMON_MINUTES", "GITHUB_ACTIONS", "GH_TOKEN", "GITHUB_RUN_ID",
+              "GITHUB_REF_NAME", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID", "KITE_API_KEY", "KITE_API_SECRET"):
         monkeypatch.delenv(k, raising=False)
-    from swing import journal
-    monkeypatch.setattr(journal, "tips_start", lambda: "")      # the owner's tip reset date never affects tests
 
 
 @pytest.fixture(autouse=True)
-def _isolate_runtime_state(tmp_path, monkeypatch):
-    """Audit 17 Nov: no test may touch the real tip store, safety state, outbox or skipped-signal log."""
-    from swing import live_engine, safety, telegram, autopilot
-    monkeypatch.setattr(live_engine, "TIPS_F", tmp_path / "live_tips.csv")
-    monkeypatch.setattr(live_engine, "BACKUP_F", tmp_path / "live_tips.bak")
-    monkeypatch.setattr(safety, "STATE_F", tmp_path / "safety.json")
-    monkeypatch.setattr(safety, "SKIPPED_F", tmp_path / "skipped.csv")
+def _isolate(tmp_path, monkeypatch, request):
+    """No test touches real records, the candle library, Telegram or Kite."""
+    from swing import candles, kite, telegram, tips, daemon, backtest, learner, backup
     monkeypatch.setattr(telegram, "_outbox", lambda: tmp_path / "outbox.jsonl")
-    monkeypatch.setattr(autopilot, "STATE_F", tmp_path / "autopilot.json")
-    yield
-
-
-@pytest.fixture(autouse=True)
-def _never_touch_real_private_records(tmp_path, monkeypatch):
-    """19 Nov 2026: a test wrote fake signals into data/private/vantage_rejected.csv - every test now writes the
-    rejected / blocked-repeat / research-rule records into its own temporary folder."""
-    from swing import vantage, registry, lab_rules, kite, telegram
-    monkeypatch.setattr(vantage, "REJ_F", tmp_path / "_rejected.csv")
     monkeypatch.setattr(kite, "UNAVAIL_F", tmp_path / "_kite_unavailable.json")
-    if not hasattr(kite, "_real_report_unavailable"):
-        kite._real_report_unavailable = kite.report_unavailable
-    monkeypatch.setattr(kite, "report_unavailable", lambda *a, **k: False)   # 20 Nov: never reaches Telegram
-    monkeypatch.setattr(registry, "SUPP", tmp_path / "_suppressed.csv")
-    monkeypatch.setattr(lab_rules, "RULES_F", tmp_path / "_lab_rules.json")
+    monkeypatch.setattr(kite, "report_unavailable", lambda *a, **k: False)
+    monkeypatch.setattr(candles, "BASE", tmp_path / "candles")
+    monkeypatch.setattr(candles, "STATE_F", tmp_path / "candles" / "state.json")
+    monkeypatch.setattr(candles, "REPORT", tmp_path / "candle_library.md")
+    monkeypatch.setattr(tips, "TIPS_F", tmp_path / "tips.csv")
+    monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs_done.json")
+    monkeypatch.setattr(daemon, "TEST_QUEUE", tmp_path / "test_queue.json")
+    monkeypatch.setattr(backtest, "TESTS", tmp_path / "tests")
+    monkeypatch.setattr(backtest, "OUT", tmp_path / "results_tests")
+    monkeypatch.setattr(learner, "OUT", tmp_path / "results_learner")
+    monkeypatch.setattr(learner, "PRIVATE", tmp_path)
+    monkeypatch.setattr(backup, "PRIVATE", tmp_path / "private")
+    monkeypatch.setattr(backup, "HASH_F", tmp_path / "backup_hash.txt")
+    sent = []
+    if "test_telegram_send" not in request.node.module.__name__:
+        monkeypatch.setattr(telegram, "send", lambda s, text, html=False, label="message": sent.append((label, text)) or "Telegram message sent")
+    request.node.sent = sent
+    yield sent
+
+
+def candles_frame(start="2024-01-01 09:15", n=300, freq="15min", seed=1, intraday=True):
+    """Synthetic candles (trading hours only when intraday)."""
+    rng = np.random.default_rng(seed)
+    if intraday:
+        days = pd.bdate_range(pd.Timestamp(start).normalize(), periods=n // 25 + 2)
+        idx = [d + pd.Timedelta(minutes=15 + i * 15) for d in days for i in range(25)][:n]
+        idx = pd.DatetimeIndex([d + pd.Timedelta(hours=9) for d in idx])
+    else:
+        idx = pd.bdate_range(start, periods=n)
+    c = 100 * np.exp(np.cumsum(rng.normal(0.0002, 0.006, len(idx))))
+    o = np.r_[c[0], c[:-1]]
+    h = np.maximum(o, c) * (1 + np.abs(rng.normal(0, 0.002, len(idx))))
+    l = np.minimum(o, c) * (1 - np.abs(rng.normal(0, 0.002, len(idx))))
+    return pd.DataFrame({"open": o, "high": h, "low": l, "close": c, "volume": rng.integers(1e4, 1e5, len(idx)).astype(float)},
+                        index=pd.DatetimeIndex(idx, name="date"))

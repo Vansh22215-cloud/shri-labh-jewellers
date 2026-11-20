@@ -40,3 +40,26 @@ def sell_cost(value):
 def fill_price(price, side):
     """Price after slippage: buys fill higher, sells fill lower."""
     return price * (1 + SLIPPAGE_PCT) if side == "buy" else price * (1 - SLIPPAGE_PCT)
+
+
+# ----------------------------------------------------------------------------- intraday (MIS) - same source
+INTRADAY_BROKERAGE_PCT = 0.0003      # 0.03% or Rs 20 per order, whichever is lower
+INTRADAY_STT_SELL = 0.00025          # 0.025% on the sell side only
+INTRADAY_STAMP_BUY = 0.00003         # 0.003% on the buy side
+
+
+def intraday_cost(buy_value, sell_value):
+    """Rupee charges for one intraday round trip (buy then sell the same day), excluding slippage."""
+    br = min(20.0, buy_value * INTRADAY_BROKERAGE_PCT) + min(20.0, sell_value * INTRADAY_BROKERAGE_PCT)
+    exch = (buy_value + sell_value) * EXCHANGE
+    sebi = (buy_value + sell_value) * SEBI
+    return round(br + sell_value * INTRADAY_STT_SELL + exch + sebi + buy_value * INTRADAY_STAMP_BUY
+                 + GST * (br + exch + sebi), 2)
+
+
+def round_trip_pct(value, kind="delivery", slippage=SLIPPAGE_PCT):
+    """All charges + slippage of one round trip as a fraction of the trade value (for a trade worth `value`)."""
+    if value <= 0:
+        return 0.0
+    ch = intraday_cost(value, value) if kind == "intraday" else buy_cost(value) + sell_cost(value)
+    return ch / value + 2 * slippage

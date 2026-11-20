@@ -8,8 +8,8 @@ Daily login (Zerodha requires a human login every day; automated login is not al
   kite-login.html -> it forwards to t.me/<bot>?start=kite_<request_token> -> owner taps Start -> exchange()
   swaps the one-time request token (useless without the secret) for the day's access token.
 The access token is stored ENCRYPTED (key derived from the API secret) in data/private/kite_token.bin and expires
-at 06:00 IST next day. No token, an expired one, or any Kite error -> callers fall back to Yahoo prices.
-Order placement is NOT implemented (no static IP; tickets only).
+at 06:00 IST next day. No token, an expired one, or any Kite error -> no data, no tips (Kite is the only price
+source; owner 20 Nov). Order placement is NOT implemented and never will be: read-only market data only.
 """
 import base64
 import hashlib
@@ -204,7 +204,7 @@ def quotes(symbols):
             fails += 1
             log.debug("Kite quote parse failed: %s", type(e).__name__)
     if fails:
-        log.warning("Kite quotes: %d of %d batch(es) failed - those stocks use Yahoo / are skipped this round",
+        log.warning("Kite quotes: %d of %d batch(es) failed - those stocks are skipped this round",
                     fails, (len(syms) + 499) // 500)
     return out
 
@@ -231,9 +231,27 @@ def instruments():
     if INSTR_F.exists() and (datetime.now().timestamp() - INSTR_F.stat().st_mtime) < 20 * 3600:
         return pd.read_csv(INSTR_F)
     r = _get("/instruments/NSE", timeout=60)
-    df = pd.read_csv(io.StringIO(r.text))[["instrument_token", "tradingsymbol", "name", "segment", "lot_size"]]
+    df = pd.read_csv(io.StringIO(r.text))[["instrument_token", "tradingsymbol", "name", "segment", "instrument_type",
+                                           "lot_size", "tick_size"]]
     df.to_csv(INSTR_F, index=False)
     return df
+
+
+def equity_symbols():
+    """Every NSE stock Kite lists today (EQ instruments, normal series - no -BE/-SM/bond/ETF-units suffixes)."""
+    try:
+        ins = instruments()
+    except Exception:
+        return []
+    if "instrument_type" not in ins.columns:
+        try:
+            INSTR_F.unlink()
+            ins = instruments()
+        except Exception:
+            return []
+    e = ins[(ins["segment"] == "NSE") & (ins["instrument_type"] == "EQ")]
+    e = e[~e["tradingsymbol"].astype(str).str.contains("-") & e["name"].notna()]
+    return sorted(set(e["tradingsymbol"].astype(str)))
 
 
 def historical(sym, interval="5minute", days=30):

@@ -1,600 +1,300 @@
-"""Telegram bot: forward any stock tip to your bot and it replies GOOD / RISKY / AVOID within seconds.
+"""Telegram bot of the rebuilt ATLAS. Answers ONLY the owner's chat. Never places orders, never asks for broker logins.
 
-Security: the bot ONLY answers the owner's chat (telegram_chat_id in my_secrets.yaml). Messages from
-anyone else are ignored. It never places orders and never asks for broker logins.
-Runs continuously (Windows: starts at log-on via Task Scheduler). Telegram keeps unread messages
-for ~24 hours, so tips forwarded while the PC was off are answered when it comes back on.
-"""
+Commands:
+  /kite            the Kite login link (also sent at 8:45 am on weekdays)
+  /status          Kite login, live feed, candle library, live strategies, kill switch
+  /capital [N]     show / set your trading money (quantities follow it)
+  /stop, /resume   kill switch: no new tips / tips again (exit alerts for open tips always go out)
+  /tips            open tips
+  /strategies      every strategy written so far: tested? live?
+  /test NAME       test a strategy on Kite data (runs outside market hours; the result comes here)
+  /learn NAME      the Learner's summary for a strategy
+  /approve NAME    let a TESTED strategy send live tips (your decision); /unapprove NAME stops it
+Forward a backup file the system sent you to restore it."""
 import json
-import os
+import re
 import time
 
 import pandas as pd
-
-import re
-
 import requests
 
-from . import tipcheck
-from .config import DATA, PRIVATE, DISCLAIMER, REPORTS, ROOT, get_logger, load_settings, load_state
+from .config import DATA, RESULTS, ROOT, DISCLAIMER, get_logger, load_settings
 
 log = get_logger()
 OFFSET = DATA / "bot_offset.txt"
-HELP = ("Forward me any stock tip (from a channel, group or friend) and I'll check it against real prices:\n"
-        "• GOOD / RISKY / AVOID with reasons\n• the odds from that stock's own 5-year history vs what you need "
-        "after Zerodha charges\n• red flags: no stop-loss, pump-and-dump stocks, results, trend\n\n"
-        "You can also type a tip, e.g.  BUY TATASTEEL 175 SL 170 TGT 185\n"
-        "Index, forex, gold, crude and crypto views/setups work too (Nifty, Bank Nifty, Sensex, EURUSD, USDINR, "
-        "XAUUSD, BTC ...), e.g. 'Nifty weakness only below 24290' or 'XAUUSD BUY 2650 SL 2640 TP 2670'. "
-        "I track every one and message you when it is right, wrong or runs out of time.\n"
-        "/report - tonight's report summary\n/score - how forwarded tips have actually turned out\n"
-        "/bought SYMBOL - you bought the system's tip (only bought tips count toward your risk limits)\n"
-        "/skip SYMBOL - you did not take that tip\n"
-        "/capital - your trading money now; /capital 60000 - update it (do this once a month, quantities follow)\n"
-        "/basket - this month's basket of the 20 strongest stocks; /basket 20000 - money for it (adds quantities)\n"
-        "/bought SYMBOL QTY PRICE [STOP] - record your own trade (e.g. /bought ICICIBANK 5 1425 1340)\n"
-        "/sold SYMBOL [PRICE] - record that you sold it\n/trades - your open trades\n"
-        "Order tickets: tap ✅ I placed it after placing a ticket in the Kite app (records it for you).\n"
-        "/tips - every open tip the system sent you (entry, SL, how to exit)\n"
-        "/health - is everything running? what ran today and why there were (no) tips\n"
-        "/approve S1 - let a strategy the system discovered and proved start sending tips\n"
-        "/research - the automatic weekly research: what it tested, what passed; /approve LAB-xxxx or /decline LAB-xxxx\n"
-        "/status - is Kite connected, live test price, last alert check\n/kite - get a Kite login link now\n"
-        "Every morning ~8:45 I send a Kite login link - one tap keeps live Zerodha prices on for the day.\n\n"
-        + DISCLAIMER)
+HELP = ("ATLAS - your strategies, tested on Kite data, scanned live on every NSE stock.\n\n"
+        "/status - is everything running\n/kite - Kite login link\n/capital - your trading money; /capital 60000 to change\n"
+        "/stop - no new tips; /resume - tips again\n/tips - open tips\n/strategies - your strategies: tested? live?\n"
+        "/test NAME - test a strategy on Kite history\n/learn NAME - where and why it works or fails\n"
+        "/approve NAME - let a tested strategy send live tips; /unapprove NAME - stop it\n\n" + DISCLAIMER)
+TOKEN_REFUSED_SINCE = None
+_READ_FAIL_SINCE = None
+
+
+# ----------------------------------------------------------------------------- settings edits (owner only)
+def _settings_text():
+    return (ROOT / "settings.yaml").read_text(encoding="utf-8")
+
+
+def _settings_write(txt):
+    p = ROOT / "settings.yaml"
+    tmp = p.with_suffix(".tmp")
+    tmp.write_text(txt, encoding="utf-8")
+    tmp.replace(p)
 
 
 def capital_command(text):
-    """/capital -> show; /capital 60000 -> set the trading money in settings.yaml (owner, monthly). Bounds keep a typo
-    from creating huge quantities; the 1% risk and 25% cap stay unchanged."""
-    import re
-    from .config import load_settings
     parts = text.replace(",", "").split()
     cur = float(load_settings().get("capital") or 0)
     if len(parts) < 2:
-        return f"Trading money now: ₹{cur:,.0f}. To change it: /capital 60000 (your account value today)."
+        return f"Trading money now: ₹{cur:,.0f}. To change it: /capital 60000"
     try:
         amt = int(float(parts[1].replace("₹", "")))
     except ValueError:
         return "Use: /capital 60000"
     if not 10000 <= amt <= 10_000_000:
         return "Please give an amount between ₹10,000 and ₹1 crore."
-    if cur and not 0.5 * cur <= amt <= 2 * cur:
-        if len(parts) < 3 or parts[2].lower() != "sure":
-            return (f"That is a big change from ₹{cur:,.0f} to ₹{amt:,.0f}. If it is right, send: /capital {amt} sure")
-    p = ROOT / "settings.yaml"
-    txt = p.read_text(encoding="utf-8")
-    new, n = re.subn(r"(?m)^capital:\s*[0-9.]+", f"capital: {amt}", txt, count=1)
+    if cur and not 0.5 * cur <= amt <= 2 * cur and (len(parts) < 3 or parts[2].lower() != "sure"):
+        return f"That is a big change from ₹{cur:,.0f} to ₹{amt:,.0f}. If it is right, send: /capital {amt} sure"
+    new, n = re.subn(r"(?m)^capital:\s*[0-9.]+", f"capital: {amt}", _settings_text(), count=1)
     if n != 1:
         return "Could not find the capital line in settings.yaml - nothing changed."
-    p.write_text(new, encoding="utf-8")
-    log.info("Capital updated by the owner")
-    return (f"✅ Trading money set to ₹{amt:,.0f} (was ₹{cur:,.0f}). New tips are sized on it: max loss per trade "
-            f"≈ ₹{amt * 0.01:,.0f} (1%). Open tips keep their quantities.")
+    _settings_write(new)
+    return f"✅ Trading money set to ₹{amt:,.0f} (was ₹{cur:,.0f}). New tips are sized on it; open tips keep theirs."
 
 
+def kill_command(on):
+    new, n = re.subn(r"(?m)^kill_switch:\s*\w+", f"kill_switch: {'true' if on else 'false'}", _settings_text(), count=1)
+    if n != 1:
+        return "Could not find the kill_switch line in settings.yaml - nothing changed."
+    _settings_write(new)
+    return ("⛔ Kill switch ON: no new tips. Exit alerts for open tips still come. /resume to start again." if on else
+            "✅ Kill switch OFF: approved strategies send tips again.")
+
+
+def _live_list(names):
+    new, n = re.subn(r"(?m)^live_strategies:.*$", "live_strategies: [" + ", ".join(names) + "]", _settings_text(), count=1)
+    if n != 1:
+        new = _settings_text().rstrip() + "\nlive_strategies: [" + ", ".join(names) + "]\n"
+    _settings_write(new)
+
+
+def approve_command(text, on=True):
+    from .strategy import load_all
+    parts = text.split()
+    if len(parts) < 2:
+        return "Use: /approve NAME (see /strategies)"
+    name = parts[1].strip()
+    S = load_all()
+    live = list(load_settings().get("live_strategies") or [])
+    if on:
+        if name not in S:
+            return f"No strategy called {name}. /strategies lists them."
+        if not (RESULTS / "tests" / f"{name}.json").exists():
+            return f"{name} has not been tested on Kite data yet - send /test {name} first."
+        if name in live:
+            return f"{name} already sends live tips."
+        _live_list(live + [name])
+        return f"✅ {name} approved by you: it sends live tips from the next market candle (stop {S[name].stop_fraction() * 100:.1f}%)."
+    if name not in live:
+        return f"{name} is not live."
+    _live_list([x for x in live if x != name])
+    return f"⏹ {name} stopped: no more live tips from it (open tips are still watched until they close)."
+
+
+def strategies_text():
+    from .strategy import load_all
+    S = load_all()
+    live = set(load_settings().get("live_strategies") or [])
+    if not S:
+        return "No strategies yet - tell me your first one and I will write and test it on Kite data."
+    L = ["Your strategies:"]
+    for k, st in S.items():
+        f = RESULTS / "tests" / f"{k}.json"
+        res = ""
+        if f.exists():
+            a = (json.loads(f.read_text()).get("all") or {})
+            res = f" - tested: {a.get('trades', 0):,} trades, {a.get('win_pct')}% won, avg {a.get('avg_net_pct', 0):+.2f}% after costs"
+        else:
+            res = " - not tested yet"
+        L.append(f"• {k} ({st.interval}, {st.kind}){res}{' - 🟢 LIVE' if k in live else ''}")
+    return "\n".join(L)
+
+
+def test_command(text):
+    from .daemon import TEST_QUEUE
+    from .strategy import load_all
+    parts = text.split()
+    if len(parts) < 2:
+        return "Use: /test NAME (see /strategies)"
+    name = parts[1]
+    if name not in load_all():
+        return f"No strategy called {name}."
+    try:
+        q = json.loads(TEST_QUEUE.read_text())
+    except Exception:
+        q = []
+    if name not in q:
+        q.append(name)
+        TEST_QUEUE.write_text(json.dumps(q))
+    from .candles import complete, progress
+    iv = load_all()[name].interval
+    wait = "" if complete(iv) else (f" Kite {iv} history is still downloading ({progress().get(iv)} stocks done) - "
+                                    "the test starts by itself when it is complete.")
+    return (f"🧪 {name} queued for its test on Kite history (every NSE stock). It runs outside market hours; the "
+            "result and the Learner's summary come here." + wait)
+
+
+def learn_text(text):
+    parts = text.split()
+    if len(parts) < 2:
+        return "Use: /learn NAME"
+    f = RESULTS / "learner" / f"{parts[1]}.json"
+    if not f.exists():
+        return f"No Learner report for {parts[1]} yet (it is made after its test)."
+    a = json.loads(f.read_text())
+    L = [f"🧠 Learner - {parts[1]}"]
+    for lab in ("test", "live"):
+        if lab in a:
+            L.append(f"{'Kite test' if lab == 'test' else 'Live tips'}: {a[lab]['trades']:,} trades, {a[lab]['win_pct']}% won, "
+                     f"avg {a[lab]['avg_net_pct']:+.2f}% after costs")
+    better = [g for g in a.get("groups", []) if g.get("better")][:4]
+    worse = [g for g in a.get("groups", []) if g.get("worse")][:4]
+    if better:
+        L.append("Works best: " + "; ".join(f"{g['context'].replace('_', ' ')} {g['value']} ({g['avg_net_pct']:+.2f}%, {g['trades']})" for g in better))
+    if worse:
+        L.append("Fails: " + "; ".join(f"{g['context'].replace('_', ' ')} {g['value']} ({g['avg_net_pct']:+.2f}%, {g['trades']})" for g in worse))
+    L += ["Ideas to test:"] + [f"• {i}" for i in a.get("ideas", [])[:5]]
+    L.append("Full report: results/learner/" + parts[1] + ".md")
+    return "\n".join(L)
+
+
+def open_tips_text():
+    from .tips import load_tips
+    T = load_tips()
+    o = T[T["exit_time"].isna()] if len(T) else T
+    if not len(o):
+        return "No open tips."
+    return "Open tips:\n" + "\n".join(f"• {r.sym} ({r.strategy}): bought ≈ ₹{r.entry:,.2f}, stop ₹{r.stop:,.2f}"
+                                      + (f", target ₹{r.target:,.2f}" if r.target == r.target and r.target else "")
+                                      for r in o.itertuples())
+
+
+def status_text():
+    from . import candles, kite
+    from .daemon import _FEED
+    s = load_settings()
+    L = [f"Kite: {'✅ logged in' if kite.logged_in() else '❌ not logged in (/kite)'}"]
+    f = _FEED.get("feed")
+    if f is not None and f.alive():
+        st = f.status()
+        L.append(f"Live feed: {st['instruments']:,} instruments, {st['ticks']:,} updates, last {st['last_tick_s']}s ago")
+    else:
+        L.append("Live feed: off (runs 9:08 am - 3:32 pm on weekdays when logged in)")
+    try:
+        p = candles.progress()
+        L.append("Candle library (stocks complete): " + ", ".join(f"{i} {p[i]}" for i in candles.ORDER)
+                 + (" - storage limit reached" if p.get("storage_full") else ""))
+    except Exception:
+        L.append("Candle library: not started")
+    live = s.get("live_strategies") or []
+    L.append(f"Live strategies: {', '.join(live) if live else 'none'}")
+    L.append(f"Kill switch: {'⛔ ON' if s.get('kill_switch') else 'off'} · capital ₹{float(s.get('capital') or 0):,.0f} · "
+             f"stop-loss {s.get('stop_loss_pct', 1)}%")
+    return "\n".join(L)
+
+
+# ----------------------------------------------------------------------------- Telegram plumbing
 def _api(token, method, **params):
     r = requests.post(f"https://api.telegram.org/bot{token}/{method}", data=params, timeout=70)
     return r.json()
 
 
-def _source(msg):
-    fo = msg.get("forward_origin") or {}
-    if fo.get("type") == "channel":
-        return fo.get("chat", {}).get("title", "channel")
-    if fo.get("type") == "user":
-        return fo.get("sender_user", {}).get("first_name", "user")
-    if fo.get("type") == "hidden_user":
-        return fo.get("sender_user_name", "hidden user")
-    if fo.get("type") == "chat":
-        return fo.get("sender_chat", {}).get("title", "group")
-    if msg.get("forward_from_chat"):
-        return msg["forward_from_chat"].get("title", "channel")
-    if msg.get("forward_from"):
-        return msg["forward_from"].get("first_name", "user")
-    return "typed by you"
-
-
-def _report_summary():
-    st = load_state()
-    f = REPORTS / "latest.html"
-    if not f.exists():
-        return "No report yet."
-    import re
-    txt = f.read_text(encoding="utf-8")
-    head = re.search(r"class='card banner[^']*'>(.*?)</div>", txt, re.S)
-    why = re.findall(r"<li>(.*?)</li>", txt.split("<h2>Why</h2>")[1].split("</ul>")[0]) if "<h2>Why</h2>" in txt else []
-    return f"Report {st.get('last_trading_day', '')}: {head.group(1) if head else '?'}\n" + "\n".join(f"- {w}" for w in why)
-
-
-def _score_text():
-    sc = tipcheck.source_scorecard()
-    if not sc:
-        return "No forwarded tip has finished yet (target, stop or time-out). Keep forwarding tips - I track them all."
-    lines = ["How forwarded tips actually turned out:"]
-    for k, v in sc["by_source"].items():
-        lines.append(f"• {k}: {v['tips']} tips, target hit {v['target_hit_pct']}%, stop hit {v['stop_hit_pct']}%")
-    lines.append("By my verdict:")
-    for k, v in sc["by_verdict"].items():
-        lines.append(f"• {k}: {v['tips']} tips, target hit {v['target_hit_pct']}%, stop hit {v['stop_hit_pct']}%")
-    return "\n".join(lines)
-
-
-def basket_command(text):
-    """/basket -> the current monthly basket; /basket 20000 -> money for the basket (quantities in the monthly list)."""
-    from . import basket
-    parts = text.replace(",", "").split()
-    if len(parts) == 1:
-        return basket.show()
-    try:
-        amt = float(parts[1].replace("₹", ""))
-    except ValueError:
-        return "Use: /basket 20000  (the money you want in the monthly basket)"
-    if amt < 0 or amt > 1e9:
-        return "Use: /basket 20000  (the money you want in the monthly basket)"
-    basket.set_capital(amt)
-    return (f"✅ Monthly basket money set to ₹{amt:,.0f} (₹{amt / basket.TOP:,.0f} per stock). Quantities will be in "
-            "the next monthly list." if amt else "Monthly basket quantities switched off.")
-
-
-def trade_command(text):
-    """/bought SYMBOL QTY PRICE [STOP]  |  /sold SYMBOL [PRICE]  |  /trades   (updates data/my_trades.csv)"""
-    import pandas as pd
-    from . import data_prices, journal
-    from .config import DATA, load_settings, load_strategy
-    parts = text.split()
-    cmd = parts[0].lower()
-    my = journal.load_my_trades()
-    if cmd == "/trades":
-        if my.empty:
-            return "No open trades recorded. Use /bought SYMBOL QTY PRICE [STOP]."
-        return "Your open trades:\n" + "\n".join(f"- {r.symbol}: {int(r.qty)} @ {r.buy_price} (stop {r.stop})" for r in my.itertuples())
-    if len(parts) < 2:
-        return "Usage: /bought ICICIBANK 5 1425 1340   or   /sold ICICIBANK 1500"
-    sym = parts[1].upper()
-    if cmd == "/skip":
-        from .live_engine import mark_taken
-        r = mark_taken(sym, taken=False)
-        return (f"Noted: you did not take the {sym} tip. It no longer counts toward your limits (exit alerts for it "
-                "stop mattering - ignore them).") if r is not None else f"No open tip for {sym}."
-    if cmd == "/bought" and len(parts) == 2:          # '/bought SYMBOL' = I bought the system's tip as sent
-        from .live_engine import mark_taken
-        r = mark_taken(sym, taken=True)
-        if r is None:
-            return f"No open tip for {sym}. For your own trade use: /bought {sym} QTY PRICE [STOP]"
-        try:
-            qty, price, stop = int(float(r["qty"])), float(r["entry"]), float(r["stop"])
-            row = pd.DataFrame([{"symbol": sym, "buy_date": str(pd.Timestamp.today().date()), "buy_price": price,
-                                 "qty": qty, "stop": stop}])
-            pd.concat([my[my["symbol"] != sym], row], ignore_index=True).to_csv(journal.MY_TRADES, index=False)
-        except Exception:
-            qty, price, stop = r.get("qty"), r.get("entry"), r.get("stop")
-        return (f"✅ Noted: you bought the {sym} tip ({qty} @ ~{price}, stop {stop}). It now counts toward your risk "
-                "limits and you'll get its exit alerts. Set the stop-loss as a GTT in Kite.")
-    if cmd == "/bought":
-        try:
-            qty, price = int(parts[2]), float(parts[3])
-        except Exception:
-            return "Usage: /bought SYMBOL QTY PRICE [STOP], e.g. /bought ICICIBANK 5 1425 1340"
-        stop = float(parts[4]) if len(parts) > 4 else None
-        if stop is None:   # default: the tips strategy's stop (3 x ATR below the buy price, or 2 x for v1)
-            s_ = load_settings()
-            p = load_strategy(s_.get("aggressive_strategy", "a1") if s_.get("tips_mode") == "aggressive" else s_["live_strategy"])
-            df = data_prices.load(sym)
-            if df is not None and len(df) > 20:
-                tr = (df["high"] - df["low"]).tail(14).mean()
-                stop = round(price - p["stop_atr_mult"] * tr, 2)
-        from .risk import check as risk_check
-        ok, why, _n = risk_check("buy", qty, price, stop) if stop else (False, ["No stop-loss could be set."], {})
-        row = pd.DataFrame([{"symbol": sym, "buy_date": str(pd.Timestamp.today().date()), "buy_price": price,
-                             "qty": qty, "stop": stop}])
-        out = pd.concat([my[my["symbol"] != sym], row], ignore_index=True)
-        out.to_csv(journal.MY_TRADES, index=False)
-        risk_line = ("\n🛡 Risk check: PASS." if ok else "\n🛡 Risk check: WARNING - " + " ".join(why) +
-                     " (recorded anyway - it's your trade).")
-        return (f"Recorded: bought {qty} {sym} @ {price}" + (f", stop {stop}. Set this stop as a GTT in Kite now." if stop
-                                                             else ".") + risk_line)
-    if cmd == "/sold":
-        if sym not in set(my["symbol"]):
-            return f"{sym} is not in your open trades."
-        r = my[my["symbol"] == sym].iloc[0]
-        px = float(parts[2]) if len(parts) > 2 else None
-        f = PRIVATE / "closed_trades.csv"
-        rec = pd.DataFrame([{"symbol": sym, "buy_date": r["buy_date"], "buy_price": r["buy_price"], "qty": r["qty"],
-                             "exit_date": str(pd.Timestamp.today().date()), "exit_price": px,
-                             "pnl": round((px - float(r["buy_price"])) * float(r["qty"]), 2) if px else None}])
-        (pd.concat([pd.read_csv(f), rec]) if f.exists() else rec).to_csv(f, index=False)
-        my[my["symbol"] != sym].to_csv(journal.MY_TRADES, index=False)
-        return f"Recorded: sold {sym}" + (f" @ {px}. P&L Rs {rec.iloc[0]['pnl']:,.0f}" if px else "") + ". Delete its GTT in Kite."
-    return "Unknown command."
-
-
 def _restore_backup(token, doc):
-    """The owner forwarded a backup file the system sent earlier -> merge it back (trades, tips, data archive)."""
-    import requests
-    from . import archive
+    from . import backup
     try:
         info = _api(token, "getFile", file_id=doc["file_id"])
         path = (info.get("result") or {}).get("file_path")
         if not path:
-            return "Could not download that file from Telegram (files over 20 MB can't be restored by the bot)."
+            return "Could not download that file from Telegram."
         r = requests.get(f"https://api.telegram.org/file/bot{token}/{path}", timeout=120)
         r.raise_for_status()
-        tmp = DATA / "restore.tar.gz"
-        tmp.write_bytes(r.content)
-        n = archive.restore(tmp)
-        tmp.unlink(missing_ok=True)
-        return f"Backup restored: {n} files/rows merged. Nothing already stored was overwritten."
+        return f"Backup restored: {backup.restore(r.content)} file(s) merged. Nothing already stored was overwritten."
     except Exception as e:
         log.error("restore failed: %s", type(e).__name__)
         return f"Restore failed ({type(e).__name__}). The file must be one the system sent you."
 
 
-def _read_picture(token, msg):
-    """A forwarded chart picture -> what chart_reader found on it (None if no picture / it failed).
-    The picture is kept only in memory/temp and deleted at once (it can be personal)."""
-    import tempfile
-    photo = (msg.get("photo") or [None])[-1]
-    doc = msg.get("document") or {}
-    fid = photo["file_id"] if photo else (doc.get("file_id") if str(doc.get("mime_type", "")).startswith("image/") else None)
-    if not fid:
-        return None
-    try:
-        info = _api(token, "getFile", file_id=fid).get("result") or {}
-        r = requests.get(f"https://api.telegram.org/file/bot{token}/{info['file_path']}", timeout=60)
-        r.raise_for_status()
-        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=True) as f:
-            f.write(r.content); f.flush()
-            from .chart_reader import read_image
-            out = read_image(f.name)
-        try:
-            from .watchlist import extract_symbols
-            log.info("Picture: %d NSE stock name(s) recognised", len(extract_symbols(out["text"])))
-        except Exception:
-            pass
-        log.info("Chart picture read: %d words, %d lines, %d pattern names", len(out["text"].split()),
-                 len(out["levels"]), len(out["patterns"]))
-        return out
-    except Exception as e:
-        log.warning("Chart picture could not be read: %s", type(e).__name__)
-        return {"text": "", "levels": [], "patterns": [], "axis": False, "failed": True}
-
-
-ALBUMS = {}   # D102: watchlist pictures sent together (one Telegram album) -> one combined list
-
-
-def _watchlist_picture(token, chat, msg, image):
-    """A watchlist picture: True if handled (answered now, or held until the rest of its album is read)."""
-    from . import watchlist
-    try:
-        entries = watchlist.read_entries(image.get("boxes") or [])
-    except Exception as e:
-        log.warning("watchlist picture reading failed: %s", type(e).__name__)
-        return False
-    if len(entries) < 3:
-        return False
-    log.info("Watchlist picture: %d stock line(s) read", len(entries))
-    gid = msg.get("media_group_id")
-    if gid:
-        a = ALBUMS.setdefault(str(gid), {"chat": chat, "reply_to": msg["message_id"], "entries": [], "n": 0,
-                                         "source": _source(msg)})
-        a["entries"] += entries
-        a["n"] += 1
-        return True
-    _send_reply(token, chat, watchlist.handle_entries(entries, _source(msg), 1), msg["message_id"])
-    return True
-
-
-def flush_albums(token):
-    from . import watchlist
-    for gid in list(ALBUMS):
-        a = ALBUMS.pop(gid)
-        try:
-            reply = watchlist.handle_entries(a["entries"], a["source"], a["n"])
-        except Exception as e:
-            log.error("watchlist album failed: %s", type(e).__name__)
-            reply = "Sorry, I hit an error reading those watchlist pictures. It has been logged."
-        _send_reply(token, a["chat"], reply, a["reply_to"])
-
-
-def handle(token, owner, msg, capital):
+def handle(token, owner, msg):
     chat = str(msg["chat"]["id"])
     if owner and chat != owner:
-        log.warning("Ignored a message from a stranger's chat %s", chat)
+        log.warning("Ignored a message from another chat")
         return owner
     if not owner and msg["chat"].get("type") == "private":
         owner = chat
     text = (msg.get("text") or msg.get("caption") or "").strip()
     doc = msg.get("document") or {}
-    image = None
-    forwarded_tip = False
-    if not str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
-        image = _read_picture(token, msg)
-        if image and image.get("boxes") and _watchlist_picture(token, chat, msg, image):
-            return owner
-        if image and image.get("text"):
-            text = (text + "\n" + image["text"]).strip()     # caption first, then what is written on the chart
-        if image and image.get("range"):
-            from . import market_views
-            if not market_views.find_instrument(text) and not tipcheck.parse(text).get("symbol"):
-                from .chart_reader import guess_instrument
-                g = guess_instrument(image["range"])
-                if g:
-                    image["guessed"] = g
-                    text = g + " " + text
-    if str(doc.get("file_name", "")).startswith(("swing-backup-", "swing-archive-")):
+    low = text.lower()
+    if str(doc.get("file_name", "")).startswith("atlas-backup-"):
         reply = _restore_backup(token, doc)
-    elif not text:
-        reply = ("I couldn't read any words or prices on that picture. Forward it with its caption, or type the "
-                 "name and level, e.g. 'Nifty weakness below 24290'.")
     elif re.search(r"(?:kite_|request_token=)([A-Za-z0-9]{8,64})", text):
-        # the login hand-back: "/start kite_XXXX", "kite_XXXX", or the whole login page address pasted in
         from . import kite
         ok, reply = kite.exchange(re.search(r"(?:kite_|request_token=)([A-Za-z0-9]{8,64})", text).group(1))
         if not ok and kite.logged_in():
-            reply = "✅ Already connected to Kite for today - this code was used already, nothing more to do."
-    elif text.lower().startswith(("/kite", "/login")):
+            reply = "✅ Already connected to Kite for today - nothing more to do."
+    elif low.startswith(("/kite", "/login")):
         from . import kite
-        reply = (f"🔑 Log in to Kite: {kite.login_url()}\nAfter logging in, tap Start in Telegram - or, if nothing "
-                 "happens, copy the message the page shows and send it here.") if kite.configured() else \
+        reply = (f"🔑 Log in to Kite: {kite.login_url()}\nAfter logging in, tap Start in Telegram.") if kite.configured() else \
             "Kite is not set up (the API key/secret are missing in GitHub Secrets)."
-    elif text.startswith("/start") or text.startswith("/help"):
+    elif low.startswith(("/start", "/help")) or not text:
         reply = HELP
-    elif text.lower().startswith("/approve"):
-        from . import discovery
-        parts = text.split()
-        if len(parts) > 1 and parts[1].upper().startswith(("LAB-", "CTX-", "FND-", "FTP-")):
-            from . import lab_rules
-            reply = lab_rules.set_status(parts[1], "approved")
-        else:
-            reply = discovery.approve(parts[1]) if len(parts) > 1 else "Use: /approve S1 or /approve LAB-1234"
-    elif text.lower().startswith("/health"):
-        from .monitor import status_text
-        reply = status_text(pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None))
-    elif text.lower().startswith(("/tips", "/open")):
-        reply = open_tips_text()
-    elif text.startswith("/status"):
+    elif low.startswith("/status"):
         reply = status_text()
-    elif text.startswith("/report"):
-        reply = _report_summary()
-    elif text.startswith("/score"):
-        reply = _score_text()
-    elif text.lower().startswith(("/bought", "/sold", "/trades", "/skip")):
-        reply = trade_command(text)
-    elif text.lower().startswith("/decline"):
-        from . import lab_rules
-        parts = text.split()
-        reply = lab_rules.set_status(parts[1], "declined") if len(parts) > 1 else "Use: /decline LAB-1234"
-    elif text.lower().startswith("/research"):
-        from . import lab_rules
-        st = lab_rules._state()
-        last = (st.get("runs") or [{}])[-1]
-        rules = "\n".join(f"• {r['id']} [{r.get('status')}] {r.get('plain', r['name'])}" for r in st.get("rules", [])) or "• none yet"
-        reply = (f"🔬 ATLAS automatic research - last run {last.get('on', 'not yet')}: {last.get('possibilities', 0)} ideas tested, "
-                 f"{len(last.get('candidates', []))} passed every test. Fresh trades so far: {last.get('fresh_top300', 0)}.\n"
-                 f"Rules:\n{rules}")
-    elif text.lower().startswith("/capital"):
+    elif low.startswith("/capital"):
         reply = capital_command(text)
-    elif text.lower().startswith("/basket"):
-        reply = basket_command(text)
+    elif low.startswith("/stop"):
+        reply = kill_command(True)
+    elif low.startswith("/resume"):
+        reply = kill_command(False)
+    elif low.startswith("/tips"):
+        reply = open_tips_text()
+    elif low.startswith("/strategies"):
+        reply = strategies_text()
+    elif low.startswith("/test"):
+        reply = test_command(text)
+    elif low.startswith("/learn"):
+        reply = learn_text(text)
+    elif low.startswith("/approve"):
+        reply = approve_command(text, True)
+    elif low.startswith("/unapprove"):
+        reply = approve_command(text, False)
     else:
-        forwarded_tip = True
-        tipcheck.LAST_TICKET = None
-        try:
-            reply = tipcheck.check_text(text, source=_source(msg), capital=capital, image=image)
-            if image and "What I read on the picture" not in reply:
-                reply = ("🖼 I read your chart picture" + (" (it was hard to read - blurry or small)" if not image.get("axis")
-                         else "") + ".\n\n" + reply)
-        except Exception as e:
-            log.error("tip check failed: %s", e)
-            reply = "Sorry, I hit an error checking that tip. It has been logged and will be fixed."
-    if forwarded_tip and not load_settings().get("reply_to_forwarded", False):
-        # owner's choice (D95): no replies to forwarded tips/pictures - they are still checked and tracked silently
-        tipcheck.LAST_TICKET = None
-        log.info("Forwarded tip checked and tracked silently (no reply - owner's choice)")
-        return owner
-    _send_reply(token, chat, reply, msg["message_id"])
-    tipcheck.LAST_TICKET = None
+        reply = "I only understand the commands below.\n\n" + HELP
+    for i in range(0, max(1, len(reply)), 3900):
+        _api(token, "sendMessage", chat_id=chat, text=reply[i:i + 3900], disable_web_page_preview="true")
     return owner
 
 
-KIND = {"HP": "Dip-buy", "RCP": "Positional", "BRK": "Breakout", "AI": "AI pick"}
-
-
-def tip_card(r):
-    """One tip as a clean card (used by /tips and by re-sends)."""
-    import pandas as pd
-    from .live_engine import tv_link
-    st = str(r.get("setup", "") or "")
-    kind = KIND.get(st, "Discovered strategy" if st.startswith("DS") else
-                    {"INTRADAY": "Intraday", "FNO": "F&O"}.get(str(r["type"]), "Normal"))
-    exit_ = {"Positional": "hold until the SELL alert (max 60 trading days)",
-             "AI pick": "sell after 10 trading days - you get an alert",
-             "Dip-buy": "sell when the bounce alert comes (~4 days)", "Intraday": "square off by 3:15 pm"}.get(
-        kind, "exit when the alert comes")
-    try:
-        day = pd.Timestamp(str(r.get("day") or str(r["time"])[:10]))
-        when = f"sent {day:%d %b}" + (" · buy at the next open after that" if kind not in ("Intraday", "F&O") else "")
-    except Exception:
-        when = f"sent {str(r['time'])[:16]}"
-    L = [f"📌 {kind.upper()} TRADE", f"#{r['symbol']}" + (f" {r.get('contract', '')}" if str(r["type"]) == "FNO" else ""),
-         f"{'BUY' if str(r['side']) == 'buy' else 'SELL'} ≈ {float(r['entry']):,.2f}",
-         f"Stop-loss: {float(r['stop']):,.2f}"]
-    tg = [x for x in str(r.get("targets", "") or "").split("/") if x and x != "nan"]
-    if tg:
-        L.append("Targets: " + " / ".join(f"{float(x):,.2f}" for x in tg))
-    try:
-        L.append(f"Qty: {int(float(r['qty']))} · Rank {int(float(r['rank']))}/10")
-    except Exception:
-        pass
-    L += [f"Exit: {exit_}", when]
-    try:
-        L.append(tv_link(str(r["symbol"]), daily=True))
-    except Exception:
-        pass
-    return "\n".join(L)
-
-
-def open_tips_text(limit=40):
-    """/tips: all open tips the system sent (so none is lost in the chat history)."""
-    from .live_engine import load_tips
-    t = load_tips()
-    if not len(t):
-        return "No tips sent yet."
-    o = t[t["status"] == "open"].copy()
-    if not len(o):
-        return "No open tips right now - all earlier tips are closed."
-    o = o.sort_values("time", ascending=False).head(limit)
-    if len(o) <= 8:     # few tips: full cards
-        return f"📌 OPEN TIPS ({len(o)})\n\n" + "\n\n".join(tip_card(r) for _, r in o.iterrows())
-    L = [f"📌 OPEN TIPS ({len(o)})", ""]
-    for _, r in o.iterrows():
-        st = str(r.get("setup", "") or "")
-        kind = KIND.get(st, "Discovered strategy" if st.startswith("DS") else
-                        {"INTRADAY": "Intraday", "FNO": "F&O"}.get(str(r["type"]), "Normal"))
-        exit_ = {"Positional": "hold until the SELL alert", "AI pick": "sell after 10 trading days (alert)",
-                 "Dip-buy": "sell on the bounce alert (~4 days)", "Intraday": "square off by 3:15 pm"}.get(kind, "exit on the alert")
-        what = f"{r['symbol']} {r.get('contract', '')}".strip() if str(r["type"]) == "FNO" else f"#{r['symbol']}"
-        try:
-            L.append(f"• {kind} · {what} · {str(r['side']).upper()} ≈ {float(r['entry']):,.2f} · SL {float(r['stop']):,.2f} · "
-                     f"sent {str(r['time'])[:16]} · {exit_}")
-        except Exception:
-            L.append(f"• {kind} · {what} · sent {str(r['time'])[:16]}")
-    return "\n".join(L)
-
-
-def status_text():
-    """/status: is Kite connected, a live test price and where it came from, the alerts' last check."""
-    import json as _j
-    from . import kite
-    from .config import DATA
-    L = ["🩺 System status"]
-    if not kite.configured():
-        L.append("Kite: not set up (keys missing in GitHub Secrets) - using Yahoo prices.")
-    elif kite.logged_in():
-        q = kite.quotes(["NIFTY50", "RELIANCE"])
-        if q:
-            L.append("Kite: ✅ connected until 6 am - live prices from Zerodha.")
-            L += [f"Test: {k} {v['last']:,.2f} (Zerodha, live)" for k, v in q.items()]
-        else:
-            L.append("Kite: logged in, but Zerodha did not answer the price test just now - using Yahoo meanwhile.")
-    else:
-        L.append(f"Kite: not logged in today - using Yahoo prices. Log in: {kite.login_url()}")
-    try:
-        a = _j.loads((DATA / "alerts_last.json").read_text())
-        L.append(f"Alerts: last check {a['at'][11:16]} on {a['source']} prices, {a['priced']} of {a['items']} "
-                 "trades/tips priced (checked every minute 9:15-3:30 on market days).")
-    except Exception:
-        L.append("Alerts: no check yet (they run every minute 9:15-3:30 on market days).")
-    return "\n".join(L)
-
-
-def handle_button(token, owner, cq):
-    """A tap on a ticket button (✅ I placed it / ⏭ Skip). Only the owner's taps count."""
-    chat = str(((cq.get("message") or {}).get("chat") or {}).get("id", ""))
-    if owner and chat != owner:
-        _api(token, "answerCallbackQuery", callback_query_id=cq["id"], text="Not your ticket.")
-        return
-    from .risk import on_button
-    try:
-        reply = on_button(cq.get("data", ""))
-    except Exception as e:
-        log.error("ticket button failed: %s", type(e).__name__)
-        reply = "Sorry, that button failed (logged). You can type /bought SYMBOL QTY PRICE STOP instead."
-    _api(token, "answerCallbackQuery", callback_query_id=cq["id"], text=reply[:190])
-    _api(token, "sendMessage", chat_id=chat, text=reply[:4000])
-
-
-def send_ticket(token, chat, t):
-    """Send an order ticket with its two buttons."""
-    import json as _j
-    from .risk import buttons, ticket_text
-    b = buttons(t)
-    params = dict(chat_id=chat, text=ticket_text(t), parse_mode="HTML")
-    if b:
-        params["reply_markup"] = _j.dumps(b)
-    return _api(token, "sendMessage", **params)
-
-
-def _chunks(text, limit=3900):
-    """Telegram takes 4096 characters a message: split long replies at blank lines (then at line ends)."""
-    out, cur = [], ""
-    for para in text.split("\n\n"):
-        for piece in ([para] if len(para) <= limit else para.split("\n")):
-            add = (("\n\n" if piece is para else "\n") if cur else "") + piece
-            if len(cur) + len(add) > limit and cur:
-                out.append(cur); cur = piece[:limit]
-            else:
-                cur += add
-    if cur:
-        out.append(cur)
-    return out or [""]
-
-
-def _send_reply(token, chat, reply, reply_to):
-    """Long replies go as several messages (first one answers the forwarded message)."""
-    parts = _chunks(reply)
-    for i, p in enumerate(parts):
-        _send_one(token, chat, p, reply_to if i == 0 else None)
-
-
-def _send_one(token, chat, reply, reply_to):
-    """Cards are formatted (bold headings); if Telegram rejects the formatting, the same words go as plain text."""
-    import html as _h
-    import re as _re
-    if "<b>" in reply:
-        extra = {"reply_to_message_id": reply_to} if reply_to else {}
-        r = _api(token, "sendMessage", chat_id=chat, text=reply[:4000], parse_mode="HTML",
-                 disable_web_page_preview="true", **extra)
-        if not isinstance(r, dict) or r.get("ok", True) is not False:
-            return
-        reply = _h.unescape(_re.sub(r"</?(b|i|pre|code)>", "", reply))
-    extra = {"reply_to_message_id": reply_to} if reply_to else {}
-    _api(token, "sendMessage", chat_id=chat, text=reply[:4000], **extra)
-
-
-_READ_FAIL_SINCE = None
-TOKEN_REFUSED_SINCE = None        # first time Telegram answered 401 Unauthorized (cleared on the next good read)
-
-
 def _updates_problem(token, owner, res, offset):
-    """Telegram refused to hand over messages. Log why (never the token), fix the common cause, tell the owner."""
+    global _READ_FAIL_SINCE, TOKEN_REFUSED_SINCE
     code, desc = res.get("error_code"), str(res.get("description", ""))[:200]
     log.warning("Bot: Telegram getUpdates refused (%s): %s", code, desc)
     if code == 409 and "webhook" in desc.lower():
-        # a webhook (set by some other tool) blocks reading messages: switch it off, keep waiting messages
-        d = _api(token, "deleteWebhook", drop_pending_updates="false")
-        log.info("Bot: webhook removed (%s)", d.get("ok"))
+        _api(token, "deleteWebhook", drop_pending_updates="false")
         res = _api(token, "getUpdates", offset=offset, timeout=0)
         if res.get("ok"):
             return res
-    global _READ_FAIL_SINCE, TOKEN_REFUSED_SINCE
-    if code in (401, 404):             # bot key not accepted (404 = malformed key) (e.g. the owner rotated it): the daemon hands over
+    if code in (401, 404):
         if not TOKEN_REFUSED_SINCE:
             from .config import token_shape
-            log.warning("Bot: the bot key in GitHub Secrets was refused. Its format: %s", token_shape(token))
+            log.warning("Bot: the bot key was refused. Its format: %s", token_shape(token))
         TOKEN_REFUSED_SINCE = TOKEN_REFUSED_SINCE or time.time()
-    transient = not (code in (401, 404, 409))
-    if transient:                      # D114: Telegram hiccups (5xx, network) fix themselves - only a LASTING one is told
-        _READ_FAIL_SINCE = _READ_FAIL_SINCE or time.time()
-        if time.time() - _READ_FAIL_SINCE < 1800:
-            return {"ok": False, "result": []}
-    try:
-        from .daemon import claim_once
-        if owner and claim_once("bot read problem"):
-            hint = ("Another program or website is also connected to your bot and reads its messages first. "
-                    "Close/disconnect it (only this system should use the bot)." if code == 409 else
-                    "Telegram did not accept the bot key - check TELEGRAM_BOT_TOKEN in GitHub Secrets."
-                    if code in (401, 404) else "Telegram had a problem; I keep trying every minute.")
-            _api(token, "sendMessage", chat_id=owner,
-                 text=f"⚠️ I can't read your messages right now (Telegram said: {desc or code}).\n{hint}")
-    except Exception:
-        pass
     return {"ok": False, "result": []}
 
 
 def poll_once():
-    """Answer every waiting message once and exit (used by GitHub Actions every hour)."""
+    """Answer every waiting message once."""
+    global _READ_FAIL_SINCE, TOKEN_REFUSED_SINCE
     s = load_settings()
     token = (s.get("telegram_bot_token") or "").strip()
     if not token:
@@ -602,33 +302,15 @@ def poll_once():
     owner = str(s.get("telegram_chat_id") or "").strip()
     offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
     res = _api(token, "getUpdates", offset=offset, timeout=0)
-    global _READ_FAIL_SINCE
     if not res.get("ok", False):
         res = _updates_problem(token, owner, res, offset)
     else:
-        global TOKEN_REFUSED_SINCE
         _READ_FAIL_SINCE = TOKEN_REFUSED_SINCE = None
     n = 0
-    for _ in range(4):        # an album's pictures can arrive a few seconds apart: wait for the rest, then answer
-        for u in res.get("result", []):
-            OFFSET.write_text(str(u["update_id"] + 1))
-            msg = u.get("message")
-            if msg:
-                owner = handle(token, owner, msg, float(s.get("capital", 45000)))
-                n += 1
-            cq = u.get("callback_query")
-            if cq:
-                handle_button(token, owner, cq)
-                n += 1
-        if not ALBUMS:
-            break
-        import time as _t
-        _t.sleep(3)
-        offset = int(OFFSET.read_text()) if OFFSET.exists() else 0
-        res = _api(token, "getUpdates", offset=offset, timeout=0)
-        if not res.get("ok", False) or not res.get("result"):
-            break
-    flush_albums(token)
-    if n:
-        log.info("Bot: answered %d message(s)", n)
+    for u in res.get("result", []):
+        OFFSET.write_text(str(u["update_id"] + 1))
+        msg = u.get("message")
+        if msg:
+            owner = handle(token, owner, msg)
+            n += 1
     return n

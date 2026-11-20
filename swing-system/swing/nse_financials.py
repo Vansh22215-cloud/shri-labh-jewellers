@@ -198,19 +198,20 @@ def promoter_pct(symbol, s=None):
 
 
 def industry(symbol):
+    """(industry, company name): name from Kite's instrument list; industry is not in it (None)."""
     try:
-        from .data_nse import nifty500_list
-        L = nifty500_list()
-        row = L[L["Symbol"] == symbol]
-        return (str(row["Industry"].iloc[0]), str(row["Company Name"].iloc[0])) if len(row) else (None, None)
+        from .kite import instruments
+        ins = instruments()
+        row = ins[ins["tradingsymbol"] == symbol]
+        return None, (str(row["name"].iloc[0]) if len(row) else None)
     except Exception:
         return None, None
 
 
 def kite_close(symbol):
     try:
-        from .data_prices import load
-        d = load(symbol)
+        from .candles import load
+        d = load(symbol, "day")
         return float(d["close"].dropna().iloc[-1]) if d is not None and len(d) else None
     except Exception:
         return None

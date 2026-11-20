@@ -1,4 +1,4 @@
-# NSE swing system - runs every job on GitHub's free computers (no laptop, no Claude needed).
+# ATLAS (rebuilt 20 Nov 2026) - runs on GitHub's free computers (no laptop, no Claude needed).
 # Times are UTC (IST = UTC + 5:30). GitHub may start scheduled jobs a few minutes late.
 name: swing-system
 
@@ -10,9 +10,9 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "scan | nightly | research | weekly | bot"
+        description: "bot (the always-on run)"
         required: true
-        default: nightly
+        default: bot
 
 permissions:
   contents: write
@@ -42,7 +42,7 @@ jobs:
           case "$S" in
             "25 * * * *") T=bot ;;
           esac
-          echo "task=${T:-nightly}" >> "$GITHUB_OUTPUT"
+          echo "task=${T:-bot}" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@v4
         with:
@@ -71,13 +71,7 @@ jobs:
           KITE_API_KEY: ${{ secrets.KITE_API_KEY }}         # Zerodha market data only (no order placing)
           KITE_API_SECRET: ${{ secrets.KITE_API_SECRET }}
         run: |
-          case "${{ steps.task.outputs.task }}" in
-            scan)     python scripts/bot_poll.py || true; python scripts/run_scan.py ;;
-            nightly)  python scripts/run_nightly.py ;;
-            research) python scripts/run_research.py ;;
-            weekly)   python scripts/run_weekly.py ;;
-            bot)      python scripts/bot_poll.py ;;
-          esac
+          python scripts/bot_poll.py      # the always-on run: bot, live feed, downloads, tests, Learner
 
       - name: Start the next run (keeps the system running all day, no outside timer needed)
         if: always()
