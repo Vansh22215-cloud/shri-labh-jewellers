@@ -41,6 +41,9 @@ class Position:
     best: float = 0.0
     lots: int = 0
     note: str = ""
+    t1: float = 0.0                 # scaling out: first target (1R); 0 = off
+    book_frac: float = 0.0          # share booked at t1
+    scaled: bool = False
     margin: float = 0.25            # share of the value blocked (stocks: Kite's own figure when available)
 
 
@@ -119,6 +122,20 @@ class Broker:
         self.acc.closed.append(c)
         self.save()
         return c
+
+    def close_part(self, key, qty, price, t, why):
+        """Book part of an open position (scaling out). The rest stays open."""
+        p = self.acc.open.get(key)
+        if p is None or not 0 < qty < p.qty:
+            return None
+        from copy import copy
+        part = copy(p)
+        part.qty = int(qty)
+        part.lots = int(round(p.lots * qty / p.qty)) if p.lots else 0
+        p.qty -= int(qty)
+        p.lots = max(p.lots - part.lots, 0) if p.lots else 0
+        self.acc.open[key + "-part"] = part
+        return self.close_position(key + "-part", price, t, why)
 
     def mark(self, key, price):
         p = self.acc.open.get(key)

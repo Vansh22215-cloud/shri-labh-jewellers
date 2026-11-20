@@ -32,7 +32,9 @@ P = dict(opt_risk=3000.0, opt_stop=0.30, opt_target=0.60, opt_be=0.30, opt_max_t
          stk_risk=1500.0, stk_stop=0.01, stk_target=0.02, stk_be=0.01, stk_max_trades=3, stk_max_open=2,
          stk_last_entry="11:30", stk_vol_mult=1.5, stk_max_gap=0.03, universe=100,
          day_target=10000.0, day_max_loss=7500.0, square_off="15:15", first_entry="09:35",
-         stk_sides="both", stk_factors=0, opt_factors=0)
+         stk_sides="both", stk_factors=0, opt_factors=0, stk_scale=0.0, opt_scale=0.0)
+# scaling out (owner 21 Nov): stk_scale / opt_scale = share booked at 1R (0 = off); the stop on the rest moves to
+# the entry and the rest runs to stk_target / opt_target. Switched on only by the long test (longtest.py).
 # extra factors (bit flags, chosen by the long test - longtest.py FILTERS / NMASKS):
 #   1 beyond yesterday's high/low · 2 NIFTY moving the same way · 4 stronger than NIFTY today ·
 #   8 India VIX below 20 · 16 no resistance (yesterday's high/low) within 1%
@@ -105,6 +107,20 @@ class Engine:
                 why, px = "target", (max(o, pos.target) if long else min(o, pos.target))
             elif self._hm(t) >= self.p["square_off"]:
                 why, px = "square-off 3:15 pm", c
+            if not why and pos.t1 and not pos.scaled and ((h >= pos.t1) if long else (l <= pos.t1)):
+                lot = max(1, pos.qty // pos.lots) if pos.lots else 1
+                units = pos.qty // lot
+                book = min(max(int(round(units * pos.book_frac)), 1), units - 1) * lot if units >= 2 else 0
+                px1 = max(o, pos.t1) if long else min(o, pos.t1)
+                pos.scaled = True
+                if book:
+                    cl = self.b.close_part(key, book, px1, t, "booked part at 1R")
+                    if cl:
+                        self.notify("exit", self.exit_text(cl) + "\nRest: stop moved to cost, running to the next target.")
+                else:
+                    why, px = "target 1R (one lot only)", px1
+                pos.stop = round(pos.avg, 2)
+                self.b.save()
             if why:
                 cl = self.b.close_position(key, px, t, why)
                 if cl:
@@ -163,6 +179,9 @@ class Engine:
                                    stop, tgt, "NIFTY options", t, lots=lots,
                                    note=f"NIFTY {c:,.0f} {'above' if side == 'CE' else 'below'} 9:15-9:30 range")
         if pos:
+            if self.p["opt_scale"]:
+                pos.t1, pos.book_frac = round(px * (1 + self.p["opt_stop"]), 2), float(self.p["opt_scale"])
+                self.b.save()
             self.notify("entry", self.entry_text(pos))
 
     # ---------------------------------------------------------------- stocks
@@ -217,6 +236,11 @@ class Engine:
             pos = self.b.open_position(f"EQ-{sym}-{t:%H%M}", sym, sym, "EQ", side, qty, px, stop, tgt, "stocks", t,
                                        note=f"broke the 9:15-9:30 range {'up' if side == 'LONG' else 'down'} with "
                                             f"{strength:.1f}x volume · margin {mr * 100:.0f}%", margin=mr)
+            if pos and self.p["stk_scale"]:
+                r = self.p["stk_stop"]
+                pos.t1 = round(pos.avg * (1 + r) if side == "LONG" else pos.avg * (1 - r), 2)
+                pos.book_frac = float(self.p["stk_scale"])
+                self.b.save()
             if pos:
                 self.notify("entry", self.entry_text(pos))
 
@@ -255,7 +279,9 @@ class Engine:
         risk = abs(p.avg - p.stop) * p.qty
         return (f"{'🟢' if p.side == 'LONG' else '🔻'} <b>{act} {p.name}</b> · Intraday\n"
                 f"Qty {p.qty}{lots} at ≈ ₹{p.avg:,.2f}\nStop-loss ₹{p.stop:,.2f} · Target ₹{p.target:,.2f}\n"
-                f"Risk ≈ ₹{risk:,.0f} · {p.note}\n<i>Practice account - place it yourself if you want it.</i>")
+                f"Risk ≈ ₹{risk:,.0f} · {p.note}\n"
+                + (f"Plan: book {p.book_frac:.0%} at ₹{p.t1:,.2f} (1R), stop to cost, rest to ₹{p.target:,.2f}\n" if p.t1 else "")
+                + "<i>Practice account - place it yourself if you want it.</i>")
 
     @staticmethod
     def exit_text(c):

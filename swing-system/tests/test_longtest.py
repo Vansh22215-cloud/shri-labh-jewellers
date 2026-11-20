@@ -38,7 +38,7 @@ def test_run_on_small_library(monkeypatch):
     monkeypatch.setattr(lt, "REPORT", lt.RESULTS / "_t.md")
     monkeypatch.setattr(lt, "DATA", candles.BASE)
     rows, orow, data = lt.run(send=False, workers=1)
-    assert len(rows) == len(lt.SIG) * len(lt.EXI) and len(orow) == 18 * len(lt.NMASKS) and data["stocks"] == 2
+    assert len(rows) == len(lt.SIG) * len(lt.EXI) and len(orow) == 18 * len(lt.NMASKS) + len(lt.OPT_SCALE) and data["stocks"] == 2
     assert any(r["dev"] for r in rows) and "Kite 5-minute candles only" in lt.REPORT.read_text()
     lt.REPORT.unlink()
 
@@ -68,3 +68,44 @@ def test_live_trader_uses_switched_on_settings(tmp_path, monkeypatch):
     p = practice_live.practice_params()
     e = autotrader.Engine(paper.Broker(None), None, params=p)
     assert e.p["stk_sides"] == "long" and e.p["stk_factors"] == 2 and e.p["opt_stop"] == autotrader.P["opt_stop"]
+
+
+def test_scale_trade_books_part_at_1r_and_runs_rest_at_cost():
+    end_m = 575 + 5 * np.arange(10)
+    o = np.array([100, 100, 100.5, 101, 101.5, 102, 102.5, 103, 103, 103.0])
+    h = o + 0.6
+    l = o - 0.2
+    c = o + 0.3
+    e1, e2, fb, j = lt.scale_trade(o, h, l, c, end_m, 1, 100.0, True, 0.01, 0.5, 3.0)
+    assert e1 == 101.0 and fb == 0.5 and e2 == 103.0                 # 1R booked, runner reached 3R
+    l2 = l.copy()
+    l2[4] = 99.5                                                      # after 1R the price falls back below cost
+    e1, e2, fb, j = lt.scale_trade(o, h, l2, c, end_m, 1, 100.0, True, 0.01, 0.5, 3.0)
+    assert e1 == 101.0 and e2 == 100.0                                # rest out at cost, not at the 1% stop
+    l3 = l.copy()
+    l3[1] = 98.9                                                      # stop before 1R: everything out at the stop
+    e1, e2, fb, j = lt.scale_trade(o, h, l3, c, end_m, 1, 100.0, True, 0.01, 0.5, 3.0)
+    assert e1 == e2 == 99.0 and fb == 0.0
+
+
+def test_live_trader_scales_out_and_dashboard_shows_one_line():
+    from datetime import timedelta
+    from swing import autotrader, paper, dashboard
+    b = paper.Broker(None, start=50800)
+    p = b.open_position("k", "NIFTY X CALL", "NFO:X", "OPT", "LONG", 195, 100, 70, 190, "NIFTY options",
+                        pd.Timestamp("2026-11-23 10:00"), lots=3)
+    p.t1, p.book_frac = 130.0, 2 / 3
+
+    class M:
+        def __init__(self, bars):
+            self.bars = bars
+
+        def bar(self, sym, t):
+            return self.bars.pop(0) if self.bars else None
+    e = autotrader.Engine(b, M([(110, 131, 109, 129), (128, 129, 100.0, 101)]))
+    e.on_minute(pd.Timestamp("2026-11-23 10:06"))
+    assert len(b.acc.closed) == 1 and b.acc.closed[0]["qty"] == 130 and b.acc.open["k"].stop == p.avg
+    e.on_minute(pd.Timestamp("2026-11-23 10:07"))                     # rest stopped at cost
+    assert not b.acc.open and b.acc.closed[1]["why"] == "stop at entry"
+    rows = dashboard.combine(b.acc.closed)
+    assert len(rows) == 1 and rows[0]["qty"] == 195

@@ -15,8 +15,29 @@ def _money(v):
     return f"{v:,.2f}"
 
 
+def combine(rows):
+    """One row per instrument, like Zerodha's 'Closed' list: quantities added, average prices weighted, P&L added
+    (a position booked in parts - scaling out - shows as one line)."""
+    out = {}
+    for r in rows:
+        k = (r["name"], r.get("product", "Intraday"))
+        if k not in out:
+            out[k] = dict(r, _b=r["buy_avg"] * r["qty"], _s=r["sell_avg"] * r["qty"])
+        else:
+            x = out[k]
+            x["qty"] += r["qty"]
+            x["_b"] += r["buy_avg"] * r["qty"]
+            x["_s"] += r["sell_avg"] * r["qty"]
+            x["pnl"] = round(x["pnl"] + r["pnl"], 2)
+            x["ltp"] = r["ltp"]
+    for x in out.values():
+        x["buy_avg"], x["sell_avg"] = x["_b"] / x["qty"], x["_s"] / x["qty"]
+    return list(out.values())
+
+
 def render(rows, path, day, balance=None, start=None, charges=None, net=None, note=""):
-    """rows: dicts with name, kind, product, qty, buy_avg, sell_avg, ltp, pnl."""
+    """rows: dicts with name, kind, product, qty, buy_avg, sell_avg, ltp, pnl (combined per instrument here)."""
+    rows = combine(rows)
     n = max(1, len(rows))
     h = 2.2 + 0.75 * n + 1.6
     fig = plt.figure(figsize=(20, h), dpi=100)

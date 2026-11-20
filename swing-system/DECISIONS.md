@@ -1479,3 +1479,12 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - Two things only remove DUPLICATE copies: keep_alive deletes older GitHub cache copies after a newer copy exists; r2.migrate moves the data to the private bucket and only then removes the GitHub copy (only if the owner sets up R2).
   - The one-time reset (D162/D163) removed only the old system's data, by the owner's instruction.
 - The data stays private: never in git, logs, artifacts or anything public.
+
+## D173 - 2026-11-21 - Scaling out tested, switched on only if it wins (owner: "big traders book part at 1:1/1:2 and run the rest at cost")
+- **Long test**: book half or two-thirds at 1R (R = the stop distance), move the rest's stop to the entry ("cost to cost"), and let it run to 2R or 3R.
+  - Stocks: stops 0.75/1/1.5%, on the live signal.
+  - NIFTY options: stops 20/30/40%, estimate.
+  - Compared with today's single target in the report. Stop first if both are hit in one candle; the rest is watched from the next candle.
+- **Switching on**: as for every setting, only if it wins both before 2024 and from 2024, with no much deeper fall (`practice_params.json`: stk_scale / opt_scale).
+- **Live trader**: books the part at 1R (options in whole lots; a single lot is sold whole at 1R), moves the stop to cost, and messages both steps.
+- **Dashboard**: one line per instrument, like Zerodha (quantities added, average prices weighted).
