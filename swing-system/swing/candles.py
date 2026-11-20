@@ -30,7 +30,8 @@ import pandas as pd
 from .config import DATA, RESULTS, get_logger
 
 log = get_logger()
-BASE = DATA / "candles"
+from .r2 import root as _kite_root
+BASE = _kite_root() / "candles"          # private R2 bucket copy when set up (r2.py), else the GitHub cache folder
 STATE_F = BASE / "state.json"
 REPORT = RESULTS / "candle_library.md"
 GAP = 0.36                                           # <= 3 historical requests a second (Kite's limit)
@@ -48,7 +49,7 @@ ORDER = ["day", "5minute", "60minute", "30minute", "15minute"]   # owner 20 Nov:
 DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min")}   # only these two are built
 ALL_INTERVALS = ["minute", "3minute", "5minute", "10minute", "15minute", "30minute", "60minute", "day"]
 INDICES = {"NIFTY50": "NIFTY 50", "BANKNIFTY": "NIFTY BANK", "INDIAVIX": "INDIA VIX"}
-MAX_DATA_GB = 8.5                                    # GitHub keeps 10 GB of cache per repository (one copy kept)
+MAX_DATA_GB = 9.5 if _kite_root() != DATA else 8.5  # R2: stay inside Cloudflare's free 10 GB; GitHub cache: 10 GB
 MAX_MINUTES = 10                                     # one step never runs longer (other jobs wait for it)
 COLS = ["open", "high", "low", "close", "volume"]
 
@@ -192,7 +193,7 @@ def load(sym, interval="day", adjusted=True, start=None, end=None):
 # ----------------------------------------------------------------------------- downloading
 def data_size_gb():
     tot = 0
-    for p in DATA.rglob("*"):
+    for p in _kite_root().rglob("*"):
         try:
             if p.is_file():
                 tot += p.stat().st_size

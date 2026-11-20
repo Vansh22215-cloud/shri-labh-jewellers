@@ -21,6 +21,11 @@ if __name__ == "__main__":
         w.write_text(str(n))                       # the runner waits 30 minutes before the next try
         if n >= 6:
             (DATA / "replay_done.txt").write_text(f"gave up after {n} tries: {type(e).__name__}")
+    try:                                   # changed Kite files -> the private R2 bucket (when set up)
+        from swing import r2
+        r2.push()
+    except Exception as e:
+        print("R2 upload failed:", type(e).__name__)
     try:
         from swing.ci_save import save
         save("practice replay")

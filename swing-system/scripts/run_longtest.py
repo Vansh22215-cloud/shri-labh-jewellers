@@ -13,6 +13,11 @@ if __name__ == "__main__":
     except Exception as e:
         print("long test failed:", type(e).__name__, str(e)[:300])
         (DATA / "long_test_done.txt").write_text(f"failed: {type(e).__name__}")
+    try:                                   # changed Kite files -> the private R2 bucket (when set up)
+        from swing import r2
+        r2.push()
+    except Exception as e:
+        print("R2 upload failed:", type(e).__name__)
     try:
         from swing.ci_save import save
         save("long test")

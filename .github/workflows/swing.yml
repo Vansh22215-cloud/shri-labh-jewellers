@@ -70,6 +70,10 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           KITE_API_KEY: ${{ secrets.KITE_API_KEY }}         # Zerodha market data only (no order placing)
           KITE_API_SECRET: ${{ secrets.KITE_API_SECRET }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}           # private Cloudflare R2 bucket for the Kite data
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
           case "${{ steps.task.outputs.task }}" in
             scan)     python scripts/bot_poll.py || true; python scripts/run_scan.py ;;

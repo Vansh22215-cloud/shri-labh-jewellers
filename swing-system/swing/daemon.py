@@ -377,8 +377,23 @@ def free_disk():
                    "/opt/hostedtoolcache/CodeQL", shell=True, timeout=600, capture_output=True)
 
 
+def r2_sync(direction):
+    try:
+        from . import r2
+        if not r2.configured():
+            return
+        if direction == "down":
+            r2.pull()
+            r2.migrate()
+        else:
+            r2.push()
+    except Exception as e:
+        log.warning("Daemon: R2 %s failed: %s", direction, type(e).__name__)
+
+
 def run():
     from .bot import poll_once
+    r2_sync("down")                                # Kite data from the private R2 bucket (when set up)
     threading.Thread(target=free_disk, daemon=True).start()
     start = time.time()
     left = lambda: MAX_MIN - (time.time() - start) / 60
@@ -415,6 +430,7 @@ def run():
             pass
     if job_running():
         _JOB["thread"].join(timeout=max(60, (MAX_MIN + 20 - (time.time() - start) / 60) * 60))
+    r2_sync("up")
     try:
         from .ci_save import save
         save("daemon run")

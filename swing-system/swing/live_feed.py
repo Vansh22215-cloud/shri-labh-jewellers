@@ -25,7 +25,8 @@ from .config import DATA, get_logger
 log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
 WS_URL = "wss://ws.kite.trade"
-LIVE = DATA / "live"
+from .r2 import root as _kite_root
+LIVE = _kite_root() / "live"
 PER_CONN = 3000
 OPEN_M, CLOSE_M = 9 * 60 + 15, 15 * 60 + 30
 INTRADAY = {"minute": 1, "3minute": 3, "5minute": 5, "10minute": 10, "15minute": 15, "30minute": 30, "60minute": 60}

@@ -80,7 +80,8 @@ def analyse(name, T=None, live=None):
     """-> dict with everything the report shows."""
     if T is None:
         try:
-            T = pd.read_parquet(DATA / "tests" / f"{name}.parquet")
+            from .backtest import TESTS
+            T = pd.read_parquet(TESTS / f"{name}.parquet")
         except Exception:
             T = pd.DataFrame()
     live = live_trades(name) if live is None else live

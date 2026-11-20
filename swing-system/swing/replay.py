@@ -19,7 +19,8 @@ from .config import DATA, PRIVATE, RESULTS, get_logger, load_settings
 from .paper import Broker
 
 log = get_logger()
-CACHE = DATA / "replay"
+from .r2 import root as _kite_root
+CACHE = _kite_root() / "replay"
 REPORT = RESULTS / "practice_replay.md"
 
 

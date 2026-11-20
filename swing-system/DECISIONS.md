@@ -1458,3 +1458,16 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - `kite.order_margin()` / `kite.mis_ratio()`: Kite's margin CALCULATOR, the only Kite address besides market data and the daily login. It computes the margin for a hypothetical order and places nothing.
 - The practice trader uses Zerodha's own intraday margin per stock, once a day per stock. If Kite cannot say, the cautious 25% is used. Each entry message shows the margin used.
 - The safety tests allow ONLY this exact address. Every order, GTT, holdings, positions and funds address stays blocked, and a new test checks this.
+
+## D171 - 2026-11-21 - Kite data moves to a PRIVATE Cloudflare R2 bucket (owner: "we can't take the risk of having this data on GitHub")
+- `swing/r2.py` is active when 4 GitHub Secrets exist: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET.
+- With them, all Kite-derived files live outside the GitHub cache folder: candles, live candles, test trade lists, replay candles.
+  - Each run downloads them from R2 at the start, and uploads changed files after each download chunk, test and run.
+  - The first time, everything still in the GitHub cache is uploaded to R2 and then deleted from it. Older GitHub cache copies are already deleted every run, so GitHub keeps no Kite data.
+- The data limit becomes 9.5 GB, inside R2's free 10 GB; more needs the owner's yes (about $0.015/GB a month).
+- **Needs the owner**:
+  1. a Cloudflare account with R2 turned on;
+  2. a PRIVATE bucket and an API token limited to that bucket (Object Read & Write);
+  3. the 4 GitHub Secrets;
+  4. the same 4 lines in `main`'s workflow (GitHub runs main's workflow file).
+- Without the keys, nothing changes.

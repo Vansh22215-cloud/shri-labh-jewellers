@@ -25,7 +25,8 @@ from . import candles, costs
 from .config import DATA, RESULTS, get_logger, load_settings
 
 log = get_logger()
-TESTS = DATA / "tests"
+from .r2 import root as _kite_root
+TESTS = _kite_root() / "tests"
 OUT = RESULTS / "tests"
 HOLDOUT_YEARS = 2            # the most recent 2 years are reported separately ("recent", the fair check)
 

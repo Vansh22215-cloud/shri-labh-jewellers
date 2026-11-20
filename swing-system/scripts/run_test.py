@@ -44,6 +44,11 @@ if __name__ == "__main__":
                + f"\n\nFull report: results/tests/{name}.md · Learner: /learn {name}\nGoes live only if you send /approve {name}.")
     TEST_QUEUE.write_text(json.dumps([x for x in q if x != name]))
     telegram.send(s, msg, label="test result")
+    try:                                   # changed Kite files -> the private R2 bucket (when set up)
+        from swing import r2
+        r2.push()
+    except Exception as e:
+        print("R2 upload failed:", type(e).__name__)
     try:
         from swing.ci_save import save
         save(f"test {name}")

@@ -21,6 +21,11 @@ if __name__ == "__main__":
     p = candles.progress()
     if r.get("requests") and not p.get("storage_full"):
         retry_later("candles", minutes=1, max_tries=1000)      # more to do: next chunk in a minute
+    try:                                   # changed Kite files -> the private R2 bucket (when set up)
+        from swing import r2
+        r2.push()
+    except Exception as e:
+        print("R2 upload failed:", type(e).__name__)
     try:
         from swing.ci_save import save
         save("candle library")
