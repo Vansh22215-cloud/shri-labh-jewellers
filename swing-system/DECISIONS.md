@@ -1388,3 +1388,10 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - the daemon frees ~25 GB of unused tools at the start of each run.
   - The workflow file on this branch is again identical to `main`.
   - A manual "Run workflow" must use the task `bot`; the old default `nightly` script no longer exists.
+
+## D164 - 2026-11-20 - Kite history kept for our use until the subscription ends; 1-minute history skipped for now
+- **Owner's decision** after the data-policy check: download everything decided, keep it in GitHub's private storage for our own research and tests, and delete it when the Kite subscription ends (Kite terms clause 9(b)). Never published.
+- **Known risk, accepted by the owner**: Kite terms clause 4(b) says no databases or permanent copies "unless expressly permitted by Zerodha". Written permission from kiteconnect@zerodha.com would remove that risk.
+- **1-minute history is not downloaded** for now (owner: test on everything else first; add 1-minute only if tests show it helps). History downloads: day, 60, 15 and 5-minute for every NSE stock.
+  - The live feed still builds 1-minute candles during the day: they are needed for exit alerts and live 3/5/10-minute candles.
+  - Strategies on 1- or 3-minute candles cannot be tested until 1-minute history is added.

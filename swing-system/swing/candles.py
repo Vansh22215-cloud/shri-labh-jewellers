@@ -40,7 +40,8 @@ INTERVALS = {                                        # chunk = days per request 
     "5minute": {"chunk": 95, "floor": pd.Timestamp("2005-01-01")},
     "minute": {"chunk": 58, "floor": pd.Timestamp("2005-01-01")},
 }
-ORDER = ["day", "60minute", "15minute", "5minute", "minute"]
+ORDER = ["day", "60minute", "15minute", "5minute"]       # owner 20 Nov: 1-minute history SKIPPED for now - only if
+                                                         # tests show it would help ("minute" stays possible: add it here)
 DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min"), "30minute": ("15minute", "30min")}
 ALL_INTERVALS = ["minute", "3minute", "5minute", "10minute", "15minute", "30minute", "60minute", "day"]
 INDICES = {"NIFTY50": "NIFTY 50", "BANKNIFTY": "NIFTY BANK", "INDIAVIX": "INDIA VIX"}

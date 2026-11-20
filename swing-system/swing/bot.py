@@ -137,8 +137,11 @@ def test_command(text):
     if name not in q:
         q.append(name)
         TEST_QUEUE.write_text(json.dumps(q))
-    from .candles import complete, progress
+    from .candles import ORDER, complete, progress
     iv = load_all()[name].interval
+    if iv in ("minute", "3minute"):
+        return (f"{name} uses {iv} candles, but 1-minute history is not downloaded (your choice, 20 Nov). Say the word "
+                "if tests show 1-minute would help, and the download starts.")
     wait = "" if complete(iv) else (f" Kite {iv} history is still downloading ({progress().get(iv)} stocks done) - "
                                     "the test starts by itself when it is complete.")
     return (f"🧪 {name} queued for its test on Kite history (every NSE stock). It runs outside market hours; the "
