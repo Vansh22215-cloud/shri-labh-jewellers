@@ -1,0 +1,43 @@
+"""Long test: fast exit maths = the step-by-step rules; the whole run on a small hand-made library."""
+import numpy as np
+import pandas as pd
+import pytest
+
+from swing import candles, longtest as lt
+
+
+def test_fast_trade_matches_step_by_step():
+    rng = np.random.default_rng(3)
+    for _ in range(300):
+        n = 60
+        c = 100 * np.exp(np.cumsum(rng.normal(0, 0.004, n)))
+        o = np.r_[100, c[:-1]]
+        h = np.maximum(o, c) * (1 + np.abs(rng.normal(0, 0.002, n)))
+        l = np.minimum(o, c) * (1 - np.abs(rng.normal(0, 0.002, n)))
+        end_m = 575 + 5 * np.arange(n)
+        ends = np.array([f"{m // 60:02d}:{m % 60:02d}" for m in end_m])
+        lng = bool(rng.integers(0, 2))
+        a, _, ja = lt._simulate(o, h, l, c, ends, 1, o[1], "LONG" if lng else "SHORT", 0.01, 0.02)
+        b, jb = lt.fast_trade(o, h, l, c, end_m, 1, o[1], lng, 0.01, 0.02)
+        assert a == pytest.approx(b) and ja == jb
+
+
+def test_run_on_small_library(monkeypatch):
+    days = pd.bdate_range("2023-06-01", periods=20).append(pd.bdate_range("2024-06-03", periods=20))
+    rng = np.random.default_rng(1)
+    for k, sym in enumerate(["AAA", "BBB", "NIFTY50"]):
+        rows = []
+        for d in days:
+            idx = pd.date_range(d + pd.Timedelta(hours=9, minutes=15), periods=75, freq="5min")
+            c = 100 * np.exp(np.cumsum(rng.normal(0.0005, 0.004, 75)))
+            o = np.r_[c[0], c[:-1]]
+            rows.append(pd.DataFrame({"open": o, "high": np.maximum(o, c) * 1.002, "low": np.minimum(o, c) * 0.998,
+                                      "close": c, "volume": rng.integers(1e3, 5e4, 75).astype(float)}, index=idx))
+        candles.store("5minute", sym, pd.concat(rows))
+    monkeypatch.setattr(candles, "symbols", lambda iv="day": ["NIFTY50", "AAA", "BBB"])
+    monkeypatch.setattr(lt, "REPORT", lt.RESULTS / "_t.md")
+    monkeypatch.setattr(lt, "DATA", candles.BASE)
+    rows, orow, data = lt.run(send=False, workers=1)
+    assert len(rows) == len(lt.SIG) * len(lt.EXI) and len(orow) == 18 and data["stocks"] == 2
+    assert any(r["dev"] for r in rows) and "Kite 5-minute candles only" in lt.REPORT.read_text()
+    lt.REPORT.unlink()

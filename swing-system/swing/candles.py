@@ -40,9 +40,10 @@ INTERVALS = {                                        # chunk = days per request 
     "5minute": {"chunk": 95, "floor": pd.Timestamp("2005-01-01")},
     "minute": {"chunk": 58, "floor": pd.Timestamp("2005-01-01")},
 }
-ORDER = ["day", "60minute", "15minute", "5minute"]       # owner 20 Nov: 1-minute history SKIPPED for now - only if
-                                                         # tests show it would help ("minute" stays possible: add it here)
-DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min"), "30minute": ("15minute", "30min")}
+ORDER = ["day", "5minute"]       # owner 20 Nov: 1-minute history skipped; 15-minute and 1-hour candles are BUILT
+                                 # exactly from the 5-minute ones (same Kite candles, ~9 hours less downloading)
+DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min"), "15minute": ("5minute", "15min"),
+           "30minute": ("5minute", "30min"), "60minute": ("5minute", "60min")}
 ALL_INTERVALS = ["minute", "3minute", "5minute", "10minute", "15minute", "30minute", "60minute", "day"]
 INDICES = {"NIFTY50": "NIFTY 50", "BANKNIFTY": "NIFTY BANK", "INDIAVIX": "INDIA VIX"}
 MAX_DATA_GB = 8.5                                    # GitHub keeps 10 GB of cache per repository (one copy kept)
@@ -126,7 +127,7 @@ def store(interval, sym, df):
 
 # ----------------------------------------------------------------------------- reading
 def raw(sym, interval="day"):
-    if interval in DERIVED:
+    if interval in DERIVED and not _path(interval, sym).exists():
         base, rule = DERIVED[interval]
         b = raw(sym, base)
         return resample(b, rule) if b is not None and len(b) else None
@@ -295,6 +296,7 @@ def progress(st=None):
 
 def complete(interval="day"):
     """All of Kite's history for this interval is downloaded and up to date (within 5 days)."""
+    interval = DERIVED.get(interval, (interval,))[0]
     st = _state()
     syms = symbols(interval)
     if not syms:

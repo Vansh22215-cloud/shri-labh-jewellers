@@ -1421,3 +1421,17 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - `swing/market_days.py` reads NSE's official trading-holiday list (confirmed: 24 Nov 2026, Prakash Gurpurb Sri Guru Nanak Dev), with a built-in copy of the 2026 holidays if NSE cannot be reached.
 - On a holiday: no Kite login message, no live feed or practice trading, and history downloads may run all day.
 - The weekly expiry moving to Monday needs no code: option contracts and their expiry dates come from Kite's own NFO list. On expiry day after 1:30 pm the trader uses the next weekly expiry.
+
+## D167 - 2026-11-20 - Weekend long test; 15-minute and 1-hour candles built from 5-minute
+- History downloads are now day + 5-minute only. 15-, 30- and 60-minute candles are built exactly from Kite's 5-minute candles (aligned to 9:15). Same data, ~9 hours less downloading, less storage.
+- **Long test** (`swing/longtest.py`), runs by itself once 5-minute history is complete, outside market hours.
+  - **Stocks**: the live opening-range rule on every day of Kite 5-minute history, with the same top-100 universe, limits, sizing, charges and slippage. 72 settings tried:
+    - volume 1.5/2x;
+    - last entry 11:30/13:00;
+    - long+short or long only;
+    - stop 0.75/1/1.5%;
+    - target 1.5/2/3%.
+  - **NIFTY options** as an ESTIMATE on NIFTY's 5-minute candles (premium 0.35% of NIFTY, delta 0.5, no time decay). Kite has no candles of expired options. 18 settings.
+  - **Fair check**: settings are chosen on the years before 2024, and 2024 onwards is shown separately; a setting is used only if it also wins there.
+  - The fast exit maths equals the step-by-step rules on 300 random cases (test).
+- **Weekends/holidays**: one Kite login message a day at 9 am while history is incomplete (downloads need the day's login).

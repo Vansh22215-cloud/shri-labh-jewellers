@@ -26,7 +26,7 @@ log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
 STATE = DATA / "jobs_done.json"
 MAX_MIN = float(os.environ.get("SWING_DAEMON_MINUTES", 315))
-SCRIPTS = {"replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py"}
+SCRIPTS = {"longtest": "run_longtest.py", "replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py"}
 TEST_QUEUE = DATA / "test_queue.json"         # strategies the owner asked to test (/test NAME)
 
 
@@ -58,7 +58,7 @@ def market_minutes(t):
 
 def key(job, t=None):
     t = t or now()
-    if job in ("test", "replay"):
+    if job in ("test", "replay", "longtest"):
         return None                                # every request runs (queue), nothing recorded
     if job == "candles" and market_minutes(t):
         return None                                # never during market hours (live scanning first)
@@ -134,6 +134,13 @@ def due(t=None):
                 out.append("test")                 # ... and only once that interval's Kite history is complete
     except Exception:
         pass
+    if not market_minutes(t) and not (DATA / "long_test_done.txt").exists() and not out:
+        try:
+            from .candles import complete
+            if complete("5minute"):
+                out.append("longtest")             # owner 20 Nov: weekend tests, once 5-minute history is complete
+        except Exception:
+            pass
     wait_f = DATA / "replay_wait.txt"
     waiting = wait_f.exists() and time.time() - wait_f.stat().st_mtime < 1800
     if not market_minutes(t) and not (DATA / "replay_done.txt").exists() and not waiting:
@@ -283,6 +290,16 @@ def minute_tasks(t=None):
                 _send(f"⏰ Still not logged in to Kite - live scanning is off. {link}", "kite login")
     except Exception as e:
         log.warning("Daemon: kite login prompt failed: %s", type(e).__name__)
+    try:                                           # weekends/holidays: downloads need the day's Kite login too
+        from . import kite
+        from .candles import progress
+        if not wd and kite.configured() and not kite.logged_in() and 9 <= t.hour < 20 and not progress()["complete"] \
+                and claim_once("kite login weekend", t):
+            _send(f"🔑 <b>Kite login for the history download</b> - no market today, but Kite history downloads only while "
+                  f"you are logged in. <a href=\"{_html.escape(kite.login_url())}\">Tap here to log in</a>, then Start.",
+                  "kite login")
+    except Exception as e:
+        log.warning("Daemon: weekend login prompt failed: %s", type(e).__name__)
     try:
         ensure_feed(t)
     except Exception as e:
