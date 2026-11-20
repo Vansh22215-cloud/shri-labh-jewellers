@@ -7,7 +7,8 @@ minutes, hours and 1 day from Kite"; Yahoo removed).
   15minute   "                                              "
   5minute    "                                              "
   minute     "                                              "
-  3/10/30-minute candles are built exactly from the 1/5/15-minute files (load(); no extra downloads).
+  30minute   every NSE stock + NIFTY 50, NIFTY BANK         everything Kite has (owner 20 Nov: download each as it is)
+  (1-minute history skipped by the owner; only 3- and 10-minute candles are built, from 1- and 5-minute.)
 
 How: read-only Kite historical API, at most ~3 requests a second, in ~10-minute chunks whenever the day's Kite
 login is valid and NEVER 8:45 am - 3:50 pm on weekdays (live scanning comes first). Each stock is read BACKWARDS
@@ -37,13 +38,14 @@ INTERVALS = {                                        # chunk = days per request 
     "day": {"chunk": 1990, "floor": pd.Timestamp("2000-01-01")},
     "60minute": {"chunk": 395, "floor": pd.Timestamp("2005-01-01")},
     "15minute": {"chunk": 195, "floor": pd.Timestamp("2005-01-01")},
+    "30minute": {"chunk": 195, "floor": pd.Timestamp("2005-01-01")},
     "5minute": {"chunk": 95, "floor": pd.Timestamp("2005-01-01")},
     "minute": {"chunk": 58, "floor": pd.Timestamp("2005-01-01")},
 }
-ORDER = ["day", "5minute"]       # owner 20 Nov: 1-minute history skipped; 15-minute and 1-hour candles are BUILT
-                                 # exactly from the 5-minute ones (same Kite candles, ~9 hours less downloading)
-DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min"), "15minute": ("5minute", "15min"),
-           "30minute": ("5minute", "30min"), "60minute": ("5minute", "60min")}
+ORDER = ["day", "5minute", "60minute", "30minute", "15minute"]   # owner 20 Nov: every one downloaded from Kite as
+                                 # it is (not built from others). 5-minute first (the tests need it), then the small
+                                 # ones, so the storage limit - if ever reached - stops the biggest last. 1-minute: skipped.
+DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min")}   # only these two are built
 ALL_INTERVALS = ["minute", "3minute", "5minute", "10minute", "15minute", "30minute", "60minute", "day"]
 INDICES = {"NIFTY50": "NIFTY 50", "BANKNIFTY": "NIFTY BANK", "INDIAVIX": "INDIA VIX"}
 MAX_DATA_GB = 8.5                                    # GitHub keeps 10 GB of cache per repository (one copy kept)
@@ -311,7 +313,7 @@ def report():
     st = _state()
     L = [f"# Kite candle library ({pd.Timestamp.now(tz='Asia/Kolkata'):%d %b %Y %H:%M} IST)", "",
          "Source: Kite Connect historical API only (no other price source). Every NSE stock Kite lists + indices. "
-         "3/10/30-minute candles are built from the 1/5/15-minute ones.", "",
+         "Day, 5, 15, 30 and 60-minute candles are downloaded from Kite as they are; only 3- and 10-minute are built (from 1- and 5-minute).", "",
          "| Interval | Stocks complete | Earliest day Kite gave | Median first day | Not on Kite | Size on disk |",
          "|---|---|---|---|---|---|"]
     for interval in ORDER:

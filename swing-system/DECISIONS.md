@@ -1446,3 +1446,7 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **NIFTY options**: beyond yesterday's high/low, VIX below 20, and both, on all 18 settings (estimate).
 - **Switching on**: a setting replaces the live one ONLY if it wins both before 2024 (where it was chosen) and in 2024 onwards, with a recent worst fall at most 1.5x deeper. Winners are written to `data/practice_params.json`, and the live practice trader uses them from the next start. The Telegram summary says what changed.
 - **₹10,000 a day**: the report shows how many times today's risk per trade would be needed to average ₹10,000, against what ₹50,800 allows (~1.6x stocks, ~4.8x options), with losses growing by the same factor. Raising the risk is NOT switched on by itself; it is shown for the owner.
+
+## D169 - 2026-11-20 - Every interval downloaded from Kite as it is (owner: "download 5, 15, 30, 1 hour and 1 day separately")
+- Replaces the D167 shortcut. Download order: day (done), 5-minute (the tests need it), then 60, 30 and 15-minute. All are Kite's own candles; only 3- and 10-minute would be built.
+- Storage: all of these together are estimated at ~9-10 GB against the 8.5 GB limit. If the limit is reached, the last one (15-minute) pauses and the owner is told.
