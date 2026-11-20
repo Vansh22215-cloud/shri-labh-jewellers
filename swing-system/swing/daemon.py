@@ -26,7 +26,7 @@ log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
 STATE = DATA / "jobs_done.json"
 MAX_MIN = float(os.environ.get("SWING_DAEMON_MINUTES", 315))
-SCRIPTS = {"candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py"}
+SCRIPTS = {"replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py"}
 TEST_QUEUE = DATA / "test_queue.json"         # strategies the owner asked to test (/test NAME)
 
 
@@ -53,7 +53,7 @@ def market_minutes(t):
 
 def key(job, t=None):
     t = t or now()
-    if job == "test":
+    if job in ("test", "replay"):
         return None                                # every request runs (queue), nothing recorded
     if job == "candles" and market_minutes(t):
         return None                                # never during market hours (live scanning first)
@@ -129,6 +129,15 @@ def due(t=None):
                 out.append("test")                 # ... and only once that interval's Kite history is complete
     except Exception:
         pass
+    wait_f = DATA / "replay_wait.txt"
+    waiting = wait_f.exists() and time.time() - wait_f.stat().st_mtime < 1800
+    if not market_minutes(t) and not (DATA / "replay_done.txt").exists() and not waiting:
+        try:
+            from . import kite
+            if kite.logged_in():
+                out.append("replay")               # owner 20 Nov: the practice trader on the last 5 days, once
+        except Exception:
+            pass
     if key("company", t) and not st.get(key("company", t)) and not out:
         out.append("company")
     if key("candles", t) and not st.get(key("candles", t)) and not _waiting(st, "candles", t) and not out:
@@ -201,7 +210,18 @@ def ensure_feed(t=None):
     try:
         from .live_feed import LiveFeed
         from .tips import Scanner
-        _FEED["feed"] = LiveFeed(on_close=Scanner().on_close).start()
+        handlers = [Scanner().on_close]
+        if load_settings().get("paper_trading", True):
+            from .practice_live import PracticeLive
+            handlers.append(PracticeLive().on_close)
+
+        def on_close(interval, minute, feed):
+            for h in handlers:
+                try:
+                    h(interval, minute, feed)
+                except Exception as e:
+                    log.warning("Daemon: candle handler failed: %s", type(e).__name__)
+        _FEED["feed"] = LiveFeed(on_close=on_close).start()
         return True
     except Exception as e:
         log.warning("Daemon: live feed failed to start: %s", type(e).__name__)

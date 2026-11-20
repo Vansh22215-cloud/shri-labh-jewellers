@@ -78,6 +78,7 @@ class CandleBuilder:
         self.done = {}           # sym -> list of (minute, o, h, l, c, v)
         self.day = {}            # sym -> dict(open, high, low, close, volume)
         self.last_vol = {}       # sym -> cumulative day volume at the end of the last finished minute
+        self.prev = {}           # sym -> previous day's close (from the exchange)
         self.lock = threading.Lock()
 
     def tick(self, t, now):
@@ -86,6 +87,8 @@ class CandleBuilder:
             return
         m = minute_of(now)
         with self.lock:
+            if t.get("close"):
+                self.prev[sym] = t["close"]
             if t.get("open"):
                 self.day[sym] = {"open": t["open"], "high": max(t["high"], t["ltp"]), "low": min(t["low"], t["ltp"]),
                                  "close": t["ltp"], "volume": t.get("volume") or 0.0}
@@ -127,6 +130,14 @@ class CandleBuilder:
                                                                  float(r["high"]), float(r["low"]), float(r["close"]),
                                                                  float(r["volume"]))
             self.done[sym] = sorted(have.values(), key=lambda r: r[0])
+
+    def ltp(self, sym):
+        with self.lock:
+            c = self.cur.get(sym)
+            if c:
+                return c[4]
+            d = self.day.get(sym)
+            return d["close"] if d else None
 
     def minutes(self, sym):
         with self.lock:

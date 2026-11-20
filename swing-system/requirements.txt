@@ -8,3 +8,4 @@ pytest>=9.0,<10
 cryptography>=50,<60   # encrypts the daily Kite login pass
 pyarrow>=20,<30           # Kite candle library (parquet files)
 websocket-client>=1.8,<2    # Kite live streaming feed (read-only market data)
+matplotlib>=3.11,<4     # the evening dashboard picture

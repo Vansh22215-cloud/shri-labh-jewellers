@@ -104,7 +104,7 @@ def _balanced(part):
 
 # Owner's choice (D95): Telegram carries ONLY these. Everything else is written to the log, not sent.
 ALLOWED = ("trade tip", "exit alert", "kite login", "learner", "test result", "system problem", "system status",
-           "backup", "company of the quarter")   # D108: only when the system itself is broken (rare) - so it never fails silently
+           "backup", "company of the quarter", "dashboard")   # D108: only when the system itself is broken (rare) - so it never fails silently
 
 
 def allowed(settings, label):
@@ -227,3 +227,26 @@ def flush_outbox(settings, max_n=20):
     if sent:
         log.info("Outbox: %d delayed message(s) delivered, %d still waiting", sent, len(keep))
     return sent
+
+
+def send_photo(settings, path, caption="", label="dashboard"):
+    """Send a picture (the evening dashboard) to the owner's chat."""
+    if not allowed(settings, label):
+        return "muted"
+    token = (settings.get("telegram_bot_token") or "").strip()
+    chat = str(settings.get("telegram_chat_id") or "").strip()
+    if not token or not chat:
+        return "Telegram not set up"
+    if dry_run():
+        _dry_write("photo", f"{path} | {caption}")
+        return "photo sent"
+    try:
+        with open(path, "rb") as fh:
+            requests.post(f"https://api.telegram.org/bot{token}/sendPhoto",
+                          data={"chat_id": chat, "caption": caption[:1000], "parse_mode": "HTML"},
+                          files={"photo": ("dashboard.png", fh, "image/png")}, timeout=60).raise_for_status()
+        log.info("Telegram %s photo sent", label)
+        return "photo sent"
+    except Exception as e:
+        log.warning("Telegram photo failed: %s", e)
+        return f"Telegram photo failed: {e}"

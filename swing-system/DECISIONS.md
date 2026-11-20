@@ -1395,3 +1395,24 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **1-minute history is not downloaded** for now (owner: test on everything else first; add 1-minute only if tests show it helps). History downloads: day, 60, 15 and 5-minute for every NSE stock.
   - The live feed still builds 1-minute candles during the day: they are needed for exit alerts and live 3/5/10-minute candles.
   - Strategies on 1- or 3-minute candles cannot be tested until 1-minute history is added.
+
+## D165 - 2026-11-20 - Practice trader: ₹50,800 of pretend money, Kite prices, goal ₹10,000+ a day (owner's experiment)
+- **Owner**: "you decide, earn ₹10,000 a day, losses are okay - it is an experiment". The owner is told this is ~20% a day and cannot be promised.
+- **No real order is ever placed.** Kite terms 2(e) say no fully automated trades, and SEBI's retail-algo rules need a registered algo and a fixed IP. The owner places trades himself, from the instant Telegram messages.
+- **Rules (my choice, `swing/autotrader.py`)**:
+  - NIFTY weekly options (at-the-money):
+    - entry: a 5-minute close beyond the 9:15-9:30 range, with the 20-candle trend and the day's open;
+    - stop -30% of the premium, target +60%, stop to the entry at +30%;
+    - at most 2 trades a day, about ₹3,000 at risk each.
+  - Intraday stocks (the day's 100 most-traded):
+    - entry: a range breakout with 1.5x volume, on the VWAP side;
+    - stop 1%, target 2%;
+    - at most 3 trades a day and 2 at a time, about ₹1,500 at risk each.
+  - Day limits: stop new trades at +₹10,000 net or -₹7,500; everything sold by 3:15 pm.
+- **Real charges** (Zerodha options and intraday) plus slippage; MIS margin 20%; options need the full premium.
+- **Replay**: once, on the last 5 market days (Kite 1-minute candles of NIFTY, every NSE stock and the options used), with 5 dashboards on Telegram one by one plus a summary.
+  - Limit: Kite has no expired option contracts, so on those days the next listed expiry is used (said on the dashboard).
+- **Live** from the next market day, on the streaming feed:
+  - every entry and exit goes instantly to Telegram;
+  - the dashboard picture (Zerodha's 'Closed positions' layout) after 3:30 pm.
+- **Not tested on long history yet**: the stock rule can be, once the 5-minute library is complete. The option rule cannot (Kite has no expired option candles), so only the replay and live results judge it.

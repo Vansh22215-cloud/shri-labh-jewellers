@@ -63,3 +63,22 @@ def round_trip_pct(value, kind="delivery", slippage=SLIPPAGE_PCT):
         return 0.0
     ch = intraday_cost(value, value) if kind == "intraday" else buy_cost(value) + sell_cost(value)
     return ch / value + 2 * slippage
+
+
+# ----------------------------------------------------------------------------- NSE options (buying) - Zerodha
+OPT_BROKERAGE = 20.0                 # Rs 20 per executed order
+OPT_STT_SELL = 0.001                 # 0.1% of the sell premium
+OPT_EXCHANGE = 0.0003503             # NSE transaction charge on premium
+OPT_STAMP_BUY = 0.00003              # 0.003% on the buy side
+
+
+def option_cost(buy_value, sell_value):
+    """Rupee charges for one option round trip (one buy order, one sell order), excluding slippage."""
+    exch = (buy_value + sell_value) * OPT_EXCHANGE
+    sebi = (buy_value + sell_value) * SEBI
+    br = 2 * OPT_BROKERAGE
+    return round(br + sell_value * OPT_STT_SELL + exch + sebi + buy_value * OPT_STAMP_BUY + GST * (br + exch + sebi), 2)
+
+
+def intraday_equity_cost(buy_value, sell_value):
+    return intraday_cost(buy_value, sell_value)

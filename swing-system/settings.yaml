@@ -24,3 +24,8 @@ live_strategies: []
 
 # Keep the GitHub runs going all day (scripts/keep_alive.py).
 keep_alive: true
+
+# PRACTICE ACCOUNT (owner 20 Nov): pretend money, real Kite prices, real charges - no real order is ever placed.
+# Every entry/exit is sent to Telegram at once; the dashboard comes after the close. Rules: swing/autotrader.py.
+paper_trading: true
+paper_capital: 50800

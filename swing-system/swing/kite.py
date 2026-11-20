@@ -151,6 +151,8 @@ def _get(path, params=None, timeout=20):
 
 
 def _instrument(sym):
+    if ":" in str(sym):
+        return sym                                     # already "NFO:NIFTY26NOV26200CE" style
     s = INDEX.get(sym, sym)
     return f"NSE:{s}"
 

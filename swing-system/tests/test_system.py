@@ -123,3 +123,12 @@ def test_backup_roundtrip(tmp_path):
     pd.DataFrame({"id": ["b"], "sym": ["Y"]}).to_csv(p / "tips.csv", index=False)
     assert backup.restore(blob) == 1
     assert set(pd.read_csv(p / "tips.csv")["id"]) == {"a", "b"}
+
+
+def test_replay_runs_once_outside_market_hours(monkeypatch):
+    (daemon.DATA / "replay_done.txt").unlink()
+    monkeypatch.setattr(kite, "logged_in", lambda: True)
+    assert "replay" in daemon.due(datetime(2026, 11, 20, 19, 0, tzinfo=IST))
+    assert "replay" not in daemon.due(datetime(2026, 11, 20, 11, 0, tzinfo=IST))
+    (daemon.DATA / "replay_wait.txt").write_text("1")                       # failed a moment ago: waits 30 min
+    assert "replay" not in daemon.due(datetime(2026, 11, 20, 19, 0, tzinfo=IST))

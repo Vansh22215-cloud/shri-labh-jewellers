@@ -32,6 +32,8 @@ def _isolate(tmp_path, monkeypatch, request):
     monkeypatch.setattr(tips, "TIPS_F", tmp_path / "tips.csv")
     monkeypatch.setattr(daemon, "STATE", tmp_path / "jobs_done.json")
     monkeypatch.setattr(daemon, "TEST_QUEUE", tmp_path / "test_queue.json")
+    monkeypatch.setattr(daemon, "DATA", tmp_path)
+    (tmp_path / "replay_done.txt").write_text("done")             # the one-time replay is tested on its own
     monkeypatch.setattr(backtest, "TESTS", tmp_path / "tests")
     monkeypatch.setattr(backtest, "OUT", tmp_path / "results_tests")
     monkeypatch.setattr(learner, "OUT", tmp_path / "results_learner")
