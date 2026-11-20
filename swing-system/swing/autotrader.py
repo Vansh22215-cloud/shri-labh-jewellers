@@ -16,7 +16,7 @@ deciding at the close of every minute. Two strategies:
    - a 5-minute candle closing beyond the 9:15-9:30 range, on the same side of the day's VWAP, with 1.5x the
      day's average 5-minute volume -> buy (above) or short-sell (below);
    - stop-loss 1% (the owner's default), target 2%; once +1% the stop moves to the entry; sold by 3:15 pm;
-   - size: about ₹1,500 at risk (1% stop -> ₹1.5 lakh of shares, ₹30,000 of margin at 5x); at most 3 stock
+   - size: about ₹1,500 at risk (1% stop -> ₹1.5 lakh of shares, ~₹37,500 of margin at 4x); at most 3 stock
      trades a day and 2 at a time; entries 9:35-11:30 am; gaps of more than 3% are skipped.
 Day limits: no new trades once the day's net result is +₹10,000 (target reached) or -₹7,500 (loss limit).
 Every entry and exit is sent to the owner on Telegram at once (live), so he can place it himself."""
@@ -206,7 +206,8 @@ class Engine:
             px = self.m.price(sym, t) or c
             stop = px * (1 - self.p["stk_stop"]) if side == "LONG" else px * (1 + self.p["stk_stop"])
             tgt = px * (1 + self.p["stk_target"]) if side == "LONG" else px * (1 - self.p["stk_target"])
-            qty = int(min(self.p["stk_risk"] / (px * self.p["stk_stop"]), self.b.available() * 0.95 / (px * 0.2)))
+            from .paper import MIS_MARGIN
+            qty = int(min(self.p["stk_risk"] / (px * self.p["stk_stop"]), self.b.available() * 0.95 / (px * MIS_MARGIN)))
             if qty < 1:
                 continue
             pos = self.b.open_position(f"EQ-{sym}-{t:%H%M}", sym, sym, "EQ", side, qty, px, stop, tgt, "stocks", t,

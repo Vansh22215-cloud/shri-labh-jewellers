@@ -221,7 +221,7 @@ def stock_trades(args):
                 ex, j = fast_trade(o, h, l, c, end_m, i + 1, px, lng, stop_f, tgt_f)
                 slp = 0.0005 * px
                 buy, sell = ((px + slp), (ex - slp)) if lng else ((ex + slp), (px - slp))
-                qty = int(min(1500 / (px * stop_f), 50800 * 5 * 0.45 / px))
+                qty = int(min(1500 / (px * stop_f), 50800 * 4 * 0.45 / px))      # 4x intraday margin (cautious)
                 if qty < 1:
                     continue
                 net = qty * (sell - buy) - costs.intraday_cost(qty * buy, qty * sell)

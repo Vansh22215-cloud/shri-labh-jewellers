@@ -1452,3 +1452,4 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - Storage: all of these together are estimated at ~9-10 GB against the 8.5 GB limit. If the limit is reached, the last one (15-minute) pauses and the owner is told.
 - Weekend/holiday Kite login message moved from 9 am to 6 am (owner: "don't want to waste 3 hours" - a login lasts until 6 am the next day).
 - /proof (owner 20 Nov: "what's the proof you traded honestly?"): every practice trade (replay or live) as a CSV with exact entry/exit times, buy/sell prices and reason, so each can be checked on Kite's own 1-minute chart.
+- Intraday stock margin in the practice account: 25% (4x) instead of 20% (5x) - owner noticed a ₹1.5 lakh trade on ₹50,800; Zerodha gives up to 5x only on the most liquid stocks, so the cautious figure is used (practice trader and long test).

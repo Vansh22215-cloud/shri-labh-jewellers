@@ -5,7 +5,8 @@ Fills:   buys fill a little above the price, sells a little below (slippage: opt
          stocks 0.05%); a stop-loss that is jumped over fills at the worse price.
 Charges: Zerodha's real charges (options: ₹20 an order, 0.1% STT on sell premium, exchange, SEBI, stamp, GST;
          intraday stocks: 0.03%/₹20 brokerage, 0.025% STT on sells, exchange, SEBI, stamp, GST).
-Money:   options need their full premium; intraday (MIS) stocks need 20% of their value (5x, Zerodha's usual).
+Money:   options need their full premium; intraday (MIS) stocks need 25% of their value (4x - Zerodha gives up
+         to 5x on the most liquid stocks, less on many; 25% is the cautious figure).
 The dashboard shows P&L like Zerodha's 'Closed positions' (before charges) and the charges and net below it."""
 import json
 from dataclasses import asdict, dataclass, field
@@ -16,7 +17,7 @@ from . import costs
 from .config import PRIVATE, get_logger
 
 log = get_logger()
-MIS_MARGIN = 0.20
+MIS_MARGIN = 0.25          # owner 20 Nov: never assume more leverage than Zerodha gives (4x, many stocks)
 
 
 def slip(price, kind):
