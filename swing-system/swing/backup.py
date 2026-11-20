@@ -11,7 +11,7 @@ from .config import DATA, PRIVATE, get_logger
 
 log = get_logger()
 HASH_F = DATA / "backup_hash.txt"
-SKIP = {"kite_token.bin", "old_system"}
+SKIP = {"kite_token.bin"}
 
 
 def build():

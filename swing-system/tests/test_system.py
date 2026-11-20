@@ -32,7 +32,10 @@ def test_downloads_never_in_market_hours_and_learner_on_saturday(monkeypatch):
     assert daemon.key("candles", datetime(2026, 11, 21, 11, 0, tzinfo=IST))
     monkeypatch.setattr(kite, "logged_in", lambda: True)
     assert daemon.due(datetime(2026, 11, 21, 10, 31, tzinfo=IST)) == ["learner"]
+    assert daemon.due(datetime(2026, 11, 20, 19, 0, tzinfo=IST)) == ["company"]    # evening: company first
+    daemon.claim("company", datetime(2026, 11, 20, 19, 0, tzinfo=IST))
     assert daemon.due(datetime(2026, 11, 20, 19, 0, tzinfo=IST)) == ["candles"]
+    assert daemon.due(datetime(2026, 11, 22, 11, 0, tzinfo=IST)) == ["candles"]    # Sunday morning
     assert daemon.due(datetime(2026, 11, 20, 11, 0, tzinfo=IST)) == []
 
 
@@ -87,26 +90,25 @@ def test_bot_capital_kill_and_approval_needs_a_test(settings_file, monkeypatch):
     assert "No strategy" in bot.approve_command("/approve nope")
 
 
-def test_clean_start_removes_old_data_keeps_kite(tmp_path, monkeypatch):
+def test_clean_start_deletes_old_data_and_records_keeps_kite(tmp_path, monkeypatch):
     data, priv = tmp_path / "data", tmp_path / "data" / "private"
     for p in ["prices/RELIANCE.csv", "bhavcopy/x.csv", "delisted_raw.csv", "kite_daily/A.csv", "bot_offset.txt",
               "kite_candles/60minute/A.parquet", "private/kite_token.bin", "private/vantage_signals.csv",
-              "private/my_trades.csv", "fundamentals/A.json", "fundamentals/nse_xbrl/1.json"]:
+              "private/old_system/my_trades.csv", "fundamentals/A.json", "fundamentals/nse_xbrl/1.json"]:
         f = data / p
         f.parent.mkdir(parents=True, exist_ok=True)
-        f.write_text('{"v": 2}' if p == "fundamentals/A.json" else "x")
+        f.write_text("x")
     (data / "kite_candles" / "state.json").write_text(json.dumps({"60minute|A": {"ended": True}}))
     monkeypatch.setattr(reset, "DATA", data)
     monkeypatch.setattr(reset, "PRIVATE", priv)
-    monkeypatch.setattr(reset, "FLAG", data / "reset_v2.done")
+    monkeypatch.setattr(reset, "FLAG", data / "reset_v3.done")
     r = reset.maybe_run(force=True)
-    assert not (data / "prices").exists() and not (data / "bhavcopy").exists() and not (data / "kite_daily").exists()
+    for gone in ("prices", "bhavcopy", "kite_daily", "fundamentals", "private/old_system", "private/vantage_signals.csv"):
+        assert not (data / gone).exists(), gone
     assert (data / "candles" / "60minute" / "A.parquet").exists()
     assert json.loads((data / "candles" / "state.json").read_text())["60minute|A"]["ended"]
     assert (priv / "kite_token.bin").exists() and (data / "bot_offset.txt").exists()
-    assert (priv / "old_system" / "vantage_signals.csv").exists()          # moved aside, not deleted
-    assert (data / "fundamentals" / "nse_xbrl" / "1.json").exists() and not (data / "fundamentals" / "A.json").exists()
-    assert r["moved"] == 2 and reset.maybe_run(force=True) is None             # only once
+    assert r["removed"] == 2 and reset.maybe_run(force=True) is None             # only once
 
 
 def test_backup_roundtrip(tmp_path):

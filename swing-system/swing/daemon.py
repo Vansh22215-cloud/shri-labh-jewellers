@@ -8,6 +8,7 @@ starts by itself (scripts/keep_alive.py). Every minute:
   - outside market hours, when logged in: the Kite history download in ~10-minute chunks (scripts/run_candles.py)
     until everything Kite has is downloaded, then the daily top-up;
   - Saturday 10:30 am: the Learner report of every tested strategy;
+  - 6:30 pm daily: Company of the Quarter - reads ~150 companies' NSE filings; one pick per calendar quarter;
   - 9:30 pm: a private backup of your records to your Telegram (only if they changed);
   - once, after this rebuild: removes the old system's data from GitHub's cache (Yahoo prices etc.).
 Jobs run one at a time in the background, so the bot keeps answering while a job works."""
@@ -25,7 +26,7 @@ log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
 STATE = DATA / "jobs_done.json"
 MAX_MIN = float(os.environ.get("SWING_DAEMON_MINUTES", 315))
-SCRIPTS = {"candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py"}
+SCRIPTS = {"candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py"}
 TEST_QUEUE = DATA / "test_queue.json"         # strategies the owner asked to test (/test NAME)
 
 
@@ -58,6 +59,8 @@ def key(job, t=None):
         return None                                # never during market hours (live scanning first)
     if job == "learner" and (t.weekday() != 5 or t.hour * 60 + t.minute < 10 * 60 + 30):
         return None
+    if job == "company" and (market_minutes(t) or t.hour * 60 + t.minute < 18 * 60 + 30):
+        return None                                # company of the quarter: filings read each evening, pick at 6:30 pm
     return f"{job} {t:%Y-%m-%d}"
 
 
@@ -126,6 +129,8 @@ def due(t=None):
                 out.append("test")                 # ... and only once that interval's Kite history is complete
     except Exception:
         pass
+    if key("company", t) and not st.get(key("company", t)) and not out:
+        out.append("company")
     if key("candles", t) and not st.get(key("candles", t)) and not _waiting(st, "candles", t) and not out:
         try:
             from . import kite

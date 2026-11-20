@@ -1,5 +1,5 @@
-"""Company financials from the companies' own NSE filings (owner 20 Nov: "move company financials to NSE/BSE filings").
-Replaces Yahoo's statements. Free, public NSE data, read-only:
+"""Company results from the companies' own NSE filings - used ONLY by the Company of the Quarter
+(swing/company_quarter.py; owner 20 Nov). Free, public NSE data, read-only:
   - annual results list  /api/corporates-financial-results?period=Annual  (every year since ~2005, real filing time)
   - each annual filing's XBRL file (the official machine-readable copy): income statement, balance sheet, cash flow
   - promoter holding     /api/corporate-share-holdings-master (latest shareholding pattern)
@@ -15,10 +15,10 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 import requests
 
-from .config import FUND, get_logger
+from .config import DATA, get_logger
 
 log = get_logger()
-XCACHE = FUND / "nse_xbrl"
+XCACHE = DATA / "company" / "xbrl"
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36",
       "Accept": "application/json, text/plain, */*", "Accept-Language": "en-US,en;q=0.9",
       "Referer": "https://www.nseindia.com/companies-listing/corporate-filings-financial-results"}
@@ -195,57 +195,3 @@ def promoter_pct(symbol, s=None):
         return float(r["pr_and_prgrp"]) / 100, str(_d(r["date"]).date())
     except Exception:
         return None, None
-
-
-def industry(symbol):
-    """(industry, company name): name from Kite's instrument list; industry is not in it (None)."""
-    try:
-        from .kite import instruments
-        ins = instruments()
-        row = ins[ins["tradingsymbol"] == symbol]
-        return None, (str(row["name"].iloc[0]) if len(row) else None)
-    except Exception:
-        return None, None
-
-
-def kite_close(symbol):
-    try:
-        from .candles import load
-        d = load(symbol, "day")
-        return float(d["close"].dropna().iloc[-1]) if d is not None and len(d) else None
-    except Exception:
-        return None
-
-
-def snapshot(symbol, s=None):
-    """The fundamentals snapshot in the format the system already uses (v3 = NSE filings)."""
-    from datetime import date
-    s = s or session()
-    snap = {"symbol": symbol, "downloaded": str(date.today()), "ok": False, "v": 3,
-            "source": "NSE filings (annual XBRL + shareholding); prices: Kite"}
-    years = annual(symbol, s)
-    snap["annual"] = years
-    snap["ok"] = bool(years)
-    ind, name = industry(symbol)
-    try:
-        lst_name = None
-        if not name:
-            lst = _get_json(s, f"/api/corporates-financial-results?index=equities&symbol={symbol}&period=Annual") or []
-            lst_name = lst[0].get("companyName") if lst else None
-        name = name or lst_name
-    except Exception:
-        pass
-    pp, pdate = promoter_pct(symbol, s)
-    last = years[max(years)] if years else {}
-    px = kite_close(symbol)
-    mcap = px * last["shares"] if px and last.get("shares") else None
-    ni, eq = last.get("net_income"), last.get("equity")
-    snap.update({"name": name, "sector": ind, "industry": ind, "summary": "",
-                 "insider_pct": pp, "promoter_pct": pp, "promoter_asof": pdate, "market_cap": mcap,
-                 "pe": mcap / ni if (mcap and ni and ni > 0) else None,
-                 "pb": mcap / eq if (mcap and eq and eq > 0) else None,
-                 "float_shares": last["shares"] * (1 - pp) if (last.get("shares") and pp is not None) else None,
-                 "dividend_yield": None, "info_ok": pp is not None,
-                 "roe_info": None, "de_info": None, "margin_info": None, "rev_growth_info": None,
-                 "eps_growth_info": None, "current_ratio_info": None})
-    return snap

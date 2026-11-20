@@ -104,7 +104,7 @@ def _balanced(part):
 
 # Owner's choice (D95): Telegram carries ONLY these. Everything else is written to the log, not sent.
 ALLOWED = ("trade tip", "exit alert", "kite login", "learner", "test result", "system problem", "system status",
-           "backup")   # D108: only when the system itself is broken (rare) - so it never fails silently
+           "backup", "company of the quarter")   # D108: only when the system itself is broken (rare) - so it never fails silently
 
 
 def allowed(settings, label):

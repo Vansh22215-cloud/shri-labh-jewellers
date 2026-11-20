@@ -15,6 +15,7 @@ Connect (read-only market data) as its only price source. It never places, chang
 | Learner | `swing/learner.py` | Every trade (test and live): did it work, where it works and where it fails (time, weekday, trend, market, VIX, gap, volume, volatility...), why losers lost, ideas to test. Suggests only - never changes anything. |
 | Live tips | `swing/tips.py` | Approved strategies on every closed live candle -> BUY tip (entry, stop, target, quantity) -> SELL alert at stop / target / exit rule / 3:20 pm. |
 | Runner | `swing/daemon.py` | The always-on GitHub run: login link 8:45 am, live feed, downloads, tests, weekly Learner, nightly private backup. |
+| Company of the Quarter | `swing/company_quarter.py` | One company a calendar quarter (research, not a tip), scored from its own NSE filings + Kite price; red flags remove it; no repeats within 4 quarters; next message says how the last pick did. |
 | Bot | `swing/bot.py` | /status /kite /capital /stop /resume /tips /strategies /test /learn /approve /unapprove |
 
 ## The owner's procedure for every strategy

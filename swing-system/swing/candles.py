@@ -44,7 +44,7 @@ ORDER = ["day", "60minute", "15minute", "5minute", "minute"]
 DERIVED = {"3minute": ("minute", "3min"), "10minute": ("5minute", "10min"), "30minute": ("15minute", "30min")}
 ALL_INTERVALS = ["minute", "3minute", "5minute", "10minute", "15minute", "30minute", "60minute", "day"]
 INDICES = {"NIFTY50": "NIFTY 50", "BANKNIFTY": "NIFTY BANK", "INDIAVIX": "INDIA VIX"}
-MAX_DATA_GB = 4.0                                    # GitHub keeps 10 GB of cache per repository in all
+MAX_DATA_GB = 8.5                                    # GitHub keeps 10 GB of cache per repository (one copy kept)
 MAX_MINUTES = 10                                     # one step never runs longer (other jobs wait for it)
 COLS = ["open", "high", "low", "close", "volume"]
 

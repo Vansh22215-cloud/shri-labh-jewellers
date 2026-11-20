@@ -24,12 +24,12 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"                 # private GitHub cache only (never in git)
 PRIVATE = DATA / "private"           # personal records: tips, trades, Kite login pass
-FUND = DATA / "fundamentals"         # NSE filings (company financials)
+COMPANY = DATA / "company"           # NSE filings read for the Company of the Quarter
 LOGS = ROOT / "logs"
 RESULTS = ROOT / "results"           # public, non-personal results (test reports, learner reports) - saved to git
 STATE = DATA / "state.json"
 DISCLAIMER = "Research, not advice. You decide and place every order yourself."
-for _d in (DATA, PRIVATE, FUND, LOGS, RESULTS):
+for _d in (DATA, PRIVATE, COMPANY, LOGS, RESULTS):
     _d.mkdir(parents=True, exist_ok=True)
 
 

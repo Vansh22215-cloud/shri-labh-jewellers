@@ -3,7 +3,7 @@ import json
 
 import pandas as pd
 
-from swing import nse_financials as nf
+from swing import company_filings as nf
 
 HEAD = ('<?xml version="1.0"?><xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance" '
         'xmlns:f="http://www.bseindia.com/xbrl/fin" xmlns:xbrldi="http://xbrl.org/2006/xbrldi">')

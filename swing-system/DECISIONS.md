@@ -1366,3 +1366,20 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Storage limit**: the free GitHub cache holds 10 GB per repository. Downloads pause at 4 GB and the owner is shown "storage limit reached". All NSE stocks at 1-minute for every year Kite has will very likely not fit; where to keep more is the owner's decision (anything paid needs his approval).
 - **Live feed**: Kite WebSocket, read-only. Quote mode, IST receive time for the minute; the evening download replaces today's live candles with Kite's official ones. A new GitHub run during the day refills missed minutes from Kite's own 1-minute candles.
 - **Not yet proven on GitHub**: the live feed and the full-market download have only been tested with simulated Kite data here (the Kite keys exist only on GitHub). The first market day is the real check; /status and the 3:45 pm message show it.
+
+## D163 - 2026-11-20 - Old records deleted; Company of the Quarter; GitHub storage used fully
+- **Deleted on GitHub** (one-time `reset.py`, version 3; the owner: "delete my personal records and NSE company financials"):
+  - the old personal records (old tips, VANTAGE signals, trades, forwarded tips);
+  - the old company-financials store;
+  - everything else of the old system.
+  - Kept: Kite candles and the Kite login.
+- **Company of the Quarter** (owner: "company of the day, but one company once a quarter"):
+  - one pick per calendar quarter, at 6:30 pm on the first weekday of Jan/Apr/Jul/Oct (the first as soon as 80% of companies have been read);
+  - scored 0-100 from each company's own NSE annual filings (quality, growth, financial health, cash, valuation from the Kite price, health checks);
+  - red flags remove a company; no repeat within 4 quarters; picks recorded in `results/company_picks.csv`.
+  - The NSE filings reader stays only for this pick (`company_filings.py`); nothing else uses company data.
+- **GitHub storage**:
+  - every run used to save a full new copy of the data (each copy counts toward GitHub's 10 GB). Now each run deletes the older copies after saving its own (`scripts/clean_caches.py`);
+  - GitHub's computer also deletes ~25 GB of unused preinstalled tools first, so there is disk room;
+  - limit raised from 4 to 8.5 GB of data.
+- **Measured**: 1-minute candles take ~1.3-1.6 MB per stock per year, so every NSE stock at 1-minute for every year Kite has is ~25-35 GB, which no free GitHub storage holds. Day, 60, 15 and 5-minute for all stocks (~6-8 GB) should fit. The download order (day → 60 → 15 → 5 → 1 minute) means nothing is lost while the owner chooses where 1-minute history lives.

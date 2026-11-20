@@ -57,6 +57,10 @@ jobs:
       - name: Install packages
         run: pip install -r requirements.txt
 
+      - name: Free disk space (GitHub's computer comes with ~25 GB of tools we never use)
+        working-directory: .
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL || true
+
       - name: Restore saved data
         uses: actions/cache/restore@v4
         with:
@@ -87,6 +91,12 @@ jobs:
         with:
           path: swing-system/data
           key: swing-data-${{ github.run_id }}
+
+      - name: Delete older saved copies (one copy of the data uses GitHub's 10 GB, not several)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/clean_caches.py || true
 
       # (no file uploads here: this repository is public, so personal files are backed up to your Telegram instead)
 
