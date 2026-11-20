@@ -1488,3 +1488,11 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Switching on**: as for every setting, only if it wins both before 2024 and from 2024, with no much deeper fall (`practice_params.json`: stk_scale / opt_scale).
 - **Live trader**: books the part at 1R (options in whole lots; a single lot is sold whole at 1R), moves the stop to cost, and messages both steps.
 - **Dashboard**: one line per instrument, like Zerodha (quantities added, average prices weighted).
+
+## D174 - 2026-11-21 - Trade size scaled toward ₹10,000 a day (owner: "₹10,000 a day is the only target; you have freedom")
+- After the long test picks the rules, `size_up()` raises the risk per trade so the recent years' average points at ₹10,000 a day.
+- **Hard limits**:
+  - what ₹50,800 allows: stocks ≤1.6x, options ≤4.8x;
+  - a day with EVERY trade stopped may lose at most ₹12,500 (~25%): stocks ≤ ₹4,166 a trade × 3, options ≤ ₹6,250 a trade × 2;
+  - the day loss limit becomes ₹12,500.
+- Not raised if no rule earned in the recent years. The report and the Telegram summary show the new sizes and the expected average a day.

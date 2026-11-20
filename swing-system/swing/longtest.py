@@ -502,9 +502,36 @@ def recommend(rows, frows, orow):
             k = 10000 / r["recent"]["avg_day"]
             out[f"{part}_scale_for_10k"] = round(k, 1)
             out[f"{part}_max_scale"] = MAX_SCALE[part]
+    size_up(out)
     if out["params"]:
         (DATA / "practice_params.json").write_text(json.dumps(out["params"]))
     return out
+
+
+DAY_LOSS_CAP = 12500.0        # hard limit: a day's worst case (every trade stopped) stays within ~25% of ₹50,800
+
+
+def size_up(out):
+    """Owner 21 Nov ("₹10,000 a day is the target; you have freedom"): scale the risk per trade towards an average
+    of ₹10,000 a day (from the recent years' result of the rules chosen), but never beyond what ₹50,800 allows
+    (margin / premium) and never so far that a day with every trade stopped loses more than DAY_LOSS_CAP."""
+    avg = {}
+    for part, key in (("stocks", "stocks"), ("nifty", "nifty")):
+        r = out[f"{part}_best"] if (("stocks" if part == "stocks" else "NIFTY options") in out["changes"]) else out[f"{part}_now"]
+        avg[part] = r["recent"]["avg_day"] if r and r.get("recent") and r["recent"]["avg_day"] > 0 else 0.0
+    total = avg["stocks"] + avg["nifty"]
+    if total <= 0:
+        out["size"] = "no rule earned in the recent years - risk not raised"
+        return
+    k = 10000.0 / total
+    caps = {"stocks": min(MAX_SCALE["stocks"], DAY_LOSS_CAP / (3 * 1500)),
+            "nifty": min(MAX_SCALE["nifty"], DAY_LOSS_CAP / (2 * 3000))}
+    ks = {p: (round(min(max(k, 1.0), caps[p]), 2) if avg[p] > 0 else 1.0) for p in avg}
+    out["params"].update(stk_risk=round(1500 * ks["stocks"]), opt_risk=round(3000 * ks["nifty"]), day_max_loss=DAY_LOSS_CAP)
+    exp = avg["stocks"] * ks["stocks"] + avg["nifty"] * ks["nifty"]
+    out["size"] = (f"risk per trade x{ks['stocks']} stocks (₹{1500 * ks['stocks']:,.0f}), x{ks['nifty']} NIFTY options "
+                   f"(₹{3000 * ks['nifty']:,.0f}); expected average ≈ ₹{exp:,.0f} a day from the recent years "
+                   f"(goal ₹10,000); day loss limit ₹{DAY_LOSS_CAP:,.0f}")
 
 
 def _name(r):
@@ -533,7 +560,8 @@ def report(rows, orow, data, frows=None, rec=None, srows=None):
                 L.append(f"| {part} | {lab}: {_name(r)} | {'before 2024' if per == 'dev' else 'recent'} | ₹{x['avg_day']:+,.0f} | "
                          f"{x['win_days_pct']}% | {x['days_10k_pct']}% | ₹{x['worst_day']:,.0f} | ₹{x['max_fall']:,.0f} |")
     L += ["", "**Switched on for the practice trader:** " + (", ".join(rec["changes"]) if rec.get("changes") else
-                                                            "nothing - no setting beat the live one in BOTH periods"), ""]
+                                                            "nothing - no setting beat the live one in BOTH periods"),
+          "", "**Size (goal ₹10,000 a day):** " + str(rec.get("size", "-")), ""]
     for part in ("stocks", "nifty"):
         if f"{part}_scale_for_10k" in rec:
             L.append(f"- {part}: averaging ₹10,000 a day would need {rec[part + '_scale_for_10k']}x today's risk per trade; "

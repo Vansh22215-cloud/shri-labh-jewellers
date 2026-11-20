@@ -53,7 +53,7 @@ def test_switch_only_when_better_in_both_periods(tmp_path, monkeypatch):
     live = dict(lt.LIVE_STK, dev=_s(500), recent=_s(300))
     better_dev_only = dict(lt.LIVE_STK, vol=2.0, dev=_s(900), recent=_s(100))
     rec = lt.recommend([live, better_dev_only], [], [])
-    assert rec["changes"] == [] and not (tmp_path / "practice_params.json").exists()
+    assert rec["changes"] == [] and "stk_vol_mult" not in rec["params"]       # rules unchanged (size may grow)
     both = dict(lt.LIVE_STK, vol=2.0, dev=_s(900), recent=_s(700))
     rec = lt.recommend([live, both], [], [])
     assert rec["changes"] == ["stocks"] and rec["params"]["stk_vol_mult"] == 2.0
@@ -109,3 +109,17 @@ def test_live_trader_scales_out_and_dashboard_shows_one_line():
     assert not b.acc.open and b.acc.closed[1]["why"] == "stop at entry"
     rows = dashboard.combine(b.acc.closed)
     assert len(rows) == 1 and rows[0]["qty"] == 195
+
+
+def test_size_up_towards_10k_within_hard_limits(tmp_path, monkeypatch):
+    monkeypatch.setattr(lt, "DATA", tmp_path)
+    s_now = dict(lt.LIVE_STK, dev=_s(1000), recent=_s(1500))
+    o_now = dict(lt.LIVE_OPT, dev=_s(1500), recent=_s(2500))
+    rec = lt.recommend([s_now], [], [o_now])
+    p = rec["params"]
+    assert p["day_max_loss"] == lt.DAY_LOSS_CAP
+    assert p["stk_risk"] == round(1500 * 1.6) and p["opt_risk"] == round(3000 * lt.DAY_LOSS_CAP / 6000, 0) or \
+        p["opt_risk"] == round(3000 * round(lt.DAY_LOSS_CAP / 6000, 2))
+    assert 3 * p["stk_risk"] <= lt.DAY_LOSS_CAP and 2 * p["opt_risk"] <= lt.DAY_LOSS_CAP + 1
+    rec = lt.recommend([dict(lt.LIVE_STK, dev=_s(-100), recent=_s(-50))], [], [dict(lt.LIVE_OPT, dev=_s(-1), recent=_s(-5))])
+    assert "not raised" in rec["size"] and "stk_risk" not in rec["params"]
