@@ -1471,3 +1471,11 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   3. the 4 GitHub Secrets;
   4. the same 4 lines in `main`'s workflow (GitHub runs main's workflow file).
 - Without the keys, nothing changes.
+
+## D172 - 2026-11-21 - CORRECTION: no Zerodha permission; Kite data is deleted only on the owner's word
+- The owner corrected the record: Zerodha did NOT give permission. They said the data should be deleted. Earlier notes saying "permission obtained" (D164 and the 20 Nov messages) are wrong.
+- **Owner's decision**: keep the Kite data, privately, for our own research until the Kite Connect subscription ends. The owner then tells us to delete it. Known risk (Kite terms 4(b)/9(b)): Zerodha may end API access.
+- **Nothing deletes Kite data by itself**: there is no automatic deletion at the end of the subscription or at any other time.
+  - Two things only remove DUPLICATE copies: keep_alive deletes older GitHub cache copies after a newer copy exists; r2.migrate moves the data to the private bucket and only then removes the GitHub copy (only if the owner sets up R2).
+  - The one-time reset (D162/D163) removed only the old system's data, by the owner's instruction.
+- The data stays private: never in git, logs, artifacts or anything public.
