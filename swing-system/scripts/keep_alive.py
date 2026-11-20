@@ -52,6 +52,23 @@ def alert_failure(names):
         return False
 
 
+def prune_caches(repo, h):
+    """GitHub keeps every run's saved copy of the data and counts them all toward its 10 GB. Keep only the newest
+    copy (the one this run started from); this run's own copy is saved right after this step, so at most two
+    copies exist for a moment and GitHub drops the older one if space runs short."""
+    try:
+        r = requests.get(f"{API}/repos/{repo}/actions/caches", headers=h, timeout=30,
+                         params={"key": "swing-data-", "sort": "created_at", "direction": "desc", "per_page": 100}).json()
+        caches = r.get("actions_caches", [])
+        n = 0
+        for c in caches[1:]:
+            d = requests.delete(f"{API}/repos/{repo}/actions/caches/{c['id']}", headers=h, timeout=30)
+            n += d.status_code in (200, 204)
+        return n
+    except Exception:
+        return 0
+
+
 def main():
     if not os.environ.get("GITHUB_ACTIONS"):
         return "not on GitHub"
@@ -62,6 +79,7 @@ def main():
     if not token or not repo:
         return "no GitHub key in this run (workflow needs the keep-alive step)"
     h = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
+    print("old saved data copies deleted:", prune_caches(repo, h))
     alert_failure([n for n in failed_steps(repo, run_id, h) if "next run" not in n.lower()])
     # 1) another run already waiting/running? then it carries on
     for status in ("queued", "pending", "waiting", "in_progress"):

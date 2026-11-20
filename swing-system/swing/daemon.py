@@ -326,8 +326,18 @@ def token_rotated(now_s=None, wait_s=180, every_h=0.5):
     return True
 
 
+def free_disk():
+    """GitHub's computer comes with ~25 GB of tools this system never uses: remove them, so saving and restoring the
+    candle library has room (best effort, GitHub only)."""
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    subprocess.run("sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup "
+                   "/opt/hostedtoolcache/CodeQL", shell=True, timeout=600, capture_output=True)
+
+
 def run():
     from .bot import poll_once
+    threading.Thread(target=free_disk, daemon=True).start()
     start = time.time()
     left = lambda: MAX_MIN - (time.time() - start) / 60
     answered = 0

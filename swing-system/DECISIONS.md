@@ -1383,3 +1383,8 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - GitHub's computer also deletes ~25 GB of unused preinstalled tools first, so there is disk room;
   - limit raised from 4 to 8.5 GB of data.
 - **Measured**: 1-minute candles take ~1.3-1.6 MB per stock per year, so every NSE stock at 1-minute for every year Kite has is ~25-35 GB, which no free GitHub storage holds. Day, 60, 15 and 5-minute for all stocks (~6-8 GB) should fit. The download order (day → 60 → 15 → 5 → 1 minute) means nothing is lost while the owner chooses where 1-minute history lives.
+- **Correction (same day)**: GitHub runs the workflow file of the `main` branch, so the two new workflow steps would never have run. Both moved into code that does run from this branch:
+  - `keep_alive.py` deletes every older saved copy except the newest, before this run saves its own;
+  - the daemon frees ~25 GB of unused tools at the start of each run.
+  - The workflow file on this branch is again identical to `main`.
+  - A manual "Run workflow" must use the task `bot`; the old default `nightly` script no longer exists.
