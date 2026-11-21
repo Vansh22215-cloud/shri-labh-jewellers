@@ -96,3 +96,21 @@ def test_complete_needs_every_stock_up_to_date(lib):
     assert not cd.complete("day")
     cd.step(max_requests=100_000, today=pd.Timestamp.now().normalize())
     assert cd.complete("day")
+
+
+def test_three_at_once_keeps_the_kite_speed_limit(lib, monkeypatch):
+    import time as _t
+    stamps = []
+    real = cd._fetch
+
+    def timed(sym, interval, fr, to):
+        cd._throttle()
+        stamps.append(_t.time())
+        return real(sym, interval, fr, to)
+    monkeypatch.setattr(cd, "symbols", lambda interval="day": ["AAA", "BBB", "CCC", "DDD"])
+    monkeypatch.setattr(cd, "_fetch", timed)
+    monkeypatch.setattr(cd, "GAP", 0.02)
+    cd.step(max_requests=100_000, today=pd.Timestamp("2026-11-20"), intervals=["day"])
+    gaps = [b - a for a, b in zip(sorted(stamps), sorted(stamps)[1:])]
+    assert len(stamps) > 4 and min(gaps) >= 0.019              # never two requests closer than the limit
+    assert all(cd._state()[f"day|{s}"]["ended"] for s in ["AAA", "BBB", "CCC", "DDD"])

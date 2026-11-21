@@ -1496,3 +1496,4 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - a day with EVERY trade stopped may lose at most ₹12,500 (~25%): stocks ≤ ₹4,166 a trade × 3, options ≤ ₹6,250 a trade × 2;
   - the day loss limit becomes ₹12,500.
 - Not raised if no rule earned in the recent years. The report and the Telegram summary show the new sizes and the expected average a day.
+- Faster history downloads (21 Nov): 3 stocks at once under ONE shared speed limit (one request every 0.36 s = Kite's 3 a second), and each stock's new candles written once instead of after every request. Before: ~1.4 requests a second.

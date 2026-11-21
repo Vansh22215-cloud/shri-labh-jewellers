@@ -87,6 +87,21 @@ def _token(sym):
     return int(row["instrument_token"].iloc[0]) if len(row) else None
 
 
+import threading as _th
+_RATE = {"next": 0.0, "lock": _th.Lock()}
+WORKERS = 3                                          # stocks downloaded at the same time (one shared speed limit)
+
+
+def _throttle():
+    """At most one historical request every GAP seconds across ALL threads (Kite allows 3 a second)."""
+    with _RATE["lock"]:
+        now = time.time()
+        wait = _RATE["next"] - now
+        _RATE["next"] = max(now, _RATE["next"]) + GAP
+    if wait > 0:
+        time.sleep(wait)
+
+
 def _fetch(sym, interval, fr, to, retries=3):
     """Kite candles from fr to to (inclusive days) -> DataFrame (may be empty); None if Kite has no such instrument."""
     from . import kite
@@ -94,7 +109,9 @@ def _fetch(sym, interval, fr, to, retries=3):
     if tok is None:
         return None
     for a in range(retries):
-        time.sleep(GAP * (1 + 3 * a))
+        _throttle()
+        if a:
+            time.sleep(GAP * 3 * a)                       # rate limited before: wait a little longer
         try:
             r = kite._get(f"/instruments/historical/{tok}/{interval}",
                           params={"from": f"{fr:%Y-%m-%d} 00:00:00", "to": f"{to:%Y-%m-%d} 23:59:59"}, timeout=60)
@@ -212,76 +229,123 @@ def in_market_hours(now=None):
     return is_trading_day(now.date())                    # NSE holidays: downloads may run all day
 
 
+class _Budget:
+    def __init__(self, max_requests, minutes):
+        self.max, self.t0, self.minutes = max_requests, time.time(), minutes
+        self.used, self.stop, self.lock = 0, None, _th.Lock()
+
+    def take(self):
+        with self.lock:
+            if self.stop:
+                return False
+            if self.used >= self.max or time.time() - self.t0 > self.minutes * 60:
+                self.stop = "budget"
+                return False
+            if self.used % 50 == 0 and in_market_hours():
+                self.stop = "market hours"
+                return False
+            self.used += 1
+            return True
+
+
+def _one(interval, sym, s, today, budget):
+    """All the work one stock needs now; its new candles are written ONCE at the end (not after every request).
+    -> (state, error name or None)."""
+    cfg = INTERVALS[interval]
+    frames = []
+    err = None
+    try:
+        while True:
+            if not s.get("ended"):                       # backwards: today -> as far back as Kite has
+                if not budget.take():
+                    break
+                to = pd.Timestamp(s["oldest"]) - timedelta(days=1) if s.get("oldest") else today
+                fr = max(to - timedelta(days=cfg["chunk"]), cfg["floor"])
+                d = _fetch(sym, interval, fr, to)
+                if d is None:
+                    s.update(ended=True, newest=str(today.date()), missing=True)
+                    break
+                if len(d):
+                    frames.append(d)
+                    s["newest"] = max(s.get("newest", "0000"), str(d.index.max().date()))
+                    s["first"] = str(d.index.min().date())
+                    s["empty_runs"] = 0
+                else:
+                    s["empty_runs"] = s.get("empty_runs", 0) + 1
+                s["oldest"] = str(fr.date())
+                if s["empty_runs"] >= 2 or fr <= cfg["floor"]:   # 2 empty chunks = start of Kite's history
+                    s["ended"] = True
+                s.setdefault("newest", str(today.date()))
+            elif pd.Timestamp(s.get("newest", "2000-01-01")) < today:     # forwards top-up
+                if not budget.take():
+                    break
+                fr = pd.Timestamp(s["newest"]) - timedelta(days=3)
+                d = _fetch(sym, interval, fr, today)
+                if d is not None and len(d):
+                    frames.append(d)
+                s["newest"] = str(today.date())
+            else:
+                break
+    except Exception as e:
+        err = type(e).__name__
+    if frames:
+        store(interval, sym, pd.concat(frames))           # written before its state is saved
+    return s, err
+
+
 def step(max_requests=1500, today=None, intervals=None):
-    """One chunk of work: backwards until Kite has no more, then forward top-ups. -> summary dict."""
+    """One chunk of work (3 stocks at a time, one shared speed limit): backwards until Kite has no more, then
+    forward top-ups. -> summary dict."""
+    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
     from . import kite
     if not kite.logged_in():
         return {"skipped": "not logged in"}
     if in_market_hours():
         return {"skipped": "market hours"}
     today = pd.Timestamp(today or pd.Timestamp.now().normalize()).normalize()
-    st, used, t0 = _state(), 0, time.time()
-    full = False
+    st = _state()
+    budget = _Budget(max_requests, MAX_MINUTES)
+    stopped = None
     for interval in intervals or ORDER:
         if interval != "day" and data_size_gb() > MAX_DATA_GB:
             log.warning("Candles: data above %.1f GB - %s and smaller paused (storage)", MAX_DATA_GB, interval)
             st["_storage_full"] = str(today.date())
             break
-        cfg = INTERVALS[interval]
-        for sym in symbols(interval):
-            k = f"{interval}|{sym}"
-            s = st.get(k, {})
+        todo = [s_ for s_ in symbols(interval)
+                if not st.get(f"{interval}|{s_}", {}).get("ended")
+                or pd.Timestamp(st.get(f"{interval}|{s_}", {}).get("newest", "2000-01-01")) < today]
+        with ThreadPoolExecutor(WORKERS) as ex:
+            it = iter(todo)
+            running = {}
             while True:
-                if used >= max_requests or time.time() - t0 > MAX_MINUTES * 60 or (used % 50 == 0 and in_market_hours()):
-                    full = True
-                    break
-                if interval != "day" and used % 200 == 199 and data_size_gb() > MAX_DATA_GB:
-                    st["_storage_full"] = str(today.date())
-                    full = True
-                    break
-                try:
-                    if not s.get("ended"):                       # backwards: today -> as far back as Kite has
-                        to = pd.Timestamp(s["oldest"]) - timedelta(days=1) if s.get("oldest") else today
-                        fr = max(to - timedelta(days=cfg["chunk"]), cfg["floor"])
-                        d = _fetch(sym, interval, fr, to)
-                        used += 1
-                        if d is None:
-                            s.update(ended=True, newest=str(today.date()), missing=True)
-                        else:
-                            if len(d):
-                                store(interval, sym, d)
-                                s["newest"] = max(s.get("newest", "0000"), str(d.index.max().date()))
-                                s["first"] = str(d.index.min().date())
-                                s["empty_runs"] = 0
-                            else:
-                                s["empty_runs"] = s.get("empty_runs", 0) + 1
-                            s["oldest"] = str(fr.date())
-                            if s["empty_runs"] >= 2 or fr <= cfg["floor"]:   # 2 empty chunks = start of Kite's history
-                                s["ended"] = True
-                            s.setdefault("newest", str(today.date()))
-                    elif pd.Timestamp(s.get("newest", "2000-01-01")) < today:     # forwards top-up
-                        fr = pd.Timestamp(s["newest"]) - timedelta(days=3)
-                        d = _fetch(sym, interval, fr, today)
-                        used += 1
-                        if d is not None and len(d):
-                            store(interval, sym, d)
-                        s["newest"] = str(today.date())
-                    else:
+                while len(running) < WORKERS and not budget.stop and not stopped:
+                    sym = next(it, None)
+                    if sym is None:
                         break
-                except Exception as e:
-                    st[k] = s
-                    _save_state(st)
-                    log.warning("Candles %s %s: %s", interval, sym, type(e).__name__)
-                    return {"requests": used, "stopped": type(e).__name__}
+                    k = f"{interval}|{sym}"
+                    running[ex.submit(_one, interval, sym, dict(st.get(k, {})), today, budget)] = k
+                if not running:
+                    break
+                done = next(iter(wait(list(running), return_when=FIRST_COMPLETED).done))
+                k = running.pop(done)
+                s, err = done.result()
                 st[k] = s
-            if full:
-                break
-        if full:
+                if err:
+                    log.warning("Candles %s: %s", k, err)
+                    stopped = err
+                if interval != "day" and budget.used % 200 < WORKERS and data_size_gb() > MAX_DATA_GB:
+                    st["_storage_full"] = str(today.date())
+                    budget.stop = "storage"
+            _save_state(st)
+        if budget.stop or stopped:
             break
     if "_storage_full" in st and data_size_gb() <= MAX_DATA_GB:
         st.pop("_storage_full")
     _save_state(st)
-    return {"requests": used, **progress(st)}
+    out = {"requests": budget.used, **progress(st)}
+    if stopped:
+        out["stopped"] = stopped
+    return out
 
 
 def progress(st=None):
