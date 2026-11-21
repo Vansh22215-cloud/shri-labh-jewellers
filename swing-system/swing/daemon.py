@@ -179,11 +179,15 @@ def run_job(job, minutes_left, background=True):
 
     def _go():
         log.info("Daemon: running %s", job)
+        ok = False
         try:
-            subprocess.run([sys.executable, str(ROOT / "scripts" / SCRIPTS[job])], cwd=ROOT, env=env,
-                           timeout=max(60, (minutes_left - 5) * 60))
+            r = subprocess.run([sys.executable, str(ROOT / "scripts" / SCRIPTS[job])], cwd=ROOT, env=env,
+                               timeout=max(60, (minutes_left - 5) * 60))
+            ok = r.returncode == 0
         except Exception as e:
             log.warning("Daemon: %s failed: %s", job, type(e).__name__)
+        if not ok and job == "candles":            # cut off or crashed: free its slot so the next run carries on
+            retry_later("candles", minutes=1, max_tries=1000)
         log.info("Daemon: %s finished", job)
 
     if not background:
@@ -418,7 +422,7 @@ def run():
         if token_rotated() and not job_running():
             break
         minute_tasks()
-        if not job_running():
+        if not job_running() and left() > 15:     # no new job in the last 15 minutes of a run (it would be cut off)
             for job in due():
                 if run_job(job, left()):
                     break
