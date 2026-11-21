@@ -369,13 +369,17 @@ def report(srows, nrows, data, rec, c_rows=None):
     s, n = rec.get("stock"), rec.get("nifty")
     L += ["## Chosen for the practice trader", "",
           f"- Stocks: {s['strategy'] + ' (stop ' + str(s['stop']) + ', target ' + str(s['target']) + ')' if s else 'none passed - stock trades stay paused'}",
-          f"- NIFTY options: {n['strategy'] + ' (stop ' + str(n['stop']) + ', target ' + str(n['target']) + (', VIX < 20' if n['vix'] else '') + ')' if n else 'none passed - option trades paused'}"]
+          f"- NIFTY options (best): {n['strategy'] + ' (stop ' + str(n['stop']) + ', target ' + str(n['target']) + (', VIX < 20' if n['vix'] else '') + ')' if n else 'none passed - option trades paused'}"]
+    os_ = rec.get("params", {}).get("opt_strategies") or []
+    if os_:
+        L.append("- NIFTY strategies that may fire (first signal takes the slot, max 2 a day): "
+                 + ", ".join(f"{x[0]} (stop {x[1]}, target {x[2]}{', VIX < 20' if x[3] else ''})" for x in os_))
     if rec.get("conditions", {}).get("rules"):
         L.append(f"- Stocks, by market condition: {len(rec['conditions']['rules'])} strategy/condition pairs allowed")
     if rec.get("live_expected") is not None:
         L.append(f"- Expected at the live size (₹1,000 a stock trade, ₹2,500 an option trade, ₹3,000 day loss limit): "
                  f"≈ ₹{rec['live_expected']:+,} a day from 2024 (goal ₹10,000)")
-    if "expected_day" in rec:
+    if "expected_day" in rec and False:            # D178: the live caps replace this older sizing line
         L += [f"- Together, recent years: ₹{rec['combined_recent']['avg_day']:+,.0f} a day at today's size; "
               f"₹10,000 a day would need {rec['scale_needed']}x the size; ₹50,800 allows "
               f"{rec['scales']['stocks']}x stocks / {rec['scales']['nifty']}x options -> expected ≈ ₹{rec['expected_day']:,} a day "
