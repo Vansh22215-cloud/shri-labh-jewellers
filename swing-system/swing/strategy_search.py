@@ -137,8 +137,17 @@ def _row(D, **k):
     return dict(k, dev=summary(D[D["day"] < CUT]), recent=summary(D[D["day"] >= CUT]), _daily=D)
 
 
+OWNER_STOCK_STOP = 0.01   # owner 21 Nov: "sl will be 1%" -> only 1%-stop stock settings can be switched on
+MIN_EDGE = 100.0          # ₹ a day in BOTH periods: +₹11 a day is break-even noise, not worth real money
+
+
 def _passes(r):
     return r["dev"] and r["recent"] and r["dev"]["avg_day"] > 0 and r["recent"]["avg_day"] > 0
+
+
+def _usable(r, stock):
+    return (_passes(r) and r["dev"]["avg_day"] >= MIN_EDGE and r["recent"]["avg_day"] >= MIN_EDGE
+            and (not stock or abs(r["stop"] - OWNER_STOCK_STOP) < 1e-9))
 
 
 def run(send=True, workers=None):
@@ -180,8 +189,8 @@ def run(send=True, workers=None):
 def choose(srows, nrows):
     """Best stock and best NIFTY strategy (chosen before 2024, must also earn from 2024), the size needed for
     ₹10,000 a day, and the practice settings."""
-    ps = [r for r in srows if _passes(r)]
-    pn = [r for r in nrows if _passes(r)]
+    ps = [r for r in srows if _usable(r, True)]
+    pn = [r for r in nrows if _usable(r, False)]
     bs = max(ps, key=lambda r: r["dev"]["avg_day"]) if ps else None
     bn = max(pn, key=lambda r: r["dev"]["avg_day"]) if pn else None
     out = {"stock": bs and {k: v for k, v in bs.items() if k != "_daily"},
@@ -235,6 +244,20 @@ def report(srows, nrows, data, rec):
             L.append(f"| {r['strategy']} | {setting} | ₹{r['dev']['avg_day']:+,.0f} | ₹{r['recent']['avg_day']:+,.0f} | "
                      f"{r['recent']['win_days_pct']}% | ₹{r['recent']['worst_day']:,.0f} | {'✅' if _passes(r) else '❌'} |")
         L.append("")
+    one = {}
+    for r in srows:
+        if r["dev"] and r["recent"] and abs(r["stop"] - OWNER_STOCK_STOP) < 1e-9:
+            b = one.get(r["strategy"])
+            if b is None or r["dev"]["avg_day"] > b["dev"]["avg_day"]:
+                one[r["strategy"]] = r
+    L += ["## Stocks with the owner's 1% stop-loss (only these can be switched on)", "",
+          f"Switched on only if it earns at least ₹{MIN_EDGE:,.0f} a day both before 2024 and from 2024.", "",
+          "| Strategy | Target | Before 2024 avg/day | Recent avg/day | Recent days in profit | Recent worst day | Usable |",
+          "|---|---|---|---|---|---|---|"]
+    for r in sorted(one.values(), key=lambda r: -r["recent"]["avg_day"]):
+        L.append(f"| {r['strategy']} | {r['target']} | ₹{r['dev']['avg_day']:+,.0f} | ₹{r['recent']['avg_day']:+,.0f} | "
+                 f"{r['recent']['win_days_pct']}% | ₹{r['recent']['worst_day']:,.0f} | {'✅' if _usable(r, True) else '❌'} |")
+    L.append("")
     s, n = rec.get("stock"), rec.get("nifty")
     L += ["## Chosen for the practice trader", "",
           f"- Stocks: {s['strategy'] + ' (stop ' + str(s['stop']) + ', target ' + str(s['target']) + ')' if s else 'none passed - stock trades stay paused'}",

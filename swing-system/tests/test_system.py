@@ -227,7 +227,7 @@ def test_strategy_search_runs_after_the_long_test_on_a_fresh_run(monkeypatch):
     (daemon.DATA / "long_test_done_v2.txt").write_text("done")
     assert daemon.due(sat) == ["search"]
     assert daemon.due(sat, skip={"longtest", "search"}) == ["candles"]
-    (daemon.DATA / "strategy_search_done.txt").write_text("done")
+    (daemon.DATA / "strategy_search_done_v2.txt").write_text("done")
     assert daemon.due(sat) == ["candles"]
 
 

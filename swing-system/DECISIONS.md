@@ -1530,3 +1530,17 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - Only strategies that make money in both periods are switched on, through `data/practice_params.json`.
   - If nothing reaches ₹10,000, the report says so plainly. Size is not pushed past the loss limit to hide it.
 - **When**: a GitHub job after the long test, outside market hours, on a fresh run (≥180 minutes left). A failed run is tried again up to 3 times; the error goes to `results/strategy_search_error.md`.
+
+## D177 - 2026-11-21 - Owner trades real money by hand from the Telegram signals; stock stop-loss 1%
+- **Owner**: "sl will be 1% ... earn as much as we can from Monday onwards ... send me instantly message on telegram ... I will buy manually and sell manually accordingly to you."
+- ATLAS still places NO orders. Every message is a signal that the owner places himself in Kite.
+- **Stock stop-loss**:
+  - always 1% (forced in `autotrader.Engine`);
+  - the search may switch on only 1%-stop stock settings.
+- **Option stop-loss**: 1% of the premium would be hit within seconds, so options keep the stop the test chose (20–30% of the premium). The owner can change this.
+- **Minimum edge**: a strategy is switched on only if it earns at least ₹100 a day both before 2024 and from 2024. Gap fade at +₹11 a day recent is break-even, not worth real money.
+- **Messages**:
+  - entry: exact Kite symbol, quantity, price, stop, target; place an SL order in Kite right after the fill; skip if the price has already run 0.5% (stocks) / 10% (options) past the signal;
+  - stop to cost: "move your stop-loss to …" message;
+  - exit: "SELL … NOW (at market)".
+- The strategy search runs again with these rules (done file v2).

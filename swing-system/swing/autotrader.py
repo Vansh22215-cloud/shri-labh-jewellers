@@ -50,10 +50,14 @@ def resample5(m):
                          "close": g["close"].last(), "volume": g["volume"].sum()}).dropna(subset=["open"])
 
 
+OWNER_STOCK_STOP = 0.01
+
+
 class Engine:
     def __init__(self, broker, market, params=None, notify=None):
         self.b, self.m = broker, market
         self.p = dict(P, **(params or {}))
+        self.p["stk_stop"] = OWNER_STOCK_STOP            # owner 21 Nov: the stock stop-loss is always 1%
         for k in ("stk_last_entry", "opt_last_entry"):
             self.p[k] = str(self.p[k])
         self.notify = notify or (lambda kind, text: None)
@@ -129,12 +133,12 @@ class Engine:
                     self.notify("exit", self.exit_text(cl))
                 continue
             be = self.p["opt_be"] if pos.kind == "OPT" else self.p["stk_be"]
-            if long and h >= pos.avg * (1 + be) and pos.stop < pos.avg:
+            if (long and h >= pos.avg * (1 + be) and pos.stop < pos.avg) or \
+                    (not long and l <= pos.avg * (1 - be) and pos.stop > pos.avg):
                 pos.stop = round(pos.avg, 2)
                 self.b.save()
-            if not long and l <= pos.avg * (1 - be) and pos.stop > pos.avg:
-                pos.stop = round(pos.avg, 2)
-                self.b.save()
+                self.notify("status", f"✏️ <b>{pos.name}</b>: move your stop-loss to ₹{pos.stop:,.2f} (your buy price) "
+                                      "- this trade can no longer lose.")
 
     # ---------------------------------------------------------------- NIFTY options
     def _lib_ctx(self, sym, t, m):
@@ -331,15 +335,21 @@ class Engine:
         act = "BUY" if p.side == "LONG" else "SELL (short)"
         lots = f" ({p.lots} lot{'s' if p.lots > 1 else ''})" if p.lots else ""
         risk = abs(p.avg - p.stop) * p.qty
-        return (f"{'🟢' if p.side == 'LONG' else '🔻'} <b>{act} {p.name}</b> · Intraday\n"
+        opt = p.kind == "OPT"
+        sym = str(p.symbol).split(":")[-1]
+        far = p.avg * (1.10 if opt else 1.005) if p.side == "LONG" else p.avg * 0.995
+        return (f"{'🟢' if p.side == 'LONG' else '🔻'} <b>{act} {p.name}</b>\n"
+                f"Kite: <code>{sym}</code> · {'NFO, NRML or MIS' if opt else 'NSE, MIS (intraday)'}\n"
                 f"Qty {p.qty}{lots} at ≈ ₹{p.avg:,.2f}\nStop-loss ₹{p.stop:,.2f} · Target ₹{p.target:,.2f}\n"
                 f"Risk ≈ ₹{risk:,.0f} · {p.note}\n"
                 + (f"Plan: book {p.book_frac:.0%} at ₹{p.t1:,.2f} (1R), stop to cost, rest to ₹{p.target:,.2f}\n" if p.t1 else "")
-                + "<i>Practice account - place it yourself if you want it.</i>")
+                + f"⚠️ Right after the order fills, place an SL order at ₹{p.stop:,.2f} in Kite. "
+                f"Skip it if the price is already {'above' if p.side == 'LONG' else 'below'} ₹{far:,.2f}.\n"
+                "<i>Signal only - ATLAS places no orders. Exit when I message.</i>")
 
     @staticmethod
     def exit_text(c):
         icon = "🎯" if c["why"] == "target" else "🔴" if c["net"] < 0 else "⏹"
         act = "SELL" if c["side"] == "LONG" else "BUY back"
-        return (f"{icon} <b>{act} {c['name']}</b> - {c['why']}\nQty {c['qty']} · buy ₹{c['buy_avg']:,.2f} → sell "
+        return (f"{icon} <b>{act} {c['name']} NOW</b> (at market) - {c['why']}\nQty {c['qty']} · buy ₹{c['buy_avg']:,.2f} → sell "
                 f"₹{c['sell_avg']:,.2f}\nP&L ₹{c['pnl']:+,.2f} (after charges ₹{c['net']:+,.2f})")

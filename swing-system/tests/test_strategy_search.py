@@ -81,3 +81,21 @@ def test_live_trader_takes_a_library_strategy_signal():
         t += timedelta(minutes=1)
     trades = [p for p in list(b.acc.open.values())] + b.acc.closed
     assert trades and (trades[0].side if hasattr(trades[0], "side") else trades[0]["side"]) == "SHORT"
+
+
+def test_owner_rules_one_percent_stop_and_manual_trade_messages():
+    from swing import autotrader, paper
+    from swing.replay import Market
+    e = autotrader.Engine(paper.Broker(None, start=50800), Market({}, None, lambda s: None), params={"stk_stop": 0.015})
+    assert e.p["stk_stop"] == 0.01
+    r = lambda strat, stop, d, rc: {"strategy": strat, "stop": stop, "target": 0.02, "dev": {"avg_day": d},
+                                    "recent": {"avg_day": rc}}
+    assert not ss._usable(r("gap_fade", 0.015, 500, 500), True)        # not the owner's 1% stop
+    assert not ss._usable(r("gap_fade", 0.01, 206, 11), True)          # +₹11 a day is break-even noise
+    assert ss._usable(r("gap_fade", 0.01, 206, 150), True)
+
+    class Pos:
+        side, name, symbol, kind, qty, lots, avg, stop, target, note, t1 = ("LONG", "NIFTY 24200 CE", "NFO:NIFTY26N2424200CE",
+                                                                         "OPT", 65, 1, 120.0, 96.0, 240.0, "x", None)
+    txt = autotrader.Engine.entry_text(Pos)
+    assert "NIFTY26N2424200CE" in txt and "SL order at ₹96.00" in txt and "₹132.00" in txt
