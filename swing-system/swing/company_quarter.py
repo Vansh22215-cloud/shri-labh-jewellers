@@ -27,6 +27,7 @@ from .config import COMPANY, RESULTS, get_logger, load_settings
 log = get_logger()
 PICKS = RESULTS / "company_picks.csv"
 REFRESH_DAYS = 80
+MAX_MINUTES = 10                 # the nightly filings read never blocks the other jobs for longer
 MIN_TURNOVER_CR, MIN_PRICE = 1.0, 20.0
 
 
@@ -64,15 +65,20 @@ def refresh(syms, n=150):
     if not todo:
         return 0
     sess = cf.session()
-    ok = 0
+    ok, fails, t0 = 0, 0, time.time()
     for s in todo:
+        if time.time() - t0 > MAX_MINUTES * 60 or fails >= 8:   # NSE slow or blocking: stop, try again tomorrow
+            log.info("Company filings: stopped (%s)", "time limit" if fails < 8 else "NSE not answering")
+            break
         try:
             years = cf.annual(s, sess)
             pp, pdate = cf.promoter_pct(s, sess)
             _file(s).write_text(json.dumps({"symbol": s, "read": str(pd.Timestamp.now().date()), "years": years,
                                             "promoter_pct": pp, "promoter_asof": pdate}))
             ok += bool(years)
+            fails = 0
         except Exception as e:
+            fails += 1
             log.info("Company filings %s: %s", s, type(e).__name__)
     log.info("Company of the quarter: filings read for %d of %d companies", ok, len(todo))
     return ok

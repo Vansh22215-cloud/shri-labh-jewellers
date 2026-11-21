@@ -39,3 +39,13 @@ def test_one_pick_a_quarter_no_repeats(tmp_path, monkeypatch):
     assert not cq.due(pd.Timestamp("2026-12-31 19:00"))
     assert cq.due(pd.Timestamp("2027-01-01 18:31"))              # first weekday of the next quarter, 6:30 pm
     assert cq.run(send=False, t=pd.Timestamp("2027-01-01 18:31")) == "sent BBB"     # AAA not repeated within 4 quarters
+
+
+def test_refresh_stops_when_nse_does_not_answer(tmp_path, monkeypatch):
+    from swing import company_filings as cf
+    calls = []
+    monkeypatch.setattr(cq, "COMPANY", tmp_path)
+    monkeypatch.setattr(cf, "session", lambda: None)
+    monkeypatch.setattr(cf, "annual", lambda s, sess: calls.append(s) or (_ for _ in ()).throw(TimeoutError()))
+    assert cq.refresh([f"S{i}" for i in range(100)]) == 0
+    assert len(calls) == 8                                   # gave up after 8 failures in a row, not 100

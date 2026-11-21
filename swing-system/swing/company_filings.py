@@ -51,16 +51,16 @@ def session():
     return s
 
 
-def _get_json(s, path, timeout=40):
-    for a in range(3):
+def _get_json(s, path, timeout=15):
+    for a in range(2):
         try:
             r = s.get(BASE + path, headers=UA, timeout=timeout)
             r.raise_for_status()
             return r.json()
         except Exception:
-            if a == 2:
+            if a == 1:
                 raise
-            time.sleep(2 * (a + 1))
+            time.sleep(2)
 
 
 def _d(x):
