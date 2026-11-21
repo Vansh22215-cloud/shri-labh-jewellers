@@ -396,7 +396,7 @@ def report(srows, nrows, data, rec, c_rows=None):
         L += ["No stock strategy earned in any market condition in both periods.", ""]
     s, n = rec.get("stock"), rec.get("nifty")
     L += ["## Chosen for the practice trader", "",
-          f"- Stocks: {s['strategy'] + ' (stop ' + str(s['stop']) + ', target ' + str(s['target']) + ')' if s else 'none passed - stock trades stay paused'}",
+          f"- Stocks: {s['strategy'] + ' (stop ' + str(s['stop']) + ', target ' + str(s['target']) + ')' if s else 'none passed the test - live: the 5-day rule at a small learning size (D181)'}",
           f"- NIFTY options (best): {n['strategy'] + ' (stop ' + str(n['stop']) + ', target ' + str(n['target']) + (', VIX < 20' if n['vix'] else '') + ')' if n else 'none passed - option trades paused'}"]
     os_ = rec.get("params", {}).get("opt_strategies") or []
     if os_:
