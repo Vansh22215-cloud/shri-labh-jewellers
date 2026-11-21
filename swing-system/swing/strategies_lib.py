@@ -14,17 +14,21 @@ Stock strategies (intraday, top-100 most traded stocks):
   late_momo    at 2:00 pm the stock is 2%+ from its open and on the right side of VWAP -> ride into the close
   pdh_break    first break of yesterday's high/low after 9:30 with 1.5x volume -> follow
   rebound      after a 4%+ fall yesterday, a gap down whose first candle turns green -> buy the rebound
+  rs_divergence  (owner's PAYTM tip) the stock falls hard while NIFTY rises -> short at the low (and mirror)
+  trend_pullback (owner's 12:50 tip) on a trend day, buy the dip to the 20-candle average, not the high
 NIFTY strategies (weekly options, CALL for long / PUT for short):
   n_orb        9:15-9:30 range breakout with the 20-candle trend and the day's open (the current rule)
   n_gap_fade   NIFTY gaps 0.5%+ and the first candle moves against the gap
   n_trend_1015 at 10:15 NIFTY is 0.4%+ from its open and beyond its 20-candle average
   n_ema_cross  9/21-candle averages cross in the direction of the day (after 9:45)
-  n_pdh_break  NIFTY breaks yesterday's high (CALL) or low (PUT)"""
+  n_pdh_break  NIFTY breaks yesterday's high (CALL) or low (PUT)
+  n_trend_pullback (owner's 12:50 tip) NIFTY trend day, the dip to the 20-candle average turns back up"""
 import numpy as np
 
 
-def ctx(o, h, l, c, v, end_m, prev_close=None, prev_high=None, prev_low=None, prev_change=None):
-    """Arrays of one day (oldest first) + yesterday's values -> a dict every strategy reads."""
+def ctx(o, h, l, c, v, end_m, prev_close=None, prev_high=None, prev_low=None, prev_change=None, nifty=None):
+    """Arrays of one day (oldest first) + yesterday's values -> a dict every strategy reads.
+    nifty = (NIFTY's open today, {candle end minute: NIFTY close}) for strategies that compare with the market."""
     v = np.asarray(v, float)
     cv = np.cumsum(v)
     vwap = np.where(cv > 0, np.cumsum(c * v) / np.maximum(cv, 1e-9), np.cumsum(c) / np.arange(1, len(c) + 1))
@@ -41,7 +45,16 @@ def ctx(o, h, l, c, v, end_m, prev_close=None, prev_high=None, prev_low=None, pr
             "orh": orh, "orl": orl, "open0": o[0] if len(o) else np.nan,
             "run_hi": np.maximum.accumulate(h), "run_lo": np.minimum.accumulate(l),
             "ema9": ema(c, 9), "ema20": ema(c, 20), "ema21": ema(c, 21),
-            "pc": prev_close, "ph": prev_high, "pl": prev_low, "pchg": prev_change}
+            "pc": prev_close, "ph": prev_high, "pl": prev_low, "pchg": prev_change,
+            "nmove": _nifty_move(nifty, end_m)}
+
+
+def _nifty_move(nifty, end_m):
+    """NIFTY's move since its open at the end of each candle (NaN where unknown)."""
+    if not nifty or not nifty[0]:
+        return np.full(len(end_m), np.nan)
+    n0, closes = nifty
+    return np.array([closes.get(int(e), np.nan) / n0 - 1 for e in end_m], float)
 
 
 def _ema(x, n):
@@ -122,8 +135,35 @@ def rebound(x):
     return ok & (c > o), z
 
 
+def rs_divergence(x):
+    """From the owner's PAYTM tip (21 Nov): a stock falling hard while NIFTY rises is weak for a reason -> short it
+    at the day's low; mirror: a stock rising hard while NIFTY falls -> buy it at the day's high. 10:00-1:00 pm."""
+    c, e, nm = x["c"], x["end_m"], x["nmove"]
+    sm = c / x["open0"] - 1
+    ok = (e >= 600) & (e <= 780) & ~np.isnan(nm)
+    nm = np.nan_to_num(nm)
+    return (ok & (nm < -0.003) & (sm > 0.015) & (c > x["vwap"]) & (c >= x["run_hi"] * 0.998),
+            ok & (nm > 0.003) & (sm < -0.015) & (c < x["vwap"]) & (c <= x["run_lo"] * 1.002))
+
+
+def trend_pullback(x):
+    """From the owner's 12:50 NIFTY tip (21 Nov): on a trend day, buy the dip, not the high. The stock is 1.5%+ up
+    (and was 2%+ up), the last candle dipped to its 20-candle average, this one closes green above it -> buy;
+    mirror for a down-trend. 10:00-1:30 pm."""
+    c, o, l, h, e, m = x["c"], x["o"], x["l"], x["h"], x["end_m"], x["ema20"]
+    sm = c / x["open0"] - 1
+    ok = (e >= 600) & (e <= 810)
+    pl = np.r_[np.inf, l[:-1]]
+    ph = np.r_[-np.inf, h[:-1]]
+    pm = np.r_[np.nan, m[:-1]]
+    up = ok & (sm > 0.015) & (x["run_hi"] >= x["open0"] * 1.02) & (pl <= pm * 1.001) & (c > m) & (c > o)
+    dn = ok & (sm < -0.015) & (x["run_lo"] <= x["open0"] * 0.98) & (ph >= pm * 0.999) & (c < m) & (c < o)
+    return up, dn
+
+
 STOCK = {"orb": orb, "gap_fade": gap_fade, "gap_go": gap_go, "vwap_revert": vwap_revert, "trend_1015": trend_1015,
-         "late_momo": late_momo, "pdh_break": pdh_break, "rebound": rebound}
+         "late_momo": late_momo, "pdh_break": pdh_break, "rebound": rebound, "rs_divergence": rs_divergence,
+         "trend_pullback": trend_pullback}
 
 
 # ----------------------------------------------------------------------------- NIFTY
@@ -166,8 +206,22 @@ def n_pdh_break(x):
     return ok & (c > x["ph"]), ok & (c < x["pl"])
 
 
+def n_trend_pullback(x):
+    """From the owner's 12:50 tip: NIFTY on a trend day (0.4%+ from its open, was 0.6%+), the last candle dipped to
+    the 20-candle average, this one closes back above it in the trend's direction -> CALL (mirror: PUT). 10:00-2:00."""
+    c, o, l, h, e, m = x["c"], x["o"], x["l"], x["h"], x["end_m"], x["ema20"]
+    mv = c / x["open0"] - 1
+    ok = (e >= 600) & (e <= 840)
+    pl = np.r_[np.inf, l[:-1]]
+    ph = np.r_[-np.inf, h[:-1]]
+    pm = np.r_[np.nan, m[:-1]]
+    up = ok & (mv > 0.004) & (x["run_hi"] >= x["open0"] * 1.006) & (pl <= pm * 1.0005) & (c > m) & (c > o)
+    dn = ok & (mv < -0.004) & (x["run_lo"] <= x["open0"] * 0.994) & (ph >= pm * 0.9995) & (c < m) & (c < o)
+    return up, dn
+
+
 NIFTY = {"n_orb": n_orb, "n_gap_fade": n_gap_fade, "n_trend_1015": n_trend_1015, "n_ema_cross": n_ema_cross,
-         "n_pdh_break": n_pdh_break}
+         "n_pdh_break": n_pdh_break, "n_trend_pullback": n_trend_pullback}
 
 
 # ----------------------------------------------------------------------------- market conditions (D179)

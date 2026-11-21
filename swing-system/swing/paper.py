@@ -46,6 +46,8 @@ class Position:
     scaled: bool = False
     margin: float = 0.25            # share of the value blocked (stocks: Kite's own figure when available)
     expiry: str = ""                # options: the contract's expiry day (expiry-day rules, D180)
+    exit_mode: str = ""             # options: cost / keep / trail (D182); "" = the old stop-to-cost rule
+    r_frac: float = 0.0             # options: stop distance as a share of the premium (1R)
 
 
 @dataclass

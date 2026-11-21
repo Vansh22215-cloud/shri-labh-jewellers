@@ -178,3 +178,58 @@ def test_five_day_stock_rule_runs_small_when_no_stock_strategy_passed(monkeypatc
     assert p["opt_strategy"] == "n_pdh_break"
     (tmp_path / "practice_params.json").write_text('{"stk_rules": [["gap_fade", 0.02, 1, 1]], "stk_strategy": "rules"}')
     assert pl.practice_params()["stk_strategy"] == "rules"
+
+
+def test_option_exit_modes_on_a_tip_like_trend_day():
+    # like the owner's 9:26 tip: +1R quickly, back to the entry once, then a big run
+    path = np.r_[np.linspace(100, 125, 5), np.linspace(125, 100.5, 4), np.linspace(101, 300, 30), [300] * 20]
+    o = np.r_[100.0, path[:-1]]
+    h, l, c = np.maximum(o, path) + 0.5, np.minimum(o, path) - 0.5, path
+    ends = np.array([f"{(555 + 5 * i) // 60:02d}:{(555 + 5 * i) % 60:02d}" for i in range(len(path))])
+    cost = ss.sim_opt(o, h, l, c, ends, 1, 100.0, 0.2, 2.0, "cost")
+    keep = ss.sim_opt(o, h, l, c, ends, 1, 100.0, 0.2, 2.0, "keep")
+    trail = ss.sim_opt(o, h, l, c, ends, 1, 100.0, 0.2, 2.0, "trail")
+    assert cost[1] == "stop" and cost[0] == 100.0                  # shaken out at the entry
+    assert keep[1] == "target" and keep[0] == 300.0                # held to +200%
+    assert trail[0] >= cost[0]                                     # a 1R trail is never worse than cost here
+    p2 = np.r_[np.linspace(100, 125, 5), np.linspace(124, 112, 4), np.linspace(113, 300, 30), [300] * 20]
+    o2 = np.r_[100.0, p2[:-1]]                                     # a shallower dip: the trail survives it
+    t2 = ss.sim_opt(o2, np.maximum(o2, p2) + 0.5, np.minimum(o2, p2) - 0.5, p2, ends, 1, 100.0, 0.2, 5.0, "trail")
+    assert t2[0] > 200
+
+
+def test_new_strategies_from_the_tips_fire_and_never_peek():
+    for name, fn in (("rs_divergence", SL.rs_divergence), ("trend_pullback", SL.trend_pullback),
+                     ("n_trend_pullback", SL.n_trend_pullback)):
+        for seed in range(10):
+            o, h, l, c, v, e = day_arrays(seed)
+            nif = (24000.0, {int(x): 24000 * (1 + 0.004 * (k % 3 - 1)) for k, x in enumerate(e)})
+            full = fn(SL.ctx(o, h, l, c, v, e, 100.0, 101.0, 99.0, 0.0, nifty=nif))
+            for i in range(2, len(c), 9):
+                part = fn(SL.ctx(o[:i + 1], h[:i + 1], l[:i + 1], c[:i + 1], v[:i + 1], e[:i + 1], 100.0, 101.0, 99.0,
+                                 0.0, nifty=nif))
+                assert part[0][-1] == full[0][i] and part[1][-1] == full[1][i], (name, seed, i)
+    # a stock 2% down at 10:30 while NIFTY is up 0.5%, at its low, below VWAP -> short
+    c = np.r_[np.linspace(100, 98, 16)]
+    o = np.r_[100.0, c[:-1]]
+    e = 560 + 5 * np.arange(16)
+    nif = (24000.0, {int(x): 24120.0 for x in e})
+    lg, sh = SL.rs_divergence(SL.ctx(o, o + 0.05, c - 0.05, c, np.ones(16), e, 100.0, 101.0, 99.0, 0.0, nifty=nif))
+    assert sh[-1] and not lg.any()
+
+
+def test_live_trailing_stop_follows_the_best_price():
+    from swing import autotrader, paper
+    from swing.replay import Market
+    b = paper.Broker(None, start=50800)
+    e = autotrader.Engine(b, Market({}, None, lambda s: None))
+    pos = b.open_position("OPT-T", "NIFTY X CALL", "NFO:X", "OPT", "LONG", 65, 100.0, 80.0, 300.0, "NIFTY options",
+                          pd.Timestamp("2026-11-23 09:40"), lots=1)
+    pos.exit_mode, pos.r_frac = "trail", 0.2
+    a = pos.avg
+    e._opt_exit_rule(pos, a * 1.1)
+    assert pos.stop < a                                            # not yet +1R
+    e._opt_exit_rule(pos, a * 1.5)
+    assert pos.stop == round(a * 1.5 * 0.8, 2)                    # trails 1R below the best
+    e._opt_exit_rule(pos, a * 1.3)
+    assert pos.stop == round(a * 1.5 * 0.8, 2)                    # never moves down

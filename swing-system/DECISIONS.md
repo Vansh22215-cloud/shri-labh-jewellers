@@ -1589,3 +1589,19 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **Owner's tips** (`tips/inbox.json` → `swing/tip_check.py`, daemon job "tips"):
   - each tip is replayed on Kite's 1-minute candles of its contract: did the entry trigger, which targets, was the stop hit (a "30 Min CB" stop on a 30-minute close), the best and worst move, and ₹ for 1 lot;
   - results go to `results/tip_check.md` and Telegram; Kite candles are not saved in the repo.
+
+## D182 - 2026-11-21 - Lessons from the owner's tips: exits that let trend days run, two new strategies
+- **Owner**: "Go ahead and do what's right and best for us." The replay of his 3 tips from 20 Nov (`results/tip_check.md`):
+  - both NIFTY tips hit target 1, came back to the entry once, then ran far: 116 → 377 and 130 → 176;
+  - "stop to cost after target 1" turned about +₹1,560 and +₹1,300 a lot into +₹304 and +₹216;
+  - the PAYTM sell was right: it fell to 1,712, past all targets.
+- **Exits tested for every NIFTY strategy** (`strategy_search.sim_opt`; live: `Engine._opt_exit_rule`, the same rule):
+  - cost: stop to the entry at +1R (the old rule);
+  - keep: the stop never moves;
+  - trail: once +1R, the stop follows the best price at 1R distance, never below the entry. It uses only finished candles.
+  - Targets now include +200%. The search picks the best exit per strategy. The owner gets a message when to move his stop: the first move, then every 0.5R.
+- **New strategies from the tips** (`strategies_lib`, tested the same way: before 2024 and from 2024):
+  - rs_divergence (the PAYTM tip): a stock 1.5%+ down while NIFTY is 0.3%+ up, at its low, below VWAP → short. Mirror → buy. 10:00 am–1:00 pm.
+  - trend_pullback (the 12:50 tip): on a trend day, buy the dip to the 20-candle average when it turns back up, not the high. Mirror for down-trends.
+  - n_trend_pullback: the same for NIFTY options.
+- The search runs again (done file v4).

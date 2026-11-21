@@ -151,7 +151,7 @@ def due(t=None, skip=()):
                 out.append("longtest")             # owner 20 Nov: weekend tests, once 5-minute history is complete
         except Exception:
             pass
-    ss_done = DATA / "strategy_search_done_v3.txt"  # v3: market conditions (D179)     # owner 21 Nov: the strategy search, after the long test
+    ss_done = DATA / "strategy_search_done_v4.txt"  # v4: exits + tip strategies (D182)     # owner 21 Nov: the strategy search, after the long test
     if not market_minutes(t) and lt_done and not ss_done.exists() and not out and "search" not in skip:
         out.append("search")
     wait_f = DATA / "replay_wait.txt"

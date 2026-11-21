@@ -25,7 +25,11 @@ from .longtest import (CUT, MAX_SCALE, DAY_LOSS_CAP, _days, _simulate, fast_trad
 log = get_logger()
 REPORT = RESULTS / "strategy_search.md"
 S_EXITS = list(itertools.product([0.005, 0.01, 0.015], [0.01, 0.02, 0.03]))
-N_EXITS = list(itertools.product([0.2, 0.3], [0.6, 1.0], [0, 8]))
+# NIFTY exits (D182, from the owner's tips: both ran far after coming back to the entry once):
+#   cost  = stop to the entry once +1R (the old rule)    keep  = the stop stays where it was set
+#   trail = once +1R, the stop follows the best price at the same distance (never below the entry)
+N_MODES = ("cost", "keep", "trail")
+N_EXITS = list(itertools.product([0.2, 0.3], [0.6, 1.0, 2.0], [0, 8], N_MODES))
 S_NAMES = list(SL.STOCK)
 N_NAMES = list(SL.NIFTY)
 
@@ -63,7 +67,7 @@ def stock_trades(args):
         if day in days and pc:
             o, h, l, c, v, end_m = _arrays(g)
             vb = SL.vix_bucket(vix_before(day))
-            x = SL.ctx(o, h, l, c, v, end_m, pc, ph, pl, (pc / ppc - 1) if ppc else None)
+            x = SL.ctx(o, h, l, c, v, end_m, pc, ph, pl, (pc / ppc - 1) if ppc else None, nifty=nctx.get(day))
             for si, name in enumerate(S_NAMES):
                 sig = SL.first_signal(SL.STOCK[name], x)
                 if sig is None or sig[0] + 1 >= len(o):
@@ -99,6 +103,27 @@ def _compact2(rows):
     return base
 
 
+def sim_opt(o, h, l, c, ends, i0, px, stop_f, tgt_f, mode="cost"):
+    """One option buy from bar i0 (entry = px). -> (exit price, why, exit index). The trailing stop uses only
+    candles already finished (the best high BEFORE this candle), so it never peeks."""
+    stop, tgt, one_r = px * (1 - stop_f), px * (1 + tgt_f), px * (1 + stop_f)
+    best, armed = px, False
+    for j in range(i0, len(o)):
+        if l[j] <= stop:
+            return min(o[j], stop), "stop", j
+        if h[j] >= tgt:
+            return max(o[j], tgt), "target", j
+        if ends[j] >= "15:15":
+            return c[j], "square-off", j
+        best = max(best, h[j])
+        armed = armed or h[j] >= one_r
+        if armed and mode == "cost":
+            stop = max(stop, px)
+        elif armed and mode == "trail":
+            stop = max(stop, px, best * (1 - stop_f))
+    return c[-1], "square-off", len(o) - 1
+
+
 def nifty_search():
     """{(name, stop, target, vix_mask): daily DataFrame} for every NIFTY strategy (option ESTIMATE)."""
     d = candles.load("NIFTY50", "5minute")
@@ -111,18 +136,20 @@ def nifty_search():
             days.append((day, g, prev, vix_before(day)))
         if len(g):
             prev = (float(g["close"].iloc[-1]), float(g["high"].max()), float(g["low"].min()))
+    prep = []
+    for day, g, (pc, ph, pl), vx in days:
+        o, h, l, c, v, end_m = _arrays(g)
+        x = SL.ctx(o, h, l, c, np.ones(len(c)), end_m, pc, ph, pl)
+        prep.append((day, vx, (o, h, l, c), (g.index + pd.Timedelta(minutes=5)).strftime("%H:%M").values,
+                     {n: SL.NIFTY[n](x) for n in N_NAMES}))
     for name in N_NAMES:
-        fn = SL.NIFTY[name]
-        for stop_f, tgt_f, mask in N_EXITS:
+        for stop_f, tgt_f, mask, mode in N_EXITS:
             rows = []
-            for day, g, (pc, ph, pl), vx in days:
+            for day, vx, (o, h, l, c), ends, sigs in prep:
                 if mask & 8 and (vx is None or vx >= 20):
                     rows.append((day, 0.0, 0))
                     continue
-                o, h, l, c, v, end_m = _arrays(g)
-                x = SL.ctx(o, h, l, c, np.ones(len(c)), end_m, pc, ph, pl)
-                lg, sh = fn(x)
-                ends = (g.index + pd.Timedelta(minutes=5)).strftime("%H:%M").values
+                lg, sh = sigs[name]
                 net, n, start = 0.0, 0, 0
                 while n < 2:
                     hit = np.flatnonzero((lg | sh)[start:])
@@ -136,7 +163,7 @@ def nifty_search():
                     ph_ = p0 + 0.5 * np.where(sgn > 0, h - s0, s0 - l)
                     pl_ = p0 + 0.5 * np.where(sgn > 0, l - s0, s0 - h)
                     pc_ = p0 + 0.5 * sgn * (c - s0)
-                    ex, why, j = _simulate(po, ph_, pl_, pc_, ends, k + 1, p0, "LONG", stop_f, tgt_f)
+                    ex, why, j = sim_opt(po, ph_, pl_, pc_, ends, k + 1, p0, stop_f, tgt_f, mode)
                     ex = max(ex, 0.05)
                     lots = int(min(3000 / (stop_f * p0 * 65), 50800 * 0.95 / (p0 * 65)))
                     if lots >= 1:
@@ -146,7 +173,7 @@ def nifty_search():
                     n += 1
                     start = j + 1
                 rows.append((day, net, n))
-            res[(name, stop_f, tgt_f, mask)] = pd.DataFrame(rows, columns=["day", "net", "trades"])
+            res[(name, stop_f, tgt_f, mask, mode)] = pd.DataFrame(rows, columns=["day", "net", "trades"])
     return res
 
 
@@ -250,7 +277,7 @@ def run(send=True, workers=None):
     for si, name in enumerate(S_NAMES):
         for ei, (stop_f, tgt_f) in enumerate(S_EXITS):
             srows.append(_row(stock_portfolio(T, si * 100 + ei), strategy=name, stop=stop_f, target=tgt_f))
-    nrows = [_row(D, strategy=k[0], stop=k[1], target=k[2], vix=bool(k[3])) for k, D in nifty_search().items()]
+    nrows = [_row(D, strategy=k[0], stop=k[1], target=k[2], vix=bool(k[3]), exit=k[4]) for k, D in nifty_search().items()]
     data = {"stocks": int(V["sym"].nunique()) if len(V) else 0, "days": int(V["day"].nunique()) if len(V) else 0,
             "first": str(V["day"].min().date()) if len(V) else None, "last": str(V["day"].max().date()) if len(V) else None}
     all_days = pd.DatetimeIndex(sorted(V["day"].unique())) if len(V) else pd.DatetimeIndex([])
@@ -303,13 +330,14 @@ def choose(srows, nrows, cond=None):
     for r in sorted(pn, key=lambda r: -r["dev"]["avg_day"]):
         good_n.setdefault(r["strategy"], r)
     if good_n:
-        p["opt_strategies"] = [[r["strategy"], r["stop"], r["target"], 8 if r["vix"] else 0] for r in good_n.values()]
+        p["opt_strategies"] = [[r["strategy"], r["stop"], r["target"], 8 if r["vix"] else 0, r.get("exit", "cost")]
+                               for r in good_n.values()]
     out["live_expected"] = round((cond["recent"]["avg_day"] if cond.get("recent") else 0.0)
                                  + (bn["recent"]["avg_day"] * LIVE_OPT if bn else 0.0))
     p["opt_max_trades"] = 2 if bn else 0
     if bn:
         p.update(opt_strategy=bn["strategy"], opt_stop=bn["stop"], opt_target=bn["target"],
-                 opt_factors=8 if bn["vix"] else 0, opt_risk=round(3000 * kn))
+                 opt_factors=8 if bn["vix"] else 0, opt_risk=round(3000 * kn), opt_exit=bn.get("exit", "cost"))
     p["day_max_loss"] = DAY_LOSS_CAP
     (DATA / "practice_params.json").write_text(json.dumps(p))
     return out
@@ -321,7 +349,7 @@ def report(srows, nrows, data, rec, c_rows=None):
          f"{data['last']}. NIFTY options are an ESTIMATE (no expired option candles on Kite). Chosen before 2024, "
          "checked on 2024 onwards.**", ""]
     for title, R, keys in (("Stocks", srows, ("strategy", "stop", "target")),
-                           ("NIFTY options (estimate)", nrows, ("strategy", "stop", "target", "vix"))):
+                           ("NIFTY options (estimate)", nrows, ("strategy", "stop", "target", "vix", "exit"))):
         best = {}
         for r in R:
             if r["dev"] and r["recent"]:
@@ -373,7 +401,7 @@ def report(srows, nrows, data, rec, c_rows=None):
     os_ = rec.get("params", {}).get("opt_strategies") or []
     if os_:
         L.append("- NIFTY strategies that may fire (first signal takes the slot, max 2 a day): "
-                 + ", ".join(f"{x[0]} (stop {x[1]}, target {x[2]}{', VIX < 20' if x[3] else ''})" for x in os_))
+                 + ", ".join(f"{x[0]} (stop {x[1]}, target {x[2]}{', VIX < 20' if x[3] else ''}, exit {x[4]})" for x in os_))
     if rec.get("conditions", {}).get("rules"):
         L.append(f"- Stocks, by market condition: {len(rec['conditions']['rules'])} strategy/condition pairs allowed")
     if rec.get("live_expected") is not None:

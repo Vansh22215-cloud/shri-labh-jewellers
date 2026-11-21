@@ -70,6 +70,8 @@ class Engine:
             self.p[k] = min(float(self.p[k]), cap)
         self.p["day_target"] = float("inf")              # no profit cap: keep earning while the day goes well
         self.peak = 0.0
+        self._told = {}
+        self._ncache = (None, None)
         for k in ("stk_last_entry", "opt_last_entry"):
             self.p[k] = str(self.p[k])
         self.notify = notify or (lambda kind, text: None)
@@ -160,6 +162,9 @@ class Engine:
                 if cl:
                     self.notify("exit", self.exit_text(cl))
                 continue
+            if pos.kind == "OPT" and pos.exit_mode in ("cost", "keep", "trail") and pos.r_frac:
+                self._opt_exit_rule(pos, h)                # D182: the exit the strategy search chose
+                continue
             be = self.p["opt_be"] if pos.kind == "OPT" else self.p["stk_be"]
             if (long and h >= pos.avg * (1 + be) and pos.stop < pos.avg) or \
                     (not long and l <= pos.avg * (1 - be) and pos.stop > pos.avg):
@@ -183,6 +188,25 @@ class Engine:
         al = SLIB.market_align(float(n["open"].iloc[0]), float(n["close"].iloc[-1]), lng) if n is not None and len(n) else 0
         vx = self.m.vix_prev(t) if hasattr(self.m, "vix_prev") else None
         return al, SLIB.vix_bucket(vx)
+
+    def _opt_exit_rule(self, pos, high):
+        """After this minute (its stop/target already checked): cost = stop to the entry once +1R; keep = never
+        move; trail = once +1R, the stop follows the best price at 1R distance, never below the entry."""
+        r = pos.r_frac
+        pos.best = max(pos.best or pos.avg, high)
+        if pos.exit_mode == "keep" or pos.best < pos.avg * (1 + r):
+            return
+        new = pos.avg if pos.exit_mode == "cost" else max(pos.avg, pos.best * (1 - r))
+        if new > pos.stop + 0.04:
+            first = pos.stop < pos.avg
+            pos.stop = round(new, 2)
+            self.b.save()
+            told = self._told.get(pos.key, 0.0)
+            if first or pos.stop >= told + pos.avg * r * 0.5:   # tell the owner on the first move, then every 0.5R
+                self._told[pos.key] = pos.stop
+                self.notify("status", f"✏️ <b>{pos.name}</b>: move your stop-loss to ₹{pos.stop:,.2f}"
+                                      + (" (your buy price) - this trade can no longer lose." if first
+                                         else f" - locking profit (best so far ₹{pos.best:,.2f})."))
 
     def market_read(self, t):
         """A live picture of the market for the owner's own judgment (not a signal): NIFTY, VIX, expiry, the
@@ -246,7 +270,19 @@ class Engine:
         pdh = self.m.prev_day(sym, t) if hasattr(self.m, "prev_day") else None
         pc = self.m.prev_close(sym, t)
         pchg = self.m.prev_change(sym, t) if hasattr(self.m, "prev_change") else None
-        return SL.ctx(o, h, l, c, v, end_m, pc, pdh[0] if pdh else None, pdh[1] if pdh else None, pchg), f
+        return SL.ctx(o, h, l, c, v, end_m, pc, pdh[0] if pdh else None, pdh[1] if pdh else None, pchg,
+                      nifty=None if sym == "NIFTY50" else self._nifty_now(t)), f
+
+    def _nifty_now(self, t):
+        """(NIFTY's open today, {5-minute candle end: close}) up to t - what rs_divergence compares with."""
+        if self._ncache[0] != t:
+            n = self.m.minutes("NIFTY50", t)
+            val = None
+            if n is not None and len(n):
+                f = resample5(n)
+                val = (float(n["open"].iloc[0]), {ts.hour * 60 + ts.minute + 5: float(v) for ts, v in f["close"].items()})
+            self._ncache = (t, val)
+        return self._ncache[1]
 
     def nifty_entry(self, t):
         if self._hm(t) > self.p["opt_last_entry"] or self._open("NIFTY options"):
@@ -262,7 +298,9 @@ class Engine:
             if x is None:
                 return
             vx = None
-            for name, stop_f, tgt_f, mask in multi:
+            for row in multi:
+                name, stop_f, tgt_f, mask = row[:4]
+                mode = row[4] if len(row) > 4 else "cost"
                 if int(mask) & 8:
                     vx = vx if vx is not None else self.m.vix_prev(t)
                     if vx is None or vx >= 20:
@@ -270,7 +308,7 @@ class Engine:
                 lg, sh = SLIB.NIFTY[name](x)
                 side = "CE" if lg[-1] else "PE" if sh[-1] else None
                 if side:
-                    return self._buy_option(t, float(f["close"].iloc[-1]), side, name, float(stop_f), float(tgt_f))
+                    return self._buy_option(t, float(f["close"].iloc[-1]), side, name, float(stop_f), float(tgt_f), mode)
             return
         lib = self.p.get("opt_strategy")
         lib = lib if lib and lib != "n_orb" else None
@@ -313,7 +351,7 @@ class Engine:
         side = "CE" if (c > hi and c > ema and c > day_open) else "PE" if (c < lo and c < ema and c < day_open) else None
         return self._buy_option(t, c, side, None)
 
-    def _buy_option(self, t, c, side, lib, stop_f=None, tgt_f=None):
+    def _buy_option(self, t, c, side, lib, stop_f=None, tgt_f=None, mode=None):
         if side is None:
             return
         k = self.m.option(c, side, t)
@@ -336,6 +374,8 @@ class Engine:
                                          f"NIFTY {c:,.0f} {'above' if side == 'CE' else 'below'} 9:15-9:30 range"))
         if pos:
             pos.expiry = str(k.get("expiry") or "")
+            pos.exit_mode = mode or self.p.get("opt_exit") or ""
+            pos.r_frac = float(stop_f)
             self.b.save()
             if self.p["opt_scale"]:
                 pos.t1, pos.book_frac = round(px * (1 + self.p["opt_stop"]), 2), float(self.p["opt_scale"])
