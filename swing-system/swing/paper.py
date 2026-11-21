@@ -45,6 +45,7 @@ class Position:
     book_frac: float = 0.0          # share booked at t1
     scaled: bool = False
     margin: float = 0.25            # share of the value blocked (stocks: Kite's own figure when available)
+    expiry: str = ""                # options: the contract's expiry day (expiry-day rules, D180)
 
 
 @dataclass

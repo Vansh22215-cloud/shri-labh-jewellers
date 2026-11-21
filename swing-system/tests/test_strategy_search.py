@@ -147,3 +147,23 @@ def test_capital_protection_caps_win_over_test_settings():
     assert e.p["day_target"] == float("inf")
     e.day = pd.Timestamp("2026-11-23")
     assert e._room() == 3000
+
+
+def test_expiry_day_option_with_no_move_is_closed_and_market_read_is_sent():
+    from swing import autotrader, paper
+    DAY, m = _gap_day()
+    idx = pd.date_range(DAY + timedelta(hours=9, minutes=15), DAY + timedelta(hours=15, minutes=29), freq="1min")
+    m.data["NFO:NIFTYTEST"] = pd.DataFrame({"open": 99.0, "high": 100.5, "low": 98.5, "close": 99.0, "volume": 1.0}, index=idx)
+    b = paper.Broker(None, start=50800)
+    sent = []
+    e = autotrader.Engine(b, m, params={"stk_max_trades": 0, "opt_max_trades": 0}, notify=lambda k, x: sent.append(x))
+    t0 = DAY + timedelta(hours=9, minutes=40)
+    pos = b.open_position("OPT-T", "NIFTY TEST CALL", "NFO:NIFTYTEST", "OPT", "LONG", 65, 100.0, 70.0, 160.0,
+                          "NIFTY options", t0, lots=1)
+    pos.expiry = str(DAY.date())
+    t = t0
+    while t <= DAY + timedelta(hours=10, minutes=20):
+        e.on_minute(t)
+        t += timedelta(minutes=1)
+    assert not b.acc.open and "time decay" in b.acc.closed[0]["why"]
+    assert any("Market at 09:45" in x and "not a trade signal" in x for x in sent)

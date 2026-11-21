@@ -55,7 +55,10 @@ OWNER_STOCK_STOP = 0.01
 # owner 21 Nov (D178): "making the most money ... and in losses, saving my capital as much as I can".
 # These caps win over any setting the tests write: risk a trade, worst day, and profit protection.
 OWNER_CAPS = dict(stk_risk=1000.0, opt_risk=2500.0, day_max_loss=3000.0)   # 2,500 = 1 NIFTY lot, 20% stop
-PROTECT_FROM, PROTECT_KEEP = 3000.0, 0.5     # once the day is +₹3,000, stop new trades if it falls below half its best
+PROTECT_FROM, PROTECT_KEEP = 3000.0, 0.5
+# expiry day (D180): an option that expires today loses its time value fast, most of all in the afternoon.
+EXPIRY_OUT, EXPIRY_WAIT_MIN, EXPIRY_MIN_GAIN = "14:45", 30, 0.10
+MARKET_READS = ("09:45", "11:15", "13:15")     # once the day is +₹3,000, stop new trades if it falls below half its best
 
 
 class Engine:
@@ -104,6 +107,11 @@ class Engine:
                                       "trades today, keep what is left.")
         if self.locked:
             return
+        if self._hm(t) in MARKET_READS:
+            try:
+                self.notify("status", self.market_read(t))
+            except Exception as e:
+                log.warning("market read failed: %s", e)
         since = (t.hour * 60 + t.minute) - (9 * 60 + 15)
         if since % 5 != 0 or since < 5:
             return
@@ -127,6 +135,12 @@ class Engine:
                 why, px = "target", (max(o, pos.target) if long else min(o, pos.target))
             elif self._hm(t) >= self.p["square_off"]:
                 why, px = "square-off 3:15 pm", c
+            elif pos.kind == "OPT" and pos.expiry == str(t.date()):
+                held = (t - pd.Timestamp(pos.entry_time)).total_seconds() / 60
+                if self._hm(t) >= EXPIRY_OUT:
+                    why, px = "expiry day: out by 2:45 pm (time value melts)", c
+                elif held >= EXPIRY_WAIT_MIN and max(pos.best, c) < pos.avg * (1 + EXPIRY_MIN_GAIN) and c < pos.avg:
+                    why, px = f"expiry day: no move in {EXPIRY_WAIT_MIN} minutes (time decay) - capital saved", c
             if not why and pos.t1 and not pos.scaled and ((h >= pos.t1) if long else (l <= pos.t1)):
                 lot = max(1, pos.qty // pos.lots) if pos.lots else 1
                 units = pos.qty // lot
@@ -169,6 +183,50 @@ class Engine:
         al = SLIB.market_align(float(n["open"].iloc[0]), float(n["close"].iloc[-1]), lng) if n is not None and len(n) else 0
         vx = self.m.vix_prev(t) if hasattr(self.m, "vix_prev") else None
         return al, SLIB.vix_bucket(vx)
+
+    def market_read(self, t):
+        """A live picture of the market for the owner's own judgment (not a signal): NIFTY, VIX, expiry, the
+        strongest movers among the most-traded stocks."""
+        n = self.m.minutes("NIFTY50", t)
+        L = [f"📊 <b>Market at {t:%H:%M}</b>"]
+        if n is not None and len(n):
+            o0, c = float(n["open"].iloc[0]), float(n["close"].iloc[-1])
+            pc = self.m.prev_close("NIFTY50", t)
+            ema = float(resample5(n)["close"].ewm(span=20, adjust=False).mean().iloc[-1])
+            mood = "up-trend" if c > o0 * 1.002 and c > ema else "down-trend" if c < o0 * 0.998 and c < ema else "sideways"
+            L.append(f"NIFTY {c:,.0f}" + (f" ({c / pc - 1:+.2%} vs yesterday)" if pc else "") +
+                     f", {c / o0 - 1:+.2%} since open · range {float(n['low'].min()):,.0f}-{float(n['high'].max()):,.0f} · {mood}")
+        vx = self.m.vix_prev(t) if hasattr(self.m, "vix_prev") else None
+        if vx:
+            L.append(f"India VIX (yesterday) {vx:.1f} - " + ("calm" if vx < 14 else "normal" if vx < 20 else "nervous, wide swings"))
+        try:
+            k = self.m.option(float(n["close"].iloc[-1]), "CE", t) if n is not None and len(n) else None
+            if k and k.get("expiry") == str(t.date()):
+                L.append("⏳ <b>Expiry day</b>: option premiums melt fast after lunch - quick trades, I exit options by 2:45 pm.")
+        except Exception:
+            pass
+        uni = self.m.universe_open(t) if hasattr(self.m, "universe_open") else self.m.universe(t)
+        mv = []
+        for sym in uni[:60]:
+            m = self.m.minutes(sym, t)
+            if m is None or len(m) < 10:
+                continue
+            o0, c = float(m["open"].iloc[0]), float(m["close"].iloc[-1])
+            f = resample5(m)
+            avgv = float(f["volume"].iloc[:-1].mean()) if len(f) > 1 else 0
+            mv.append((c / o0 - 1, sym, float(f["volume"].iloc[-1]) / avgv if avgv > 0 else 0))
+        if mv:
+            mv.sort()
+            up = [f"{s} {x:+.1%}" for x, s, _ in reversed(mv[-3:]) if x > 0]
+            dn = [f"{s} {x:+.1%}" for x, s, _ in mv[:3] if x < 0]
+            if up:
+                L.append("Strongest: " + ", ".join(up))
+            if dn:
+                L.append("Weakest: " + ", ".join(dn))
+        net = self.b.day_pnl(self.day) if self.day is not None else 0.0
+        L.append(f"Today so far: ₹{net:+,.0f} · open trades {len(self.b.acc.open)}")
+        L.append("<i>For your own judgment - not a trade signal.</i>")
+        return "\n".join(L)
 
     def _room(self):
         """₹ a new trade may still risk today: day loss limit - today's loss - risk already open."""
@@ -277,6 +335,8 @@ class Engine:
                                    note=(f"NIFTY {c:,.0f}: {lib} signal" if lib else
                                          f"NIFTY {c:,.0f} {'above' if side == 'CE' else 'below'} 9:15-9:30 range"))
         if pos:
+            pos.expiry = str(k.get("expiry") or "")
+            self.b.save()
             if self.p["opt_scale"]:
                 pos.t1, pos.book_frac = round(px * (1 + self.p["opt_stop"]), 2), float(self.p["opt_scale"])
                 self.b.save()

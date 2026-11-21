@@ -1566,3 +1566,17 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - **NIFTY options**: every NIFTY strategy that earned at least ₹100 a day in both periods may fire (`opt_strategies`), the first to signal taking the slot. Each keeps its own tested stop and target. Max 2 a day.
 - The risk caps of D178 still apply: ₹1,000 a stock trade, ₹2,500 an option trade, ₹3,000 day loss limit, profit protection.
 - The search runs again (done file v3) and the report shows the allowed strategy/condition pairs and their combined result at the live size.
+
+## D180 - 2026-11-21 - Monday is expiry day: trade with judgment, not only tests
+- **Owner**: "don't just go on tests, it's just something we should be cautious ... trade Monday with our brain, it's expiry ... don't be so rigid."
+- **Expiry-day option rules** (an option that expires today loses its time value fast):
+  - after 1:30 pm the next weekly expiry is bought (`fno.pick`, already in place);
+  - an expiring option that has not gained 10% within 30 minutes and is below its buy price is sold, to save capital from time decay;
+  - every expiring option is sold by 2:45 pm.
+- **Market read** for the owner's own judgment, at 9:45, 11:15 and 1:15 on Telegram. It is NOT a signal. It shows:
+  - NIFTY vs yesterday and since the open, the day's range, trend or sideways;
+  - yesterday's India VIX;
+  - an expiry-day warning;
+  - the 3 strongest and 3 weakest of the most-traded stocks;
+  - the day's P&L so far.
+- The tests still decide which strategy trades in which market condition (D179). They are the caution, and the market condition is read live.
