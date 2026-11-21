@@ -1555,3 +1555,14 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - no ₹10,000 cap: trading continues while the day goes well;
   - profit protection: once the day is +₹3,000, no new trades if it falls below half of its best, so most of a good day is kept.
 - Only strategies with a tested edge send signals. A quiet day with no signal is part of saving capital.
+
+## D179 - 2026-11-21 - Not rigid: every strategy may trade, in the market conditions where it worked
+- **Owner**: "We can't go for only these ... go for any strategy, don't be rigid, spot the live market and its strength."
+- **Stocks**:
+  - All 8 stock strategies stay available (1% stop).
+  - The search splits every strategy by the market at the moment of the signal: does the trade go WITH NIFTY's move so far today, AGAINST it, or is NIFTY flat (±0.2%)? And yesterday's India VIX: below 14, 14–20, or 20+.
+  - A strategy is allowed in a condition only where it earned at least ₹100 a trade after charges: before 2024 (at least 100 trades, clearly, t ≥ 2) AND from 2024 (at least 40 trades).
+  - Live, ATLAS reads the condition on every candle (`strategies_lib.market_align` / `vix_bucket`, the same code as the search). It takes the strongest signals first: 3 a day, 2 at a time, one trade per stock.
+- **NIFTY options**: every NIFTY strategy that earned at least ₹100 a day in both periods may fire (`opt_strategies`), the first to signal taking the slot. Each keeps its own tested stop and target. Max 2 a day.
+- The risk caps of D178 still apply: ₹1,000 a stock trade, ₹2,500 an option trade, ₹3,000 day loss limit, profit protection.
+- The search runs again (done file v3) and the report shows the allowed strategy/condition pairs and their combined result at the live size.

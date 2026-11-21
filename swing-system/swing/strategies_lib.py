@@ -170,6 +170,29 @@ NIFTY = {"n_orb": n_orb, "n_gap_fade": n_gap_fade, "n_trend_1015": n_trend_1015,
          "n_pdh_break": n_pdh_break}
 
 
+# ----------------------------------------------------------------------------- market conditions (D179)
+# Owner 21 Nov: "go for any strategy, don't be rigid, spot the live market and its strength". Every strategy may
+# trade, but only in the market conditions where it earned in the past (strategy_search.conditions). The same two
+# functions describe the condition in the search and live.
+ALIGN = {1: "with NIFTY", 0: "NIFTY flat", -1: "against NIFTY"}
+VIXB = {0: "VIX below 14", 1: "VIX 14-20", 2: "VIX 20+"}
+
+
+def market_align(nifty_open, nifty_now, lng):
+    """+1 trade goes WITH NIFTY's move so far today, -1 against it, 0 NIFTY within ±0.2% of its open."""
+    if not nifty_open or not nifty_now:
+        return 0
+    mv = nifty_now / nifty_open - 1
+    d = 1 if mv > 0.002 else -1 if mv < -0.002 else 0
+    return d * (1 if lng else -1)
+
+
+def vix_bucket(vix_prev):
+    if vix_prev is None:
+        return 1
+    return 0 if vix_prev < 14 else 1 if vix_prev < 20 else 2
+
+
 def first_signal(fn, x):
     """-> (index, is_long) of the day's first signal, or None."""
     lg, sh = fn(x)

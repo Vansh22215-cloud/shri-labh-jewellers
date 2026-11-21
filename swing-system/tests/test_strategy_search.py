@@ -57,6 +57,42 @@ def test_search_runs_end_to_end(monkeypatch):
     assert "goal ₹10,000" in ss.REPORT.read_text()
     p = json.loads((candles.BASE / "practice_params.json").read_text())
     assert "stk_max_trades" in p and "opt_max_trades" in p
+    txt = ss.REPORT.read_text()
+    assert "Every stock strategy by market condition" in txt
+
+
+def _gap_day():
+    from swing.replay import Market
+    DAY = pd.Timestamp("2026-11-18")
+    idx = pd.date_range(DAY + timedelta(hours=9, minutes=15), DAY + timedelta(hours=15, minutes=29), freq="1min")
+    c = np.r_[np.linspace(102, 100.5, 10), np.full(len(idx) - 10, 100.4)]
+    o = np.r_[102.0, c[:-1]]
+    stock = pd.DataFrame({"open": o, "high": np.maximum(o, c) + 0.05, "low": np.minimum(o, c) - 0.05, "close": c,
+                          "volume": 1000.0}, index=idx)
+    prev = pd.DataFrame({"open": 99.0, "high": 101.0, "low": 99.0, "close": 100.0, "volume": 1000.0},
+                        index=pd.date_range(DAY - timedelta(days=1) + timedelta(hours=9, minutes=15), periods=375, freq="1min"))
+    m = Market({"NIFTY50": stock * 240, "AAA": pd.concat([prev, stock])}, None, lambda s: None)
+    m.set_day(DAY)
+    return DAY, m
+
+
+@pytest.mark.parametrize("align,expect", [(1, True), (-1, False)])
+def test_live_trader_uses_a_strategy_only_in_its_market_condition(align, expect):
+    from swing import autotrader, paper
+    DAY, m = _gap_day()
+    b = paper.Broker(None, start=50800)
+    e = autotrader.Engine(b, m, params={"stk_strategy": "rules", "stk_rules": [["gap_fade", 0.02, align, 1]],
+                                        "stk_max_trades": 3, "opt_max_trades": 0})
+    t = DAY + timedelta(hours=9, minutes=16)
+    while t <= DAY + timedelta(hours=10):
+        e.on_minute(t)
+        t += timedelta(minutes=1)
+    trades = list(b.acc.open.values()) + b.acc.closed
+    assert bool(trades) == expect                # the gap-fade short goes WITH a falling NIFTY: only align +1 fits
+    if expect:
+        p = trades[0]
+        side = p.side if hasattr(p, "side") else p["side"]
+        assert side == "SHORT"
 
 
 def test_live_trader_takes_a_library_strategy_signal():

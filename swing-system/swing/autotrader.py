@@ -25,6 +25,7 @@ from datetime import timedelta
 import numpy as np
 import pandas as pd
 
+from . import strategies_lib as SLIB
 from .config import get_logger
 
 log = get_logger()
@@ -154,6 +155,21 @@ class Engine:
                                       "- this trade can no longer lose.")
 
     # ---------------------------------------------------------------- NIFTY options
+    def _rules(self, t):
+        """Strategy/condition pairs allowed by the strategy search; each strategy checked once per stock."""
+        out = []
+        for name, tgt, al, vb in self.p.get("stk_rules") or []:
+            if name in SLIB.STOCK:
+                out.append((name, tgt, int(al), int(vb)))
+        return out
+
+    def _cond(self, t, lng):
+        """Today's market condition for a trade in this direction: (with/against NIFTY, VIX bucket)."""
+        n = self.m.minutes("NIFTY50", t)
+        al = SLIB.market_align(float(n["open"].iloc[0]), float(n["close"].iloc[-1]), lng) if n is not None and len(n) else 0
+        vx = self.m.vix_prev(t) if hasattr(self.m, "vix_prev") else None
+        return al, SLIB.vix_bucket(vx)
+
     def _room(self):
         """₹ a new trade may still risk today: day loss limit - today's loss - risk already open."""
         loss = max(0.0, -self.b.day_pnl(self.day))
@@ -178,6 +194,25 @@ class Engine:
         if self._hm(t) > self.p["opt_last_entry"] or self._open("NIFTY options"):
             return
         if len(self._today_closed("NIFTY options")) >= self.p["opt_max_trades"]:
+            return
+        multi = [r for r in (self.p.get("opt_strategies") or []) if r[0] in SLIB.NIFTY]
+        if multi:                                         # D179: every NIFTY strategy that earned; first to fire
+            m = self.m.minutes("NIFTY50", t)
+            if m is None or len(m) < 4:
+                return
+            x, f = self._lib_ctx("NIFTY50", t, m)
+            if x is None:
+                return
+            vx = None
+            for name, stop_f, tgt_f, mask in multi:
+                if int(mask) & 8:
+                    vx = vx if vx is not None else self.m.vix_prev(t)
+                    if vx is None or vx >= 20:
+                        continue
+                lg, sh = SLIB.NIFTY[name](x)
+                side = "CE" if lg[-1] else "PE" if sh[-1] else None
+                if side:
+                    return self._buy_option(t, float(f["close"].iloc[-1]), side, name, float(stop_f), float(tgt_f))
             return
         lib = self.p.get("opt_strategy")
         lib = lib if lib and lib != "n_orb" else None
@@ -220,7 +255,7 @@ class Engine:
         side = "CE" if (c > hi and c > ema and c > day_open) else "PE" if (c < lo and c < ema and c < day_open) else None
         return self._buy_option(t, c, side, None)
 
-    def _buy_option(self, t, c, side, lib):
+    def _buy_option(self, t, c, side, lib, stop_f=None, tgt_f=None):
         if side is None:
             return
         k = self.m.option(c, side, t)
@@ -229,7 +264,9 @@ class Engine:
         px = self.m.price(k["symbol"], t)
         if not px or px <= 1:
             return
-        stop, tgt = px * (1 - self.p["opt_stop"]), px * (1 + self.p["opt_target"])
+        stop_f = self.p["opt_stop"] if stop_f is None else stop_f
+        tgt_f = self.p["opt_target"] if tgt_f is None else tgt_f
+        stop, tgt = px * (1 - stop_f), px * (1 + tgt_f)
         lot = k["lot"]
         lots = int(min(min(self.p["opt_risk"], self._room()) / ((px - stop) * lot),
                        self.b.available() * 0.95 / (px * 1.003 * lot)))
@@ -269,6 +306,15 @@ class Engine:
                 x, f = self._lib_ctx(sym, t, m)
                 if x is None:
                     continue
+                if lib == "rules":                        # D179: any strategy, in the market conditions it earned in
+                    for name, tgt, al, vb in self._rules(t):
+                        sig = SL.first_signal(SL.STOCK[name], x)
+                        if sig and sig[0] == len(f) - 1 and self._cond(t, sig[1]) == (al, vb):
+                            cands.append((float(x["strength"][-1]), sym, "LONG" if sig[1] else "SHORT",
+                                          float(f["close"].iloc[-1]), float(tgt),
+                                          f"{name} · {SL.ALIGN[al]} · {SL.VIXB[vb]}"))
+                            break
+                    continue
                 sig = SL.first_signal(SL.STOCK[lib], x)
                 if sig and sig[0] == len(f) - 1:          # today's FIRST signal, on the candle that just closed
                     cands.append((float(x["strength"][-1]), sym, "LONG" if sig[1] else "SHORT", float(f["close"].iloc[-1])))
@@ -297,13 +343,16 @@ class Engine:
             side = "LONG" if (c > hi and c > vwap) else "SHORT" if (c < lo and c < vwap and self.p["stk_sides"] == "both") else None
             if side and self.factors_ok(sym, side, c, float(m["open"].iloc[0]), t):
                 cands.append((strength, sym, side, c))
-        for strength, sym, side, c in sorted(cands, reverse=True):
+        for cand in sorted(cands, key=lambda z: -z[0]):
+            strength, sym, side, c = cand[:4]
+            tgt_f = cand[4] if len(cand) > 4 else self.p["stk_target"]
+            why = cand[5] if len(cand) > 5 else None
             opened = self._open("stocks")
             if len(opened) >= self.p["stk_max_open"] or len(opened) + len(self._today_closed("stocks")) >= self.p["stk_max_trades"]:
                 break
             px = self.m.price(sym, t) or c
             stop = px * (1 - self.p["stk_stop"]) if side == "LONG" else px * (1 + self.p["stk_stop"])
-            tgt = px * (1 + self.p["stk_target"]) if side == "LONG" else px * (1 - self.p["stk_target"])
+            tgt = px * (1 + tgt_f) if side == "LONG" else px * (1 - tgt_f)
             from .paper import MIS_MARGIN
             mr = None
             if hasattr(self.m, "margin_ratio"):
@@ -314,7 +363,7 @@ class Engine:
             if qty < 1:
                 continue
             pos = self.b.open_position(f"EQ-{sym}-{t:%H%M}", sym, sym, "EQ", side, qty, px, stop, tgt, "stocks", t,
-                                       note=(f"{lib} signal" if lib and lib != "orb" else
+                                       note=(why or f"{lib} signal" if lib and lib != "orb" else
                                              f"broke the 9:15-9:30 range {'up' if side == 'LONG' else 'down'} with "
                                              f"{strength:.1f}x volume") + f" · margin {mr * 100:.0f}%", margin=mr)
             if pos and self.p["stk_scale"]:
