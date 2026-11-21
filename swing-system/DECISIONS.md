@@ -1544,3 +1544,14 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - stop to cost: "move your stop-loss to …" message;
   - exit: "SELL … NOW (at market)".
 - The strategy search runs again with these rules (done file v2).
+
+## D178 - 2026-11-21 - Owner's two goals: the most money on good days, capital saved on bad days
+- **Owner**: "making the most smartest money I can on Monday and in losses, saving my capital as much as I can (in smartest way)". Stock stop-loss 1% (D177).
+- **Capital protection** (`autotrader.OWNER_CAPS`; these win over any test setting):
+  - risk a trade: at most ₹1,000 on stocks, ₹2,500 on NIFTY options (about 1 lot);
+  - day loss limit ₹3,000, about 6% of ₹50,800 (was ₹12,500);
+  - a new trade gets only the room left: limit − today's loss − risk already open. So after one full option loss there is no second trade that day.
+- **Most money**:
+  - no ₹10,000 cap: trading continues while the day goes well;
+  - profit protection: once the day is +₹3,000, no new trades if it falls below half of its best, so most of a good day is kept.
+- Only strategies with a tested edge send signals. A quiet day with no signal is part of saving capital.

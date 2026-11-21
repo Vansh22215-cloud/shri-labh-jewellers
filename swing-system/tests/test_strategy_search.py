@@ -99,3 +99,15 @@ def test_owner_rules_one_percent_stop_and_manual_trade_messages():
                                                                          "OPT", 65, 1, 120.0, 96.0, 240.0, "x", None)
     txt = autotrader.Engine.entry_text(Pos)
     assert "NIFTY26N2424200CE" in txt and "SL order at ₹96.00" in txt and "₹132.00" in txt
+
+
+def test_capital_protection_caps_win_over_test_settings():
+    from swing import autotrader, paper
+    from swing.replay import Market
+    b = paper.Broker(None, start=50800)
+    e = autotrader.Engine(b, Market({}, None, lambda s: None),
+                          params={"opt_risk": 6240, "stk_risk": 2400, "day_max_loss": 12500, "day_target": 10000})
+    assert (e.p["opt_risk"], e.p["stk_risk"], e.p["day_max_loss"]) == (2500, 1000, 3000)
+    assert e.p["day_target"] == float("inf")
+    e.day = pd.Timestamp("2026-11-23")
+    assert e._room() == 3000

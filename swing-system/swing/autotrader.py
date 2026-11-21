@@ -51,6 +51,10 @@ def resample5(m):
 
 
 OWNER_STOCK_STOP = 0.01
+# owner 21 Nov (D178): "making the most money ... and in losses, saving my capital as much as I can".
+# These caps win over any setting the tests write: risk a trade, worst day, and profit protection.
+OWNER_CAPS = dict(stk_risk=1000.0, opt_risk=2500.0, day_max_loss=3000.0)   # 2,500 = 1 NIFTY lot, 20% stop
+PROTECT_FROM, PROTECT_KEEP = 3000.0, 0.5     # once the day is +₹3,000, stop new trades if it falls below half its best
 
 
 class Engine:
@@ -58,6 +62,10 @@ class Engine:
         self.b, self.m = broker, market
         self.p = dict(P, **(params or {}))
         self.p["stk_stop"] = OWNER_STOCK_STOP            # owner 21 Nov: the stock stop-loss is always 1%
+        for k, cap in OWNER_CAPS.items():
+            self.p[k] = min(float(self.p[k]), cap)
+        self.p["day_target"] = float("inf")              # no profit cap: keep earning while the day goes well
+        self.peak = 0.0
         for k in ("stk_last_entry", "opt_last_entry"):
             self.p[k] = str(self.p[k])
         self.notify = notify or (lambda kind, text: None)
@@ -79,15 +87,20 @@ class Engine:
         """t = the END of the minute that just finished (e.g. 09:36 after the 09:35 candle)."""
         t = pd.Timestamp(t)
         if self.day != t.normalize():
-            self.day, self.locked = t.normalize(), None
+            self.day, self.locked, self.peak = t.normalize(), None, 0.0
         self.manage(t)
         if self._hm(t) >= self.p["square_off"]:
             return
         net = self.b.day_pnl(self.day)
-        if self.locked is None and (net >= self.p["day_target"] or net <= -self.p["day_max_loss"]):
-            self.locked = "target" if net > 0 else "loss limit"
-            self.notify("status", f"🔒 Day {'target reached' if net > 0 else 'loss limit hit'} (net ₹{net:,.0f}) - no new "
-                                  "trades today.")
+        self.peak = max(self.peak, net)
+        if self.locked is None:
+            if net <= -self.p["day_max_loss"]:
+                self.locked = "loss limit"
+                self.notify("status", f"🔒 Day loss limit (net ₹{net:,.0f}) - no new trades today. Capital protected.")
+            elif self.peak >= PROTECT_FROM and net < self.peak * PROTECT_KEEP:
+                self.locked = "profit kept"
+                self.notify("status", f"🔒 Profit protection: the day was +₹{self.peak:,.0f}, now ₹{net:,.0f} - no new "
+                                      "trades today, keep what is left.")
         if self.locked:
             return
         since = (t.hour * 60 + t.minute) - (9 * 60 + 15)
@@ -141,6 +154,13 @@ class Engine:
                                       "- this trade can no longer lose.")
 
     # ---------------------------------------------------------------- NIFTY options
+    def _room(self):
+        """₹ a new trade may still risk today: day loss limit - today's loss - risk already open."""
+        loss = max(0.0, -self.b.day_pnl(self.day))
+        open_risk = sum(max(0.0, (p.avg - p.stop) if p.side == "LONG" else (p.stop - p.avg)) * p.qty
+                        for p in self.b.acc.open.values())
+        return self.p["day_max_loss"] - loss - open_risk
+
     def _lib_ctx(self, sym, t, m):
         """Strategy-library view of today's 5-minute candles so far (same code as the strategy search)."""
         from . import strategies_lib as SL
@@ -211,7 +231,8 @@ class Engine:
             return
         stop, tgt = px * (1 - self.p["opt_stop"]), px * (1 + self.p["opt_target"])
         lot = k["lot"]
-        lots = int(min(self.p["opt_risk"] / ((px - stop) * lot), self.b.available() * 0.95 / (px * 1.003 * lot)))
+        lots = int(min(min(self.p["opt_risk"], self._room()) / ((px - stop) * lot),
+                       self.b.available() * 0.95 / (px * 1.003 * lot)))
         if lots < 1:
             return
         pos = self.b.open_position(f"OPT-{k['symbol']}-{t:%H%M}", k["name"], k["symbol"], "OPT", "LONG", lots * lot, px,
@@ -288,12 +309,14 @@ class Engine:
             if hasattr(self.m, "margin_ratio"):
                 mr = self.m.margin_ratio(sym, px, "BUY" if side == "LONG" else "SELL")
             mr = mr if mr and 0.05 <= mr <= 1.0 else MIS_MARGIN          # Kite's own figure, else the cautious 25%
-            qty = int(min(self.p["stk_risk"] / (px * self.p["stk_stop"]), self.b.available() * 0.95 / (px * mr)))
+            qty = int(min(min(self.p["stk_risk"], self._room()) / (px * self.p["stk_stop"]),
+                          self.b.available() * 0.95 / (px * mr)))
             if qty < 1:
                 continue
             pos = self.b.open_position(f"EQ-{sym}-{t:%H%M}", sym, sym, "EQ", side, qty, px, stop, tgt, "stocks", t,
-                                       note=f"broke the 9:15-9:30 range {'up' if side == 'LONG' else 'down'} with "
-                                            f"{strength:.1f}x volume · margin {mr * 100:.0f}%", margin=mr)
+                                       note=(f"{lib} signal" if lib and lib != "orb" else
+                                             f"broke the 9:15-9:30 range {'up' if side == 'LONG' else 'down'} with "
+                                             f"{strength:.1f}x volume") + f" · margin {mr * 100:.0f}%", margin=mr)
             if pos and self.p["stk_scale"]:
                 r = self.p["stk_stop"]
                 pos.t1 = round(pos.avg * (1 + r) if side == "LONG" else pos.avg * (1 - r), 2)
