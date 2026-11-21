@@ -136,7 +136,9 @@ def due(t=None, skip=()):
                 out.append("test")                 # ... and only once that interval's Kite history is complete
     except Exception:
         pass
-    if not market_minutes(t) and not (DATA / "long_test_done.txt").exists() and not out and "longtest" not in skip:
+    lt_done = (DATA / "long_test_done.txt")
+    lt_done = lt_done.exists() and lt_done.read_text().strip() != "" and not lt_done.read_text().startswith("failed:")
+    if not market_minutes(t) and not lt_done and not out and "longtest" not in skip:
         try:
             from .candles import complete
             if complete("5minute"):
