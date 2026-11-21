@@ -285,7 +285,21 @@ def stock_trades(args):
                         buy, sell = ((px + slp), (ex - slp)) if lng else ((ex + slp), (px - slp))
                         net += q * (sell - buy) - costs.intraday_cost(q * buy, q * sell)
                     out.append((day, sym, int(end_m[i]), int(end_m[j]), 3000 + ki, float(net), float(strength[i])))
-    return out
+    return _compact(out)
+
+
+T_COLS = ["day", "sym", "t_in", "t_out", "combo", "net", "strength"]
+
+
+def _compact(rows):
+    """~20 million trial trades in all: kept as compact arrays (~26 bytes each), not Python objects (~250)."""
+    if not rows:
+        return None
+    day, sym, ti, to, cb, net, st = zip(*rows)
+    return {"day": np.array([d.toordinal() for d in day], dtype=np.int32), "sym": np.array(sym, dtype=object),
+            "t_in": np.array(ti, dtype=np.int16), "t_out": np.array(to, dtype=np.int16),
+            "combo": np.array(cb, dtype=np.int16), "net": np.array(net, dtype=np.float32),
+            "strength": np.array(st, dtype=np.float32)}
 
 
 def stock_portfolio(T, combo_id):
@@ -424,10 +438,15 @@ def run(send=True, workers=None):
     V = pd.DataFrame(V, columns=["day", "sym", "value15"])
     V["rank"] = V.groupby("day")["value15"].rank(ascending=False, method="first")
     top = V[V["rank"] <= 100].groupby("sym")["day"].apply(list).to_dict()
-    T = [r for rows in mp(stock_trades, [(s_, top.get(s_, [])) for s_ in syms if s_ in top]) for r in rows]
+    parts = [p_ for p_ in mp(stock_trades, [(s_, top.get(s_, [])) for s_ in syms if s_ in top]) if p_]
     if pool:
         pool.close()
-    T = pd.DataFrame(T, columns=["day", "sym", "t_in", "t_out", "combo", "net", "strength"])
+    if parts:
+        T = pd.DataFrame({c_: np.concatenate([p_[c_] for p_ in parts]) for c_ in T_COLS})
+        T["day"] = pd.to_datetime(T["day"].astype(np.int64) - 719163, unit="D")    # day numbers -> dates, fast
+    else:
+        T = pd.DataFrame(columns=T_COLS)
+    del parts
     rows = []
     for si, (vol_m, last, sides) in enumerate(SIG):
         for ei, (stop_f, tgt_f) in enumerate(EXI):

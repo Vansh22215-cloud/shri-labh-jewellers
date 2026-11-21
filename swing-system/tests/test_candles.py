@@ -114,3 +114,19 @@ def test_three_at_once_keeps_the_kite_speed_limit(lib, monkeypatch):
     gaps = [b - a for a, b in zip(sorted(stamps), sorted(stamps)[1:])]
     assert len(stamps) > 4 and min(gaps) >= 0.019              # never two requests closer than the limit
     assert all(cd._state()[f"day|{s}"]["ended"] for s in ["AAA", "BBB", "CCC", "DDD"])
+
+
+def test_one_bad_stock_never_blocks_the_rest(lib, monkeypatch):
+    good = cd._fetch
+
+    def fetch(sym, interval, fr, to):
+        if sym == "BAD":
+            raise ValueError("Kite refused this one")
+        return good(sym, interval, fr, to)
+    monkeypatch.setattr(cd, "symbols", lambda interval="day": ["BAD", "AAA"])
+    monkeypatch.setattr(cd, "_fetch", fetch)
+    for _ in range(3):
+        cd.step(max_requests=100_000, today=pd.Timestamp("2026-11-20"), intervals=["day"])
+    st = cd._state()
+    assert st["day|AAA"]["ended"] and st["day|BAD"]["ended"] and st["day|BAD"]["missing"]
+    assert cd.complete.__call__ is not None

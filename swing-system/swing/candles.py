@@ -287,7 +287,14 @@ def _one(interval, sym, s, today, budget):
             else:
                 break
     except Exception as e:
-        err = type(e).__name__
+        msg = str(e)
+        if isinstance(e, RuntimeError) and ("logged" in msg or "expired" in msg or "rate limited" in msg):
+            err = type(e).__name__                       # login / speed problem: stop this chunk, try again later
+        else:                                            # a problem with THIS stock only: never block the others
+            s["errors"] = s.get("errors", 0) + 1
+            log.info("Candles %s %s: %s (%d)", interval, sym, type(e).__name__, s["errors"])
+            if s["errors"] >= 3:
+                s.update(ended=True, missing=True, newest=str(today.date()), error=type(e).__name__)
     if frames:
         store(interval, sym, pd.concat(frames))           # written before its state is saved
     return s, err

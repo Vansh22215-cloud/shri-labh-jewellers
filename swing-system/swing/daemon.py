@@ -424,6 +424,8 @@ def run():
         minute_tasks()
         if not job_running() and left() > 15:     # no new job in the last 15 minutes of a run (it would be cut off)
             for job in due():
+                if job == "longtest" and left() < 180:
+                    continue                       # the long test needs a fresh run (~1-2 h) - never cut it off
                 if run_job(job, left()):
                     break
         time.sleep(20 if left() > 3 else 5)
