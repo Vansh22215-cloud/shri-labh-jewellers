@@ -215,3 +215,17 @@ def test_downloads_continue_while_long_test_waits_for_a_fresh_run(monkeypatch):
     daemon.claim("company", sat)
     assert daemon.due(sat) == ["longtest"]
     assert daemon.due(sat, skip={"longtest"}) == ["candles"]
+
+
+def test_strategy_search_runs_after_the_long_test_on_a_fresh_run(monkeypatch):
+    from swing import candles
+    monkeypatch.setattr(kite, "logged_in", lambda: True)
+    monkeypatch.setattr(candles, "complete", lambda iv="day": True)
+    sat = datetime(2026, 11, 21, 21, 0, tzinfo=IST)
+    daemon.claim("learner", sat)
+    daemon.claim("company", sat)
+    (daemon.DATA / "long_test_done_v2.txt").write_text("done")
+    assert daemon.due(sat) == ["search"]
+    assert daemon.due(sat, skip={"longtest", "search"}) == ["candles"]
+    (daemon.DATA / "strategy_search_done.txt").write_text("done")
+    assert daemon.due(sat) == ["candles"]

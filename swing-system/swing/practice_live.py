@@ -69,6 +69,14 @@ class LiveMarket:
         d = d[d.index < pd.Timestamp(t).normalize()]
         return (float(d["high"].iloc[-1]), float(d["low"].iloc[-1])) if len(d) else None
 
+    def prev_change(self, sym, t):
+        from . import candles
+        d = candles.load(sym, "day", adjusted=True)
+        if d is None:
+            return None
+        d = d[d.index < pd.Timestamp(t).normalize()]
+        return float(d["close"].iloc[-1] / d["close"].iloc[-2] - 1) if len(d) >= 2 else None
+
     def vix_prev(self, t):
         from . import candles
         v = candles.load("INDIAVIX", "day", adjusted=False)
@@ -76,6 +84,28 @@ class LiveMarket:
             return None
         v = v[v.index < pd.Timestamp(t).normalize()]
         return float(v["close"].iloc[-1]) if len(v) else None
+
+    def universe_open(self, t):
+        """Most-traded stocks by YESTERDAY's traded value from the day library (known at the open)."""
+        from . import candles
+        day = pd.Timestamp(t).normalize()
+        key = ("open", day)
+        if key not in self._uni:
+            val = {}
+            for s in list(self.feed.builder.done) or candles.symbols("day"):
+                if s in ("NIFTY50", "BANKNIFTY", "INDIAVIX"):
+                    continue
+                try:
+                    d = candles.load(s, "day", adjusted=False)
+                except Exception:
+                    continue
+                if d is None:
+                    continue
+                d = d[d.index < day]
+                if len(d):
+                    val[s] = float(d["close"].iloc[-1] * d["volume"].iloc[-1])
+            self._uni[key] = [s for s, _ in sorted(val.items(), key=lambda kv: -kv[1])]
+        return self._uni[key]
 
     def universe(self, t):
         day = pd.Timestamp(t).normalize()

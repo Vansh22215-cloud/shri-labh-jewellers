@@ -87,7 +87,7 @@ class Engine:
         if self.locked:
             return
         since = (t.hour * 60 + t.minute) - (9 * 60 + 15)
-        if since % 5 != 0 or self._hm(t) < self.p["first_entry"]:
+        if since % 5 != 0 or since < 5:
             return
         self.nifty_entry(t)
         self.stock_entries(t)
@@ -137,14 +137,44 @@ class Engine:
                 self.b.save()
 
     # ---------------------------------------------------------------- NIFTY options
+    def _lib_ctx(self, sym, t, m):
+        """Strategy-library view of today's 5-minute candles so far (same code as the strategy search)."""
+        from . import strategies_lib as SL
+        f = resample5(m)
+        if f is None or len(f) < 1:
+            return None, None
+        o, h, l, c, v = (f[k].values.astype(float) for k in ("open", "high", "low", "close", "volume"))
+        end_m = np.array([ts.hour * 60 + ts.minute + 5 for ts in f.index])
+        pdh = self.m.prev_day(sym, t) if hasattr(self.m, "prev_day") else None
+        pc = self.m.prev_close(sym, t)
+        pchg = self.m.prev_change(sym, t) if hasattr(self.m, "prev_change") else None
+        return SL.ctx(o, h, l, c, v, end_m, pc, pdh[0] if pdh else None, pdh[1] if pdh else None, pchg), f
+
     def nifty_entry(self, t):
         if self._hm(t) > self.p["opt_last_entry"] or self._open("NIFTY options"):
             return
         if len(self._today_closed("NIFTY options")) >= self.p["opt_max_trades"]:
             return
-        m = self.m.minutes("NIFTY50", t)
-        if m is None or len(m) < 20:
+        lib = self.p.get("opt_strategy")
+        lib = lib if lib and lib != "n_orb" else None
+        if not lib and self._hm(t) < self.p["first_entry"]:
             return
+        m = self.m.minutes("NIFTY50", t)
+        if m is None or len(m) < (4 if lib else 20):
+            return
+        if lib:                                           # a strategy chosen by the strategy search: it fires from
+            if int(self.p["opt_factors"]) & 8:            # the first 5-minute candle, exactly as in the search
+                vx = self.m.vix_prev(t)
+                if vx is None or vx >= 20:
+                    return
+            from . import strategies_lib as SL
+            x, f = self._lib_ctx("NIFTY50", t, m)
+            if x is None:
+                return
+            lg, sh = SL.NIFTY[lib](x)
+            c = float(f["close"].iloc[-1])
+            side = "CE" if lg[-1] else "PE" if sh[-1] else None
+            return self._buy_option(t, c, side, lib)
         orng = m[m.index < m.index[0].normalize() + timedelta(hours=9, minutes=30)]
         if len(orng) < 10:
             return
@@ -164,6 +194,9 @@ class Engine:
         c = float(f["close"].iloc[-1])
         ema = float(f["close"].ewm(span=20, adjust=False).mean().iloc[-1])
         side = "CE" if (c > hi and c > ema and c > day_open) else "PE" if (c < lo and c < ema and c < day_open) else None
+        return self._buy_option(t, c, side, None)
+
+    def _buy_option(self, t, c, side, lib):
         if side is None:
             return
         k = self.m.option(c, side, t)
@@ -179,7 +212,8 @@ class Engine:
             return
         pos = self.b.open_position(f"OPT-{k['symbol']}-{t:%H%M}", k["name"], k["symbol"], "OPT", "LONG", lots * lot, px,
                                    stop, tgt, "NIFTY options", t, lots=lots,
-                                   note=f"NIFTY {c:,.0f} {'above' if side == 'CE' else 'below'} 9:15-9:30 range")
+                                   note=(f"NIFTY {c:,.0f}: {lib} signal" if lib else
+                                         f"NIFTY {c:,.0f} {'above' if side == 'CE' else 'below'} 9:15-9:30 range"))
         if pos:
             if self.p["opt_scale"]:
                 pos.t1, pos.book_frac = round(px * (1 + self.p["opt_stop"]), 2), float(self.p["opt_scale"])
@@ -188,14 +222,32 @@ class Engine:
 
     # ---------------------------------------------------------------- stocks
     def stock_entries(self, t):
-        if self._hm(t) > self.p["stk_last_entry"]:
+        lib = self.p.get("stk_strategy")
+        if self._hm(t) > (self.p["stk_last_entry"] if not lib or lib == "orb" else "14:05"):
+            return
+        if (not lib or lib == "orb") and self._hm(t) < self.p["first_entry"]:
             return
         opened, done = self._open("stocks"), self._today_closed("stocks")
         if len(opened) >= self.p["stk_max_open"] or len(opened) + len(done) >= self.p["stk_max_trades"]:
             return
         traded = {p.symbol for p in opened} | {c["symbol"] for c in done}
         cands = []
-        for sym in self.m.universe(t)[: self.p["universe"]]:
+        if lib and lib != "orb":                          # a strategy chosen by the strategy search
+            from . import strategies_lib as SL
+            uni = self.m.universe_open(t) if hasattr(self.m, "universe_open") else self.m.universe(t)
+            for sym in uni[: self.p["universe"]]:
+                if sym in traded:
+                    continue
+                m = self.m.minutes(sym, t)
+                if m is None or len(m) < 5:
+                    continue
+                x, f = self._lib_ctx(sym, t, m)
+                if x is None:
+                    continue
+                sig = SL.first_signal(SL.STOCK[lib], x)
+                if sig and sig[0] == len(f) - 1:          # today's FIRST signal, on the candle that just closed
+                    cands.append((float(x["strength"][-1]), sym, "LONG" if sig[1] else "SHORT", float(f["close"].iloc[-1])))
+        for sym in ([] if (lib and lib != "orb") else self.m.universe(t)[: self.p["universe"]]):
             if sym in traded:
                 continue
             m = self.m.minutes(sym, t)

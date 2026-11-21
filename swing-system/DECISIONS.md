@@ -1512,3 +1512,21 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - today's rule: +₹136 before 2024, +₹29 recent;
   - best: target +100% with India VIX below 20: +₹255 / +₹135. Switched on. Risk ₹6,240 a trade (x2.08, within the ₹12,500 worst-day limit).
 - **Honest**: expected ≈ ₹280 a day, far from the ₹10,000 goal. The next work is finding better strategies on this data.
+
+## D176 - 2026-11-21 - Strategy search toward the ₹10,000-a-day goal
+- **Owner**: "start the strategy search now. Make it strict ultimate goal that per day 10k profit must be reached."
+- **What**: 13 strategies (`swing/strategies_lib.py`):
+  - 8 for stocks: ORB, gap fade, gap and go, VWAP reversion, 10:15 trend, 2 pm momentum, yesterday's high/low break, rebound after a fall;
+  - 5 for NIFTY options: ORB, gap fade, 10:15 trend, 9/21 average cross, yesterday's high/low break.
+  - Each is tested with a grid of stop/target settings on Kite 5-minute data since 2015 (`swing/strategy_search.py`).
+- **Fairness**:
+  - The same code runs in the search and in the live practice trader.
+  - A test checks that no strategy looks at later candles.
+  - The 100 stocks of each day are ranked by yesterday's traded value, which is known at 9:15, both in the search and live.
+  - Settings are chosen before 2024 and must also make money from 2024 onward.
+- **Goal**:
+  - The report shows, for each strategy, the average profit a day against ₹10,000, and the trade size needed to reach it.
+  - Size is capped by the ₹12,500 worst-day limit (D174).
+  - Only strategies that make money in both periods are switched on, through `data/practice_params.json`.
+  - If nothing reaches ₹10,000, the report says so plainly. Size is not pushed past the loss limit to hide it.
+- **When**: a GitHub job after the long test, outside market hours, on a fresh run (≥180 minutes left). A failed run is tried again up to 3 times; the error goes to `results/strategy_search_error.md`.

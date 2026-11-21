@@ -26,7 +26,7 @@ log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
 STATE = DATA / "jobs_done.json"
 MAX_MIN = float(os.environ.get("SWING_DAEMON_MINUTES", 315))
-SCRIPTS = {"longtest": "run_longtest.py", "replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py"}
+SCRIPTS = {"longtest": "run_longtest.py", "replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py", "search": "run_search.py"}
 TEST_QUEUE = DATA / "test_queue.json"         # strategies the owner asked to test (/test NAME)
 
 
@@ -58,7 +58,7 @@ def market_minutes(t):
 
 def key(job, t=None):
     t = t or now()
-    if job in ("test", "replay", "longtest"):
+    if job in ("test", "replay", "longtest", "search"):
         return None                                # every request runs (queue), nothing recorded
     if job == "candles" and market_minutes(t):
         return None                                # never during market hours (live scanning first)
@@ -145,6 +145,9 @@ def due(t=None, skip=()):
                 out.append("longtest")             # owner 20 Nov: weekend tests, once 5-minute history is complete
         except Exception:
             pass
+    ss_done = DATA / "strategy_search_done.txt"     # owner 21 Nov: the strategy search, after the long test
+    if not market_minutes(t) and lt_done and not ss_done.exists() and not out and "search" not in skip:
+        out.append("search")
     wait_f = DATA / "replay_wait.txt"
     waiting = wait_f.exists() and time.time() - wait_f.stat().st_mtime < 1800
     if not market_minutes(t) and not (DATA / "replay_done.txt").exists() and not waiting:
@@ -433,8 +436,8 @@ def run():
         minute_tasks()
         if not job_running() and left() > 15:     # no new job in the last 15 minutes of a run (it would be cut off)
             jobs = due()
-            if "longtest" in jobs and left() < 180:  # the long test needs a fresh run (~1-2 h) - never cut it off;
-                jobs = due(skip={"longtest"})        # meanwhile the other jobs (downloads) carry on
+            if {"longtest", "search"} & set(jobs) and left() < 180:  # the long test / strategy search need a fresh
+                jobs = due(skip={"longtest", "search"})  # run (~1-2 h) - never cut off; downloads carry on meanwhile
             for job in jobs:
                 if run_job(job, left()):
                     break

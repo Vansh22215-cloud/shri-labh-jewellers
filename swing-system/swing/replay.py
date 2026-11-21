@@ -103,6 +103,18 @@ class Market:
         last = p[p.index >= p.index[-1].normalize()]
         return float(last["high"].max()), float(last["low"].min())
 
+    def prev_change(self, sym, t):
+        d = self._df(sym)
+        if d is None:
+            return None
+        p = d[d.index < self.day]
+        days = sorted({x.normalize() for x in p.index})
+        if len(days) < 2:
+            return None
+        c1 = float(p[p.index < days[-1] + pd.Timedelta(days=1)]["close"].iloc[-1])
+        c0 = float(p[p.index < days[-1]]["close"].iloc[-1])
+        return c1 / c0 - 1
+
     def vix_prev(self, t):
         from . import candles
         v = candles.load("INDIAVIX", "day", adjusted=False)
@@ -110,6 +122,21 @@ class Market:
             return None
         v = v[v.index < self.day]
         return float(v["close"].iloc[-1]) if len(v) else None
+
+    def universe_open(self, t):
+        """Most-traded stocks by YESTERDAY's traded value (known at the open; strategy-search ranking)."""
+        key = ("open", self.day)
+        if key not in self._uni:
+            val = {}
+            for s, d in self.data.items():
+                if s in ("NIFTY50", "BANKNIFTY", "INDIAVIX") or str(s).startswith("NFO:"):
+                    continue
+                p = d[d.index < self.day]
+                if len(p):
+                    last = p[p.index >= p.index[-1].normalize()]
+                    val[s] = float((last["close"] * last["volume"]).sum())
+            self._uni[key] = [s for s, _ in sorted(val.items(), key=lambda kv: -kv[1])]
+        return self._uni[key]
 
     def universe(self, t):
         if self.day not in self._uni:
