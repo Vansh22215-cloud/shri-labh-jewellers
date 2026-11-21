@@ -26,7 +26,7 @@ log = get_logger()
 IST = timezone(timedelta(hours=5, minutes=30))
 STATE = DATA / "jobs_done.json"
 MAX_MIN = float(os.environ.get("SWING_DAEMON_MINUTES", 315))
-SCRIPTS = {"longtest": "run_longtest.py", "replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py", "search": "run_search.py"}
+SCRIPTS = {"longtest": "run_longtest.py", "replay": "run_replay.py", "candles": "run_candles.py", "learner": "run_learner.py", "test": "run_test.py", "company": "run_company.py", "search": "run_search.py", "tips": "run_tips.py"}
 TEST_QUEUE = DATA / "test_queue.json"         # strategies the owner asked to test (/test NAME)
 
 
@@ -58,7 +58,7 @@ def market_minutes(t):
 
 def key(job, t=None):
     t = t or now()
-    if job in ("test", "replay", "longtest", "search"):
+    if job in ("test", "replay", "longtest", "search", "tips"):
         return None                                # every request runs (queue), nothing recorded
     if job == "candles" and market_minutes(t):
         return None                                # never during market hours (live scanning first)
@@ -124,6 +124,12 @@ def due(t=None, skip=()):
     t = t or now()
     st = _load()
     out = []
+    try:                                           # owner's tips: replayed on Kite candles (quick, outside market hours)
+        from . import kite, tip_check
+        if not market_minutes(t) and "tips" not in skip and tip_check.pending() and kite.logged_in():
+            return ["tips"]
+    except Exception:
+        pass
     if key("learner", t) and not st.get(key("learner", t)):
         out.append("learner")
     try:

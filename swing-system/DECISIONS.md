@@ -1580,3 +1580,12 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - the 3 strongest and 3 weakest of the most-traded stocks;
   - the day's P&L so far.
 - The tests still decide which strategy trades in which market condition (D179). They are the caution, and the market condition is read live.
+
+## D181 - 2026-11-21 - The 5-day stock rule runs again, small; the owner's tips are replayed on Kite
+- **Owner**: "Do the 5 days one too. We will learn from our mistakes, not from backtests only."
+  - When the search allows no stock strategy, live trading uses the 5-day stock rule again (`practice_live.FIVE_DAY_STOCKS`): the opening-range breakout with 1.5x volume and VWAP, 1% stop, 2% target, stop to cost at +1%, 9:35–11:30, max 3 a day.
+  - It runs at ₹500 risk a trade, so a bad day costs about ₹1,500.
+  - Messages say "5-day rule (learning, small size)". The live results will show whether the 11-year test or the 5 days were right.
+- **Owner's tips** (`tips/inbox.json` → `swing/tip_check.py`, daemon job "tips"):
+  - each tip is replayed on Kite's 1-minute candles of its contract: did the entry trigger, which targets, was the stop hit (a "30 Min CB" stop on a 30-minute close), the best and worst move, and ₹ for 1 lot;
+  - results go to `results/tip_check.md` and Telegram; Kite candles are not saved in the repo.

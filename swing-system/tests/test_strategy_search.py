@@ -167,3 +167,14 @@ def test_expiry_day_option_with_no_move_is_closed_and_market_read_is_sent():
         t += timedelta(minutes=1)
     assert not b.acc.open and "time decay" in b.acc.closed[0]["why"]
     assert any("Market at 09:45" in x and "not a trade signal" in x for x in sent)
+
+
+def test_five_day_stock_rule_runs_small_when_no_stock_strategy_passed(monkeypatch, tmp_path):
+    from swing import practice_live as pl
+    monkeypatch.setattr(pl, "DATA", tmp_path)
+    (tmp_path / "practice_params.json").write_text('{"stk_max_trades": 0, "opt_strategy": "n_pdh_break"}')
+    p = pl.practice_params()
+    assert p["stk_max_trades"] == 3 and p["stk_risk"] == 500 and p["stk_strategy"] is None
+    assert p["opt_strategy"] == "n_pdh_break"
+    (tmp_path / "practice_params.json").write_text('{"stk_rules": [["gap_fade", 0.02, 1, 1]], "stk_strategy": "rules"}')
+    assert pl.practice_params()["stk_strategy"] == "rules"

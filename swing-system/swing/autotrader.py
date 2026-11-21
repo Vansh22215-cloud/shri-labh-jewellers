@@ -424,8 +424,9 @@ class Engine:
                 continue
             pos = self.b.open_position(f"EQ-{sym}-{t:%H%M}", sym, sym, "EQ", side, qty, px, stop, tgt, "stocks", t,
                                        note=(why or f"{lib} signal" if lib and lib != "orb" else
-                                             f"broke the 9:15-9:30 range {'up' if side == 'LONG' else 'down'} with "
-                                             f"{strength:.1f}x volume") + f" · margin {mr * 100:.0f}%", margin=mr)
+                                             f"5-day rule (learning, small size): broke the 9:15-9:30 range "
+                                             f"{'up' if side == 'LONG' else 'down'} with {strength:.1f}x volume")
+                                       + f" · margin {mr * 100:.0f}%", margin=mr)
             if pos and self.p["stk_scale"]:
                 r = self.p["stk_stop"]
                 pos.t1 = round(pos.avg * (1 + r) if side == "LONG" else pos.avg * (1 - r), 2)

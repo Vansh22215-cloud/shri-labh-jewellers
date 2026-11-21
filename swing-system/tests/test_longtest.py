@@ -63,7 +63,7 @@ def test_switch_only_when_better_in_both_periods(tmp_path, monkeypatch):
 def test_live_trader_uses_switched_on_settings(tmp_path, monkeypatch):
     import json
     from swing import practice_live, autotrader, paper
-    (tmp_path / "practice_params.json").write_text(json.dumps({"stk_sides": "long", "stk_factors": 2}))
+    (tmp_path / "practice_params.json").write_text(json.dumps({"stk_sides": "long", "stk_factors": 2, "stk_rules": [["orb", 0.02, 1, 1]]}))
     monkeypatch.setattr(practice_live, "DATA", tmp_path)
     p = practice_live.practice_params()
     e = autotrader.Engine(paper.Broker(None), None, params=p)

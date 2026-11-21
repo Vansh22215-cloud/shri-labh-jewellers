@@ -1,0 +1,11 @@
+[
+  {"id": "2026-11-20-a", "day": "2026-11-20", "time": "09:26", "underlying": "NIFTY", "kind": "CE", "strike": 25450,
+   "side": "BUY", "entry": "above", "price": 116, "sl": 95, "targets": [130, 140, 150], "cmp": 109,
+   "text": "NIFTY 25450 CE BUY ABOVE 115-116 SL 95 TARGET 130,140,150 CMP 109"},
+  {"id": "2026-11-20-b", "day": "2026-11-20", "time": "12:50", "underlying": "NIFTY", "kind": "CE", "strike": 25700,
+   "side": "BUY", "entry": "at", "price": 130, "sl": 120, "targets": [140, 150, 160], "cmp": 136,
+   "text": "NIFTY 25700 CE Buy at 130 SL 120 Target 140, 150, 160 CMP 136"},
+  {"id": "2026-11-20-c", "day": "2026-11-20", "time": "10:19", "underlying": "PAYTM", "kind": "FUT", "strike": null,
+   "side": "SELL", "entry": "at", "price": 1762, "sl": 1775, "sl_rule": "30min_close", "targets": [1745, 1725, 1700],
+   "lot": 725, "text": "PAYTM NOV FUT SELL AT 1762 Target 1745-1725-1700 Stoploss 1775 (30 Min CB) Lot 725"}
+]

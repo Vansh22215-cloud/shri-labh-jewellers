@@ -35,6 +35,10 @@ def _isolate(tmp_path, monkeypatch, request):
     monkeypatch.setattr(daemon, "DATA", tmp_path)
     from swing import market_days
     monkeypatch.setattr(market_days, "holidays", lambda: set(market_days.BUILTIN))   # no network in tests
+    from swing import tip_check
+    for k_, f_ in (("INBOX", "tips_inbox.json"), ("DONE_F", "tips_done.json"), ("RES_F", "tips_results.json"),
+                   ("REPORT", "tip_check.md")):
+        monkeypatch.setattr(tip_check, k_, tmp_path / f_)
     (tmp_path / "replay_done.txt").write_text("done")             # the one-time replay is tested on its own
     monkeypatch.setattr(backtest, "TESTS", tmp_path / "tests")
     monkeypatch.setattr(backtest, "OUT", tmp_path / "results_tests")

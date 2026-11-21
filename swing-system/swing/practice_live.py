@@ -135,13 +135,25 @@ class LiveMarket:
             time.sleep(2)
 
 
+# owner 21 Nov (D181): "Do the 5 days one too. We will learn from our mistakes, not from backtests only."
+# The 5-day stock rule (opening-range breakout, 1% stop, 2% target) runs again, at a SMALL size, whenever the
+# search allowed no stock strategy - live results decide, the size keeps a bad day cheap.
+FIVE_DAY_STOCKS = dict(stk_strategy=None, stk_rules=None, stk_max_trades=3, stk_max_open=2, stk_risk=500.0,
+                       stk_target=0.02, stk_be=0.01, stk_vol_mult=1.5, stk_last_entry="11:30", stk_max_gap=0.03,
+                       stk_factors=0, stk_scale=0.0, stk_sides="both")
+
+
 def practice_params():
-    """Settings the long test switched on (data/practice_params.json), else the defaults in autotrader.P."""
+    """Settings the tests switched on (data/practice_params.json), else the defaults in autotrader.P; plus the
+    owner's learning rule for stocks (D181)."""
     import json
     try:
-        return json.loads((DATA / "practice_params.json").read_text())
+        p = json.loads((DATA / "practice_params.json").read_text())
     except Exception:
-        return {}
+        p = {}
+    if not p.get("stk_rules"):
+        p.update(FIVE_DAY_STOCKS)
+    return p
 
 
 class PracticeLive:
