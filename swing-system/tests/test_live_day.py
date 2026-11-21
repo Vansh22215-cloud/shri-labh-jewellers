@@ -18,6 +18,7 @@ def test_full_live_day(tmp_path, monkeypatch):
     monkeypatch.setattr(telegram, "send_photo", lambda s, p, caption="", label="": photos.append(caption) or "photo sent")
     monkeypatch.setattr(practice_live, "ACCOUNT_F", tmp_path / "paper.json")
     monkeypatch.setattr(practice_live, "DATA", tmp_path)
+    monkeypatch.setattr(practice_live, "DASH_F", tmp_path / "sent.txt")
     monkeypatch.setattr(practice_live, "load_settings", lambda: {"kill_switch": False, "paper_capital": 50800})
     monkeypatch.setattr(practice_live, "practice_params", lambda: {})
     opt_px = {"v": 100.0}
