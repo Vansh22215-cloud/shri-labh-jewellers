@@ -229,3 +229,11 @@ def test_strategy_search_runs_after_the_long_test_on_a_fresh_run(monkeypatch):
     assert daemon.due(sat, skip={"longtest", "search"}) == ["candles"]
     (daemon.DATA / "strategy_search_done.txt").write_text("done")
     assert daemon.due(sat) == ["candles"]
+
+
+def test_every_task_in_the_run_workflow_menu_has_a_script():
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent / "scripts"
+    for n in ("nightly", "scan", "research", "weekly"):
+        assert "bot_poll.py" in (root / f"run_{n}.py").read_text()
+    assert (root / "bot_poll.py").exists()
