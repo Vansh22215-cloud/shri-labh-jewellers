@@ -156,6 +156,30 @@ class PracticeLive:
         send_dashboard(self.broker, day)
 
 
+DASH_F = DATA / "dashboard_sent.txt"
+
+
+def dashboard_sent(day):
+    try:
+        return DASH_F.read_text().strip() == str(pd.Timestamp(day).date())
+    except Exception:
+        return False
+
+
+def fallback_dashboard(day):
+    """3:40 pm backup: if the live feed was not running at 3:30 pm, close anything still open at its last price and
+    send the dashboard anyway."""
+    if dashboard_sent(day):
+        return False
+    b = Broker(ACCOUNT_F)
+    t = pd.Timestamp(day) + timedelta(hours=15, minutes=30)
+    for key in list(b.acc.open):
+        p = b.acc.open[key]
+        b.close_position(key, p.ltp or p.avg, t, "square-off (feed was down)")
+    send_dashboard(b, day)
+    return True
+
+
 def send_dashboard(broker, day):
     from .dashboard import render
     s = load_settings()
@@ -167,3 +191,7 @@ def send_dashboard(broker, day):
     telegram.send_photo(s, png, caption=f"📊 Today: net ₹{net:+,.0f} · balance ₹{broker.acc.cash:,.0f}"
                                         + (" · 🎯 ₹10,000 goal reached" if net >= 10000 else ""))
     png.unlink(missing_ok=True)
+    try:
+        DASH_F.write_text(str(pd.Timestamp(day).date()))
+    except Exception:
+        pass

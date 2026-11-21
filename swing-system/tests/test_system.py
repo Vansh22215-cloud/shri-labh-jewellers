@@ -204,3 +204,14 @@ def test_stock_list_refresh_is_safe_with_many_threads(tmp_path, monkeypatch):
 
 def test_candle_job_is_claimed_per_hour():
     assert daemon.key("candles", datetime(2026, 11, 21, 6, 33, tzinfo=IST)) != daemon.key("candles", datetime(2026, 11, 21, 7, 1, tzinfo=IST))
+
+
+def test_downloads_continue_while_long_test_waits_for_a_fresh_run(monkeypatch):
+    from swing import candles
+    monkeypatch.setattr(kite, "logged_in", lambda: True)
+    monkeypatch.setattr(candles, "complete", lambda iv="day": True)
+    sat = datetime(2026, 11, 21, 19, 0, tzinfo=IST)
+    daemon.claim("learner", sat)
+    daemon.claim("company", sat)
+    assert daemon.due(sat) == ["longtest"]
+    assert daemon.due(sat, skip={"longtest"}) == ["candles"]

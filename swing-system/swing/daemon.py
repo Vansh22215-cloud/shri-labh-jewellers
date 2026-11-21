@@ -120,7 +120,7 @@ def _waiting(st, job, t):
     return bool(nb) and str(t)[:19] < nb
 
 
-def due(t=None):
+def due(t=None, skip=()):
     t = t or now()
     st = _load()
     out = []
@@ -136,7 +136,7 @@ def due(t=None):
                 out.append("test")                 # ... and only once that interval's Kite history is complete
     except Exception:
         pass
-    if not market_minutes(t) and not (DATA / "long_test_done.txt").exists() and not out:
+    if not market_minutes(t) and not (DATA / "long_test_done.txt").exists() and not out and "longtest" not in skip:
         try:
             from .candles import complete
             if complete("5minute"):
@@ -310,6 +310,13 @@ def minute_tasks(t=None):
         ensure_feed(t)
     except Exception as e:
         log.warning("Daemon: feed check failed: %s", type(e).__name__)
+    try:                                           # backup: the practice dashboard even if the feed was down at 3:30
+        if wd and t.hour * 60 + t.minute >= 15 * 60 + 40 and t.hour < 20 and s.get("paper_trading", True):
+            from .practice_live import dashboard_sent, fallback_dashboard
+            if not dashboard_sent(t.date()) and claim_once("practice dashboard backup", t):
+                fallback_dashboard(t.date())
+    except Exception as e:
+        log.warning("Daemon: dashboard backup failed: %s", type(e).__name__)
     try:
         if wd and t.hour * 60 + t.minute >= 15 * 60 + 45 and t.hour < 20 and claim_once("day status", t):
             _send(day_status(t), "system status", html=False)
@@ -423,9 +430,10 @@ def run():
             break
         minute_tasks()
         if not job_running() and left() > 15:     # no new job in the last 15 minutes of a run (it would be cut off)
-            for job in due():
-                if job == "longtest" and left() < 180:
-                    continue                       # the long test needs a fresh run (~1-2 h) - never cut it off
+            jobs = due()
+            if "longtest" in jobs and left() < 180:  # the long test needs a fresh run (~1-2 h) - never cut it off;
+                jobs = due(skip={"longtest"})        # meanwhile the other jobs (downloads) carry on
+            for job in jobs:
                 if run_job(job, left()):
                     break
         time.sleep(20 if left() > 3 else 5)
