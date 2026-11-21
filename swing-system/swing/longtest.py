@@ -527,6 +527,11 @@ def recommend(rows, frows, orow):
             k = 10000 / r["recent"]["avg_day"]
             out[f"{part}_scale_for_10k"] = round(k, 1)
             out[f"{part}_max_scale"] = MAX_SCALE[part]
+    s_now = out["stocks_best"] if "stocks" in out["changes"] else out["stocks_now"]
+    stk_ok = bool(s_now and s_now.get("recent") and s_now["recent"]["avg_day"] > 0)
+    out["params"]["stk_max_trades"] = 3 if stk_ok else 0          # a losing stock rule is not traded at all
+    if not stk_ok:
+        out["changes"].append("stock trades paused (the rule loses money)")
     size_up(out)
     if out["params"]:
         (DATA / "practice_params.json").write_text(json.dumps(out["params"]))

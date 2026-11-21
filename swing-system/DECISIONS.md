@@ -1503,3 +1503,12 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
 - 21 Nov bug hunt (2): backup practice dashboard at 3:40 pm if the live feed was down at 3:30 (open positions squared off at their last price); while the long test waits for a fresh GitHub run, the downloads carry on; a whole live practice day simulated end to end in the tests (feed -> candles -> trader -> Telegram -> dashboard).
 - 21 Nov: the long test crashed 3 times in the NIFTY part on a day with no 9:15-9:30 candles (a special session); such days are now skipped, and the test gets fresh attempts (v2 files).
 - 21 Nov: the evening Company-of-the-Quarter job could hang for hours when NSE is slow or blocks GitHub (40 s timeouts x 3 retries per request), blocking every other job. Now: 15 s timeout, 1 retry, stop after 8 failures in a row or 10 minutes.
+
+## D175 - 2026-11-21 - Long test result: stock breakout loses, stocks paused; NIFTY options improved
+- **Data**: Kite 5-minute candles, 2,772 stocks, 2,910 days (Feb 2015 to 20 Nov 2026). Settings chosen before 2024, checked on 2024 onwards.
+- **Stocks**: the opening-range breakout loses money in every one of 72 settings, every factor mix and every scaling-out version. Today's rule: -₹644 a day before 2024, -₹560 recent. It is about break-even before ~₹200 of charges and slippage a trade. The 5-day replay's profit was luck.
+  - Stock trades are PAUSED in the practice trader (stk_max_trades 0) until a stock rule passes the test. The long test now pauses a losing stock rule by itself.
+- **NIFTY options** (estimate: delta 0.5, no time decay):
+  - today's rule: +₹136 before 2024, +₹29 recent;
+  - best: target +100% with India VIX below 20: +₹255 / +₹135. Switched on. Risk ₹6,240 a trade (x2.08, within the ₹12,500 worst-day limit).
+- **Honest**: expected ≈ ₹280 a day, far from the ₹10,000 goal. The next work is finding better strategies on this data.

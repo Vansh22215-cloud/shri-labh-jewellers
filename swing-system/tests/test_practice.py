@@ -42,12 +42,12 @@ def test_broker_fills_and_money(tmp_path):
     assert b.open_position("big", "X", "X", "OPT", "LONG", 10_000, 100, 70, 160, "s", DAY) is None   # no money
 
 
-def run_day(data, extra=None):
+def run_day(data, extra=None, params=None):
     b = paper.Broker(None, start=50800)
     m = Market(data, NFO, lambda s: (extra or {}).get(s))
     m.set_day(DAY)
     msgs = []
-    e = autotrader.Engine(b, m, notify=lambda k, t: msgs.append((k, t)))
+    e = autotrader.Engine(b, m, params=params, notify=lambda k, t: msgs.append((k, t)))
     t = DAY + timedelta(hours=9, minutes=16)
     while t <= DAY + timedelta(hours=15, minutes=30):
         e.on_minute(t)
@@ -69,7 +69,7 @@ def test_stock_breakout_with_volume_and_one_percent_stop():
     day = minutes(DAY, [500, 501, 499.5, 500.5, 500, 507, 498, 494, 494], vol=1000.0)
     day.loc[day.index[25:30], "volume"] = 9000.0                # strong volume on the breakout candle 9:40
     data = {"NIFTY50": minutes(DAY, [24000] * 8), "AAA": day}
-    b, msgs = run_day(data)
+    b, msgs = run_day(data, params={"stk_max_trades": 3})       # stocks are paused by default (21 Nov long test)
     c = [x for x in b.day_closed(DAY) if x["symbol"] == "AAA"]
     assert c and c[0]["side"] == "LONG"
     assert c[0]["why"] in ("stop-loss", "stop at entry", "target", "square-off 3:15 pm")

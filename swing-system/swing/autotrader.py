@@ -29,12 +29,14 @@ from .config import get_logger
 
 log = get_logger()
 P = dict(opt_risk=3000.0, opt_stop=0.30, opt_target=0.60, opt_be=0.30, opt_max_trades=2, opt_last_entry="14:30",
-         stk_risk=1500.0, stk_stop=0.01, stk_target=0.02, stk_be=0.01, stk_max_trades=3, stk_max_open=2,
+         stk_risk=1500.0, stk_stop=0.01, stk_target=0.02, stk_be=0.01, stk_max_trades=0, stk_max_open=2,
          stk_last_entry="11:30", stk_vol_mult=1.5, stk_max_gap=0.03, universe=100,
          day_target=10000.0, day_max_loss=7500.0, square_off="15:15", first_entry="09:35",
          stk_sides="both", stk_factors=0, opt_factors=0, stk_scale=0.0, opt_scale=0.0)
 # scaling out (owner 21 Nov): stk_scale / opt_scale = share booked at 1R (0 = off); the stop on the rest moves to
 # the entry and the rest runs to stk_target / opt_target. Switched on only by the long test (longtest.py).
+# 21 Nov long test (Kite 5-minute, 2,772 stocks, 2015-2026): the stock breakout loses (-₹560 a day recent, every
+# variant negative) -> stock trades PAUSED (stk_max_trades=0) until a stock rule passes the test.
 # extra factors (bit flags, chosen by the long test - longtest.py FILTERS / NMASKS):
 #   1 beyond yesterday's high/low · 2 NIFTY moving the same way · 4 stronger than NIFTY today ·
 #   8 India VIX below 20 · 16 no resistance (yesterday's high/low) within 1%
