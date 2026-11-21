@@ -265,15 +265,32 @@ import threading as _threading  # noqa: E402
 _PACE_LOCK = _threading.Lock()
 
 
+_INSTR = {"df": None, "t": 0.0, "lock": _threading.Lock()} if "_threading" in globals() else None
+
+
 def instruments():
-    """NSE instrument list (symbol -> instrument_token), refreshed once a day."""
-    if INSTR_F.exists() and (datetime.now().timestamp() - INSTR_F.stat().st_mtime) < 20 * 3600:
-        return pd.read_csv(INSTR_F)
-    r = _get("/instruments/NSE", timeout=60)
-    df = pd.read_csv(io.StringIO(r.text))[["instrument_token", "tradingsymbol", "name", "segment", "instrument_type",
-                                           "lot_size", "tick_size"]]
-    df.to_csv(INSTR_F, index=False)
-    return df
+    """NSE instrument list (symbol -> instrument_token), refreshed once a day. Thread-safe (21 Nov: three download
+    threads refreshing it at the same moment crashed the download): one refresh at a time, written to a temporary
+    file and swapped in whole, and kept in memory."""
+    import threading
+    import time as _t
+    global _INSTR
+    if _INSTR is None:
+        _INSTR = {"df": None, "t": 0.0, "lock": threading.Lock()}
+    with _INSTR["lock"]:
+        fresh = INSTR_F.exists() and (datetime.now().timestamp() - INSTR_F.stat().st_mtime) < 20 * 3600
+        if fresh:
+            if _INSTR["df"] is None or _INSTR["t"] < INSTR_F.stat().st_mtime:
+                _INSTR["df"], _INSTR["t"] = pd.read_csv(INSTR_F), INSTR_F.stat().st_mtime
+            return _INSTR["df"]
+        r = _get("/instruments/NSE", timeout=60)
+        df = pd.read_csv(io.StringIO(r.text))[["instrument_token", "tradingsymbol", "name", "segment",
+                                               "instrument_type", "lot_size", "tick_size"]]
+        tmp = INSTR_F.with_suffix(".tmp")
+        df.to_csv(tmp, index=False)
+        tmp.replace(INSTR_F)
+        _INSTR["df"], _INSTR["t"] = df, _t.time()
+        return df
 
 
 def equity_symbols():

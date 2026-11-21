@@ -182,3 +182,25 @@ def test_margin_calculator_is_the_only_extra_kite_call(monkeypatch):
     for bad in ("/orders", "/orders/regular", "/gtt/triggers", "/user/margins", "/portfolio/holdings"):
         with pytest.raises(PermissionError):
             kite._get(bad)
+
+
+def test_stock_list_refresh_is_safe_with_many_threads(tmp_path, monkeypatch):
+    """21 Nov: three download threads refreshing Kite's stock list at once crashed the download."""
+    import threading
+    import time as _t
+    calls = []
+
+    class R:
+        text = "instrument_token,tradingsymbol,name,segment,instrument_type,lot_size,tick_size\n1,AAA,A,NSE,EQ,1,0.05\n"
+    monkeypatch.setattr(kite, "INSTR_F", tmp_path / "ins.csv")
+    monkeypatch.setattr(kite, "_INSTR", {"df": None, "t": 0.0, "lock": threading.Lock()})
+    monkeypatch.setattr(kite, "_get", lambda *a, **k: (calls.append(1), _t.sleep(0.05), R())[2])
+    out = []
+    th = [threading.Thread(target=lambda: out.append(len(kite.instruments()))) for _ in range(6)]
+    [t.start() for t in th]
+    [t.join() for t in th]
+    assert out == [1] * 6 and len(calls) == 1                      # one refresh, everyone gets the whole list
+
+
+def test_candle_job_is_claimed_per_hour():
+    assert daemon.key("candles", datetime(2026, 11, 21, 6, 33, tzinfo=IST)) != daemon.key("candles", datetime(2026, 11, 21, 7, 1, tzinfo=IST))

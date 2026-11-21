@@ -62,6 +62,8 @@ def key(job, t=None):
         return None                                # every request runs (queue), nothing recorded
     if job == "candles" and market_minutes(t):
         return None                                # never during market hours (live scanning first)
+    if job == "candles":
+        return f"candles {t:%Y-%m-%d %H}"          # per HOUR: a crashed chunk can never block downloads for the day
     if job == "learner" and (t.weekday() != 5 or t.hour * 60 + t.minute < 10 * 60 + 30):
         return None
     if job == "company" and (market_minutes(t) or t.hour * 60 + t.minute < 18 * 60 + 30):

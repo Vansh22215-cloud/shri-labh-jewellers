@@ -15,12 +15,20 @@ if __name__ == "__main__":
     if not kite.logged_in():
         kite.report_unavailable(load_settings(), "Kite candle download", why="Kite is not logged in")
         sys.exit(0)
-    r = candles.step(max_requests=1500)
+    try:
+        r = candles.step(max_requests=1500)
+    except Exception as e:                  # never let one failure stop the downloads: log it, try again soon
+        print("candles step failed:", type(e).__name__, str(e)[:200])
+        r = {"requests": 1, "stopped": type(e).__name__}
     print("candles:", {k: v for k, v in r.items() if not k.endswith("_complete")})
-    candles.report()
-    p = candles.progress()
+    try:
+        candles.report()
+        p = candles.progress()
+    except Exception as e:
+        print("candles report failed:", type(e).__name__)
+        p = {}
     if r.get("requests") and not p.get("storage_full"):
-        retry_later("candles", minutes=1, max_tries=1000)      # more to do: next chunk in a minute
+        retry_later("candles", minutes=1 if not r.get("stopped") else 3, max_tries=1000)   # next chunk soon
     try:                                   # changed Kite files -> the private R2 bucket (when set up)
         from swing import r2
         r2.push()

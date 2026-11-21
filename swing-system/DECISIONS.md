@@ -1497,3 +1497,4 @@ Pocket pivot, NR7 breakout and the 3-day pullback in leaders give 20–40 trades
   - the day loss limit becomes ₹12,500.
 - Not raised if no rule earned in the recent years. The report and the Telegram summary show the new sizes and the expected average a day.
 - Faster history downloads (21 Nov): 3 stocks at once under ONE shared speed limit (one request every 0.36 s = Kite's 3 a second), and each stock's new candles written once instead of after every request. Before: ~1.4 requests a second.
+- 21 Nov fix: the parallel downloads crashed at 6:33 am when Kite's daily stock list was refreshed by several threads at once, and the crashed job counted as done for the whole day. Now: one thread-safe refresh (temp file swapped in whole), a crash is logged and retried in 3 minutes, and the download job is claimed per hour.
