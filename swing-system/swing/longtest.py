@@ -341,6 +341,9 @@ def nifty_test():
             starts = g.index.strftime("%H:%M").values
             ends = (g.index + pd.Timedelta(minutes=5)).strftime("%H:%M").values
             first = starts < "09:30"
+            if first.sum() < 3 or len(c) < 10:
+                rows.append((day, 0.0, 0))                      # special / short session: no 9:15-9:30 range
+                continue
             hi, lo, dopen = h[first].max(), l[first].min(), o[0]
             if mask & 1 and pd_hl:
                 hi, lo = max(hi, pd_hl[0]), min(lo, pd_hl[1])      # must also clear yesterday's high / low
@@ -380,6 +383,9 @@ def nifty_test():
             end_m = np.array([t.hour * 60 + t.minute + 5 for t in g.index])
             ends = (g.index + pd.Timedelta(minutes=5)).strftime("%H:%M").values
             first = starts < "09:30"
+            if first.sum() < 3 or len(c) < 10:
+                rows.append((day, 0.0, 0))                      # special / short session: no 9:15-9:30 range
+                continue
             hi, lo, dopen = h[first].max(), l[first].min(), o[0]
             ema = pd.Series(c).ewm(span=20, adjust=False).mean().values
             net, n, i = 0.0, 0, 0

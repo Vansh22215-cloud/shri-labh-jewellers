@@ -123,3 +123,16 @@ def test_size_up_towards_10k_within_hard_limits(tmp_path, monkeypatch):
     assert 3 * p["stk_risk"] <= lt.DAY_LOSS_CAP and 2 * p["opt_risk"] <= lt.DAY_LOSS_CAP + 1
     rec = lt.recommend([dict(lt.LIVE_STK, dev=_s(-100), recent=_s(-50))], [], [dict(lt.LIVE_OPT, dev=_s(-1), recent=_s(-5))])
     assert "not raised" in rec["size"] and "stk_risk" not in rec["params"]
+
+
+def test_nifty_test_skips_days_without_the_opening_range(monkeypatch):
+    days = pd.bdate_range("2023-06-01", periods=30)
+    rows = []
+    for k, d in enumerate(days):
+        start = d + pd.Timedelta(hours=18 if k == 5 else 9, minutes=15)     # day 5: an evening special session
+        idx = pd.date_range(start, periods=75 if k != 5 else 12, freq="5min")
+        c = 24000 + np.arange(len(idx), dtype=float)
+        rows.append(pd.DataFrame({"open": c, "high": c + 5, "low": c - 5, "close": c, "volume": 0.0}, index=idx))
+    candles.store("5minute", "NIFTY50", pd.concat(rows))
+    res = lt.nifty_test()
+    assert res and all(len(D) for D in res.values())
